@@ -217,6 +217,7 @@
 		619B09711913F2EE00A4BAA2 /* NUOpaqueArrayTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B09611913F2EE00A4BAA2 /* NUOpaqueArrayTest.m */; };
 		619B09721913F2EE00A4BAA2 /* NURegionArrayTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B09621913F2EE00A4BAA2 /* NURegionArrayTest.m */; };
 		61A3297E1B9AED82006B6FC5 /* NUMovingUp.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A3297D1B9AED82006B6FC5 /* NUMovingUp.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		61DC96341FA104D900AABC9E /* Nursery.h in Headers */ = {isa = PBXBuildFile; fileRef = 61DC96331FA104D900AABC9E /* Nursery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		61DCED6419DCEEC8009E4E9E /* AllTypesObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 61DCED6319DCEEC8009E4E9E /* AllTypesObject.m */; };
 /* End PBXBuildFile section */
 
@@ -449,6 +450,7 @@
 		619B09611913F2EE00A4BAA2 /* NUOpaqueArrayTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = NUOpaqueArrayTest.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		619B09621913F2EE00A4BAA2 /* NURegionArrayTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NURegionArrayTest.m; sourceTree = "<group>"; };
 		61A3297D1B9AED82006B6FC5 /* NUMovingUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUMovingUp.h; sourceTree = "<group>"; };
+		61DC96331FA104D900AABC9E /* Nursery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Nursery.h; sourceTree = "<group>"; };
 		61DCED6219DCEEC8009E4E9E /* AllTypesObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTypesObject.h; sourceTree = "<group>"; };
 		61DCED6319DCEEC8009E4E9E /* AllTypesObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTypesObject.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -821,6 +823,7 @@
 		619B07961913ED8D00A4BAA2 /* Nursery */ = {
 			isa = PBXGroup;
 			children = (
+				61DC96331FA104D900AABC9E /* Nursery.h */,
 				610E4BD8191519D3000D5247 /* PlayLot */,
 				610E4BE21915204C000D5247 /* Associations */,
 				610E4BD51915060F000D5247 /* Nursery */,
@@ -878,6 +881,7 @@
 			files = (
 				619B08D71913EEC000A4BAA2 /* NUDefaultComparator.h in Headers */,
 				619B09051913EEC000A4BAA2 /* NUOpaqueBTree.h in Headers */,
+				61DC96341FA104D900AABC9E /* Nursery.h in Headers */,
 				619B08E71913EEC000A4BAA2 /* NUMainBranchGradeKidnapper.h in Headers */,
 				619B08ED1913EEC000A4BAA2 /* NUMutableDictionary.h in Headers */,
 				619B08F71913EEC000A4BAA2 /* NUNSSet.h in Headers */,
