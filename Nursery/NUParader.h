@@ -18,7 +18,7 @@ extern NSString *NUParaderInvalidNodeLocationException;
     NUUInt64 nextLocation;
 }
 
-+ (id)paraderWithPlayLot:(NUPlayLot *)aPlayLot;
++ (id)paraderWithSandbox:(NUSandbox *)aSandbox;
 
 - (NUMainBranchNursery *)nursery;
 

@@ -8,7 +8,7 @@
 
 #import "NUMutableDictionary.h"
 #import "NUBell.h"
-#import "NUPlayLot.h"
+#import "NUSandbox.h"
 #import "NUAliaser.h"
 #import "NUCharacter.h"
 #import "NUIvar.h"
@@ -62,8 +62,8 @@
     [[self removedKeys] removeObject:aKey];
     [[self setKeys] addObject:[[aKey copyWithZone:NSDefaultMallocZone()] autorelease]];
     [[self innerDictionary] setObject:anObject forKey:aKey];
-    [[[self bell] playLot] markChangedObject:self];
-    [[[self bell] playLot] markChangedObject:[self innerDictionary]];
+    [[[self bell] sandbox] markChangedObject:self];
+    [[[self bell] sandbox] markChangedObject:[self innerDictionary]];
 }
 
 - (void)removeObjectForKey:(id)aKey
@@ -73,8 +73,8 @@
     [[self setKeys] removeObject:aKey];
     [[self removedKeys] addObject:[[aKey copyWithZone:NSDefaultMallocZone()] autorelease]];
     [[self innerDictionary] removeObjectForKey:aKey];
-    [[[self bell] playLot] markChangedObject:self];
-    [[[self bell] playLot] markChangedObject:[self innerDictionary]];
+    [[[self bell] sandbox] markChangedObject:self];
+    [[[self bell] sandbox] markChangedObject:[self innerDictionary]];
 }
 
 - (NUBell *)bell
@@ -87,7 +87,7 @@
 	bell = aBell;
 }
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUPlayLot *)aPlayLot
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
 {
     [aCharacter addOOPIvarWithName:@"innerDictionary"];
 }
@@ -127,7 +127,7 @@
 
 - (void)moveUp
 {
-    [[[[self bell] playLot] aliaser] moveUp:self];
+    [[[[self bell] sandbox] aliaser] moveUp:self];
 }
 
 @end

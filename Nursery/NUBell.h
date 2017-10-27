@@ -8,24 +8,24 @@
 
 #import <Nursery/NUTypes.h>
 
-@class NUPlayLot;
+@class NUSandbox;
 
 
 @interface NUBell : NSObject <NSCopying>
 {
 	NUBellBall ball;
     NUUInt64 gradeAtCallFor;
-    NUUInt64 gradeForStalker;
-	NUPlayLot *playLot;
+    NUUInt64 gradeForSeeker;
+	NUSandbox *sandbox;
     BOOL isLoaded;
 	id object;
 }
 
 + (id)bellWithBall:(NUBellBall)aBall;
-+ (id)bellWithBall:(NUBellBall)aBall playLot:(NUPlayLot *)aPlayLot;
-+ (id)bellWithBall:(NUBellBall)aBall isLoaded:(BOOL)anIsLoaded playLot:(NUPlayLot *)aPlayLot;
++ (id)bellWithBall:(NUBellBall)aBall sandbox:(NUSandbox *)aSandbox;
++ (id)bellWithBall:(NUBellBall)aBall isLoaded:(BOOL)anIsLoaded sandbox:(NUSandbox *)aSandbox;
 
-- (id)initWithBall:(NUBellBall)aBall isLoaded:(BOOL)anIsLoaded playLot:(NUPlayLot *)aPlayLot;
+- (id)initWithBall:(NUBellBall)aBall isLoaded:(BOOL)anIsLoaded sandbox:(NUSandbox *)aSandbox;
 
 - (NUBellBall)ball;
 - (void)setBall:(NUBellBall)aBall;
@@ -39,11 +39,11 @@
 - (NUUInt64)gradeAtCallFor;
 - (void)setGradeAtCallFor:(NUUInt64)aGrade;
 
-- (NUUInt64)gradeForKidnapper;
-- (void)setGradeForKidnapper:(NUUInt64)aGrade;
+- (NUUInt64)gradeForSeeker;
+- (void)setGradeForSeeker:(NUUInt64)aGrade;
 
-- (NUPlayLot *)playLot;
-- (void)setPlayLot:(NUPlayLot *)aPlayLot;
+- (NUSandbox *)sandbox;
+- (void)setSandbox:(NUSandbox *)aSandbox;
 
 - (id)object;
 - (void)setObject:(id)anObject;

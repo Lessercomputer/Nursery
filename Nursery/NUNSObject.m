@@ -7,7 +7,7 @@
 //
 
 #import "NUNSObject.h"
-#import "NUPlayLot.h"
+#import "NUSandbox.h"
 
 @implementation NSObject (NUCharacter)
 
@@ -16,20 +16,20 @@
 	return NO;
 }
 
-+ (NUCharacter *)characterOn:(NUPlayLot *)aPlayLot
++ (NUCharacter *)characterOn:(NUSandbox *)aSandbox
 {
-	NUCharacter *anEstablishedCharacter = [aPlayLot characterForClass:self];
+	NUCharacter *anEstablishedCharacter = [aSandbox characterForClass:self];
 	
 	if (!anEstablishedCharacter)
-		anEstablishedCharacter = [self establishCharacterOn:aPlayLot];
+		anEstablishedCharacter = [self establishCharacterOn:aSandbox];
 	
 	return anEstablishedCharacter;
 }
 
-+ (NUCharacter *)establishCharacterOn:(NUPlayLot *)aPlayLot
++ (NUCharacter *)establishCharacterOn:(NUSandbox *)aSandbox
 {
-	NUCharacter *aCharacter = [self createCharacterOn:aPlayLot];
-	NUCharacter *anEstablishedCharacter = [aPlayLot characterForName:[aCharacter fullName]];
+	NUCharacter *aCharacter = [self createCharacterOn:aSandbox];
+	NUCharacter *anEstablishedCharacter = [aSandbox characterForName:[aCharacter fullName]];
 	
 	if (anEstablishedCharacter)
 	{
@@ -38,22 +38,22 @@
 	}
 	else
 	{
-		//[aPlayLot setObjectLayout:aCharacter forName:[aCharacter fullName]];
+		//[aSandbox setObjectLayout:aCharacter forName:[aCharacter fullName]];
 		anEstablishedCharacter = aCharacter;
 	}
 	
-	[aPlayLot setCharacter:anEstablishedCharacter forClass:self];
+	[aSandbox setCharacter:anEstablishedCharacter forClass:self];
     [[anEstablishedCharacter superCharacter] addSubCharacter:anEstablishedCharacter];
     
 	return anEstablishedCharacter;
 }
 
-+ (NUCharacter *)createCharacterOn:(NUPlayLot *)aPlayLot
++ (NUCharacter *)createCharacterOn:(NUSandbox *)aSandbox
 {
-	NUCharacter *aSuper = self == [NSObject class] ? nil : [[[self classForNursery] superclass] characterOn:aPlayLot];
-	NUCharacter *aCharacter = [NUCharacter characterWithName:[self CharacterNameOn:aPlayLot] super:aSuper];
+	NUCharacter *aSuper = self == [NSObject class] ? nil : [[[self classForNursery] superclass] characterOn:aSandbox];
+	NUCharacter *aCharacter = [NUCharacter characterWithName:[self CharacterNameOn:aSandbox] super:aSuper];
 	[aCharacter setTargetClass:self];
-    [self defineCharacter:aCharacter on:aPlayLot];
+    [self defineCharacter:aCharacter on:aSandbox];
     
     if (![aCharacter formatIsValid])
         @throw [NSException exceptionWithName:NUCharacterInvalidObjectFormatException reason:NUCharacterInvalidObjectFormatException userInfo:nil];
@@ -65,13 +65,13 @@
 	return aCharacter;
 }
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUPlayLot *)aPlayLot
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
 {
     if (self == [NSObject class])
         [aCharacter addOOPIvarWithName:@"isa"];
 }
 
-+ (NSString *)CharacterNameOn:(NUPlayLot *)aPlayLot
++ (NSString *)CharacterNameOn:(NUSandbox *)aSandbox
 {
 	Class aClass = [self classForNursery];
     

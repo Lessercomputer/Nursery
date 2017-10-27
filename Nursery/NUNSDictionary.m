@@ -8,7 +8,7 @@
 
 #import "NUNSDictionary.h"
 #import "NUCharacter.h"
-#import "NUPlayLot.h"
+#import "NUSandbox.h"
 #import "NUDictionaryCoder.h"
 
 @implementation NSDictionary (NUCharacter)
@@ -29,7 +29,7 @@
 
 @implementation NUNSDictionary
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUPlayLot *)aPlayLot
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
 {
     [aCharacter setIsMutable:NO];
     [aCharacter setFormat:NUIndexedIvars];
@@ -40,7 +40,7 @@
 
 @implementation NUNSMutableDictionary
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUPlayLot *)aPlayLot
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
 {
     [aCharacter setFormat:NUIndexedIvars];
 	[aCharacter setCoderClass:[NUDictionaryCoder class]];

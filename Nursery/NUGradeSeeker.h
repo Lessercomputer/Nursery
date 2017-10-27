@@ -1,5 +1,5 @@
 //
-//  NUGradeKidnapper.h
+//  NUGradeSeeker.h
 //  Nursery
 //
 //  Created by P,T,A on 2013/08/31.
@@ -9,20 +9,20 @@
 #import "NUThreadedChildminder.h"
 #import "NUTypes.h"
 
-@class NUPlayLot, NUBell, NUPeephole;
+@class NUSandbox, NUBell, NUAperture;
 
-@interface NUGradeKidnapper : NUThreadedChildminder <NSLocking>
+@interface NUGradeSeeker : NUThreadedChildminder <NSLocking>
 {
     NSMutableArray *bells;
     NSRecursiveLock *bellsLock;
-    NUPeephole *peephole;
+    NUAperture *aperture;
     NSRecursiveLock *lock;
 }
 
-+ (id)gradeKidnapperWithPlayLot:(NUPlayLot *)aPlayLot;
-+ (id)gradeKidnapperWithPlayLot:(NUPlayLot *)aPlayLot peephole:(NUPeephole *)aPeephole;
++ (id)gradeSeekerWithSandbox:(NUSandbox *)aSandbox;
++ (id)gradeSeekerWithSandbox:(NUSandbox *)aSandbox aperture:(NUAperture *)aAperture;
 
-- (id)initWithPlayLot:(NUPlayLot *)aPlayLot peephole:(NUPeephole *)aPeephole;
+- (id)initWithSandbox:(NUSandbox *)aSandbox aperture:(NUAperture *)aAperture;
 
 - (void)pushRootBell:(NUBell *)aBell;
 - (void)pushBellIfNeeded:(NUBell *)aBell;
@@ -32,11 +32,11 @@
 - (NUBell *)popBell;
 - (void)pushBell:(NUBell *)aBell;
 
-- (NUPeephole *)peephole;
+- (NUAperture *)aperture;
 - (NUUInt64)grade;
 
-- (void)stalkObjectFor:(NUBell *)aBell;
-- (void)stalkIvarsOfObjectFor:(NUBell *)aBell;
+- (void)seekObjectFor:(NUBell *)aBell;
+- (void)seekIvarsOfObjectFor:(NUBell *)aBell;
 
 - (void)kidnapGrade;
 - (void)kidnapGradeLessThan:(NUUInt64)aGrade;

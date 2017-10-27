@@ -12,7 +12,7 @@
 #import "NUIvar.h"
 #import "NUAliaser.h"
 #import "NUBell.h"
-#import "NUPlayLot.h"
+#import "NUSandbox.h"
 
 @implementation NUCharacterDictionary
 
@@ -54,7 +54,7 @@
     
     [[self dictionary] setObject:anObject forKey:aKey];
     [[aCharacter superCharacter] addSubCharacter:aCharacter];
-    [[[self bell] playLot] markChangedObject:self];
+    [[[self bell] sandbox] markChangedObject:self];
 }
 
 - (NSEnumerator *)keyEnumerator
@@ -72,7 +72,7 @@
 	bell = aBell;
 }
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUPlayLot *)aPlayLot
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
 {
     [aCharacter addOOPIvarWithName:@"dictionary"];
 }
@@ -98,31 +98,31 @@
 {
     NUUInt64 aGradeBeforeMoveUp = [[self bell] grade];
     
-    [[[[self bell] playLot] aliaser] moveUp:self];
+    [[[[self bell] sandbox] aliaser] moveUp:self];
     [[self dictionary] moveUp];
     
     if ([[self bell] grade] != aGradeBeforeMoveUp)
-        [self mergeWithPlayLotCharacters];
+        [self mergeWithSandboxCharacters];
 }
 
-- (void)mergeWithPlayLotCharacters
+- (void)mergeWithSandboxCharacters
 {
-    NUMutableDictionary *aCharactersInPlayLot = [[[self bell] playLot] characters];
-    NSDictionary *aNewCharactersInPlayLot = [aCharactersInPlayLot dictionaryWithValuesForKeys:[[aCharactersInPlayLot setKeys] allObjects]];
+    NUMutableDictionary *aCharactersInSandbox = [[[self bell] sandbox] characters];
+    NSDictionary *aNewCharactersInSandbox = [aCharactersInSandbox dictionaryWithValuesForKeys:[[aCharactersInSandbox setKeys] allObjects]];
     
-    [aNewCharactersInPlayLot enumerateKeysAndObjectsUsingBlock:^(Class aCharacterClass, NUCharacter *aCharacterInPlayLot, BOOL *aStop) {
-        NUCharacter *aCharacterInSelf = [[self dictionary] objectForKey:[aCharacterInPlayLot fullName]];
+    [aNewCharactersInSandbox enumerateKeysAndObjectsUsingBlock:^(Class aCharacterClass, NUCharacter *aCharacterInSandbox, BOOL *aStop) {
+        NUCharacter *aCharacterInSelf = [[self dictionary] objectForKey:[aCharacterInSandbox fullName]];
         
-        if (aCharacterInSelf && aCharacterInSelf != aCharacterInPlayLot)
+        if (aCharacterInSelf && aCharacterInSelf != aCharacterInSandbox)
         {
-            [aCharacterInSelf setCoderClass:[aCharacterInPlayLot coderClass]];
-            [aCharacterInSelf setTargetClass:[aCharacterInPlayLot targetClass]];
+            [aCharacterInSelf setCoderClass:[aCharacterInSandbox coderClass]];
+            [aCharacterInSelf setTargetClass:[aCharacterInSandbox targetClass]];
             
-            [[[self bell] playLot] setCharacter:aCharacterInSelf forClass:aCharacterClass];
+            [[[self bell] sandbox] setCharacter:aCharacterInSelf forClass:aCharacterClass];
         }
     }];
     
-    [aCharactersInPlayLot removeAllModificationInfo];
+    [aCharactersInSandbox removeAllModificationInfo];
 }
 
 @end

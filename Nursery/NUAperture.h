@@ -1,5 +1,5 @@
 //
-//  NUPeephole.h
+//  NUAperture.h
 //  Nursery
 //
 //  Created by P,T,A on 11/08/29.
@@ -8,9 +8,9 @@
 
 #import <Nursery/NUTypes.h>
 
-@class NUNursery, NUCharacter, NUPlayLot;
+@class NUNursery, NUCharacter, NUSandbox;
 
-@interface NUPeephole : NSObject
+@interface NUAperture : NSObject
 {
     NUCharacter *character;
     NUUInt64 currentFixedOOPIvarIndex;
@@ -18,9 +18,9 @@
     NUUInt64 indexedOOPCount;
 }
 
-+ (id)peepholeWithNursery:(NUNursery *)aNursery playLot:(NUPlayLot *)aPlayLot;
++ (id)apertureWithNursery:(NUNursery *)aNursery sandbox:(NUSandbox *)aSandbox;
 
-- (id)initWithNursery:(NUNursery *)aNursery playLot:(NUPlayLot *)aPlayLot;
+- (id)initWithNursery:(NUNursery *)aNursery sandbox:(NUSandbox *)aSandbox;
 
 - (void)peekAt:(NUBellBall)aBellBall;
 - (BOOL)hasNextFixedOOP;

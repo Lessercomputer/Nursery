@@ -7,7 +7,7 @@
 //
 
 #import <Nursery/NUNurseryAssociation.h>
-#import <Nursery/NUPlayLot.h>
+#import <Nursery/NUSandbox.h>
 #import <Nursery/NUMainBranchNurseryAssociationProtocol.h>
 
 @class NUMainBranchNursery;

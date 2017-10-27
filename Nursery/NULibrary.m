@@ -12,7 +12,7 @@
 #import <Nursery/NUIvar.h>
 #import <Nursery/NUAliaser.h>
 #import <Nursery/NUBell.h>
-#import <Nursery/NUPlayLot.h>
+#import <Nursery/NUSandbox.h>
 
 @implementation NULibrary
 
@@ -120,7 +120,7 @@
 	return YES;
 }
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUPlayLot *)aPlayLot
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
 {
     [aCharacter addOOPIvarWithName:@"tree"];
 }

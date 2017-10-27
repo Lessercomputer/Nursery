@@ -7,7 +7,7 @@
 //
 
 #import "NUNursery.h"
-#import "NUPlayLot.h"
+#import "NUSandbox.h"
 #import "NUNurseryRoot.h"
 #import "NURegion.h"
 #import "NUIvar.h"
@@ -16,8 +16,8 @@
 
 NSString * const NUOOPNotFoundException = @"NUOOPNotFoundException";
 
-NUUInt64 NUNilPlayLotID = 0;
-NUUInt64 NUFirstPlayLotID = 1000;
+NUUInt64 NUNilSandboxID = 0;
+NUUInt64 NUFirstSandboxID = 1000;
 
 @implementation NUNursery
 
@@ -35,7 +35,7 @@ NUUInt64 NUFirstPlayLotID = 1000;
 
 - (void)dealloc
 {
-    [playLot release];
+    [sandbox release];
     
 	[super dealloc];
 }
@@ -44,31 +44,31 @@ NUUInt64 NUFirstPlayLotID = 1000;
 
 @implementation NUNursery (Accessing)
 
-- (NUPlayLot *)playLot
+- (NUSandbox *)sandbox
 {
-	return playLot;
+	return sandbox;
 }
 
 @end
 
 @implementation NUNursery (Grade)
 
-- (NUUInt64)latestGrade:(NUPlayLot *)sender
+- (NUUInt64)latestGrade:(NUSandbox *)sender
 {
     return NUNilGrade;
 }
 
-- (NUUInt64)olderRetainedGrade:(NUPlayLot *)sender
+- (NUUInt64)olderRetainedGrade:(NUSandbox *)sender
 {
     return NUNilGrade;
 }
 
-- (NUUInt64)retainLatestGradeByPlayLot:(NUPlayLot *)sender
+- (NUUInt64)retainLatestGradeBySandbox:(NUSandbox *)sender
 {
-    return [self retainLatestGradeByPlayLotWithID:[sender ID]];
+    return [self retainLatestGradeBySandboxWithID:[sender ID]];
 }
 
-- (NUUInt64)retainGradeIfValid:(NUUInt64)aGrade byPlayLot:(NUPlayLot *)sender
+- (NUUInt64)retainGradeIfValid:(NUUInt64)aGrade bySandbox:(NUSandbox *)sender
 {
     NUUInt64 anOlderGrade = [self olderRetainedGrade:sender];
     NUUInt64 aLatestGrade = [self latestGrade:sender];
@@ -79,47 +79,47 @@ NUUInt64 NUFirstPlayLotID = 1000;
         return NUNilGrade;
 }
 
-- (void)retainGrade:(NUUInt64)aGrade byPlayLot:(NUPlayLot *)sender
+- (void)retainGrade:(NUUInt64)aGrade bySandbox:(NUSandbox *)sender
 {
-    [self retainGrade:aGrade byPlayLotWithID:[sender ID]];
+    [self retainGrade:aGrade bySandboxWithID:[sender ID]];
 }
 
-- (void)releaseGradeLessThan:(NUUInt64)aGrade byPlayLot:(NUPlayLot *)sender
+- (void)releaseGradeLessThan:(NUUInt64)aGrade bySandbox:(NUSandbox *)sender
 {
-    [self releaseGradeLessThan:aGrade byPlayLotWithID:[sender ID]];
+    [self releaseGradeLessThan:aGrade bySandboxWithID:[sender ID]];
 }
 
-- (NUUInt64)retainLatestGradeByPlayLotWithID:(NUUInt64)anID
+- (NUUInt64)retainLatestGradeBySandboxWithID:(NUUInt64)anID
 {
     return NUNilGrade;
 }
 
-- (void)retainGrade:(NUUInt64)aGrade byPlayLotWithID:(NUUInt64)anID
+- (void)retainGrade:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID
 {
 }
 
-- (void)releaseGradeLessThan:(NUUInt64)aGrade byPlayLotWithID:(NUUInt64)anID
+- (void)releaseGradeLessThan:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID
 {
 }
 
 @end
 
-@implementation NUNursery (PlayLot)
+@implementation NUNursery (Sandbox)
 
-- (NUPlayLot *)createPlayLot
+- (NUSandbox *)createSandbox
 {
-    return [self createPlayLotWithGrade:NUNilGrade];
+    return [self createSandboxWithGrade:NUNilGrade];
 }
 
-- (NUPlayLot *)createPlayLotWithGrade:(NUUInt64)aGrade
+- (NUSandbox *)createSandboxWithGrade:(NUUInt64)aGrade
 {
-    NUPlayLot *aPlayLot = [NUPlayLot playLotWithNursery:self grade:aGrade usesGradeKidnapper:YES];
-    return aPlayLot;
+    NUSandbox *aSandbox = [NUSandbox sandboxWithNursery:self grade:aGrade usesGradeSeeker:YES];
+    return aSandbox;
 }
 
-- (void)playLotDidClose:(NUPlayLot *)aPlayLot
+- (void)sandboxDidClose:(NUSandbox *)aSandbox
 {
-    if ([aPlayLot isEqual:[self playLot]]) [self close];
+    if ([aSandbox isEqual:[self sandbox]]) [self close];
 }
 
 @end
@@ -135,10 +135,10 @@ NUUInt64 NUFirstPlayLotID = 1000;
 
 @implementation NUNursery (Private)
 
-- (void)setPlayLot:(NUPlayLot *)aPlayLot
+- (void)setSandbox:(NUSandbox *)aSandbox
 {
-    [playLot autorelease];
-    playLot = [aPlayLot retain];
+    [sandbox autorelease];
+    sandbox = [aSandbox retain];
 }
 
 - (BOOL)open
@@ -149,10 +149,10 @@ NUUInt64 NUFirstPlayLotID = 1000;
 
 - (void)close
 {
-    NUPlayLot *aPlayLot = [self playLot];
-    playLot = nil;
-    [aPlayLot close];
-    [aPlayLot release];
+    NUSandbox *aSandbox = [self sandbox];
+    sandbox = nil;
+    [aSandbox close];
+    [aSandbox release];
     
     openStatus = NUNurseryOpenStatusClose;
 }

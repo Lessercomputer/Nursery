@@ -320,7 +320,7 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
     [lock lock];
         
 	NURegion aRegion = NUMakeRegion([self objectLocationFor:aBellBall]
-										, [(NUMainBranchAliaser *)[[[self nursery] playLotForKidnapper] aliaser]  previousSizeOfObjectForBellBall:aBellBall]);
+										, [(NUMainBranchAliaser *)[[[self nursery] sandboxForSeeker] aliaser]  previousSizeOfObjectForBellBall:aBellBall]);
 
 #ifdef DEBUG
     NSLog(@"NUObjectTable #removeObjectFor:%@; aRegion:%@", NUStringFromBellBall(aBellBall), NUStringFromRegion(aRegion));

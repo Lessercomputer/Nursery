@@ -7,7 +7,7 @@
 //
 
 #import "NUBell.h"
-#import "NUPlayLot.h"
+#import "NUSandbox.h"
 #import "NUCoding.h"
 #import "NUBellBall.h"
 
@@ -16,27 +16,27 @@
 
 + (id)bellWithBall:(NUBellBall)aBall
 {
-    return [[[self alloc] initWithBall:aBall isLoaded:NO playLot:nil] autorelease];
+    return [[[self alloc] initWithBall:aBall isLoaded:NO sandbox:nil] autorelease];
 }
 
-+ (id)bellWithBall:(NUBellBall)aBall playLot:(NUPlayLot *)aPlayLot
++ (id)bellWithBall:(NUBellBall)aBall sandbox:(NUSandbox *)aSandbox
 {
-    return [[[self alloc] initWithBall:aBall isLoaded:NO playLot:aPlayLot] autorelease];
+    return [[[self alloc] initWithBall:aBall isLoaded:NO sandbox:aSandbox] autorelease];
 }
 
-+ (id)bellWithBall:(NUBellBall)aBall isLoaded:(BOOL)anIsLoaded playLot:(NUPlayLot *)aPlayLot
++ (id)bellWithBall:(NUBellBall)aBall isLoaded:(BOOL)anIsLoaded sandbox:(NUSandbox *)aSandbox
 {
-	return [[[self alloc] initWithBall:aBall isLoaded:anIsLoaded playLot:aPlayLot] autorelease];
+	return [[[self alloc] initWithBall:aBall isLoaded:anIsLoaded sandbox:aSandbox] autorelease];
 }
 
-- (id)initWithBall:(NUBellBall)aBall isLoaded:(BOOL)anIsLoaded playLot:(NUPlayLot *)aPlayLot
+- (id)initWithBall:(NUBellBall)aBall isLoaded:(BOOL)anIsLoaded sandbox:(NUSandbox *)aSandbox
 {
 	if (self = [super init])
     {
         ball = aBall;
         isLoaded = anIsLoaded;
         gradeAtCallFor = NUNilGrade;
-        playLot = aPlayLot;
+        sandbox = aSandbox;
 	}
     
 	return self;
@@ -75,9 +75,9 @@
 	ball.oop = anOOP;
 }
 
-- (NUPlayLot *)playLot
+- (NUSandbox *)sandbox
 {
-	return playLot;
+	return sandbox;
 }
 
 - (NUUInt64)grade
@@ -100,19 +100,19 @@
     gradeAtCallFor = aGrade;
 }
 
-- (NUUInt64)gradeForKidnapper
+- (NUUInt64)gradeForSeeker
 {
-    return gradeForStalker;
+    return gradeForSeeker;
 }
 
-- (void)setGradeForKidnapper:(NUUInt64)aGrade
+- (void)setGradeForSeeker:(NUUInt64)aGrade
 {
-    gradeForStalker = aGrade;
+    gradeForSeeker = aGrade;
 }
 
-- (void)setPlayLot:(NUPlayLot *)aPlayLot
+- (void)setSandbox:(NUSandbox *)aSandbox
 {
-	playLot = aPlayLot;
+	sandbox = aSandbox;
 }
 
 - (id)object
@@ -130,7 +130,7 @@
 
 - (id)loadObject
 {
-    id anObject = [[self playLot] objectForBell:self];
+    id anObject = [[self sandbox] objectForBell:self];
 	return anObject;
 }
 
@@ -160,24 +160,24 @@
 {
 	if (self == anOOP) return YES;
 	if ([self OOP] != [anOOP OOP]) return NO;
-	if (![[self playLot] isEqual:[anOOP playLot]]) return NO;
+	if (![[self sandbox] isEqual:[anOOP sandbox]]) return NO;
 	
 	return YES;
 }
 
 - (void)markChanged
 {
-    [[self playLot] markChangedObject:[self object]];
+    [[self sandbox] markChangedObject:[self object]];
 }
 
 - (void)invalidate
 {
-    [[self playLot] invalidateBell:self];
+    [[self sandbox] invalidateBell:self];
 }
 
 - (void)invalidateObjectIfNotReferenced
 {
-    [[self playLot] invalidateObjectIfNotReferencedForBell:self];
+    [[self sandbox] invalidateObjectIfNotReferencedForBell:self];
 }
 
 - (NSString *)description

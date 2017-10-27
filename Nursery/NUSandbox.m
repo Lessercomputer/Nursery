@@ -1,23 +1,23 @@
 //
-//  NUPlayLot.m
+//  NUSandbox.m
 //  Nursery
 //
 //  Created by P,T,A on 10/09/09.
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
-#import "NUPlayLot.h"
+#import "NUSandbox.h"
 #import "NUObjectTable.h"
 #import "NUCharacter.h"
 #import "NUBell.h"
 #import "NUObjectWrapper.h"
 #import "NUAliaser.h"
-#import "NUGradeKidnapper.h"
+#import "NUGradeSeeker.h"
 #import "NUNursery.h"
 #import "NUNurseryRoot.h"
 #import "NUIvar.h"
-#import "NUMainBranchPlayLot.h"
-#import "NUBranchPlayLot.h"
+#import "NUMainBranchSandbox.h"
+#import "NUBranchSandbox.h"
 #import "NUBellBall.h"
 #import "NUCharacterDictionary.h"
 #import "NUNSString.h"
@@ -29,47 +29,47 @@
 
 NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
-@implementation NUPlayLot
+@implementation NUSandbox
 @end
 
-@implementation NUPlayLot (InitializingAndRelease)
+@implementation NUSandbox (InitializingAndRelease)
 
-+ (id)playLotWithNursery:(NUNursery *)aNursery usesGradeKidnapper:(BOOL)aUsesGradeKidnapper
++ (id)sandboxWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker
 {
-    return [self playLotWithNursery:aNursery grade:NUNilGrade usesGradeKidnapper:aUsesGradeKidnapper];
+    return [self sandboxWithNursery:aNursery grade:NUNilGrade usesGradeSeeker:aUsesGradeSeeker];
 }
 
-+ (id)playLotWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeKidnapper:(BOOL)aUsesGradeKidnapper
++ (id)sandboxWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker
 {
-    Class aPlayLotClass = [aNursery isMainBranch] ? [NUMainBranchPlayLot class] : [NUBranchPlayLot class];
-    return [[[aPlayLotClass alloc] initWithNursery:aNursery grade:aGrade usesGradeKidnapper:aUsesGradeKidnapper] autorelease];
+    Class aSandboxClass = [aNursery isMainBranch] ? [NUMainBranchSandbox class] : [NUBranchSandbox class];
+    return [[[aSandboxClass alloc] initWithNursery:aNursery grade:aGrade usesGradeSeeker:aUsesGradeSeeker] autorelease];
 }
 
-- (id)initWithNursery:(NUNursery *)aNursery usesGradeKidnapper:(BOOL)aUsesGradeKidnapper
+- (id)initWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker
 {
-    return [self initWithNursery:aNursery grade:NUNilGrade usesGradeKidnapper:aUsesGradeKidnapper];
+    return [self initWithNursery:aNursery grade:NUNilGrade usesGradeSeeker:aUsesGradeSeeker];
 }
 
-- (id)initWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeKidnapper:(BOOL)aUsesGradeKidnapper
+- (id)initWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker
 {
     if (self = [super init])
     {
         lock = [NSRecursiveLock new];
-        playLotID = [aNursery isMainBranch] ? [(NUMainBranchNursery *)aNursery newPlayLotID] : NUNilPlayLotID;
+        sandboxID = [aNursery isMainBranch] ? [(NUMainBranchNursery *)aNursery newSandboxID] : NUNilSandboxID;
         grade = aGrade;
         [self setNursery:aNursery];
         [self setObjectToOOPDictionary:[NSMutableDictionary dictionary]];
         [self setBellSet:[NSMutableSet set]];
         [self setChangedObjects:[NUU64ODictionary dictionary]];
         [self setKeyObject:[NUObjectWrapper objectWrapperWithObject:nil]];
-        [self setKeyBell:[NUBell bellWithBall:NUNotFoundBellBall playLot:self]];
-        [self setAliaser:[NUAliaser aliaserWithPlayLot:self]];
+        [self setKeyBell:[NUBell bellWithBall:NUNotFoundBellBall sandbox:self]];
+        [self setAliaser:[NUAliaser aliaserWithSandbox:self]];
         [self setCharacters:[NUMutableDictionary dictionary]];
         [self setRetainedGrades:[NSMutableIndexSet indexSet]];
         [self establishSystemCharacters];
-        usesGradeKidnapper = aUsesGradeKidnapper;
-        if (aUsesGradeKidnapper) gradeKidnapper = [[NUGradeKidnapper gradeKidnapperWithPlayLot:self] retain];
-        [[self gradeKidnapper] prepare];
+        usesGradeSeeker = aUsesGradeSeeker;
+        if (aUsesGradeSeeker) gradeSeeker = [[NUGradeSeeker gradeSeekerWithSandbox:self] retain];
+        [[self gradeSeeker] prepare];
     }
     
     return self;
@@ -85,7 +85,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 	[self setKeyBell:nil];
 	[self setAliaser:nil];
     [self setRetainedGrades:nil];
-    [self setGradeKidnapper:nil];
+    [self setGradeSeeker:nil];
     [lock release];
 
 	[super dealloc];
@@ -93,7 +93,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 @end
 
-@implementation NUPlayLot (Accessing)
+@implementation NUSandbox (Accessing)
 
 - (NUNursery *)nursery
 {
@@ -102,7 +102,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 - (NUUInt64)ID
 {
-    return playLotID;
+    return sandboxID;
 }
 
 - (NUUInt64)grade
@@ -213,20 +213,20 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 	aliaser = [anAliaser retain];
 }
 
-- (NUGradeKidnapper *)gradeKidnapper
+- (NUGradeSeeker *)gradeSeeker
 {
-    return gradeKidnapper;
+    return gradeSeeker;
 }
 
-- (void)setGradeKidnapper:(NUGradeKidnapper *)aGradeKidnapper
+- (void)setGradeSeeker:(NUGradeSeeker *)aGradeSeeker
 {
-    [gradeKidnapper autorelease];
-    gradeKidnapper = [aGradeKidnapper retain];
+    [gradeSeeker autorelease];
+    gradeSeeker = [aGradeSeeker retain];
 }
 
 @end
 
-@implementation NUPlayLot (SaveAndLoad)
+@implementation NUSandbox (SaveAndLoad)
 
 - (void)moveUp
 {
@@ -237,17 +237,17 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 {
     if ([self grade] >= aGrade) return;
     
-    [[self gradeKidnapper] stop];
+    [[self gradeSeeker] stop];
     [self lock];
     [self setIsInMoveUp:YES];
     
     [self setGrade:aGrade];
     [self moveUpNurseryRoot];
-    [[self gradeKidnapper] pushRootBell:[[self nurseryRoot] bell]];
+    [[self gradeSeeker] pushRootBell:[[self nurseryRoot] bell]];
     
     [self setIsInMoveUp:NO];
     [self unlock];
-    [[self gradeKidnapper] start];
+    [[self gradeSeeker] start];
 }
 
 - (void)moveUpNurseryRoot
@@ -286,7 +286,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 - (void)close
 {
-    [[self gradeKidnapper] terminate];
+    [[self gradeSeeker] terminate];
     
     @try {
         [self lock];
@@ -295,7 +295,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
             [aBell invalidate];
         }];
         
-        [[self nursery] playLotDidClose:self];
+        [[self nursery] sandboxDidClose:self];
     }
     @finally {
         [self unlock];
@@ -304,7 +304,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 @end
 
-@implementation NUPlayLot (Bell)
+@implementation NUSandbox (Bell)
 
 - (id)objectForBell:(NUBell *)aBell
 {
@@ -384,7 +384,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 - (NUBell *)allocateBellForBellBall:(NUBellBall)aBellBall isLoaded:(BOOL)anIsLoaded
 {
-    NUBell *aBell = [NUBell bellWithBall:aBellBall isLoaded:anIsLoaded playLot:self];
+    NUBell *aBell = [NUBell bellWithBall:aBellBall isLoaded:anIsLoaded sandbox:self];
     
     @try {
         [self lock];
@@ -435,7 +435,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
             [aBell setObject:nil];
         }
 
-        [aBell setPlayLot:nil];
+        [aBell setSandbox:nil];
         [[self bellSet] removeObject:aBell];
     }
     @finally {
@@ -450,7 +450,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 @end
 
-@implementation NUPlayLot (Characters)
+@implementation NUSandbox (Characters)
 
 - (NSDictionary *)systemCharacterOOPToClassDictionary
 {
@@ -563,7 +563,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 @end
 
-@implementation NUPlayLot (ObjectState)
+@implementation NUSandbox (ObjectState)
 
 - (void)markChangedObject:(id)anObject
 {
@@ -588,7 +588,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 @end
 
-@implementation NUPlayLot (Testing)
+@implementation NUSandbox (Testing)
 
 - (BOOL)contains:(id)anObject
 {
@@ -618,7 +618,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 @end
 
-@implementation NUPlayLot (Private)
+@implementation NUSandbox (Private)
 
 - (void)lock
 {
@@ -644,7 +644,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     @try {
         [self lock];
         
-        NUUInt64 aGrade = [[self nursery] retainLatestGradeByPlayLot:self];
+        NUUInt64 aGrade = [[self nursery] retainLatestGradeBySandbox:self];
         [[self retainedGrades] addIndex:aGrade];
         return aGrade;
     }
@@ -660,7 +660,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 - (void)setID:(NUUInt64)anID
 {
-    playLotID = anID;
+    sandboxID = anID;
 }
 
 - (void)setIsInMoveUp:(BOOL)aFlag
@@ -684,13 +684,13 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     else
     {
         if ([self isInMoveUp] || [self grade] == NUNilGrade)
-            [self setGrade:usesGradeKidnapper ? [self retainLatestGradeOfNursery] : [[self nursery] latestGrade:self]];
+            [self setGrade:usesGradeSeeker ? [self retainLatestGradeOfNursery] : [[self nursery] latestGrade:self]];
         else
-            [self setGrade:[[self nursery] retainGradeIfValid:[self grade] byPlayLot:self]];
+            [self setGrade:[[self nursery] retainGradeIfValid:[self grade] bySandbox:self]];
         
         NUBell *aNurseryRootBell = [self allocateBellForBellBall:NUMakeBellBall(aNurseryRootOOP, NUNilGrade)];
         aNurseryRoot = [self objectForBell:aNurseryRootBell];
-        [[self gradeKidnapper] pushRootBell:aNurseryRootBell];
+        [[self gradeSeeker] pushRootBell:aNurseryRootBell];
         aShouldMoveUpSystemCharacters = YES;
     }
     
@@ -789,7 +789,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         [self lock];
         
         [self kidnapBellsWithGradeLessThan:aGrade];
-        [[self nursery] releaseGradeLessThan:aGrade byPlayLot:self];            
+        [[self nursery] releaseGradeLessThan:aGrade bySandbox:self];            
     }
     @finally {
         [self unlock];

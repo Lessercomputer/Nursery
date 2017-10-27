@@ -8,7 +8,7 @@
 
 #import <Nursery/Nursery.h>
 
-@class NUObjectTable, NUReversedObjectTable, NUSpaces, NUPages, NUKidnapper, NUParader, NUMainBranchPlayLot, NUPairedMainBranchPlayLot;
+@class NUObjectTable, NUReversedObjectTable, NUSpaces, NUPages, NUSeeker, NUParader, NUMainBranchSandbox, NUPairedMainBranchSandbox;
 
 @interface NUMainBranchNursery : NUNursery
 {
@@ -18,9 +18,9 @@
 	NUSpaces *spaces;
     NUUInt64 grade;
     NSMutableDictionary *retainedGrades;
-	NUKidnapper *kidnapper;
+	NUSeeker *seeker;
     NUParader *parader;
-    NUUInt64 nextPlayLotID;
+    NUUInt64 nextSandboxID;
     NSRecursiveLock *lock;
     BOOL backups;
 }
@@ -49,7 +49,7 @@
 - (NUUInt64)grade;
 - (NSMutableDictionary *)retainedGrades;
 
-- (NUKidnapper *)kidnapper;
+- (NUSeeker *)seeker;
 - (NUParader *)parader;
 
 - (BOOL)backups;
@@ -57,10 +57,10 @@
 
 @end
 
-@interface NUMainBranchNursery (PlayLot)
+@interface NUMainBranchNursery (Sandbox)
 
-- (NUUInt64)newPlayLotID;
-- (void)releasePlayLotID:(NUInt64)anID;
+- (NUUInt64)newSandboxID;
+- (void)releaseSandboxID:(NUInt64)anID;
 
 @end
 
@@ -76,17 +76,17 @@
 - (void)setSpaces:(NUSpaces *)aSpaces;
 - (void)setObjectTable:(NUObjectTable *)anObjectTable;
 - (void)setReversedObjectTable:(NUReversedObjectTable *)aReversedObjectTable;
-- (void)setKidnapper:(NUKidnapper *)aKidnapper;
+- (void)setSeeker:(NUSeeker *)aSeeker;
 - (void)setParader:(NUParader *)aParader;
 - (void)setGrade:(NUUInt64)aGrade;
 - (void)setRetainedGrades:(NSMutableDictionary *)aGrades;
 
-- (NUPairedMainBranchPlayLot *)createPairdPlayLot;
+- (NUPairedMainBranchSandbox *)createPairdSandbox;
 
-- (NUPlayLot *)playLotForKidnapper;
-- (NUPlayLot *)playLotForParader;
+- (NUSandbox *)sandboxForSeeker;
+- (NUSandbox *)sandboxForParader;
 
-- (NUUInt64)gradeForKidnapper;
+- (NUUInt64)gradeForSeeker;
 - (NUUInt64)gradeForParader;
 
 - (void)lockForFarmOut;

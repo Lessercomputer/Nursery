@@ -7,7 +7,7 @@
 //
 
 #import "NUMainBranchNurseryAssociationEntry.h"
-#import "NUMainBranchPlayLot.h"
+#import "NUMainBranchSandbox.h"
 
 @implementation NUMainBranchNurseryAssociationEntry
 
@@ -23,7 +23,7 @@
         lock = [NSLock new];
         name = [aName copy];
         nursery = [aNursery retain];
-        playLots = [NSMutableDictionary new];
+        sandboxs = [NSMutableDictionary new];
     }
     
     return self;
@@ -31,8 +31,8 @@
 
 - (void)close
 {
-    [playLots enumerateKeysAndObjectsUsingBlock:^(id key, NUPairedMainBranchPlayLot *aPlayLot, BOOL *stop) {
-        [aPlayLot close];
+    [sandboxs enumerateKeysAndObjectsUsingBlock:^(id key, NUPairedMainBranchSandbox *aSandbox, BOOL *stop) {
+        [aSandbox close];
     }];
 }
 
@@ -41,33 +41,33 @@
     return nursery;
 }
 
-- (NUPairedMainBranchPlayLot *)playLotForID:(NUUInt64)anID
+- (NUPairedMainBranchSandbox *)sandboxForID:(NUUInt64)anID
 {
     @try {
         [lock lock];
-        return [playLots objectForKey:@(anID)];
+        return [sandboxs objectForKey:@(anID)];
     }
     @finally {
         [lock unlock];
     }
 }
 
-- (void)setPlayLot:(NUPairedMainBranchPlayLot *)aPlayLot forID:(NUUInt64)anID
+- (void)setSandbox:(NUPairedMainBranchSandbox *)aSandbox forID:(NUUInt64)anID
 {
     @try {
         [lock lock];
-        [playLots setObject:aPlayLot forKey:@(anID)];
+        [sandboxs setObject:aSandbox forKey:@(anID)];
     }
     @finally {
         [lock unlock];
     }
 }
 
-- (void)removePlayLotForID:(NUUInt64)anID
+- (void)removeSandboxForID:(NUUInt64)anID
 {
     @try {
         [lock lock];
-        [playLots removeObjectForKey:@(anID)];
+        [sandboxs removeObjectForKey:@(anID)];
     }
     @finally {
         [lock unlock];
@@ -78,7 +78,7 @@
 {
     [name release];
     [nursery release];
-    [playLots release];
+    [sandboxs release];
     [lock release];
     
     [super dealloc];

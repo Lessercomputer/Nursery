@@ -9,8 +9,8 @@
 #import "NUMainBranchNurseryAssociation.h"
 #import "NUMainBranchNurseryAssociationEntry.h"
 #import "NUMainBranchNursery.h"
-#import "NUMainBranchPlayLot.h"
-#import "NUPairedMainBranchPlayLot.h"
+#import "NUMainBranchSandbox.h"
+#import "NUPairedMainBranchSandbox.h"
 
 
 static NSRecursiveLock *classLock;
@@ -129,28 +129,28 @@ NSString *NUDefaultMainBranchAssociation = @"NUDefaultMainBranchAssociation";
     return YES;
 }
 
-- (NUUInt64)openPlayLotForNurseryWithName:(bycopy NSString *)aName
+- (NUUInt64)openSandboxForNurseryWithName:(bycopy NSString *)aName
 {
     NUMainBranchNurseryAssociationEntry *anEntry = [self entryForName:aName];
     NUMainBranchNursery *aNursery = (NUMainBranchNursery *)[anEntry nursery];
-    NUPairedMainBranchPlayLot *aPlayLot = (NUPairedMainBranchPlayLot *)[aNursery createPairdPlayLot];
-    NUUInt64 aBranchPlayLotID = [aNursery newPlayLotID];
-    [anEntry setPlayLot:aPlayLot forID:aBranchPlayLotID];
-    return aBranchPlayLotID;
+    NUPairedMainBranchSandbox *aSandbox = (NUPairedMainBranchSandbox *)[aNursery createPairdSandbox];
+    NUUInt64 aBranchSandboxID = [aNursery newSandboxID];
+    [anEntry setSandbox:aSandbox forID:aBranchSandboxID];
+    return aBranchSandboxID;
 }
 
-- (void)closePlayLotWithID:(NUUInt64)anID inNurseryWithName:(bycopy NSString *)aName
+- (void)closeSandboxWithID:(NUUInt64)anID inNurseryWithName:(bycopy NSString *)aName
 {
     NUMainBranchNurseryAssociationEntry *anEntry = [self entryForName:aName];
-    NUPairedMainBranchPlayLot *aPlayLot = [anEntry playLotForID:anID];
-    [aPlayLot close];
-    [anEntry removePlayLotForID:anID];
+    NUPairedMainBranchSandbox *aSandbox = [anEntry sandboxForID:anID];
+    [aSandbox close];
+    [anEntry removeSandboxForID:anID];
 }
 
-- (NUUInt64)rootOOPForNurseryWithName:(bycopy NSString *)aName playLotWithID:(NUUInt64)anID
+- (NUUInt64)rootOOPForNurseryWithName:(bycopy NSString *)aName sandboxWithID:(NUUInt64)anID
 {
     NUMainBranchNurseryAssociationEntry *anEntry = [self entryForName:aName];
-    return [[[anEntry playLotForID:anID] aliaser] rootOOP];
+    return [[[anEntry sandboxForID:anID] aliaser] rootOOP];
 }
 
 - (NUUInt64)latestGradeForNurseryWithName:(bycopy NSString *)aName
@@ -164,40 +164,40 @@ NSString *NUDefaultMainBranchAssociation = @"NUDefaultMainBranchAssociation";
     return [[anEntry nursery] olderRetainedGrade:nil];
 }
 
-- (NUUInt64)retainLatestGradeByPlayLotWithID:(NUUInt64)anID inNurseryWithName:(bycopy NSString *)aName
+- (NUUInt64)retainLatestGradeBySandboxWithID:(NUUInt64)anID inNurseryWithName:(bycopy NSString *)aName
 {
     NUMainBranchNurseryAssociationEntry *anEntry = [self entryForName:aName];
-    return [[anEntry nursery] retainLatestGradeByPlayLot:(NUMainBranchPlayLot *)[anEntry playLotForID:anID]];
+    return [[anEntry nursery] retainLatestGradeBySandbox:(NUMainBranchSandbox *)[anEntry sandboxForID:anID]];
 }
 
-- (NUUInt64)retainGradeIfValid:(NUUInt64)aGrade byPlayLotWithID:(NUUInt64)anID inNurseryWithName:(bycopy NSString *)aName
+- (NUUInt64)retainGradeIfValid:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID inNurseryWithName:(bycopy NSString *)aName
 {
     NUMainBranchNurseryAssociationEntry *anEntry = [self entryForName:aName];
-    return [[anEntry nursery] retainGradeIfValid:aGrade byPlayLot:(NUMainBranchPlayLot *)[anEntry playLotForID:anID]];
+    return [[anEntry nursery] retainGradeIfValid:aGrade bySandbox:(NUMainBranchSandbox *)[anEntry sandboxForID:anID]];
 }
 
-- (void)retainGrade:(NUUInt64)aGrade byPlayLotWithID:(NUUInt64)anID inNurseryWithName:(bycopy NSString *)aName
+- (void)retainGrade:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID inNurseryWithName:(bycopy NSString *)aName
 {
     NUMainBranchNurseryAssociationEntry *anEntry = [self entryForName:aName];
-    [[anEntry nursery] retainGrade:aGrade byPlayLot:(NUMainBranchPlayLot *)[anEntry playLotForID:anID]];
+    [[anEntry nursery] retainGrade:aGrade bySandbox:(NUMainBranchSandbox *)[anEntry sandboxForID:anID]];
 }
 
-- (void)releaseGradeLessThan:(NUUInt64)aGrade byPlayLotWithID:(NUUInt64)anID inNurseryWithName:(bycopy NSString *)aName
+- (void)releaseGradeLessThan:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID inNurseryWithName:(bycopy NSString *)aName
 {
     NUMainBranchNurseryAssociationEntry *anEntry = [self entryForName:aName];
-    [[anEntry nursery] releaseGradeLessThan:aGrade byPlayLot:(NUMainBranchPlayLot *)[anEntry playLotForID:anID]];
+    [[anEntry nursery] releaseGradeLessThan:aGrade bySandbox:(NUMainBranchSandbox *)[anEntry sandboxForID:anID]];
 }
 
-- (bycopy NSData *)callForPupilWithOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade playLotWithID:(NUUInt64)anID containsFellowPupils:(BOOL)aContainsFellowPupils inNurseryWithName:(bycopy NSString *)aName
+- (bycopy NSData *)callForPupilWithOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade sandboxWithID:(NUUInt64)anID containsFellowPupils:(BOOL)aContainsFellowPupils inNurseryWithName:(bycopy NSString *)aName
 {
     NUMainBranchNurseryAssociationEntry *anEntry = [self entryForName:aName];
-    return [[anEntry playLotForID:anID] callForPupilWithOOP:anOOP gradeLessThanOrEqualTo:aGrade containsFellowPupils:aContainsFellowPupils];
+    return [[anEntry sandboxForID:anID] callForPupilWithOOP:anOOP gradeLessThanOrEqualTo:aGrade containsFellowPupils:aContainsFellowPupils];
 }
 
-- (NUFarmOutStatus)farmOutPupils:(bycopy NSData *)aPupilData rootOOP:(NUUInt64)aRootOOP playLotWithID:(NUUInt64)anID inNurseryWithName:(bycopy NSString *)aName fixedOOPs:(bycopy NSData **)aFixedOOPs latestGrade:(NUUInt64 *)aLatestGrade
+- (NUFarmOutStatus)farmOutPupils:(bycopy NSData *)aPupilData rootOOP:(NUUInt64)aRootOOP sandboxWithID:(NUUInt64)anID inNurseryWithName:(bycopy NSString *)aName fixedOOPs:(bycopy NSData **)aFixedOOPs latestGrade:(NUUInt64 *)aLatestGrade
 {
     NUMainBranchNurseryAssociationEntry *anEntry = [self entryForName:aName];
-    return [[anEntry playLotForID:anID] farmOutPupils:aPupilData rootOOP:aRootOOP fixedOOPs:aFixedOOPs latestGrade:aLatestGrade];
+    return [[anEntry sandboxForID:anID] farmOutPupils:aPupilData rootOOP:aRootOOP fixedOOPs:aFixedOOPs latestGrade:aLatestGrade];
 }
 
 @end

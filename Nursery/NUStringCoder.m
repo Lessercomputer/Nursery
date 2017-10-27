@@ -8,7 +8,7 @@
 
 #import "NUStringCoder.h"
 #import "NUCharacter.h"
-#import "NUPlayLot.h"
+#import "NUSandbox.h"
 
 @implementation NUStringCoder
 
@@ -69,7 +69,7 @@
     
     NSMutableString *aString = anObject;
     [aString setString:[self decodeObjectWithAliaser:anAliaser]];
-    [[anAliaser playLot] unmarkChangedObject:aString];
+    [[anAliaser sandbox] unmarkChangedObject:aString];
 }
 
 @end

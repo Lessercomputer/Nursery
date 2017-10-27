@@ -7,7 +7,7 @@
 //
 
 #import "NUBranchNursery.h"
-#import "NUBranchPlayLot.h"
+#import "NUBranchSandbox.h"
 #import "NUBranchNurseryAssociation.h"
 #import "NUPupilAlbum.h"
 
@@ -19,7 +19,7 @@
     {
         url = [aURL copy];
         association = [anAssociation retain];
-        playLot = [[NUPlayLot playLotWithNursery:self usesGradeKidnapper:YES] retain];
+        sandbox = [[NUSandbox sandboxWithNursery:self usesGradeSeeker:YES] retain];
         pupilAlbum = [NUPupilAlbum new];
     }
     
@@ -41,9 +41,9 @@
     return association;
 }
 
-- (id <NUMainBranchNurseryAssociation>)mainBranchAssociationForPlayLot:(NUBranchPlayLot *)aPlayLot
+- (id <NUMainBranchNurseryAssociation>)mainBranchAssociationForSandbox:(NUBranchSandbox *)aSandbox
 {
-    return [[self association] mainBranchAssociationForPlayLot:aPlayLot];
+    return [[self association] mainBranchAssociationForSandbox:aSandbox];
 }
 
 - (NUPupilAlbum *)pupilAlbum
@@ -64,24 +64,24 @@
 
 @implementation NUBranchNursery (Grade)
 
-- (NUUInt64)latestGrade:(NUPlayLot *)sender
+- (NUUInt64)latestGrade:(NUSandbox *)sender
 {
-    return [[self mainBranchAssociationForPlayLot:(NUBranchPlayLot *)sender] latestGradeForNurseryWithName:[self name]];
+    return [[self mainBranchAssociationForSandbox:(NUBranchSandbox *)sender] latestGradeForNurseryWithName:[self name]];
 }
 
-- (NUUInt64)olderRetainedGrade:(NUPlayLot *)sender
+- (NUUInt64)olderRetainedGrade:(NUSandbox *)sender
 {
-    return [[self mainBranchAssociationForPlayLot:(NUBranchPlayLot *)sender] olderRetainedGradeForNurseryWithName:[self name]];
+    return [[self mainBranchAssociationForSandbox:(NUBranchSandbox *)sender] olderRetainedGradeForNurseryWithName:[self name]];
 }
 
-- (NUUInt64)retainLatestGradeByPlayLot:(NUPlayLot *)sender
+- (NUUInt64)retainLatestGradeBySandbox:(NUSandbox *)sender
 {
-    return [[self mainBranchAssociationForPlayLot:(NUBranchPlayLot *)sender] retainLatestGradeByPlayLotWithID:[sender ID] inNurseryWithName:[self name]];
+    return [[self mainBranchAssociationForSandbox:(NUBranchSandbox *)sender] retainLatestGradeBySandboxWithID:[sender ID] inNurseryWithName:[self name]];
 }
 
-- (void)retainGrade:(NUUInt64)aGrade byPlayLot:(NUPlayLot *)sender
+- (void)retainGrade:(NUUInt64)aGrade bySandbox:(NUSandbox *)sender
 {
-    [[self mainBranchAssociationForPlayLot:(NUBranchPlayLot *)sender] retainGrade:aGrade byPlayLotWithID:[sender ID] inNurseryWithName:[self name]];
+    [[self mainBranchAssociationForSandbox:(NUBranchSandbox *)sender] retainGrade:aGrade bySandboxWithID:[sender ID] inNurseryWithName:[self name]];
 }
 
 @end

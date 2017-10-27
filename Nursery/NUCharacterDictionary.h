@@ -25,7 +25,7 @@
 - (NSEnumerator *)keyEnumerator;
 
 - (void)moveUp;
-- (void)mergeWithPlayLotCharacters;
+- (void)mergeWithSandboxCharacters;
 
 @end
 

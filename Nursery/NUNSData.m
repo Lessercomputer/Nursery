@@ -8,7 +8,7 @@
 
 #import "NUNSData.h"
 #import "NUCharacter.h"
-#import "NUPlayLot.h"
+#import "NUSandbox.h"
 #import "NUDataCoder.h"
 
 @implementation NSData (NUCharacter)
@@ -18,7 +18,7 @@
     return [self isEqual:[NSData class]] || [self isEqual:[NSMutableData class]];
 }
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUPlayLot *)aPlayLot
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
 {
     if ([self isEqual:[NSData class]])
     {

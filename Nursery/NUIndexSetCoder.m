@@ -9,7 +9,7 @@
 #import "NUIndexSetCoder.h"
 #import "NUNSIndexSet.h"
 #import "NUCharacter.h"
-#import "NUPlayLot.h"
+#import "NUSandbox.h"
 
 @implementation NUIndexSetCoder
 
@@ -66,7 +66,7 @@
     
     NSMutableIndexSet *anIndexSet = anObject;
     [self setIndexesToIndexSet:anIndexSet withAliaser:anAliaser];
-    [[anAliaser playLot] unmarkChangedObject:anIndexSet];
+    [[anAliaser sandbox] unmarkChangedObject:anIndexSet];
 }
 
 - (void)setIndexesToIndexSet:(NSMutableIndexSet *)anIndexSet withAliaser:(NUAliaser *)anAliaser

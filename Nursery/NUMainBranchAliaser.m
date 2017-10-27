@@ -7,13 +7,13 @@
 //
 
 #import "NUMainBranchAliaser.h"
-#import "NUPlayLot.h"
+#import "NUSandbox.h"
 #import "NUCoder.h"
 #import "NUPages.h"
 #import "NUMainBranchCodingContext.h"
 #import "NUObjectTable.h"
-#import "NUKidnapper.h"
-#import "NUGradeKidnapper.h"
+#import "NUSeeker.h"
+#import "NUGradeSeeker.h"
 #import "NUReversedObjectTable.h"
 #import "NUSpaces.h"
 #import "NUCharacter.h"
@@ -32,7 +32,7 @@
 
 - (NUMainBranchNursery *)nursery
 {
-    return (NUMainBranchNursery *)[[self playLot] nursery];
+    return (NUMainBranchNursery *)[[self sandbox] nursery];
 }
 
 - (NUPages *)pages
@@ -66,8 +66,8 @@
 
 - (NUBell *)allocateBellForObject:(id)anObject
 {
-	NUBell *aBell = [[self playLot] allocateBellForBellBall:[[self objectTable] allocateBellBallWithGrade:[self gradeForSave]] isLoaded:YES];
-    [[self playLot] setObject:anObject forBell:aBell];
+	NUBell *aBell = [[self sandbox] allocateBellForBellBall:[[self objectTable] allocateBellBallWithGrade:[self gradeForSave]] isLoaded:YES];
+    [[self sandbox] setObject:anObject forBell:aBell];
 	return aBell;
 }
 
@@ -92,7 +92,7 @@
 
 - (void)prepareCodingContextForEncode:(id)anObject
 {
-	NUBell *aBell = [[self playLot] bellForObject:anObject];
+	NUBell *aBell = [[self sandbox] bellForObject:anObject];
 	NUUInt64 anObjectLocation = 0;
 	
 	if (!aBell) aBell = [self allocateBellForObject:anObject];
@@ -109,7 +109,7 @@
 
 - (void)objectDidEncode:(NUBell *)aBell
 {
-    [[[self nursery] kidnapper] objectDidEncode:[aBell OOP]];
+    [[[self nursery] seeker] objectDidEncode:[aBell OOP]];
 }
 
 @end
@@ -187,14 +187,14 @@
 
 - (NUUInt64)previousSizeOfObject:(id)anObject
 {
-	return [self previousSizeOfObjectForBellBall:[[[self playLot] bellForObject:anObject] ball]];
+	return [self previousSizeOfObjectForBellBall:[[[self sandbox] bellForObject:anObject] ball]];
 }
 
 - (NUUInt64)previousSizeOfObjectForBellBall:(NUBellBall)aBellBall
 {
 	NUUInt64 aLocation = [[[self nursery] objectTable] objectLocationFor:aBellBall];
     if (aLocation == NUNotFound64) [[NSException exceptionWithName:NUObjectLocationNotFoundException reason:NUObjectLocationNotFoundException userInfo:nil] raise];
-	NUCharacter *aCharacter = [[self playLot] objectForOOP:[[self pages] readUInt64At:aLocation]];
+	NUCharacter *aCharacter = [[self sandbox] objectForOOP:[[self pages] readUInt64At:aLocation]];
 	NUUInt64 aSize = [aCharacter basicSize];
 	
 	if (aLocation == NUNotFound64 || aLocation == 0) return 0;
@@ -228,7 +228,7 @@
 
 - (NUUInt64)locationForObject:(id)anObject
 {
-	NUBell *anOOP = [[self playLot] bellForObject:anObject];
+	NUBell *anOOP = [[self sandbox] bellForObject:anObject];
 	if (anOOP) return [self locationForOOP:anOOP];
 	return NUNotFound64;
 }

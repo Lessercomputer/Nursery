@@ -6,7 +6,7 @@
 //
 //
 
-@class NUBranchNursery, NUPlayLot, NUBranchPlayLot;
+@class NUBranchNursery, NUSandbox, NUBranchSandbox;
 
 @interface NUBranchNurseryAssociationEntry : NSObject
 {

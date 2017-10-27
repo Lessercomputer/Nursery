@@ -6,23 +6,23 @@
 //
 //
 
-@class NUPlayLot;
+@class NUSandbox;
 
 @interface NUThreadedChildminder : NSObject
 {
-    NUPlayLot *playLot;
+    NUSandbox *sandbox;
 	NSConditionLock *conditionLock;
 	BOOL shouldStop;
 	BOOL shouldTerminate;
     BOOL isTerminated;
 }
 
-+ (id)threadedChildminderWithPlayLot:(NUPlayLot *)aPlayLot;
++ (id)threadedChildminderWithSandbox:(NUSandbox *)aSandbox;
 
-- (id)initWithPlayLot:(NUPlayLot *)aPlayLot;
+- (id)initWithSandbox:(NUSandbox *)aSandbox;
 
-- (NUPlayLot *)playLot;
-- (void)setPlayLot:(NUPlayLot *)aPlayLot;
+- (NUSandbox *)sandbox;
+- (void)setSandbox:(NUSandbox *)aSandbox;
 
 - (void)prepare;
 - (void)start;

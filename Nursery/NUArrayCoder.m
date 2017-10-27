@@ -8,7 +8,7 @@
 
 #import "NUArrayCoder.h"
 #import "NUCharacter.h"
-#import "NUPlayLot.h"
+#import "NUSandbox.h"
 
 @implementation NUArrayCoder
 

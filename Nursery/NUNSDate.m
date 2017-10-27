@@ -9,7 +9,7 @@
 #import "NUNSDate.h"
 #import "NUNSObject.h"
 #import "NUCharacter.h"
-#import "NUPlayLot.h"
+#import "NUSandbox.h"
 #import "NUDateCoder.h"
 
 @implementation NSDate (NUCharacter)
@@ -28,7 +28,7 @@
 
 @implementation NUNSDate
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUPlayLot *)aPlayLot
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
 {
     [aCharacter setIsMutable:NO];
     [aCharacter addDoubleIvarWithName:@"timeIntervalSinceReferenceDate"];    

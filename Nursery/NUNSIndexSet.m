@@ -8,7 +8,7 @@
 
 #import "NUNSIndexSet.h"
 #import "NUCharacter.h"
-#import "NUPlayLot.h"
+#import "NUSandbox.h"
 #import "NUIndexSetCoder.h"
 
 @implementation NSIndexSet (NUCharacter)
@@ -18,7 +18,7 @@
     return [self isEqual:[NSIndexSet class]] || [self isEqual:[NSMutableIndexSet class]];
 }
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUPlayLot *)aPlayLot
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
 {
     if ([self isEqual:[NSIndexSet class]])
         [aCharacter setIsMutable:NO];

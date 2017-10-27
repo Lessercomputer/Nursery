@@ -9,7 +9,7 @@
 #import "NUCharacter.h"
 #import "NUBell.h"
 #import "NUIvar.h"
-#import "NUPlayLot.h"
+#import "NUSandbox.h"
 #import "NUAliaser.h"
 #import "NUCoder.h"
 
@@ -405,7 +405,7 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
         if (![[self subCharacters] containsObject:aCharacter])
         {
             [[self subCharacters] addObject:aCharacter];
-            [[[self bell] playLot] markChangedObject:[self subCharacters]];
+            [[[self bell] sandbox] markChangedObject:[self subCharacters]];
         }
     }
     @finally
@@ -423,7 +423,7 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
         if ([[self subCharacters] containsObject:aCharacter])
         {
             [[self subCharacters] removeObject:aCharacter];
-            [[[self bell] playLot] markChangedObject:[self subCharacters]];
+            [[[self bell] sandbox] markChangedObject:[self subCharacters]];
         }
     }
     @finally
@@ -706,7 +706,7 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
     }
 }
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUPlayLot *)aPlayLot
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
 {
     if ([self isEqual:[NUCharacter class]])
 	{
@@ -780,7 +780,7 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
 
 - (void)moveUp
 {
-    [[[[self bell] playLot] aliaser] moveUp:self ignoreGradeAtCallFor:YES];
+    [[[[self bell] sandbox] aliaser] moveUp:self ignoreGradeAtCallFor:YES];
 }
 
 - (NSString *)description

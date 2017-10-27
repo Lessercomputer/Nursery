@@ -8,13 +8,13 @@
 
 #import <Nursery/NUTypes.h>
 
-@class NUMainBranchNursery, NUPairedMainBranchPlayLot;
+@class NUMainBranchNursery, NUPairedMainBranchSandbox;
 
 @interface NUMainBranchNurseryAssociationEntry : NSObject
 {
     NSString *name;
     NUMainBranchNursery *nursery;
-    NSMutableDictionary *playLots;
+    NSMutableDictionary *sandboxs;
     NSLock *lock;
 }
 
@@ -25,8 +25,8 @@
 - (void)close;
 
 - (NUMainBranchNursery *)nursery;
-- (NUPairedMainBranchPlayLot *)playLotForID:(NUUInt64)anID;
-- (void)setPlayLot:(NUPairedMainBranchPlayLot *)aPlayLot forID:(NUUInt64)anID;
-- (void)removePlayLotForID:(NUUInt64)anID;
+- (NUPairedMainBranchSandbox *)sandboxForID:(NUUInt64)anID;
+- (void)setSandbox:(NUPairedMainBranchSandbox *)aSandbox forID:(NUUInt64)anID;
+- (void)removeSandboxForID:(NUUInt64)anID;
 
 @end

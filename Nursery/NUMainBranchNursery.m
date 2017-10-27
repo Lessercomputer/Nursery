@@ -7,7 +7,7 @@
 //
 
 #import "NUMainBranchNursery.h"
-#import "NUPlayLot.h"
+#import "NUSandbox.h"
 #import "NUNurseryRoot.h"
 #import "NUObjectTable.h"
 #import "NUReversedObjectTable.h"
@@ -15,12 +15,12 @@
 #import "NUPages.h"
 #import "NUPage.h"
 #import "NURegion.h"
-#import "NUKidnapper.h"
+#import "NUSeeker.h"
 #import "NUParader.h"
 #import "NUIvar.h"
 #import "NUAliaser.h"
 #import "NUBellBall.h"
-#import "NUPairedMainBranchPlayLot.h"
+#import "NUPairedMainBranchSandbox.h"
 
 const NUUInt64 NURootObjectOOPOffset = 13;
 const NUUInt64 NUNurseryCurrentGradeOffset = 93;
@@ -46,7 +46,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 //            return nil;
 //        }
         
-        nextPlayLotID = NUFirstPlayLotID;
+        nextSandboxID = NUFirstSandboxID;
         lock = [NSRecursiveLock new];
         [self setFilePath:aFilePath];
         [self setSpaces:[NUSpaces spacesWithNursery:self]];
@@ -54,11 +54,11 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
         [self setReversedObjectTable:[[[NUReversedObjectTable alloc] initWithRootLocation:0 on:[self spaces]] autorelease]];
         [[self spaces] prepareNodeOOPToTreeDictionary];
         retainedGrades = [NSMutableDictionary new];
-        [self setKidnapper:[NUKidnapper kidnapperWithPlayLot:[NUPlayLot playLotWithNursery:self usesGradeKidnapper:NO]]];
-        [self setParader:[NUParader paraderWithPlayLot:[NUPlayLot playLotWithNursery:self usesGradeKidnapper:NO]]];
-        [[self kidnapper] prepare];
+        [self setSeeker:[NUSeeker seekerWithSandbox:[NUSandbox sandboxWithNursery:self usesGradeSeeker:NO]]];
+        [self setParader:[NUParader paraderWithSandbox:[NUSandbox sandboxWithNursery:self usesGradeSeeker:NO]]];
+        [[self seeker] prepare];
         [[self parader] prepare];
-        [self setPlayLot:[NUPlayLot playLotWithNursery:self usesGradeKidnapper:YES]];
+        [self setSandbox:[NUSandbox sandboxWithNursery:self usesGradeSeeker:YES]];
     }
     
 	return self;
@@ -70,7 +70,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     [self setReversedObjectTable:nil];
 	[self setSpaces:nil];
 	[self setFilePath:nil];
-	[self setKidnapper:nil];
+	[self setSeeker:nil];
     [self setParader:nil];
     [retainedGrades release];
     [lock release];
@@ -130,9 +130,9 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     return retainedGrades;
 }
 
-- (NUKidnapper *)kidnapper
+- (NUSeeker *)seeker
 {
-	return kidnapper;
+	return seeker;
 }
 
 - (NUParader *)parader
@@ -152,23 +152,23 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 
 @end
 
-@implementation NUMainBranchNursery (PlayLot)
+@implementation NUMainBranchNursery (Sandbox)
 
-- (NUUInt64)newPlayLotID
+- (NUUInt64)newSandboxID
 {
-    NUUInt64 aNewPlayLotID;
+    NUUInt64 aNewSandboxID;
     
     [lock lock];
     
-    aNewPlayLotID = nextPlayLotID;
-    nextPlayLotID++;
+    aNewSandboxID = nextSandboxID;
+    nextSandboxID++;
     
     [lock unlock];
     
-    return aNewPlayLotID;
+    return aNewSandboxID;
 }
 
-- (void)releasePlayLotID:(NUInt64)anID
+- (void)releaseSandboxID:(NUInt64)anID
 {
     
 }
@@ -177,7 +177,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 
 @implementation NUMainBranchNursery (Grade)
 
-- (NUUInt64)latestGrade:(NUPlayLot *)sender
+- (NUUInt64)latestGrade:(NUSandbox *)sender
 {
     [lock lock];
     
@@ -188,13 +188,13 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     return aGrade;
 }
 
-- (NUUInt64)olderRetainedGrade:(NUPlayLot *)sender
+- (NUUInt64)olderRetainedGrade:(NUSandbox *)sender
 {
     [lock lock];
     
     __block NUUInt64 aGrade = NUNotFoundGrade;
     
-    [[self retainedGrades] enumerateKeysAndObjectsUsingBlock:^(NSNumber *aGradeNumber, NSMutableIndexSet *aPlayLotIDs, BOOL *aStop) {
+    [[self retainedGrades] enumerateKeysAndObjectsUsingBlock:^(NSNumber *aGradeNumber, NSMutableIndexSet *aSandboxIDs, BOOL *aStop) {
         NUUInt64 aRetainedGradeNumber = [aGradeNumber unsignedLongLongValue];
         if (aRetainedGradeNumber < aGrade) aGrade = aRetainedGradeNumber;
     }];
@@ -206,43 +206,43 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     return aGrade;
 }
 
-- (NUUInt64)retainLatestGradeByPlayLotWithID:(NUUInt64)anID
+- (NUUInt64)retainLatestGradeBySandboxWithID:(NUUInt64)anID
 {
     [lock lock];
     
     NUUInt64 aGrade = [self grade];
-    [self retainGrade:aGrade byPlayLotWithID:anID];
+    [self retainGrade:aGrade bySandboxWithID:anID];
     
     [lock unlock];
     
     return aGrade;
 }
 
-- (void)retainGrade:(NUUInt64)aGrade byPlayLotWithID:(NUUInt64)anID
+- (void)retainGrade:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID
 {
     [lock lock];
     
     NSNumber *aGradeNumber = @(aGrade);
-    NSMutableIndexSet *aPlayLotIDs = [[self retainedGrades] objectForKey:aGradeNumber];
+    NSMutableIndexSet *aSandboxIDs = [[self retainedGrades] objectForKey:aGradeNumber];
     
-    if (!aPlayLotIDs)
+    if (!aSandboxIDs)
     {
-        aPlayLotIDs = [NSMutableIndexSet indexSet];
-        [[self retainedGrades] setObject:aPlayLotIDs forKey:aGradeNumber];
+        aSandboxIDs = [NSMutableIndexSet indexSet];
+        [[self retainedGrades] setObject:aSandboxIDs forKey:aGradeNumber];
     }
     
-    [aPlayLotIDs addIndex:anID];
+    [aSandboxIDs addIndex:anID];
     
     [lock unlock];
 }
 
-- (void)releaseGradeLessThan:(NUUInt64)aGrade byPlayLotWithID:(NUUInt64)anID
+- (void)releaseGradeLessThan:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID
 {
     [lock lock];
     
     NSMutableIndexSet *aRetainedGrades = [NSMutableIndexSet indexSet];
     
-    [[self retainedGrades] enumerateKeysAndObjectsUsingBlock:^(NSNumber *aRetainedGradeNumber, NSMutableIndexSet *aPlayLotIDs, BOOL *stop) {
+    [[self retainedGrades] enumerateKeysAndObjectsUsingBlock:^(NSNumber *aRetainedGradeNumber, NSMutableIndexSet *aSandboxIDs, BOOL *stop) {
         NUUInt64 aRetainedGrade = [aRetainedGradeNumber unsignedLongLongValue];
         if (aRetainedGrade < aGrade)
             [aRetainedGrades addIndex:aRetainedGrade];
@@ -250,13 +250,13 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     
     [aRetainedGrades enumerateIndexesUsingBlock:^(NSUInteger aRetainedGrade, BOOL *stop) {
         NSNumber *aGradeNumber = @(aRetainedGrade);
-        NSMutableIndexSet *aPlayLotIDs = [[self retainedGrades] objectForKey:aGradeNumber];
+        NSMutableIndexSet *aSandboxIDs = [[self retainedGrades] objectForKey:aGradeNumber];
         
-        if (aPlayLotIDs)
+        if (aSandboxIDs)
         {
-            [aPlayLotIDs removeIndex:anID];
+            [aSandboxIDs removeIndex:anID];
             
-            if (![aPlayLotIDs count])
+            if (![aSandboxIDs count])
                 [[self retainedGrades] removeObjectForKey:aGradeNumber];
         }
     }];
@@ -302,10 +302,10 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     reversedObjectTable = [aReversedObjectTable retain];
 }
 
-- (void)setKidnapper:(NUKidnapper *)aKidnapper
+- (void)setSeeker:(NUSeeker *)aSeeker
 {
-	[kidnapper autorelease];
-	kidnapper = [aKidnapper retain];
+	[seeker autorelease];
+	seeker = [aSeeker retain];
 }
 
 - (void)setParader:(NUParader *)aParader
@@ -325,29 +325,29 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     retainedGrades = [aGrades retain];
 }
 
-- (NUPairedMainBranchPlayLot *)createPairdPlayLot
+- (NUPairedMainBranchSandbox *)createPairdSandbox
 {
-    NUPairedMainBranchPlayLot *aPlayLot = [NUPairedMainBranchPlayLot playLotWithNursery:self usesGradeKidnapper:NO];
-    return aPlayLot;
+    NUPairedMainBranchSandbox *aSandbox = [NUPairedMainBranchSandbox sandboxWithNursery:self usesGradeSeeker:NO];
+    return aSandbox;
 }
 
-- (NUPlayLot *)playLotForKidnapper
+- (NUSandbox *)sandboxForSeeker
 {
-    return [[self kidnapper] playLot];
+    return [[self seeker] sandbox];
 }
 
-- (NUPlayLot *)playLotForParader
+- (NUSandbox *)sandboxForParader
 {
-    return [[self parader] playLot];
+    return [[self parader] sandbox];
 }
 
-- (NUUInt64)gradeForKidnapper
+- (NUUInt64)gradeForSeeker
 {
     @try
     {
         [self lockForChange];
         
-        NUUInt64 aGrade = [self olderRetainedGrade:[self playLotForKidnapper]];
+        NUUInt64 aGrade = [self olderRetainedGrade:[self sandboxForSeeker]];
         if (aGrade == NUNotFoundGrade) aGrade = [self grade];
         return aGrade;
     }
@@ -375,14 +375,14 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 - (void)lockForFarmOut
 {
 #ifdef DEBUG
-    NSLog(@"%@: will stop kidnapper", self);
+    NSLog(@"%@: will stop seeker", self);
 #endif
     
-    [[self kidnapper] stop];
+    [[self seeker] stop];
     [[self parader] stop];
     
 #ifdef DEBUG
-    NSLog(@"%@: did stop kidnapper", self);
+    NSLog(@"%@: did stop seeker", self);
 #endif
     
     [self lockForChange];
@@ -393,14 +393,14 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     [self unlockForChange];
     
 #ifdef DEBUG
-    NSLog(@"%@: will start kidnapper", self);
+    NSLog(@"%@: will start seeker", self);
 #endif
     
-    [[self kidnapper] startWithoutWait];
+    [[self seeker] startWithoutWait];
     [[self parader] startWithoutWait];
     
 #ifdef DEBUG
-    NSLog(@"%@: did start kidnapper", self);
+    NSLog(@"%@: did start seeker", self);
 #endif
 }
 
@@ -459,7 +459,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 {
     if (![self isOpen]) return;
     
-	[[self kidnapper] terminate];
+	[[self seeker] terminate];
     [[self parader] terminate];
     [[self fileHandle] closeFile];
     
@@ -496,7 +496,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     
     if (shouldStartChildminders)
     {
-        [[self kidnapper] start];
+        [[self seeker] start];
         [[self parader] start];
     }
     
@@ -509,7 +509,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     
     @try
     {
-        [[self kidnapper] stop];
+        [[self seeker] stop];
         [[self parader] stop];
         
         [self lockForChange];
@@ -521,7 +521,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
         [self saveGrade];
         [[self objectTable] save];
         [[self reversedObjectTable] save];
-        [[self kidnapper] save];
+        [[self seeker] save];
         [[self parader] save];
         [[self spaces] save];
         
@@ -536,7 +536,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     {
         [self unlockForChange];
         
-        [[self kidnapper] start];
+        [[self seeker] start];
         [[self parader] start];
     }
     
@@ -679,7 +679,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 	[[self spaces] load];
 	[[self objectTable] load];
     [[self reversedObjectTable] load];
-	[[self kidnapper] load];
+	[[self seeker] load];
     [[self parader] load];
 }
 

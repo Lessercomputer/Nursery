@@ -1,5 +1,5 @@
 //
-//  NUKidnapper.h
+//  NUSeeker.h
 //  Nursery
 //
 //  Created by P,T,A on 11/08/17.
@@ -9,24 +9,24 @@
 #import <Nursery/NUTypes.h>
 #import "NUThreadedChildminder.h"
 
-extern const NUUInt8 NUKidnapperNonePhase;
-extern const NUUInt8 NUKidnapperStalkPhase;
-extern const NUUInt8 NUKidnapperKidnapPhase;
+extern const NUUInt8 NUSeekerNonePhase;
+extern const NUUInt8 NUSeekerSeekPhase;
+extern const NUUInt8 NUSeekerKidnapPhase;
 
-@class NUIndexArray, NUMainBranchNursery, NUPeephole;
+@class NUIndexArray, NUMainBranchNursery, NUAperture;
 
-@interface NUKidnapper : NUThreadedChildminder
+@interface NUSeeker : NUThreadedChildminder
 {
 	NUIndexArray *grayOOPs;
 	BOOL shouldLoadGrayOOPs;
 	NUUInt8 currentPhase;
     NUUInt64 grade;
-	NUPeephole *peephole;
+	NUAperture *aperture;
 }
 
-+ (id)kidnapperWithPlayLot:(NUPlayLot *)aPlayLot;
++ (id)seekerWithSandbox:(NUSandbox *)aSandbox;
 
-- (id)initWithPlayLot:(NUPlayLot *)aPlayLot;
+- (id)initWithSandbox:(NUSandbox *)aSandbox;
 
 - (void)objectDidEncode:(NUUInt64)anOOP;
 
@@ -39,10 +39,10 @@ extern const NUUInt8 NUKidnapperKidnapPhase;
 
 @end
 
-@interface NUKidnapper (Private)
+@interface NUSeeker (Private)
 
-- (void)stalkObjects;
-- (void)stalkObjectsUntilStop;
+- (void)seekObjects;
+- (void)seekObjectsUntilStop;
 - (void)kidnapObjects;
 - (void)pushRootOOP;
 - (void)loadGrayOOPs;

@@ -12,7 +12,7 @@ extern NSString *NUPupilNoteNotFoundException;
 
 @interface NUBranchAliaser : NUAliaser
 
-- (NUBranchPlayLot *)branchPlayLot;
+- (NUBranchSandbox *)branchSandbox;
 - (NUBranchNursery *)branchNursery;
 - (NUPupilAlbum *)pupilAlbum;
 - (NSString *)branchNurseryName;

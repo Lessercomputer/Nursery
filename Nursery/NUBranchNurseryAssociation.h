@@ -9,7 +9,7 @@
 #import <Nursery/NUNurseryAssociation.h>
 #import <Nursery/NUMainBranchNurseryAssociation.h>
 
-@class NUBranchNursery, NUBranchPlayLot, NUBranchNurseryAssociationEntry;
+@class NUBranchNursery, NUBranchSandbox, NUBranchNurseryAssociationEntry;
 
 @interface NUBranchNurseryAssociation : NUNurseryAssociation
 {
@@ -28,6 +28,6 @@
 
 - (NUBranchNurseryAssociationEntry *)entryForURL:(NSURL *)aURL;
 - (NSNumber *)ensureBranchNurseryAssociationThreadID;
-- (id <NUMainBranchNurseryAssociation>)mainBranchAssociationForPlayLot:(NUBranchPlayLot *)aPlayLot;
+- (id <NUMainBranchNurseryAssociation>)mainBranchAssociationForSandbox:(NUBranchSandbox *)aSandbox;
 
 @end

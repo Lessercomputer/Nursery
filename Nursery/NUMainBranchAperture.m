@@ -1,12 +1,12 @@
 //
-//  NUMainBranchPeephole.m
+//  NUMainBranchAperture.m
 //  Nursery
 //
 //  Created by P,T,A on 2013/09/19.
 //
 //
 
-#import "NUMainBranchPeephole.h"
+#import "NUMainBranchAperture.h"
 #import "NUMainBranchNursery.h"
 #import "NUPages.h"
 #import "NUCharacter.h"
@@ -14,14 +14,14 @@
 #import "NUIvar.h"
 #import "NUBellBall.h"
 
-@implementation NUMainBranchPeephole
+@implementation NUMainBranchAperture
 
-- (id)initWithNursery:(NUNursery *)aNursery playLot:(NUPlayLot *)aPlayLot
+- (id)initWithNursery:(NUNursery *)aNursery sandbox:(NUSandbox *)aSandbox
 {
-	if (self = [super initWithNursery:aNursery playLot:aPlayLot])
+	if (self = [super initWithNursery:aNursery sandbox:aSandbox])
 	{
         nursery = (NUMainBranchNursery *)aNursery;
-        playLot = (NUMainBranchPlayLot *)aPlayLot;
+        sandbox = (NUMainBranchSandbox *)aSandbox;
 	}
     
 	return self;
@@ -45,7 +45,7 @@
                 [[NSException exceptionWithName:NUObjectLocationNotFoundException reason:NUObjectLocationNotFoundException userInfo:nil] raise];
             
             NUUInt64 aCharacterOOP = [[nursery pages] readUInt64At:objectLocation];
-            character = [playLot objectForOOP:aCharacterOOP];
+            character = [sandbox objectForOOP:aCharacterOOP];
             if ([character isIndexedIvars] || [character isFixedAndIndexedIvars])
                 indexedOOPCount = [[nursery pages] readUInt64At:objectLocation + sizeof(NUUInt64)]
                 / sizeof(NUUInt64);

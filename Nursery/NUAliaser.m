@@ -7,7 +7,7 @@
 //
 
 #import "NUAliaser.h"
-#import "NUPlayLot.h"
+#import "NUSandbox.h"
 #import "NUPages.h"
 #import "NUCodingContext.h"
 #import "NUIndexArray.h"
@@ -17,13 +17,13 @@
 #import "NUCoder.h"
 #import "NUCharacter.h"
 #import "NUSpaces.h"
-#import "NUKidnapper.h"
+#import "NUSeeker.h"
 #import "NURegion.h"
 #import "NUBellBall.h"
 #import "NUMainBranchAliaser.h"
 #import "NUBranchAliaser.h"
-#import "NUGradeKidnapper.h"
-#import "NUPairedMainBranchPlayLot.h"
+#import "NUGradeSeeker.h"
+#import "NUPairedMainBranchSandbox.h"
 #import "NUPairedMainBranchAliaser.h"
 #import "NUU64ODictionary.h"
 #import "NUPupilNote.h"
@@ -38,17 +38,17 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 
 @implementation NUAliaser (Initializing)
 
-+ (id)aliaserWithPlayLot:(NUPlayLot *)aPlayLot
++ (id)aliaserWithSandbox:(NUSandbox *)aSandbox
 {
-    Class aClass = [aPlayLot isForMainBranch] ? ([aPlayLot isKindOfClass:[NUPairedMainBranchPlayLot class]] ? [NUPairedMainBranchAliaser class] : [NUMainBranchAliaser class]) : [NUBranchAliaser class];
-	return [[[aClass alloc] initWithPlayLot:aPlayLot] autorelease];
+    Class aClass = [aSandbox isForMainBranch] ? ([aSandbox isKindOfClass:[NUPairedMainBranchSandbox class]] ? [NUPairedMainBranchAliaser class] : [NUMainBranchAliaser class]) : [NUBranchAliaser class];
+	return [[[aClass alloc] initWithSandbox:aSandbox] autorelease];
 }
 
-- (id)initWithPlayLot:(NUPlayLot *)aPlayLot
+- (id)initWithSandbox:(NUSandbox *)aSandbox
 {
 	if (self = [super init])
     {
-        [self setPlayLot:aPlayLot];
+        [self setSandbox:aSandbox];
         [self setContexts:[NSMutableArray array]];
         [self setObjectToEncode:[NSMutableArray array]];
 	}
@@ -69,14 +69,14 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 
 @implementation NUAliaser (Accessing)
 
-- (NUPlayLot *)playLot
+- (NUSandbox *)sandbox
 {
-	return playLot;
+	return sandbox;
 }
 
-- (void)setPlayLot:(NUPlayLot *)aPlayLot
+- (void)setSandbox:(NUSandbox *)aSandbox
 {
-	playLot = aPlayLot;
+	sandbox = aSandbox;
 }
 
 - (NSMutableArray *)contexts
@@ -144,7 +144,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 
 - (NUUInt64)grade
 {
-    return [[self playLot] grade];
+    return [[self sandbox] grade];
 }
 
 - (NUUInt64)gradeForSave
@@ -220,7 +220,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 - (void)encodeChangedObjects
 {
 	NUBell *aChangedObject;
-	NUU64ODictionary *aChangedObjects = [[self playLot] changedObjects];
+	NUU64ODictionary *aChangedObjects = [[self sandbox] changedObjects];
 	
 	while ((aChangedObject = [aChangedObjects anyObject]))
 	{
@@ -239,7 +239,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 
 - (void)encodeObjectReally:(id)anObject
 {
-    NUCharacter *aCharacter = [[anObject classForNursery] characterOn:[self playLot]];
+    NUCharacter *aCharacter = [[anObject classForNursery] characterOn:[self sandbox]];
     
 	[self ensureCharacterRegistration:aCharacter];
     
@@ -261,7 +261,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 		[anObject encodeWithAliaser:self];
 	
 	[self objectDidEncode:[[self currentContext] bell]];
-	[[self playLot] unmarkChangedObject:anObject];
+	[[self sandbox] unmarkChangedObject:anObject];
 	[self popContext];
 
 }
@@ -269,8 +269,8 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 - (void)ensureCharacterRegistration:(NUCharacter *)aCharacter
 {
     do {
-        if (![[self playLot] characterForName:[aCharacter fullName]])
-            [[self playLot] setCharacter:aCharacter forName:[aCharacter fullName]];
+        if (![[self sandbox] characterForName:[aCharacter fullName]])
+            [[self sandbox] setCharacter:aCharacter forName:[aCharacter fullName]];
     } while ((aCharacter = [aCharacter superCharacter]));
 }
 
@@ -291,22 +291,22 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 		id aNextObject = [objectsToEncode lastObject];
 		[objectsToEncode removeLastObject];
 		
-		if ([[self playLot] needsEncode:aNextObject]) return aNextObject;
+		if ([[self sandbox] needsEncode:aNextObject]) return aNextObject;
     }
 		
 	return nil;
 }
 
-- (void)validatePlayLotOfEncodingObject:(id)anObject
+- (void)validateSandboxOfEncodingObject:(id)anObject
 {
-    NUPlayLot *aPlayLotOfAnObject = nil;
+    NUSandbox *aSandboxOfAnObject = nil;
     
     if ([anObject isBell])
-        aPlayLotOfAnObject = [(NUBell *)anObject playLot];
+        aSandboxOfAnObject = [(NUBell *)anObject sandbox];
     else if ([anObject conformsToProtocol:@protocol(NUCoding)])
-        aPlayLotOfAnObject = [[(id <NUCoding>)anObject bell] playLot];
+        aSandboxOfAnObject = [[(id <NUCoding>)anObject bell] sandbox];
     
-    if (aPlayLotOfAnObject && ![aPlayLotOfAnObject isEqual:[self playLot]])
+    if (aSandboxOfAnObject && ![aSandboxOfAnObject isEqual:[self sandbox]])
         @throw [NSException exceptionWithName:NUAliaserCannotEncodeObjectException reason:NUAliaserCannotEncodeObjectException userInfo:nil];
 }
 
@@ -319,27 +319,27 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 {
     NUUInt64 anOOP = NUNilOOP;
     
-    [self validatePlayLotOfEncodingObject:anObject];
+    [self validateSandboxOfEncodingObject:anObject];
     
     if ([anObject isBell])
         anOOP = [anObject OOP];
     else if (anObject
              && ([anObject conformsToProtocol:@protocol(NUCoding)]
-                 || [[[anObject classForNursery] characterOn:[self playLot]] coderClass]))
+                 || [[[anObject classForNursery] characterOn:[self sandbox]] coderClass]))
     {
-        NUBell *aBell = [[self playLot] bellForObject:anObject];
+        NUBell *aBell = [[self sandbox] bellForObject:anObject];
         
         if (aBell)
         {
             anOOP = [aBell OOP];
-            if ([[self playLot] needsEncode:anObject])
+            if ([[self sandbox] needsEncode:anObject])
                 [objectsToEncode addObject:anObject];
         }
         else
         {
             anOOP = [[self allocateBellForObject:anObject] OOP];
             [objectsToEncode addObject:anObject];
-            [[self playLot] markChangedObject:anObject];
+            [[self sandbox] markChangedObject:anObject];
         }
     }
 
@@ -579,8 +579,8 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 {
 	if (anOOP == NUNilOOP) return nil;
 
-	NUBell *aBell = [[self playLot] bellForOOP:anOOP];
-	if (!aBell) aBell = [[self playLot] allocateBellForBellBall:NUMakeBellBall(anOOP, NUNilGrade)];
+	NUBell *aBell = [[self sandbox] bellForOOP:anOOP];
+	if (!aBell) aBell = [[self sandbox] allocateBellForBellBall:NUMakeBellBall(anOOP, NUNilGrade)];
     [aBell setGradeAtCallFor:[self grade]];
 	
 	if (aReallyDecode)
@@ -603,7 +603,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 - (id)decodeObjectForBell:(NUBell *)aBell classOOP:(NUUInt64)aClassOOP
 {
 	id anObject = nil;
-	NUCharacter *aCharacter = [[self playLot] objectForOOP:aClassOOP];
+	NUCharacter *aCharacter = [[self sandbox] objectForOOP:aClassOOP];
     
     [self ensureCharacterForDecoding:aCharacter];
     [[self currentContext] setCharacter:aCharacter];
@@ -621,26 +621,26 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 		if ([aCharacter isMutable])
 		{
 			anObject = [aCoder new];
-			[[self playLot] setObject:anObject forBell:aBell];
+			[[self sandbox] setObject:anObject forBell:aBell];
 			[aCoder decode:anObject withAliaser:self];
 		}
 		else
 		{
 			anObject = [[aCoder decodeObjectWithAliaser:self] retain];
-			[[self playLot] setObject:anObject forBell:aBell];
+			[[self sandbox] setObject:anObject forBell:aBell];
 		}
 	}
 	else
 	{
 		anObject = [[aCharacter targetClass] new];
-		[[self playLot] setObject:anObject forBell:aBell];
+		[[self sandbox] setObject:anObject forBell:aBell];
 		[anObject initWithAliaser:self];
 	}
 	
 	[self popContext];
     
     [aBell setIsLoaded:YES];
-    [[[self playLot] gradeKidnapper] bellDidLoadIvars:aBell];
+    [[[self sandbox] gradeSeeker] bellDidLoadIvars:aBell];
     
 	return [anObject autorelease];
 }
@@ -858,7 +858,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 
 - (void)moveUp:(id)anObject ignoreGradeAtCallFor:(BOOL)anIgnoreFlag
 {
-    NUBell *aBell = [[self playLot] bellForObject:anObject];
+    NUBell *aBell = [[self sandbox] bellForObject:anObject];
     if (!aBell) return;
     if (!anIgnoreFlag && [aBell gradeAtCallFor] == [self grade]) return;
     
@@ -866,7 +866,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
     [self prepareCodingContextForMoveUp:aBell];
     
     NUUInt64 aClassOOP = [self decodeUInt64];
-    NUCharacter *aCharacter = [[self playLot] objectForOOP:aClassOOP];
+    NUCharacter *aCharacter = [[self sandbox] objectForOOP:aClassOOP];
     
     if (![aCharacter isMutable]) return;
     [[self currentContext] setCharacter:aCharacter];
@@ -887,7 +887,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
     
     [self popContext];
     
-    [[[self playLot] gradeKidnapper] bellDidLoadIvars:aBell];
+    [[[self sandbox] gradeSeeker] bellDidLoadIvars:aBell];
 }
 
 - (void)moveUpObjects:(NSArray *)anObjects
@@ -913,7 +913,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 
 - (NUUInt64)computeSizeOfObject:(id)anObject
 {
-	NUCharacter *aCharacter = [[anObject classForNursery] characterOn:[self playLot]];
+	NUCharacter *aCharacter = [[anObject classForNursery] characterOn:[self sandbox]];
 	NUUInt64 aSize = [aCharacter basicSize];
 	
 	if ([aCharacter isVariable])
@@ -934,7 +934,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 //    NSLog(@"#fixProbationaryOOPsInPupil:%@", aPupilNote);
 //#endif
     NUUInt64 aCharacterOOP = [aPupilNote isa];
-    NUCharacter *aCharacter = [[self playLot] objectForOOP:aCharacterOOP];
+    NUCharacter *aCharacter = [[self sandbox] objectForOOP:aCharacterOOP];
     
     for (NSUInteger i = 0; i < [aCharacter allOOPIvarsCount]; i++)
     {

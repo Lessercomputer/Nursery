@@ -9,7 +9,7 @@
 #import "NUNSNumber.h"
 #import "NUNSObject.h"
 #import "NUCharacter.h"
-#import "NUPlayLot.h"
+#import "NUSandbox.h"
 #import "NUNumberCoder.h"
 
 @implementation NSNumber (NUCharacter)
@@ -66,7 +66,7 @@
 
 @implementation NUNSNumber
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUPlayLot *)aPlayLot
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
 {
     [aCharacter setIsMutable:NO];
     [aCharacter setFormat:NUIndexedBytes];

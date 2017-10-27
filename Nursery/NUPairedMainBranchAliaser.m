@@ -10,16 +10,16 @@
 #import "NUPages.h"
 #import "NUObjectTable.h"
 #import "NUReversedObjectTable.h"
-#import "NUPairedMainBranchPlayLot.h"
+#import "NUPairedMainBranchSandbox.h"
 #import "NUU64ODictionary.h"
 #import "NUSpaces.h"
 #import "NUBranchCodingContext.h"
 
 @implementation NUPairedMainBranchAliaser
 
-- (id)initWithPlayLot:(NUPlayLot *)aPlayLot
+- (id)initWithSandbox:(NUSandbox *)aSandbox
 {
-    if (self = [super initWithPlayLot:aPlayLot])
+    if (self = [super initWithSandbox:aSandbox])
     {
         pupils = [NUU64ODictionary new];
     }
@@ -27,9 +27,9 @@
     return self;
 }
 
-- (NUPairedMainBranchPlayLot *)pairedMainBranchPlayLot
+- (NUPairedMainBranchSandbox *)pairedMainBranchSandbox
 {
-    return (NUPairedMainBranchPlayLot *)[self playLot];
+    return (NUPairedMainBranchSandbox *)[self sandbox];
 }
 
 - (void)dealloc
@@ -47,7 +47,7 @@
 {
     NUPupilNote *aPupilNote = [pupils objectForKey:[aBell OOP]];
     
-    if (!aPupilNote && ![[self pairedMainBranchPlayLot] OOPIsProbationary:[aBell OOP]])
+    if (!aPupilNote && ![[self pairedMainBranchSandbox] OOPIsProbationary:[aBell OOP]])
             aPupilNote = [fixedOOPToProbationaryPupils objectForKey:[aBell OOP]];
     
     if (aPupilNote)
@@ -149,7 +149,7 @@
         [[NSException exceptionWithName:NUObjectLocationNotFoundException reason:NUObjectLocationNotFoundException userInfo:nil] raise];
     
     aCharacterOOP = [[self pages] readUInt64At:anObjectLocation];
-    aCharacter = [[self playLot] objectForOOP:aCharacterOOP];
+    aCharacter = [[self sandbox] objectForOOP:aCharacterOOP];
     anObjectSize = [self previousSizeOfObjectForBellBall:aBellBall];
     
     aUInt64Value = NSSwapHostLongLongToBig(aBellBall.oop);
@@ -205,7 +205,7 @@
 {
     [pupils enumerateKeysAndObjectsUsingBlock:^(NUUInt64 anOOP, NUPupilNote *aPupilNote, BOOL *stop) {
         
-        if ([[self pairedMainBranchPlayLot] OOPIsProbationary:[aPupilNote OOP]])
+        if ([[self pairedMainBranchSandbox] OOPIsProbationary:[aPupilNote OOP]])
         {
             NUBellBall aFixedBellBall = [self fixedBellBallForPupilWithOOP:[aPupilNote OOP]];
 
@@ -219,7 +219,7 @@
 
 - (NUBellBall)fixedBellBallForPupilWithOOP:(NUUInt64)anOOP
 {
-    if ([[self pairedMainBranchPlayLot] OOPIsProbationary:anOOP])
+    if ([[self pairedMainBranchSandbox] OOPIsProbationary:anOOP])
         return [[self objectTable] allocateBellBallWithGrade:[self gradeForSave]];
     else
         return NUMakeBellBall(anOOP, [self gradeForSave]);
@@ -234,7 +234,7 @@
 //    NSLog(@"aReferencedOOP:%llu", aReferencedOOP);
 //#endif
     
-    if ([[self pairedMainBranchPlayLot] OOPIsProbationary:aReferencedOOP])
+    if ([[self pairedMainBranchSandbox] OOPIsProbationary:aReferencedOOP])
     {
         NUPupilNote *aReferencedPupilNote = [pupils objectForKey:aReferencedOOP];
         NUBellBall aFixedBellBall = NUNotFoundBellBall;
@@ -242,7 +242,7 @@
         if (!aReferencedPupilNote)
             @throw [NSException exceptionWithName:NSGenericException reason:NSGenericException userInfo:nil];
         
-        if ([[self pairedMainBranchPlayLot] OOPIsProbationary:aReferencedPupilNote.OOP])
+        if ([[self pairedMainBranchSandbox] OOPIsProbationary:aReferencedPupilNote.OOP])
         {
             aFixedBellBall = [self fixedBellBallForPupilWithOOP:[aReferencedPupilNote OOP]];
             [aReferencedPupilNote setBellBall:aFixedBellBall];
@@ -276,7 +276,7 @@
     NSMutableData *aProbationaryOOPAndFixedOOPData = [NSMutableData data];
     
     [pupils enumerateKeysAndObjectsUsingBlock:^(NUUInt64 anOOP, NUPupilNote *aPupilNote, BOOL *stop) {
-        if ([[self pairedMainBranchPlayLot] OOPIsProbationary:anOOP])
+        if ([[self pairedMainBranchSandbox] OOPIsProbationary:anOOP])
         {
             NUUInt64 aProbationaryOOP = NSSwapHostLongLongToBig(anOOP);
             NUUInt64 aFixedOOP = NSSwapHostLongLongToBig([aPupilNote OOP]);
@@ -290,7 +290,7 @@
 
 - (NUUInt64)fixedRootOOPForOOP:(NUUInt64)anOOP
 {
-    if ([[self pairedMainBranchPlayLot] OOPIsProbationary:anOOP])
+    if ([[self pairedMainBranchSandbox] OOPIsProbationary:anOOP])
         return [[pupils objectForKey:anOOP] OOP];
     else
         return anOOP;

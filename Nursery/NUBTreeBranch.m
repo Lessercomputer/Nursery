@@ -9,7 +9,7 @@
 #import <Nursery/NUBTreeBranch.h>
 #import <Nursery/NUBTree.h>
 #import <Nursery/NUBell.h>
-#import <Nursery/NUPlayLot.h>
+#import <Nursery/NUSandbox.h>
 
 @implementation NUBTreeBranch
 
@@ -77,7 +77,7 @@
         {
             [aNode shuffleLeftNode];
             [[self keys] replaceObjectAtIndex:aNodeIndex - 1 withObject:[aNode firstKey]];
-            [[[self bell] playLot] markChangedObject:[self keys]];
+            [[[self bell] sandbox] markChangedObject:[self keys]];
             
 #ifdef DEBUG
             if ([aNode isBranch] && [aNode keyCount] + 1 != [aNode valueCount])
@@ -90,7 +90,7 @@
         {
             [aNode shuffleRightNode];
             [[self keys] replaceObjectAtIndex:aNodeIndex withObject:[[aNode rightNode] firstKey]];
-            [[[self bell] playLot] markChangedObject:[self keys]];
+            [[[self bell] sandbox] markChangedObject:[self keys]];
             
 #ifdef DEBUG
             if ([aNode isBranch] && [aNode keyCount] + 1 != [aNode valueCount])
@@ -110,8 +110,8 @@
 
             [[self keys] removeObjectAtIndex:aNodeIndex - 1];
             [[self values] removeObjectAtIndex:aNodeIndex];
-            [[[self bell] playLot] markChangedObject:[self keys]];
-            [[[self bell] playLot] markChangedObject:[self values]];
+            [[[self bell] sandbox] markChangedObject:[self keys]];
+            [[[self bell] sandbox] markChangedObject:[self values]];
         }
         else if (aNodeIndex != [self valueCount] - 1)
         {
@@ -124,8 +124,8 @@
             
             [[self keys] removeObjectAtIndex:aNodeIndex];
             [[self values] removeObjectAtIndex:aNodeIndex];
-            [[[self bell] playLot] markChangedObject:[self keys]];
-            [[[self bell] playLot] markChangedObject:[self values]];
+            [[[self bell] sandbox] markChangedObject:[self keys]];
+            [[[self bell] sandbox] markChangedObject:[self values]];
         }
         else
         {
@@ -150,8 +150,8 @@
     [[self keys] removeObjectsInRange:aKeyRemoveRange];
     [[self values] removeObjectsInRange:aNewValueRange];
     
-    [[[self bell] playLot] markChangedObject:[self keys]];
-    [[[self bell] playLot] markChangedObject:[self values]];
+    [[[self bell] sandbox] markChangedObject:[self keys]];
+    [[[self bell] sandbox] markChangedObject:[self values]];
 
 #ifdef DEBUG
     if ([self keyCount] + 1 != [self valueCount])
@@ -179,16 +179,16 @@
     
     [[[self leftNode] keys] removeObjectsInRange:aKeyRange];
     [[[self leftNode] values] removeObjectsInRange:aValueRange];
-    [[[self bell] playLot] markChangedObject:[[self leftNode] keys]];
-    [[[self bell] playLot] markChangedObject:[[self leftNode] values]];
+    [[[self bell] sandbox] markChangedObject:[[self leftNode] keys]];
+    [[[self bell] sandbox] markChangedObject:[[self leftNode] values]];
     
     [aKeys removeObjectAtIndex:0];
     [aKeys addObject:[self firstKey]];
     
     [[self keys] insertObjects:aKeys atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [aKeys count])]];
     [[self values] insertObjects:aValues atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [aValues count])]];
-    [[[self bell] playLot] markChangedObject:[self keys]];
-    [[[self bell] playLot] markChangedObject:[self values]];
+    [[[self bell] sandbox] markChangedObject:[self keys]];
+    [[[self bell] sandbox] markChangedObject:[self values]];
     [aValues enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         [obj setParentNode:self];
     }];
@@ -207,8 +207,8 @@
     
     [[[self rightNode] keys] removeObjectsInRange:aRange];
     [[[self rightNode] values] removeObjectsInRange:aRange];
-    [[[self bell] playLot] markChangedObject:[[self rightNode] keys]];
-    [[[self bell] playLot] markChangedObject:[[self rightNode] values]];
+    [[[self bell] sandbox] markChangedObject:[[self rightNode] keys]];
+    [[[self bell] sandbox] markChangedObject:[[self rightNode] values]];
     
 #ifdef DEBUG
     if ([self keyCount] + [aKeys count] + 1 != [self valueCount] + [aValues count])
@@ -220,8 +220,8 @@
     
     [[self keys] addObjectsFromArray:aKeys];
     [[self values] addObjectsFromArray:aValues];
-    [[[self bell] playLot] markChangedObject:[self keys]];
-    [[[self bell] playLot] markChangedObject:[self values]];
+    [[[self bell] sandbox] markChangedObject:[self keys]];
+    [[[self bell] sandbox] markChangedObject:[self values]];
     [aValues enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         [obj setParentNode:self];
     }];
@@ -290,7 +290,7 @@
 {
     [[self values] insertObject:aNode atIndex:anIndex];
     [aNode setParentNode:self];
-    [[[self bell] playLot] markChangedObject:[self values]];
+    [[[self bell] sandbox] markChangedObject:[self values]];
 }
 
 - (void)removeNodeAt:(NUUInt64)anIndex
@@ -298,13 +298,13 @@
     NUBTreeNode *aNode = [self valueAt:anIndex];
     [[self values] removeObjectAtIndex:anIndex];
     [aNode setParentNode:nil];
-    [[[self bell] playLot] markChangedObject:[self values]];
+    [[[self bell] sandbox] markChangedObject:[self values]];
 }
 
 - (void)insertKey:(id)aKey at:(NUUInt64)anIndex
 {
     [[self keys] insertObject:aKey atIndex:anIndex];
-    [[[self bell] playLot] markChangedObject:[self keys]];
+    [[[self bell] sandbox] markChangedObject:[self keys]];
 }
 
 @end
@@ -324,7 +324,7 @@
     if ([self getKeyIndexLessThanOrEqualTo:aKey keyIndexInto:&aKeyIndex])
     {
         [[self keys] replaceObjectAtIndex:aKeyIndex withObject:[[self valueAt:aKeyIndex + 1] firstKey]];
-        [[[self bell] playLot] markChangedObject:[self keys]];
+        [[[self bell] sandbox] markChangedObject:[self keys]];
     }
     
     [[self valueAt:aKeyIndex != NUNotFound64 ? aKeyIndex + 1 : 0] updateKey:aKey];

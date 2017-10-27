@@ -12,7 +12,7 @@
 #import <Nursery/NUIvar.h>
 #import <Nursery/NUAliaser.h>
 #import <Nursery/NUBell.h>
-#import <Nursery/NUPlayLot.h>
+#import <Nursery/NUSandbox.h>
 
 @implementation NUBTreeNode
 
@@ -276,16 +276,16 @@
 {
     [[[self leftNode] leftNode] setRightNode:self];
     [self setLeftNode:[[self leftNode] leftNode]];
-    [[[self bell] playLot] markChangedObject:[self keys]];
-    [[[self bell] playLot] markChangedObject:[self values]];
+    [[[self bell] sandbox] markChangedObject:[self keys]];
+    [[[self bell] sandbox] markChangedObject:[self values]];
 }
 
 - (void)mergeRightNode
 {
     [[[self rightNode] rightNode] setLeftNode:self];
     [self setRightNode:[[self rightNode] rightNode]];
-    [[[self bell] playLot] markChangedObject:[self keys]];
-    [[[self bell] playLot] markChangedObject:[self values]];
+    [[[self bell] sandbox] markChangedObject:[self keys]];
+    [[[self bell] sandbox] markChangedObject:[self values]];
 }
 
 @end
@@ -297,7 +297,7 @@
 	return YES;
 }
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUPlayLot *)aPlayLot
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
 {
     if (![[self class] isEqual:[NUBTreeNode class]]) return;
 

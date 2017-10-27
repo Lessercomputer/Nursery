@@ -20,17 +20,17 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 
 - (NUUInt64)rootOOP
 {
-    return [[self mainBranchAssociation] rootOOPForNurseryWithName:[self branchNurseryName] playLotWithID:[[self playLot] ID]];
+    return [[self mainBranchAssociation] rootOOPForNurseryWithName:[self branchNurseryName] sandboxWithID:[[self sandbox] ID]];
 }
 
-- (NUBranchPlayLot *)branchPlayLot
+- (NUBranchSandbox *)branchSandbox
 {
-    return (NUBranchPlayLot *)[self playLot];
+    return (NUBranchSandbox *)[self sandbox];
 }
 
 - (NUBranchNursery *)branchNursery
 {
-    return (NUBranchNursery *)[[self playLot] nursery];
+    return (NUBranchNursery *)[[self sandbox] nursery];
 }
 
 - (NUPupilAlbum *)pupilAlbum
@@ -45,7 +45,7 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 
 - (id <NUMainBranchNurseryAssociation>)mainBranchAssociation
 {
-    return [[self branchNursery] mainBranchAssociationForPlayLot:[self branchPlayLot]];
+    return [[self branchNursery] mainBranchAssociationForSandbox:[self branchSandbox]];
 }
 
 @end
@@ -84,7 +84,7 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 - (NUPupilNote *)callForPupilNoteReallyWithOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade
 {
     id <NUMainBranchNurseryAssociation> anAssociation = [self mainBranchAssociation];
-    NSData *aPupilNoteData = [anAssociation callForPupilWithOOP:anOOP gradeLessThanOrEqualTo:aGrade playLotWithID:[[self playLot] ID] containsFellowPupils:YES inNurseryWithName:[self branchNurseryName]];
+    NSData *aPupilNoteData = [anAssociation callForPupilWithOOP:anOOP gradeLessThanOrEqualTo:aGrade sandboxWithID:[[self sandbox] ID] containsFellowPupils:YES inNurseryWithName:[self branchNurseryName]];
     NUPupilNote *aPupilNote = nil;
     NSArray *aPupilNotes = [self pupilNotesFromPupilNoteData:aPupilNoteData pupilNoteOOP:anOOP pupilNoteInto:&aPupilNote];
     [[self pupilAlbum] addPupilNotes:aPupilNotes grade:aGrade];
@@ -139,7 +139,7 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 
 - (void)prepareCodingContextForEncode:(id)anObject
 {
-	NUBell *aBell = [[self playLot] bellForObject:anObject];
+	NUBell *aBell = [[self sandbox] bellForObject:anObject];
     NUPupilNote *aPupilNote;
 	
 	if (!aBell) aBell = [self allocateBellForObject:anObject];
@@ -155,7 +155,7 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 
 - (NUPupilNote *)ensurePupilNoteFor:(NUBell *)aBell
 {
-    NUPupilNote *aPupilNote = [[[self branchPlayLot] probationaryPupils] objectForKey:aBell];
+    NUPupilNote *aPupilNote = [[[self branchSandbox] probationaryPupils] objectForKey:aBell];
     
     if (aPupilNote)
     {
@@ -166,7 +166,7 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
     else
     {
         aPupilNote = [NUPupilNote pupilNoteWithOOP:[aBell OOP] grade:NUNilGrade size:[self computeSizeOfObject:[aBell object]]];
-        [[[self branchPlayLot] probationaryPupils] setObject:aPupilNote forKey:aBell];
+        [[[self branchSandbox] probationaryPupils] setObject:aPupilNote forKey:aBell];
     }
     
     return aPupilNote;
@@ -176,7 +176,7 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 {
     NSMutableData *aData = [NSMutableData data];
     
-    [[[self branchPlayLot] probationaryPupils] enumerateKeysAndObjectsUsingBlock:^(NUBell *aBell, NUPupilNote *aPupilNote, BOOL *aStop) {
+    [[[self branchSandbox] probationaryPupils] enumerateKeysAndObjectsUsingBlock:^(NUBell *aBell, NUPupilNote *aPupilNote, BOOL *aStop) {
         NUUInt64 aValue = NSSwapHostLongLongToBig([aBell OOP]);
         [aData appendBytes:&aValue length:sizeof(NUUInt64)];
         aValue = NSSwapHostLongLongToBig([aPupilNote size]);
@@ -193,8 +193,8 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 
 - (NUBell *)allocateBellForObject:(id)anObject
 {
-    NUBell *aBell = [[self playLot] allocateBellForBellBall:NUMakeBellBall([[self branchPlayLot] allocProbationaryOOP], NUNilGrade)];
-    [[self playLot] setObject:anObject forBell:aBell];
+    NUBell *aBell = [[self sandbox] allocateBellForBellBall:NUMakeBellBall([[self branchSandbox] allocProbationaryOOP], NUNilGrade)];
+    [[self sandbox] setObject:anObject forBell:aBell];
     return aBell;
 }
 
@@ -215,10 +215,10 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 {
     NUUInt64 aReferencedOOP = [aPupilNote readUInt64At:anIvarOffset];
     
-    if ([[self branchPlayLot] OOPIsProbationary:aReferencedOOP])
+    if ([[self branchSandbox] OOPIsProbationary:aReferencedOOP])
     {
-        NUBell *aReferencedBell = [[self playLot] bellForOOP:aReferencedOOP];
-        NUPupilNote *aReferencedPupilNote = [[[self branchPlayLot] probationaryPupils] objectForKey:aReferencedBell];
+        NUBell *aReferencedBell = [[self sandbox] bellForOOP:aReferencedOOP];
+        NUPupilNote *aReferencedPupilNote = [[[self branchSandbox] probationaryPupils] objectForKey:aReferencedBell];
         
         [aPupilNote writeUInt64:[aReferencedPupilNote OOP] at:anIvarOffset];
     }

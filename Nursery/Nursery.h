@@ -16,9 +16,9 @@
 #import <Nursery/NUMainBranchNursery.h>
 #import <Nursery/NUBranchNursery.h>
 
-#import <Nursery/NUPlayLot.h>
-#import <Nursery/NUMainBranchPlayLot.h>
-#import <Nursery/NUBranchPlayLot.h>
+#import <Nursery/NUSandbox.h>
+#import <Nursery/NUMainBranchSandbox.h>
+#import <Nursery/NUBranchSandbox.h>
 
 #import <Nursery/NUAliaser.h>
 #import <Nursery/NUCoding.h>

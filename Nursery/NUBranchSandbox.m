@@ -1,20 +1,20 @@
 //
-//  NUBranchPlayLot.m
+//  NUBranchSandbox.m
 //  Nursery
 //
 //  Created by P,T,A on 2013/10/23.
 //
 //
 
-#import "NUBranchPlayLot.h"
-#import "NUGradeKidnapper.h"
+#import "NUBranchSandbox.h"
+#import "NUGradeSeeker.h"
 #import "NUBranchAliaser.h"
 
-@implementation NUBranchPlayLot
+@implementation NUBranchSandbox
 
-- (id)initWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeKidnapper:(BOOL)aUsesGradeKidnapper
+- (id)initWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker
 {
-    if (self = [super initWithNursery:aNursery grade:aGrade usesGradeKidnapper:aUsesGradeKidnapper])
+    if (self = [super initWithNursery:aNursery grade:aGrade usesGradeSeeker:aUsesGradeSeeker])
     {
         nextProbationaryOOP = NUNotFound64 - 1;
         probationaryPupils = [NSMutableDictionary new];
@@ -54,7 +54,7 @@
 
 @end
 
-@implementation NUBranchPlayLot (SaveAndLoad)
+@implementation NUBranchSandbox (SaveAndLoad)
 
 - (NUFarmOutStatus)farmOut
 {
@@ -64,7 +64,7 @@
         NSData *aFixedOOPs = nil;
         NUUInt64 aLatestGrade = NUNilGrade;
         
-        [[self gradeKidnapper] stop];
+        [[self gradeSeeker] stop];
         
         if (![self gradeIsEqualToNurseryGrade]) return NUFarmOutStatusNurseryGradeUnmatched;
         
@@ -74,14 +74,14 @@
             [[self aliaser] setRoots:[NSMutableArray arrayWithObject:[self nurseryRoot]]];
         
         [[self aliaser] encodeObjects];
-        aFarmOutStatus = [[self mainBranchNurseryAssociation] farmOutPupils:[[self branchAliaser] encodedPupilData] rootOOP:[[[self nurseryRoot] bell] OOP] playLotWithID:[self ID] inNurseryWithName:[[self branchNursery] name] fixedOOPs:&aFixedOOPs latestGrade:&aLatestGrade];
+        aFarmOutStatus = [[self mainBranchNurseryAssociation] farmOutPupils:[[self branchAliaser] encodedPupilData] rootOOP:[[[self nurseryRoot] bell] OOP] sandboxWithID:[self ID] inNurseryWithName:[[self branchNursery] name] fixedOOPs:&aFixedOOPs latestGrade:&aLatestGrade];
         
         if (aFarmOutStatus == NUFarmOutStatusSucceeded)
         {
             [self replaceProbationaryOOPsWithFixedOOPs:aFixedOOPs inPupils:[self probationaryPupils] grade:aLatestGrade];
             [[self probationaryPupils] removeAllObjects];
             [self setGrade:aLatestGrade];
-            [[self gradeKidnapper] pushRootBell:[[self nurseryRoot] bell]];
+            [[self gradeSeeker] pushRootBell:[[self nurseryRoot] bell]];
         }
         /*else
             [self restoreChangedObjects];*/
@@ -91,7 +91,7 @@
     @finally {
         //[self setStoredChangedObjects:nil];
         //[[self probationaryPupils] removeAllObjects];
-        [[self gradeKidnapper] start];
+        [[self gradeSeeker] start];
     }
     
     return aFarmOutStatus;
@@ -99,11 +99,11 @@
 
 @end
 
-@implementation NUBranchPlayLot (Private)
+@implementation NUBranchSandbox (Private)
 
 - (id <NUMainBranchNurseryAssociation>)mainBranchNurseryAssociation
 {
-    id <NUMainBranchNurseryAssociation> aMainBranchNurseryAssociation = [[(NUBranchNursery *)[self nursery] association] mainBranchAssociationForPlayLot:self];
+    id <NUMainBranchNurseryAssociation> aMainBranchNurseryAssociation = [[(NUBranchNursery *)[self nursery] association] mainBranchAssociationForSandbox:self];
     return aMainBranchNurseryAssociation;
 }
 

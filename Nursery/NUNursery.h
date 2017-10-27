@@ -8,12 +8,12 @@
 
 #import <Nursery/NUTypes.h>
 
-@class NUCharacter, NUBell, NUObjectWrapper, NUAliaser, NUNurseryRoot, NUPlayLot;
+@class NUCharacter, NUBell, NUObjectWrapper, NUAliaser, NUNurseryRoot, NUSandbox;
 
 extern NSString * const NUOOPNotFoundException;
 
-extern NUUInt64 NUNilPlayLotID;
-extern NUUInt64 NUFirstPlayLotID;
+extern NUUInt64 NUNilSandboxID;
+extern NUUInt64 NUFirstSandboxID;
 
 typedef enum : NSUInteger {
     NUNurseryOpenStatusClose,
@@ -24,7 +24,7 @@ typedef enum : NSUInteger {
 @interface NUNursery : NSObject
 {
     NUNurseryOpenStatus openStatus;
-	NUPlayLot *playLot;
+	NUSandbox *sandbox;
 }
 @end
 
@@ -34,32 +34,32 @@ typedef enum : NSUInteger {
 
 @interface NUNursery (Accessing)
 
-- (NUPlayLot *)playLot;
+- (NUSandbox *)sandbox;
 
 @end
 
 @interface NUNursery (Grade)
 
-- (NUUInt64)latestGrade:(NUPlayLot *)sender;
-- (NUUInt64)olderRetainedGrade:(NUPlayLot *)sender;
+- (NUUInt64)latestGrade:(NUSandbox *)sender;
+- (NUUInt64)olderRetainedGrade:(NUSandbox *)sender;
 
-- (NUUInt64)retainLatestGradeByPlayLot:(NUPlayLot *)sender;
-- (NUUInt64)retainGradeIfValid:(NUUInt64)aGrade byPlayLot:(NUPlayLot *)sender;
-- (void)retainGrade:(NUUInt64)aGrade byPlayLot:(NUPlayLot *)sender;
-- (void)releaseGradeLessThan:(NUUInt64)aGrade byPlayLot:(NUPlayLot *)sender;
+- (NUUInt64)retainLatestGradeBySandbox:(NUSandbox *)sender;
+- (NUUInt64)retainGradeIfValid:(NUUInt64)aGrade bySandbox:(NUSandbox *)sender;
+- (void)retainGrade:(NUUInt64)aGrade bySandbox:(NUSandbox *)sender;
+- (void)releaseGradeLessThan:(NUUInt64)aGrade bySandbox:(NUSandbox *)sender;
 
-- (NUUInt64)retainLatestGradeByPlayLotWithID:(NUUInt64)anID;
-- (void)retainGrade:(NUUInt64)aGrade byPlayLotWithID:(NUUInt64)anID;
-- (void)releaseGradeLessThan:(NUUInt64)aGrade byPlayLotWithID:(NUUInt64)anID;
+- (NUUInt64)retainLatestGradeBySandboxWithID:(NUUInt64)anID;
+- (void)retainGrade:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID;
+- (void)releaseGradeLessThan:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID;
 
 @end
 
-@interface NUNursery (PlayLot)
+@interface NUNursery (Sandbox)
 
-- (NUPlayLot *)createPlayLot;
-- (NUPlayLot *)createPlayLotWithGrade:(NUUInt64)aGrade;
+- (NUSandbox *)createSandbox;
+- (NUSandbox *)createSandboxWithGrade:(NUUInt64)aGrade;
 
-- (void)playLotDidClose:(NUPlayLot *)aPlayLot;
+- (void)sandboxDidClose:(NUSandbox *)aSandbox;
 
 @end
 
@@ -71,7 +71,7 @@ typedef enum : NSUInteger {
 
 @interface NUNursery (Private)
 
-- (void)setPlayLot:(NUPlayLot *)aPlayLot;
+- (void)setSandbox:(NUSandbox *)aSandbox;
 
 - (BOOL)open;
 - (void)close;

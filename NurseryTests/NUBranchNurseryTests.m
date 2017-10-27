@@ -35,15 +35,15 @@ static NSString *NUNurseryTestFilePath;
 {
     NUMainBranchNursery *aMainBranchNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
     
-    [[aMainBranchNursery playLot] setRoot:@"theRoot"];
-    XCTAssertEqual([[aMainBranchNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
+    [[aMainBranchNursery sandbox] setRoot:@"theRoot"];
+    XCTAssertEqual([[aMainBranchNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
     
     [[NUMainBranchNurseryAssociation defaultAssociation] setNursery:aMainBranchNursery forName:@"nursery"];
     
     NUBranchNurseryAssociation *aBranchAssociation = [NUBranchNurseryAssociation association];
     NUBranchNursery *aBranchNursery = [aBranchAssociation nurseryForURL:[NUNurseryAssociation URLWithHostName:nil associationName:NUDefaultMainBranchAssociation nurseryName:@"nursery"]];
     
-    XCTAssertEqualObjects([[aBranchNursery playLot] root], @"theRoot", @"");
+    XCTAssertEqualObjects([[aBranchNursery sandbox] root], @"theRoot", @"");
     
     [aBranchAssociation close];
     
@@ -60,8 +60,8 @@ static NSString *NUNurseryTestFilePath;
     NUBranchNurseryAssociation *aBranchAssociation = [NUBranchNurseryAssociation association];
     NUBranchNursery *aBranchNursery = [aBranchAssociation nurseryForURL:[NUNurseryAssociation URLWithHostName:nil associationName:NUDefaultMainBranchAssociation nurseryName:@"nursery"]];
     
-    [[aBranchNursery playLot] setRoot:@"theRoot"];
-    XCTAssertEqual([[aBranchNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
+    [[aBranchNursery sandbox] setRoot:@"theRoot"];
+    XCTAssertEqual([[aBranchNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
     [aBranchAssociation close];
     
     [[NUMainBranchNurseryAssociation defaultAssociation] removeNurseryForName:@"nursery"];
@@ -77,38 +77,38 @@ static NSString *NUNurseryTestFilePath;
     NUBranchNurseryAssociation *aBranchAssociation = [NUBranchNurseryAssociation association];
     NUBranchNursery *aBranchNursery = [aBranchAssociation nurseryForURL:[NUNurseryAssociation URLWithHostName:nil associationName:NUDefaultMainBranchAssociation nurseryName:@"nursery"]];
     
-    NUPlayLot *aBranchPlayLot2 = [aBranchNursery createPlayLot];
-    NUPlayLot *aBranchPlayLot3 = [aBranchNursery createPlayLot];
-    NUPlayLot *aBranchPlayLot4 = [aBranchNursery createPlayLot];
-    NUPlayLot *aBranchPlayLot5 = [aBranchNursery createPlayLot];
+    NUSandbox *aBranchSandbox2 = [aBranchNursery createSandbox];
+    NUSandbox *aBranchSandbox3 = [aBranchNursery createSandbox];
+    NUSandbox *aBranchSandbox4 = [aBranchNursery createSandbox];
+    NUSandbox *aBranchSandbox5 = [aBranchNursery createSandbox];
     
-    [[aBranchNursery playLot] setRoot:@"theRoot"];
-    XCTAssertEqual([[aBranchNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
+    [[aBranchNursery sandbox] setRoot:@"theRoot"];
+    XCTAssertEqual([[aBranchNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
     
-    XCTAssertEqualObjects([aBranchPlayLot2 root], @"theRoot", @"");
+    XCTAssertEqualObjects([aBranchSandbox2 root], @"theRoot", @"");
     
-    [aBranchPlayLot3 setRoot:@"theRoot3"];
-    XCTAssertEqual([aBranchPlayLot3 farmOut], NUFarmOutStatusSucceeded, @"");
-    XCTAssertEqualObjects([aBranchPlayLot3 root], @"theRoot3", @"");
-    XCTAssertEqualObjects([aBranchPlayLot4 root], @"theRoot3", @"");
+    [aBranchSandbox3 setRoot:@"theRoot3"];
+    XCTAssertEqual([aBranchSandbox3 farmOut], NUFarmOutStatusSucceeded, @"");
+    XCTAssertEqualObjects([aBranchSandbox3 root], @"theRoot3", @"");
+    XCTAssertEqualObjects([aBranchSandbox4 root], @"theRoot3", @"");
     
-    [aBranchPlayLot2 setRoot:@"theRoot2"];
-    NSString *theRoot2 = [[[aBranchPlayLot2 root] retain] autorelease];
-    XCTAssertEqual([aBranchPlayLot2 farmOut], NUFarmOutStatusNurseryGradeUnmatched, @"");
-    [aBranchPlayLot2 moveUp];
-    XCTAssertEqualObjects([aBranchPlayLot2 root], @"theRoot3", @"");
-    [aBranchPlayLot2 setRoot:theRoot2];
-    XCTAssertEqualObjects([aBranchPlayLot2 root], @"theRoot2", @"");
-    XCTAssertTrue([aBranchPlayLot2 gradeIsEqualToNurseryGrade], @"");
-    XCTAssertEqual([aBranchPlayLot2 farmOut], NUFarmOutStatusSucceeded, @"");
-    XCTAssertEqualObjects([aBranchPlayLot2 root], @"theRoot2", @"");
+    [aBranchSandbox2 setRoot:@"theRoot2"];
+    NSString *theRoot2 = [[[aBranchSandbox2 root] retain] autorelease];
+    XCTAssertEqual([aBranchSandbox2 farmOut], NUFarmOutStatusNurseryGradeUnmatched, @"");
+    [aBranchSandbox2 moveUp];
+    XCTAssertEqualObjects([aBranchSandbox2 root], @"theRoot3", @"");
+    [aBranchSandbox2 setRoot:theRoot2];
+    XCTAssertEqualObjects([aBranchSandbox2 root], @"theRoot2", @"");
+    XCTAssertTrue([aBranchSandbox2 gradeIsEqualToNurseryGrade], @"");
+    XCTAssertEqual([aBranchSandbox2 farmOut], NUFarmOutStatusSucceeded, @"");
+    XCTAssertEqualObjects([aBranchSandbox2 root], @"theRoot2", @"");
     
-    XCTAssertEqualObjects([aBranchPlayLot5 root], @"theRoot2", @"");
+    XCTAssertEqualObjects([aBranchSandbox5 root], @"theRoot2", @"");
     
-    [aBranchPlayLot2 close];
-    [aBranchPlayLot3 close];
-    [aBranchPlayLot4 close];
-    [aBranchPlayLot5 close];
+    [aBranchSandbox2 close];
+    [aBranchSandbox3 close];
+    [aBranchSandbox4 close];
+    [aBranchSandbox5 close];
     
     [aBranchAssociation close];
     

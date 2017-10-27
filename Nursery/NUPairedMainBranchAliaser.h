@@ -14,7 +14,7 @@
     NUU64ODictionary *fixedOOPToProbationaryPupils;
 }
 
-- (NUPairedMainBranchPlayLot *)pairedMainBranchPlayLot;
+- (NUPairedMainBranchSandbox *)pairedMainBranchSandbox;
 
 @end
 

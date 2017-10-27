@@ -24,14 +24,14 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 
 @implementation NUParader
 
-+ (id)paraderWithPlayLot:(NUPlayLot *)aPlayLot
++ (id)paraderWithSandbox:(NUSandbox *)aSandbox
 {
-    return [[[self alloc] initWithPlayLot:aPlayLot] autorelease];
+    return [[[self alloc] initWithSandbox:aSandbox] autorelease];
 }
 
 - (NUMainBranchNursery *)nursery
 {
-    return (NUMainBranchNursery *)[[self playLot] nursery];
+    return (NUMainBranchNursery *)[[self sandbox] nursery];
 }
 
 - (void)save
@@ -70,7 +70,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
         {
             [[self nursery] lockForChange];
             
-            [[self playLot] moveUpTo:[[self nursery] gradeForParader]];
+            [[self sandbox] moveUpTo:[[self nursery] gradeForParader]];
             
             NURegion aFreeRegion = [[[self nursery] spaces] nextParaderTargetFreeSpaceForLocation:nextLocation];
             
@@ -126,7 +126,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     NSLog(@"#paradeObject nextLocation:%llu bellBall:%@ freeRegion:%@", nextLocation, NUStringFromBellBall(aBellBall), NUStringFromRegion(aFreeRegion));
 #endif
     
-    NUUInt64 anObjectSize = [(NUMainBranchAliaser *)[[self playLot] aliaser] previousSizeOfObjectForBellBall:aBellBall];
+    NUUInt64 anObjectSize = [(NUMainBranchAliaser *)[[self sandbox] aliaser] previousSizeOfObjectForBellBall:aBellBall];
     NURegion aNewFreeRegion = NUMakeRegion(aFreeRegion.location + anObjectSize, aFreeRegion.length);
     [[[self nursery] pages] moveBytesAt:nextLocation length:anObjectSize to:aFreeRegion.location buffer:aBuffer length:aBufferSize];
     //[[[self nursery] spaces] moveFreeSpaceAtLocation:aFreeRegion.location toLocation:aNewFreeRegion.location];

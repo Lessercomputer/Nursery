@@ -1,12 +1,12 @@
 //
-//  NUPeephole.m
+//  NUAperture.m
 //  Nursery
 //
 //  Created by P,T,A on 11/08/29.
 //  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 
-#import "NUPeephole.h"
+#import "NUAperture.h"
 #import "NUMainBranchNursery.h"
 #import "NUPages.h"
 #import "NUCharacter.h"
@@ -15,14 +15,14 @@
 #import "NUBellBall.h"
 
 
-@implementation NUPeephole
+@implementation NUAperture
 
-+ (id)peepholeWithNursery:(NUNursery *)aNursery playLot:(NUPlayLot *)aPlayLot
++ (id)apertureWithNursery:(NUNursery *)aNursery sandbox:(NUSandbox *)aSandbox
 {
-	return [[[self alloc] initWithNursery:aNursery playLot:aPlayLot] autorelease];
+	return [[[self alloc] initWithNursery:aNursery sandbox:aSandbox] autorelease];
 }
 
-- (id)initWithNursery:(NUNursery *)aNursery playLot:(NUPlayLot *)aPlayLot
+- (id)initWithNursery:(NUNursery *)aNursery sandbox:(NUSandbox *)aSandbox
 {
 	self = [super init];
 		

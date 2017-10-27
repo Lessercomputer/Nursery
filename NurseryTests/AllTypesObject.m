@@ -17,7 +17,7 @@ static BOOL useKeyedCoding = NO;
     return YES;
 }
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUPlayLot *)aPlayLot
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
 {
     [aCharacter addInt8IvarWithName:@"int8Value"];
     [aCharacter addInt16IvarName:@"int16Value"];

@@ -8,7 +8,7 @@
 
 #import "NUNSArray.h"
 #import "NUCharacter.h"
-#import "NUPlayLot.h"
+#import "NUSandbox.h"
 #import "NUArrayCoder.h"
 
 @implementation NSArray (NUCharacter)
@@ -29,7 +29,7 @@
 
 @implementation NUNSArray
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUPlayLot *)aPlayLot
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
 {
     [aCharacter setIsMutable:NO];
 	[aCharacter setFormat:NUIndexedIvars];
@@ -40,7 +40,7 @@
 
 @implementation NUNSMutableArray
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUPlayLot *)aPlayLot
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
 {
 	[aCharacter setFormat:NUIndexedIvars];
 	[aCharacter setCoderClass:[NUArrayCoder class]];

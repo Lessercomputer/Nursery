@@ -8,7 +8,7 @@
 
 #import "NUNSString.h"
 #import "NUCharacter.h"
-#import "NUPlayLot.h"
+#import "NUSandbox.h"
 #import "NUStringCoder.h"
 
 @implementation NSString (NUCharacter)
@@ -34,7 +34,7 @@
     return YES;
 }
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUPlayLot *)aPlayLot
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
 {
     [aCharacter setIsMutable:NO];
 	[aCharacter setFormat:NUIndexedBytes];
@@ -50,7 +50,7 @@
     return YES;
 }
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUPlayLot *)aPlayLot
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
 {
 	[aCharacter setFormat:NUIndexedBytes];
 	[aCharacter setCoderClass:[NUStringCoder class]];

@@ -1,22 +1,22 @@
 //
-//  NUPairedMainBranchPlayLot.m
+//  NUPairedMainBranchSandbox.m
 //  Nursery
 //
 //  Created by P,T,A on 2014/03/15.
 //
 //
 
-#import "NUPairedMainBranchPlayLot.h"
-#import "NUGradeKidnapper.h"
+#import "NUPairedMainBranchSandbox.h"
+#import "NUGradeSeeker.h"
 #import "NUMainBranchAliaser.h"
 #import "NUPairedMainBranchAliaser.h"
 #import "NUObjectTable.h"
 
-@implementation NUPairedMainBranchPlayLot
+@implementation NUPairedMainBranchSandbox
 
-+ (id)playLotWithNursery:(NUNursery *)aNursery usesGradeKidnapper:(BOOL)aUsesGradeKidnapper
++ (id)sandboxWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker
 {
-    return [[[self alloc] initWithNursery:aNursery usesGradeKidnapper:aUsesGradeKidnapper] autorelease];
+    return [[[self alloc] initWithNursery:aNursery usesGradeSeeker:aUsesGradeSeeker] autorelease];
 }
 
 - (NUPairedMainBranchAliaser *)pairedMainBranchAliaser
@@ -26,7 +26,7 @@
 
 @end
 
-@implementation NUPairedMainBranchPlayLot (Pupil)
+@implementation NUPairedMainBranchSandbox (Pupil)
 
 - (NSData *)callForPupilWithOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade containsFellowPupils:(BOOL)aContainsFellowPupils
 {
@@ -48,7 +48,7 @@
     {
         
         [farmOutLock lock];
-        [[self gradeKidnapper] stop];
+        [[self gradeSeeker] stop];
         [self lock];
         
         if (![[self nursery] open]) return NUFarmOutStatusFailed;
@@ -85,9 +85,9 @@
 
             if (aFarmOutStatus == NUFarmOutStatusSucceeded)
             {
-                [[self mainBranchNursery] retainGrade:aNewGrade byPlayLot:self];
+                [[self mainBranchNursery] retainGrade:aNewGrade bySandbox:self];
                 [self setGrade:aNewGrade];
-                [[self gradeKidnapper] pushRootBell:[[self nurseryRoot] bell]];
+                [[self gradeSeeker] pushRootBell:[[self nurseryRoot] bell]];
             }
             
             *aLatestGrade = aNewGrade;
@@ -102,7 +102,7 @@
     @finally
     {
         [self unlock];
-        [[self gradeKidnapper] start];
+        [[self gradeSeeker] start];
         [farmOutLock unlock];
         
         return aFarmOutStatus;

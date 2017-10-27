@@ -36,27 +36,27 @@ static NSString *NUNurseryTestFilePath = nil;
 {
 	NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
 	XCTAssertNotNil(aNursery, @"");
-	[[aNursery playLot] close];
+	[[aNursery sandbox] close];
 }
 
 - (void)testSaveEmptyNUNursery
 {
 	NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-	XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
-	[[aNursery playLot] close];
+	XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+	[[aNursery sandbox] close];
 }
 
 - (void)testDoubleOpenNUNursery
 {
     NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
     
     NUNursery *aNursery2 = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    [[aNursery2 playLot] root];
+    [[aNursery2 sandbox] root];
     XCTAssertEqual([aNursery2 openStatus], NUNurseryOpenStatusClose);
 
-    [[aNursery playLot] close];
-    [[aNursery2 playLot] close];
+    [[aNursery sandbox] close];
+    [[aNursery2 sandbox] close];
 }
 
 - (void)testSaveManyNSObject
@@ -69,9 +69,9 @@ static NSString *NUNurseryTestFilePath = nil;
     
     [self measureBlock:^{
         NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-        [[aNursery playLot] setRoot:anObjects];
-        XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
-        [[aNursery playLot] close];
+        [[aNursery sandbox] setRoot:anObjects];
+        XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+        [[aNursery sandbox] close];
     }];
 }
 
@@ -79,26 +79,26 @@ static NSString *NUNurseryTestFilePath = nil;
 {
 	NSString *theRootObject = @"The Root Object";
 	NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-	[[aNursery playLot] setRoot:theRootObject];
-	XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
-	XCTAssertEqualObjects(theRootObject, [[aNursery playLot] root], @"");
-	[[aNursery playLot] close];
+	[[aNursery sandbox] setRoot:theRootObject];
+	XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+	XCTAssertEqualObjects(theRootObject, [[aNursery sandbox] root], @"");
+	[[aNursery sandbox] close];
 	
 	aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    XCTAssertEqualObjects([[aNursery playLot] root], theRootObject, @"");
-	[[aNursery playLot] close];
+    XCTAssertEqualObjects([[aNursery sandbox] root], theRootObject, @"");
+	[[aNursery sandbox] close];
 }
 
 - (void)testSaveAndLoadNumberFromNUNursery
 {
 	NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
     NSNumber *aNumber = [NSNumber numberWithUnsignedLongLong:1];
-    [[aNursery playLot] setRoot:aNumber];
-	XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
-    NUPlayLot *aPlayLot2 = [aNursery createPlayLot];
-    XCTAssertEqualObjects(aNumber, [aPlayLot2 root], @"");
-    [aPlayLot2 close];
-	[[aNursery playLot] close];
+    [[aNursery sandbox] setRoot:aNumber];
+	XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+    NUSandbox *aSandbox2 = [aNursery createSandbox];
+    XCTAssertEqualObjects(aNumber, [aSandbox2 root], @"");
+    [aSandbox2 close];
+	[[aNursery sandbox] close];
 }
 
 - (void)testRepeatSaveAndLoad
@@ -108,37 +108,37 @@ static NSString *NUNurseryTestFilePath = nil;
 			@"Smalltalk-72", @"Smalltalk-74", @"Smalltalk-76", @"Smalltalk-78", @"Smalltalk-80", nil];
 	NSMutableArray *aLoadedArray = nil;
 	NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-	[[aNursery playLot] setRoot:anArray];
-	XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
+	[[aNursery sandbox] setRoot:anArray];
+	XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
 	
 	[anArray addObject:@"ObjectWorks"];
-	[[aNursery playLot] markChangedObject:anArray];
-	XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
+	[[aNursery sandbox] markChangedObject:anArray];
+	XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
 	
 	[anArray addObject:@"VisualWorks"];
-	[[aNursery playLot] markChangedObject:anArray];
-	XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
+	[[aNursery sandbox] markChangedObject:anArray];
+	XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
 	
 	[anArray addObject:@"Squeak"];
-	[[aNursery playLot] markChangedObject:anArray];
-	XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
+	[[aNursery sandbox] markChangedObject:anArray];
+	XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
 
 	[anArray addObject:@"Pharo"];
-	[[aNursery playLot] markChangedObject:anArray];
-	XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
+	[[aNursery sandbox] markChangedObject:anArray];
+	XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
 	
 	NSDate *aDate = [NSDate date];
 	[anArray addObject:aDate];
-	[[aNursery playLot] markChangedObject:anArray];
-	XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
+	[[aNursery sandbox] markChangedObject:anArray];
+	XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
 	
-	[[aNursery playLot] close];
+	[[aNursery sandbox] close];
 
 	aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-	aLoadedArray = [[aNursery playLot] root];
+	aLoadedArray = [[aNursery sandbox] root];
 	XCTAssertEqualObjects(anArray, aLoadedArray, @"");
     [aLoadedArray addObject:@"DolphinSmalltalk"];
-	[[aNursery playLot] close];
+	[[aNursery sandbox] close];
 }
 
 - (void)testSaveAndLoadIndexSet
@@ -158,20 +158,20 @@ static NSString *NUNurseryTestFilePath = nil;
     [anArray addObject:aMultiRangeIndexSet];
     [anArray addObject:aMultiRangeIndexSet2];
     
-    [[aNursery playLot] setRoot:anArray];
-    XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
+    [[aNursery sandbox] setRoot:anArray];
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
     
-    [[aNursery playLot] close];
+    [[aNursery sandbox] close];
     
     aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    NSArray *aLoadedArray = [[aNursery playLot] root];
+    NSArray *aLoadedArray = [[aNursery sandbox] root];
     
     XCTAssertEqualObjects([aLoadedArray objectAtIndex:0], anEmptyIndexSet, @"");
     XCTAssertEqualObjects([aLoadedArray objectAtIndex:1], aSingleRangeIndexSet, @"");
     XCTAssertEqualObjects([aLoadedArray objectAtIndex:2], aMultiRangeIndexSet, @"");
     XCTAssertEqualObjects([aLoadedArray objectAtIndex:3], aMultiRangeIndexSet2, @"");
 
-    [[aNursery playLot] close];
+    [[aNursery sandbox] close];
 }
 
 - (void)testSaveAndLoadSet
@@ -180,16 +180,16 @@ static NSString *NUNurseryTestFilePath = nil;
 
     NSMutableSet *aMutableSet = [NSMutableSet set];
     [aMutableSet addObject:@"aString"];
-    [[aNursery playLot] setRoot:aMutableSet];
-    XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
-    [[aNursery playLot] close];
+    [[aNursery sandbox] setRoot:aMutableSet];
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+    [[aNursery sandbox] close];
 
     aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    NSMutableSet *aLoadedMutableSet = [[aNursery playLot] root];
+    NSMutableSet *aLoadedMutableSet = [[aNursery sandbox] root];
     
     XCTAssertEqualObjects(aLoadedMutableSet, aMutableSet, @"");
     [aLoadedMutableSet addObject:@"aString2"];
-    [[aNursery playLot] close];
+    [[aNursery sandbox] close];
 }
 
 - (void)testSaveAndLoadLargeObject
@@ -201,34 +201,34 @@ static NSString *NUNurseryTestFilePath = nil;
 	int i = 0;
 	for (; i < aMaxCount; i++)
 		[anArray addObject:[NSString stringWithFormat:@"%06d", i]];
-	[[aNursery playLot] setRoot:anArray];
+	[[aNursery sandbox] setRoot:anArray];
 	
-    XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"[aNursery save] failed");
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"[aNursery save] failed");
 	
-	[[aNursery playLot] close];
+	[[aNursery sandbox] close];
 	
 	aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-	NSMutableArray *aUserRoot = [[aNursery playLot] root];
+	NSMutableArray *aUserRoot = [[aNursery sandbox] root];
 	
 	XCTAssertFalse(anArray == aUserRoot, @"");
 	XCTAssertEqualObjects(anArray, aUserRoot, @"");
-	[[aNursery playLot] close];
+	[[aNursery sandbox] close];
 }
 
 - (void)testSaveAndLoadMutableString
 {
     NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
     NSMutableString *aMutableString = [[@"string" mutableCopy] autorelease];
-    [[aNursery playLot] setRoot:aMutableString];
-    XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"[aNursery save] failed");
-    [[aNursery playLot] close];
+    [[aNursery sandbox] setRoot:aMutableString];
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"[aNursery save] failed");
+    [[aNursery sandbox] close];
     
     aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-	NSMutableString *aUserRoot = [[aNursery playLot] root];
+	NSMutableString *aUserRoot = [[aNursery sandbox] root];
 	
 	XCTAssertFalse(aMutableString == aUserRoot, @"");
 	XCTAssertEqualObjects(aMutableString, aUserRoot, @"");
-	[[aNursery playLot] close];
+	[[aNursery sandbox] close];
 }
 
 - (void)testRetainCount
@@ -238,9 +238,9 @@ static NSString *NUNurseryTestFilePath = nil;
     NSAutoreleasePool *aPool = [NSAutoreleasePool new];
 
     NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    [[aNursery playLot] setRoot:aPerson];
-    XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
-    [[aNursery playLot] close];
+    [[aNursery sandbox] setRoot:aPerson];
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+    [[aNursery sandbox] close];
     [aPool release];
     
     XCTAssertTrue([aPerson retainCount] == 1, @"");
@@ -248,12 +248,12 @@ static NSString *NUNurseryTestFilePath = nil;
     
     aPool = [NSAutoreleasePool new];
     aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    aPerson = [[[aNursery playLot] root] retain];
+    aPerson = [[[aNursery sandbox] root] retain];
     NUBell *aPersonBell = [aPerson bell];
-    NSMutableSet *anOOPSet = [[aNursery playLot] bellSet];
+    NSMutableSet *anOOPSet = [[aNursery sandbox] bellSet];
     NSLog(@"%@", aPersonBell);
     NSLog(@"%@", anOOPSet);
-    [[aNursery playLot] close];
+    [[aNursery sandbox] close];
     [aPool release];
     
     XCTAssertTrue([aPerson retainCount] == 1, @"");
@@ -269,39 +269,39 @@ static NSString *NUNurseryTestFilePath = nil;
     Person *aPerson0 = [[[Person alloc] initWithFirstName:@"aFirstName0" lastName:@"aLastName0"] autorelease];
     
     [aPersons addObject:aPerson0];
-    [[aNursery playLot] setRoot:aPersons];
-    XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
+    [[aNursery sandbox] setRoot:aPersons];
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
     [aNursery close];
     
     aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
     [Person setCharacterVersion:1];
-    [[[aNursery playLot] characterForName:@"NSObject#0!Person#0"] setTargetClass:[Person class]];
-    aPersons = [[aNursery playLot] root];
+    [[[aNursery sandbox] characterForName:@"NSObject#0!Person#0"] setTargetClass:[Person class]];
+    aPersons = [[aNursery sandbox] root];
     Person *aPerson1 = [[[Person alloc] initWithFirstName:@"aFirstName1" lastName:@"aLastName1"] autorelease];
     [aPerson1 setMiddleName:@"aMiddleName1"];
     [aPersons addObject:aPerson1];
-    [[aNursery playLot] markChangedObject:aPersons];
-    XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
+    [[aNursery sandbox] markChangedObject:aPersons];
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
     [aNursery close];
     
     aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
     [Person setCharacterVersion:2];
-    [[[aNursery playLot] characterForName:@"NSObject#0!Person#0"] setTargetClass:[Person class]];
-    [[[aNursery playLot] characterForName:@"NSObject#0!Person#1"] setTargetClass:[Person class]];
-    aPersons = [[aNursery playLot] root];
+    [[[aNursery sandbox] characterForName:@"NSObject#0!Person#0"] setTargetClass:[Person class]];
+    [[[aNursery sandbox] characterForName:@"NSObject#0!Person#1"] setTargetClass:[Person class]];
+    aPersons = [[aNursery sandbox] root];
     Person *aPerson2 = [[[Person alloc] initWithFirstName:@"aFirstName2" lastName:@"aLastName2"] autorelease];
     [aPerson2 setMiddleName:@"aMiddleName2"];
     [aPerson2 setAge:11];
     [aPersons addObject:aPerson2];
-    [[aNursery playLot] markChangedObject:aPersons];
-    XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
+    [[aNursery sandbox] markChangedObject:aPersons];
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
     [aNursery close];
 
     aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    [[[aNursery playLot] characterForName:@"NSObject#0!Person#0"] setTargetClass:[Person class]];
-    [[[aNursery playLot] characterForName:@"NSObject#0!Person#1"] setTargetClass:[Person class]];
-    [[[aNursery playLot] characterForName:@"NSObject#0!Person#2"] setTargetClass:[Person class]];
-    aPersons = [[aNursery playLot] root];
+    [[[aNursery sandbox] characterForName:@"NSObject#0!Person#0"] setTargetClass:[Person class]];
+    [[[aNursery sandbox] characterForName:@"NSObject#0!Person#1"] setTargetClass:[Person class]];
+    [[[aNursery sandbox] characterForName:@"NSObject#0!Person#2"] setTargetClass:[Person class]];
+    aPersons = [[aNursery sandbox] root];
 
     [Person setCharacterVersion:0];
     XCTAssertEqualObjects(aPersons[0], aPerson0, @"");
@@ -311,16 +311,16 @@ static NSString *NUNurseryTestFilePath = nil;
     XCTAssertEqualObjects(aPersons[2], aPerson2, @"");
     
     [aPersons[0] setMiddleName:@"aMiddleName0"];
-    [[aNursery playLot] markChangedObject:aPersons[0]];
+    [[aNursery sandbox] markChangedObject:aPersons[0]];
     [aPersons[1] setMiddleName:@"aMiddleName1-2"];
-    [[aNursery playLot] markChangedObject:aPersons[1]];
+    [[aNursery sandbox] markChangedObject:aPersons[1]];
     [aPersons[2] setMiddleName:@"aMiddleName2-2"];
-    [[aNursery playLot] markChangedObject:aPersons[2]];
-    XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
+    [[aNursery sandbox] markChangedObject:aPersons[2]];
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
     [aNursery close];
     
     aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    aPersons = [[aNursery playLot] root];
+    aPersons = [[aNursery sandbox] root];
     XCTAssertEqualObjects([aPersons[0] middleName], @"aMiddleName0", @"");
     XCTAssertEqualObjects([aPersons[1] middleName], @"aMiddleName1-2", @"");
     XCTAssertEqualObjects([aPersons[2] middleName], @"aMiddleName2-2", @"");
@@ -333,12 +333,12 @@ static NSString *NUNurseryTestFilePath = nil;
 {
     AllTypesObject *anObject = [[AllTypesObject new] autorelease];
     NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    [[aNursery playLot] setRoot:anObject];
-    XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
+    [[aNursery sandbox] setRoot:anObject];
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
     [aNursery close];
     
     aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    XCTAssertEqualObjects([[aNursery playLot] root], anObject);
+    XCTAssertEqualObjects([[aNursery sandbox] root], anObject);
     [aNursery close];
 }
 
@@ -348,45 +348,45 @@ static NSString *NUNurseryTestFilePath = nil;
     
     AllTypesObject *anObject = [[AllTypesObject new] autorelease];
     NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    [[aNursery playLot] setRoot:anObject];
-    XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
+    [[aNursery sandbox] setRoot:anObject];
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
     [aNursery close];
     
     aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    XCTAssertEqualObjects([[aNursery playLot] root], anObject);
+    XCTAssertEqualObjects([[aNursery sandbox] root], anObject);
     [aNursery close];
 }
 
-- (void)testCreatePlayLotWithGrade
+- (void)testCreateSandboxWithGrade
 {
     NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
     
-    [[aNursery playLot] setRoot:@"NextStep"];
-    XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
-    NUPlayLot *aPlayLotWithPastGrade1 = [aNursery createPlayLotWithGrade:[[aNursery playLot] grade]];
+    [[aNursery sandbox] setRoot:@"NextStep"];
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+    NUSandbox *aSandboxWithPastGrade1 = [aNursery createSandboxWithGrade:[[aNursery sandbox] grade]];
     
-    [[aNursery playLot] setRoot:@"NeXTstep"];
-    XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
-    NUPlayLot *aPlayLotWithPastGrade2 = [aNursery createPlayLotWithGrade:[[aNursery playLot] grade]];
+    [[aNursery sandbox] setRoot:@"NeXTstep"];
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+    NUSandbox *aSandboxWithPastGrade2 = [aNursery createSandboxWithGrade:[[aNursery sandbox] grade]];
     
-    [[aNursery playLot] setRoot:@"NeXTSTEP"];
-    XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
-    NUPlayLot *aPlayLotWithPastGrade3 = [aNursery createPlayLotWithGrade:[[aNursery playLot] grade]];
+    [[aNursery sandbox] setRoot:@"NeXTSTEP"];
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+    NUSandbox *aSandboxWithPastGrade3 = [aNursery createSandboxWithGrade:[[aNursery sandbox] grade]];
     
-    [[aNursery playLot] setRoot:@"NEXTSTEP"];
-    XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
-    NUPlayLot *aPlayLotWithPastGrade4 = [aNursery createPlayLotWithGrade:[[aNursery playLot] grade]];
+    [[aNursery sandbox] setRoot:@"NEXTSTEP"];
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+    NUSandbox *aSandboxWithPastGrade4 = [aNursery createSandboxWithGrade:[[aNursery sandbox] grade]];
     
-    XCTAssertEqualObjects([aPlayLotWithPastGrade1 root], @"NextStep");
-    XCTAssertEqualObjects([aPlayLotWithPastGrade2 root], @"NeXTstep");
-    XCTAssertEqualObjects([aPlayLotWithPastGrade3 root], @"NeXTSTEP");
-    XCTAssertEqualObjects([aPlayLotWithPastGrade4 root], @"NEXTSTEP");
+    XCTAssertEqualObjects([aSandboxWithPastGrade1 root], @"NextStep");
+    XCTAssertEqualObjects([aSandboxWithPastGrade2 root], @"NeXTstep");
+    XCTAssertEqualObjects([aSandboxWithPastGrade3 root], @"NeXTSTEP");
+    XCTAssertEqualObjects([aSandboxWithPastGrade4 root], @"NEXTSTEP");
     
-    [aPlayLotWithPastGrade1 close];
-    [aPlayLotWithPastGrade2 close];
-    [aPlayLotWithPastGrade3 close];
-    [aPlayLotWithPastGrade4 close];
-    [[aNursery playLot] close];
+    [aSandboxWithPastGrade1 close];
+    [aSandboxWithPastGrade2 close];
+    [aSandboxWithPastGrade3 close];
+    [aSandboxWithPastGrade4 close];
+    [[aNursery sandbox] close];
     [aNursery close];
 }
 @end

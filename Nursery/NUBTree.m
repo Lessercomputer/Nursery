@@ -143,7 +143,7 @@
 	return YES;
 }
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUPlayLot *)aPlayLot
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
 {
     [aCharacter addOOPIvarWithName:@"root"];
     [aCharacter addUInt64IvarWithName:@"count"];

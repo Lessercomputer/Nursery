@@ -15,16 +15,16 @@ const int NUThreadedChildminderTerminateCondition   = 2;
 
 @implementation NUThreadedChildminder
 
-+ (id)threadedChildminderWithPlayLot:(NUPlayLot *)aPlayLot
++ (id)threadedChildminderWithSandbox:(NUSandbox *)aSandbox
 {
-	return [[[self alloc] initWithPlayLot:aPlayLot] autorelease];
+	return [[[self alloc] initWithSandbox:aSandbox] autorelease];
 }
 
-- (id)initWithPlayLot:(NUPlayLot *)aPlayLot
+- (id)initWithSandbox:(NUSandbox *)aSandbox
 {
 	if (self = [super init])
     {
-        [self setPlayLot:aPlayLot];
+        [self setSandbox:aSandbox];
         shouldTerminate = NO;
         shouldStop = NO;
         conditionLock = [[NSConditionLock alloc] initWithCondition:NUThreadedChildminderDeactiveCondition];
@@ -40,15 +40,15 @@ const int NUThreadedChildminderTerminateCondition   = 2;
 	[super dealloc];
 }
 
-- (NUPlayLot *)playLot
+- (NUSandbox *)sandbox
 {
-    return playLot;
+    return sandbox;
 }
 
-- (void)setPlayLot:(NUPlayLot *)aPlayLot
+- (void)setSandbox:(NUSandbox *)aSandbox
 {
-    [playLot autorelease];
-    playLot = [aPlayLot retain];
+    [sandbox autorelease];
+    sandbox = [aSandbox retain];
 }
 
 - (void)prepare
@@ -94,7 +94,7 @@ const int NUThreadedChildminderTerminateCondition   = 2;
     
     [conditionLock unlockWithCondition:NUThreadedChildminderDeactiveCondition];
     
-    [self setPlayLot:nil];
+    [self setSandbox:nil];
     
 #ifdef DEBUG
     NSLog(@"%@: end #terminate", self);

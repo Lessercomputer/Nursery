@@ -1,5 +1,5 @@
 //
-//  NUMainBranchPlayLot.h
+//  NUMainBranchSandbox.h
 //  Nursery
 //
 //  Created by P,T,A on 2013/10/23.
@@ -10,13 +10,13 @@
 
 @class NUMainBranchNursery, NUMainBranchAliaser;
 
-@interface NUMainBranchPlayLot : NUPlayLot
+@interface NUMainBranchSandbox : NUSandbox
 {
     NSLock *farmOutLock;
 }
 @end
 
-@interface NUMainBranchPlayLot (Private)
+@interface NUMainBranchSandbox (Private)
 
 - (NUMainBranchNursery *)mainBranchNursery;
 - (NUMainBranchAliaser *)mainBranchAliaser;

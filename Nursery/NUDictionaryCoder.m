@@ -8,7 +8,7 @@
 
 #import "NUDictionaryCoder.h"
 #import "NUCharacter.h"
-#import "NUPlayLot.h"
+#import "NUSandbox.h"
 
 @implementation NUDictionaryCoder
 

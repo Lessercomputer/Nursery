@@ -9,7 +9,7 @@
 #import <Nursery/NUBTreeLeaf.h>
 #import <Nursery/NUBTree.h>
 #import <Nursery/NUBell.h>
-#import <Nursery/NUPlayLot.h>
+#import <Nursery/NUSandbox.h>
 
 @implementation NUBTreeLeaf
 
@@ -60,8 +60,8 @@
         result = NUBTreeSetObjectResultAdd;
     }
     
-    [[[self bell] playLot] markChangedObject:[self keys]];
-    [[[self bell] playLot] markChangedObject:[self values]];
+    [[[self bell] sandbox] markChangedObject:[self keys]];
+    [[[self bell] sandbox] markChangedObject:[self values]];
 
     return result;
 }
@@ -74,8 +74,8 @@
     {
         [[self keys] removeObjectAtIndex:aKeyIndex];
         [[self values] removeObjectAtIndex:aKeyIndex];
-        [[[self bell] playLot] markChangedObject:[self keys]];
-        [[[self bell] playLot] markChangedObject:[self values]];
+        [[[self bell] sandbox] markChangedObject:[self keys]];
+        [[[self bell] sandbox] markChangedObject:[self values]];
 
         return YES;
     }
@@ -93,8 +93,8 @@
 
     [[self keys] removeObjectsInRange:aRange];
     [[self values] removeObjectsInRange:aRange];
-    [[[self bell] playLot] markChangedObject:[self keys]];
-    [[[self bell] playLot] markChangedObject:[self values]];
+    [[[self bell] sandbox] markChangedObject:[self keys]];
+    [[[self bell] sandbox] markChangedObject:[self values]];
 
     [self insertRightSiblingNode:aLeaf];
     
@@ -112,10 +112,10 @@
     [[self values] insertObjects:aValues atIndexes:anIndexSet];
     [[aLeftNode keys] removeObjectsInRange:aRange];
     [[aLeftNode values] removeObjectsInRange:aRange];
-    [[[self bell] playLot] markChangedObject:[self keys]];
-    [[[self bell] playLot] markChangedObject:[self values]];
-    [[[self bell] playLot] markChangedObject:[aLeftNode keys]];
-    [[[self bell] playLot] markChangedObject:[aLeftNode values]];
+    [[[self bell] sandbox] markChangedObject:[self keys]];
+    [[[self bell] sandbox] markChangedObject:[self values]];
+    [[[self bell] sandbox] markChangedObject:[aLeftNode keys]];
+    [[[self bell] sandbox] markChangedObject:[aLeftNode values]];
 }
 
 - (void)shuffleRightNode
@@ -129,10 +129,10 @@
     [[self values] insertObjects:aValues atIndexes:anIndexSet];
     [[aRightNode keys] removeObjectsInRange:aRange];
     [[aRightNode values] removeObjectsInRange:aRange];
-    [[[self bell] playLot] markChangedObject:[self keys]];
-    [[[self bell] playLot] markChangedObject:[self values]];
-    [[[self bell] playLot] markChangedObject:[aRightNode keys]];
-    [[[self bell] playLot] markChangedObject:[aRightNode values]];
+    [[[self bell] sandbox] markChangedObject:[self keys]];
+    [[[self bell] sandbox] markChangedObject:[self values]];
+    [[[self bell] sandbox] markChangedObject:[aRightNode keys]];
+    [[[self bell] sandbox] markChangedObject:[aRightNode values]];
 }
 
 - (void)mergeLeftNode
@@ -161,7 +161,7 @@
     if ([self getKeyIndexLessThanOrEqualTo:aKey keyIndexInto:&aKeyIndex])
     {
         [[self keys] replaceObjectAtIndex:aKeyIndex withObject:aKey];
-        [[[self bell] playLot] markChangedObject:[self keys]];
+        [[[self bell] sandbox] markChangedObject:[self keys]];
     }
 }
 

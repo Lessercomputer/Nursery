@@ -143,19 +143,19 @@ static NSString *NUNurseryTestFilePath = nil;
         [aLibrary setObject:obj forKey:obj];
     }];
 
-    [[aNursery playLot] setRoot:aLibrary];
-    XCTAssertEqual([[aNursery playLot] farmOut], NUFarmOutStatusSucceeded, @"");
-    [[aNursery playLot] close];
+    [[aNursery sandbox] setRoot:aLibrary];
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+    [[aNursery sandbox] close];
     
     aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    NULibrary *aLoadedLibrary = [[aNursery playLot] root];
+    NULibrary *aLoadedLibrary = [[aNursery sandbox] root];
     
     XCTAssertEqual((NUUInt64)[aLoadedLibrary count], [aNumbers count], @"");
     [aNumbers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         XCTAssertEqualObjects([aLoadedLibrary objectForKey:obj], obj, @"");
     }];
     
-    [[aNursery playLot] close];
+    [[aNursery sandbox] close];
 }
 
 @end

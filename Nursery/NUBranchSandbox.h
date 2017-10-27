@@ -1,5 +1,5 @@
 //
-//  NUBranchPlayLot.h
+//  NUBranchSandbox.h
 //  Nursery
 //
 //  Created by P,T,A on 2013/10/23.
@@ -10,7 +10,7 @@
 
 @class NUBranchAliaser;
 
-@interface NUBranchPlayLot : NUPlayLot
+@interface NUBranchSandbox : NUSandbox
 {
     NUU64ODictionary *storedChangedObjects;
     NUUInt64 nextProbationaryOOP;
@@ -24,7 +24,7 @@
 
 @end
 
-@interface NUBranchPlayLot (Private)
+@interface NUBranchSandbox (Private)
 
 - (id <NUMainBranchNurseryAssociation>)mainBranchNurseryAssociation;
 

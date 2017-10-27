@@ -8,7 +8,7 @@
 
 #import <Nursery/NUOpaqueBTree.h>
 
-@class NUPlayLot, NUObjectTableLeaf;
+@class NUSandbox, NUObjectTableLeaf;
 
 extern const NUUInt64 NUNilOOP;
 extern const NUUInt64 NUCharacterOOP;

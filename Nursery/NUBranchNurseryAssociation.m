@@ -8,7 +8,7 @@
 
 #import "NUBranchNurseryAssociation.h"
 #import "NUBranchNursery.h"
-#import "NUBranchPlayLot.h"
+#import "NUBranchSandbox.h"
 #import "NUBranchNurseryAssociationEntry.h"
 
 NSString *NUBranchNurseryAssociationThreadID = @"NUBranchNurseryAssociationThreadID";
@@ -120,12 +120,12 @@ static NUUInt64 nextBranchNurseryAssociationThreadID = 0;
     return aThreadID;
 }
 
-- (id<NUMainBranchNurseryAssociation>)mainBranchAssociationForPlayLot:(NUBranchPlayLot *)aPlayLot
+- (id<NUMainBranchNurseryAssociation>)mainBranchAssociationForSandbox:(NUBranchSandbox *)aSandbox
 {
     @try {
         [lock lock];
         
-        NSURL *aNurseryURL = [(NUBranchNursery *)[aPlayLot nursery] URL];
+        NSURL *aNurseryURL = [(NUBranchNursery *)[aSandbox nursery] URL];
         NSURL *anAssociationURL = [[self class] associationURLFromNurseryURL:aNurseryURL];
         NUBranchNurseryAssociationEntry *anEntry = [self entryForURL:anAssociationURL];
         NSNumber *aThreadID = [self ensureBranchNurseryAssociationThreadID];
@@ -149,8 +149,8 @@ static NUUInt64 nextBranchNurseryAssociationThreadID = 0;
         else
             anAssociation = (id<NUMainBranchNurseryAssociation>)[aConnection rootProxy];
         
-        if ([aPlayLot ID] == NUNilPlayLotID)
-            [aPlayLot setID:[anAssociation openPlayLotForNurseryWithName:[[self class] nurseryNameFromURL:aNurseryURL]]];
+        if ([aSandbox ID] == NUNilSandboxID)
+            [aSandbox setID:[anAssociation openSandboxForNurseryWithName:[[self class] nurseryNameFromURL:aNurseryURL]]];
 
         return anAssociation;
     }

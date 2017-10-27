@@ -1,40 +1,40 @@
 //
-//  NUGradeKidnapper.m
+//  NUGradeSeeker.m
 //  Nursery
 //
 //  Created by P,T,A on 2013/08/31.
 //
 //
 
-#import "NUGradeKidnapper.h"
-#import "NUPlayLot.h"
+#import "NUGradeSeeker.h"
+#import "NUSandbox.h"
 #import "NUNurseryRoot.h"
 #import "NUBell.h"
 #import "NUBellBall.h"
-#import "NUMainBranchPeephole.h"
-#import "NUBranchPeephole.h"
-#import "NUMainBranchGradeKidnapper.h"
-#import "NUBranchGradeKidnapper.h"
+#import "NUMainBranchAperture.h"
+#import "NUBranchAperture.h"
+#import "NUMainBranchGradeSeeker.h"
+#import "NUBranchGradeSeeker.h"
 
-@implementation NUGradeKidnapper
+@implementation NUGradeSeeker
 
-+ (id)gradeKidnapperWithPlayLot:(NUPlayLot *)aPlayLot
++ (id)gradeSeekerWithSandbox:(NUSandbox *)aSandbox
 {
-    Class aPeepholeClass = [aPlayLot isForMainBranch] ? [NUMainBranchPeephole class] : [NUBranchPeephole class];
-    Class aKidnapperClass = [aPlayLot isForMainBranch] ? [NUMainBranchGradeKidnapper class] : [NUBranchGradeKidnapper class];
-    return [[[aKidnapperClass alloc] initWithPlayLot:aPlayLot peephole:[aPeepholeClass peepholeWithNursery:[aPlayLot nursery] playLot:aPlayLot]] autorelease];
+    Class aApertureClass = [aSandbox isForMainBranch] ? [NUMainBranchAperture class] : [NUBranchAperture class];
+    Class aSeekerClass = [aSandbox isForMainBranch] ? [NUMainBranchGradeSeeker class] : [NUBranchGradeSeeker class];
+    return [[[aSeekerClass alloc] initWithSandbox:aSandbox aperture:[aApertureClass apertureWithNursery:[aSandbox nursery] sandbox:aSandbox]] autorelease];
 }
 
-+ (id)gradeKidnapperWithPlayLot:(NUPlayLot *)aPlayLot peephole:(NUPeephole *)aPeephole
++ (id)gradeSeekerWithSandbox:(NUSandbox *)aSandbox aperture:(NUAperture *)aAperture
 {
-    return [[[self alloc] initWithPlayLot:aPlayLot peephole:aPeephole] autorelease];
+    return [[[self alloc] initWithSandbox:aSandbox aperture:aAperture] autorelease];
 }
 
-- (id)initWithPlayLot:(NUPlayLot *)aPlayLot peephole:(NUPeephole *)aPeephole
+- (id)initWithSandbox:(NUSandbox *)aSandbox aperture:(NUAperture *)aAperture
 {
-    if (self = [super initWithPlayLot:aPlayLot])
+    if (self = [super initWithSandbox:aSandbox])
     {
-        peephole = [aPeephole retain];
+        aperture = [aAperture retain];
         bellsLock = [NSRecursiveLock new];
         bells = [NSMutableArray new];
         lock = [NSRecursiveLock new];
@@ -45,7 +45,7 @@
 
 - (void)dealloc
 {
-    [peephole release];
+    [aperture release];
     [bellsLock release];
     [bells release];
     [lock release];
@@ -75,7 +75,7 @@
 
 - (void)pushBellIfNeeded:(NUBell *)aBell
 {
-    if (aBell && [aBell gradeForKidnapper] < [self grade])
+    if (aBell && [aBell gradeForSeeker] < [self grade])
         [self pushBell:aBell];
 }
 
@@ -110,14 +110,14 @@
     [bellsLock unlock];
 }
 
-- (NUPeephole *)peephole
+- (NUAperture *)aperture
 {
-    return peephole;
+    return aperture;
 }
 
 - (NUUInt64)grade
 {
-    return [[self playLot] grade];
+    return [[self sandbox] grade];
 }
 
 - (void)process
@@ -129,7 +129,7 @@
         NUBell *aBell = [self popBell];
         
         if (aBell)
-            [self stalkObjectFor:aBell];
+            [self seekObjectFor:aBell];
         else
         {
             [self kidnapGrade];
@@ -140,18 +140,18 @@
     }
 }
 
-- (void)stalkObjectFor:(NUBell *)aBell
+- (void)seekObjectFor:(NUBell *)aBell
 {    
-    if ([aBell gradeForKidnapper] == [self grade]) return;
+    if ([aBell gradeForSeeker] == [self grade]) return;
     
-    [aBell setGradeForKidnapper:[self grade]];
+    [aBell setGradeForSeeker:[self grade]];
     
     //if (![aBell isLoaded]) return;
     
-    [self stalkIvarsOfObjectFor:aBell];
+    [self seekIvarsOfObjectFor:aBell];
 }
 
-- (void)stalkIvarsOfObjectFor:(NUBell *)aBell
+- (void)seekIvarsOfObjectFor:(NUBell *)aBell
 {
     
 }
@@ -161,13 +161,13 @@
     __block BOOL aGradeLessThanCurrentFound = NO;
     
     @try {
-        [[self playLot] lock];
+        [[self sandbox] lock];
         
-        [[self playLot] invalidateBellsWithNotReferencedObject];
-        [[self playLot] invalidateNotReferencedBells];
+        [[self sandbox] invalidateBellsWithNotReferencedObject];
+        [[self sandbox] invalidateNotReferencedBells];
         
-        [[[self playLot] bellSet] enumerateObjectsUsingBlock:^(NUBell *aBell, BOOL *stop) {
-            if ([aBell gradeForKidnapper] < [self grade])
+        [[[self sandbox] bellSet] enumerateObjectsUsingBlock:^(NUBell *aBell, BOOL *stop) {
+            if ([aBell gradeForSeeker] < [self grade])
             {
                 aGradeLessThanCurrentFound = YES;
                 *stop = YES;
@@ -185,26 +185,26 @@
         }
     }
     @finally {
-        [[self playLot] unlock];
+        [[self sandbox] unlock];
     }
 }
 
 - (NSMutableArray *)collectBellWithGradeLessThanCurrent
 {
     @try {
-        [[self playLot] lock];
+        [[self sandbox] lock];
         
         NSMutableArray *aBells = [NSMutableArray array];
         
-        [[[self playLot] bellSet] enumerateObjectsUsingBlock:^(NUBell *aBell, BOOL *stop) {
-            if ([aBell gradeForKidnapper] < [self grade])
+        [[[self sandbox] bellSet] enumerateObjectsUsingBlock:^(NUBell *aBell, BOOL *stop) {
+            if ([aBell gradeForSeeker] < [self grade])
                 [aBells addObject:aBell];
         }];
         
         return aBells;
     }
     @finally {
-        [[self playLot] unlock];
+        [[self sandbox] unlock];
     }
 }
 
@@ -214,21 +214,21 @@
     NSLog(@"<%@:%p> #kidnapGradeLessThan:%llu", [self class], self, aGrade);
 #endif
     
-    [[self playLot] kidnapGradeLessThan:aGrade];
+    [[self sandbox] kidnapGradeLessThan:aGrade];
 }
 
 - (void)bellDidLoadIvars:(NUBell *)aBell
 {
-    if ([aBell gradeForKidnapper] == [self grade])
+    if ([aBell gradeForSeeker] == [self grade])
     {
-        [aBell setGradeForKidnapper:NUNilGrade];
+        [aBell setGradeForSeeker:NUNilGrade];
         [self pushBellIfNeeded:aBell];
     }
 }
 
 - (void)objectDidLoadIvars:(id)anObject
 {
-    [self bellDidLoadIvars:[[self playLot] bellForObject:anObject]];
+    [self bellDidLoadIvars:[[self sandbox] bellForObject:anObject]];
 }
 
 @end

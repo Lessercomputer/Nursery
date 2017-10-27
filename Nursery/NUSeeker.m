@@ -1,49 +1,49 @@
 //
-//  NUKidnapper.m
+//  NUSeeker.m
 //  Nursery
 //
 //  Created by P,T,A on 11/08/17.
 //  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 
-#import "NUKidnapper.h"
+#import "NUSeeker.h"
 #import "NUIndexArray.h"
 #import "NUMainBranchNursery.h"
 #import "NUPages.h"
 #import "NUObjectTable.h"
 #import "NUReversedObjectTable.h"
-#import "NUPeephole.h"
+#import "NUAperture.h"
 #import "NUBell.h"
 #import "NUBellBall.h"
-#import "NUPlayLot.h"
-#import "NUMainBranchPeephole.h"
+#import "NUSandbox.h"
+#import "NUMainBranchAperture.h"
 
-const NUUInt8 NUKidnapperNonePhase		= 0;
-const NUUInt8 NUKidnapperStalkPhase		= 1;
-const NUUInt8 NUKidnapperKidnapPhase	= 2;
+const NUUInt8 NUSeekerNonePhase		= 0;
+const NUUInt8 NUSeekerSeekPhase		= 1;
+const NUUInt8 NUSeekerKidnapPhase	= 2;
 
-const NUUInt64 NUKidnapperPhaseOffset	= 101;
-const NUUInt64 NUKidnapperCurrentGradeOffset = 109;
+const NUUInt64 NUSeekerPhaseOffset	= 101;
+const NUUInt64 NUSeekerCurrentGradeOffset = 109;
 
-const NUUInt32 NUKidnapperDefaultStalkCount = 1000;
+const NUUInt32 NUSeekerDefaultSeekCount = 1000;
 
-const NUUInt32 NUKidnapperDefaultGrayOOPCapacity = 50000;
+const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
-@implementation NUKidnapper
+@implementation NUSeeker
 
-+ (id)kidnapperWithPlayLot:(NUPlayLot *)aPlayLot
++ (id)seekerWithSandbox:(NUSandbox *)aSandbox
 {
-	return [[[self alloc] initWithPlayLot:aPlayLot] autorelease];
+	return [[[self alloc] initWithSandbox:aSandbox] autorelease];
 }
 
-- (id)initWithPlayLot:(NUPlayLot *)aPlayLot
+- (id)initWithSandbox:(NUSandbox *)aSandbox
 {
-	if (self = [super initWithPlayLot:aPlayLot])
+	if (self = [super initWithSandbox:aSandbox])
 	{
-        currentPhase = NUKidnapperNonePhase;
+        currentPhase = NUSeekerNonePhase;
         shouldLoadGrayOOPs = NO;
-        grayOOPs = [[NUIndexArray alloc] initWithCapacity:NUKidnapperDefaultGrayOOPCapacity comparator:[NUIndexArray comparator]];
-        peephole = [[NUMainBranchPeephole alloc] initWithNursery:[aPlayLot nursery] playLot:aPlayLot];
+        grayOOPs = [[NUIndexArray alloc] initWithCapacity:NUSeekerDefaultGrayOOPCapacity comparator:[NUIndexArray comparator]];
+        aperture = [[NUMainBranchAperture alloc] initWithNursery:[aSandbox nursery] sandbox:aSandbox];
     }
     
 	return self;
@@ -52,7 +52,7 @@ const NUUInt32 NUKidnapperDefaultGrayOOPCapacity = 50000;
 - (void)dealloc
 {
 	[grayOOPs release];
-	[peephole release];
+	[aperture release];
 	
 	[super dealloc];
 }
@@ -64,20 +64,20 @@ const NUUInt32 NUKidnapperDefaultGrayOOPCapacity = 50000;
 
 - (void)save
 {
-	[[[self nursery] pages] writeUInt8:currentPhase at:NUKidnapperPhaseOffset];
-    [[[self nursery] pages] writeUInt64:[self grade] at:NUKidnapperCurrentGradeOffset];
+	[[[self nursery] pages] writeUInt8:currentPhase at:NUSeekerPhaseOffset];
+    [[[self nursery] pages] writeUInt64:[self grade] at:NUSeekerCurrentGradeOffset];
 }
 
 - (void)load
 {
-	currentPhase = [[[self nursery] pages] readUInt8At:NUKidnapperPhaseOffset];
-	if (currentPhase == NUKidnapperStalkPhase) shouldLoadGrayOOPs = YES;
-    [self setGrade:[[[self nursery] pages] readUInt64At:NUKidnapperCurrentGradeOffset]];
+	currentPhase = [[[self nursery] pages] readUInt8At:NUSeekerPhaseOffset];
+	if (currentPhase == NUSeekerSeekPhase) shouldLoadGrayOOPs = YES;
+    [self setGrade:[[[self nursery] pages] readUInt64At:NUSeekerCurrentGradeOffset]];
 }
 
 - (NUMainBranchNursery *)nursery
 {
-    return (NUMainBranchNursery *)[[self playLot] nursery];
+    return (NUMainBranchNursery *)[[self sandbox] nursery];
 }
 
 - (NUUInt64)grade
@@ -87,39 +87,39 @@ const NUUInt32 NUKidnapperDefaultGrayOOPCapacity = 50000;
 
 @end
 
-@implementation NUKidnapper (Private)
+@implementation NUSeeker (Private)
 
 - (void)process
 {
-    [self stalkObjects];
+    [self seekObjects];
     [self kidnapObjects];
 }
 
-- (void)stalkObjects
+- (void)seekObjects
 {
-	if (currentPhase == NUKidnapperStalkPhase)
+	if (currentPhase == NUSeekerSeekPhase)
 	{
 		if (shouldLoadGrayOOPs)
             [self loadGrayOOPs];
-        [[self playLot] moveUpTo:[self grade]];
+        [[self sandbox] moveUpTo:[self grade]];
 	}
-	else if (currentPhase == NUKidnapperNonePhase)
+	else if (currentPhase == NUSeekerNonePhase)
 	{
-        [self setGrade:[[self nursery] gradeForKidnapper]];
+        [self setGrade:[[self nursery] gradeForSeeker]];
         if ([self grade] == NUNilGrade)
         {
             [self setShouldStop:YES];
             return;
         }
-		currentPhase = NUKidnapperStalkPhase;
-        [[self playLot] moveUpTo:[self grade]];
+		currentPhase = NUSeekerSeekPhase;
+        [[self sandbox] moveUpTo:[self grade]];
         [self pushRootOOP];
 	}
 	
-	[self stalkObjectsUntilStop];
+	[self seekObjectsUntilStop];
 }
 
-- (void)stalkObjectsUntilStop
+- (void)seekObjectsUntilStop
 {
 	if (![grayOOPs count]) [self setShouldStop:YES];
 
@@ -128,7 +128,7 @@ const NUUInt32 NUKidnapperDefaultGrayOOPCapacity = 50000;
 		NUUInt64 anOOP = NUNotFound64;
 		int i = 0;
 		
-		for (; i < NUKidnapperDefaultStalkCount && (anOOP = [self popGrayOOP]) != NUNotFound64; i++)
+		for (; i < NUSeekerDefaultSeekCount && (anOOP = [self popGrayOOP]) != NUNotFound64; i++)
 		{            
             [[self nursery] lockForChange];
             
@@ -136,17 +136,17 @@ const NUUInt32 NUKidnapperDefaultGrayOOPCapacity = 50000;
             if ([[[self nursery] objectTable] objectLocationForOOP:anOOP gradeLessThanOrEqualTo:[self grade] gradeInto:&aGrade] == NUNotFound64)
                 [[NSException exceptionWithName:NUObjectLocationNotFoundException reason:NUObjectLocationNotFoundException userInfo:nil] raise];
             
-			[peephole peekAt:NUMakeBellBall(anOOP, aGrade)];
+			[aperture peekAt:NUMakeBellBall(anOOP, aGrade)];
 			
-			while ([peephole hasNextFixedOOP])
+			while ([aperture hasNextFixedOOP])
 			{
-				NUUInt64 aFixedOOP = [peephole nextFixedOOP];
+				NUUInt64 aFixedOOP = [aperture nextFixedOOP];
 				if (aFixedOOP != NUNilOOP) [self pushOOPAsGrayIfWhite:aFixedOOP];
 			}
 			
-			while ([peephole hasNextIndexedOOP])
+			while ([aperture hasNextIndexedOOP])
 			{
-				NUUInt64 anIndexedOOP = [peephole nextIndexedOOP];
+				NUUInt64 anIndexedOOP = [aperture nextIndexedOOP];
 				if (anIndexedOOP != NUNilOOP) [self pushOOPAsGrayIfWhite:anIndexedOOP];
 			}
             
@@ -161,12 +161,12 @@ const NUUInt32 NUKidnapperDefaultGrayOOPCapacity = 50000;
 	}
 	
 	if (!shouldLoadGrayOOPs && ![grayOOPs count])
-        currentPhase = NUKidnapperKidnapPhase;
+        currentPhase = NUSeekerKidnapPhase;
 }
 
 - (void)kidnapObjects
 {
-	if (currentPhase != NUKidnapperKidnapPhase) return;
+	if (currentPhase != NUSeekerKidnapPhase) return;
 	
 	NUBellBall aBellBall = [[[self nursery] objectTable] firstBellBall];
     
@@ -206,12 +206,12 @@ const NUUInt32 NUKidnapperDefaultGrayOOPCapacity = 50000;
 #endif
 	}
 	
-	currentPhase = NUKidnapperNonePhase;
+	currentPhase = NUSeekerNonePhase;
 }
 
 - (void)pushRootOOP
 {
-	NUBell *anOOP = [[self playLot] bellForObject:[[self playLot] nurseryRoot]];
+	NUBell *anOOP = [[self sandbox] bellForObject:[[self sandbox] nurseryRoot]];
 	if (anOOP) [self pushOOPAsGrayIfWhite:[anOOP OOP]];
 }
 
@@ -219,7 +219,7 @@ const NUUInt32 NUKidnapperDefaultGrayOOPCapacity = 50000;
 {
 	NUUInt64 anOOP = [[[self nursery] objectTable] firstGrayOOPGradeLessThanOrEqualTo:[self grade]];
 	
-	while (anOOP != NUNotFound64 && [grayOOPs count] < NUKidnapperDefaultGrayOOPCapacity / 2)
+	while (anOOP != NUNotFound64 && [grayOOPs count] < NUSeekerDefaultGrayOOPCapacity / 2)
 	{
 		[grayOOPs addIndex:anOOP];
         anOOP = [[[self nursery] objectTable] grayOOPGreaterThanOOP:anOOP gradeLessThanOrEqualTo:[self grade]];
@@ -230,7 +230,7 @@ const NUUInt32 NUKidnapperDefaultGrayOOPCapacity = 50000;
 
 - (void)pushOOPAsGrayIfWhite:(NUUInt64)anOOP
 {	
-	if (currentPhase != NUKidnapperStalkPhase) return;
+	if (currentPhase != NUSeekerSeekPhase) return;
 
     NUUInt64 aGrade;
     if ([[[self nursery] objectTable] objectLocationForOOP:anOOP gradeLessThanOrEqualTo:[self grade] gradeInto:&aGrade] == NUNotFound64)
@@ -250,7 +250,7 @@ const NUUInt32 NUKidnapperDefaultGrayOOPCapacity = 50000;
 
 - (void)pushOOPAsGrayIfBlack:(NUUInt64)anOOP
 {
-	if (currentPhase != NUKidnapperStalkPhase) return;
+	if (currentPhase != NUSeekerSeekPhase) return;
 
     NUBellBall aBellBall = NUMakeBellBall(anOOP, [self grade]);
 	NUUInt8 aGCMark = [[[self nursery] objectTable] gcMarkFor:aBellBall];
