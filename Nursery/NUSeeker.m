@@ -20,7 +20,7 @@
 
 const NUUInt8 NUSeekerNonePhase		= 0;
 const NUUInt8 NUSeekerSeekPhase		= 1;
-const NUUInt8 NUSeekerKidnapPhase	= 2;
+const NUUInt8 NUSeekerCollectPhase	= 2;
 
 const NUUInt64 NUSeekerPhaseOffset	= 101;
 const NUUInt64 NUSeekerCurrentGradeOffset = 109;
@@ -92,7 +92,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 - (void)process
 {
     [self seekObjects];
-    [self kidnapObjects];
+    [self collectObjects];
 }
 
 - (void)seekObjects
@@ -161,12 +161,12 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 	}
 	
 	if (!shouldLoadGrayOOPs && ![grayOOPs count])
-        currentPhase = NUSeekerKidnapPhase;
+        currentPhase = NUSeekerCollectPhase;
 }
 
-- (void)kidnapObjects
+- (void)collectObjects
 {
-	if (currentPhase != NUSeekerKidnapPhase) return;
+	if (currentPhase != NUSeekerCollectPhase) return;
 	
 	NUBellBall aBellBall = [[[self nursery] objectTable] firstBellBall];
     
@@ -188,7 +188,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
                 [[NSException exceptionWithName:@"error" reason:@"error" userInfo:nil] raise];
             
 #ifdef DEBUG
-            NSLog(@"<%@:%p> #kidnapObjects (removeObjectFor: %@, removeOOPForObjectLocation: %llu)", [self class], self, NUStringFromBellBall(aBellBall), anObjectLocation);
+            NSLog(@"<%@:%p> #collectObjects (removeObjectFor: %@, removeOOPForObjectLocation: %llu)", [self class], self, NUStringFromBellBall(aBellBall), anObjectLocation);
             if (aBellBall.oop == 12499)
                 NSLog(@"aBellBall.oop == 12499");
 #endif
@@ -202,7 +202,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
         
 #ifdef DEBUG
         if (NUBellBallEquals(aBellBall, NUNotFoundBellBall))
-            NSLog(@"<%@:%p> #kidnapObjects (aBellBall == NUNotFoundBellBall)", [self class], self);
+            NSLog(@"<%@:%p> #collectObjects (aBellBall == NUNotFoundBellBall)", [self class], self);
 #endif
 	}
 	

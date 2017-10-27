@@ -186,7 +186,7 @@ extern NSString * const NUObjectLoadingException;
 - (void)invalidateNotReferencedBells;
 - (void)invalidateBell:(NUBell *)aBell;
 
-- (void)kidnapGradeLessThan:(NUUInt64)aGrade;
-- (void)kidnapBellsWithGradeLessThan:(NUUInt64)aGrade;
+- (void)collectGradeLessThan:(NUUInt64)aGrade;
+- (void)collectBellsWithGradeLessThan:(NUUInt64)aGrade;
 
 @end

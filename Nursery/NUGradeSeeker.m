@@ -132,7 +132,7 @@
             [self seekObjectFor:aBell];
         else
         {
-            [self kidnapGrade];
+            [self collectGrade];
             [self setShouldStop:YES];
         }
         
@@ -156,7 +156,7 @@
     
 }
 
-- (void)kidnapGrade
+- (void)collectGrade
 {
     __block BOOL aGradeLessThanCurrentFound = NO;
     
@@ -175,7 +175,7 @@
         }];
         
         if (!aGradeLessThanCurrentFound)
-            [self kidnapGradeLessThan:[self grade]];
+            [self collectGradeLessThan:[self grade]];
         else
         {
 #ifdef DEBUG
@@ -208,13 +208,13 @@
     }
 }
 
-- (void)kidnapGradeLessThan:(NUUInt64)aGrade
+- (void)collectGradeLessThan:(NUUInt64)aGrade
 {
 #ifdef DEBUG
-    NSLog(@"<%@:%p> #kidnapGradeLessThan:%llu", [self class], self, aGrade);
+    NSLog(@"<%@:%p> #collectGradeLessThan:%llu", [self class], self, aGrade);
 #endif
     
-    [[self sandbox] kidnapGradeLessThan:aGrade];
+    [[self sandbox] collectGradeLessThan:aGrade];
 }
 
 - (void)bellDidLoadIvars:(NUBell *)aBell

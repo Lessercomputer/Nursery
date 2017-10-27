@@ -11,7 +11,7 @@
 
 extern const NUUInt8 NUSeekerNonePhase;
 extern const NUUInt8 NUSeekerSeekPhase;
-extern const NUUInt8 NUSeekerKidnapPhase;
+extern const NUUInt8 NUSeekerCollectPhase;
 
 @class NUIndexArray, NUMainBranchNursery, NUAperture;
 
@@ -43,7 +43,7 @@ extern const NUUInt8 NUSeekerKidnapPhase;
 
 - (void)seekObjects;
 - (void)seekObjectsUntilStop;
-- (void)kidnapObjects;
+- (void)collectObjects;
 - (void)pushRootOOP;
 - (void)loadGrayOOPs;
 - (void)pushOOPAsGrayIfWhite:(NUUInt64)anOOP;

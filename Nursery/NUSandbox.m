@@ -783,12 +783,12 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     [self removeBell:aBell];
 }
 
-- (void)kidnapGradeLessThan:(NUUInt64)aGrade
+- (void)collectGradeLessThan:(NUUInt64)aGrade
 {
     @try {
         [self lock];
         
-        [self kidnapBellsWithGradeLessThan:aGrade];
+        [self collectBellsWithGradeLessThan:aGrade];
         [[self nursery] releaseGradeLessThan:aGrade bySandbox:self];            
     }
     @finally {
@@ -796,7 +796,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     }
 }
 
-- (void)kidnapBellsWithGradeLessThan:(NUUInt64)aGrade
+- (void)collectBellsWithGradeLessThan:(NUUInt64)aGrade
 {
     @try {
         [self lock];
