@@ -2,7 +2,7 @@
 //  NUBell.h
 //  Nursery
 //
-//  Created by P,T,A on 11/02/24.
+//  Created by Akifumi Takata on 11/02/24.
 //  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 

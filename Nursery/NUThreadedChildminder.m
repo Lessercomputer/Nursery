@@ -2,7 +2,7 @@
 //  NUThreadedChildminder.m
 //  Nursery
 //
-//  Created by P,T,A on 2013/03/16.
+//  Created by Akifumi Takata on 2013/03/16.
 //
 //
 

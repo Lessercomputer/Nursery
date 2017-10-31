@@ -2,7 +2,7 @@
 //  NUOpaqueBTree.h
 //  Nursery
 //
-//  Created by P,T,A on 10/09/09.
+//  Created by Akifumi Takata on 10/09/09.
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 

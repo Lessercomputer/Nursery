@@ -2,7 +2,7 @@
 //  NUObjectWrapper.h
 //  Nursery
 //
-//  Created by P,T,A on 11/05/30.
+//  Created by Akifumi Takata on 11/05/30.
 //  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 

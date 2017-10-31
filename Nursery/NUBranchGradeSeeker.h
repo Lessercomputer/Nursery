@@ -2,7 +2,7 @@
 //  NUBranchGradeSeeker.h
 //  Nursery
 //
-//  Created by P,T,A on 2014/03/01.
+//  Created by Akifumi Takata on 2014/03/01.
 //
 //
 

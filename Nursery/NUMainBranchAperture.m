@@ -2,7 +2,7 @@
 //  NUMainBranchAperture.m
 //  Nursery
 //
-//  Created by P,T,A on 2013/09/19.
+//  Created by Akifumi Takata on 2013/09/19.
 //
 //
 

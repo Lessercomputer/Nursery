@@ -2,7 +2,7 @@
 //  NUNurseryRoot.h
 //  Nursery
 //
-//  Created by P,T,A on 11/07/14.
+//  Created by Akifumi Takata on 11/07/14.
 //  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 

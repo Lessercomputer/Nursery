@@ -2,7 +2,7 @@
 //  NUOpaqueArray.h
 //  Nursery
 //
-//  Created by P,T,A on 10/10/08.
+//  Created by Akifumi Takata on 10/10/08.
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 

@@ -2,7 +2,7 @@
 //  NUChangedRegionArray.m
 //  Nursery
 //
-//  Created by P,T,A on 11/01/22.
+//  Created by Akifumi Takata on 11/01/22.
 //  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 

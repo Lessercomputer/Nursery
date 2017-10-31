@@ -2,7 +2,7 @@
 //  NURegionArrayTest.m
 //  Nursery
 //
-//  Created by P,T,A on 2012/09/07.
+//  Created by Akifumi Takata on 2012/09/07.
 //
 //
 

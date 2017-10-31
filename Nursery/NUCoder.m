@@ -2,7 +2,7 @@
 //  NUCoder.m
 //  Nursery
 //
-//  Created by P,T,A on 11/03/20.
+//  Created by Akifumi Takata on 11/03/20.
 //  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 
