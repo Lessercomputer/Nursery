@@ -9,6 +9,9 @@ It is not ORM.
 There is no impedance mismatch.  
 Relational database and SQL are not used at all.
 
+Loading and saving objects is thread-safe.  
+However, there is no guarantee that other processing is thread-safe.
+
 Instances of the following classes can be persisted.
 
 * NSObject
