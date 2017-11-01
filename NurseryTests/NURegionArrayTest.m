@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <Nursery/NUChangedRegionArray.h>
+#import "NUChangedRegionArray.h"
 #import <Nursery/NURegion.h>
 
 @interface NURegionArrayTest : XCTestCase

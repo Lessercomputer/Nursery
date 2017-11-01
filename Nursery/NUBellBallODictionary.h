@@ -6,7 +6,7 @@
 //
 //
 
-#import <Nursery/NUOpaqueODictionary.h>
+#import "NUOpaqueODictionary.h"
 
 @interface NUBellBallODictionary : NUOpaqueODictionary
 

@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <Nursery/NUMutableDictionary.h>
+#import "NUMutableDictionary.h"
 
 @interface NUMutableDictionaryTests : XCTestCase
 

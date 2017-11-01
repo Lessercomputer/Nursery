@@ -6,7 +6,7 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
-#import <Nursery/NUOpaqueArray.h>
+#import "NUOpaqueArray.h"
 
 
 @interface NURegionArray : NUOpaqueArray

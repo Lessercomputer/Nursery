@@ -12,6 +12,7 @@
 
 #import <Nursery/NUNursery.h>
 #import <Nursery/NUMainBranchNursery.h>
+#import <Nursery/NUBranchNursery.h>
 
 #import <Nursery/NUSandbox.h>
 
@@ -28,4 +29,7 @@
 #import <Nursery/NUComparator.h>
 
 #import <Nursery/NUNurseryAssociation.h>
+#import <Nursery/NUBranchNurseryAssociation.h>
 #import <Nursery/NUMainBranchNurseryAssociation.h>
+#import <Nursery/NUMainBranchNurseryAssociationProtocol.h>
+

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		613511301B6F9CA4008392C0 /* NUCodingNote.h in Headers */ = {isa = PBXBuildFile; fileRef = 6135112F1B6F9CA4008392C0 /* NUCodingNote.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		613511301B6F9CA4008392C0 /* NUCodingNote.h in Headers */ = {isa = PBXBuildFile; fileRef = 6135112F1B6F9CA4008392C0 /* NUCodingNote.h */; };
 		619B07911913ED8D00A4BAA2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 619B07901913ED8D00A4BAA2 /* Cocoa.framework */; };
 		619B07A61913ED8D00A4BAA2 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 619B07A51913ED8D00A4BAA2 /* XCTest.framework */; };
 		619B07A71913ED8D00A4BAA2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 619B07901913ED8D00A4BAA2 /* Cocoa.framework */; };
@@ -54,7 +54,7 @@
 		619B08AE1913EEC000A4BAA2 /* NUBranchAliaser.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07E11913EEBF00A4BAA2 /* NUBranchAliaser.m */; };
 		619B08AF1913EEC000A4BAA2 /* NUBranchNursery.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07E21913EEBF00A4BAA2 /* NUBranchNursery.m */; };
 		619B08B01913EEC000A4BAA2 /* NUBranchNurseryAssociationEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07E31913EEBF00A4BAA2 /* NUBranchNurseryAssociationEntry.m */; };
-		619B08B11913EEC000A4BAA2 /* NUBranchSandbox.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07E41913EEBF00A4BAA2 /* NUBranchSandbox.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		619B08B11913EEC000A4BAA2 /* NUBranchSandbox.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07E41913EEBF00A4BAA2 /* NUBranchSandbox.h */; };
 		619B08B21913EEC000A4BAA2 /* NUBranchSandbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07E51913EEBF00A4BAA2 /* NUBranchSandbox.m */; };
 		619B08B31913EEC000A4BAA2 /* NUMainBranchNurseryAssociation.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07E61913EEBF00A4BAA2 /* NUMainBranchNurseryAssociation.m */; };
 		619B08B41913EEC000A4BAA2 /* NUMainBranchNurseryAssociationEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07E71913EEBF00A4BAA2 /* NUMainBranchNurseryAssociationEntry.h */; };
@@ -67,7 +67,7 @@
 		619B08BB1913EEC000A4BAA2 /* NUBellBall.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07EE1913EEBF00A4BAA2 /* NUBellBall.m */; };
 		619B08BC1913EEC000A4BAA2 /* NUBellBallArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07EF1913EEBF00A4BAA2 /* NUBellBallArray.h */; };
 		619B08BD1913EEC000A4BAA2 /* NUBellBallArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07F01913EEBF00A4BAA2 /* NUBellBallArray.m */; };
-		619B08BE1913EEC000A4BAA2 /* NUBellBallODictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07F11913EEBF00A4BAA2 /* NUBellBallODictionary.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		619B08BE1913EEC000A4BAA2 /* NUBellBallODictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07F11913EEBF00A4BAA2 /* NUBellBallODictionary.h */; };
 		619B08BF1913EEC000A4BAA2 /* NUBellBallODictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07F21913EEBF00A4BAA2 /* NUBellBallODictionary.m */; };
 		619B08C01913EEC000A4BAA2 /* NUBranchCodingContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07F31913EEBF00A4BAA2 /* NUBranchCodingContext.h */; };
 		619B08C11913EEC000A4BAA2 /* NUBranchGradeSeeker.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07F41913EEBF00A4BAA2 /* NUBranchGradeSeeker.h */; };
@@ -82,7 +82,7 @@
 		619B08CA1913EEC000A4BAA2 /* NUBTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07FD1913EEBF00A4BAA2 /* NUBTree.m */; };
 		619B08CB1913EEC000A4BAA2 /* NUBTreeBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07FE1913EEBF00A4BAA2 /* NUBTreeBranch.m */; };
 		619B08CC1913EEC000A4BAA2 /* NUBTreeLeaf.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07FF1913EEBF00A4BAA2 /* NUBTreeLeaf.m */; };
-		619B08CD1913EEC000A4BAA2 /* NUBTreeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08001913EEBF00A4BAA2 /* NUBTreeNode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		619B08CD1913EEC000A4BAA2 /* NUBTreeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08001913EEBF00A4BAA2 /* NUBTreeNode.h */; };
 		619B08CE1913EEC000A4BAA2 /* NUBTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08011913EEBF00A4BAA2 /* NUBTreeNode.m */; };
 		619B08CF1913EEC000A4BAA2 /* NUChangedRegionArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08021913EEBF00A4BAA2 /* NUChangedRegionArray.m */; };
 		619B08D01913EEC000A4BAA2 /* NUCharacterDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08031913EEBF00A4BAA2 /* NUCharacterDictionary.h */; };
@@ -113,8 +113,8 @@
 		619B08E91913EEC000A4BAA2 /* NUMainBranchNurseryAssociation.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B081C1913EEBF00A4BAA2 /* NUMainBranchNurseryAssociation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		619B08EA1913EEC000A4BAA2 /* NUMainBranchAperture.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B081D1913EEBF00A4BAA2 /* NUMainBranchAperture.h */; };
 		619B08EB1913EEC000A4BAA2 /* NUMainBranchAperture.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B081E1913EEBF00A4BAA2 /* NUMainBranchAperture.m */; };
-		619B08EC1913EEC000A4BAA2 /* NUMainBranchSandbox.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B081F1913EEBF00A4BAA2 /* NUMainBranchSandbox.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		619B08ED1913EEC000A4BAA2 /* NUMutableDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08201913EEBF00A4BAA2 /* NUMutableDictionary.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		619B08EC1913EEC000A4BAA2 /* NUMainBranchSandbox.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B081F1913EEBF00A4BAA2 /* NUMainBranchSandbox.h */; };
+		619B08ED1913EEC000A4BAA2 /* NUMutableDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08201913EEBF00A4BAA2 /* NUMutableDictionary.h */; };
 		619B08EE1913EEC000A4BAA2 /* NUMutableDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08211913EEBF00A4BAA2 /* NUMutableDictionary.m */; };
 		619B08EF1913EEC000A4BAA2 /* NUNSArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08221913EEBF00A4BAA2 /* NUNSArray.h */; };
 		619B08F01913EEC000A4BAA2 /* NUNSArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08231913EEBF00A4BAA2 /* NUNSArray.m */; };
@@ -141,7 +141,7 @@
 		619B09061913EEC000A4BAA2 /* NUOpaqueBTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08391913EEBF00A4BAA2 /* NUOpaqueBTree.m */; };
 		619B09071913EEC000A4BAA2 /* NUOpaqueBTreeBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B083A1913EEBF00A4BAA2 /* NUOpaqueBTreeBranch.m */; };
 		619B09081913EEC000A4BAA2 /* NUOpaqueBTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B083B1913EEBF00A4BAA2 /* NUOpaqueBTreeNode.m */; };
-		619B09091913EEC000A4BAA2 /* NUOpaqueODictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B083C1913EEBF00A4BAA2 /* NUOpaqueODictionary.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		619B09091913EEC000A4BAA2 /* NUOpaqueODictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B083C1913EEBF00A4BAA2 /* NUOpaqueODictionary.h */; };
 		619B090A1913EEC000A4BAA2 /* NUOpaqueODictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B083D1913EEBF00A4BAA2 /* NUOpaqueODictionary.m */; };
 		619B090B1913EEC000A4BAA2 /* NUPage.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B083E1913EEBF00A4BAA2 /* NUPage.h */; };
 		619B090C1913EEC000A4BAA2 /* NUPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B083F1913EEBF00A4BAA2 /* NUPage.m */; };
@@ -154,9 +154,9 @@
 		619B09131913EEC000A4BAA2 /* NUParader.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08461913EEBF00A4BAA2 /* NUParader.m */; };
 		619B09141913EEC000A4BAA2 /* NUAperture.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08471913EEBF00A4BAA2 /* NUAperture.h */; };
 		619B09151913EEC000A4BAA2 /* NUAperture.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08481913EEBF00A4BAA2 /* NUAperture.m */; };
-		619B09161913EEC000A4BAA2 /* NUPupilAlbum.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08491913EEBF00A4BAA2 /* NUPupilAlbum.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		619B09161913EEC000A4BAA2 /* NUPupilAlbum.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08491913EEBF00A4BAA2 /* NUPupilAlbum.h */; };
 		619B09171913EEC000A4BAA2 /* NUPupilAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B084A1913EEBF00A4BAA2 /* NUPupilAlbum.m */; };
-		619B09181913EEC000A4BAA2 /* NUPupilNote.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B084B1913EEBF00A4BAA2 /* NUPupilNote.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		619B09181913EEC000A4BAA2 /* NUPupilNote.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B084B1913EEBF00A4BAA2 /* NUPupilNote.h */; };
 		619B09191913EEC000A4BAA2 /* NUPupilNote.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B084C1913EEBF00A4BAA2 /* NUPupilNote.m */; };
 		619B091A1913EEC000A4BAA2 /* NURegion.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B084D1913EEBF00A4BAA2 /* NURegion.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		619B091B1913EEC000A4BAA2 /* NURegion.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B084E1913EEBF00A4BAA2 /* NURegion.m */; };
@@ -199,9 +199,9 @@
 		619B09421913EEC000A4BAA2 /* NUReversedObjectTableLeaf.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08751913EEC000A4BAA2 /* NUReversedObjectTableLeaf.h */; };
 		619B09431913EEC000A4BAA2 /* NUReversedObjectTableBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08761913EEC000A4BAA2 /* NUReversedObjectTableBranch.m */; };
 		619B09441913EEC000A4BAA2 /* NULengthTreeLeaf.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08771913EEC000A4BAA2 /* NULengthTreeLeaf.m */; };
-		619B09451913EEC000A4BAA2 /* NUOpaqueArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08781913EEC000A4BAA2 /* NUOpaqueArray.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		619B09451913EEC000A4BAA2 /* NUOpaqueArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08781913EEC000A4BAA2 /* NUOpaqueArray.h */; };
 		619B09471913EEC000A4BAA2 /* NURegionArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B087A1913EEC000A4BAA2 /* NURegionArray.m */; };
-		619B094A1913EEC000A4BAA2 /* NUChangedRegionArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B087D1913EEC000A4BAA2 /* NUChangedRegionArray.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		619B094A1913EEC000A4BAA2 /* NUChangedRegionArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B087D1913EEC000A4BAA2 /* NUChangedRegionArray.h */; };
 		619B094F1913EEC000A4BAA2 /* NULengthTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08821913EEC000A4BAA2 /* NULengthTree.h */; };
 		619B09501913EEC000A4BAA2 /* NULengthTreeBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08831913EEC000A4BAA2 /* NULengthTreeBranch.m */; };
 		619B09511913EEC000A4BAA2 /* NULocationTreeBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08841913EEC000A4BAA2 /* NULocationTreeBranch.m */; };
