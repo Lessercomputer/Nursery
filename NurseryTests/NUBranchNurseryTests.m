@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 #import <Nursery/Nursery.h>
 #import "Person.h"
+#import "NUBranchNurseryAssociation.h"
 
 static NSString *NUNurseryTestFilePath;
 @interface NUBranchNurseryTests : XCTestCase

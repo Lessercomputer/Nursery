@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import <Nursery/Nursery.h>
+#import "NUOpaqueArray.h"
 
 @interface NUOpaqueArrayTest : XCTestCase
 

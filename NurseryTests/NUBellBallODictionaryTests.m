@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import <Nursery/Nursery.h>
+#import "NUBellBallODictionary.h"
 
 static const NUUInt64 entryCount = 1000000;
 static NSArray *bells;
