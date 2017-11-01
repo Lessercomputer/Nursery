@@ -6,7 +6,10 @@
 //
 //
 
-#import <Nursery/Nursery.h>
+#import "NUAliaser.h"
+
+@class NUBranchSandbox, NUBranchNursery, NUPupilAlbum;
+@protocol NUMainBranchNurseryAssociation;
 
 extern NSString *NUPupilNoteNotFoundException;
 

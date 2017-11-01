@@ -10,6 +10,7 @@
 #import "NUBranchSandbox.h"
 #import "NUBranchAliaser.h"
 #import "NUAperture.h"
+#import "NUBell.h"
 
 @implementation NUBranchGradeSeeker
 

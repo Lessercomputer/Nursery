@@ -17,6 +17,7 @@
 #import "NURegion.h"
 #import "NUMainBranchNursery.h"
 #import "NUMainBranchAliaser.h"
+#import "NUSandbox.h"
 
 
 const NUUInt64 NUNilOOP                             = 0;

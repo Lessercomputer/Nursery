@@ -20,18 +20,20 @@
 #import "NUSeeker.h"
 #import "NURegion.h"
 #import "NUBellBall.h"
-#import "NUMainBranchAliaser.h"
-#import "NUBranchAliaser.h"
 #import "NUGradeSeeker.h"
+#import "NUBranchAliaser.h"
 #import "NUPairedMainBranchSandbox.h"
 #import "NUPairedMainBranchAliaser.h"
 #import "NUU64ODictionary.h"
 #import "NUPupilNote.h"
+#import "NUIvar.h"
 
 NSString *NUObjectLocationNotFoundException = @"NUObjectLocationNotFoundException";
 NSString *NUBellBallNotFoundException = @"NUBellBallNotFoundException";
 NSString *NUAliaserCannotEncodeObjectException = @"NUAliaserCannotEncodeObjectException";
 NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectException";
+
+@class NUMainBranchAliaser, NUBranchAliaser, NUPairedMainBranchAliaser;
 
 @implementation NUAliaser
 @end

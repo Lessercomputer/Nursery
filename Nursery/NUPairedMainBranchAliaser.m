@@ -14,6 +14,10 @@
 #import "NUU64ODictionary.h"
 #import "NUSpaces.h"
 #import "NUBranchCodingContext.h"
+#import "NUPupilNote.h"
+#import "NUMainBranchNursery.h"
+#import "NUBell.h"
+#import "NUBellBall.h"
 
 @implementation NUPairedMainBranchAliaser
 

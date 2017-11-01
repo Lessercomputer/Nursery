@@ -7,6 +7,7 @@
 //
 
 #import "NUMainBranchAliaser.h"
+#import "NUMainBranchNursery.h"
 #import "NUSandbox.h"
 #import "NUCoder.h"
 #import "NUPages.h"
@@ -17,7 +18,9 @@
 #import "NUReversedObjectTable.h"
 #import "NUSpaces.h"
 #import "NUCharacter.h"
+#import "NUBell.h"
 #import "NUBellBall.h"
+#import "NURegion.h"
 
 @implementation NUMainBranchAliaser
 

@@ -6,7 +6,7 @@
 //
 //
 
-#import <Nursery/Nursery.h>
+#import "NUSandbox.h"
 
 @class NUMainBranchNursery, NUMainBranchAliaser;
 

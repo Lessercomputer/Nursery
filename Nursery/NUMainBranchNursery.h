@@ -6,7 +6,7 @@
 //
 //
 
-#import <Nursery/Nursery.h>
+#import "NUNursery.h"
 
 @class NUObjectTable, NUReversedObjectTable, NUSpaces, NUPages, NUSeeker, NUParader, NUMainBranchSandbox, NUPairedMainBranchSandbox;
 

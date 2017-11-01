@@ -13,6 +13,8 @@
 #import "NUObjectTable.h"
 #import "NUIvar.h"
 #import "NUBellBall.h"
+#import "NUAliaser.h"
+#import "NUSandbox.h"
 
 @implementation NUMainBranchAperture
 

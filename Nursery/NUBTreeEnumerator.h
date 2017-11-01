@@ -6,7 +6,7 @@
 //
 //
 
-#import <Nursery/Nursery.h>
+#import "NUTypes.h"
 
 @class NUBTree, NUBTreeLeaf;
 

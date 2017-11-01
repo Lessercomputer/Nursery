@@ -11,6 +11,7 @@
 #import "NUOpaqueArray.h"
 #import "NUIndexArray.h"
 #import "NUBellBallArray.h"
+#import "NUBellBall.h"
 
 
 @implementation NUObjectTableLeaf

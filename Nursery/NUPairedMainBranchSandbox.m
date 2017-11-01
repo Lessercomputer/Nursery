@@ -11,6 +11,8 @@
 #import "NUMainBranchAliaser.h"
 #import "NUPairedMainBranchAliaser.h"
 #import "NUObjectTable.h"
+#import "NUMainBranchNursery.h"
+#import "NUNurseryRoot.h"
 
 @implementation NUPairedMainBranchSandbox
 

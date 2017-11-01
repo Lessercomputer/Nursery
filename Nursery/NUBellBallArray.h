@@ -6,7 +6,7 @@
 //
 //
 
-#import <Nursery/Nursery.h>
+#import "NUOpaqueArray.h"
 
 @interface NUBellBallArray : NUOpaqueArray
 

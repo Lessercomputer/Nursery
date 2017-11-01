@@ -17,6 +17,7 @@
 #import "NUBellBall.h"
 #import "NUSandbox.h"
 #import "NUMainBranchAperture.h"
+#import "NUAliaser.h"
 
 const NUUInt8 NUSeekerNonePhase		= 0;
 const NUUInt8 NUSeekerSeekPhase		= 1;

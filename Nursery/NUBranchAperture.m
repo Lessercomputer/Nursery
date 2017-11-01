@@ -12,6 +12,8 @@
 #import "NUBranchAliaser.h"
 #import "NUPupilNote.h"
 #import "NUObjectTable.h"
+#import "NUCharacter.h"
+#import "NUIvar.h"
 
 @implementation NUBranchAperture
 

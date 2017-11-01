@@ -12,6 +12,10 @@
 #import <Nursery/NUBTreeBranch.h>
 #import <Nursery/NUDefaultComparator.h>
 #import <Nursery/NUBTreeEnumerator.h>
+#import "NUIvar.h"
+#import "NUCharacter.h"
+#import "NUBell.h"
+#import "NUAliaser.h"
 
 @implementation NUBTree
 

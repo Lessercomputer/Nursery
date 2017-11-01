@@ -13,6 +13,9 @@
 #import "NUCodingContext.h"
 #import "NUBranchCodingContext.h"
 #import "NUCoder.h"
+#import "NUPupilNote.h"
+#import "NUPupilAlbum.h"
+#import "NUBranchSandbox.h"
 
 NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 

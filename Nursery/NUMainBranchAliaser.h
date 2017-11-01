@@ -6,10 +6,9 @@
 //
 //
 
-#import <Nursery/Nursery.h>
 #import "NUAliaser.h"
 
-@class NUBell;
+@class NUBell, NUMainBranchNursery,NUReversedObjectTable;
 
 @interface NUMainBranchAliaser : NUAliaser
 {

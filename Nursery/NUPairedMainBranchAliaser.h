@@ -8,6 +8,8 @@
 
 #import "NUMainBranchAliaser.h"
 
+@class NUPairedMainBranchSandbox, NUU64ODictionary;
+
 @interface NUPairedMainBranchAliaser : NUMainBranchAliaser
 {
     NUU64ODictionary *pupils;

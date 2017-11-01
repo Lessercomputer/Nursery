@@ -6,9 +6,10 @@
 //
 //
 
-#import <Nursery/Nursery.h>
+#import "NUSandbox.h"
 
-@class NUBranchAliaser;
+@class NUBranchAliaser, NUBranchNursery;
+@protocol NUMainBranchNurseryAssociation;
 
 @interface NUBranchSandbox : NUSandbox
 {
