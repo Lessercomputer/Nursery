@@ -46,8 +46,8 @@ extern const NUIvarType NUNSSizeArrayType;
 extern const NUIvarType NUNSRectType;
 extern const NUIvarType NUNSRectArrayType;
 
-extern id NUGetIvar(id *anIvar);
-extern id NUSetIvar(id *anIvar, id anObject);
+extern id NUGetIvar(id __strong *anIvar);
+extern id NUSetIvar(id __strong *anIvar, id anObject);
 
 extern NSString *NUIvarInvalidTypeException;
 

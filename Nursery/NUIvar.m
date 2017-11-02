@@ -48,13 +48,13 @@ const NUIvarType NUNSSizeArrayType  = 31;
 const NUIvarType NUNSRectType       = 32;
 const NUIvarType NUNSRectArrayType  = 33;
 
-id NUGetIvar(id *anIvar)
+id NUGetIvar(id __strong *anIvar)
 {
     if ([(NSObject *)*anIvar isBell]) NUSetIvar(anIvar, [*anIvar object]);
     return *anIvar;
 }
 
-id NUSetIvar(id *anIvar, id anObject)
+id NUSetIvar(id __strong *anIvar, id anObject)
 {
     [anObject retain];
     [*anIvar release];
