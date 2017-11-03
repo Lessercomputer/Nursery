@@ -6,8 +6,8 @@
 //
 //
 
-#import <Nursery/NUTypes.h>
-#import <Nursery/NUCodingNote.h>
+#import "NUTypes.h"
+#import "NUCodingNote.h"
 
 @interface NUPupilNote : NSObject <NUCodingNote>
 {

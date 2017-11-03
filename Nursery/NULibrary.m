@@ -6,13 +6,13 @@
 //
 //
 
-#import <Nursery/NULibrary.h>
-#import <Nursery/NUBTree.h>
-#import <Nursery/NUCharacter.h>
-#import <Nursery/NUIvar.h>
-#import <Nursery/NUAliaser.h>
-#import <Nursery/NUBell.h>
-#import <Nursery/NUSandbox.h>
+#import "NULibrary.h"
+#import "NUBTree.h"
+#import "NUCharacter.h"
+#import "NUIvar.h"
+#import "NUAliaser.h"
+#import "NUBell.h"
+#import "NUSandbox.h"
 
 @implementation NULibrary
 
@@ -72,7 +72,17 @@
 
 - (void)enumerateKeysAndObjectsUsingBlock:(void (^)(id aKey, id anObj, BOOL *aStop))aBlock
 {
-    [[self tree] enumerateKeysAndObjectsUsingBlock:aBlock];
+    [self enumerateKeysAndObjectsWithOptions:NSEnumerationConcurrent usingBlock:aBlock];
+}
+
+-(void)enumerateKeysAndObjectsWithOptions:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
+{
+    [self enumerateKeysAndObjectsFrom:nil to:nil options:anOpts usingBlock:aBlock];
+}
+
+- (void)enumerateKeysAndObjectsFrom:(id)aKey1 to:(id)aKey2 options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
+{
+    [[self tree] enumerateKeysAndObjectsFrom:aKey1 to:aKey2 options:anOpts usingBlock:aBlock];
 }
 
 - (BOOL)isEqual:(id)anObject

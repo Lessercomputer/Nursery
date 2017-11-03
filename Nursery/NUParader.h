@@ -6,8 +6,8 @@
 //
 //
 
-#import <Nursery/NUTypes.h>
-#import <Nursery/NUThreadedChildminder.h>
+#import "NUTypes.h"
+#import "NUThreadedChildminder.h"
 
 extern NSString *NUParaderInvalidNodeLocationException;
 

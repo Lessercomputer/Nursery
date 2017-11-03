@@ -6,8 +6,8 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
-#import <Nursery/NUTypes.h>
-#import <Nursery/NUCodingNote.h>
+#import "NUTypes.h"
+#import "NUCodingNote.h"
 
 extern NSString *NUPageDataDoesNotExistException;
 extern NSString *NUInvalidPageLocationException;

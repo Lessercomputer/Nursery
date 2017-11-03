@@ -6,7 +6,7 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
-#import <Nursery/NURegionTree.h>
+#import "NURegionTree.h"
 
 @class NULengthTree, NULocationTreeLeaf;
 

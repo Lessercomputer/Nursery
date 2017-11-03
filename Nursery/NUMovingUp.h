@@ -6,7 +6,6 @@
 //  Copyright (c) 2015年 Nursery-Framework. All rights reserved.
 //
 
-#import <Nursery/NUTypes.h>
 
 @class NUAliaser;
 

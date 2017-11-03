@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年 Nursery-Framework. All rights reserved.
 //
 
-#import <Nursery/NUTypes.h>
+#import "NUTypes.h"
 
 @protocol NUCodingNote
 

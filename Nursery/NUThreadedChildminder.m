@@ -7,7 +7,7 @@
 //
 
 #import "NUThreadedChildminder.h"
-#import <Nursery/NUMainBranchNursery.h>
+#import "NUMainBranchNursery.h"
 
 const int NUThreadedChildminderActiveCondition      = 0;
 const int NUThreadedChildminderDeactiveCondition    = 1;

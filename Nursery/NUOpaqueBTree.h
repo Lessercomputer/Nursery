@@ -6,7 +6,7 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
-#import <Nursery/NUTypes.h>
+#import "NUTypes.h"
 
 @class NUOpaqueBTreeNode, NUOpaqueBTreeBranch, NUOpaqueBTreeLeaf, NUMainBranchNursery, NUPages, NUPage, NUOpaqueArray, NUSpaces, NUU64ODictionary;
 

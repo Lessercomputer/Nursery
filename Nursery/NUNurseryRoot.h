@@ -6,8 +6,8 @@
 //  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 
-#import <Nursery/NUCoding.h>
-#import <Nursery/NUMovingUp.h>
+#import "NUCoding.h"
+#import "NUMovingUp.h"
 
 @class NUCharacterDictionary, NUBell;
 

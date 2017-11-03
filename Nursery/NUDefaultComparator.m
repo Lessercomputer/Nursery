@@ -6,8 +6,8 @@
 //
 //
 
-#import <Nursery/NUDefaultComparator.h>
-#import <Nursery/NUCharacter.h>
+#import "NUDefaultComparator.h"
+#import "NUCharacter.h"
 
 @implementation NUDefaultComparator
 

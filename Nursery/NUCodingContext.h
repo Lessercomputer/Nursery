@@ -6,8 +6,8 @@
 //  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 
-#import <Nursery/NUTypes.h>
-#import <Nursery/NUCodingNote.h>
+#import "NUTypes.h"
+#import "NUCodingNote.h"
 
 @class NUBell, NUCharacter;
 

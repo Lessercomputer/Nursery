@@ -7,7 +7,7 @@
 //
 
 #import "NUBranchNurseryAssociationEntry.h"
-#import <Nursery/NUBranchSandbox.h>
+#import "NUBranchSandbox.h"
 
 @implementation NUBranchNurseryAssociationEntry
 

@@ -6,7 +6,7 @@
 //  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 
-#import <Nursery/NUTypes.h>
+#import "NUTypes.h"
 #import "NUThreadedChildminder.h"
 
 extern const NUUInt8 NUSeekerNonePhase;

@@ -6,7 +6,7 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
-#import <Nursery/NUOpaqueBTree.h>
+#import "NUOpaqueBTree.h"
 
 @class NUSandbox, NUObjectTableLeaf;
 

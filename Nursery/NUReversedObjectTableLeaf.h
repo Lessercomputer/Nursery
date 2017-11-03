@@ -6,7 +6,7 @@
 //
 //
 
-#import <Nursery/NUOpaqueBTreeLeaf.h>
+#import "NUOpaqueBTreeLeaf.h"
 
 @interface NUReversedObjectTableLeaf : NUOpaqueBTreeLeaf
 

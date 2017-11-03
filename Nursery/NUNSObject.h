@@ -6,7 +6,7 @@
 //
 //
 
-#import <Nursery/NUCharacter.h>
+#import "NUCharacter.h"
 
 @interface NSObject (NUCharacter) <NUCharacter>
 @end
