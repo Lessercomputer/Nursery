@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		613511301B6F9CA4008392C0 /* NUCodingNote.h in Headers */ = {isa = PBXBuildFile; fileRef = 6135112F1B6F9CA4008392C0 /* NUCodingNote.h */; };
-		619B07911913ED8D00A4BAA2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 619B07901913ED8D00A4BAA2 /* Cocoa.framework */; };
+		61826D521FAC84970042B6D9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 619B07931913ED8D00A4BAA2 /* Foundation.framework */; };
 		619B07A61913ED8D00A4BAA2 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 619B07A51913ED8D00A4BAA2 /* XCTest.framework */; };
 		619B07A71913ED8D00A4BAA2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 619B07901913ED8D00A4BAA2 /* Cocoa.framework */; };
 		619B07AA1913ED8D00A4BAA2 /* Nursery.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 619B078D1913ED8D00A4BAA2 /* Nursery.framework */; };
@@ -460,7 +460,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				619B07911913ED8D00A4BAA2 /* Cocoa.framework in Frameworks */,
+				61826D521FAC84970042B6D9 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

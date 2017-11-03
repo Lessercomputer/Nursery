@@ -33,6 +33,7 @@
 - (id <NUComparator>)comparator;
 
 - (NSEnumerator *)objectEnumerator;
+- (NSEnumerator *)reverseObjectEnumerator;
 
 - (void)enumerateKeysAndObjectsUsingBlock:(void (^)(id aKey, id anObj, BOOL *aStop))aBlock;
 

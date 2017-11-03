@@ -6,13 +6,13 @@
 //
 //
 
-#import <Nursery/NUBTreeNode.h>
-#import <Nursery/NUBTree.h>
-#import <Nursery/NUCharacter.h>
-#import <Nursery/NUIvar.h>
-#import <Nursery/NUAliaser.h>
-#import <Nursery/NUBell.h>
-#import <Nursery/NUSandbox.h>
+#import "NUBTreeNode.h"
+#import "NUBTree.h"
+#import "NUCharacter.h"
+#import "NUIvar.h"
+#import "NUAliaser.h"
+#import "NUBell.h"
+#import "NUSandbox.h"
 
 @implementation NUBTreeNode
 
@@ -398,6 +398,21 @@
 }
 
 - (NUBTreeLeaf *)firstLeaf
+{
+    return nil;
+}
+
+-(NUBTreeLeaf *)lastLeaf
+{
+    return nil;
+}
+
+- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThenOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex
+{
+    return nil;
+}
+
+-(NUBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex
 {
     return nil;
 }

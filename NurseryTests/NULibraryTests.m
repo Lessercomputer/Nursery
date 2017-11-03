@@ -127,6 +127,56 @@ static NSString *NUNurseryTestFilePath = nil;
     }];
 }
 
+- (void)testSetAndEnumerateFromTo
+{
+    const int MaxCount = 1000000;
+    NULibrary *aLibrary = [NULibrary library];
+    NSNumber *aKeyFrom = [NSNumber numberWithInteger:300];
+    NSNumber *aKeyTo = [NSNumber numberWithInteger:600];
+    NSMutableSet *aNumberSet = [NSMutableSet set];
+    NSArray *aNumbers;
+    for (int i = 0; i < MaxCount; i++)
+        [aNumberSet addObject:[NSNumber numberWithUnsignedLongLong:i]];
+    aNumbers = [aNumberSet allObjects];
+    
+    [aNumbers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [aLibrary setObject:obj forKey:obj];
+    }];
+
+    [aLibrary enumerateKeysAndObjectsFrom:aKeyFrom to:aKeyTo options:0 usingBlock:^(id aKey, id anObj, BOOL *aStop) {
+        NSComparisonResult aResult1 = [[aLibrary comparator] compareObject:aKey toObject:aKeyFrom];
+        NSComparisonResult aResult2 = [[aLibrary comparator] compareObject:aKey toObject:aKeyTo];
+        //NSLog(@"aKey:%@",aKey);
+        XCTAssertTrue((aResult1 == NSOrderedSame || aResult1 == NSOrderedDescending)
+                      && (aResult2 == NSOrderedSame || aResult2 == NSOrderedAscending));
+    }];
+}
+
+- (void)testSetAndReverseEnumerateFromTo
+{
+    const int MaxCount = 1000000;
+    NULibrary *aLibrary = [NULibrary library];
+    NSNumber *aKeyFrom = [NSNumber numberWithInteger:300];
+    NSNumber *aKeyTo = [NSNumber numberWithInteger:600];
+    NSMutableSet *aNumberSet = [NSMutableSet set];
+    NSArray *aNumbers;
+    for (int i = 0; i < MaxCount; i++)
+        [aNumberSet addObject:[NSNumber numberWithUnsignedLongLong:i]];
+    aNumbers = [aNumberSet allObjects];
+    
+    [aNumbers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [aLibrary setObject:obj forKey:obj];
+    }];
+    
+    [aLibrary enumerateKeysAndObjectsFrom:aKeyFrom to:aKeyTo options:NSEnumerationReverse usingBlock:^(id aKey, id anObj, BOOL *aStop) {
+        NSComparisonResult aResult1 = [[aLibrary comparator] compareObject:aKey toObject:aKeyFrom];
+        NSComparisonResult aResult2 = [[aLibrary comparator] compareObject:aKey toObject:aKeyTo];
+        //NSLog(@"aKey:%@",aKey);
+        XCTAssertTrue((aResult1 == NSOrderedSame || aResult1 == NSOrderedDescending)
+                      && (aResult2 == NSOrderedSame || aResult2 == NSOrderedAscending));
+    }];
+}
+
 - (void)testSaveAndLoadLibrary
 {
     NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];

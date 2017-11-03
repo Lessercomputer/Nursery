@@ -6,10 +6,10 @@
 //
 //
 
-#import <Nursery/NUBTreeLeaf.h>
-#import <Nursery/NUBTree.h>
-#import <Nursery/NUBell.h>
-#import <Nursery/NUSandbox.h>
+#import "NUBTreeLeaf.h"
+#import "NUBTree.h"
+#import "NUBell.h"
+#import "NUSandbox.h"
 
 @implementation NUBTreeLeaf
 
@@ -168,6 +168,62 @@
 - (NUBTreeLeaf *)firstLeaf
 {
     return self;
+}
+
+- (NUBTreeLeaf *)lastLeaf
+{
+    return self;
+}
+
+- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThenOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex
+{
+    BOOL aKeyExists;
+    NUUInt64 aCandidateKeyIndex;
+    
+    aKeyExists = [self getKeyIndexGreaterThanOrEqualTo:aKey keyIndexInto:&aCandidateKeyIndex];
+    
+    if (aKeyExists)
+    {
+        if (aKeyIndex) *aKeyIndex = (NUUInt32)aCandidateKeyIndex;
+        return self;
+    }
+    else if ([self rightNode])
+        return [[self rightNode] leafNodeContainingKeyGreaterThenOrEqualTo:aKey keyIndex:aKeyIndex];
+    else
+        return nil;
+}
+
+-(NUBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex
+{
+    NUUInt64 aTmpKeyIndex;
+    BOOL aKeyExists;
+    aKeyExists = [self getKeyIndexLessThanOrEqualTo:aKey keyIndexInto:&aTmpKeyIndex];
+    NUInt32 aKeyIndexLessThanOrEqualToKey = (NUUInt32)aTmpKeyIndex;
+    NUUInt32 aCurrentIndex = aKeyIndexLessThanOrEqualToKey;
+    NUBTreeLeaf *aCurrentLeaf = self;
+    NUUInt32 aCurrentOrNextKeyIndex = aCurrentIndex;
+    
+    if (aKeyIndexLessThanOrEqualToKey < 0)
+        return nil;
+    
+    while (YES)
+    {
+        NUBTreeLeaf *aCurrentOrNextLeaf = [[self tree] getNextKeyIndex:&aCurrentOrNextKeyIndex node:aCurrentLeaf];
+        NSComparisonResult aResult = [[self comparator] compareObject:[aCurrentOrNextLeaf keyAt:aCurrentOrNextKeyIndex] toObject:aKey];
+        
+        if (!aCurrentOrNextLeaf || aResult == NSOrderedDescending)
+        {
+            *aKeyIndex = aCurrentIndex;
+            return aCurrentLeaf;
+        }
+        else
+        {
+            aCurrentIndex = aCurrentOrNextKeyIndex;
+            aCurrentLeaf = aCurrentOrNextLeaf;
+        }
+    }
+    
+    return nil;
 }
 
 @end

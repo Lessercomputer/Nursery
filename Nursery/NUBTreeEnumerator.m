@@ -12,17 +12,47 @@
 
 @implementation NUBTreeEnumerator
 
-+ (id)enumeratorWithTree:(NUBTree *)aTree;
++ (id)enumeratorWithTree:(NUBTree *)aTree from:(id)aKey1 to:(id)aKey2 options:(NSEnumerationOptions)anOpts;
 {
-    return [[[self alloc] initWithTree:aTree] autorelease];
+    return [[[self alloc] initWithTree:aTree from:aKey1 to:aKey2 options:anOpts] autorelease];
 }
 
-- (id)initWithTree:(NUBTree *)aTree
+- (id)initWithTree:(NUBTree *)aTree from:(id)aKey1 to:(id)aKey2 options:(NSEnumerationOptions)anOpts
 {
     [super init];
 
     tree = [aTree retain];
-    node = [[aTree firstLeaf] retain];
+    keyFrom = [aKey1 retain];
+    keyTo = [aKey2 retain];
+    
+    options = anOpts;
+    
+    if (keyFrom && keyTo && [[tree comparator] compareObject:keyFrom toObject:keyTo] != NSOrderedAscending)
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:nil userInfo:nil];
+    
+    NUUInt32 aTmpNextValueIndex = 0;
+    
+    if ((anOpts & NSEnumerationReverse) != NSEnumerationReverse)
+    {
+        if (keyFrom)
+            node = [[tree leafNodeContainingKeyGreaterThenOrEqualTo:keyFrom keyIndex:&aTmpNextValueIndex] retain];
+        else
+            node = [[tree firstLeaf] retain];
+    }
+    else
+    {
+        if (keyTo)
+        {
+            node = [[tree leafNodeContainingKeyLessThanOrEqualTo:keyTo keyIndex:&aTmpNextValueIndex] retain];
+        }
+        else
+        {
+            node = [[tree lastLeaf] retain];
+            aTmpNextValueIndex = (NUInt32)[node valueCount] - 1;
+        }
+    }
+    
+    nextValueIndex = aTmpNextValueIndex;
     
     return self;
 }
@@ -30,6 +60,8 @@
 - (void)dealloc
 {
     [tree release];
+    [keyFrom release];
+    [keyTo release];
     [node release];
     
     [super dealloc];
@@ -51,23 +83,48 @@
 {
     BOOL aStop = NO;
 
-    while (!aStop)
+    if ((options & NSEnumerationReverse) != NSEnumerationReverse)
     {
-        @autoreleasepool
+        while (!aStop)
         {
-            if (nextValueIndex >= [node valueCount])
+            @autoreleasepool
             {
-                node = (NUBTreeLeaf *)[node rightNode];
-                nextValueIndex = 0;
+                if (nextValueIndex >= [node valueCount])
+                {
+                    node = (NUBTreeLeaf *)[node rightNode];
+                    nextValueIndex = 0;
+                }
+                
+                if (node && [[tree comparator] compareObject:[node keyAt:nextValueIndex] toObject:keyTo] != NSOrderedDescending)
+                {
+                    aBlock([node keyAt:nextValueIndex], [node valueAt:nextValueIndex], &aStop);
+                    nextValueIndex++;
+                }
+                else
+                    aStop = YES;
             }
-            
-            if (node)
+        }
+    }
+    else
+    {
+        while (!aStop)
+        {
+            @autoreleasepool
             {
-                aBlock([node keyAt:nextValueIndex], [node valueAt:nextValueIndex], &aStop);
-                nextValueIndex++;
+                if (nextValueIndex < 0)
+                {
+                    node = (NUBTreeLeaf *)[node leftNode];
+                    nextValueIndex = (NUInt32)[node valueCount] - 1;
+                }
+                
+                if (node && [[tree comparator] compareObject:[node keyAt:nextValueIndex] toObject:keyFrom] != NSOrderedAscending)
+                {
+                    aBlock([node keyAt:nextValueIndex], [node valueAt:nextValueIndex], &aStop);
+                    nextValueIndex--;
+                }
+                else
+                    aStop = YES;
             }
-            else
-                aStop = YES;
         }
     }
 }

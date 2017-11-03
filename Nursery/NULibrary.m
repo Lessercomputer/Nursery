@@ -70,6 +70,11 @@
     return [[self tree] objectEnumerator];
 }
 
+- (NSEnumerator *)reverseObjectEnumerator
+{
+    return [[self tree] reverseObjectEnumerator];
+}
+
 - (void)enumerateKeysAndObjectsUsingBlock:(void (^)(id aKey, id anObj, BOOL *aStop))aBlock
 {
     [self enumerateKeysAndObjectsWithOptions:NSEnumerationConcurrent usingBlock:aBlock];

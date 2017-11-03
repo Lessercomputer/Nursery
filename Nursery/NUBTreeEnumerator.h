@@ -13,13 +13,16 @@
 @interface NUBTreeEnumerator : NSEnumerator
 {
     NUBTree *tree;
+    id keyFrom;
+    id keyTo;
     NUBTreeLeaf *node;
-    NUUInt64 nextValueIndex;
+    NUInt32 nextValueIndex;
+    NSEnumerationOptions options;
 }
 
-+ (id)enumeratorWithTree:(NUBTree *)aTree;
++ (id)enumeratorWithTree:(NUBTree *)aTree from:(id)aKey1 to:(id)aKey2 options:(NSEnumerationOptions)anOpts;
 
-- (id)initWithTree:(NUBTree *)aTree;
+- (id)initWithTree:(NUBTree *)aTree from:(id)aKey1 to:(id)aKey2 options:(NSEnumerationOptions)anOpts;
 
 - (void)enumerateKeysAndObjectsUsingBlock:(void (^)(id aKey, id anObj, BOOL *aStop))aBlock;
 

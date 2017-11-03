@@ -6,7 +6,7 @@
 //
 //
 
-#import <Nursery/NUBTreeNode.h>
+#import "NUBTreeNode.h"
 
 @interface NUBTreeLeaf : NUBTreeNode
 

@@ -6,9 +6,9 @@
 //
 //
 
-#import <Nursery/NUTypes.h>
-#import <Nursery/NUComparator.h>
-#import <Nursery/NUCoding.h>
+#import "NUTypes.h"
+#import "NUComparator.h"
+#import "NUCoding.h"
 
 @class NUBTree, NUBTreeLeaf, NUBell;
 
@@ -94,5 +94,9 @@ typedef enum NUBTreeSetObjectResult
 - (void)updateKey:(id)aKey;
 
 - (NUBTreeLeaf *)firstLeaf;
+- (NUBTreeLeaf *)lastLeaf;
+
+- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThenOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex;
+-(NUBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex;
 
 @end

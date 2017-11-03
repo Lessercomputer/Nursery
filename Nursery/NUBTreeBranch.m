@@ -6,10 +6,10 @@
 //
 //
 
-#import <Nursery/NUBTreeBranch.h>
-#import <Nursery/NUBTree.h>
-#import <Nursery/NUBell.h>
-#import <Nursery/NUSandbox.h>
+#import "NUBTreeBranch.h"
+#import "NUBTree.h"
+#import "NUBell.h"
+#import "NUSandbox.h"
 
 @implementation NUBTreeBranch
 
@@ -333,6 +333,32 @@
 - (NUBTreeLeaf *)firstLeaf
 {
     return [[self valueAt:0] firstLeaf];
+}
+
+-(NUBTreeLeaf *)lastLeaf
+{
+    return [[self valueAt:[self valueCount] - 1] lastLeaf];
+}
+
+- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThenOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex
+{
+    NUUInt64 aTmpKeyIndex = 0;
+    
+    [self getKeyIndexLessThanOrEqualTo:aKey keyIndexInto:&aTmpKeyIndex];
+    aTmpKeyIndex++;
+    
+    return [[self valueAt:aTmpKeyIndex] leafNodeContainingKeyGreaterThenOrEqualTo:aKey keyIndex:aKeyIndex];
+}
+
+- (NUBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex
+{
+    NUUInt64 aTmpKeyIndex = 0;
+    
+    [self getKeyIndexLessThanOrEqualTo:aKey keyIndexInto:&aTmpKeyIndex];
+    if (aTmpKeyIndex == NUNotFound64)
+        aTmpKeyIndex = 0;
+    
+    return [[self valueAt:aTmpKeyIndex] leafNodeContainingKeyLessThanOrEqualTo:aKey keyIndex:aKeyIndex];
 }
 
 @end

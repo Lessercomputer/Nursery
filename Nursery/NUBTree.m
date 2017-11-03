@@ -6,12 +6,12 @@
 //
 //
 
-#import <Nursery/NUBTree.h>
-#import <Nursery/NUBTreeNode.h>
-#import <Nursery/NUBTreeLeaf.h>
-#import <Nursery/NUBTreeBranch.h>
-#import <Nursery/NUDefaultComparator.h>
-#import <Nursery/NUBTreeEnumerator.h>
+#import "NUBTree.h"
+#import "NUBTreeNode.h"
+#import "NUBTreeLeaf.h"
+#import "NUBTreeBranch.h"
+#import "NUDefaultComparator.h"
+#import "NUBTreeEnumerator.h"
 #import "NUIvar.h"
 #import "NUCharacter.h"
 #import "NUBell.h"
@@ -119,12 +119,47 @@
 
 - (NSEnumerator *)objectEnumerator
 {
-    return [NUBTreeEnumerator enumeratorWithTree:self];
+    return [self objectEnumeratorFrom:nil to:nil];
+}
+
+- (NSEnumerator *)objectEnumeratorFrom:(id)aKey1 to:(id)aKey2
+{
+    return [self objectEnumeratorFrom:aKey1 to:aKey2 option:0];
+}
+
+- (NSEnumerator *)objectEnumeratorFrom:(id)aKey1 to:(id)aKey2 option:(NSEnumerationOptions)anOpts
+{
+    return [NUBTreeEnumerator enumeratorWithTree:self from:aKey1 to:aKey2 options:anOpts];
+}
+
+-(NSEnumerator *)reverseObjectEnumerator
+{
+    return [self reverseObjectEnumeratorFrom:nil to:nil];
+}
+
+- (NSEnumerator *)reverseObjectEnumeratorFrom:(id)aKey1 to:(id)aKey2
+{
+    return [self reverseObjectEnumeratorFrom:aKey1 to:aKey2 option:NSEnumerationReverse];
+}
+
+- (NSEnumerator *)reverseObjectEnumeratorFrom:(id)aKey1 to:(id)aKey2 option:(NSEnumerationOptions)anOpts
+{
+    return [NUBTreeEnumerator enumeratorWithTree:self from:nil to:nil options:NSEnumerationReverse];
 }
 
 - (void)enumerateKeysAndObjectsUsingBlock:(void (^)(id aKey, id anObj, BOOL *aStop))aBlock
 {
-    NUBTreeEnumerator *anEnumerator = (NUBTreeEnumerator *)[self objectEnumerator];
+    [self enumerateKeysAndObjectsWithOptions:0 usingBlock:aBlock];
+}
+
+-(void)enumerateKeysAndObjectsWithOptions:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
+{
+    [self enumerateKeysAndObjectsFrom:nil to:nil options:anOpts usingBlock:aBlock];
+}
+
+-(void)enumerateKeysAndObjectsFrom:(id)aKey1 to:(id)aKey2 options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
+{
+    NUBTreeEnumerator *anEnumerator = (NUBTreeEnumerator *)[self objectEnumeratorFrom:aKey1 to:aKey2 option:anOpts];
     [anEnumerator enumerateKeysAndObjectsUsingBlock:aBlock];
 }
 
@@ -208,10 +243,55 @@
 {
     [[self root] updateKey:aKey];
 }
-
 - (NUBTreeLeaf *)firstLeaf
 {
     return [[self root] firstLeaf];
+}
+
+- (NUBTreeLeaf *)lastLeaf
+{
+    return [[self root] lastLeaf];
+}
+
+- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThenOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex
+{
+    return [[self root] leafNodeContainingKeyGreaterThenOrEqualTo:aKey keyIndex:aKeyIndex];
+}
+
+-(NUBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex
+{
+    return [[self root] leafNodeContainingKeyLessThanOrEqualTo:aKey keyIndex:aKeyIndex];
+}
+
+- (NUBTreeLeaf *)getNextKeyIndex:(NUUInt32 *)aKeyIndex node:(NUBTreeLeaf *)aNode
+{
+    if (!aKeyIndex)
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:NSInvalidArgumentException userInfo:nil];
+    
+    if (!aNode)
+        return nil;
+    
+    if (*aKeyIndex == NUNotFound32)
+    {
+        if ([aNode keyCount] == 0)
+            return nil;
+        else
+        {
+            *aKeyIndex = 0;
+            return (NUBTreeLeaf *)aNode;
+        }
+    }
+    
+    if (*aKeyIndex + 1 < [aNode keyCount])
+    {
+        (*aKeyIndex)++;
+        return (NUBTreeLeaf *)aNode;
+    }
+    else
+    {
+        *aKeyIndex = 0;
+        return (NUBTreeLeaf *)[aNode rightNode];
+    }
 }
 
 @end
