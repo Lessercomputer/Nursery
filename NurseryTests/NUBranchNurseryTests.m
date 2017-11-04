@@ -20,7 +20,7 @@ static NSString *NUNurseryTestFilePath;
 - (void)setUp
 {
     [super setUp];
-    NUNurseryTestFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"nursery.nu"];
+    NUNurseryTestFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"nursery.nursery"];
     [[NSFileManager defaultManager] removeItemAtPath:NUNurseryTestFilePath error:nil];
 
 }

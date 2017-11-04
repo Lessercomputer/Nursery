@@ -20,7 +20,7 @@ static NSString *NUNurseryTestFilePath = nil;
 - (void)setUp
 {
     [super setUp];
-    NUNurseryTestFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"nursery.nu"];
+    NUNurseryTestFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"nursery.nursery"];
 	[[NSFileManager defaultManager] removeItemAtPath:NUNurseryTestFilePath error:nil];
 }
 
@@ -129,52 +129,128 @@ static NSString *NUNurseryTestFilePath = nil;
 
 - (void)testSetAndEnumerateFromTo
 {
-    const int MaxCount = 1000000;
+    [self setAndEnumerateFrom:@(30000) to:@(60000) max:1000000];
+}
+
+- (void)testSetAndEnumerateFrom
+{
+    [self setAndEnumerateFrom:@(30000) to:nil max:1000000];
+}
+
+- (void)testSetAndEnumerateTo
+{
+    [self setAndEnumerateFrom:nil to:@(60000) max:1000000];
+}
+
+- (void)setAndEnumerateFrom:(NSNumber *)aKeyFrom to:(NSNumber *)aKeyTo max:(NSInteger)aMaxCount
+{
     NULibrary *aLibrary = [NULibrary library];
-    NSNumber *aKeyFrom = [NSNumber numberWithInteger:300];
-    NSNumber *aKeyTo = [NSNumber numberWithInteger:600];
-    NSMutableSet *aNumberSet = [NSMutableSet set];
-    NSArray *aNumbers;
-    for (int i = 0; i < MaxCount; i++)
-        [aNumberSet addObject:[NSNumber numberWithUnsignedLongLong:i]];
-    aNumbers = [aNumberSet allObjects];
+    NSMutableArray *aNumbers = [NSMutableArray array];
+    
+    for (int i = 0; i < aMaxCount; i++)
+        [aNumbers addObject:[NSNumber numberWithInteger:i]];
     
     [aNumbers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         [aLibrary setObject:obj forKey:obj];
     }];
-
-    [aLibrary enumerateKeysAndObjectsFrom:aKeyFrom to:aKeyTo options:0 usingBlock:^(id aKey, id anObj, BOOL *aStop) {
-        NSComparisonResult aResult1 = [[aLibrary comparator] compareObject:aKey toObject:aKeyFrom];
-        NSComparisonResult aResult2 = [[aLibrary comparator] compareObject:aKey toObject:aKeyTo];
-        //NSLog(@"aKey:%@",aKey);
-        XCTAssertTrue((aResult1 == NSOrderedSame || aResult1 == NSOrderedDescending)
-                      && (aResult2 == NSOrderedSame || aResult2 == NSOrderedAscending));
-    }];
+    
+    __block NSInteger aCurrentKey = 0;
+    
+    if (aKeyFrom && aKeyTo)
+    {
+        [aLibrary enumerateKeysAndObjectsFrom:aKeyFrom to:aKeyTo options:0 usingBlock:^(id aKey, id anObj, BOOL *aStop) {
+            NSComparisonResult aResult1 = [[aLibrary comparator] compareObject:aKey toObject:aKeyFrom];
+            NSComparisonResult aResult2 = [[aLibrary comparator] compareObject:aKey toObject:aKeyTo];
+//            NSLog(@"aKey:%@",aKey);
+            XCTAssertTrue((aResult1 == NSOrderedSame || aResult1 == NSOrderedDescending)
+                          && (aResult2 == NSOrderedSame || aResult2 == NSOrderedAscending));
+            XCTAssertGreaterThan([aKey integerValue], aCurrentKey);
+            aCurrentKey = [aKey integerValue];
+        }];
+    }
+    else if (aKeyFrom)
+    {
+        [aLibrary enumerateKeysAndObjectsFrom:aKeyFrom to:aKeyTo options:0 usingBlock:^(id aKey, id anObj, BOOL *aStop) {
+            NSComparisonResult aResult1 = [[aLibrary comparator] compareObject:aKey toObject:aKeyFrom];
+//            NSLog(@"aKey:%@",aKey);
+            XCTAssertTrue(aResult1 == NSOrderedSame || aResult1 == NSOrderedDescending);
+            XCTAssertGreaterThan([aKey integerValue], aCurrentKey);
+            aCurrentKey = [aKey integerValue];
+        }];
+    }
+    else
+    {
+        [aLibrary enumerateKeysAndObjectsFrom:aKeyFrom to:aKeyTo options:0 usingBlock:^(id aKey, id anObj, BOOL *aStop) {
+            NSComparisonResult aResult2 = [[aLibrary comparator] compareObject:aKey toObject:aKeyTo];
+//            NSLog(@"aKey:%@",aKey);
+            XCTAssertTrue(aResult2 == NSOrderedSame || aResult2 == NSOrderedAscending);
+            XCTAssertGreaterThanOrEqual([aKey integerValue], aCurrentKey);
+            aCurrentKey = [aKey integerValue];
+        }];
+    }
 }
 
 - (void)testSetAndReverseEnumerateFromTo
 {
-    const int MaxCount = 1000000;
+    [self setAndReverseEnumerateFrom:@(30000) to:@(60000) max:1000000];
+}
+
+- (void)testSetAndReverseEnumerateFrom
+{
+    [self setAndReverseEnumerateFrom:@(30000) to:nil max:1000000];
+}
+
+- (void)testSetAndReverseEnumerateTo
+{
+    [self setAndReverseEnumerateFrom:nil to:@(60000) max:1000000];
+}
+
+- (void)setAndReverseEnumerateFrom:(NSNumber *)aKeyFrom to:(NSNumber *)aKeyTo max:(NSInteger)aMaxCount
+{
     NULibrary *aLibrary = [NULibrary library];
-    NSNumber *aKeyFrom = [NSNumber numberWithInteger:300];
-    NSNumber *aKeyTo = [NSNumber numberWithInteger:600];
-    NSMutableSet *aNumberSet = [NSMutableSet set];
-    NSArray *aNumbers;
-    for (int i = 0; i < MaxCount; i++)
-        [aNumberSet addObject:[NSNumber numberWithUnsignedLongLong:i]];
-    aNumbers = [aNumberSet allObjects];
+    NSMutableArray *aNumbers = [NSMutableArray array];
+    
+    for (int i = 0; i < aMaxCount; i++)
+        [aNumbers addObject:[NSNumber numberWithInteger:i]];
     
     [aNumbers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         [aLibrary setObject:obj forKey:obj];
     }];
     
-    [aLibrary enumerateKeysAndObjectsFrom:aKeyFrom to:aKeyTo options:NSEnumerationReverse usingBlock:^(id aKey, id anObj, BOOL *aStop) {
-        NSComparisonResult aResult1 = [[aLibrary comparator] compareObject:aKey toObject:aKeyFrom];
-        NSComparisonResult aResult2 = [[aLibrary comparator] compareObject:aKey toObject:aKeyTo];
-        //NSLog(@"aKey:%@",aKey);
-        XCTAssertTrue((aResult1 == NSOrderedSame || aResult1 == NSOrderedDescending)
-                      && (aResult2 == NSOrderedSame || aResult2 == NSOrderedAscending));
-    }];
+    __block NSInteger aCurrentKey = aKeyTo ? [aKeyTo integerValue] : aMaxCount;
+    
+    if (aKeyFrom && aKeyTo)
+    {
+        [aLibrary enumerateKeysAndObjectsFrom:aKeyFrom to:aKeyTo options:NSEnumerationReverse usingBlock:^(id aKey, id anObj, BOOL *aStop) {
+            NSComparisonResult aResult1 = [[aLibrary comparator] compareObject:aKey toObject:aKeyFrom];
+            NSComparisonResult aResult2 = [[aLibrary comparator] compareObject:aKey toObject:aKeyTo];
+//            NSLog(@"aKey:%@",aKey);
+            XCTAssertTrue((aResult1 == NSOrderedSame || aResult1 == NSOrderedDescending)
+                          && (aResult2 == NSOrderedSame || aResult2 == NSOrderedAscending));
+            XCTAssertLessThanOrEqual([aKey integerValue], aCurrentKey);
+            aCurrentKey = [aKey integerValue];
+        }];
+    }
+    else if (aKeyFrom)
+    {
+        [aLibrary enumerateKeysAndObjectsFrom:aKeyFrom to:aKeyTo options:NSEnumerationReverse usingBlock:^(id aKey, id anObj, BOOL *aStop) {
+            NSComparisonResult aResult1 = [[aLibrary comparator] compareObject:aKey toObject:aKeyFrom];
+//            NSLog(@"aKey:%@",aKey);
+            XCTAssertTrue(aResult1 == NSOrderedSame || aResult1 == NSOrderedDescending);
+            XCTAssertLessThanOrEqual([aKey integerValue], aCurrentKey);
+            aCurrentKey = [aKey integerValue];
+        }];
+    }
+    else
+    {
+        [aLibrary enumerateKeysAndObjectsFrom:aKeyFrom to:aKeyTo options:NSEnumerationReverse usingBlock:^(id aKey, id anObj, BOOL *aStop) {
+            NSComparisonResult aResult2 = [[aLibrary comparator] compareObject:aKey toObject:aKeyTo];
+//            NSLog(@"aKey:%@",aKey);
+            XCTAssertTrue(aResult2 == NSOrderedSame || aResult2 == NSOrderedAscending);
+            XCTAssertLessThanOrEqual([aKey integerValue], aCurrentKey);
+            aCurrentKey = [aKey integerValue];
+        }];
+    }
 }
 
 - (void)testSaveAndLoadLibrary

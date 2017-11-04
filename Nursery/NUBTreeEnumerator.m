@@ -95,7 +95,7 @@
                     nextValueIndex = 0;
                 }
                 
-                if (node && [[tree comparator] compareObject:[node keyAt:nextValueIndex] toObject:keyTo] != NSOrderedDescending)
+                if (node && (!keyTo || [[tree comparator] compareObject:[node keyAt:nextValueIndex] toObject:keyTo] != NSOrderedDescending))
                 {
                     aBlock([node keyAt:nextValueIndex], [node valueAt:nextValueIndex], &aStop);
                     nextValueIndex++;
@@ -117,7 +117,7 @@
                     nextValueIndex = (NUInt32)[node valueCount] - 1;
                 }
                 
-                if (node && [[tree comparator] compareObject:[node keyAt:nextValueIndex] toObject:keyFrom] != NSOrderedAscending)
+                if (node && (!keyFrom || [[tree comparator] compareObject:[node keyAt:nextValueIndex] toObject:keyFrom] != NSOrderedAscending))
                 {
                     aBlock([node keyAt:nextValueIndex], [node valueAt:nextValueIndex], &aStop);
                     nextValueIndex--;
