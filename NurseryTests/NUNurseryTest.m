@@ -231,6 +231,43 @@ static NSString *NUNurseryTestFilePath = nil;
 	[[aNursery sandbox] close];
 }
 
+- (void)testSaveAndLoadAndSearchNULibrary
+{
+    NULibrary *aLibrary = [NULibrary library];
+    
+    for (NSInteger i = 0; i < 100000; i++)
+    {
+        NSNumber *aNumber = @(i);
+        [aLibrary setObject:aNumber forKey:aNumber];
+    }
+    
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    [[aNursery sandbox] setRoot:aLibrary];
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"[aNursery save] failed");
+    [aNursery close];
+
+    aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    aLibrary = [[aNursery sandbox] root];
+    
+    NSMutableArray *aNumbers = [NSMutableArray array];
+
+    [aLibrary enumerateKeysAndObjectsFrom:@(1000) to:@(4000) options:0 usingBlock:^(id aKey, id anObj, BOOL *aStop) {
+        if ([anObj integerValue] % 2 == 0)
+            [aNumbers addObject:anObj];
+    }];
+    
+    __block NSInteger aCurrent = 0;
+    
+    [aNumbers enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        XCTAssertLessThanOrEqual(aCurrent, [obj integerValue]);
+        aCurrent = [obj integerValue];
+        XCTAssertTrue(aCurrent % 2 == 0);
+//        NSLog(@"%@", obj);
+    }];
+    
+    [aNursery close];
+}
+
 - (void)testRetainCount
 {
     Person *aPerson = [[Person alloc] initWithFirstName:@"aFirstName" lastName:@"aLastName"];
