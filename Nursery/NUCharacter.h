@@ -86,7 +86,6 @@ extern NSString *NUCharacterInvalidObjectFormatException;
 - (void)addUInt16IvarName:(NSString *)aName;
 - (void)addUInt32IvarName:(NSString *)aName;
 - (void)addUInt64IvarWithName:(NSString *)aName;
-- (void)addUInt64ArrayIvarWithName:(NSString *)aName;
 - (void)addFloatIvarWithName:(NSString *)aName;
 - (void)addDoubleIvarWithName:(NSString *)aName;
 - (void)addBOOLIvarWithName:(NSString *)aName;

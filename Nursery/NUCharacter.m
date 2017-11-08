@@ -125,87 +125,82 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
 
 - (void)addOOPIvarWithName:(NSString *)aName
 {
-    [self addIvarWithName:aName type:NUOOPType];
+    [self addIvarWithName:aName type:NUOOPIvarType];
 }
 
 - (void)addInt8IvarWithName:(NSString *)aName
 {
-    [self addIvarWithName:aName type:NUInt8Type];
+    [self addIvarWithName:aName type:NUInt8IvarType];
 }
 
 - (void)addInt16IvarName:(NSString *)aName
 {
-    [self addIvarWithName:aName type:NUInt16Type];
+    [self addIvarWithName:aName type:NUInt16IvarType];
 }
 
 - (void)addInt32IvarName:(NSString *)aName
 {
-    [self addIvarWithName:aName type:NUInt32Type];
+    [self addIvarWithName:aName type:NUInt32IvarType];
 }
 
 - (void)addInt64IvarName:(NSString *)aName
 {
-    [self addIvarWithName:aName type:NUInt64Type];
+    [self addIvarWithName:aName type:NUInt64IvarType];
 }
 
 - (void)addUInt8IvarWithName:(NSString *)aName
 {
-    [self addIvarWithName:aName type:NUUInt8Type];
+    [self addIvarWithName:aName type:NUUInt8IvarType];
 }
 
 - (void)addUInt16IvarName:(NSString *)aName
 {
-    [self addIvarWithName:aName type:NUUInt16Type];
+    [self addIvarWithName:aName type:NUUInt16IvarType];
 }
 
 - (void)addUInt32IvarName:(NSString *)aName
 {
-    [self addIvarWithName:aName type:NUUInt32Type];
+    [self addIvarWithName:aName type:NUUInt32IvarType];
 }
 
 - (void)addUInt64IvarWithName:(NSString *)aName
 {
-    [self addIvarWithName:aName type:NUUInt64Type];
-}
-
-- (void)addUInt64ArrayIvarWithName:(NSString *)aName
-{
-    [self addIvarWithName:aName type:NUUInt64ArrayType];
+    [self addIvarWithName:aName type:NUUInt64IvarType];
 }
 
 - (void)addFloatIvarWithName:(NSString *)aName
 {
-    [self addIvarWithName:aName type:NUFloatType];
+    [self addIvarWithName:aName type:NUFloatIvarType];
 }
 
 - (void)addDoubleIvarWithName:(NSString *)aName
 {
-    [self addIvarWithName:aName type:NUDoubleType];
+    [self addIvarWithName:aName type:NUDoubleIvarType];
 }
 
 - (void)addBOOLIvarWithName:(NSString *)aName
 {
-    [self addIvarWithName:aName type:NUBOOLType];
+    [self addIvarWithName:aName type:NUBOOLIvarType];
 }
 
 - (void)addRangeIvarWithName:(NSString *)aName
 {
-    [self addIvarWithName:aName type:NUNSRangeType];
+    [self addIvarWithName:aName type:NUNSRangeIvarType];
 }
 
 - (void)addPointIvarWithName:(NSString *)aName
 {
-    [self addIvarWithName:aName type:NUNSPointType];
+    [self addIvarWithName:aName type:NUNSPointIvarType];
 }
 
 - (void)addSizeIvarWithName:(NSString *)aName
 {
-    [self addIvarWithName:aName type:NUNSSizeType];
+    [self addIvarWithName:aName type:NUNSSizeIvarType];
 }
 
 - (void)addRectIvarWithName:(NSString *)aName
 {
-    [self addIvarWithName:aName type:NUNSRectType];
+    [self addIvarWithName:aName type:NUNSRectIvarType];
 }
 
 - (void)addIvarWithName:(NSString *)aName type:(NUIvarType)aType
@@ -253,7 +248,7 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
 	NUIvar *anIvar = nil;
 	
 	while (anIvar = [anEnumerator nextObject])
-		if ([anIvar type] == NUOOPType)
+		if ([anIvar type] == NUOOPIvarType)
 			[anIvars addObject:anIvar];
 	
     [lock unlock];
@@ -326,7 +321,7 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
         if ([self isVariable])
         {
             if ([anAllIvars count] == 1 || ![[[anAllIvars objectAtIndex:1] name] isEqualToString:@"indexedIvarsSize"])
-                [anAllIvars insertObject:[NUIvar ivarWithName:@"indexedIvarsSize" type:NUUInt64Type] atIndex:1];
+                [anAllIvars insertObject:[NUIvar ivarWithName:@"indexedIvarsSize" type:NUUInt64IvarType] atIndex:1];
         }
             
         return [[anAllIvars copy] autorelease];
@@ -711,13 +706,13 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
     if ([self isEqual:[NUCharacter class]])
 	{
 		[aCharacter setFormat:NUFixedIvars];
-		[aCharacter addIvar:[NUIvar ivarWithName:@"superCharacter" type:NUOOPType]];
-		[aCharacter addIvar:[NUIvar ivarWithName:@"format" type:NUUInt8Type]];
-		[aCharacter addIvar:[NUIvar ivarWithName:@"version" type:NUUInt32Type]];
-		[aCharacter addIvar:[NUIvar ivarWithName:@"name" type:NUOOPType]];
-		[aCharacter addIvar:[NUIvar ivarWithName:@"ivars" type:NUOOPType]];
-        [aCharacter addIvar:[NUIvar ivarWithName:@"isMutable" type:NUBOOLType]];
-		[aCharacter addIvar:[NUIvar ivarWithName:@"subCharacters" type:NUOOPType]];
+		[aCharacter addIvar:[NUIvar ivarWithName:@"superCharacter" type:NUOOPIvarType]];
+		[aCharacter addIvar:[NUIvar ivarWithName:@"format" type:NUUInt8IvarType]];
+		[aCharacter addIvar:[NUIvar ivarWithName:@"version" type:NUUInt32IvarType]];
+		[aCharacter addIvar:[NUIvar ivarWithName:@"name" type:NUOOPIvarType]];
+		[aCharacter addIvar:[NUIvar ivarWithName:@"ivars" type:NUOOPIvarType]];
+        [aCharacter addIvar:[NUIvar ivarWithName:@"isMutable" type:NUBOOLIvarType]];
+		[aCharacter addIvar:[NUIvar ivarWithName:@"subCharacters" type:NUOOPIvarType]];
 	}
 }
 
