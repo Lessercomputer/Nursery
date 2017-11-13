@@ -31,6 +31,9 @@ It is **not** ORM(Object-relational mapping).
 * A class that implements the **NUCoding** protocol.
 * A class that implements persistence processing by subclass of **NUCoder**
 		
+### Endian independent
+Instance variables are converted to big endian at the time of encoding and converted to host endian at the time of decoding.
+
 ### Thread safety
 Loading and saving objects is thread-safe.  
 However, there is no guarantee that other processing is thread-safe.
