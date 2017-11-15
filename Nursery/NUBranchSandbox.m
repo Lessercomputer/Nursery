@@ -72,27 +72,30 @@
         
         [[self gradeSeeker] stop];
         
-        if (![self gradeIsEqualToNurseryGrade]) return NUFarmOutStatusNurseryGradeUnmatched;
-        
-        //[self storeChangedObjects];
-        
-        if (![self contains:[self nurseryRoot]])
-            [[self aliaser] setRoots:[NSMutableArray arrayWithObject:[self nurseryRoot]]];
-        
-        [[self aliaser] encodeObjects];
-        aFarmOutStatus = [[self mainBranchNurseryAssociation] farmOutPupils:[[self branchAliaser] encodedPupilData] rootOOP:[[[self nurseryRoot] bell] OOP] sandboxWithID:[self ID] inNurseryWithName:[[self branchNursery] name] fixedOOPs:&aFixedOOPs latestGrade:&aLatestGrade];
-        
-        if (aFarmOutStatus == NUFarmOutStatusSucceeded)
+        if (![self gradeIsEqualToNurseryGrade])
         {
-            [self replaceProbationaryOOPsWithFixedOOPs:aFixedOOPs inPupils:[self probationaryPupils] grade:aLatestGrade];
-            [[self probationaryPupils] removeAllObjects];
-            [self setGrade:aLatestGrade];
-            [[self gradeSeeker] pushRootBell:[[self nurseryRoot] bell]];
+            aFarmOutStatus = NUFarmOutStatusNurseryGradeUnmatched;
         }
-        /*else
-            [self restoreChangedObjects];*/
-        
-        return aFarmOutStatus;
+        else
+        {
+            //[self storeChangedObjects];
+            
+            if (![self contains:[self nurseryRoot]])
+                [[self aliaser] setRoots:[NSMutableArray arrayWithObject:[self nurseryRoot]]];
+            
+            [[self aliaser] encodeObjects];
+            aFarmOutStatus = [[self mainBranchNurseryAssociation] farmOutPupils:[[self branchAliaser] encodedPupilData] rootOOP:[[[self nurseryRoot] bell] OOP] sandboxWithID:[self ID] inNurseryWithName:[[self branchNursery] name] fixedOOPs:&aFixedOOPs latestGrade:&aLatestGrade];
+            
+            if (aFarmOutStatus == NUFarmOutStatusSucceeded)
+            {
+                [self replaceProbationaryOOPsWithFixedOOPs:aFixedOOPs inPupils:[self probationaryPupils] grade:aLatestGrade];
+                [[self probationaryPupils] removeAllObjects];
+                [self setGrade:aLatestGrade];
+                [[self gradeSeeker] pushRootBell:[[self nurseryRoot] bell]];
+            }
+            /*else
+                [self restoreChangedObjects];*/
+        }
     }
     @finally {
         //[self setStoredChangedObjects:nil];
