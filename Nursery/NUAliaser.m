@@ -855,7 +855,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 
 - (void)moveUp:(id)anObject
 {
-    [self moveUp:anObject ignoreGradeAtCallFor:NO];
+    [self moveUp:anObject ignoreGradeAtCallFor:YES];
 }
 
 - (void)moveUp:(id)anObject ignoreGradeAtCallFor:(BOOL)anIgnoreFlag
@@ -890,13 +890,6 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
     [self popContext];
     
     [[[self sandbox] gradeSeeker] bellDidLoadIvars:aBell];
-}
-
-- (void)moveUpObjects:(NSArray *)anObjects
-{
-    [anObjects enumerateObjectsUsingBlock:^(id anObject, NSUInteger idx, BOOL *stop) {
-        [self moveUp:anObject];
-    }];
 }
 
 - (void)prepareCodingContextForMoveUp:(NUBell *)aBell

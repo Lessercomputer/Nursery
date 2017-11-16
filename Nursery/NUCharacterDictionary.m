@@ -98,7 +98,7 @@
 {
     NUUInt64 aGradeBeforeMoveUp = [[self bell] grade];
     
-    [[[[self bell] sandbox] aliaser] moveUp:self];
+    [[[[self bell] sandbox] aliaser] moveUp:self ignoreGradeAtCallFor:NO];
     [[self dictionary] moveUp];
     
     if ([[self bell] grade] != aGradeBeforeMoveUp)

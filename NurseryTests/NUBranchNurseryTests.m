@@ -49,7 +49,7 @@ static NSString *NUNurseryTestFilePath;
     [aBranchAssociation close];
     
     [[NUMainBranchNurseryAssociation defaultAssociation] removeNurseryForName:@"nursery"];
-    [aMainBranchNursery close];
+    [[aMainBranchNursery sandbox] close];
 }
 
 - (void)testBranchNurseryFarmOut
@@ -66,7 +66,7 @@ static NSString *NUNurseryTestFilePath;
     [aBranchAssociation close];
     
     [[NUMainBranchNurseryAssociation defaultAssociation] removeNurseryForName:@"nursery"];
-    [aMainBranchNursery close];
+    [[aMainBranchNursery sandbox] close];
 }
 
 - (void)testBranchNurseryFarmOutAndCallFor
@@ -115,6 +115,49 @@ static NSString *NUNurseryTestFilePath;
     
     [[NUMainBranchNurseryAssociation defaultAssociation] removeNurseryForName:@"nursery"];
     [aMainBranchNursery close];
+}
+
+- (void)testBranchNurseryMoveUp
+{
+    NUMainBranchNursery *aMainBranchNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    
+    [[NUMainBranchNurseryAssociation defaultAssociation] setNursery:aMainBranchNursery forName:@"nursery"];
+    
+    NUBranchNurseryAssociation *aBranchAssociation = [NUBranchNurseryAssociation association];
+    NUBranchNursery *aBranchNursery = [aBranchAssociation nurseryForURL:[NUNurseryAssociation URLWithHostName:nil associationName:NUDefaultMainBranchAssociation nurseryName:@"nursery"]];
+    
+    [[aBranchNursery sandbox] setRoot:[[@"first" mutableCopy] autorelease]];
+    XCTAssertEqual([[aBranchNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+    
+    NUSandbox *aSandboxA = [aBranchNursery createSandbox];
+    NUSandbox *aSandboxB = [aBranchNursery createSandbox];
+    
+    [(NSMutableString *)[aSandboxA root] setString:@"A"];
+    [aSandboxA markChangedObject:[aSandboxA root]];
+    
+    [(NSMutableString *)[aSandboxB root] setString:@"B"];
+    [aSandboxB markChangedObject:[aSandboxB root]];
+    
+    XCTAssertEqual([aSandboxA farmOut], NUFarmOutStatusSucceeded, @"");
+    
+    XCTAssertEqual([aSandboxB farmOut], NUFarmOutStatusNurseryGradeUnmatched, @"");
+    
+    [aSandboxB moveUp];
+    [aSandboxB moveUpObject:[aSandboxB root]];
+    XCTAssertEqualObjects([aSandboxB root], @"A");
+    [(NSMutableString *)[aSandboxB root] setString:@"B"];
+    [aSandboxB markChangedObject:[aSandboxB root]];
+    
+    XCTAssertEqual([aSandboxB farmOut], NUFarmOutStatusSucceeded, @"");
+    
+    [aSandboxA close];
+    [aSandboxB close];
+    [[aBranchNursery sandbox] close];
+    
+    [aBranchAssociation close];
+    
+    [[NUMainBranchNurseryAssociation defaultAssociation] removeNurseryForName:@"nursery"];
+    [[aMainBranchNursery sandbox] close];
 }
 
 @end

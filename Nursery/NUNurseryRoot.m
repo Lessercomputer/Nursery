@@ -114,7 +114,7 @@
 
 - (void)moveUp
 {
-    [[[[self bell] sandbox] aliaser] moveUp:self];
+    [[[[self bell] sandbox] aliaser] moveUp:self ignoreGradeAtCallFor:NO];
     [self moveUpCharacters];
 }
 

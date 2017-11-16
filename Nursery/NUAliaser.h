@@ -204,7 +204,6 @@ extern NSString *NUAliaserCannotDecodeObjectException;
 
 - (void)moveUp:(id)anObject;
 - (void)moveUp:(id)anObject ignoreGradeAtCallFor:(BOOL)anIgnoreFlag;
-- (void)moveUpObjects:(NSArray *)anObjects;
 - (void)prepareCodingContextForMoveUp:(NUBell *)aBell;
 
 - (NUUInt64)objectLocationForBell:(NUBell *)aBell gradeInto:(NUUInt64 *)aGrade;
