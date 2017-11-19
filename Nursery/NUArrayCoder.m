@@ -68,4 +68,18 @@
 	return [anArray autorelease];
 }
 
+- (BOOL)canMoveUpObject:(id)anObject withAliaser:(NUAliaser *)anAliaser
+{
+    return [[anAliaser character] isMutable];
+}
+
+- (void)moveUpObject:(id)anObject withAliaser:(NUAliaser *)anAliaser
+{
+    if (![[anAliaser character] isMutable]) return;
+    
+    NSMutableArray *anArray = anObject;
+    [anArray setArray:[self decodeObjectWithAliaser:anAliaser]];
+    [[anAliaser sandbox] unmarkChangedObject:anArray];
+}
+
 @end

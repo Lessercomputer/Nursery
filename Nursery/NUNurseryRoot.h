@@ -34,9 +34,3 @@
 
 @end
 
-@interface NUNurseryRoot (MoveUp)
-
-- (void)moveUp;
-- (void)moveUpCharacters;
-
-@end

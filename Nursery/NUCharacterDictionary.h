@@ -24,9 +24,6 @@
 - (void)setObject:(id)anObject forKey:(id<NSCopying>)aKey;
 - (NSEnumerator *)keyEnumerator;
 
-- (void)moveUp;
-- (void)mergeWithSandboxCharacters;
-
 @end
 
 @interface NUCharacterDictionary (Private)

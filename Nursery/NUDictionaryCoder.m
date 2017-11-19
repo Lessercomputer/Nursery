@@ -68,4 +68,18 @@
 	return [aDictionary autorelease];
 }
 
+- (BOOL)canMoveUpObject:(id)anObject withAliaser:(NUAliaser *)anAliaser
+{
+    return [[anAliaser character] isMutable];
+}
+
+- (void)moveUpObject:(id)anObject withAliaser:(NUAliaser *)anAliaser
+{
+    if (![[anAliaser character] isMutable]) return;
+    
+    NSMutableDictionary *aDictionary = anObject;
+    [aDictionary setDictionary:[self decodeObjectWithAliaser:anAliaser]];
+    [[anAliaser sandbox] unmarkChangedObject:aDictionary];
+}
+
 @end

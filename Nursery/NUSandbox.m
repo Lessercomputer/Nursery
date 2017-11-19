@@ -262,11 +262,28 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         if (![aNurseryRoot bell] || [[self aliaser] rootOOP] != [[aNurseryRoot bell] OOP])
             [self setNurseryRoot:nil];
         
-        [[self nurseryRoot] moveUp];
+        [[self aliaser] moveUp:[self nurseryRoot] ignoreGradeAtCallFor:NO];
+        [self mergeCharacters];
     }
     @finally {
         [self unlock];
     }
+}
+
+- (void)mergeCharacters
+{
+    [[[[self characters] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(Class _Nonnull aClassForCharacter, NUCharacter * _Nonnull aCharacterInSandbox, BOOL * _Nonnull aStop) {
+        NUCharacter *aCharacterInNurseryRoot = [self characterForName:[aCharacterInSandbox fullName]];
+        
+        if (!aCharacterInNurseryRoot)
+            return;
+        
+        [aCharacterInNurseryRoot setTargetClass:[aCharacterInSandbox targetClass]];
+        [aCharacterInNurseryRoot setCoderClass:[aCharacterInSandbox coderClass]];
+        
+        if ([self characterForClass:[aCharacterInNurseryRoot targetClass]] != aCharacterInNurseryRoot)
+            [self setCharacter:aCharacterInNurseryRoot forClass:[aCharacterInNurseryRoot targetClass]];
+    }];
 }
 
 - (void)moveUpObject:(id)anObject

@@ -64,7 +64,8 @@
 
 - (void)moveUpWithAliaser:(NUAliaser *)anAliaser
 {
-    [self decodeIvarsWithAliaser:anAliaser];
+    [anAliaser moveUp:characters ignoreGradeAtCallFor:NO];
+    NUSetIvar(&userRoot, [anAliaser decodeObjectForKey:@"userRoot"]);
 }
 
 - (void)decodeIvarsWithAliaser:(NUAliaser *)anAliaser
@@ -110,17 +111,3 @@
 
 @end
 
-@implementation NUNurseryRoot (MoveUp)
-
-- (void)moveUp
-{
-    [[[[self bell] sandbox] aliaser] moveUp:self ignoreGradeAtCallFor:NO];
-    [self moveUpCharacters];
-}
-
-- (void)moveUpCharacters
-{
-    [[self characters] moveUp];
-}
-
-@end

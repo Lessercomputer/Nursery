@@ -7,10 +7,11 @@
 //
 
 #import "NUCoding.h"
+#import "NUMovingUp.h"
 
 @class NUBell;
 
-@interface NUMutableDictionary : NSMutableDictionary <NUCoding>
+@interface NUMutableDictionary : NSMutableDictionary <NUCoding, NUMovingUp>
 {
     NSMutableDictionary *innerDictionary;
     NSMutableSet *setKeys;
@@ -22,12 +23,6 @@
 @interface NUMutableDictionary (ModificationInfo)
 
 - (void)removeAllModificationInfo;
-
-@end
-
-@interface NUMutableDictionary (MoveUp)
-
-- (void)moveUp;
 
 @end
 

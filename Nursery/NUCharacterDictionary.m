@@ -91,38 +91,7 @@
 
 - (void)moveUpWithAliaser:(NUAliaser *)anAliaser
 {
-    
-}
-
-- (void)moveUp
-{
-    NUUInt64 aGradeBeforeMoveUp = [[self bell] grade];
-    
-    [[[[self bell] sandbox] aliaser] moveUp:self ignoreGradeAtCallFor:NO];
-    [[self dictionary] moveUp];
-    
-    if ([[self bell] grade] != aGradeBeforeMoveUp)
-        [self mergeWithSandboxCharacters];
-}
-
-- (void)mergeWithSandboxCharacters
-{
-    NUMutableDictionary *aCharactersInSandbox = [[[self bell] sandbox] characters];
-    NSDictionary *aNewCharactersInSandbox = [aCharactersInSandbox dictionaryWithValuesForKeys:[[aCharactersInSandbox setKeys] allObjects]];
-    
-    [aNewCharactersInSandbox enumerateKeysAndObjectsUsingBlock:^(Class aCharacterClass, NUCharacter *aCharacterInSandbox, BOOL *aStop) {
-        NUCharacter *aCharacterInSelf = [[self dictionary] objectForKey:[aCharacterInSandbox fullName]];
-        
-        if (aCharacterInSelf && aCharacterInSelf != aCharacterInSandbox)
-        {
-            [aCharacterInSelf setCoderClass:[aCharacterInSandbox coderClass]];
-            [aCharacterInSelf setTargetClass:[aCharacterInSandbox targetClass]];
-            
-            [[[self bell] sandbox] setCharacter:aCharacterInSelf forClass:aCharacterClass];
-        }
-    }];
-    
-    [aCharactersInSandbox removeAllModificationInfo];
+    [anAliaser moveUp:[self dictionary] ignoreGradeAtCallFor:NO];
 }
 
 @end

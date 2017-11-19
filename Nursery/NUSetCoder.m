@@ -69,4 +69,17 @@
 	return [aSet autorelease];
 }
 
+- (BOOL)canMoveUpObject:(id)anObject withAliaser:(NUAliaser *)anAliaser
+{
+    return [[anAliaser character] isMutable];
+}
+
+- (void)moveUpObject:(id)anObject withAliaser:(NUAliaser *)anAliaser
+{
+    if (![[anAliaser character] isMutable]) return;
+    
+    NSMutableSet *aSet = anObject;
+    [aSet setSet:[self decodeObjectWithAliaser:anAliaser]];
+    [[anAliaser sandbox] unmarkChangedObject:aSet];
+}
 @end

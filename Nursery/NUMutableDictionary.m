@@ -111,6 +111,11 @@
 	return self;
 }
 
+- (void)moveUpWithAliaser:(NUAliaser *)anAliaser
+{
+    [anAliaser moveUp:innerDictionary ignoreGradeAtCallFor:NO];
+}
+
 @end
 
 @implementation NUMutableDictionary (ModificationInfo)
@@ -119,15 +124,6 @@
 {
     [[self setKeys] removeAllObjects];
     [[self removedKeys] removeAllObjects];
-}
-
-@end
-
-@implementation NUMutableDictionary (MoveUp)
-
-- (void)moveUp
-{
-    [[[[self bell] sandbox] aliaser] moveUp:self ignoreGradeAtCallFor:NO];
 }
 
 @end

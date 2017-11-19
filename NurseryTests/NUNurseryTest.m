@@ -286,10 +286,10 @@ static NSString *NUNurseryTestFilePath = nil;
     aPool = [NSAutoreleasePool new];
     aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
     aPerson = [[[aNursery sandbox] root] retain];
-    NUBell *aPersonBell = [aPerson bell];
-    NSMutableSet *anOOPSet = [[aNursery sandbox] bellSet];
-    NSLog(@"%@", aPersonBell);
-    NSLog(@"%@", anOOPSet);
+//    NUBell *aPersonBell = [aPerson bell];
+//    NSMutableSet *anOOPSet = [[aNursery sandbox] bellSet];
+//    NSLog(@"%@", aPersonBell);
+//    NSLog(@"%@", anOOPSet);
     [[aNursery sandbox] close];
     [aPool release];
     
@@ -456,6 +456,71 @@ static NSString *NUNurseryTestFilePath = nil;
     
     [aSandboxA close];
     [aSandboxB close];
+    [[aNursery sandbox] close];
+}
+
+@class NUNSNumber;
+
+- (void)testMoveUpOfMutableArray
+{
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    
+    [[aNursery sandbox] setRoot:[NSMutableArray array]];
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+    
+    NUSandbox *aSandboxA = [aNursery createSandbox];
+    NSMutableArray *aMutableArray = [aSandboxA root];
+    [aMutableArray addObject:@(1)];
+    [aSandboxA markChangedObject:aMutableArray];
+    XCTAssertEqual([aSandboxA farmOut], NUFarmOutStatusSucceeded, @"");
+    
+    [[aNursery sandbox] moveUp];
+    [[aNursery sandbox] moveUpObject:[[aNursery sandbox] root]];
+    
+//    NSLog(@"[[aNursery sandbox] root]:%@, [aSandboxA root]:%@", [[aNursery sandbox] root], [aSandboxA root]);
+    
+    XCTAssertEqualObjects([[aNursery sandbox] root], [aSandboxA root]);
+    
+    [[aNursery sandbox] close];
+}
+
+- (void)testMoveUpOfMutableDictionary
+{
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    
+    [[aNursery sandbox] setRoot:[NSMutableDictionary dictionary]];
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+    
+    NUSandbox *aSandboxA = [aNursery createSandbox];
+    NSMutableDictionary *aMutableDictionary = [aSandboxA root];
+    [aMutableDictionary setObject:@(1) forKey:@(1)];
+    [aSandboxA markChangedObject:aMutableDictionary];
+    XCTAssertEqual([aSandboxA farmOut], NUFarmOutStatusSucceeded, @"");
+    
+    [[aNursery sandbox] moveUp];
+    [[aNursery sandbox] moveUpObject:[[aNursery sandbox] root]];
+    
+    XCTAssertEqualObjects([[aNursery sandbox] root], [aSandboxA root]);
+    [[aNursery sandbox] close];
+}
+
+- (void)testMoveUpOfMutableSet
+{
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    
+    [[aNursery sandbox] setRoot:[NSMutableSet set]];
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+    
+    NUSandbox *aSandboxA = [aNursery createSandbox];
+    NSMutableSet *aMutableSet = [aSandboxA root];
+    [aMutableSet addObject:@(1)];
+    [aSandboxA markChangedObject:aMutableSet];
+    XCTAssertEqual([aSandboxA farmOut], NUFarmOutStatusSucceeded, @"");
+    
+    [[aNursery sandbox] moveUp];
+    [[aNursery sandbox] moveUpObject:[[aNursery sandbox] root]];
+    
+    XCTAssertEqualObjects([[aNursery sandbox] root], [aSandboxA root]);
     [[aNursery sandbox] close];
 }
 
