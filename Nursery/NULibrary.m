@@ -87,7 +87,7 @@
 
 - (void)enumerateKeysAndObjectsFrom:(id)aKey1 to:(id)aKey2 options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
 {
-    [[self tree] enumerateKeysAndObjectsFrom:aKey1 to:aKey2 options:anOpts usingBlock:aBlock];
+    [[self tree] enumerateKeysAndObjectsFromKeyGreaterThanOrEqualTo:aKey1 toKeyLessThanOrEqualTo:aKey2 options:anOpts usingBlock:aBlock];
 }
 
 - (BOOL)isEqual:(id)anObject

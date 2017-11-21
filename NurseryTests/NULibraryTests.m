@@ -129,7 +129,7 @@ static NSString *NUNurseryTestFilePath = nil;
 
 - (void)testSetAndEnumerateFromTo
 {
-    [self setAndEnumerateFrom:@(30000) to:@(60000) max:1000000];
+    [self setAndEnumerateFrom:@(300000) to:@(400000) max:1000000];
 }
 
 - (void)testSetAndEnumerateFrom
@@ -192,7 +192,7 @@ static NSString *NUNurseryTestFilePath = nil;
 
 - (void)testSetAndReverseEnumerateFromTo
 {
-    [self setAndReverseEnumerateFrom:@(30000) to:@(60000) max:1000000];
+    [self setAndReverseEnumerateFrom:@(300000) to:@(400000) max:1000000];
 }
 
 - (void)testSetAndReverseEnumerateFrom

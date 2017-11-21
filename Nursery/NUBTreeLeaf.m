@@ -25,7 +25,12 @@
 
 - (id)firstKey
 {
-    return [self keyAt:0];
+    return [self keyCount] ? [self keyAt:0] : nil;
+}
+
+- (id)lastKey
+{
+    return [self keyCount] ? [self keyAt:[self keyCount] - 1] : nil;
 }
 
 - (id)objectForKey:(id)aKey
@@ -175,55 +180,75 @@
     return self;
 }
 
-- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThenOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex
+- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThan:(id)aKey orEqualToKey:(BOOL)anOrEqualToKeyFlag keyIndex:(NUUInt64 *)aKeyIndex
 {
-    BOOL aKeyExists;
     NUUInt64 aCandidateKeyIndex;
+    BOOL aSameKeyExists = [self getKeyIndexGreaterThanOrEqualTo:aKey keyIndexInto:&aCandidateKeyIndex];
     
-    aKeyExists = [self getKeyIndexGreaterThanOrEqualTo:aKey keyIndexInto:&aCandidateKeyIndex];
-    
-    if (aKeyExists)
+    if (aCandidateKeyIndex != NUNotFound64)
     {
-        if (aKeyIndex) *aKeyIndex = (NUUInt32)aCandidateKeyIndex;
-        return self;
+        if (!aSameKeyExists)
+        {
+            if (aKeyIndex) *aKeyIndex = aCandidateKeyIndex;
+            return self;
+        }
+        else
+        {
+            NUBTreeLeaf *aCandidateLeaf = self;
+            
+            while (YES)
+            {
+                aCandidateLeaf = [[self tree] getNextKeyIndex:&aCandidateKeyIndex node:aCandidateLeaf];
+                NSComparisonResult aResult = [[self comparator] compareObject:[aCandidateLeaf keyAt:aCandidateKeyIndex] toObject:aKey];
+                
+                if (!aCandidateLeaf || aResult == NSOrderedDescending)
+                {
+                    *aKeyIndex = aCandidateKeyIndex;
+                    return aCandidateLeaf;
+                }
+            }
+        }
     }
     else if ([self rightNode])
-        return [[self rightNode] leafNodeContainingKeyGreaterThenOrEqualTo:aKey keyIndex:aKeyIndex];
+        return [[self rightNode] leafNodeContainingKeyGreaterThan:aKey orEqualToKey:anOrEqualToKeyFlag keyIndex:aKeyIndex];
     else
         return nil;
 }
 
--(NUBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex
+- (NUBTreeLeaf *)leafNodeContainingKeyLessThan:(id)aKey orEqualToKey:(BOOL)anOrEqualToKeyFlag keyIndex:(NUUInt64 *)aKeyIndex
 {
-    NUUInt64 aTmpKeyIndex;
-    BOOL aKeyExists;
-    aKeyExists = [self getKeyIndexLessThanOrEqualTo:aKey keyIndexInto:&aTmpKeyIndex];
-    NUInt32 aKeyIndexLessThanOrEqualToKey = (NUUInt32)aTmpKeyIndex;
-    NUUInt32 aCurrentIndex = aKeyIndexLessThanOrEqualToKey;
-    NUBTreeLeaf *aCurrentLeaf = self;
-    NUUInt32 aCurrentOrNextKeyIndex = aCurrentIndex;
+    NUUInt64 aCandidateKeyIndex;
+    BOOL aSameKeyExists = [self getKeyIndexLessThanOrEqualTo:aKey keyIndexInto:&aCandidateKeyIndex];
     
-    if (aKeyIndexLessThanOrEqualToKey < 0)
-        return nil;
-    
-    while (YES)
+    if (aCandidateKeyIndex != NUNotFound64)
     {
-        NUBTreeLeaf *aCurrentOrNextLeaf = [[self tree] getNextKeyIndex:&aCurrentOrNextKeyIndex node:aCurrentLeaf];
-        NSComparisonResult aResult = [[self comparator] compareObject:[aCurrentOrNextLeaf keyAt:aCurrentOrNextKeyIndex] toObject:aKey];
-        
-        if (!aCurrentOrNextLeaf || aResult == NSOrderedDescending)
+        if (!aSameKeyExists)
         {
-            *aKeyIndex = aCurrentIndex;
-            return aCurrentLeaf;
+            if (aKeyIndex) *aKeyIndex = aCandidateKeyIndex;
+            return self;
         }
         else
         {
-            aCurrentIndex = aCurrentOrNextKeyIndex;
-            aCurrentLeaf = aCurrentOrNextLeaf;
+            NUBTreeLeaf *aCandidateLeaf = self;
+            
+            while (YES)
+            {
+                aCandidateLeaf = [[self tree] getPreviousKeyIndex:&aCandidateKeyIndex node:aCandidateLeaf];
+                NSComparisonResult aResult = [[self comparator] compareObject:[aCandidateLeaf keyAt:aCandidateKeyIndex] toObject:aKey];
+                
+                if (!aCandidateLeaf || aResult == NSOrderedAscending)
+                {
+                    *aKeyIndex = aCandidateKeyIndex;
+                    return aCandidateLeaf;
+                }
+            }
         }
     }
-    
-    return nil;
+    else if ([self leftNode])
+        return [[self leftNode] leafNodeContainingKeyLessThan:aKey orEqualToKey:anOrEqualToKeyFlag keyIndex:aKeyIndex];
+    else
+        return nil;
 }
+
 
 @end

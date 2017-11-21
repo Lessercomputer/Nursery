@@ -107,6 +107,11 @@
     return nil;
 }
 
+- (id)lastKey
+{
+    return nil;
+}
+
 - (id)keyAt:(NUUInt64)anIndex
 {
     return [[self keys] objectAtIndex:anIndex];
@@ -407,14 +412,25 @@
     return nil;
 }
 
-- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThenOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex
+- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex
+{
+    return [self leafNodeContainingKeyGreaterThan:aKey orEqualToKey:YES keyIndex:aKeyIndex];
+}
+
+- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThan:(id)aKey orEqualToKey:(BOOL)anOrEqualToKeyFlag keyIndex:(NUUInt64 *)aKeyIndex
 {
     return nil;
 }
 
--(NUBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex
+-(NUBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex
+{
+    return [self leafNodeContainingKeyLessThan:aKey orEqualToKey:YES keyIndex:aKeyIndex];
+}
+
+- (NUBTreeLeaf *)leafNodeContainingKeyLessThan:(id)aKey orEqualToKey:(BOOL)anOrEqualToKeyFlag keyIndex:(NUUInt64 *)aKeyIndex
 {
     return nil;
 }
+
 
 @end

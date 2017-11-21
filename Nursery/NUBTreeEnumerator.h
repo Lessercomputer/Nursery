@@ -16,13 +16,13 @@
     id keyFrom;
     id keyTo;
     NUBTreeLeaf *node;
-    NUInt32 nextValueIndex;
+    NUInt64 nextValueIndex;
     NSEnumerationOptions options;
 }
 
-+ (id)enumeratorWithTree:(NUBTree *)aTree from:(id)aKey1 to:(id)aKey2 options:(NSEnumerationOptions)anOpts;
++ (id)enumeratorWithTree:(NUBTree *)aTree keyGreaterThanOrEqualTo:(id)aKey1 keyLessThanOrEqualTo:(id)aKey2 options:(NSEnumerationOptions)anOpts;
 
-- (id)initWithTree:(NUBTree *)aTree from:(id)aKey1 to:(id)aKey2 options:(NSEnumerationOptions)anOpts;
+- (id)initWithTree:(NUBTree *)aTree keyGreaterThanOrEqualTo:(id)aKey1 keyLessThanOrEqualTo:(id)aKey2 options:(NSEnumerationOptions)anOpts;
 
 - (void)enumerateKeysAndObjectsUsingBlock:(void (^)(id aKey, id anObj, BOOL *aStop))aBlock;
 

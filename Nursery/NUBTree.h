@@ -30,6 +30,9 @@
 - (void)setObject:(id)anObject forKey:(id)aKey;
 - (void)removeObjectForKey:(id)aKey;
 
+- (id)firstKey;
+- (id)lastKey;
+
 - (NUUInt64)count;
 - (NUUInt64)depth;
 
@@ -40,16 +43,16 @@
 - (id <NUComparator>)comparator;
 
 - (NSEnumerator *)objectEnumerator;
-- (NSEnumerator *)objectEnumeratorFrom:(id)aKey1 to:(id)aKey2;
-- (NSEnumerator *)objectEnumeratorFrom:(id)aKey1 to:(id)aKey2 option:(NSEnumerationOptions)anOpts;
+- (NSEnumerator *)objectEnumeratorFromKeyGreaterThanOrEqualTo:(id)aKey1 toKeyLessThanOrEqualTo:(id)aKey2;
+- (NSEnumerator *)objectEnumeratorFromKeyGreaterThanOrEqualTo:(id)aKey1 toKeyLessThanOrEqualTo:(id)aKey2 option:(NSEnumerationOptions)anOpts;
 
 - (NSEnumerator *)reverseObjectEnumerator;
-- (NSEnumerator *)reverseObjectEnumeratorFrom:(id)aKey1 to:(id)aKey2;
-- (NSEnumerator *)reverseObjectEnumeratorFrom:(id)aKey1 to:(id)aKey2 option:(NSEnumerationOptions)anOpts;
+- (NSEnumerator *)reverseObjectEnumeratorFromKeyGreaterThanOrEqualTo:(id)aKey1 toKeyLessThanOrEqualTo:(id)aKey2;
+- (NSEnumerator *)reverseObjectEnumeratorFromKeyGreaterThanOrEqualTo:(id)aKey1 toKeyLessThanOrEqualTo:(id)aKey2 option:(NSEnumerationOptions)anOpts;
 
 - (void)enumerateKeysAndObjectsUsingBlock:(void (^)(id aKey, id anObj, BOOL *aStop))aBlock;
 - (void)enumerateKeysAndObjectsWithOptions:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id aKey, id anObj, BOOL *aStop))aBlock;
-- (void)enumerateKeysAndObjectsFrom:(id)aKey1 to:(id)aKey2 options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id aKey, id anObj, BOOL *aStop))aBlock;
+- (void)enumerateKeysAndObjectsFromKeyGreaterThanOrEqualTo:(id)aKey1 toKeyLessThanOrEqualTo:(id)aKey2 options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id aKey, id anObj, BOOL *aStop))aBlock;
 
 + (NUUInt64)defaultKeyCapacity;
 + (Class)defaultComparatorClass;
@@ -68,9 +71,12 @@
 - (NUBTreeLeaf *)firstLeaf;
 - (NUBTreeLeaf *)lastLeaf;
 
-- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThenOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex;
-- (NUBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex;
+- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex;
+- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThan:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex;
+- (NUBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex;
+- (NUBTreeLeaf *)leafNodeContainingKeyLessThan:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex;
 
-- (NUBTreeLeaf *)getNextKeyIndex:(NUUInt32 *)aKeyIndex node:(NUBTreeLeaf *)aNode;
+- (NUBTreeLeaf *)getNextKeyIndex:(NUUInt64 *)aKeyIndex node:(NUBTreeLeaf *)aNode;
+- (NUBTreeLeaf *)getPreviousKeyIndex:(NUUInt64 *)aKeyIndex node:(NUBTreeLeaf *)aNode;
 
 @end

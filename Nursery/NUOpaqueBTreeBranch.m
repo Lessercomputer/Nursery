@@ -75,25 +75,19 @@ NSString *NUBtreeNodeIsNotChildNodeException = @"NUBtreeNodeIsNotChildNodeExcept
 	return [self keyIndexLessThanOrEqualToKey:aKey] + 1;
 }
 
-- (NUUInt32)nodeIndexForKeyLessThanOrEqualTo:(NUUInt8 *)aKey
-{
-    NUInt32 aKeyIndex = [self keyIndexLessThanOrEqualToKey:aKey];
-    return aKeyIndex < 0 ? 0 : aKeyIndex;
-}
-
 - (NUOpaqueBTreeLeaf *)leafNodeContainingKey:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
 {
 	return [[self nodeAt:[self insertionTargetNodeIndexFor:aKey]] leafNodeContainingKey:aKey keyIndex:aKeyIndex];
 }
 
-- (NUOpaqueBTreeLeaf *)leafNodeContainingKeyGreaterThenOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
+- (NUOpaqueBTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
 {
-	return [[self nodeAt:[self insertionTargetNodeIndexFor:aKey]] leafNodeContainingKeyGreaterThenOrEqualTo:aKey keyIndex:aKeyIndex];
+	return [[self nodeAt:[self insertionTargetNodeIndexFor:aKey]] leafNodeContainingKeyGreaterThanOrEqualTo:aKey keyIndex:aKeyIndex];
 }
 
 - (NUOpaqueBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
 {
-	return [[self nodeAt:[self nodeIndexForKeyLessThanOrEqualTo:aKey]] leafNodeContainingKeyLessThanOrEqualTo:aKey keyIndex:aKeyIndex];
+	return [[self nodeAt:[self insertionTargetNodeIndexFor:aKey]] leafNodeContainingKeyLessThanOrEqualTo:aKey keyIndex:aKeyIndex];
 }
 
 - (NUUInt8 *)mostLeftKey

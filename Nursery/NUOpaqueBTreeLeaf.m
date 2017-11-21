@@ -121,7 +121,7 @@
 	return nil;
 }
 
-- (NUOpaqueBTreeLeaf *)leafNodeContainingKeyGreaterThenOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
+- (NUOpaqueBTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
 {
 	NUUInt32 aCandidateKeyIndex = [self keyIndexGreaterThanOrEqualToKey:aKey];
 	
@@ -131,38 +131,24 @@
 		return self;
 	}
 	else if ([self rightNode])
-        return [[self rightNode] leafNodeContainingKeyGreaterThenOrEqualTo:aKey keyIndex:aKeyIndex];
+        return [[self rightNode] leafNodeContainingKeyGreaterThanOrEqualTo:aKey keyIndex:aKeyIndex];
     else
         return nil;
 }
 
 - (NUOpaqueBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
 {
-    NUInt32 aKeyIndexLessThanOrEqualToKey = [self keyIndexLessThanOrEqualToKey:aKey];
-    NUUInt32 aCurrentIndex = aKeyIndexLessThanOrEqualToKey;
-    NUOpaqueBTreeLeaf *aCurrentLeaf = self;
-    NUUInt32 aCurrentOrNextKeyIndex = aCurrentIndex;
-
-    if (aKeyIndexLessThanOrEqualToKey < 0)
-        return nil;
+    NUUInt32 aCandidateKeyIndex = [self keyIndexLessThanOrEqualToKey:aKey];
     
-    while (YES)
+    if (aCandidateKeyIndex < [self keyCount])
     {
-        NUOpaqueBTreeLeaf *aCurrentOrNextLeaf = [[self tree] getNextKeyIndex:&aCurrentOrNextKeyIndex node:aCurrentLeaf];
-        
-        if (!aCurrentOrNextLeaf || [aCurrentOrNextLeaf keyAt:aCurrentOrNextKeyIndex isGreaterThan:aKey])
-        {
-            *aKeyIndex = aCurrentIndex;
-            return aCurrentLeaf;
-        }
-        else
-        {
-            aCurrentIndex = aCurrentOrNextKeyIndex;
-            aCurrentLeaf = aCurrentOrNextLeaf;
-        }
+        if (aKeyIndex) *aKeyIndex = aCandidateKeyIndex;
+        return self;
     }
-    
-	return nil;
+    else if ([self leftNode])
+        return [[self leftNode] leafNodeContainingKeyLessThanOrEqualTo:aKey keyIndex:aKeyIndex];
+    else
+        return nil;
 }
 
 - (NUOpaqueBTreeLeaf *)mostLeftNode

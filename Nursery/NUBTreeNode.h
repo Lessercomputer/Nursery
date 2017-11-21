@@ -49,6 +49,7 @@ typedef enum NUBTreeSetObjectResult
 - (NUBTree *)tree;
 
 - (id)firstKey;
+- (id)lastKey;
 - (id)keyAt:(NUUInt64)anIndex;
 - (NUUInt64)keyCount;
 - (NUUInt64)minKeyCount;
@@ -96,7 +97,9 @@ typedef enum NUBTreeSetObjectResult
 - (NUBTreeLeaf *)firstLeaf;
 - (NUBTreeLeaf *)lastLeaf;
 
-- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThenOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex;
--(NUBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex;
+- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex;
+- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThan:(id)aKey orEqualToKey:(BOOL)anOrEqualToKeyFlag keyIndex:(NUUInt64 *)aKeyIndex;
+- (NUBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex;
+- (NUBTreeLeaf *)leafNodeContainingKeyLessThan:(id)aKey orEqualToKey:(BOOL)anOrEqualToKeyFlag keyIndex:(NUUInt64 *)aKeyIndex;
 
 @end

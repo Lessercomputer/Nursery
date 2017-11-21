@@ -44,6 +44,11 @@
     return [[self valueAt:0] firstKey];
 }
 
+- (id)lastKey
+{
+    return [self valueAt:[self valueCount] - 1];
+}
+
 - (id)objectForKey:(id)aKey
 {
     return [[self nodeForKey:aKey] objectForKey:aKey];
@@ -340,17 +345,26 @@
     return [[self valueAt:[self valueCount] - 1] lastLeaf];
 }
 
-- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThenOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex
+- (NUUInt64)insertionTargetNodeIndexFor:(id)aKey
+{
+    NUUInt64 aKeyIndex;
+    
+    [self getKeyIndexLessThanOrEqualTo:aKey keyIndexInto:&aKeyIndex];
+    
+    return aKeyIndex != NUNotFound64 ? aKeyIndex : 0;
+}
+
+- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThan:(id)aKey orEqualToKey:(BOOL)anOrEqualToKeyFlag keyIndex:(NUUInt64 *)aKeyIndex
 {
     NUUInt64 aTmpKeyIndex = 0;
     
     [self getKeyIndexLessThanOrEqualTo:aKey keyIndexInto:&aTmpKeyIndex];
     aTmpKeyIndex++;
     
-    return [[self valueAt:aTmpKeyIndex] leafNodeContainingKeyGreaterThenOrEqualTo:aKey keyIndex:aKeyIndex];
+    return [[self valueAt:aTmpKeyIndex] leafNodeContainingKeyGreaterThan:aKey orEqualToKey:anOrEqualToKeyFlag keyIndex:aKeyIndex];
 }
 
-- (NUBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex
+- (NUBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex
 {
     NUUInt64 aTmpKeyIndex = 0;
     

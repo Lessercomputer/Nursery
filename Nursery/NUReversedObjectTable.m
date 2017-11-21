@@ -77,7 +77,7 @@ const NUUInt64 NUReversedObjectTableRootLocationOffset	= 45;
         [lock lock];
         
         NUUInt32 aKeyIndex;
-        NUReversedObjectTableLeaf *aLeaf = (NUReversedObjectTableLeaf *)[self leafNodeContainingKeyGreaterThenOrEqualTo:(NUUInt8 *)&aLocation keyIndex:&aKeyIndex];
+        NUReversedObjectTableLeaf *aLeaf = (NUReversedObjectTableLeaf *)[self leafNodeContainingKeyGreaterThanOrEqualTo:(NUUInt8 *)&aLocation keyIndex:&aKeyIndex];
         
         if (aLeaf) return *(NUBellBall *)[aLeaf valueAt:aKeyIndex];
         else return NUNotFoundBellBall;

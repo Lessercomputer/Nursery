@@ -26,7 +26,7 @@ const NUUInt8 NUSeekerCollectPhase	= 2;
 const NUUInt64 NUSeekerPhaseOffset	= 101;
 const NUUInt64 NUSeekerCurrentGradeOffset = 109;
 
-const NUUInt32 NUSeekerDefaultSeekCount = 1000;
+const NUUInt32 NUSeekerDefaultSeekCount = 300;
 
 const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 

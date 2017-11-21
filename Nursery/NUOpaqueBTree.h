@@ -53,7 +53,7 @@
 @interface NUOpaqueBTree (GettingNode)
 
 - (NUOpaqueBTreeLeaf *)leafNodeContainingKey:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex;
-- (NUOpaqueBTreeLeaf *)leafNodeContainingKeyGreaterThenOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex;
+- (NUOpaqueBTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex;
 - (NUOpaqueBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex;
 - (NUOpaqueBTreeLeaf *)mostLeftNode;
 - (NUOpaqueBTreeLeaf *)mostRightNode;

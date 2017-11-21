@@ -45,7 +45,7 @@ static NUComparisonResult compareRegion(NUUInt8 *aRegion1Pointer, NUUInt8 *aRegi
 - (NULengthTreeLeaf *)getNodeContainingSpaceOfLengthGreaterThanOrEqual:(NUUInt64)aLength keyIndex:(NUUInt32 *)aKeyIndex
 {
 	NURegion aRegion = NUMakeRegion(0, aLength);
-	return (NULengthTreeLeaf *)[self leafNodeContainingKeyGreaterThenOrEqualTo:(NUUInt8 *)&aRegion keyIndex:aKeyIndex];
+	return (NULengthTreeLeaf *)[self leafNodeContainingKeyGreaterThanOrEqualTo:(NUUInt8 *)&aRegion keyIndex:aKeyIndex];
 }
 
 - (void)setRegion:(NURegion)aRegion

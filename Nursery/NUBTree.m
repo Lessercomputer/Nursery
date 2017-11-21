@@ -87,6 +87,16 @@
     }
 }
 
+- (id)firstKey
+{
+    return [[self root] firstKey];
+}
+
+- (id)lastKey
+{
+    return [[self root] lastKey];
+}
+
 - (NUUInt64)count
 {
     return count;
@@ -119,32 +129,32 @@
 
 - (NSEnumerator *)objectEnumerator
 {
-    return [self objectEnumeratorFrom:nil to:nil];
+    return [self objectEnumeratorFromKeyGreaterThanOrEqualTo:nil toKeyLessThanOrEqualTo:nil];
 }
 
-- (NSEnumerator *)objectEnumeratorFrom:(id)aKey1 to:(id)aKey2
+- (NSEnumerator *)objectEnumeratorFromKeyGreaterThanOrEqualTo:(id)aKey1 toKeyLessThanOrEqualTo:(id)aKey2
 {
-    return [self objectEnumeratorFrom:aKey1 to:aKey2 option:0];
+    return [self objectEnumeratorFromKeyGreaterThanOrEqualTo:aKey1 toKeyLessThanOrEqualTo:aKey2 option:0];
 }
 
-- (NSEnumerator *)objectEnumeratorFrom:(id)aKey1 to:(id)aKey2 option:(NSEnumerationOptions)anOpts
+- (NSEnumerator *)objectEnumeratorFromKeyGreaterThanOrEqualTo:(id)aKey1 toKeyLessThanOrEqualTo:(id)aKey2 option:(NSEnumerationOptions)anOpts
 {
-    return [NUBTreeEnumerator enumeratorWithTree:self from:aKey1 to:aKey2 options:anOpts];
+    return [NUBTreeEnumerator enumeratorWithTree:self keyGreaterThanOrEqualTo:aKey1 keyLessThanOrEqualTo:aKey2 options:anOpts];
 }
 
 -(NSEnumerator *)reverseObjectEnumerator
 {
-    return [self reverseObjectEnumeratorFrom:nil to:nil];
+    return [self reverseObjectEnumeratorFromKeyGreaterThanOrEqualTo:nil toKeyLessThanOrEqualTo:nil];
 }
 
-- (NSEnumerator *)reverseObjectEnumeratorFrom:(id)aKey1 to:(id)aKey2
+- (NSEnumerator *)reverseObjectEnumeratorFromKeyGreaterThanOrEqualTo:(id)aKey1 toKeyLessThanOrEqualTo:(id)aKey2
 {
-    return [self reverseObjectEnumeratorFrom:aKey1 to:aKey2 option:NSEnumerationReverse];
+    return [self reverseObjectEnumeratorFromKeyGreaterThanOrEqualTo:aKey1 toKeyLessThanOrEqualTo:aKey2 option:NSEnumerationReverse];
 }
 
-- (NSEnumerator *)reverseObjectEnumeratorFrom:(id)aKey1 to:(id)aKey2 option:(NSEnumerationOptions)anOpts
+- (NSEnumerator *)reverseObjectEnumeratorFromKeyGreaterThanOrEqualTo:(id)aKey1 toKeyLessThanOrEqualTo:(id)aKey2 option:(NSEnumerationOptions)anOpts
 {
-    return [NUBTreeEnumerator enumeratorWithTree:self from:nil to:nil options:NSEnumerationReverse];
+    return [NUBTreeEnumerator enumeratorWithTree:self keyGreaterThanOrEqualTo:nil keyLessThanOrEqualTo:nil options:NSEnumerationReverse];
 }
 
 - (void)enumerateKeysAndObjectsUsingBlock:(void (^)(id aKey, id anObj, BOOL *aStop))aBlock
@@ -154,12 +164,12 @@
 
 -(void)enumerateKeysAndObjectsWithOptions:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
 {
-    [self enumerateKeysAndObjectsFrom:nil to:nil options:anOpts usingBlock:aBlock];
+    [self enumerateKeysAndObjectsFromKeyGreaterThanOrEqualTo:nil toKeyLessThanOrEqualTo:nil options:anOpts usingBlock:aBlock];
 }
 
--(void)enumerateKeysAndObjectsFrom:(id)aKey1 to:(id)aKey2 options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
+-(void)enumerateKeysAndObjectsFromKeyGreaterThanOrEqualTo:(id)aKey1 toKeyLessThanOrEqualTo:(id)aKey2 options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
 {
-    NUBTreeEnumerator *anEnumerator = (NUBTreeEnumerator *)[self objectEnumeratorFrom:aKey1 to:aKey2 option:anOpts];
+    NUBTreeEnumerator *anEnumerator = (NUBTreeEnumerator *)[self objectEnumeratorFromKeyGreaterThanOrEqualTo:aKey1 toKeyLessThanOrEqualTo:aKey2 option:anOpts];
     [anEnumerator enumerateKeysAndObjectsUsingBlock:aBlock];
 }
 
@@ -253,17 +263,27 @@
     return [[self root] lastLeaf];
 }
 
-- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThenOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex
+- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex
 {
-    return [[self root] leafNodeContainingKeyGreaterThenOrEqualTo:aKey keyIndex:aKeyIndex];
+    return [[self root] leafNodeContainingKeyGreaterThanOrEqualTo:aKey keyIndex:aKeyIndex];
 }
 
--(NUBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt32 *)aKeyIndex
+- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThan:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex
+{
+    return [[self root] leafNodeContainingKeyGreaterThan:aKey orEqualToKey:NO keyIndex:aKeyIndex];
+}
+
+-(NUBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex
 {
     return [[self root] leafNodeContainingKeyLessThanOrEqualTo:aKey keyIndex:aKeyIndex];
 }
 
-- (NUBTreeLeaf *)getNextKeyIndex:(NUUInt32 *)aKeyIndex node:(NUBTreeLeaf *)aNode
+- (NUBTreeLeaf *)leafNodeContainingKeyLessThan:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex
+{
+    return [[self root] leafNodeContainingKeyLessThan:aKey orEqualToKey:NO keyIndex:aKeyIndex];
+}
+
+- (NUBTreeLeaf *)getNextKeyIndex:(NUUInt64 *)aKeyIndex node:(NUBTreeLeaf *)aNode
 {
     if (!aKeyIndex)
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:NSInvalidArgumentException userInfo:nil];
@@ -271,7 +291,7 @@
     if (!aNode)
         return nil;
     
-    if (*aKeyIndex == NUNotFound32)
+    if (*aKeyIndex == NUNotFound64)
     {
         if ([aNode keyCount] == 0)
             return nil;
@@ -291,6 +311,37 @@
     {
         *aKeyIndex = 0;
         return (NUBTreeLeaf *)[aNode rightNode];
+    }
+}
+
+- (NUBTreeLeaf *)getPreviousKeyIndex:(NUUInt64 *)aKeyIndex node:(NUBTreeLeaf *)aNode
+{
+    if (!aKeyIndex)
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:NSInvalidArgumentException userInfo:nil];
+    
+    if (!aNode)
+        return nil;
+    
+    if (*aKeyIndex == NUNotFound64)
+    {
+        if ([aNode keyCount] == 0)
+            return nil;
+        else
+        {
+            *aKeyIndex = [aNode keyCount] - 1;
+            return (NUBTreeLeaf *)aNode;
+        }
+    }
+    
+    if (*aKeyIndex != 0)
+    {
+        (*aKeyIndex)--;
+        return (NUBTreeLeaf *)aNode;
+    }
+    else
+    {
+        *aKeyIndex = [aNode keyCount] - 1;
+        return (NUBTreeLeaf *)[aNode leftNode];
     }
 }
 

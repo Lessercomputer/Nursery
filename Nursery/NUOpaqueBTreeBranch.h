@@ -22,7 +22,6 @@ extern NSString *NUBtreeNodeIsNotChildNodeException;
 
 - (NUUInt32)lastNodeIndex;
 - (NUUInt32)insertionTargetNodeIndexFor:(NUUInt8 *)aKey;
-- (NUUInt32)nodeIndexForKeyLessThanOrEqualTo:(NUUInt8 *)aKey;
 - (NUOpaqueBTreeNode *)nodeAt:(NUUInt32)anIndex;
 - (NUUInt64)nodeLocationAt:(NUUInt32)anIndex;
 - (NUIndexArray *)nodeLocations;

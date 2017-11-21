@@ -12,12 +12,12 @@
 
 @implementation NUBTreeEnumerator
 
-+ (id)enumeratorWithTree:(NUBTree *)aTree from:(id)aKey1 to:(id)aKey2 options:(NSEnumerationOptions)anOpts;
++ (id)enumeratorWithTree:(NUBTree *)aTree keyGreaterThanOrEqualTo:(id)aKey1 keyLessThanOrEqualTo:(id)aKey2 options:(NSEnumerationOptions)anOpts;
 {
-    return [[[self alloc] initWithTree:aTree from:aKey1 to:aKey2 options:anOpts] autorelease];
+    return [[[self alloc] initWithTree:aTree keyGreaterThanOrEqualTo:aKey1 keyLessThanOrEqualTo:aKey2 options:anOpts] autorelease];
 }
 
-- (id)initWithTree:(NUBTree *)aTree from:(id)aKey1 to:(id)aKey2 options:(NSEnumerationOptions)anOpts
+- (id)initWithTree:(NUBTree *)aTree keyGreaterThanOrEqualTo:(id)aKey1 keyLessThanOrEqualTo:(id)aKey2 options:(NSEnumerationOptions)anOpts
 {
     [super init];
 
@@ -30,12 +30,12 @@
     if (keyFrom && keyTo && [[tree comparator] compareObject:keyFrom toObject:keyTo] != NSOrderedAscending)
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:nil userInfo:nil];
     
-    NUUInt32 aTmpNextValueIndex = 0;
+    NUUInt64 aTmpNextValueIndex = 0;
     
     if ((anOpts & NSEnumerationReverse) != NSEnumerationReverse)
     {
         if (keyFrom)
-            node = [[tree leafNodeContainingKeyGreaterThenOrEqualTo:keyFrom keyIndex:&aTmpNextValueIndex] retain];
+            node = [[tree leafNodeContainingKeyGreaterThanOrEqualTo:keyFrom keyIndex:&aTmpNextValueIndex] retain];
         else
             node = [[tree firstLeaf] retain];
     }

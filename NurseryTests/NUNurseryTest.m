@@ -192,6 +192,22 @@ static NSString *NUNurseryTestFilePath = nil;
     [[aNursery sandbox] close];
 }
 
+- (void)testSaveLargeObject
+{
+    const int aMaxCount = 100000;//45000;
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    
+    NSMutableArray *anArray = [NSMutableArray array];
+    int i = 0;
+    for (; i < aMaxCount; i++)
+        [anArray addObject:[NSString stringWithFormat:@"%06d", i]];
+    [[aNursery sandbox] setRoot:anArray];
+    
+    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"[aNursery save] failed");
+    
+    [[aNursery sandbox] close];
+}
+
 - (void)testSaveAndLoadLargeObject
 {
     const int aMaxCount = 100000;//45000;

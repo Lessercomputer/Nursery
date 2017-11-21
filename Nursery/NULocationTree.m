@@ -27,7 +27,7 @@ const NUUInt64 NULocationTreeRootLocationOffset = 29;
 
 - (NULocationTreeLeaf *)getNodeContainingSpaceAtLocationGraterThanOrEqual:(NUUInt64)aLocation keyIndex:(NUUInt32 *)aKeyIndex
 {
-    return (NULocationTreeLeaf *)[self leafNodeContainingKeyGreaterThenOrEqualTo:(NUUInt8 *)&aLocation keyIndex:aKeyIndex];
+    return (NULocationTreeLeaf *)[self leafNodeContainingKeyGreaterThanOrEqualTo:(NUUInt8 *)&aLocation keyIndex:aKeyIndex];
 }
 
 - (NULocationTreeLeaf *)getNodeContainingSpaceAtLocationLessThanOrEqual:(NUUInt64)aLocation keyIndex:(NUUInt32 *)aKeyIndex
