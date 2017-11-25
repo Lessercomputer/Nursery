@@ -46,7 +46,7 @@
 
 - (id)lastKey
 {
-    return [self valueAt:[self valueCount] - 1];
+    return [[self valueAt:[self valueCount] - 1] lastKey];
 }
 
 - (id)objectForKey:(id)aKey
@@ -351,28 +351,17 @@
     
     [self getKeyIndexLessThanOrEqualTo:aKey keyIndexInto:&aKeyIndex];
     
-    return aKeyIndex != NUNotFound64 ? aKeyIndex : 0;
+    return aKeyIndex != NUNotFound64 ? aKeyIndex + 1 : 0;
 }
 
 - (NUBTreeLeaf *)leafNodeContainingKeyGreaterThan:(id)aKey orEqualToKey:(BOOL)anOrEqualToKeyFlag keyIndex:(NUUInt64 *)aKeyIndex
 {
-    NUUInt64 aTmpKeyIndex = 0;
-    
-    [self getKeyIndexLessThanOrEqualTo:aKey keyIndexInto:&aTmpKeyIndex];
-    aTmpKeyIndex++;
-    
-    return [[self valueAt:aTmpKeyIndex] leafNodeContainingKeyGreaterThan:aKey orEqualToKey:anOrEqualToKeyFlag keyIndex:aKeyIndex];
+    return [[self valueAt:[self insertionTargetNodeIndexFor:aKey]] leafNodeContainingKeyGreaterThan:aKey orEqualToKey:anOrEqualToKeyFlag keyIndex:aKeyIndex];
 }
 
-- (NUBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex
+- (NUBTreeLeaf *)leafNodeContainingKeyLessThan:(id)aKey orEqualToKey:(BOOL)anOrEqualToKeyFlag keyIndex:(NUUInt64 *)aKeyIndex
 {
-    NUUInt64 aTmpKeyIndex = 0;
-    
-    [self getKeyIndexLessThanOrEqualTo:aKey keyIndexInto:&aTmpKeyIndex];
-    if (aTmpKeyIndex == NUNotFound64)
-        aTmpKeyIndex = 0;
-    
-    return [[self valueAt:aTmpKeyIndex] leafNodeContainingKeyLessThanOrEqualTo:aKey keyIndex:aKeyIndex];
+    return [[self valueAt:[self insertionTargetNodeIndexFor:aKey]] leafNodeContainingKeyLessThan:aKey orEqualToKey:anOrEqualToKeyFlag keyIndex:aKeyIndex];
 }
 
 @end

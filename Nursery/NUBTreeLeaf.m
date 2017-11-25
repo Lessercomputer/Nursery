@@ -187,7 +187,7 @@
     
     if (aCandidateKeyIndex != NUNotFound64)
     {
-        if (!aSameKeyExists)
+        if (!aSameKeyExists || anOrEqualToKeyFlag)
         {
             if (aKeyIndex) *aKeyIndex = aCandidateKeyIndex;
             return self;
@@ -222,7 +222,7 @@
     
     if (aCandidateKeyIndex != NUNotFound64)
     {
-        if (!aSameKeyExists)
+        if (!aSameKeyExists || anOrEqualToKeyFlag)
         {
             if (aKeyIndex) *aKeyIndex = aCandidateKeyIndex;
             return self;

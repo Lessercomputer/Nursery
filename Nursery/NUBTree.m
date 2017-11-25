@@ -97,6 +97,38 @@
     return [[self root] lastKey];
 }
 
+- (id)keyGreaterThanOrEqualTo:(id)aKey
+{
+    NUUInt64 aKeyIndex;
+    NUBTreeLeaf *aLeaf = [self leafNodeContainingKeyGreaterThanOrEqualTo:(id)aKey keyIndex:&aKeyIndex];
+    
+    return aLeaf ? [aLeaf keyAt:aKeyIndex] : nil;
+}
+
+- (id)keyGreaterThan:(id)aKey
+{
+    NUUInt64 aKeyIndex;
+    NUBTreeLeaf *aLeaf = [self leafNodeContainingKeyGreaterThan:aKey keyIndex:&aKeyIndex];
+    
+    return aLeaf ? [aLeaf keyAt:aKeyIndex] : nil;
+}
+
+- (id)keyLessThanOrEqualTo:(id)aKey
+{
+    NUUInt64 aKeyIndex;
+    NUBTreeLeaf *aLeaf = [self leafNodeContainingKeyLessThanOrEqualTo:aKey keyIndex:&aKeyIndex];
+    
+    return aLeaf ? [aLeaf keyAt:aKeyIndex] : nil;
+}
+
+- (id)keyLessThan:(id)aKey
+{
+    NUUInt64 aKeyIndex;
+    NUBTreeLeaf *aLeaf = [self leafNodeContainingKeyLessThan:aKey keyIndex:&aKeyIndex];
+    
+    return aLeaf ? [aLeaf keyAt:aKeyIndex] : nil;
+}
+
 - (NUUInt64)count
 {
     return count;
@@ -127,35 +159,6 @@
     return NUGetIvar(&comparator);
 }
 
-- (NSEnumerator *)objectEnumerator
-{
-    return [self objectEnumeratorFromKeyGreaterThanOrEqualTo:nil toKeyLessThanOrEqualTo:nil];
-}
-
-- (NSEnumerator *)objectEnumeratorFromKeyGreaterThanOrEqualTo:(id)aKey1 toKeyLessThanOrEqualTo:(id)aKey2
-{
-    return [self objectEnumeratorFromKeyGreaterThanOrEqualTo:aKey1 toKeyLessThanOrEqualTo:aKey2 option:0];
-}
-
-- (NSEnumerator *)objectEnumeratorFromKeyGreaterThanOrEqualTo:(id)aKey1 toKeyLessThanOrEqualTo:(id)aKey2 option:(NSEnumerationOptions)anOpts
-{
-    return [NUBTreeEnumerator enumeratorWithTree:self keyGreaterThanOrEqualTo:aKey1 keyLessThanOrEqualTo:aKey2 options:anOpts];
-}
-
--(NSEnumerator *)reverseObjectEnumerator
-{
-    return [self reverseObjectEnumeratorFromKeyGreaterThanOrEqualTo:nil toKeyLessThanOrEqualTo:nil];
-}
-
-- (NSEnumerator *)reverseObjectEnumeratorFromKeyGreaterThanOrEqualTo:(id)aKey1 toKeyLessThanOrEqualTo:(id)aKey2
-{
-    return [self reverseObjectEnumeratorFromKeyGreaterThanOrEqualTo:aKey1 toKeyLessThanOrEqualTo:aKey2 option:NSEnumerationReverse];
-}
-
-- (NSEnumerator *)reverseObjectEnumeratorFromKeyGreaterThanOrEqualTo:(id)aKey1 toKeyLessThanOrEqualTo:(id)aKey2 option:(NSEnumerationOptions)anOpts
-{
-    return [NUBTreeEnumerator enumeratorWithTree:self keyGreaterThanOrEqualTo:nil keyLessThanOrEqualTo:nil options:NSEnumerationReverse];
-}
 
 - (void)enumerateKeysAndObjectsUsingBlock:(void (^)(id aKey, id anObj, BOOL *aStop))aBlock
 {
@@ -164,12 +167,22 @@
 
 -(void)enumerateKeysAndObjectsWithOptions:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
 {
-    [self enumerateKeysAndObjectsFromKeyGreaterThanOrEqualTo:nil toKeyLessThanOrEqualTo:nil options:anOpts usingBlock:aBlock];
+    [self enumerateKeysAndObjectsWithKeyGreaterThan:nil orEqual:YES andKeyLessThan:nil orEqual:YES options:0 usingBlock:aBlock];
 }
 
--(void)enumerateKeysAndObjectsFromKeyGreaterThanOrEqualTo:(id)aKey1 toKeyLessThanOrEqualTo:(id)aKey2 options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
+- (void)enumerateKeysAndObjectsWithKeyGreaterThan:(id)aKey orEqual:(BOOL)anOrEqualFlag options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
 {
-    NUBTreeEnumerator *anEnumerator = (NUBTreeEnumerator *)[self objectEnumeratorFromKeyGreaterThanOrEqualTo:aKey1 toKeyLessThanOrEqualTo:aKey2 option:anOpts];
+    [self enumerateKeysAndObjectsWithKeyGreaterThan:aKey orEqual:anOrEqualFlag andKeyLessThan:nil orEqual:YES options:anOpts usingBlock:aBlock];
+}
+
+- (void)enumerateKeysAndObjectsWithKeyLessThan:(id)aKey orEqual:(BOOL)anOrEqualFlag options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
+{
+    [self enumerateKeysAndObjectsWithKeyGreaterThan:nil orEqual:YES andKeyLessThan:aKey orEqual:anOrEqualFlag options:anOpts usingBlock:aBlock];
+}
+
+- (void)enumerateKeysAndObjectsWithKeyGreaterThan:(id)aKey1 orEqual:(BOOL)anOrEqualFlag1 andKeyLessThan:(id)aKey2 orEqual:(BOOL)anOrEqualFlag2 options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
+{
+    NUBTreeEnumerator *anEnumerator = [NUBTreeEnumerator enumeratorWithTree:self keyGreaterThan:aKey1 orEqual:anOrEqualFlag1 keyLessThan:aKey2 orEqual:anOrEqualFlag2 options:anOpts];
     [anEnumerator enumerateKeysAndObjectsUsingBlock:aBlock];
 }
 

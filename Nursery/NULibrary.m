@@ -55,6 +55,36 @@
     [[self tree] removeObjectForKey:aKey];
 }
 
+- (id)firstKey
+{
+    return [[self tree] firstKey];
+}
+
+- (id)lastKey
+{
+    return [[self tree] lastKey];
+}
+
+- (id)keyGreaterThanOrEqualTo:(id)aKey
+{
+    return [[self tree] keyGreaterThanOrEqualTo:aKey];
+}
+
+- (id)keyGreaterThan:(id)aKey
+{
+    return [[self tree] keyGreaterThan:aKey];
+}
+
+- (id)keyLessThanOrEqualTo:(id)aKey
+{
+    return [[self tree] keyLessThanOrEqualTo:aKey];
+}
+
+- (id)keyLessThan:(id)aKey
+{
+    return [[self tree] keyLessThan:aKey];
+}
+
 - (NUUInt64)count
 {
     return [[self tree] count];
@@ -65,16 +95,6 @@
     return [[self tree] comparator];
 }
 
-- (NSEnumerator *)objectEnumerator
-{
-    return [[self tree] objectEnumerator];
-}
-
-- (NSEnumerator *)reverseObjectEnumerator
-{
-    return [[self tree] reverseObjectEnumerator];
-}
-
 - (void)enumerateKeysAndObjectsUsingBlock:(void (^)(id aKey, id anObj, BOOL *aStop))aBlock
 {
     [self enumerateKeysAndObjectsWithOptions:NSEnumerationConcurrent usingBlock:aBlock];
@@ -82,12 +102,22 @@
 
 -(void)enumerateKeysAndObjectsWithOptions:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
 {
-    [self enumerateKeysAndObjectsFrom:nil to:nil options:anOpts usingBlock:aBlock];
+    [self enumerateKeysAndObjectsWithKeyGreaterThan:nil orEqual:YES andKeyLessThan:nil orEqual:YES options:anOpts usingBlock:aBlock];
 }
 
-- (void)enumerateKeysAndObjectsFrom:(id)aKey1 to:(id)aKey2 options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
+- (void)enumerateKeysAndObjectsWithKeyGreaterThan:(id)aKey orEqual:(BOOL)anOrEqualFlag options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
 {
-    [[self tree] enumerateKeysAndObjectsFromKeyGreaterThanOrEqualTo:aKey1 toKeyLessThanOrEqualTo:aKey2 options:anOpts usingBlock:aBlock];
+    [self enumerateKeysAndObjectsWithKeyGreaterThan:aKey orEqual:anOrEqualFlag options:anOpts usingBlock:aBlock];
+}
+
+- (void)enumerateKeysAndObjectsWithKeyLessThan:(id)aKey orEqual:(BOOL)anOrEqualFlag options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
+{
+    [self enumerateKeysAndObjectsWithKeyGreaterThan:aKey orEqual:anOrEqualFlag options:anOpts usingBlock:aBlock];
+}
+
+- (void)enumerateKeysAndObjectsWithKeyGreaterThan:(id)aKey1 orEqual:(BOOL)anOrEqualFlag1 andKeyLessThan:(id)aKey2 orEqual:(BOOL)anOrEqualFlag2 options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
+{
+    [[self tree] enumerateKeysAndObjectsWithKeyGreaterThan:aKey1 orEqual:anOrEqualFlag1 andKeyLessThan:aKey2 orEqual:anOrEqualFlag2 options:anOpts usingBlock:aBlock];
 }
 
 - (BOOL)isEqual:(id)anObject

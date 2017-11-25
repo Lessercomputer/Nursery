@@ -133,7 +133,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 - (NURegion)freeSpaceContainingSpaceAtLocationGreaterThanOrEqual:(NUUInt64)aLocation
 {
     NUUInt32 aKeyIndex;
-    NULocationTreeLeaf *aLeaf = [locationTree getNodeContainingSpaceAtLocationGraterThanOrEqual:aLocation keyIndex:&aKeyIndex];
+    NULocationTreeLeaf *aLeaf = [locationTree getNodeContainingSpaceAtLocationGreaterThanOrEqual:aLocation keyIndex:&aKeyIndex];
     
     if (!aLeaf) return NUMakeRegion(NUNotFound64, 0);
     

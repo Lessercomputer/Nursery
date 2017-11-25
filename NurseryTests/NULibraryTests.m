@@ -127,130 +127,224 @@ static NSString *NUNurseryTestFilePath = nil;
     }];
 }
 
-- (void)testSetAndEnumerateFromTo
-{
-    [self setAndEnumerateFrom:@(300000) to:@(400000) max:1000000];
-}
-
-- (void)testSetAndEnumerateFrom
-{
-    [self setAndEnumerateFrom:@(30000) to:nil max:1000000];
-}
-
-- (void)testSetAndEnumerateTo
-{
-    [self setAndEnumerateFrom:nil to:@(60000) max:1000000];
-}
-
-- (void)setAndEnumerateFrom:(NSNumber *)aKeyFrom to:(NSNumber *)aKeyTo max:(NSInteger)aMaxCount
+- (NULibrary *)libraryWithKeyFrom:(NSNumber *)aKey1 to:(NSNumber *)aKey2
 {
     NULibrary *aLibrary = [NULibrary library];
-    NSMutableArray *aNumbers = [NSMutableArray array];
     
-    for (int i = 0; i < aMaxCount; i++)
-        [aNumbers addObject:[NSNumber numberWithInteger:i]];
+    for (NSInteger i = [aKey1 integerValue]; i <= [aKey2 integerValue]; i++)
+         [aLibrary setObject:@(i) forKey:@(i)];
     
-    [aNumbers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [aLibrary setObject:obj forKey:obj];
-    }];
-    
-    __block NSInteger aCurrentKey = 0;
-    
-    if (aKeyFrom && aKeyTo)
-    {
-        [aLibrary enumerateKeysAndObjectsFrom:aKeyFrom to:aKeyTo options:0 usingBlock:^(id aKey, id anObj, BOOL *aStop) {
-            NSComparisonResult aResult1 = [[aLibrary comparator] compareObject:aKey toObject:aKeyFrom];
-            NSComparisonResult aResult2 = [[aLibrary comparator] compareObject:aKey toObject:aKeyTo];
-//            NSLog(@"aKey:%@",aKey);
-            XCTAssertTrue((aResult1 == NSOrderedSame || aResult1 == NSOrderedDescending)
-                          && (aResult2 == NSOrderedSame || aResult2 == NSOrderedAscending));
-            XCTAssertGreaterThan([aKey integerValue], aCurrentKey);
-            aCurrentKey = [aKey integerValue];
-        }];
-    }
-    else if (aKeyFrom)
-    {
-        [aLibrary enumerateKeysAndObjectsFrom:aKeyFrom to:aKeyTo options:0 usingBlock:^(id aKey, id anObj, BOOL *aStop) {
-            NSComparisonResult aResult1 = [[aLibrary comparator] compareObject:aKey toObject:aKeyFrom];
-//            NSLog(@"aKey:%@",aKey);
-            XCTAssertTrue(aResult1 == NSOrderedSame || aResult1 == NSOrderedDescending);
-            XCTAssertGreaterThan([aKey integerValue], aCurrentKey);
-            aCurrentKey = [aKey integerValue];
-        }];
-    }
-    else
-    {
-        [aLibrary enumerateKeysAndObjectsFrom:aKeyFrom to:aKeyTo options:0 usingBlock:^(id aKey, id anObj, BOOL *aStop) {
-            NSComparisonResult aResult2 = [[aLibrary comparator] compareObject:aKey toObject:aKeyTo];
-//            NSLog(@"aKey:%@",aKey);
-            XCTAssertTrue(aResult2 == NSOrderedSame || aResult2 == NSOrderedAscending);
-            XCTAssertGreaterThanOrEqual([aKey integerValue], aCurrentKey);
-            aCurrentKey = [aKey integerValue];
-        }];
-    }
+    return aLibrary;
 }
 
-- (void)testSetAndReverseEnumerateFromTo
-{
-    [self setAndReverseEnumerateFrom:@(300000) to:@(400000) max:1000000];
-}
-
-- (void)testSetAndReverseEnumerateFrom
-{
-    [self setAndReverseEnumerateFrom:@(30000) to:nil max:1000000];
-}
-
-- (void)testSetAndReverseEnumerateTo
-{
-    [self setAndReverseEnumerateFrom:nil to:@(60000) max:1000000];
-}
-
-- (void)setAndReverseEnumerateFrom:(NSNumber *)aKeyFrom to:(NSNumber *)aKeyTo max:(NSInteger)aMaxCount
+- (void)testFirstKey
 {
     NULibrary *aLibrary = [NULibrary library];
-    NSMutableArray *aNumbers = [NSMutableArray array];
+    XCTAssertNil([aLibrary firstKey]);
     
-    for (int i = 0; i < aMaxCount; i++)
-        [aNumbers addObject:[NSNumber numberWithInteger:i]];
+    aLibrary = [self libraryWithKeyFrom:@(0) to:@(100000)];
+    XCTAssertEqual([[aLibrary firstKey] integerValue], 0);
+}
+
+- (void)testLastKey
+{
+    NULibrary *aLibrary = [NULibrary library];
+    XCTAssertNil([aLibrary lastKey]);
     
-    [aNumbers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [aLibrary setObject:obj forKey:obj];
+    aLibrary = [self libraryWithKeyFrom:@(0) to:@(100000)];
+    XCTAssertEqual([[aLibrary lastKey] integerValue], 100000);
+}
+
+
+- (void)testKeyGreaterThanOrEqual
+{
+    NULibrary *aLibrary = [NULibrary library];
+    XCTAssertNil([aLibrary keyGreaterThanOrEqualTo:@(0)]);
+    
+    aLibrary = [self libraryWithKeyFrom:@(0) to:@(100000)];
+    XCTAssertGreaterThanOrEqual([[aLibrary keyGreaterThanOrEqualTo:@(50000)] integerValue], 50000);
+    XCTAssertGreaterThanOrEqual([[aLibrary keyGreaterThanOrEqualTo:@(-1)] integerValue], -1);
+    XCTAssertNil([aLibrary keyGreaterThanOrEqualTo:@(100001)]);
+}
+
+- (void)testKeyGreaterThan
+{
+    NULibrary *aLibrary = [NULibrary library];
+    XCTAssertNil([aLibrary keyGreaterThan:@(0)]);
+    
+    aLibrary = [self libraryWithKeyFrom:@(0) to:@(100000)];
+    XCTAssertGreaterThan([[aLibrary keyGreaterThan:@(50000)] integerValue], 50000);
+    XCTAssertGreaterThan([[aLibrary keyGreaterThan:@(-1)] integerValue], -1);
+    XCTAssertNil([aLibrary keyGreaterThan:@(100001)]);
+}
+
+- (void)testKeyLessThanOrEqual
+{
+    NULibrary *aLibrary = [NULibrary library];
+    XCTAssertNil([aLibrary keyLessThanOrEqualTo:@(0)]);
+    
+    aLibrary = [self libraryWithKeyFrom:@(0) to:@(100000)];
+    XCTAssertLessThanOrEqual([[aLibrary keyLessThanOrEqualTo:@(50000)] integerValue], 50000);
+    XCTAssertLessThanOrEqual([[aLibrary keyLessThanOrEqualTo:@(100001)] integerValue], 100001);
+    XCTAssertNil([aLibrary keyLessThanOrEqualTo:@(-1)]);
+}
+
+- (void)testKeyLessThan
+{
+    NULibrary *aLibrary = [NULibrary library];
+    XCTAssertNil([aLibrary keyLessThan:@(0)]);
+    
+    aLibrary = [self libraryWithKeyFrom:@(0) to:@(100000)];
+    XCTAssertLessThan([[aLibrary keyLessThan:@(50000)] integerValue], 50000);
+    XCTAssertLessThan([[aLibrary keyLessThan:@(100001)] integerValue], 100001);
+    XCTAssertNil([aLibrary keyLessThan:@(-1)]);
+}
+
+- (void)enumerateWithKeyGreaterThan:(NSNumber *)aKey1 orEqual:(BOOL)anOrEqualFlag1 andLessThan:(NSNumber *)aKey2 orEqual:(BOOL)anOrEqualFlag2 reverse:(BOOL)aReverseFlag onLibraryWithKeyFrom:(NSNumber *)aKeyFrom to:(NSNumber *)aKeyTo
+{
+    NULibrary *aLibrary = [self libraryWithKeyFrom:aKeyFrom to:aKeyTo];
+    __block NSInteger aCurrentKey = !aReverseFlag ? [aKeyFrom integerValue] - 1 : [aKeyTo integerValue] + 1;
+    __block BOOL aKeyIsFirst = NO;
+    NSEnumerationOptions anOpts = !aReverseFlag ? 0 : NSEnumerationReverse;
+    
+    [aLibrary enumerateKeysAndObjectsWithKeyGreaterThan:aKey1 orEqual:anOrEqualFlag1 andKeyLessThan:aKey2 orEqual:anOrEqualFlag2 options:anOpts usingBlock:^(id aKey, id anObj, BOOL *aStop) {
+        
+//        NSLog(@"aKey:%@",aKey);
+        
+        if (!aKeyIsFirst)
+        {
+            aKeyIsFirst = YES;
+            
+            if (!aReverseFlag && aKey1)
+            {
+                if (anOrEqualFlag1)
+                    XCTAssertGreaterThanOrEqual([aKey integerValue], [aKey1 integerValue]);
+                else
+                    XCTAssertGreaterThan([aKey integerValue], [aKey1 integerValue]);
+            }
+            
+            if (aReverseFlag && aKey2)
+            {
+                if (anOrEqualFlag2)
+                    XCTAssertLessThanOrEqual([aKey integerValue], [aKey2 integerValue]);
+                else
+                    XCTAssertLessThan([aKey integerValue], [aKey2 integerValue]);
+            }
+        }
+        
+        if (aKey1)
+        {
+            if (anOrEqualFlag1)
+                XCTAssertGreaterThanOrEqual([aKey integerValue], [aKey1 integerValue]);
+            else
+                XCTAssertGreaterThan([aKey integerValue], [aKey1 integerValue]);
+        }
+        
+        if (aKey2)
+        {
+            if (anOrEqualFlag2)
+                XCTAssertLessThanOrEqual([aKey integerValue], [aKey2 integerValue]);
+            else
+                XCTAssertLessThan([aKey integerValue], [aKey2 integerValue]);
+        }
+        
+        if (!aReverseFlag)
+            XCTAssertGreaterThan([aKey integerValue], aCurrentKey);
+        else
+            XCTAssertLessThan([aKey integerValue], aCurrentKey);
+        
+        aCurrentKey = [aKey integerValue];
     }];
-    
-    __block NSInteger aCurrentKey = aKeyTo ? [aKeyTo integerValue] : aMaxCount;
-    
-    if (aKeyFrom && aKeyTo)
-    {
-        [aLibrary enumerateKeysAndObjectsFrom:aKeyFrom to:aKeyTo options:NSEnumerationReverse usingBlock:^(id aKey, id anObj, BOOL *aStop) {
-            NSComparisonResult aResult1 = [[aLibrary comparator] compareObject:aKey toObject:aKeyFrom];
-            NSComparisonResult aResult2 = [[aLibrary comparator] compareObject:aKey toObject:aKeyTo];
-//            NSLog(@"aKey:%@",aKey);
-            XCTAssertTrue((aResult1 == NSOrderedSame || aResult1 == NSOrderedDescending)
-                          && (aResult2 == NSOrderedSame || aResult2 == NSOrderedAscending));
-            XCTAssertLessThanOrEqual([aKey integerValue], aCurrentKey);
-            aCurrentKey = [aKey integerValue];
-        }];
-    }
-    else if (aKeyFrom)
-    {
-        [aLibrary enumerateKeysAndObjectsFrom:aKeyFrom to:aKeyTo options:NSEnumerationReverse usingBlock:^(id aKey, id anObj, BOOL *aStop) {
-            NSComparisonResult aResult1 = [[aLibrary comparator] compareObject:aKey toObject:aKeyFrom];
-//            NSLog(@"aKey:%@",aKey);
-            XCTAssertTrue(aResult1 == NSOrderedSame || aResult1 == NSOrderedDescending);
-            XCTAssertLessThanOrEqual([aKey integerValue], aCurrentKey);
-            aCurrentKey = [aKey integerValue];
-        }];
-    }
-    else
-    {
-        [aLibrary enumerateKeysAndObjectsFrom:aKeyFrom to:aKeyTo options:NSEnumerationReverse usingBlock:^(id aKey, id anObj, BOOL *aStop) {
-            NSComparisonResult aResult2 = [[aLibrary comparator] compareObject:aKey toObject:aKeyTo];
-//            NSLog(@"aKey:%@",aKey);
-            XCTAssertTrue(aResult2 == NSOrderedSame || aResult2 == NSOrderedAscending);
-            XCTAssertLessThanOrEqual([aKey integerValue], aCurrentKey);
-            aCurrentKey = [aKey integerValue];
-        }];
-    }
+}
+
+- (void)testEnumerateWithNotExistingKey
+{
+    [self enumerateWithKeyGreaterThan:@(-1) orEqual:YES andLessThan:@(100001) orEqual:YES reverse:NO onLibraryWithKeyFrom:@(0) to:@(100000)];
+}
+
+- (void)testEnumerateWithKeyGreaterThanOrEqualAndKeyLessThanOrEqual
+{
+    [self enumerateWithKeyGreaterThan:@(30000) orEqual:YES andLessThan:@(40000) orEqual:YES reverse:NO onLibraryWithKeyFrom:@(0) to:@(100000)];
+}
+
+- (void)testEnumerateWithKeyGreaterThanOrEqualAndLessThan
+{
+    [self enumerateWithKeyGreaterThan:@(30000) orEqual:YES andLessThan:@(40000) orEqual:NO reverse:NO onLibraryWithKeyFrom:@(0) to:@(100000)];
+}
+
+- (void)testEnumerateWithKeyGreaterThanAndLessThanOrEqual
+{
+    [self enumerateWithKeyGreaterThan:@(30000) orEqual:NO andLessThan:@(40000) orEqual:YES reverse:NO onLibraryWithKeyFrom:@(0) to:@(100000)];
+}
+
+- (void)testEnumerateWithKeyGreaterThanAndLessThan
+{
+    [self enumerateWithKeyGreaterThan:@(30000) orEqual:NO andLessThan:@(40000) orEqual:NO reverse:NO onLibraryWithKeyFrom:@(0) to:@(100000)];
+}
+
+- (void)testEnumerateWithKeyGreaterThanOrEqual
+{
+    [self enumerateWithKeyGreaterThan:@(30000) orEqual:YES andLessThan:nil orEqual:YES reverse:NO onLibraryWithKeyFrom:@(0) to:@(100000)];
+}
+
+- (void)testEnumerateWithKeyGreaterThan
+{
+    [self enumerateWithKeyGreaterThan:@(30000) orEqual:NO andLessThan:nil orEqual:YES reverse:NO onLibraryWithKeyFrom:@(0) to:@(100000)];
+}
+
+- (void)testEnumerateWithKeyLessThanOrEqual
+{
+    [self enumerateWithKeyGreaterThan:nil orEqual:YES andLessThan:@(40000) orEqual:YES reverse:NO onLibraryWithKeyFrom:@(0) to:@(100000)];
+}
+
+- (void)testEnumerateWithKeyLessThan
+{
+    [self enumerateWithKeyGreaterThan:nil orEqual:YES andLessThan:@(40000) orEqual:NO reverse:NO onLibraryWithKeyFrom:@(0) to:@(100000)];
+}
+
+- (void)testReverseEnumerateWithNotExistingKey
+{
+    [self enumerateWithKeyGreaterThan:@(-1) orEqual:YES andLessThan:@(100001) orEqual:YES reverse:YES onLibraryWithKeyFrom:@(0) to:@(100000)];
+}
+
+- (void)testReverseEnumerateWithKeyGreaterThanOrEqualAndKeyLessThanOrEqual
+{
+    [self enumerateWithKeyGreaterThan:@(30000) orEqual:YES andLessThan:@(40000) orEqual:YES reverse:YES onLibraryWithKeyFrom:@(0) to:@(100000)];
+}
+
+- (void)testReverseEnumerateWithKeyGreaterThanOrEqualAndLessThan
+{
+    [self enumerateWithKeyGreaterThan:@(30000) orEqual:YES andLessThan:@(40000) orEqual:NO reverse:YES onLibraryWithKeyFrom:@(0) to:@(100000)];
+}
+
+- (void)testReverseEnumerateWithKeyGreaterThanAndLessThanOrEqual
+{
+    [self enumerateWithKeyGreaterThan:@(30000) orEqual:NO andLessThan:@(40000) orEqual:YES reverse:YES onLibraryWithKeyFrom:@(0) to:@(100000)];
+}
+
+- (void)testReverseEnumerateWithKeyGreaterThanAndLessThan
+{
+    [self enumerateWithKeyGreaterThan:@(30000) orEqual:NO andLessThan:@(40000) orEqual:NO reverse:YES onLibraryWithKeyFrom:@(0) to:@(100000)];
+}
+
+- (void)testReverseEnumerateWithKeyGreaterThanOrEqual
+{
+    [self enumerateWithKeyGreaterThan:@(30000) orEqual:YES andLessThan:nil orEqual:YES reverse:YES onLibraryWithKeyFrom:@(0) to:@(100000)];
+}
+
+- (void)testReverseEnumerateWithKeyGreaterThan
+{
+    [self enumerateWithKeyGreaterThan:@(30000) orEqual:NO andLessThan:nil orEqual:YES reverse:YES onLibraryWithKeyFrom:@(0) to:@(100000)];
+}
+
+- (void)testReverseEnumerateWithKeyLessThanOrEqual
+{
+    [self enumerateWithKeyGreaterThan:nil orEqual:YES andLessThan:@(40000) orEqual:YES reverse:YES onLibraryWithKeyFrom:@(0) to:@(100000)];
+}
+
+- (void)testReverseEnumerateWithKeyLessThan
+{
+    [self enumerateWithKeyGreaterThan:nil orEqual:YES andLessThan:@(40000) orEqual:NO reverse:YES onLibraryWithKeyFrom:@(0) to:@(100000)];
 }
 
 - (void)testSaveAndLoadLibrary

@@ -13,16 +13,18 @@
 @interface NUBTreeEnumerator : NSEnumerator
 {
     NUBTree *tree;
-    id keyFrom;
-    id keyTo;
+    id key1;
+    id key2;
     NUBTreeLeaf *node;
     NUInt64 nextValueIndex;
     NSEnumerationOptions options;
+    BOOL orEqualFlag1;
+    BOOL orEqualFlag2;
 }
 
-+ (id)enumeratorWithTree:(NUBTree *)aTree keyGreaterThanOrEqualTo:(id)aKey1 keyLessThanOrEqualTo:(id)aKey2 options:(NSEnumerationOptions)anOpts;
++ (id)enumeratorWithTree:(NUBTree *)aTree keyGreaterThan:(id)aKey1 orEqual:(BOOL)anOrEqualFlag1 keyLessThan:(id)aKey2 orEqual:(BOOL)anOrEqualFlag2 options:(NSEnumerationOptions)anOpts;
 
-- (id)initWithTree:(NUBTree *)aTree keyGreaterThanOrEqualTo:(id)aKey1 keyLessThanOrEqualTo:(id)aKey2 options:(NSEnumerationOptions)anOpts;
+- (id)initWithTree:(NUBTree *)aTree keyGreaterThan:(id)aKey1 orEqual:(BOOL)anOrEqualFlag1 keyLessThan:(id)aKey2 orEqual:(BOOL)anOrEqualFlag2 options:(NSEnumerationOptions)anOpts;
 
 - (void)enumerateKeysAndObjectsUsingBlock:(void (^)(id aKey, id anObj, BOOL *aStop))aBlock;
 

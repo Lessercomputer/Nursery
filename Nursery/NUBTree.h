@@ -33,6 +33,11 @@
 - (id)firstKey;
 - (id)lastKey;
 
+- (id)keyGreaterThanOrEqualTo:(id)aKey;
+- (id)keyGreaterThan:(id)aKey;
+- (id)keyLessThanOrEqualTo:(id)aKey;
+- (id)keyLessThan:(id)aKey;
+
 - (NUUInt64)count;
 - (NUUInt64)depth;
 
@@ -42,17 +47,11 @@
 
 - (id <NUComparator>)comparator;
 
-- (NSEnumerator *)objectEnumerator;
-- (NSEnumerator *)objectEnumeratorFromKeyGreaterThanOrEqualTo:(id)aKey1 toKeyLessThanOrEqualTo:(id)aKey2;
-- (NSEnumerator *)objectEnumeratorFromKeyGreaterThanOrEqualTo:(id)aKey1 toKeyLessThanOrEqualTo:(id)aKey2 option:(NSEnumerationOptions)anOpts;
-
-- (NSEnumerator *)reverseObjectEnumerator;
-- (NSEnumerator *)reverseObjectEnumeratorFromKeyGreaterThanOrEqualTo:(id)aKey1 toKeyLessThanOrEqualTo:(id)aKey2;
-- (NSEnumerator *)reverseObjectEnumeratorFromKeyGreaterThanOrEqualTo:(id)aKey1 toKeyLessThanOrEqualTo:(id)aKey2 option:(NSEnumerationOptions)anOpts;
-
 - (void)enumerateKeysAndObjectsUsingBlock:(void (^)(id aKey, id anObj, BOOL *aStop))aBlock;
 - (void)enumerateKeysAndObjectsWithOptions:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id aKey, id anObj, BOOL *aStop))aBlock;
-- (void)enumerateKeysAndObjectsFromKeyGreaterThanOrEqualTo:(id)aKey1 toKeyLessThanOrEqualTo:(id)aKey2 options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id aKey, id anObj, BOOL *aStop))aBlock;
+- (void)enumerateKeysAndObjectsWithKeyGreaterThan:(id)aKey orEqual:(BOOL)anOrEqualFlag options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock;
+- (void)enumerateKeysAndObjectsWithKeyLessThan:(id)aKey orEqual:(BOOL)anOrEqualFlag options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock;
+- (void)enumerateKeysAndObjectsWithKeyGreaterThan:(id)aKey1 orEqual:(BOOL)anOrEqualFlag1 andKeyLessThan:(id)aKey2 orEqual:(BOOL)anOrEqualFlag2 options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock;
 
 + (NUUInt64)defaultKeyCapacity;
 + (Class)defaultComparatorClass;

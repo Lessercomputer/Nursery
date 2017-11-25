@@ -18,7 +18,7 @@
 - (id)initWithRootLocation:(NUUInt64)aRootLocation on:(NUSpaces *)aSpaces;
 
 - (NULocationTreeLeaf *)getNodeContainingSpaceAtLocation:(NUUInt64)aLocation keyIndex:(NUUInt32 *)aKeyIndex;
-- (NULocationTreeLeaf *)getNodeContainingSpaceAtLocationGraterThanOrEqual:(NUUInt64)aLocation keyIndex:(NUUInt32 *)aKeyIndex;
+- (NULocationTreeLeaf *)getNodeContainingSpaceAtLocationGreaterThanOrEqual:(NUUInt64)aLocation keyIndex:(NUUInt32 *)aKeyIndex;
 - (NULocationTreeLeaf *)getNodeContainingSpaceAtLocationLessThanOrEqual:(NUUInt64)aLocation keyIndex:(NUUInt32 *)aKeyIndex;
 
 - (NURegion)regionFor:(NUUInt64)aLocation;

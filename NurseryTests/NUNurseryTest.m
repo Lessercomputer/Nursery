@@ -267,7 +267,7 @@ static NSString *NUNurseryTestFilePath = nil;
     
     NSMutableArray *aNumbers = [NSMutableArray array];
 
-    [aLibrary enumerateKeysAndObjectsFrom:@(1000) to:@(4000) options:0 usingBlock:^(id aKey, id anObj, BOOL *aStop) {
+    [aLibrary enumerateKeysAndObjectsWithKeyGreaterThan:@(1000) orEqual:YES andKeyLessThan:@(4000) orEqual:YES options:0 usingBlock:^(id aKey, id anObj, BOOL *aStop) {
         if ([anObj integerValue] % 2 == 0)
             [aNumbers addObject:anObj];
     }];
