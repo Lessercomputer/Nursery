@@ -26,8 +26,8 @@ It is **not** ORM(Object-relational mapping).
 * NSMutableData
 * NSIndexSet
 * NSMutableIndexSet
-* NULibrary
-	A collection class that implements B+ tree.
+* NULibrary  
+	A collection class that implements **B+ tree**.
 * A class that implements the **NUCoding** protocol.
 * A class that implements persistence processing by subclass of **NUCoder**
 		
