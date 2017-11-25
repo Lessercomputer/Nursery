@@ -1,5 +1,5 @@
 # Nursery  
-**Nursery** is a persistent object framework (object database) for Cocoa.
+**Nursery** is a persistent object framework (object-oriented database) for Cocoa.
 
 ## Overview
 It is written in Objective-C.  
