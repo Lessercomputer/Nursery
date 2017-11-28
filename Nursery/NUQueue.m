@@ -83,7 +83,7 @@ const NUUInt64 NUQueueDefaultObjectsSize = 7;
     
     topIndex++;
     
-    if (topIndex == objectsSize && bottomIndex < topIndex)
+    if (topIndex == objectsSize && bottomIndex <= topIndex)
         topIndex = 0;
     
     count--;

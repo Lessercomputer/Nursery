@@ -135,14 +135,14 @@
 {
     NUUInt16 aValue;
     [self read:(NUUInt8 *)&aValue length:sizeof(NUUInt16) at:anOffset];
-    return aValue;
+    return NSSwapBigShortToHost(aValue);
 }
 
 - (NUUInt32)readUInt32At:(NUUInt64)anOffset
 {
     NUUInt32 aValue;
     [self read:(NUUInt8 *)&aValue length:sizeof(NUUInt32) at:anOffset];
-    return aValue;
+    return NSSwapBigIntToHost(aValue);
 }
 
 - (NUUInt64)readUInt64At:(NUUInt64)anOffset
