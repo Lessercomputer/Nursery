@@ -66,6 +66,8 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 	
 	[self setTree:aTree];
 	[self setPageLocation:aPageLocation];
+    
+    minKeyCount = NUUInt32Max;
 	
 	if (aKeys)
 	{
@@ -234,7 +236,9 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 - (NUUInt32)minKeyCount
 {
-	return floor([self keyCapacity] / 2.0);
+    if (minKeyCount == NUUInt32Max)
+	    minKeyCount = floor([self keyCapacity] / 2.0);
+    return minKeyCount;
 }
 
 - (NUUInt32)minValueCount

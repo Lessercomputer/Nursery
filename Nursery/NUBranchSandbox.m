@@ -15,6 +15,7 @@
 #import "NUNurseryRoot.h"
 #import "NUBranchNursery.h"
 #import "NUPupilAlbum.h"
+#import "NUU64ODictionary.h"
 
 @implementation NUBranchSandbox
 
@@ -167,11 +168,11 @@
         @try {
             [self lock];
             
-            [[self bellSet] removeObject:aBell];
+            [[self bells] removeObjectForKey:[aBell OOP]];
             [aBell setOOP:[aPupilNote OOP]];
             [aBell setGrade:aLatestGrade];
             [aBell setGradeAtCallFor:aLatestGrade];
-            [[self bellSet] addObject:aBell];
+            [[self bells] setObject:aBell forKey:[aBell OOP]];
         }
         @finally {
             [self unlock];

@@ -13,7 +13,7 @@
 #import "NUPairedMainBranchSandbox.h"
 #import "NUU64ODictionary.h"
 #import "NUSpaces.h"
-#import "NUBranchCodingContext.h"
+#import "NUCodingContextWithPupilNote.h"
 #import "NUPupilNote.h"
 #import "NUMainBranchNursery.h"
 #import "NUBell.h"
@@ -58,7 +58,7 @@
     {
         [aBell setGrade:[self gradeForSave]];
         [aBell setGradeAtCallFor:[self gradeForSave]];
-        [self pushContext:[NUBranchCodingContext contextWithPupilNote:aPupilNote]];
+        [self pushContext:[NUCodingContextWithPupilNote contextWithPupilNote:aPupilNote]];
     }
     else
         [super prepareCodingContextForDecode:aBell];

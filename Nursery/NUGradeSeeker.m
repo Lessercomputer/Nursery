@@ -15,6 +15,7 @@
 #import "NUBranchAperture.h"
 #import "NUMainBranchGradeSeeker.h"
 #import "NUBranchGradeSeeker.h"
+#import "NUU64ODictionary.h"
 
 @implementation NUGradeSeeker
 
@@ -166,7 +167,7 @@
         [[self sandbox] invalidateBellsWithNotReferencedObject];
         [[self sandbox] invalidateNotReferencedBells];
         
-        [[[self sandbox] bellSet] enumerateObjectsUsingBlock:^(NUBell *aBell, BOOL *stop) {
+        [[[self sandbox] bells] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop) {
             if ([aBell gradeForSeeker] < [self grade])
             {
                 aGradeLessThanCurrentFound = YES;
@@ -196,7 +197,7 @@
         
         NSMutableArray *aBells = [NSMutableArray array];
         
-        [[[self sandbox] bellSet] enumerateObjectsUsingBlock:^(NUBell *aBell, BOOL *stop) {
+        [[[self sandbox] bells] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop) {
             if ([aBell gradeForSeeker] < [self grade])
                 [aBells addObject:aBell];
         }];

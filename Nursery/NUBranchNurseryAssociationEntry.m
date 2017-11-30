@@ -8,6 +8,7 @@
 
 #import "NUBranchNurseryAssociationEntry.h"
 #import "NUBranchSandbox.h"
+#import "NUBranchNursery.h"
 
 @implementation NUBranchNurseryAssociationEntry
 
@@ -62,7 +63,7 @@
 - (void)close
 {
     [nurseries enumerateKeysAndObjectsUsingBlock:^(id key, NUBranchNursery *aNursery, BOOL *stop) {
-        [aNursery close];
+        [[aNursery sandbox] close];
     }];
     [connections enumerateKeysAndObjectsUsingBlock:^(id key, NSConnection *aConnection, BOOL *stop) {
         [aConnection invalidate];

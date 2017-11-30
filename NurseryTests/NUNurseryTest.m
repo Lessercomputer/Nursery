@@ -194,7 +194,7 @@ static NSString *NUNurseryTestFilePath = nil;
 
 - (void)testSaveLargeObject
 {
-    const int aMaxCount = 100000;//45000;
+    const int aMaxCount = 1000000;
     NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
     
     NSMutableArray *anArray = [NSMutableArray array];

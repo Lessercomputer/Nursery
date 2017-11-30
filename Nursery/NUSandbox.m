@@ -60,8 +60,8 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         sandboxID = [aNursery isMainBranch] ? [(NUMainBranchNursery *)aNursery newSandboxID] : NUNilSandboxID;
         grade = aGrade;
         [self setNursery:aNursery];
-        [self setObjectToOOPDictionary:[NSMutableDictionary dictionary]];
-        [self setBellSet:[NSMutableSet set]];
+        [self setObjectToBellDictionary:[NSMutableDictionary dictionary]];
+        bells = [NUU64ODictionary new];
         [self setChangedObjects:[NUU64ODictionary dictionary]];
         [self setKeyObject:[NUObjectWrapper objectWrapperWithObject:nil]];
         [self setKeyBell:[NUBell bellWithBall:NUNotFoundBellBall sandbox:self]];
@@ -81,8 +81,9 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 {
 	[self setNurseryRoot:nil];
 	[self setCharacters:nil];
-	[self setObjectToOOPDictionary:nil];
-	[self setBellSet:nil];
+	[self setObjectToBellDictionary:nil];
+    [bells release];
+    bells = nil;
 	[self setChangedObjects:nil];
 	[self setKeyBell:nil];
 	[self setAliaser:nil];
@@ -155,26 +156,26 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 	characters = [aCharacters retain];
 }
 
-- (NSMutableDictionary *)objectToOOPDictionary
+- (NSMutableDictionary *)objectToBellDictionary
 {
-	return objectToOOPDictionary;
+    return objectToBellDictionary;
 }
 
-- (void)setObjectToOOPDictionary:(NSMutableDictionary *)anObjectToOOPDictionary
+- (void)setObjectToBellDictionary:(NSMutableDictionary *)anObjectToBellDictionary
 {
-	[objectToOOPDictionary autorelease];
-	objectToOOPDictionary = [anObjectToOOPDictionary retain];
+    [objectToBellDictionary autorelease];
+    objectToBellDictionary = [anObjectToBellDictionary retain];
 }
 
-- (NSMutableSet *)bellSet
+- (NUU64ODictionary *)bells
 {
-	return bellSet;
+    return bells;
 }
 
-- (void)setBellSet:(NSMutableSet *)anOOPSet
+- (void)setBells:(NUU64ODictionary *)aBells
 {
-	[bellSet autorelease];
-	bellSet = [anOOPSet retain];
+    [bells autorelease];
+    bells = [aBells retain];
 }
 
 - (NUU64ODictionary *)changedObjects
@@ -190,7 +191,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 - (NUObjectWrapper *)keyObject
 {
-	return keyObject;
+    return keyObject;
 }
 
 - (NUBell *)keyBell
@@ -310,7 +311,10 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     @try {
         [self lock];
         
-        [[[[self bellSet] copy] autorelease] enumerateObjectsUsingBlock:^(id aBell, BOOL *stop) {
+//        [[[[self bellSet] copy] autorelease] enumerateObjectsUsingBlock:^(id aBell, BOOL *stop) {
+//            [aBell invalidate];
+//        }];
+        [[[[self bells] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop){
             [aBell invalidate];
         }];
         
@@ -372,8 +376,9 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 		aBell = [anObject bell];
 	else
 	{
-		[[self keyObject] setObject:anObject];
-		aBell = [[self objectToOOPDictionary] objectForKey:[self keyObject]];
+        [[self keyObject] setObject:anObject];
+        aBell = [[self objectToBellDictionary] objectForKey:[self keyObject]];
+//        aBell = [[self objectToBellDictionary] objectForKey:(NUUInt64)anObject];
 	}
     
     [self unlock];
@@ -387,9 +392,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     
     [self lock];
     
-	NUBell *aKeyBell = [self keyBell];
-	[aKeyBell setOOP:anOOP];
-	aResultBell = [[self bellSet] member:aKeyBell];
+    aResultBell = [bells objectForKey:anOOP];
     
     [self unlock];
     
@@ -407,7 +410,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     
     @try {
         [self lock];
-        [[self bellSet] addObject:aBell];
+        [[self bells] setObject:aBell forKey:[aBell OOP]];
         return aBell;
     }
     @finally {
@@ -426,7 +429,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 	if ([anObject conformsToProtocol:@protocol(NUCoding)])
 		[anObject setBell:aBell];
 	else
-		[[self objectToOOPDictionary] setObject:aBell forKey:[NUObjectWrapper objectWrapperWithObject:anObject]];
+        [[self objectToBellDictionary] setObject:aBell forKey:[NUObjectWrapper objectWrapperWithObject:anObject]];
     
     [self unlock];
 }
@@ -448,14 +451,14 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
             else
             {
                 [[self keyObject] setObject:[aBell object]];
-                [[self objectToOOPDictionary] removeObjectForKey:[self keyObject]];
+                [[self objectToBellDictionary] removeObjectForKey:[self keyObject]];
             }
             
             [aBell setObject:nil];
         }
 
         [aBell setSandbox:nil];
-        [[self bellSet] removeObject:aBell];
+        [[self bells] removeObjectForKey:[aBell OOP]];
     }
     @finally {
         [self unlock];
@@ -741,8 +744,8 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 - (void)setKeyObject:(NUObjectWrapper *)anObjectWrapper
 {
-	[keyObject autorelease];
-	keyObject = [anObjectWrapper retain];
+    [keyObject autorelease];
+    keyObject = [anObjectWrapper retain];
 }
 
 - (void)setRetainedGrades:(NSMutableIndexSet *)aGrades
@@ -756,7 +759,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     @try {
         [self lock];
         
-        [[self bellSet] enumerateObjectsUsingBlock:^(NUBell *aBell, BOOL *stop) {
+        [[self bells] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop) {
             [aBell invalidateObjectIfNotReferenced];
         }];
     }
@@ -773,7 +776,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         if ([aBell hasObject] && [[aBell object] retainCount] == 1)
         {
             [[self keyObject] setObject:[aBell object]];
-            [[self objectToOOPDictionary] removeObjectForKey:[self keyObject]];
+            [[self objectToBellDictionary] removeObjectForKey:[self keyObject]];
             [aBell setObject:nil];
         }
     }
@@ -787,7 +790,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     @try {
         [self lock];
         
-        [[[[self bellSet] copy] autorelease] enumerateObjectsUsingBlock:^(NUBell *aBell, BOOL *stop) {
+        [[[[self bells] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop){
             if ([aBell retainCount] == 1 && (![aBell hasObject] || [[aBell object] retainCount] == 1))
                 [self invalidateBell:aBell];
         }];
@@ -820,11 +823,12 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     @try {
         [self lock];
         
-        [[[[self bellSet] copy] autorelease] enumerateObjectsUsingBlock:^(NUBell *aBell, BOOL *stop) {
+        [[[[self bells] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop) {
             if ([aBell gradeAtCallFor] < aGrade
                 && ([aBell retainCount] == 1 && (![aBell hasObject] || [[aBell object] retainCount] == 1)))
                 [self removeBell:aBell];
-        }];
+
+        } ];
     }
     @finally {
         [self unlock];

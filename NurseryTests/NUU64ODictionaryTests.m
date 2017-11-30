@@ -55,6 +55,34 @@ static NSArray *numbers;
     XCTAssertTrue([aDic count] == 0, @"");
 }
 
+- (void)testSetManyEntries
+{
+    NUU64ODictionary *aDic = [NUU64ODictionary dictionary];
+    XCTAssertTrue([aDic count] == 0, @"");
+    for (NUUInt64 i = 0; i < entryCount; i++)
+    {
+        NSNumber *aNum = [numbers objectAtIndex:i];
+        [aDic setObject:aNum forKey:[aNum unsignedLongLongValue]];
+    }
+    XCTAssertTrue([aDic count] == entryCount, @"");
+}
+
+- (void)testSetAndGetManyEntries
+{
+    NUU64ODictionary *aDic = [NUU64ODictionary dictionary];
+    XCTAssertTrue([aDic count] == 0, @"");
+    for (NUUInt64 i = 0; i < entryCount; i++)
+    {
+        NSNumber *aNum = [numbers objectAtIndex:i];
+        [aDic setObject:aNum forKey:[aNum unsignedLongLongValue]];
+    }
+    XCTAssertTrue([aDic count] == entryCount, @"");
+    for (NUUInt64 i = 0; i < entryCount; i++)
+    {
+        [aDic objectForKey:i];
+    }
+}
+
 - (void)testSetAndRemoveManyEntries
 {
     [self measureBlock:^{

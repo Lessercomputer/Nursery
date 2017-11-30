@@ -28,6 +28,7 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 	NUUInt64 leftNodeLocation;
 	NUUInt64 rightNodeLocation;
 	BOOL isChanged;
+    NUUInt32 minKeyCount;
 }
 
 @end

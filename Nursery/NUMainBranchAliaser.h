@@ -13,6 +13,7 @@
 @interface NUMainBranchAliaser : NUAliaser
 {
     NUUInt64 gradeForSave;
+    NSMutableArray *encodedPupils;
 }
 @end
 

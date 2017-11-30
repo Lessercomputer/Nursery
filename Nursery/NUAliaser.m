@@ -27,6 +27,7 @@
 #import "NUU64ODictionary.h"
 #import "NUPupilNote.h"
 #import "NUIvar.h"
+#import "NUQueue.h"
 
 NSString *NUObjectLocationNotFoundException = @"NUObjectLocationNotFoundException";
 NSString *NUBellBallNotFoundException = @"NUBellBallNotFoundException";
@@ -52,7 +53,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
     {
         [self setSandbox:aSandbox];
         [self setContexts:[NSMutableArray array]];
-        [self setObjectToEncode:[NSMutableArray array]];
+        [self setObjectsToEncode:[NUQueue queue]];
 	}
     
 	return self;
@@ -61,7 +62,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 - (void)dealloc
 {
 	[self setRoots:nil];
-	[self setObjectToEncode:nil];
+	[self setObjectsToEncode:nil];
 	[self setContexts:nil];
 	
 	[super dealloc];
@@ -103,12 +104,12 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 	roots = [aRoots retain];
 }
 
-- (NSMutableArray *)objectToEncode
+- (NUQueue *)objectsToEncode
 {
 	return objectsToEncode;
 }
 
-- (void)setObjectToEncode:(NSMutableArray *)anObjectsToEncode
+- (void)setObjectsToEncode:(NUQueue *)anObjectsToEncode
 {
 	[objectsToEncode autorelease];
 	objectsToEncode = [anObjectsToEncode retain];
@@ -213,8 +214,8 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 	while ([[self roots] count])
 	{
 		id anObject = [[self roots] objectAtIndex:0];
-		[[self roots] removeObjectAtIndex:0];
-		[objectsToEncode addObject:anObject];
+		[[self objectsToEncode] push:anObject];
+        [[self roots] removeObjectAtIndex:0];
 		[self encodeObjectsFromStarter];
 	}
 }
@@ -226,7 +227,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 	
 	while ((aChangedObject = [aChangedObjects anyObject]))
 	{
-		[objectsToEncode addObject:aChangedObject];
+		[[self objectsToEncode] push:aChangedObject];
 		[self encodeObjectsFromStarter];
 	}
 }
@@ -290,8 +291,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 {	
 	while ([objectsToEncode count])
 	{
-		id aNextObject = [objectsToEncode lastObject];
-		[objectsToEncode removeLastObject];
+		id aNextObject = [[self objectsToEncode] pop];
 		
 		if ([[self sandbox] needsEncode:aNextObject]) return aNextObject;
     }
@@ -335,12 +335,12 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
         {
             anOOP = [aBell OOP];
             if ([[self sandbox] needsEncode:anObject])
-                [objectsToEncode addObject:anObject];
+                [[self objectsToEncode] push:anObject];
         }
         else
         {
             anOOP = [[self allocateBellForObject:anObject] OOP];
-            [objectsToEncode addObject:anObject];
+            [[self objectsToEncode] push:anObject];
             [[self sandbox] markChangedObject:anObject];
         }
     }
@@ -860,6 +860,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 
 - (void)moveUp:(id)anObject ignoreGradeAtCallFor:(BOOL)anIgnoreFlag
 {
+    if ([anObject isBell]) return;
     NUBell *aBell = [[self sandbox] bellForObject:anObject];
     if (!aBell) return;
     if (!anIgnoreFlag && [aBell gradeAtCallFor] == [self grade]) return;

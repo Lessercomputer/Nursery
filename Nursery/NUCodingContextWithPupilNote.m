@@ -6,10 +6,10 @@
 //
 //
 
-#import "NUBranchCodingContext.h"
+#import "NUCodingContextWithPupilNote.h"
 #import "NUPupilNote.h"
 
-@implementation NUBranchCodingContext
+@implementation NUCodingContextWithPupilNote
 
 + (id)contextWithPupilNote:(NUPupilNote *)aPupilNote
 {

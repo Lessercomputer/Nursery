@@ -25,10 +25,10 @@ extern NSString * const NUObjectLoadingException;
     NSMutableIndexSet *retainedGrades;
     NUNurseryRoot *root;
 	NUMutableDictionary *characters;
-	NUObjectWrapper *keyObject;
-	NSMutableDictionary *objectToOOPDictionary;
+    NUObjectWrapper *keyObject;
+    NSMutableDictionary *objectToBellDictionary;
 	NUBell *keyBell;
-	NSMutableSet *bellSet;
+    NUU64ODictionary *bells;
 	NUU64ODictionary *changedObjects;
 	NUAliaser *aliaser;
     BOOL usesGradeSeeker;
@@ -67,11 +67,11 @@ extern NSString * const NUObjectLoadingException;
 - (NUMutableDictionary *)characters;
 - (void)setCharacters:(NUMutableDictionary *)aCharacters;
 
-- (NSMutableDictionary *)objectToOOPDictionary;
-- (void)setObjectToOOPDictionary:(NSMutableDictionary *)anObjectToOOPDictionary;
+- (NSMutableDictionary *)objectToBellDictionary;
+- (void)setObjectToBellDictionary:(NSMutableDictionary *)anObjectToBellDictionary;
 
-- (NSMutableSet *)bellSet;
-- (void)setBellSet:(NSMutableSet *)anOOPSet;
+- (NUU64ODictionary *)bells;
+- (void)setBells:(NUU64ODictionary *)aBells;
 
 - (NUU64ODictionary *)changedObjects;
 - (void)setChangedObjects:(NUU64ODictionary *)aChangedObjects;

@@ -92,4 +92,15 @@ void NUU64ODictionary2SetKey(NUUInt8 *aDestinationKey, NUUInt8 *aSourceKey, NUOp
         aBlock(*(NUUInt64 *)anAssociation->key, anAssociation->object, &aStopFlag);
 }
 
+- (id)copy
+{
+    NUU64ODictionary *aDictionary = [[self class] new];
+    
+    [self enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, id anObject, BOOL *stop) {
+        [aDictionary setObject:anObject forKey:aKey];
+    }];
+    
+    return aDictionary;
+}
+
 @end

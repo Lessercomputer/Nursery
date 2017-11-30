@@ -11,7 +11,7 @@
 #import "NUBell.h"
 #import "NUBellBall.h"
 #import "NUCodingContext.h"
-#import "NUBranchCodingContext.h"
+#import "NUCodingContextWithPupilNote.h"
 #import "NUCoder.h"
 #import "NUPupilNote.h"
 #import "NUPupilAlbum.h"
@@ -62,7 +62,7 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
     [aBell setGradeAtCallFor:[self grade]];
     aPupilNote = [self callForPupilNoteWithBell:aBell];
     [aBell setGrade:[aPupilNote grade]];
-    [self pushContext:[NUBranchCodingContext contextWithPupilNote:aPupilNote]];
+    [self pushContext:[NUCodingContextWithPupilNote contextWithPupilNote:aPupilNote]];
 }
 
 - (NUPupilNote *)callForPupilNoteWithBell:(NUBell *)aBell
@@ -133,7 +133,7 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 
 - (NUPupilNote *)currentPupilNote
 {
-    return [(NUBranchCodingContext *)[self currentContext] pupilNote];
+    return [(NUCodingContextWithPupilNote *)[self currentContext] pupilNote];
 }
 
 @end
@@ -149,7 +149,7 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
     
 	aPupilNote = [self ensurePupilNoteFor:aBell];
     
-	NUCodingContext *aContext = [NUBranchCodingContext contextWithPupilNote:aPupilNote];
+	NUCodingContext *aContext = [NUCodingContextWithPupilNote contextWithPupilNote:aPupilNote];
 	[aContext setBell:aBell];
 	[aContext setObject:anObject];
 	

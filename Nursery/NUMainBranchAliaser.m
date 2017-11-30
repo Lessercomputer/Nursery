@@ -12,6 +12,8 @@
 #import "NUCoder.h"
 #import "NUPages.h"
 #import "NUMainBranchCodingContext.h"
+#import "NUCodingContextWithPupilNote.h"
+#import "NUPupilNote.h"
 #import "NUObjectTable.h"
 #import "NUSeeker.h"
 #import "NUGradeSeeker.h"
@@ -21,8 +23,26 @@
 #import "NUBell.h"
 #import "NUBellBall.h"
 #import "NURegion.h"
+#import "NUU64ODictionary.h"
 
 @implementation NUMainBranchAliaser
+
+- (id)initWithSandbox:(NUSandbox *)aSandbox
+{
+    if (self = [super initWithSandbox:aSandbox])
+    {
+        encodedPupils = [NSMutableArray new];
+    }
+    
+    return self;
+}
+
+- (void)dealloc
+{
+    [encodedPupils release];
+    
+    [super dealloc];
+}
 
 @end
 
@@ -93,21 +113,58 @@
 
 @implementation NUMainBranchAliaser (Encoding)
 
+- (void)encodeObjects
+{
+    [super encodeObjects];
+
+    [self writeEncodedObjectsToPages];
+}
+
+- (void)writeEncodedObjectsToPages
+{
+    NSMutableArray *anEncodedPupils = [NSMutableArray array];
+    NUU64ODictionary *aPupilsDictionary = [NUU64ODictionary dictionary];
+    __block NUUInt64 anEncodedObjectsSize = 0;
+    
+    [encodedPupils enumerateObjectsUsingBlock:^(NUPupilNote * _Nonnull aPupilNote, NSUInteger idx, BOOL * _Nonnull stop) {
+        [aPupilsDictionary setObject:aPupilNote forKey:[aPupilNote OOP]];
+    }];
+    
+    [encodedPupils enumerateObjectsUsingBlock:^(NUPupilNote * _Nonnull aPupilNote, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([aPupilsDictionary objectForKey:[aPupilNote OOP]] == aPupilNote)
+        {
+            [anEncodedPupils addObject:aPupilNote];
+            anEncodedObjectsSize += [aPupilNote size];
+        }
+    }];
+    
+    NUUInt64 aSpaceForEncodedObjects = [[[self nursery] spaces] allocateSpace:anEncodedObjectsSize];
+    __block NUUInt64 anObjectLocation = aSpaceForEncodedObjects;
+    
+    [anEncodedPupils enumerateObjectsUsingBlock:^(NUPupilNote * _Nonnull aPupilNote, NSUInteger idx, BOOL * _Nonnull stop) {
+        [[self objectTable] setObjectLocation:anObjectLocation for:[aPupilNote bellBall]];
+        [[self reversedObjectTable] setBellBall:[aPupilNote bellBall] forObjectLocation:anObjectLocation];
+        [[self pages] writeData:[aPupilNote data] at:anObjectLocation];
+        anObjectLocation += [aPupilNote size];
+    }];
+    
+    [encodedPupils removeAllObjects];
+}
+
 - (void)prepareCodingContextForEncode:(id)anObject
 {
-	NUBell *aBell = [[self sandbox] bellForObject:anObject];
-	NUUInt64 anObjectLocation = 0;
-	
-	if (!aBell) aBell = [self allocateBellForObject:anObject];
-	else if ([aBell grade] != [self gradeForSave]) [aBell setGrade:[self gradeForSave]];
-    
-	anObjectLocation = [self ensureObjectSpaceFor:aBell];
-    
-	NUCodingContext *aContext = [NUMainBranchCodingContext contextWithObjectLocation:anObjectLocation pages:[self pages]];
-	[aContext setBell:aBell];
-	[aContext setObject:anObject];
-	
-	[self pushContext:aContext];
+    NUBell *aBell = [[self sandbox] bellForObject:anObject];
+
+    if (!aBell) aBell = [self allocateBellForObject:anObject];
+    else if ([aBell grade] != [self gradeForSave]) [aBell setGrade:[self gradeForSave]];
+
+    NUPupilNote *aPupilNote = [NUPupilNote pupilNoteWithOOP:aBell.OOP grade:aBell.grade size:[self computeSizeOfObject:anObject]];
+    [encodedPupils addObject:aPupilNote];
+    NUCodingContext *aContext = [NUCodingContextWithPupilNote contextWithPupilNote:aPupilNote];
+    [aContext setBell:aBell];
+    [aContext setObject:anObject];
+
+    [self pushContext:aContext];
 }
 
 - (void)objectDidEncode:(NUBell *)aBell

@@ -39,13 +39,17 @@ static NSString *NUNurseryTestFilePath;
     [[aMainBranchNursery sandbox] setRoot:@"theRoot"];
     XCTAssertEqual([[aMainBranchNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
     
+    NUSandbox *aSandbox = [aMainBranchNursery createSandbox];
+    XCTAssertEqualObjects([aSandbox root], @"theRoot");
+    [aSandbox close];
+    
     [[NUMainBranchNurseryAssociation defaultAssociation] setNursery:aMainBranchNursery forName:@"nursery"];
     
     NUBranchNurseryAssociation *aBranchAssociation = [NUBranchNurseryAssociation association];
     NUBranchNursery *aBranchNursery = [aBranchAssociation nurseryForURL:[NUNurseryAssociation URLWithHostName:nil associationName:NUDefaultMainBranchAssociation nurseryName:@"nursery"]];
     
     XCTAssertEqualObjects([[aBranchNursery sandbox] root], @"theRoot", @"");
-    
+
     [aBranchAssociation close];
     
     [[NUMainBranchNurseryAssociation defaultAssociation] removeNurseryForName:@"nursery"];

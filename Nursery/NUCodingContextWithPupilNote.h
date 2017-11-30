@@ -10,7 +10,7 @@
 
 @class NUPupilNote;
 
-@interface NUBranchCodingContext : NUCodingContext
+@interface NUCodingContextWithPupilNote : NUCodingContext
 {
     NUPupilNote *pupilNote;
 }

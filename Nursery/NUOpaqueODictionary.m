@@ -9,7 +9,7 @@
 #import "NUOpaqueODictionary.h"
 
 const NUUInt64 NUOpaqueODictionaryInitialBucketCount = 17;
-const NUUInt64 NUOpaqueODictionaryInitialBucketLoadCountLimit = 8;
+const NUUInt64 NUOpaqueODictionaryInitialBucketLoadCountLimit = 7;
 
 NUOpaqueOAssociation *NUOpaqueODictionaryDefaultGetAssociation(NUUInt64 anIndex, NUOpaqueOBucket *aBucket, NUOpaqueODictionary *aDictionary)
 {

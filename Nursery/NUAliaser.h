@@ -8,7 +8,7 @@
 
 #import <Nursery/NUTypes.h>
 
-@class NUSandbox, NUPages, NUCodingContext, NUIndexArray, NUObjectTable, NUBell, NUPupilNote, NUCharacter;
+@class NUSandbox, NUPages, NUCodingContext, NUIndexArray, NUObjectTable, NUBell, NUPupilNote, NUCharacter, NUQueue;
 
 extern NSString *NUObjectLocationNotFoundException;
 extern NSString *NUBellBallNotFoundException;
@@ -20,7 +20,7 @@ extern NSString *NUAliaserCannotDecodeObjectException;
 	NUSandbox *sandbox;
 	NSMutableArray *contexts;
 	NSMutableArray *roots;
-	NSMutableArray *objectsToEncode;
+	NUQueue *objectsToEncode;
 	NUIndexArray *rootOOPs;
 }
 @end
@@ -44,8 +44,8 @@ extern NSString *NUAliaserCannotDecodeObjectException;
 - (NSMutableArray *)roots;
 - (void)setRoots:(NSMutableArray *)aRoots;
 
-- (NSMutableArray *)objectToEncode;
-- (void)setObjectToEncode:(NSMutableArray *)anObjectsToEncode;
+- (NUQueue *)objectsToEncode;
+- (void)setObjectsToEncode:(NUQueue *)anObjectsToEncode;
 
 - (NUUInt64)indexedIvarOffset;
 - (void)setIndexedIvarOffset:(NUUInt64)anOffset;
