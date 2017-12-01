@@ -7,6 +7,7 @@
 //
 
 #import "NUDateCoder.h"
+#import "NUAliaser.h"
 
 @implementation NUDateCoder
 

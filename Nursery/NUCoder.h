@@ -6,7 +6,7 @@
 //  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 
-#import "NUAliaser.h"
+@class NUAliaser;
 
 
 @interface NUCoder : NSObject

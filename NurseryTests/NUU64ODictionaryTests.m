@@ -118,6 +118,23 @@ static NSArray *numbers;
     }];
 }
 
+- (void)testSetAndGetManyEntriesWithNSDictionary
+{
+    NSMutableDictionary *aDic = [NSMutableDictionary dictionary];
+    XCTAssertTrue([aDic count] == 0, @"");
+    for (NUUInt64 i = 0; i < entryCount; i++)
+    {
+        NSNumber *aNum = [numbers objectAtIndex:i];
+        [aDic setObject:aNum forKey:aNum];
+        [aNum unsignedLongLongValue];
+    }
+    XCTAssertTrue([aDic count] == entryCount, @"");
+    for (NUUInt64 i = 0; i < entryCount; i++)
+    {
+        [aDic objectForKey:@(i)];
+    }
+}
+
 - (void)testSetAndRemoveManyEntriesWithNSDictionary
 {
     NSMutableDictionary *aDic = [NSMutableDictionary dictionary];

@@ -19,6 +19,7 @@
 #import <Nursery/NUAliaser.h>
 #import <Nursery/NUCoding.h>
 #import <Nursery/NUMovingUp.h>
+#import <NUrsery/NUCoder.h>
 
 #import <Nursery/NUCharacter.h>
 #import <Nursery/NUIvar.h>

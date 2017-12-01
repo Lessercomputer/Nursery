@@ -9,6 +9,7 @@
 #import "NUSetCoder.h"
 #import "NUCharacter.h"
 #import "NUSandbox.h"
+#import "NUAliaser.h"
 
 @implementation NUSetCoder
 

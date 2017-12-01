@@ -7,6 +7,8 @@
 //
 
 #import "NUNumberCoder.h"
+#import "NUTypes.h"
+#import "NUAliaser.h"
 
 @implementation NUNumberCoder
 

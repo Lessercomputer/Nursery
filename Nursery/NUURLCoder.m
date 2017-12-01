@@ -7,6 +7,7 @@
 //
 
 #import "NUURLCoder.h"
+#import "NUAliaser.h"
 
 @implementation NUURLCoder : NUCoder
 

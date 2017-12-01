@@ -89,7 +89,7 @@
 		619B08CE1913EEC000A4BAA2 /* NUBTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08011913EEBF00A4BAA2 /* NUBTreeNode.m */; };
 		619B08CF1913EEC000A4BAA2 /* NUChangedRegionArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08021913EEBF00A4BAA2 /* NUChangedRegionArray.m */; };
 		619B08D01913EEC000A4BAA2 /* NUCharacterDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08031913EEBF00A4BAA2 /* NUCharacterDictionary.h */; };
-		619B08D11913EEC000A4BAA2 /* NUCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08041913EEBF00A4BAA2 /* NUCoder.h */; };
+		619B08D11913EEC000A4BAA2 /* NUCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08041913EEBF00A4BAA2 /* NUCoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		619B08D21913EEC000A4BAA2 /* NUCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08051913EEBF00A4BAA2 /* NUCoder.m */; };
 		619B08D31913EEC000A4BAA2 /* NUCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08061913EEBF00A4BAA2 /* NUCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		619B08D41913EEC000A4BAA2 /* NUDataCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08071913EEBF00A4BAA2 /* NUDataCoder.h */; };

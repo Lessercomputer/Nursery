@@ -7,6 +7,7 @@
 //
 
 #import "NUCoder.h"
+#import "NUTypes.h"
 
 @interface NUIndexSetCoder : NUCoder
 

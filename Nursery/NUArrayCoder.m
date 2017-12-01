@@ -9,6 +9,7 @@
 #import "NUArrayCoder.h"
 #import "NUCharacter.h"
 #import "NUSandbox.h"
+#import "NUAliaser.h"
 
 @implementation NUArrayCoder
 
