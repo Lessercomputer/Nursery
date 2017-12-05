@@ -8,7 +8,7 @@
 
 #import <Nursery/NUTypes.h>
 
-@class NUSandbox, NUPages, NUCodingContext, NUIndexArray, NUObjectTable, NUBell, NUPupilNote, NUCharacter, NUQueue;
+@class NUSandbox, NUPages, NUCodingContext, NUIndexArray, NUObjectTable, NUBell, NUPupilNote, NUCharacter, NUQueue, NUU64ODictionary;
 
 extern NSString *NUObjectLocationNotFoundException;
 extern NSString *NUBellBallNotFoundException;
@@ -21,6 +21,7 @@ extern NSString *NUAliaserCannotDecodeObjectException;
 	NSMutableArray *contexts;
 	NSMutableArray *roots;
 	NUQueue *objectsToEncode;
+    NSMutableArray *encodedPupils;
 	NUIndexArray *rootOOPs;
 }
 @end
@@ -46,6 +47,9 @@ extern NSString *NUAliaserCannotDecodeObjectException;
 
 - (NUQueue *)objectsToEncode;
 - (void)setObjectsToEncode:(NUQueue *)anObjectsToEncode;
+
+- (NSMutableArray *)encodedPupils;
+- (void)setEncodedPupils:(NSMutableArray *)anEncodedPupils;
 
 - (NUUInt64)indexedIvarOffset;
 - (void)setIndexedIvarOffset:(NUUInt64)anOffset;
@@ -93,6 +97,10 @@ extern NSString *NUAliaserCannotDecodeObjectException;
 - (void)encodeObjectReally:(id)anObject;
 - (void)ensureCharacterRegistration:(NUCharacter *)aCharacter;
 - (void)prepareCodingContextForEncode:(id)anObject;
+- (NUU64ODictionary *)reducedEncodedPupilsDictionary:(NSArray *)anEncodedPupils;
+- (NSArray *)reducedEncodedPupilsFor:(NSArray *)anEncodedPupils with:(NUU64ODictionary *)aReducedEncodedPupilsDictionary;
+- (NUUInt64)sizeOfEncodedObjects:(NSArray *)aReducedEncodedPupils;
+- (NUUInt64)sizeOfEncodedObjects:(NSArray *)aReducedEncodedPupils with:(NUU64ODictionary *)aReducedEncodedPupilsDictionary;
 - (void)objectDidEncode:(NUBell *)aBell;
 - (id)nextObjectToEncode;
 

@@ -15,7 +15,6 @@
 {
     NUU64ODictionary *storedChangedObjects;
     NUUInt64 nextProbationaryOOP;
-    NSMutableDictionary *probationaryPupils;
 }
 
 - (NUBranchAliaser *)branchAliaser;
@@ -33,7 +32,6 @@
 - (void)restoreChangedObjects;
 - (void)setStoredChangedObjects:(NUU64ODictionary *)aChangedObjects;
 
-- (NSMutableDictionary *)probationaryPupils;
-- (void)replaceProbationaryOOPsWithFixedOOPs:(NSData *)aProbationaryOOPsFixedOOPs inPupils:(NSDictionary *)aProbationaryPupils grade:(NUUInt64)aLatestGrade;
+- (void)replaceProbationaryOOPsWithFixedOOPs:(NSData *)aProbationaryOOPsFixedOOPs inPupils:(NUU64ODictionary *)aProbationaryPupils grade:(NUUInt64)aLatestGrade;
 
 @end

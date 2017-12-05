@@ -16,6 +16,7 @@
 #import "NUPupilNote.h"
 #import "NUPupilAlbum.h"
 #import "NUBranchSandbox.h"
+#import "NUU64ODictionary.h"
 
 NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 
@@ -49,6 +50,13 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 - (id <NUMainBranchNurseryAssociation>)mainBranchAssociation
 {
     return [[self branchNursery] mainBranchAssociationForSandbox:[self branchSandbox]];
+}
+
+- (void)removeAllEncodedPupils
+{
+    [[self encodedPupils] removeAllObjects];
+    [self setReducedEncodedPupils:nil];
+    [self setReducedEncodedPupilsDictionary:nil];
 }
 
 @end
@@ -140,15 +148,22 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 
 @implementation NUBranchAliaser (Encoding)
 
+- (void)encodeObjects
+{
+    [super encodeObjects];
+    
+    [self setReducedEncodedPupilsDictionary:[self reducedEncodedPupilsDictionary:[self encodedPupils]]];
+    [self setReducedEncodedPupils:[self reducedEncodedPupilsFor:[self encodedPupils] with:[self reducedEncodedPupilsDictionary]]];
+}
+
 - (void)prepareCodingContextForEncode:(id)anObject
 {
 	NUBell *aBell = [[self sandbox] bellForObject:anObject];
-    NUPupilNote *aPupilNote;
 	
 	if (!aBell) aBell = [self allocateBellForObject:anObject];
     
-	aPupilNote = [self ensurePupilNoteFor:aBell];
-    
+    NUPupilNote *aPupilNote = [NUPupilNote pupilNoteWithOOP:[aBell OOP] grade:NUNilGrade size:[self computeSizeOfObject:[aBell object]]];
+    [[self encodedPupils] addObject:aPupilNote];
 	NUCodingContext *aContext = [NUCodingContextWithPupilNote contextWithPupilNote:aPupilNote];
 	[aContext setBell:aBell];
 	[aContext setObject:anObject];
@@ -156,39 +171,55 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 	[self pushContext:aContext];
 }
 
-- (NUPupilNote *)ensurePupilNoteFor:(NUBell *)aBell
-{
-    NUPupilNote *aPupilNote = [[[self branchSandbox] probationaryPupils] objectForKey:aBell];
-    
-    if (aPupilNote)
-    {
-        NUUInt64 anObjectSize = [self computeSizeOfObject:[aBell object]];
-        if ([aPupilNote size] != anObjectSize)
-            [aPupilNote setSize:anObjectSize];
-    }
-    else
-    {
-        aPupilNote = [NUPupilNote pupilNoteWithOOP:[aBell OOP] grade:NUNilGrade size:[self computeSizeOfObject:[aBell object]]];
-        [[[self branchSandbox] probationaryPupils] setObject:aPupilNote forKey:aBell];
-    }
-    
-    return aPupilNote;
-}
-
 - (NSData *)encodedPupilData
 {
     NSMutableData *aData = [NSMutableData data];
-    
-    [[[self branchSandbox] probationaryPupils] enumerateKeysAndObjectsUsingBlock:^(NUBell *aBell, NUPupilNote *aPupilNote, BOOL *aStop) {
-        NUUInt64 aValue = NSSwapHostLongLongToBig([aBell OOP]);
+
+    [[self reducedEncodedPupils] enumerateObjectsUsingBlock:^(NUPupilNote * _Nonnull aPupilNote, NSUInteger idx, BOOL * _Nonnull stop) {
+        NUUInt64 aValue = NSSwapHostLongLongToBig([aPupilNote OOP]);
         [aData appendBytes:&aValue length:sizeof(NUUInt64)];
+//        if ([aPupilNote size] > 10000)
+//            NSLog(@"[aPupilNote size] > 10000:%llu", [aPupilNote size]);
         aValue = NSSwapHostLongLongToBig([aPupilNote size]);
         [aData appendBytes:&aValue length:sizeof(NUUInt64)];
         [aData appendData:[aPupilNote data]];
     }];
     
+//    NSArray *aPupils = [self pupilsFromData:aData];
+//    NSLog(@"%@", aPupils);
+
+//    return [NSData dataWithBytes:[aData bytes] length:[aData length]];
+    NSLog(@"In NUBranchAliaser encodedPupilData, aData length:%lu", [aData length]);
     return aData;
 }
+
+//- (NSArray *)pupilsFromData:(NSData *)aPupilData
+//{
+//    NSMutableArray *aPupils = [NSMutableArray array];
+//    NUUInt8 *aPupilDataBtyes = (NUUInt8 *)[aPupilData bytes];
+//    NUPupilNote *aPupilNote;
+//    NUUInt64 i = 0;
+//    
+//    while( i < [aPupilData length])
+//    {
+//        NUUInt64 anOOP = NSSwapBigLongLongToHost(*((NUUInt64 *)&(aPupilDataBtyes[i])));
+//        i += sizeof(NUUInt64);
+//        NUUInt64 aSize = NSSwapBigLongLongToHost(*((NUUInt64 *)&(aPupilDataBtyes[i])));
+//        i += sizeof(NUUInt64);
+//        
+//        if (aSize > 1000)
+//            NSLog(@"in pupilsFromData:, aSize > 1000:%llu", aSize);
+//        
+//        aPupilNote = [NUPupilNote pupilNoteWithOOP:anOOP grade:[self gradeForSave] size:aSize bytes:(NUUInt8 *)&(aPupilDataBtyes[i])];
+//        if (aSize != [aPupilNote size])
+//            NSLog(@"aSize != [aPupilNote size], %llu:%llu", aSize, [aPupilNote size]);
+//        [aPupils addObject:aPupilNote];
+//        i += [aPupilNote size];
+//        //NSLog(@"i += [aPupilNote size]:%llu",i);
+//    }
+//    
+//    return aPupils;
+//}
 
 @end
 
@@ -220,8 +251,7 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
     
     if ([[self branchSandbox] OOPIsProbationary:aReferencedOOP])
     {
-        NUBell *aReferencedBell = [[self sandbox] bellForOOP:aReferencedOOP];
-        NUPupilNote *aReferencedPupilNote = [[[self branchSandbox] probationaryPupils] objectForKey:aReferencedBell];
+        NUPupilNote *aReferencedPupilNote = [[self reducedEncodedPupilsDictionary] objectForKey:aReferencedOOP];
         
         [aPupilNote writeUInt64:[aReferencedPupilNote OOP] at:anIvarOffset];
     }

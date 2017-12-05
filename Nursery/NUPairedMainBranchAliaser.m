@@ -25,7 +25,7 @@
 {
     if (self = [super initWithSandbox:aSandbox])
     {
-        pupils = [NUU64ODictionary new];
+        _pupilsDictionary = [NUU64ODictionary new];
     }
     
     return self;
@@ -36,9 +36,24 @@
     return (NUPairedMainBranchSandbox *)[self sandbox];
 }
 
+- (void)setPupils:(NSArray *)aPupils
+{
+    [_pupils autorelease];
+    _pupils = [aPupils retain];
+    
+    [self setPupilsDictionary:[NUU64ODictionary dictionary]];
+    
+    [[self pupils] enumerateObjectsUsingBlock:^(NUPupilNote *aPupil, NSUInteger idx, BOOL *stop) {
+        [[self pupilsDictionary] setObject:aPupil forKey:[aPupil OOP]];
+    }];
+    
+    [self setFixedOOPToProbationaryPupils:[NUU64ODictionary dictionary]];
+}
+
 - (void)dealloc
 {
-    [pupils release];
+    [_pupilsDictionary release];
+    _pupilsDictionary = nil;
     
     [super dealloc];
 }
@@ -49,10 +64,10 @@
 
 - (void)prepareCodingContextForDecode:(NUBell *)aBell
 {
-    NUPupilNote *aPupilNote = [pupils objectForKey:[aBell OOP]];
+    NUPupilNote *aPupilNote = [[self pupilsDictionary] objectForKey:[aBell OOP]];
     
     if (!aPupilNote && ![[self pairedMainBranchSandbox] OOPIsProbationary:[aBell OOP]])
-            aPupilNote = [fixedOOPToProbationaryPupils objectForKey:[aBell OOP]];
+            aPupilNote = [[self fixedOOPToProbationaryPupils] objectForKey:[aBell OOP]];
     
     if (aPupilNote)
     {
@@ -175,46 +190,51 @@
 
 - (NSArray *)pupilsFromData:(NSData *)aPupilData
 {
-    NSMutableArray *aPupils = [NSMutableArray array];
-    NUPupilNote *aPupilNote;
-    
-    for (NUUInt64 i = 0; i < [aPupilData length]; i += [aPupilNote size])
+    @try
     {
-        NUUInt64 anOOP = NSSwapBigLongLongToHost(*(NUUInt64 *)&[aPupilData bytes][i]);
-        i += sizeof(NUUInt64);
-        NUUInt64 aSize = NSSwapBigLongLongToHost(*(NUUInt64 *)&[aPupilData bytes][i]);
-        i += sizeof(NUUInt64);
+        NSMutableArray *aPupils = [NSMutableArray array];
+        NUUInt8 *aPupilDataBtyes = (NUUInt8 *)[aPupilData bytes];
+        NUPupilNote *aPupilNote;
+        NUUInt64 i = 0;
         
-        aPupilNote = [NUPupilNote pupilNoteWithOOP:anOOP grade:[self gradeForSave] size:aSize bytes:(NUUInt8 *)&[aPupilData bytes][i]];
-        [aPupils addObject:aPupilNote];
+        while(i < [aPupilData length])
+        {
+            NUUInt64 anOOP = NSSwapBigLongLongToHost(*((NUUInt64 *)&(aPupilDataBtyes[i])));
+            i += sizeof(NUUInt64);
+            NUUInt64 aSize = NSSwapBigLongLongToHost(*((NUUInt64 *)&(aPupilDataBtyes[i])));
+            i += sizeof(NUUInt64);
+            
+//            if (aSize > 10000)
+//                NSLog(@"in pupilsFromData:, aSize > 1000:%llu", aSize);
+            
+            aPupilNote = [NUPupilNote pupilNoteWithOOP:anOOP grade:[self gradeForSave] size:aSize bytes:(NUUInt8 *)&(aPupilDataBtyes[i])];
+//            if (aSize != [aPupilNote size])
+//                NSLog(@"aSize != [aPupilNote size], %llu:%llu", aSize, [aPupilNote size]);
+            [aPupils addObject:aPupilNote];
+            i += [aPupilNote size];
+    //        NSLog(@"i += [aPupilNote size]:%llu",i);
+        }
+        
+//        NSLog(@"In pupilsFromData:,i:%llu", i);
+        
+        return aPupils;
+    } @catch (NSException *exception)
+    {
+        NSLog(@"%@", exception);
+        @throw exception;
     }
-    
-    return aPupils;
-}
-
-- (void)setPupils:(NSArray *)aPupils
-{
-    [pupils release];
-    pupils = [NUU64ODictionary new];
-    
-    [aPupils enumerateObjectsUsingBlock:^(NUPupilNote *aPupil, NSUInteger idx, BOOL *stop) {
-        [pupils setObject:aPupil forKey:[aPupil OOP]];
-    }];
-    
-    [fixedOOPToProbationaryPupils release];
-    fixedOOPToProbationaryPupils = [NUU64ODictionary new];
 }
 
 - (void)fixProbationaryOOPsInPupils
 {
-    [pupils enumerateKeysAndObjectsUsingBlock:^(NUUInt64 anOOP, NUPupilNote *aPupilNote, BOOL *stop) {
+    [[self pupilsDictionary] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 anOOP, NUPupilNote *aPupilNote, BOOL *stop) {
         
         if ([[self pairedMainBranchSandbox] OOPIsProbationary:[aPupilNote OOP]])
         {
             NUBellBall aFixedBellBall = [self fixedBellBallForPupilWithOOP:[aPupilNote OOP]];
 
             [aPupilNote setBellBall:aFixedBellBall];
-            [fixedOOPToProbationaryPupils setObject:aPupilNote forKey:aFixedBellBall.oop];
+            [[self fixedOOPToProbationaryPupils] setObject:aPupilNote forKey:aFixedBellBall.oop];
         }
         
         [self fixProbationaryOOPsInPupil:aPupilNote];
@@ -240,7 +260,7 @@
     
     if ([[self pairedMainBranchSandbox] OOPIsProbationary:aReferencedOOP])
     {
-        NUPupilNote *aReferencedPupilNote = [pupils objectForKey:aReferencedOOP];
+        NUPupilNote *aReferencedPupilNote = [[self pupilsDictionary] objectForKey:aReferencedOOP];
         NUBellBall aFixedBellBall = NUNotFoundBellBall;
         
         if (!aReferencedPupilNote)
@@ -251,7 +271,7 @@
             aFixedBellBall = [self fixedBellBallForPupilWithOOP:[aReferencedPupilNote OOP]];
             [aReferencedPupilNote setBellBall:aFixedBellBall];
             
-            [fixedOOPToProbationaryPupils setObject:aReferencedPupilNote forKey:aFixedBellBall.oop];
+            [[self fixedOOPToProbationaryPupils] setObject:aReferencedPupilNote forKey:aFixedBellBall.oop];
         }
         else
             aFixedBellBall = [aReferencedPupilNote bellBall];
@@ -260,13 +280,18 @@
     }
 }
 
-- (void)encodeProbationaryPupils
+- (void)writeEncodedObjectsToPages
 {
-    [pupils enumerateKeysAndObjectsUsingBlock:^(NUUInt64 anOOP, NUPupilNote *aPupilNote, BOOL *stop) {
-        NUUInt64 anObjectLocation = [self allocateObjectSpaceForPupil:aPupilNote];
+    NUUInt64 anEncodedObjectsSize = [self sizeOfEncodedObjects:[self pupils]];
+    
+    NUUInt64 aSpaceForEncodedObjects = [[[self nursery] spaces] allocateSpace:anEncodedObjectsSize];
+    __block NUUInt64 anObjectLocation = aSpaceForEncodedObjects;
+    
+    [[self pupils] enumerateObjectsUsingBlock:^(NUPupilNote * _Nonnull aPupilNote, NSUInteger idx, BOOL * _Nonnull stop) {
         [[self objectTable] setObjectLocation:anObjectLocation for:[aPupilNote bellBall]];
         [[self reversedObjectTable] setBellBall:[aPupilNote bellBall] forObjectLocation:anObjectLocation];
         [[self pages] writeData:[aPupilNote data] at:anObjectLocation];
+        anObjectLocation += [aPupilNote size];
     }];
 }
 
@@ -279,7 +304,7 @@
 {
     NSMutableData *aProbationaryOOPAndFixedOOPData = [NSMutableData data];
     
-    [pupils enumerateKeysAndObjectsUsingBlock:^(NUUInt64 anOOP, NUPupilNote *aPupilNote, BOOL *stop) {
+    [[self pupilsDictionary] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 anOOP, NUPupilNote *aPupilNote, BOOL *stop) {
         if ([[self pairedMainBranchSandbox] OOPIsProbationary:anOOP])
         {
             NUUInt64 aProbationaryOOP = NSSwapHostLongLongToBig(anOOP);
@@ -295,18 +320,18 @@
 - (NUUInt64)fixedRootOOPForOOP:(NUUInt64)anOOP
 {
     if ([[self pairedMainBranchSandbox] OOPIsProbationary:anOOP])
-        return [[pupils objectForKey:anOOP] OOP];
+        return [[[self pupilsDictionary] objectForKey:anOOP] OOP];
     else
         return anOOP;
 }
 
 - (NSString *)descriptionForPupils
 {
-    NSMutableString *aDescription = [[[pupils description] mutableCopy] autorelease];
+    NSMutableString *aDescription = [[[[self pupilsDictionary] description] mutableCopy] autorelease];
     
     [aDescription appendString:@"{\n"];
     
-    [pupils enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, id anObject, BOOL *stop) {
+    [[self pupilsDictionary] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, id anObject, BOOL *stop) {
         [aDescription appendFormat:@"%llu:%@\n", aKey, anObject];
     }];
     

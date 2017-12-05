@@ -12,9 +12,11 @@
 
 @interface NUPairedMainBranchAliaser : NUMainBranchAliaser
 {
-    NUU64ODictionary *pupils;
-    NUU64ODictionary *fixedOOPToProbationaryPupils;
 }
+
+@property (retain, nonatomic)NSArray *pupils;
+@property (retain)NUU64ODictionary *pupilsDictionary;
+@property (retain)NUU64ODictionary *fixedOOPToProbationaryPupils;
 
 - (NUPairedMainBranchSandbox *)pairedMainBranchSandbox;
 
@@ -30,11 +32,9 @@
 
 - (NSArray *)pupilsFromData:(NSData *)aPupilData;
 
-- (void)setPupils:(NSArray *)aPupils;
-
 - (void)fixProbationaryOOPsInPupils;
 - (NUBellBall)fixedBellBallForPupilWithOOP:(NUUInt64)anOOP;
-- (void)encodeProbationaryPupils;
+- (void)writeEncodedObjectsToPages;
 - (NUUInt64)allocateObjectSpaceForPupil:(NUPupilNote *)aPupilNote;
 - (NSData *)dataWithProbationaryOOPAndFixedOOP;
 - (NUUInt64)fixedRootOOPForOOP:(NUUInt64)anOOP;

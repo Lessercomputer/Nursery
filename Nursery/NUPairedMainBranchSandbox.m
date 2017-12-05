@@ -65,8 +65,18 @@
             NUUInt64 aFixedRootOOP;
 
             [[self pairedMainBranchAliaser] setGradeForSave:aNewGrade];
+//            NSData *aCopiedPupilData = [NSData dataWithData:aPupilData];
+//            aPupilData = [[aPupilData mutableCopy] autorelease];
+//            NSLog(@"In NUPairedMainBranchSandbox farmOutPupils:, aPupilData length:%lu", [aPupilData length]);
+//            void *anEncodedPupilBytes = malloc([aPupilData length]);
+//            [aPupilData getBytes:anEncodedPupilBytes length:[aPupilData length]];
+//            NSData *aCopiedPupilData = [[NSData alloc] initWithBytesNoCopy:anEncodedPupilBytes length:[aPupilData length] freeWhenDone:YES];
+//            NSLog(@"In NUPairedMainBranchSandbox farmOutPupils:, aCopiedPupilData length:%lu", [aCopiedPupilData length]);
+//            [aPupilData writeToFile:[@"~/Desktop/NUPairedMainBranchSandbox_encodedObjects" stringByExpandingTildeInPath] atomically:YES];
+//            aPupils = [[self pairedMainBranchAliaser] pupilsFromData:aCopiedPupilData];
             aPupils = [[self pairedMainBranchAliaser] pupilsFromData:aPupilData];
             [[self pairedMainBranchAliaser] setPupils:aPupils];
+//            [aCopiedPupilData release];
             
             if ([[self mainBranchNursery] rootOOP] == NUNilOOP)
                 [self moveUpTo:aNewGrade];
@@ -75,13 +85,15 @@
 //#ifdef DEBUG
 //            NSLog(@"%@", [[self pairedMainBranchAliaser] descriptionForPupils]);
 //#endif
-            [[self pairedMainBranchAliaser] encodeProbationaryPupils];
+            [[self pairedMainBranchAliaser] writeEncodedObjectsToPages];
             *aFixedOOPs = [[self pairedMainBranchAliaser] dataWithProbationaryOOPAndFixedOOP];
             
             aFixedRootOOP = [[self pairedMainBranchAliaser] fixedRootOOPForOOP:aRootOOP];
             
             if ([[self pairedMainBranchAliaser] rootOOP] != aFixedRootOOP)
                 [[self mainBranchNursery] saveRootOOP:aFixedRootOOP];
+            
+            [[self pairedMainBranchAliaser] setPupils:nil];
             
             aFarmOutStatus = [[self mainBranchNursery] save] ? NUFarmOutStatusSucceeded : NUFarmOutStatusFailed;
 

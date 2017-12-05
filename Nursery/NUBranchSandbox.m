@@ -24,18 +24,11 @@
     if (self = [super initWithNursery:aNursery grade:aGrade usesGradeSeeker:aUsesGradeSeeker])
     {
         nextProbationaryOOP = NUNotFound64 - 1;
-        probationaryPupils = [NSMutableDictionary new];
     }
     
     return self;
 }
 
-- (void)dealloc
-{
-    [probationaryPupils release];
-    
-    [super dealloc];
-}
 
 - (NUBranchAliaser *)branchAliaser
 {
@@ -85,12 +78,17 @@
                 [[self aliaser] setRoots:[NSMutableArray arrayWithObject:[self nurseryRoot]]];
             
             [[self aliaser] encodeObjects];
-            aFarmOutStatus = [[self mainBranchNurseryAssociation] farmOutPupils:[[self branchAliaser] encodedPupilData] rootOOP:[[[self nurseryRoot] bell] OOP] sandboxWithID:[self ID] inNurseryWithName:[[self branchNursery] name] fixedOOPs:&aFixedOOPs latestGrade:&aLatestGrade];
+            NSData *anEncodedObjectsData = [[self branchAliaser] encodedPupilData];
+//            NSMutableData *aCopiedEncodedObjectsData = [anEncodedObjectsData mutableCopy];
+//            [anEncodedObjectsData writeToFile:[@"~/Desktop/NUBranchSandbox_encodedObjects" stringByExpandingTildeInPath] atomically:YES];
+            aFarmOutStatus = [[self mainBranchNurseryAssociation] farmOutPupils:anEncodedObjectsData rootOOP:[[[self nurseryRoot] bell] OOP] sandboxWithID:[self ID] inNurseryWithName:[[self branchNursery] name] fixedOOPs:&aFixedOOPs latestGrade:&aLatestGrade];
+            
+//            [aCopiedEncodedObjectsData release];
             
             if (aFarmOutStatus == NUFarmOutStatusSucceeded)
             {
-                [self replaceProbationaryOOPsWithFixedOOPs:aFixedOOPs inPupils:[self probationaryPupils] grade:aLatestGrade];
-                [[self probationaryPupils] removeAllObjects];
+                [self replaceProbationaryOOPsWithFixedOOPs:aFixedOOPs inPupils:[[self branchAliaser] reducedEncodedPupilsDictionary] grade:aLatestGrade];
+                [[self branchAliaser] removeAllEncodedPupils];
                 [self setGrade:aLatestGrade];
                 [[self gradeSeeker] pushRootBell:[[self nurseryRoot] bell]];
             }
@@ -117,11 +115,6 @@
     return aMainBranchNurseryAssociation;
 }
 
-- (NSMutableDictionary *)probationaryPupils
-{
-    return probationaryPupils;
-}
-
 - (NUNurseryRoot *)loadNurseryRoot
 {
     [self mainBranchNurseryAssociation];
@@ -145,7 +138,8 @@
     storedChangedObjects = [aChangedObjects retain];
 }
 
-- (void)replaceProbationaryOOPsWithFixedOOPs:(NSData *)aProbationaryOOPsFixedOOPs inPupils:(NSDictionary *)aProbationaryPupils grade:(NUUInt64)aLatestGrade
+
+- (void)replaceProbationaryOOPsWithFixedOOPs:(NSData *)aProbationaryOOPsFixedOOPs inPupils:(NUU64ODictionary *)aProbationaryPupils grade:(NUUInt64)aLatestGrade
 {
     NUUInt64 *anOOPs = (NUUInt64 *)[aProbationaryOOPsFixedOOPs bytes];
     NUUInt64 aCount = [aProbationaryOOPsFixedOOPs length] / (sizeof(NUUInt64) * 2);
@@ -154,30 +148,30 @@
     {
         NUUInt64 aProbationaryOOP = NSSwapBigLongLongToHost(anOOPs[i * 2]);
         NUUInt64 aFixedOOP = NSSwapBigLongLongToHost(anOOPs[i * 2 + 1]);
-        NUBell *aBell = [self bellForOOP:aProbationaryOOP];
         
-        [[aProbationaryPupils objectForKey:aBell] setOOP:aFixedOOP];
+        [[aProbationaryPupils objectForKey:aProbationaryOOP] setOOP:aFixedOOP];
     }
     
-    [aProbationaryPupils enumerateKeysAndObjectsUsingBlock:^(NUBell *aBell, NUPupilNote *aPupilNote, BOOL *stop) {
+    [aProbationaryPupils enumerateKeysAndObjectsUsingBlock:^(NUUInt64 anOOP, NUPupilNote *aPupilNote, BOOL *stop) {
         [[self branchAliaser] fixProbationaryOOPsInPupil:aPupilNote];
     }];
     
-    [aProbationaryPupils enumerateKeysAndObjectsUsingBlock:^(NUBell *aBell, NUPupilNote *aPupilNote, BOOL *stop) {
-        
+    [aProbationaryPupils enumerateKeysAndObjectsUsingBlock:^(NUUInt64 anOOP, NUPupilNote *aPupilNote, BOOL *stop) {
         @try {
             [self lock];
             
-            [[self bells] removeObjectForKey:[aBell OOP]];
+            NUBell *aBell = [[self bellForOOP:anOOP] retain];
+            [[self bells] removeObjectForKey:anOOP];
             [aBell setOOP:[aPupilNote OOP]];
             [aBell setGrade:aLatestGrade];
             [aBell setGradeAtCallFor:aLatestGrade];
             [[self bells] setObject:aBell forKey:[aBell OOP]];
+            [aBell release];
         }
         @finally {
             [self unlock];
         }
-
+        
         [aPupilNote setGrade:aLatestGrade];
         [[[self branchAliaser] pupilAlbum] addPupilNote:aPupilNote grade:aLatestGrade];
     }];

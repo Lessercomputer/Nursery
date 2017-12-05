@@ -196,6 +196,7 @@ NSString *NUDefaultMainBranchAssociation = @"NUDefaultMainBranchAssociation";
 
 - (NUFarmOutStatus)farmOutPupils:(bycopy NSData *)aPupilData rootOOP:(NUUInt64)aRootOOP sandboxWithID:(NUUInt64)anID inNurseryWithName:(bycopy NSString *)aName fixedOOPs:(bycopy NSData **)aFixedOOPs latestGrade:(NUUInt64 *)aLatestGrade
 {
+//    [aPupilData writeToFile:[@"~/Desktop/NUMainBranchNurseryAssociation_encodedObjects" stringByExpandingTildeInPath] atomically:YES];
     NUMainBranchNurseryAssociationEntry *anEntry = [self entryForName:aName];
     return [[anEntry sandboxForID:anID] farmOutPupils:aPupilData rootOOP:aRootOOP fixedOOPs:aFixedOOPs latestGrade:aLatestGrade];
 }

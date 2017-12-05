@@ -54,6 +54,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
         [self setSandbox:aSandbox];
         [self setContexts:[NSMutableArray array]];
         [self setObjectsToEncode:[NUQueue queue]];
+        encodedPupils = [NSMutableArray new];
 	}
     
 	return self;
@@ -64,6 +65,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 	[self setRoots:nil];
 	[self setObjectsToEncode:nil];
 	[self setContexts:nil];
+    [encodedPupils release];
 	
 	[super dealloc];
 }
@@ -113,6 +115,17 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 {
 	[objectsToEncode autorelease];
 	objectsToEncode = [anObjectsToEncode retain];
+}
+
+- (NSMutableArray *)encodedPupils
+{
+    return encodedPupils;
+}
+
+- (void)setEncodedPupils:(NSMutableArray *)anEncodedPupils
+{
+    [encodedPupils autorelease];
+    encodedPupils = [anEncodedPupils retain];
 }
 
 - (NUUInt64)indexedIvarOffset
@@ -275,6 +288,52 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
         if (![[self sandbox] characterForName:[aCharacter fullName]])
             [[self sandbox] setCharacter:aCharacter forName:[aCharacter fullName]];
     } while ((aCharacter = [aCharacter superCharacter]));
+}
+
+- (NUU64ODictionary *)reducedEncodedPupilsDictionary:(NSArray *)anEncodedPupils
+{
+    NUU64ODictionary *aReducedEncodedPupilsDictionary = [NUU64ODictionary dictionary];
+    
+    [anEncodedPupils enumerateObjectsUsingBlock:^(NUPupilNote * _Nonnull aPupilNote, NSUInteger idx, BOOL * _Nonnull stop) {
+        [aReducedEncodedPupilsDictionary setObject:aPupilNote forKey:[aPupilNote OOP]];
+    }];
+    
+    return aReducedEncodedPupilsDictionary;
+}
+
+- (NSArray *)reducedEncodedPupilsFor:(NSArray *)anEncodedPupils with:(NUU64ODictionary *)aReducedEncodedPupilsDictionary
+{
+    NSMutableArray *aReducedEncodedPupils = [NSMutableArray array];
+    
+    [anEncodedPupils enumerateObjectsUsingBlock:^(NUPupilNote * _Nonnull aPupilNote, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([aReducedEncodedPupilsDictionary objectForKey:[aPupilNote OOP]] == aPupilNote)
+            [aReducedEncodedPupils addObject:aPupilNote];
+    }];
+    
+    return aReducedEncodedPupils;
+}
+
+- (NUUInt64)sizeOfEncodedObjects:(NSArray *)aReducedEncodedPupils
+{
+    __block NUUInt64 anEncodedObjectsSize = 0;
+    
+    [aReducedEncodedPupils enumerateObjectsUsingBlock:^(NUPupilNote * _Nonnull aPupilNote, NSUInteger idx, BOOL * _Nonnull stop) {
+            anEncodedObjectsSize += [aPupilNote size];
+    }];
+    
+    return anEncodedObjectsSize;
+}
+
+- (NUUInt64)sizeOfEncodedObjects:(NSArray *)aReducedEncodedPupils with:(NUU64ODictionary *)aReducedEncodedPupilsDictionary
+{
+    __block NUUInt64 anEncodedObjectsSize = 0;
+    
+    [aReducedEncodedPupils enumerateObjectsUsingBlock:^(NUPupilNote * _Nonnull aPupilNote, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([aReducedEncodedPupilsDictionary objectForKey:[aPupilNote OOP]] == aPupilNote)
+            anEncodedObjectsSize += [aPupilNote size];
+    }];
+    
+    return anEncodedObjectsSize;
 }
 
 - (void)objectDidEncode:(NUBell *)aBell
