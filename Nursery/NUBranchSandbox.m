@@ -9,13 +9,13 @@
 #import "NUBranchSandbox.h"
 #import "NUGradeSeeker.h"
 #import "NUBranchAliaser.h"
-#import "NUMainBranchNurseryAssociationProtocol.h"
 #import "NUBell.h"
 #import "NUBellBall.h"
 #import "NUNurseryRoot.h"
 #import "NUBranchNursery.h"
 #import "NUPupilAlbum.h"
 #import "NUU64ODictionary.h"
+#import "NUNurseryNetClient.h"
 
 @implementation NUBranchSandbox
 
@@ -38,6 +38,11 @@
 - (NUBranchNursery *)branchNursery
 {
     return (NUBranchNursery *)[self nursery];
+}
+
+- (NUNurseryNetClient *)netClient
+{
+    return [[self branchNursery] netClient];
 }
 
 - (NUUInt64)allocProbationaryOOP
@@ -72,8 +77,6 @@
         }
         else
         {
-            //[self storeChangedObjects];
-            
             if (![self contains:[self nurseryRoot]])
                 [[self aliaser] setRoots:[NSMutableArray arrayWithObject:[self nurseryRoot]]];
             
@@ -81,7 +84,7 @@
             NSData *anEncodedObjectsData = [[self branchAliaser] encodedPupilData];
 //            NSMutableData *aCopiedEncodedObjectsData = [anEncodedObjectsData mutableCopy];
 //            [anEncodedObjectsData writeToFile:[@"~/Desktop/NUBranchSandbox_encodedObjects" stringByExpandingTildeInPath] atomically:YES];
-            aFarmOutStatus = [[self mainBranchNurseryAssociation] farmOutPupils:anEncodedObjectsData rootOOP:[[[self nurseryRoot] bell] OOP] sandboxWithID:[self ID] inNurseryWithName:[[self branchNursery] name] fixedOOPs:&aFixedOOPs latestGrade:&aLatestGrade];
+            aFarmOutStatus = [[[self branchNursery] netClient] farmOutPupils:anEncodedObjectsData rootOOP:[[[self nurseryRoot] bell] OOP] sandboxWithID:[self ID] fixedOOPs:&aFixedOOPs latestGrade:&aLatestGrade];
             
 //            [aCopiedEncodedObjectsData release];
             
@@ -92,13 +95,10 @@
                 [self setGrade:aLatestGrade];
                 [[self gradeSeeker] pushRootBell:[[self nurseryRoot] bell]];
             }
-            /*else
-                [self restoreChangedObjects];*/
+
         }
     }
     @finally {
-        //[self setStoredChangedObjects:nil];
-        //[[self probationaryPupils] removeAllObjects];
         [[self gradeSeeker] start];
     }
     
@@ -109,35 +109,16 @@
 
 @implementation NUBranchSandbox (Private)
 
-- (id <NUMainBranchNurseryAssociation>)mainBranchNurseryAssociation
-{
-    id <NUMainBranchNurseryAssociation> aMainBranchNurseryAssociation = [[(NUBranchNursery *)[self nursery] association] mainBranchAssociationForSandbox:self];
-    return aMainBranchNurseryAssociation;
-}
-
 - (NUNurseryRoot *)loadNurseryRoot
 {
-    [self mainBranchNurseryAssociation];
+    if ([self ID] == NUNilSandboxID)
+    {
+        [[self netClient] startIfNeeded];
+        [self setID:[[[self branchNursery] netClient] openSandbox]];
+    }
         
     return [super loadNurseryRoot];
 }
-
-- (void)storeChangedObjects
-{
-    [self setStoredChangedObjects:[[[self changedObjects] copy] autorelease]];
-}
-
-- (void)restoreChangedObjects
-{
-    [self setChangedObjects:storedChangedObjects];
-}
-
-- (void)setStoredChangedObjects:(NUU64ODictionary *)aChangedObjects
-{
-    [storedChangedObjects release];
-    storedChangedObjects = [aChangedObjects retain];
-}
-
 
 - (void)replaceProbationaryOOPsWithFixedOOPs:(NSData *)aProbationaryOOPsFixedOOPs inPupils:(NUU64ODictionary *)aProbationaryPupils grade:(NUUInt64)aLatestGrade
 {

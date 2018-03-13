@@ -11,16 +11,15 @@
 #import "NUMainBranchNursery.h"
 #import "NUMainBranchSandbox.h"
 #import "NUPairedMainBranchSandbox.h"
-
+#import "NUXPCListenerEndpointServer.h"
 
 static NSRecursiveLock *classLock;
 static NUMainBranchNurseryAssociation *defaultAssociation;
 
 NSString *NUDefaultMainBranchAssociation = @"NUDefaultMainBranchAssociation";
+NSString *NUMainBranchNurseryAssociationServiceType = @"_numainbranchnurseryassociation._tcp.";
 
 @interface NUMainBranchNurseryAssociation (Private)
-
-- (void)prepareConnection;
 
 - (NUMainBranchNurseryAssociationEntry *)entryForName:(NSString *)aName;
 
@@ -76,9 +75,8 @@ NSString *NUDefaultMainBranchAssociation = @"NUDefaultMainBranchAssociation";
 - (void)dealloc
 {
     [name release];
-    [connection invalidate];
-    [connection setDelegate:nil];
-    [connection release];
+    [netService setDelegate:nil];
+    [netService release];
     [nurseries release];
 
     [super dealloc];
@@ -86,7 +84,39 @@ NSString *NUDefaultMainBranchAssociation = @"NUDefaultMainBranchAssociation";
 
 - (void)open
 {
-    [self prepareConnection];
+    NSThread *aThread = [[NSThread alloc] initWithTarget:self selector:@selector(startNetServiceInNewThreadWith:) object:nil];
+    [aThread setName:@"NUMainBranchNurseryAssociation NetService Thread"];
+    [aThread start];
+}
+
+- (void)startNetServiceInNewThreadWith:(id)anObject
+{
+    netService = [[NSNetService alloc] initWithDomain:@"" type:NUMainBranchNurseryAssociationServiceType name:name port:0];
+    [netService setDelegate:self];
+    
+    [netService publishWithOptions:NSNetServiceListenForConnections];
+
+    while (YES)
+    {
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+    }
+}
+
+- (void)netServiceDidPublish:(NSNetService *)sender
+{
+    NSLog(@"%@", sender);
+    
+}
+
+- (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary<NSString *,NSNumber *> *)errorDict
+{
+    NSLog(@"%@", errorDict);
+}
+
+- (void)netService:(NSNetService *)sender didAcceptConnectionWithInputStream:(NSInputStream *)anInputStream outputStream:(NSOutputStream *)anOutputStream
+{
+    NSLog(@"%@", sender);
+    
 }
 
 - (void)close
@@ -94,8 +124,8 @@ NSString *NUDefaultMainBranchAssociation = @"NUDefaultMainBranchAssociation";
     [nurseries enumerateKeysAndObjectsUsingBlock:^(id key, NUMainBranchNurseryAssociationEntry *anEntry, BOOL *stop) {
         [anEntry close];
     }];
-    [[NSSocketPortNameServer sharedInstance] removePortForName:name];
-    [connection invalidate];
+    
+    [netService stop];
 }
 
 - (void)setNursery:(NUMainBranchNursery *)aNursery forName:(NSString *)aName
@@ -122,24 +152,18 @@ NSString *NUDefaultMainBranchAssociation = @"NUDefaultMainBranchAssociation";
     }
 }
 
-- (BOOL)makeNewConnection:(NSConnection *)conn sender:(NSConnection *)ancestor
+- (void)openSandboxForNurseryWithName:(NSString *)aName completionHandler:(void (^)(NUUInt64 aBranchSandboxID))aHandler
 {
-    [conn removeRunLoop:[NSRunLoop currentRunLoop]];
-    [conn runInNewThread];
-    return YES;
-}
-
-- (NUUInt64)openSandboxForNurseryWithName:(bycopy NSString *)aName
-{
+    NSLog(@"In openSandboxForNurseryWithName:");
     NUMainBranchNurseryAssociationEntry *anEntry = [self entryForName:aName];
     NUMainBranchNursery *aNursery = (NUMainBranchNursery *)[anEntry nursery];
     NUPairedMainBranchSandbox *aSandbox = (NUPairedMainBranchSandbox *)[aNursery createPairdSandbox];
     NUUInt64 aBranchSandboxID = [aNursery newSandboxID];
     [anEntry setSandbox:aSandbox forID:aBranchSandboxID];
-    return aBranchSandboxID;
+    aHandler(aBranchSandboxID);
 }
 
-- (void)closeSandboxWithID:(NUUInt64)anID inNurseryWithName:(bycopy NSString *)aName
+- (void)closeSandboxWithID:(NUUInt64)anID inNurseryWithName:(NSString *)aName
 {
     NUMainBranchNurseryAssociationEntry *anEntry = [self entryForName:aName];
     NUPairedMainBranchSandbox *aSandbox = [anEntry sandboxForID:anID];
@@ -147,27 +171,27 @@ NSString *NUDefaultMainBranchAssociation = @"NUDefaultMainBranchAssociation";
     [anEntry removeSandboxForID:anID];
 }
 
-- (NUUInt64)rootOOPForNurseryWithName:(bycopy NSString *)aName sandboxWithID:(NUUInt64)anID
+- (void)rootOOPForNurseryWithName:(NSString *)aName sandboxWithID:(NUUInt64)anID completionHandler:(void (^)(NUUInt64 aLatestGrade))aHandler
 {
     NUMainBranchNurseryAssociationEntry *anEntry = [self entryForName:aName];
-    return [[[anEntry sandboxForID:anID] aliaser] rootOOP];
+    aHandler([[[anEntry sandboxForID:anID] aliaser] rootOOP]);
 }
 
-- (NUUInt64)latestGradeForNurseryWithName:(bycopy NSString *)aName
+- (void)latestGradeForNurseryWithName:(NSString *)aName completionHandler:(void (^)(NUUInt64 aLatestGrade))aHandler
 {
-    return [[[self entryForName:aName] nursery] latestGrade:nil];
+    aHandler([[[self entryForName:aName] nursery] latestGrade:nil]);
 }
 
-- (NUUInt64)olderRetainedGradeForNurseryWithName:(bycopy NSString *)aName
-{
-    NUMainBranchNurseryAssociationEntry *anEntry = [self entryForName:aName];
-    return [[anEntry nursery] olderRetainedGrade:nil];
-}
-
-- (NUUInt64)retainLatestGradeBySandboxWithID:(NUUInt64)anID inNurseryWithName:(bycopy NSString *)aName
+- (void)olderRetainedGradeForNurseryWithName:(NSString *)aName completionHandler:(void (^)(NUUInt64 anOlderRetaindGrade))aHandler
 {
     NUMainBranchNurseryAssociationEntry *anEntry = [self entryForName:aName];
-    return [[anEntry nursery] retainLatestGradeBySandbox:(NUMainBranchSandbox *)[anEntry sandboxForID:anID]];
+    aHandler([[anEntry nursery] olderRetainedGrade:nil]);
+}
+
+- (void)retainLatestGradeBySandboxWithID:(NUUInt64)anID inNurseryWithName:(NSString *)aName completionHandler:(void (^)(NUUInt64 aLatestGrade))aHandler
+{
+    NUMainBranchNurseryAssociationEntry *anEntry = [self entryForName:aName];
+    aHandler([[anEntry nursery] retainLatestGradeBySandbox:(NUMainBranchSandbox *)[anEntry sandboxForID:anID]]);
 }
 
 - (NUUInt64)retainGradeIfValid:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID inNurseryWithName:(bycopy NSString *)aName
@@ -176,48 +200,37 @@ NSString *NUDefaultMainBranchAssociation = @"NUDefaultMainBranchAssociation";
     return [[anEntry nursery] retainGradeIfValid:aGrade bySandbox:(NUMainBranchSandbox *)[anEntry sandboxForID:anID]];
 }
 
-- (void)retainGrade:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID inNurseryWithName:(bycopy NSString *)aName
+- (void)retainGrade:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID inNurseryWithName:(NSString *)aName
 {
     NUMainBranchNurseryAssociationEntry *anEntry = [self entryForName:aName];
     [[anEntry nursery] retainGrade:aGrade bySandbox:(NUMainBranchSandbox *)[anEntry sandboxForID:anID]];
 }
 
-- (void)releaseGradeLessThan:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID inNurseryWithName:(bycopy NSString *)aName
+- (void)releaseGradeLessThan:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID inNurseryWithName:(NSString *)aName
 {
     NUMainBranchNurseryAssociationEntry *anEntry = [self entryForName:aName];
     [[anEntry nursery] releaseGradeLessThan:aGrade bySandbox:(NUMainBranchSandbox *)[anEntry sandboxForID:anID]];
 }
 
-- (bycopy NSData *)callForPupilWithOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade sandboxWithID:(NUUInt64)anID containsFellowPupils:(BOOL)aContainsFellowPupils inNurseryWithName:(bycopy NSString *)aName
+- (void)callForPupilWithOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade sandboxWithID:(NUUInt64)anID containsFellowPupils:(BOOL)aContainsFellowPupils inNurseryWithName:(NSString *)aName completionHandler:(void (^)(NSData *aPupilNotesData))aHandler
 {
     NUMainBranchNurseryAssociationEntry *anEntry = [self entryForName:aName];
-    return [[anEntry sandboxForID:anID] callForPupilWithOOP:anOOP gradeLessThanOrEqualTo:aGrade containsFellowPupils:aContainsFellowPupils];
+    aHandler([[anEntry sandboxForID:anID] callForPupilWithOOP:anOOP gradeLessThanOrEqualTo:aGrade containsFellowPupils:aContainsFellowPupils]);
 }
 
-- (NUFarmOutStatus)farmOutPupils:(bycopy NSData *)aPupilData rootOOP:(NUUInt64)aRootOOP sandboxWithID:(NUUInt64)anID inNurseryWithName:(bycopy NSString *)aName fixedOOPs:(bycopy NSData **)aFixedOOPs latestGrade:(NUUInt64 *)aLatestGrade
+- (void)farmOutPupils:(NSData *)aPupilData rootOOP:(NUUInt64)aRootOOP sandboxWithID:(NUUInt64)anID inNurseryWithName:(NSString *)aName  completionHandler:(void (^)(NUFarmOutStatus aFarmOutStatus, NSData *aFixedOOPs, NUUInt64 aLatestGrade))aHandler
 {
 //    [aPupilData writeToFile:[@"~/Desktop/NUMainBranchNurseryAssociation_encodedObjects" stringByExpandingTildeInPath] atomically:YES];
     NUMainBranchNurseryAssociationEntry *anEntry = [self entryForName:aName];
-    return [[anEntry sandboxForID:anID] farmOutPupils:aPupilData rootOOP:aRootOOP fixedOOPs:aFixedOOPs latestGrade:aLatestGrade];
+    NSData *aFixedOOPs;
+    NUUInt64 aLatestGrade;
+    NUFarmOutStatus aFarmOutStatus = [[anEntry sandboxForID:anID] farmOutPupils:aPupilData rootOOP:aRootOOP fixedOOPs:&aFixedOOPs latestGrade:&aLatestGrade];
+    aHandler(aFarmOutStatus, aFixedOOPs, aLatestGrade);
 }
 
 @end
 
 @implementation NUMainBranchNurseryAssociation (Private)
-
-- (void)prepareConnection
-{
-//    connection = [[NSConnection serviceConnectionWithName:name rootObject:self] retain];
-    
-    NSSocketPort *aPort = [[[NSSocketPort alloc] init] autorelease];
-    connection = [[NSConnection connectionWithReceivePort:aPort sendPort:nil] retain];
-    if (![[NSSocketPortNameServer sharedInstance] registerPort:aPort name:name])
-        @throw [NSException exceptionWithName:NSGenericException reason:NSGenericException userInfo:nil];
-    
-//    [connection setIndependentConversationQueueing:YES];
-    [connection setRootObject:self];
-    [connection setDelegate:self];
-}
 
 - (NUMainBranchNurseryAssociationEntry *)entryForName:(NSString *)aName
 {

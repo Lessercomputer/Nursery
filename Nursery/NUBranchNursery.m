@@ -10,40 +10,25 @@
 #import "NUBranchSandbox.h"
 #import "NUBranchNurseryAssociation.h"
 #import "NUPupilAlbum.h"
+#import "NUNurseryNetClient.h"
 
 @implementation NUBranchNursery
 
-- (id)initWithURL:(NSURL *)aURL association:(NUBranchNurseryAssociation *)anAssociation
++ (instancetype)branchNurseryWithServiceName:(NSString *)aServiceName
+{
+    return [[[self alloc] initWithServiceName:aServiceName] autorelease];
+}
+
+- (instancetype)initWithServiceName:(NSString *)aServiceName
 {
     if (self = [super init])
     {
-        url = [aURL copy];
-        association = [anAssociation retain];
+        _netClient = [[NUNurseryNetClient alloc] initWithServiceName:aServiceName];
         sandbox = [[NUSandbox sandboxWithNursery:self usesGradeSeeker:YES] retain];
         pupilAlbum = [NUPupilAlbum new];
     }
     
     return self;
-}
-
-- (NSURL *)URL
-{
-    return url;
-}
-
-- (NSString *)name
-{
-    return [[self association] nurseryNameFromURL:[self URL]];
-}
-
-- (NUBranchNurseryAssociation *)association
-{
-    return association;
-}
-
-- (id <NUMainBranchNurseryAssociation>)mainBranchAssociationForSandbox:(NUBranchSandbox *)aSandbox
-{
-    return [[self association] mainBranchAssociationForSandbox:aSandbox];
 }
 
 - (NUPupilAlbum *)pupilAlbum
@@ -53,8 +38,8 @@
 
 - (void)dealloc
 {
-    [url release];
-    [association release];
+    [_netClient stop];
+    [_netClient release];
     [pupilAlbum release];
     
     [super dealloc];
@@ -66,22 +51,22 @@
 
 - (NUUInt64)latestGrade:(NUSandbox *)sender
 {
-    return [[self mainBranchAssociationForSandbox:(NUBranchSandbox *)sender] latestGradeForNurseryWithName:[self name]];
+    return [[self netClient] latestGrade];
 }
 
 - (NUUInt64)olderRetainedGrade:(NUSandbox *)sender
 {
-    return [[self mainBranchAssociationForSandbox:(NUBranchSandbox *)sender] olderRetainedGradeForNurseryWithName:[self name]];
+    return [[self netClient] olderRetainedGrade];
 }
 
 - (NUUInt64)retainLatestGradeBySandbox:(NUSandbox *)sender
 {
-    return [[self mainBranchAssociationForSandbox:(NUBranchSandbox *)sender] retainLatestGradeBySandboxWithID:[sender ID] inNurseryWithName:[self name]];
+    return [[self netClient] retainLatestGradeBySandboxWithID:[sender ID]];
 }
 
 - (void)retainGrade:(NUUInt64)aGrade bySandbox:(NUSandbox *)sender
 {
-    [[self mainBranchAssociationForSandbox:(NUBranchSandbox *)sender] retainGrade:aGrade bySandboxWithID:[sender ID] inNurseryWithName:[self name]];
+    [[self netClient] retainGrade:aGrade bySandboxWithID:[sender ID]];
 }
 
 @end
@@ -96,18 +81,6 @@
 @end
 
 @implementation NUBranchNursery (Private)
-
-- (void)setURL:(NSURL *)aURL
-{
-    [url autorelease];
-    url = [aURL copy];
-}
-
-- (void)setAssociation:(NUBranchNurseryAssociation *)anAssociation
-{
-    [association autorelease];
-    association = [anAssociation retain];
-}
 
 - (void)setPupilAlbum:(NUPupilAlbum *)aPupilAlbum
 {

@@ -11,12 +11,10 @@
 @class NUPairedMainBranchSandbox, NUU64ODictionary;
 
 @interface NUPairedMainBranchAliaser : NUMainBranchAliaser
-{
-}
 
-@property (retain, nonatomic)NSArray *pupils;
-@property (retain)NUU64ODictionary *pupilsDictionary;
-@property (retain)NUU64ODictionary *fixedOOPToProbationaryPupils;
+@property (nonatomic, retain) NSArray *pupils;
+@property (nonatomic, retain) NUU64ODictionary *pupilsDictionary;
+@property (nonatomic, retain) NUU64ODictionary *fixedOOPToProbationaryPupils;
 
 - (NUPairedMainBranchSandbox *)pairedMainBranchSandbox;
 

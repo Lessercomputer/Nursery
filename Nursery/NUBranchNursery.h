@@ -7,35 +7,25 @@
 //
 
 #import <Nursery/NUNursery.h>
-#import <Nursery/NUMainBranchNurseryAssociation.h>
 
-@class NUBranchNurseryAssociation, NUBranchSandbox, NUPupilAlbum;
+@class NUBranchSandbox, NUPupilAlbum, NUNurseryNetClient;
 
 @interface NUBranchNursery : NUNursery
 {
-    NSURL *url;
-    NUBranchNurseryAssociation *association;
     NUPupilAlbum *pupilAlbum;
 }
 
-- (id)initWithURL:(NSURL *)aURL association:(NUBranchNurseryAssociation *)anAssociation;
++ (instancetype)branchNurseryWithServiceName:(NSString *)aServiceName;
 
-- (NSURL *)URL;
+- (instancetype)initWithServiceName:(NSString *)aServiceName;
 
-- (NSString *)name;
-
-- (NUBranchNurseryAssociation *)association;
-
-- (id <NUMainBranchNurseryAssociation>)mainBranchAssociationForSandbox:(NUBranchSandbox *)aSandbox;
-
+@property (nonatomic, retain) NUNurseryNetClient *netClient;
 - (NUPupilAlbum *)pupilAlbum;
 
 @end
 
 @interface NUBranchNursery (Private)
 
-- (void)setURL:(NSURL *)aURL;
-- (void)setAssociation:(NUBranchNurseryAssociation *)anAssociation;
 - (void)setPupilAlbum:(NUPupilAlbum *)aPupilAlbum;
 
 @end

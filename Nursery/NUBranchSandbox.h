@@ -8,12 +8,10 @@
 
 #import "NUSandbox.h"
 
-@class NUBranchAliaser, NUBranchNursery;
-@protocol NUMainBranchNurseryAssociation;
+@class NUBranchAliaser, NUBranchNursery, NUMainBranchNurseryAssociation;
 
 @interface NUBranchSandbox : NUSandbox
 {
-    NUU64ODictionary *storedChangedObjects;
     NUUInt64 nextProbationaryOOP;
 }
 
@@ -25,12 +23,6 @@
 @end
 
 @interface NUBranchSandbox (Private)
-
-- (id <NUMainBranchNurseryAssociation>)mainBranchNurseryAssociation;
-
-- (void)storeChangedObjects;
-- (void)restoreChangedObjects;
-- (void)setStoredChangedObjects:(NUU64ODictionary *)aChangedObjects;
 
 - (void)replaceProbationaryOOPsWithFixedOOPs:(NSData *)aProbationaryOOPsFixedOOPs inPupils:(NUU64ODictionary *)aProbationaryPupils grade:(NUUInt64)aLatestGrade;
 

@@ -10,6 +10,8 @@
 #import "NUBranchNursery.h"
 #import "NUBranchSandbox.h"
 #import "NUBranchNurseryAssociationEntry.h"
+#import "NUMainBranchNurseryAssociationProtocol.h"
+#import "NUXPCListenerEndpointServer.h"
 
 NSString *NUBranchNurseryAssociationThreadID = @"NUBranchNurseryAssociationThreadID";
 
@@ -120,7 +122,7 @@ static NUUInt64 nextBranchNurseryAssociationThreadID = 0;
     return aThreadID;
 }
 
-- (id<NUMainBranchNurseryAssociation>)mainBranchAssociationForSandbox:(NUBranchSandbox *)aSandbox
+- (NUMainBranchNurseryAssociation *)mainBranchAssociationForSandbox:(NUBranchSandbox *)aSandbox
 {
     @try {
         [lock lock];
@@ -129,8 +131,9 @@ static NUUInt64 nextBranchNurseryAssociationThreadID = 0;
         NSURL *anAssociationURL = [[self class] associationURLFromNurseryURL:aNurseryURL];
         NUBranchNurseryAssociationEntry *anEntry = [self entryForURL:anAssociationURL];
         NSNumber *aThreadID = [self ensureBranchNurseryAssociationThreadID];
-        id <NUMainBranchNurseryAssociation> anAssociation = nil;
-        NSConnection *aConnection = [[anEntry connections] objectForKey:aThreadID];
+        NUMainBranchNurseryAssociation *anAssociation = nil;
+        //NSConnection *aConnection = [[anEntry connections] objectForKey:aThreadID];
+        NSXPCConnection *aConnection = [[anEntry connections] objectForKey:aThreadID];
         
         if (!aConnection)
         {
@@ -139,18 +142,45 @@ static NUUInt64 nextBranchNurseryAssociationThreadID = 0;
 
 //            aConnection = [NSConnection connectionWithRegisteredName:anAssociationName host:[aNurseryURL host]];
 //            aConnection = [NSConnection connectionWithRegisteredName:anAssociationName host:[aNurseryURL host] usingNameServer:[NSSocketPortNameServer sharedInstance]];
-            NSSocketPort *aPort = (NSSocketPort *)[[NSSocketPortNameServer sharedInstance] portForName:anAssociationName host:[aNurseryURL host]];
-            aConnection = [NSConnection connectionWithReceivePort:nil sendPort:aPort];
-            aRootProxy = [aConnection rootProxy];
-            [aRootProxy setProtocolForProxy:@protocol(NUMainBranchNurseryAssociation)];
+            //NSSocketPort *aPort = (NSSocketPort *)[[NSSocketPortNameServer sharedInstance] portForName:anAssociationName host:[aNurseryURL host]];
+//            aConnection = [NSConnection connectionWithReceivePort:nil sendPort:aPort];
+//            aRootProxy = [aConnection rootProxy];
+//            [aRootProxy setProtocolForProxy:@protocol(NUMainBranchNurseryAssociation)];
+            //aConnection = [[[NSXPCConnection alloc] initWithMachServiceName:anAssociationName options:NSXPCConnectionPrivileged] autorelease];
+            NSXPCListenerEndpoint *anEndpoint = [[NUXPCListenerEndpointServer sharedInstance] endpointForName:anAssociationName];
+            aConnection = [[[NSXPCConnection alloc] initWithListenerEndpoint:anEndpoint] autorelease];
+            [aConnection setRemoteObjectInterface:[NSXPCInterface interfaceWithProtocol:@protocol(NUMainBranchNurseryAssociation)]];
+            [aConnection resume];
+            aRootProxy = [aConnection remoteObjectProxy];
             [[anEntry connections] setObject:aConnection forKey:aThreadID];
-            anAssociation = (id <NUMainBranchNurseryAssociation>)aRootProxy;
+            anAssociation = (NUMainBranchNurseryAssociation *)aRootProxy;
         }
         else
-            anAssociation = (id<NUMainBranchNurseryAssociation>)[aConnection rootProxy];
+            anAssociation = (NUMainBranchNurseryAssociation *)[aConnection remoteObjectProxy];
         
         if ([aSandbox ID] == NUNilSandboxID)
-            [aSandbox setID:[anAssociation openSandboxForNurseryWithName:[[self class] nurseryNameFromURL:aNurseryURL]]];
+        {
+//            [aSandbox setID:[anAssociation openSandboxForNurseryWithName:[[self class] nurseryNameFromURL:aNurseryURL]]];
+            __block BOOL aCompletion = NO;
+            NSCondition *aCondition = [[NSCondition new] autorelease];
+            [aCondition lock];
+            
+            [anAssociation openSandboxForNurseryWithName:[[self class] nurseryNameFromURL:aNurseryURL] completionHandler:^(NUUInt64 anID){
+                [aCondition lock];
+                
+                NSLog(@"in remove");
+                [aSandbox setID:anID];
+                aCompletion = YES;
+                
+                [aCondition signal];
+                [aCondition unlock];
+            }];
+            
+            while (!aCompletion)
+                [aCondition wait];
+            
+            [aCondition unlock];
+        }
 
         return anAssociation;
     }

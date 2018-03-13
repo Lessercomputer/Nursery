@@ -10,6 +10,7 @@
 #import <Nursery/NUMainBranchNurseryAssociation.h>
 
 @class NUBranchNursery, NUBranchSandbox, NUBranchNurseryAssociationEntry;
+@protocol NUMainBranchNurseryAssociation;
 
 @interface NUBranchNurseryAssociation : NUNurseryAssociation
 {
@@ -28,6 +29,6 @@
 
 - (NUBranchNurseryAssociationEntry *)entryForURL:(NSURL *)aURL;
 - (NSNumber *)ensureBranchNurseryAssociationThreadID;
-- (id <NUMainBranchNurseryAssociation>)mainBranchAssociationForSandbox:(NUBranchSandbox *)aSandbox;
+- (NUMainBranchNurseryAssociation *)mainBranchAssociationForSandbox:(NUBranchSandbox *)aSandbox;
 
 @end

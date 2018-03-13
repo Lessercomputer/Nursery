@@ -17,6 +17,7 @@
 #import "NUPupilAlbum.h"
 #import "NUBranchSandbox.h"
 #import "NUU64ODictionary.h"
+#import "NUNurseryNetClient.h"
 
 NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 
@@ -24,7 +25,7 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 
 - (NUUInt64)rootOOP
 {
-    return [[self mainBranchAssociation] rootOOPForNurseryWithName:[self branchNurseryName] sandboxWithID:[[self sandbox] ID]];
+    return [[[self branchNursery] netClient] rootOOPForSandboxWithID:[[self sandbox] ID]];
 }
 
 - (NUBranchSandbox *)branchSandbox
@@ -40,16 +41,6 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 - (NUPupilAlbum *)pupilAlbum
 {
     return [[self branchNursery] pupilAlbum];
-}
-
-- (NSString *)branchNurseryName
-{
-    return [[self branchNursery] name];
-}
-
-- (id <NUMainBranchNurseryAssociation>)mainBranchAssociation
-{
-    return [[self branchNursery] mainBranchAssociationForSandbox:[self branchSandbox]];
 }
 
 - (void)removeAllEncodedPupils
@@ -94,8 +85,8 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 
 - (NUPupilNote *)callForPupilNoteReallyWithOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade
 {
-    id <NUMainBranchNurseryAssociation> anAssociation = [self mainBranchAssociation];
-    NSData *aPupilNoteData = [anAssociation callForPupilWithOOP:anOOP gradeLessThanOrEqualTo:aGrade sandboxWithID:[[self sandbox] ID] containsFellowPupils:YES inNurseryWithName:[self branchNurseryName]];
+    NUNurseryNetClient *aNetClient = [[self branchNursery] netClient];
+    NSData *aPupilNoteData = [aNetClient callForPupilWithOOP:anOOP gradeLessThanOrEqualTo:aGrade sandboxWithID:[[self sandbox] ID] containsFellowPupils:YES];
     NUPupilNote *aPupilNote = nil;
     NSArray *aPupilNotes = [self pupilNotesFromPupilNoteData:aPupilNoteData pupilNoteOOP:anOOP pupilNoteInto:&aPupilNote];
     [[self pupilAlbum] addPupilNotes:aPupilNotes grade:aGrade];

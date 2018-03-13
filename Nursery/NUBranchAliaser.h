@@ -15,14 +15,13 @@ extern NSString *NUPupilNoteNotFoundException;
 
 @interface NUBranchAliaser : NUAliaser
 
-@property (retain)NSArray *reducedEncodedPupils;
-@property (retain)NUU64ODictionary *reducedEncodedPupilsDictionary;
+@property (nonatomic, retain) NSArray *reducedEncodedPupils;
+@property (nonatomic, retain) NUU64ODictionary *reducedEncodedPupilsDictionary;
 
 - (NUBranchSandbox *)branchSandbox;
 - (NUBranchNursery *)branchNursery;
 - (NUPupilAlbum *)pupilAlbum;
-- (NSString *)branchNurseryName;
-- (id <NUMainBranchNurseryAssociation>)mainBranchAssociation;
+
 - (void)removeAllEncodedPupils;
 
 @end

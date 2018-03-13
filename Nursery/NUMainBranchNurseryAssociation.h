@@ -14,14 +14,12 @@
 
 extern NSString *NUDefaultMainBranchAssociation;
 
-@interface NUMainBranchNurseryAssociation : NUNurseryAssociation <NUMainBranchNurseryAssociation, NSConnectionDelegate>
+@interface NUMainBranchNurseryAssociation : NUNurseryAssociation <NUMainBranchNurseryAssociation, NSNetServiceDelegate>
 {
     NSString *name;
-    NSConnection *connection;
     NSMutableDictionary *nurseries;
+    NSNetService *netService;
 }
-
-+ (id)defaultAssociation;
 
 + (id)associationWithName:(NSString *)aName;
 
