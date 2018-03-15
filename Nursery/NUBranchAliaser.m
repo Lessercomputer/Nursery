@@ -180,7 +180,7 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 //    NSLog(@"%@", aPupils);
 
 //    return [NSData dataWithBytes:[aData bytes] length:[aData length]];
-    NSLog(@"In NUBranchAliaser encodedPupilData, aData length:%lu", [aData length]);
+//    NSLog(@"In NUBranchAliaser encodedPupilData, aData length:%lu", [aData length]);
     return aData;
 }
 

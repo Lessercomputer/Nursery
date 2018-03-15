@@ -8,6 +8,8 @@
 
 extern NSString *NUNurseryNetServiceType;
 
+extern NSString *NUNurseryNetServiceNetworkException;
+
 typedef enum : NSUInteger {
     NUNurseryNetServiceStatusNone,
     NUNurseryNetServiceStatusPublishing,

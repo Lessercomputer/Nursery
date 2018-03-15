@@ -14,6 +14,19 @@
 
 NSString *NUNurseryNetServiceType = @"_nunurserynetservice._tcp.";
 
+NSString *NUNurseryNetServiceNetworkException = @"NUNurseryNetServiceNetworkException";
+
+const NSTimeInterval NUNurseryNetServiceRunLoopRunningTimeInterval = 0.003;
+
+@interface NUNurseryNetService ()
+
+- (void)startInNewThread;
+- (void)prepareListeningSocket;
+
+void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, const void *data, void *info);
+
+@end
+
 @implementation NUNurseryNetService
 
 + (instancetype)netServiceWithNursery:(NUMainBranchNursery *)aNursery serviceName:(NSString *)aServiceName
@@ -72,7 +85,7 @@ NSString *NUNurseryNetServiceType = @"_nunurserynetservice._tcp.";
     [[self netService] publish];
 
     while (YES)
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.003]];
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:NUNurseryNetServiceRunLoopRunningTimeInterval]];
 }
 
 - (void)stop
@@ -106,78 +119,49 @@ NSString *NUNurseryNetServiceType = @"_nunurserynetservice._tcp.";
     aSocketContext.retain = NULL;
     aSocketContext.version = 0;
     
-    CFSocketRef myipv4cfsock = CFSocketCreate(
-                                              kCFAllocatorDefault,
-                                              PF_INET,
-                                              SOCK_STREAM,
-                                              IPPROTO_TCP,
-                                              kCFSocketAcceptCallBack, handleConnect, &aSocketContext);
-    CFSocketRef myipv6cfsock = CFSocketCreate(
-                                              kCFAllocatorDefault,
-                                              PF_INET6,
-                                              SOCK_STREAM,
-                                              IPPROTO_TCP,
-                                              kCFSocketAcceptCallBack, handleConnect, &aSocketContext);
+    CFSocketRef anIPv4CFSocket = CFSocketCreate(kCFAllocatorDefault, PF_INET, SOCK_STREAM, IPPROTO_TCP, kCFSocketAcceptCallBack, handleConnect, &aSocketContext);
+    CFSocketRef anIPv6CFSocket = CFSocketCreate(kCFAllocatorDefault, PF_INET6, SOCK_STREAM, IPPROTO_TCP, kCFSocketAcceptCallBack, handleConnect, &aSocketContext);
     
-    struct sockaddr_in sin;
+    struct sockaddr_in aSockAddrIn;
     
-    memset(&sin, 0, sizeof(sin));
-    sin.sin_len = sizeof(sin);
-    sin.sin_family = AF_INET;
-    sin.sin_port = htons(0);
-    sin.sin_addr.s_addr= INADDR_ANY;
+    memset(&aSockAddrIn, 0, sizeof(aSockAddrIn));
+    aSockAddrIn.sin_len = sizeof(aSockAddrIn);
+    aSockAddrIn.sin_family = AF_INET;
+    aSockAddrIn.sin_port = htons(0);
+    aSockAddrIn.sin_addr.s_addr= INADDR_ANY;
     
-    CFDataRef sincfd = CFDataCreate(
-                                    kCFAllocatorDefault,
-                                    (UInt8 *)&sin,
-                                    sizeof(sin));
+    CFDataRef aSockAddrInData = CFDataCreate(kCFAllocatorDefault, (UInt8 *)&aSockAddrIn, sizeof(aSockAddrIn));
     
-    if (CFSocketSetAddress(myipv4cfsock, sincfd) != kCFSocketSuccess)
-        NSLog(@"%@", @"!kCFSocketSuccess");
+    if (CFSocketSetAddress(anIPv4CFSocket, aSockAddrInData) != kCFSocketSuccess)
+        @throw [NSException exceptionWithName:NUNurseryNetServiceNetworkException reason:NUNurseryNetServiceNetworkException userInfo:nil];
     
-    CFRelease(sincfd);
+    CFRelease(aSockAddrInData);
     
-    struct sockaddr_in6 sin6;
+    struct sockaddr_in6 aSockAddrIn6;
     
-    memset(&sin6, 0, sizeof(sin6));
-    sin6.sin6_len = sizeof(sin6);
-    sin6.sin6_family = AF_INET6;
-    sin6.sin6_port = htons(0);
-    sin6.sin6_addr = in6addr_any;
+    memset(&aSockAddrIn6, 0, sizeof(aSockAddrIn6));
+    aSockAddrIn6.sin6_len = sizeof(aSockAddrIn6);
+    aSockAddrIn6.sin6_family = AF_INET6;
+    aSockAddrIn6.sin6_port = htons(0);
+    aSockAddrIn6.sin6_addr = in6addr_any;
     
-    CFDataRef sin6cfd = CFDataCreate(
-                                     kCFAllocatorDefault,
-                                     (UInt8 *)&sin6,
-                                     sizeof(sin6));
+    CFDataRef aSockAddrIn6Data = CFDataCreate(kCFAllocatorDefault, (UInt8 *)&aSockAddrIn6, sizeof(aSockAddrIn6));
     
-    if (CFSocketSetAddress(myipv6cfsock, sin6cfd) != kCFSocketSuccess)
-        NSLog(@"%@", @"!kCFSocketSuccess");
-    CFRelease(sin6cfd);
+    if (CFSocketSetAddress(anIPv6CFSocket, aSockAddrIn6Data) != kCFSocketSuccess)
+        @throw [NSException exceptionWithName:NUNurseryNetServiceNetworkException reason:NUNurseryNetServiceNetworkException userInfo:nil];
     
-    CFDataRef               dataRef = CFSocketCopyAddress(myipv6cfsock);
-    struct sockaddr_in      *sockaddr = (struct sockaddr_in*)CFDataGetBytePtr(dataRef);
+    CFRelease(aSockAddrIn6Data);
     
-    [self setPort:ntohs(sockaddr->sin_port)];
+    CFDataRef               aSocketAddressData = CFSocketCopyAddress(anIPv6CFSocket);
+    struct sockaddr_in      *aSockAddr = (struct sockaddr_in*)CFDataGetBytePtr(aSocketAddressData);
     
-    CFRunLoopSourceRef socketsource = CFSocketCreateRunLoopSource(
-                                                                  kCFAllocatorDefault,
-                                                                  myipv4cfsock,
-                                                                  0);
+    [self setPort:ntohs(aSockAddr->sin_port)];
     
-    CFRunLoopAddSource(
-                       CFRunLoopGetCurrent(),
-                       socketsource,
-                       kCFRunLoopDefaultMode);
+    CFRunLoopSourceRef aSocketRunLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, anIPv4CFSocket, 0);
+    CFRunLoopAddSource(CFRunLoopGetCurrent(), aSocketRunLoopSource, kCFRunLoopDefaultMode);
     
-    CFRunLoopSourceRef socketsource6 = CFSocketCreateRunLoopSource(
-                                                                   kCFAllocatorDefault,
-                                                                   myipv6cfsock,
-                                                                   0);
-    
-    CFRunLoopAddSource(
-                       CFRunLoopGetCurrent(),
-                       socketsource6,
-                       kCFRunLoopDefaultMode);
+    CFRunLoopSourceRef aSocketRunLoopSource6 = CFSocketCreateRunLoopSource(kCFAllocatorDefault, anIPv6CFSocket, 0);
+    CFRunLoopAddSource(CFRunLoopGetCurrent(), aSocketRunLoopSource6, kCFRunLoopDefaultMode);
 }
 
 void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, const void *data, void *info)
@@ -186,23 +170,24 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
     NSLog(@"currentMode:%@", [[NSRunLoop currentRunLoop] currentMode]);
     
     if (type != kCFSocketAcceptCallBack)
-        return;
+        @throw [NSException exceptionWithName:NUNurseryNetServiceNetworkException reason:NUNurseryNetServiceNetworkException userInfo:nil];
     
-    NUNurseryNetService *nurseryNetService = (NUNurseryNetService *)info;
-    CFReadStreamRef readStream;
-    CFWriteStreamRef writeStream;
+    NUNurseryNetService *aNurseryNetService = (NUNurseryNetService *)info;
+    CFReadStreamRef aReadStream;
+    CFWriteStreamRef aWriteStream;
     
-    CFStreamCreatePairWithSocket(kCFAllocatorDefault, *(CFSocketNativeHandle *)data, &readStream, &writeStream);
+    CFStreamCreatePairWithSocket(kCFAllocatorDefault, *(CFSocketNativeHandle *)data, &aReadStream, &aWriteStream);
     
-    NSInputStream *inputStream = (NSInputStream *)readStream;
-    NSOutputStream *outputStream = (NSOutputStream *)writeStream;
+    NSInputStream *anInputStream = (NSInputStream *)aReadStream;
+    NSOutputStream *anOutputStream = (NSOutputStream *)aWriteStream;
     
-    NUNurseryNetResponder *aNetResponder = [[[NUNurseryNetResponder alloc] initWithNetService:nurseryNetService inputStream:inputStream outputStream:outputStream] autorelease];
+    NUNurseryNetResponder *aNetResponder = [[[NUNurseryNetResponder alloc] initWithNetService:aNurseryNetService inputStream:anInputStream outputStream:anOutputStream] autorelease];
     
-    [[nurseryNetService netResponders] addObject:aNetResponder];
+    [[aNurseryNetService netResponders] addObject:aNetResponder];
+    [aNetResponder start];
     
-    [inputStream release];
-    [outputStream release];
+    [anInputStream release];
+    [anOutputStream release];
 }
 
 @end

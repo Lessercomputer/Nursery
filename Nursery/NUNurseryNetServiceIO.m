@@ -25,58 +25,6 @@ const NUUInt64 NUNurseryNetworkerReadBufferSize = 4096;
     [super dealloc];
 }
 
-- (void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)anEventCode
-{
-//    NSLog(@"stream:handleEvent:");
-    
-    switch (anEventCode)
-    {
-        case NSStreamEventOpenCompleted:
-            
-            NSLog(@"NSStreamEventOpenCompleted, %@", self);
-            [self streamDidOpen:aStream];
-            
-            break;
-            
-        case NSStreamEventHasSpaceAvailable:
-            
-            NSLog(@"NSStreamEventHasSpaceAvailable, %@", self);
-            [self sendMessageOnStream];
-            
-            break;
-            
-        case NSStreamEventHasBytesAvailable:
-            
-            NSLog(@"NSStreamEventHasBytesAvailable, %@", self);
-            [self receiveMessageOnStream];
-            
-            break;
-            
-        case NSStreamEventEndEncountered:
-            
-            NSLog(@"NSStreamEventEndEncountered, %@", self);
-            [aStream setDelegate:nil];
-            [aStream close];
-            
-            break;
-            
-        case NSStreamEventNone:
-            
-            NSLog(@"NSStreamEventNone, %@", self);
-            
-            break;
-        
-        case NSStreamEventErrorOccurred:
-            
-            NSLog(@"NSStreamEventErrorOccurred, %@", self);
-            
-            break;
-
-        default:
-            break;
-    }
-}
-
 - (void)streamDidOpen:(NSStream *)aStream
 {
     
@@ -86,7 +34,7 @@ const NUUInt64 NUNurseryNetworkerReadBufferSize = 4096;
 {
     if (![self sendingMessage])
     {
-        NSLog(@"has sendingMessage?:%@, %@", [self sendingMessage] ? @"YES": @"NO", self);
+//        NSLog(@"has sendingMessage?:%@, %@", [self sendingMessage] ? @"YES": @"NO", self);
         return;
     }
     
@@ -97,12 +45,12 @@ const NUUInt64 NUNurseryNetworkerReadBufferSize = 4096;
     NUUInt64 aWriteCount = [[self outputStream] write:[aSendingMessageData bytes] + [self writtenBytesCount] maxLength:[aSendingMessageData length] - [self writtenBytesCount]];
     
     [self setWrittenBytesCount:[self writtenBytesCount] + aWriteCount];
-    NSLog(@"writeCount:%@", @(aWriteCount));
+//    NSLog(@"writeCount:%@", @(aWriteCount));
     
     if ([self writtenBytesCount] == [aSendingMessageData length])
     {
         [self messageDidSend];
-        NSLog(@"messageDidSend, %@", self);
+//        NSLog(@"messageDidSend, %@", self);
         
         [self setWrittenBytesCount:0];
         [self setSendingMessage:nil];
@@ -115,7 +63,7 @@ const NUUInt64 NUNurseryNetworkerReadBufferSize = 4096;
 
 - (void)receiveMessageOnStream
 {
-    NSLog(@"receiveMessageOnStream, %@", self);
+//    NSLog(@"receiveMessageOnStream, %@", self);
     
     NUUInt8 *aReadBuffer = NULL;
     NUUInt64 aReadBytesCount;
@@ -129,7 +77,7 @@ const NUUInt64 NUNurseryNetworkerReadBufferSize = 4096;
     
     [[self inputData] appendBytes:aReadBuffer length:aReadBytesCount];
     
-    NSLog(@"readCount:%@", @(aReadBytesCount));
+//    NSLog(@"readCount:%@", @(aReadBytesCount));
     
     free(aReadBuffer);
     
@@ -150,8 +98,6 @@ const NUUInt64 NUNurseryNetworkerReadBufferSize = 4096;
         [self setInputData:nil];
         
         [self messageDidReceive];
-        
-        //        [self setReceivedMessage:nil];
     }
 }
 

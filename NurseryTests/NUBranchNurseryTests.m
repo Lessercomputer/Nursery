@@ -13,10 +13,8 @@
 #import "NUNurseryNetService.h"
 
 static NSString *NUNurseryTestFilePath;
+
 @interface NUBranchNurseryTests : XCTestCase
-@property (nonatomic) BOOL isNurseryNetServiceStarted;
-@property (nonatomic) BOOL shouldStopNurseryNetService;
-@property (nonatomic, retain) NSLock *lock;
 @end
 
 @implementation NUBranchNurseryTests
@@ -26,13 +24,11 @@ static NSString *NUNurseryTestFilePath;
     [super setUp];
     NUNurseryTestFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"nursery.nursery"];
     [[NSFileManager defaultManager] removeItemAtPath:NUNurseryTestFilePath error:nil];
-    _lock = [NSLock new];
 }
 
 - (void)tearDown
 {
     [[NSFileManager defaultManager] removeItemAtPath:NUNurseryTestFilePath error:nil];
-    [_lock release];
 
     [super tearDown];
 }

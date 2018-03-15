@@ -14,6 +14,17 @@
 #import "NUPairedMainBranchSandbox.h"
 #import "NUPairedMainBranchAliaser.h"
 
+@interface NUNurseryNetResponder (Private)
+
+- (NUMainBranchNursery *)nursery;
+
+- (BOOL)shouldStop;
+- (void)setShouldStop:(BOOL)aFlagToStop;
+
+- (NUNurseryNetMessage *)responseForOpenSandbox;
+
+@end
+
 @implementation NUNurseryNetResponder
 
 - (instancetype)initWithNetService:(NUNurseryNetService *)aNetService inputStream:(NSInputStream *)anInputStream outputStream:(NSOutputStream *)anOutputStream
@@ -24,18 +35,56 @@
     {
         _pairedSandboxes = [NSMutableDictionary new];
         _netService = aNetService;
+        _lockForShouldStop = [NSLock new];
         _inputStream = [anInputStream retain];
-        [_inputStream setDelegate:self];
-        [_inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
         _outputStream = [anOutputStream retain];
-        [_outputStream setDelegate:self];
-//        [_outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-        
-        [_inputStream open];
-        [_outputStream open];
     }
     
     return self;
+}
+
+- (void)dealloc
+{
+    [_pairedSandboxes release];
+    [_lockForShouldStop release];
+    
+    [super dealloc];
+}
+
+- (void)start
+{
+    NSThread *aThread = [[NSThread alloc] initWithBlock:^{
+        
+        [_inputStream open];
+        [_outputStream open];
+        
+        while (![self shouldStop])
+        {
+            [NSThread sleepForTimeInterval:0.001];
+            
+            if ([[self inputStream] hasBytesAvailable])
+                 [self receiveMessageOnStream];
+                 
+            if ([[self outputStream] hasSpaceAvailable])
+                 [self sendMessageOnStream];
+                 
+            if ([[self inputStream] streamStatus] == NSStreamStatusError
+                || [[self outputStream] streamStatus] == NSStreamStatusError)
+                @throw [NSException exceptionWithName:NUNurseryNetServiceNetworkException reason:NUNurseryNetServiceNetworkException userInfo:nil];
+            
+            if ([[self inputStream] streamStatus] == NSStreamStatusClosed
+                || [[self outputStream] streamStatus] == NSStreamStatusClosed)
+                [self setShouldStop:YES];
+        }
+    }];
+    
+    [aThread setName:@"org.nursery-framework.NUNurseryNetResponder"];
+    [aThread start];
+}
+
+- (void)stop
+{
+    [self setShouldStop:YES];
 }
 
 - (void)messageDidReceive
@@ -47,14 +96,7 @@
     if (aMessageKind == NUNurseryNetMessageKindOpenSandbox)
     {
 //        NSLog(@"NUNurseryNetMessageKindOpenSandbox");
-        
-        NUMainBranchNursery *aNursery = [[self netService] nursery];
-        
-        NUUInt64 aPairID = [aNursery newSandboxID];
-        
-        NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindOpenSandboxResponse];
-        [[self pairedSandboxes] setObject:[aNursery createPairdSandbox] forKey:@(aPairID)];
-        [aResponse addArgumentOfTypeUInt64WithValue:aPairID];
+        NUNurseryNetMessage *aResponse = [self responseForOpenSandbox];
         [aResponse serialize];
         [self setSendingMessage:aResponse];
     }
@@ -184,8 +226,6 @@
         [aResponse serialize];
         [self setSendingMessage:aResponse];
     }
-    
-    [[self outputStream] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
 - (NUPairedMainBranchSandbox *)pairedMainBranchSandboxFor:(NUUInt64)aPairID
@@ -196,6 +236,48 @@
 - (void)messageDidSend
 {
     [[self outputStream] removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+}
+
+@end
+
+@implementation NUNurseryNetResponder (Private)
+
+
+- (NUMainBranchNursery *)nursery
+{
+    return [[self netService] nursery];
+}
+
+- (BOOL)shouldStop
+{
+    [[self lockForShouldStop] lock];
+    
+    BOOL aShouldStop = shouldStop;
+    
+    [[self lockForShouldStop] unlock];
+    
+    return aShouldStop;
+}
+
+- (void)setShouldStop:(BOOL)aFlagToStop
+{
+    [[self lockForShouldStop] lock];
+    
+    shouldStop = aFlagToStop;
+    
+    [[self lockForShouldStop] lock];
+}
+
+- (NUNurseryNetMessage *)responseForOpenSandbox
+{
+    NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindOpenSandboxResponse];
+    
+    NUUInt64 aPairID = [[self nursery] newSandboxID];
+    [[self pairedSandboxes] setObject:[[self nursery] createPairdSandbox] forKey:@(aPairID)];
+    
+    [aResponse addArgumentOfTypeUInt64WithValue:aPairID];
+
+    return aResponse;
 }
 
 @end

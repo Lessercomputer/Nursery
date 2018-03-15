@@ -152,25 +152,17 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
     NSInputStream *anInputStream;
     NSOutputStream *anOutputStream;
     
-    //    [[self netService] getInputStream:&anInputStream outputStream:&anOutputStream];
     CFStreamCreatePairWithSocketToCFHost(kCFAllocatorDefault, aHost, (SInt)[[self netService] port], &aReadStream, &aWriteStream);
     
     anInputStream = (NSInputStream *)aReadStream;
     anOutputStream = (NSOutputStream *)aWriteStream;
     
     [self setInputStream:anInputStream];
-    [[self inputStream] setDelegate:self];
-//    [[self inputStream] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     
     [self setOutputStream:anOutputStream];
-    [[self outputStream] setDelegate:self];
-//    [[self outputStream] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     
     [[self inputStream] open];
     [[self outputStream] open];
-//
-//    while (!([[self inputStream] streamStatus] == NSStreamStatusOpen && [[self outputStream] streamStatus] == NSStreamStatusOpen))
-//        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:NUNurseryNetClientRunLoopRunningTimeInterval]];
     
     [self setStatus:NUNurseryNetClientStatusRunning];
     
@@ -179,20 +171,13 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
     
     while (![self shouldStop])
     {
-//        [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.003]];
+        [NSThread sleepForTimeInterval:0.001];
         
         [[self statusCondition] lock];
         
         switch ([self status])
         {
             case NUNurseryNetClientStatusSendingMessage:
-                
-//                if (![self outputStreamIsScheduled])
-//                {
-//                    [[self outputStream] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-//                    [[self outputStream] open];
-//                    [self setOutputStreamIsScheduled:YES];
-//                }
               
                 if ([[self outputStream] hasSpaceAvailable])
                     [self sendMessageOnStream];
@@ -201,12 +186,6 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
                 
             case NUNurseryNetClientStatusReceivingMessage:
                 
-//                if (![self inputStreamIsScheduled])
-//                {
-//                    [[self inputStream] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-//                    [self setInputStreamIsScheduled:YES];
-//                }
-//
                 if ([[self inputStream] hasBytesAvailable])
                     [self receiveMessageOnStream];
                 
@@ -214,29 +193,15 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
                 
             case NUNurseryNetClientStatusDidSendMessage:
             
-//                [[self outputStream] removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-//                [self setOutputStreamIsScheduled:NO];
-            
                 break;
                 
             case NUNurseryNetClientStatusDidReceiveMessage:
-                
-//                [[self inputStream] removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-//                [self setInputStreamIsScheduled:NO];
                 
                 break;
                 
             default:
                 break;
         }
-        
-//        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:NUNurseryNetClientRunLoopRunningTimeInterval]];
-        
-//        if ([self status] == NUNurseryNetClientStatusDidSendMessage)
-//            NSLog(@"%@", @"NUNurseryNetClientStatusDidSendMessage");
-//
-//        if ([self status] == NUNurseryNetClientStatusDidReceiveMessage)
-//            NSLog(@"%@", @"NUNurseryNetClientStatusDidReceiveMessage");
         
         if (!([self isSendingMessage] || [self isReceivingMessage]))
             [[self statusCondition] signal];
@@ -269,7 +234,6 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
         
         [[self serviceBrowser] setDelegate:nil];;
         [[self serviceBrowser] removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-        //        [self setServiceBrowser:nil];
         
         [self setNetService:aService];
         [self setStatus:NUNurseryNetClientStatusDidFindService];
