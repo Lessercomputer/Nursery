@@ -13,19 +13,23 @@ extern NSString *NUNurseryNetServiceNetworkException;
 typedef enum : NSUInteger {
     NUNurseryNetServiceStatusNone,
     NUNurseryNetServiceStatusPublishing,
-    NUNurseryNetServiceStatusRunning
+    NUNurseryNetServiceStatusRunning,
+    NUNurseryNetServiceStatusStopping,
+    NUNurseryNetServiceStatusStopped
 } NUNurseryNetServiceStatus;
 
-@class NUMainBranchNursery;
+@class NUMainBranchNursery, NUNurseryNetResponder;
 
 @interface NUNurseryNetService : NSObject <NSNetServiceDelegate>
-
+{
+    NUNurseryNetServiceStatus status;
+}
 @property (nonatomic, retain) NSNetService *netService;
 @property (nonatomic, retain) NSMutableArray *netResponders;
 @property (nonatomic, retain) NUMainBranchNursery *nursery;
 @property (nonatomic, retain) NSString *serviceName;
 @property (nonatomic, retain) NSThread *netServiceThread;
-@property (nonatomic) NUNurseryNetServiceStatus status;
+@property (nonatomic, retain) NSLock *statusLock;
 @property (nonatomic, retain) NSCondition *statusCondition;
 @property (nonatomic) int port;
 
@@ -36,5 +40,7 @@ typedef enum : NSUInteger {
 - (void)stop;
 
 - (NUMainBranchNursery *)nursery;
+
+- (void)netResponderDidStop:(NUNurseryNetResponder *)sender;
 
 @end

@@ -43,7 +43,6 @@ typedef enum : NSUInteger {
 @property (nonatomic, readonly) BOOL isSendingMessage;
 @property (nonatomic, readonly) BOOL isReceivingMessage;
 @property (nonatomic, retain) NSCondition *statusCondition;
-@property (nonatomic) BOOL shouldStop;
 @property (nonatomic, retain) NSRecursiveLock *shouldStopLock;
 
 - (instancetype)initWithServiceName:(NSString *)aServiceName;

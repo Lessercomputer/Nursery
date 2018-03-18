@@ -29,7 +29,6 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
         _statusLock = [NSLock new];
         _statusCondition = [NSCondition new];
         _serviceName = [aServiceName copy];
-        _shouldStopLock = [NSRecursiveLock new];
     }
     
     return self;
@@ -52,26 +51,6 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
     status = aStatus;
 //    NSLog(@"status:%@", @(status));
     [[self statusLock] unlock];
-}
-
-- (BOOL)shouldStop
-{
-    [[self shouldStopLock] lock];
-    
-    BOOL aShouldStop = shouldStop;
-    
-    [[self shouldStopLock] unlock];
-    
-    return aShouldStop;
-}
-
-- (void)setShouldStop:(BOOL)aShouldStop
-{
-    [[self shouldStopLock] lock];
-    
-    shouldStop = aShouldStop;
-    
-    [[self shouldStopLock] unlock];
 }
 
 - (BOOL)isNotStarted
@@ -101,7 +80,6 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
     [_nursery release];
     [_statusCondition release];
     [_statusLock release];
-    [_shouldStopLock release];
     [_lock release];
     
     [super dealloc];
@@ -114,8 +92,9 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
     
     [[self statusCondition] lock];
     
-    NSThread *aThread = [[NSThread alloc] initWithTarget:self selector:@selector(startInNewThread:) object:nil];
+    NSThread *aThread = [[[NSThread alloc] initWithTarget:self selector:@selector(startInNewThread:) object:nil] autorelease];
     [aThread setName:@"org.nursery-framework.NUNurseryNetClientNetworking"];
+    [self setThread:aThread];
     [aThread start];
     
     while ([self isNotStarted])
@@ -169,7 +148,7 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
     [[self statusCondition] signal];
     [[self statusCondition] unlock];
     
-    while (![self shouldStop])
+    while (![[self thread] isCancelled])
     {
         [NSThread sleepForTimeInterval:0.001];
         
@@ -283,9 +262,7 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
 - (void)stop
 {
     [[self lock] lock];
-    [[self shouldStopLock] lock];
-    
-    [self setShouldStop:YES];
+    [[self thread] cancel];
     
     [[self statusCondition] lock];
     
@@ -294,7 +271,6 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
     
     [[self statusCondition] unlock];
     
-    [[self shouldStopLock] unlock];
     [[self lock] unlock];
 }
 

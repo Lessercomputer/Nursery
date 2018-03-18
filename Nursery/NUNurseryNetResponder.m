@@ -18,9 +18,6 @@
 
 - (NUMainBranchNursery *)nursery;
 
-- (BOOL)shouldStop;
-- (void)setShouldStop:(BOOL)aFlagToStop;
-
 - (NUNurseryNetMessage *)responseForOpenSandbox;
 
 @end
@@ -53,12 +50,12 @@
 
 - (void)start
 {
-    NSThread *aThread = [[NSThread alloc] initWithBlock:^{
+    NSThread *aThread = [[[NSThread alloc] initWithBlock:^{
         
         [_inputStream open];
         [_outputStream open];
         
-        while (![self shouldStop])
+        while (![[self thread] isCancelled])
         {
             [NSThread sleepForTimeInterval:0.001];
             
@@ -74,17 +71,22 @@
             
             if ([[self inputStream] streamStatus] == NSStreamStatusClosed
                 || [[self outputStream] streamStatus] == NSStreamStatusClosed)
-                [self setShouldStop:YES];
+                [[self thread] cancel];
         }
-    }];
+        
+        [[self inputStream] close];
+        [[self outputStream] close];
+        [[self netService] netResponderDidStop:self];
+    }] autorelease];
     
     [aThread setName:@"org.nursery-framework.NUNurseryNetResponder"];
+    [self setThread:aThread];
     [aThread start];
 }
 
 - (void)stop
 {
-    [self setShouldStop:YES];
+    [[self thread] cancel];
 }
 
 - (void)messageDidReceive
@@ -246,26 +248,6 @@
 - (NUMainBranchNursery *)nursery
 {
     return [[self netService] nursery];
-}
-
-- (BOOL)shouldStop
-{
-    [[self lockForShouldStop] lock];
-    
-    BOOL aShouldStop = shouldStop;
-    
-    [[self lockForShouldStop] unlock];
-    
-    return aShouldStop;
-}
-
-- (void)setShouldStop:(BOOL)aFlagToStop
-{
-    [[self lockForShouldStop] lock];
-    
-    shouldStop = aFlagToStop;
-    
-    [[self lockForShouldStop] lock];
 }
 
 - (NUNurseryNetMessage *)responseForOpenSandbox

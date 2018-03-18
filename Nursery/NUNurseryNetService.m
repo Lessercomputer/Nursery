@@ -19,6 +19,15 @@ NSString *NUNurseryNetServiceNetworkException = @"NUNurseryNetServiceNetworkExce
 const NSTimeInterval NUNurseryNetServiceRunLoopRunningTimeInterval = 0.003;
 
 @interface NUNurseryNetService ()
+{
+//    BOOL shouldStop;
+}
+
+//- (BOOL)shouldStop;
+//- (void)setShouldStop:(BOOL)aFlagForShouldStop;
+
+//@property (nonatomic, retain) NSLock *lockForShouldStop;
+@property (nonatomic, retain) NSRecursiveLock *netRespondersLock;
 
 - (void)startInNewThread;
 - (void)prepareListeningSocket;
@@ -38,11 +47,13 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
 {
     if (self = [super init])
     {
-        _status = NUNurseryNetServiceStatusNone;
+        status = NUNurseryNetServiceStatusNone;
         _statusCondition = [NSCondition new];
         _nursery = [aNursery retain];
         _serviceName = [aServiceName copy];
         _netResponders = [NSMutableArray new];
+        _netRespondersLock = [NSRecursiveLock new];
+        _statusLock = [NSLock new];
     }
     
     return self;
@@ -51,9 +62,11 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
 - (void)dealloc
 {
     [_netResponders release];
+    [_netRespondersLock release];
     [_serviceName release];
     [_nursery release];
     [_statusCondition release];
+    [_statusLock release];
     
     [super dealloc];
 }
@@ -84,13 +97,66 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
     
     [[self netService] publish];
 
-    while (YES)
+    while (![[self netServiceThread] isCancelled])
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:NUNurseryNetServiceRunLoopRunningTimeInterval]];
+    
+    [[self netService] stop];
 }
 
 - (void)stop
 {
-    [[self netService] stop];
+//    [self setShouldStop:YES];
+    
+    [[self netServiceThread] cancel];
+    
+    [[self statusCondition] lock];
+    
+    [self setStatus:NUNurseryNetServiceStatusStopping];
+    
+    while ([self status] != NUNurseryNetServiceStatusStopped)
+        [[self statusCondition] wait];
+    
+    [[self statusCondition] unlock];
+}
+
+//- (BOOL)shouldStop
+//{
+//    [[self lockForShouldStop] lock];
+//
+//    BOOL aFlagForShouldStop = shouldStop;
+//
+//    [[self lockForShouldStop] unlock];
+//
+//    return aFlagForShouldStop;
+//}
+//
+//- (void)setShouldStop:(BOOL)aFlagForShouldStop
+//{
+//    [[self lockForShouldStop] lock];
+//
+//    shouldStop = aFlagForShouldStop;
+//
+//    [[self lockForShouldStop] unlock];
+//}
+
+- (NUNurseryNetServiceStatus)status
+{
+    [[self statusLock] lock];
+    
+    NUNurseryNetServiceStatus aStatus = status;
+    
+    [[self statusLock] unlock];
+    
+    return aStatus;
+}
+
+- (void)setStatus:(NUNurseryNetServiceStatus)aStatus
+{
+    [[self statusLock] lock];
+    
+    status = aStatus;
+    
+    [[self statusLock] unlock];
 }
 
 - (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary<NSString *,NSNumber *> *)errorDict
@@ -108,6 +174,19 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
     
     [[self statusCondition] signal];
     [[self statusCondition] unlock];
+}
+
+- (void)netServiceDidStop:(NSNetService *)sender
+{
+    NSLog(@"netServiceDidStop:%@", sender);
+    
+    [[self netRespondersLock] lock];
+    
+    [[self netResponders] enumerateObjectsUsingBlock:^(NUNurseryNetResponder *  _Nonnull aNetResponder, NSUInteger idx, BOOL * _Nonnull stop) {
+        [aNetResponder stop];
+    }];
+    
+    [[self netRespondersLock] unlock];
 }
 
 - (void)prepareListeningSocket
@@ -188,6 +267,23 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
     
     [anInputStream release];
     [anOutputStream release];
+}
+
+- (void)netResponderDidStop:(NUNurseryNetResponder *)sender
+{
+    [[self netRespondersLock] lock];
+
+    [[self statusCondition] lock];
+    
+    [[self netResponders] removeObject:sender];
+    
+    if ([self status] == NUNurseryNetServiceStatusStopping && ![[self netResponders] count])
+        [self setStatus:NUNurseryNetServiceStatusStopped];
+    
+    [[self statusCondition] signal];
+    [[self statusCondition] unlock];
+    
+    [[self netRespondersLock] unlock];
 }
 
 @end

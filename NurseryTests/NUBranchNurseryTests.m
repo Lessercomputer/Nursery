@@ -80,13 +80,10 @@ static NSString *NUNurseryTestFilePath;
 {
 	NUMainBranchNursery *aMainBranchNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
     
-//    [[NUMainBranchNurseryAssociation defaultAssociation] setNursery:aMainBranchNursery forName:@"nursery"];
     NUNurseryNetService *aNurseryNetService = [NUNurseryNetService netServiceWithNursery:aMainBranchNursery serviceName:@"nursery"];
     
     [aNurseryNetService start];
     
-//    NUBranchNurseryAssociation *aBranchAssociation = [NUBranchNurseryAssociation association];
-//    NUBranchNursery *aBranchNursery = [aBranchAssociation nurseryForURL:[NUNurseryAssociation URLWithHostName:nil associationName:NUDefaultMainBranchAssociation nurseryName:@"nursery"]];
     NUBranchNursery *aBranchNursery = [NUBranchNursery branchNurseryWithServiceName:@"nursery"];
 
     NUSandbox *aBranchSandbox2 = [aBranchNursery createSandbox];
@@ -122,10 +119,8 @@ static NSString *NUNurseryTestFilePath;
     [aBranchSandbox4 close];
     [aBranchSandbox5 close];
     
-//    [aBranchAssociation close];
     [aNurseryNetService stop];
     
-//    [[NUMainBranchNurseryAssociation defaultAssociation] removeNurseryForName:@"nursery"];
     [aMainBranchNursery close];
 }
 
@@ -133,13 +128,9 @@ static NSString *NUNurseryTestFilePath;
 {
     NUMainBranchNursery *aMainBranchNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
     
-//    [[NUMainBranchNurseryAssociation defaultAssociation] setNursery:aMainBranchNursery forName:@"nursery"];
     NUNurseryNetService *aNurseryNetService = [NUNurseryNetService netServiceWithNursery:aMainBranchNursery serviceName:@"nursery"];
     
     [aNurseryNetService start];
-    
-//    NUBranchNurseryAssociation *aBranchAssociation = [NUBranchNurseryAssociation association];
-//    NUBranchNursery *aBranchNursery = [aBranchAssociation nurseryForURL:[NUNurseryAssociation URLWithHostName:nil associationName:NUDefaultMainBranchAssociation nurseryName:@"nursery"]];
     
     NUBranchNursery *aBranchNursery = [NUBranchNursery branchNurseryWithServiceName:@"nursery"];
 
@@ -170,10 +161,6 @@ static NSString *NUNurseryTestFilePath;
     [aSandboxA close];
     [aSandboxB close];
     [[aBranchNursery sandbox] close];
-    
-//    [aBranchAssociation close];
-    
-//    [[NUMainBranchNurseryAssociation defaultAssociation] removeNurseryForName:@"nursery"];
     
     [aNurseryNetService stop];
     
