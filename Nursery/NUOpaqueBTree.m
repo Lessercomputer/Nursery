@@ -14,7 +14,7 @@
 #import "NUPage.h"
 #import "NUOpaqueArray.h"
 #import "NUSpaces.h"
-#import "NUU64ODictionary.h"
+#import "NUNodeDictionary.h"
 
 @implementation NUOpaqueBTree
 @end
@@ -29,7 +29,7 @@
 	leafValueLength = aLeafValueLength;
 	spaces = aSpaces;
 	rootLocation = aRootLocation;
-	nodeDictionary = [NUU64ODictionary new];
+	nodeDictionary = [[NUNodeDictionary alloc] initWithSpaces:spaces];
 	
 	return self;
 }

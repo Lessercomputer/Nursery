@@ -8,11 +8,7 @@
 
 #import "NUU64ODictionary.h"
 
-NUUInt64 NUU64ODictionaryKeyHash(NUUInt8 *aKey, NUOpaqueODictionary *aDictionary);
-BOOL NUU64ODictionaryKeyEqual(NUUInt8 *aKey1, NUUInt8 *aKey2, NUOpaqueODictionary *aDictionary);
-void NUU64ODictionarySetKey(NUUInt8 *aDestinationKey, NUUInt8 *aSourceKey, NUOpaqueODictionary *aDictionary);
-
-NUUInt64 NUU64ODictionaryKeyHash(NUUInt8 *aKey, NUOpaqueODictionary *aDictionary)
+NUUInt64 NUU64ODictionaryKeyHash(NUUInt8 *aKey, NUOpaqueODictionary *aDictionary, void *aContext)
 {
     return *(NUUInt64 *)aKey;
 }
@@ -38,7 +34,8 @@ void NUU64ODictionarySetKey(NUUInt8 *aDestinationKey, NUUInt8 *aSourceKey, NUOpa
                 allocAssociations:NUOpaqueODictionaryDefaultAllocAssociations
               reallocAssociations:NUOpaqueODictionaryDefaultReallocAssociations
                    getAssociation:NUOpaqueODictionaryDefaultGetAssociation
-                  moveAssociation:NUOpaqueODictionaryDefaultMoveAssociation];
+                  moveAssociation:NUOpaqueODictionaryDefaultMoveAssociation
+                          context:NULL];
     
     return self;
 }

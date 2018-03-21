@@ -45,15 +45,15 @@ NUOpaqueOAssociation *NUOpaqueODictionaryDefaultReallocAssociations(NUOpaqueOAss
 
 - (id)init
 {
-    return [self initWithKeySize:0 keyHash:NULL keyEqual:NULL setKey:NULL];
+    return [self initWithKeySize:0 keyHash:NULL keyEqual:NULL setKey:NULL context:NULL];
 }
 
-- (id)initWithKeySize:(NUUInt64)aKeySize keyHash:(NUOpaqueODictionaryKeyHash)aKeyHash keyEqual:(NUOpaqueODictionaryKeyEqual)aKeyEqual setKey:(NUOpaqueODictionarySetKey)aSetKey
+- (id)initWithKeySize:(NUUInt64)aKeySize keyHash:(NUOpaqueODictionaryKeyHash)aKeyHash keyEqual:(NUOpaqueODictionaryKeyEqual)aKeyEqual setKey:(NUOpaqueODictionarySetKey)aSetKey context:(void *)aContext
 {
-    return [self initWithKeySize:aKeySize keyHash:aKeyHash keyEqual:aKeyEqual setKey:aSetKey allocAssociations:NUOpaqueODictionaryDefaultAllocAssociations reallocAssociations:NUOpaqueODictionaryDefaultReallocAssociations getAssociation:NUOpaqueODictionaryDefaultGetAssociation moveAssociation:NUOpaqueODictionaryDefaultMoveAssociation];
+    return [self initWithKeySize:aKeySize keyHash:aKeyHash keyEqual:aKeyEqual setKey:aSetKey allocAssociations:NUOpaqueODictionaryDefaultAllocAssociations reallocAssociations:NUOpaqueODictionaryDefaultReallocAssociations getAssociation:NUOpaqueODictionaryDefaultGetAssociation moveAssociation:NUOpaqueODictionaryDefaultMoveAssociation context:aContext];
 }
 
-- (id)initWithKeySize:(NUUInt64)aKeySize keyHash:(NUOpaqueODictionaryKeyHash)aKeyHash keyEqual:(NUOpaqueODictionaryKeyEqual)aKeyEqual setKey:(NUOpaqueODictionarySetKey)aSetKey allocAssociations:(NUOpaqueODictionaryAllocAssociations)anAllocAssociations reallocAssociations:(NUOpaqueODictionaryReallocAssociations)aReallocAssociations getAssociation:(NUOpaqueODictionaryGetAssociation) aGetAssociation moveAssociation:(NUOpaqueODictionaryMoveAssociation)aMoveAssociation
+- (id)initWithKeySize:(NUUInt64)aKeySize keyHash:(NUOpaqueODictionaryKeyHash)aKeyHash keyEqual:(NUOpaqueODictionaryKeyEqual)aKeyEqual setKey:(NUOpaqueODictionarySetKey)aSetKey allocAssociations:(NUOpaqueODictionaryAllocAssociations)anAllocAssociations reallocAssociations:(NUOpaqueODictionaryReallocAssociations)aReallocAssociations getAssociation:(NUOpaqueODictionaryGetAssociation) aGetAssociation moveAssociation:(NUOpaqueODictionaryMoveAssociation)aMoveAssociation context:(void *)aContext
 {
     if (self = [super init])
     {
@@ -77,6 +77,7 @@ NUOpaqueOAssociation *NUOpaqueODictionaryDefaultReallocAssociations(NUOpaqueOAss
             reallocAssociations = aReallocAssociations;
             getAssociation = aGetAssociation;
             moveAssociation = aMoveAssociation;
+            context = aContext;
         }
     }
     
@@ -221,7 +222,7 @@ NUOpaqueOAssociation *NUOpaqueODictionaryDefaultReallocAssociations(NUOpaqueOAss
 
 - (NUUInt64)bucketIndexForKey:(NUUInt8 *)aKey
 {
-    return keyHash(aKey, self) % bucketCount;
+    return keyHash(aKey, self, context) % bucketCount;
 }
 
 - (void)rehash
@@ -235,7 +236,7 @@ NUOpaqueOAssociation *NUOpaqueODictionaryDefaultReallocAssociations(NUOpaqueOAss
     {
         for (NUUInt64 j = 0; j < buckets[i].count; j++)
         {
-            NUUInt64 aNewBucketIndex = keyHash(getAssociation(j, &buckets[i], self)->key, self) % aNewBucketCount;
+            NUUInt64 aNewBucketIndex = keyHash(getAssociation(j, &buckets[i], self)->key, self, context) % aNewBucketCount;
             
             if (aNewBuckets[aNewBucketIndex].count == aNewBuckets[aNewBucketIndex].capacity)
             {

@@ -9,11 +9,11 @@
 #import "NUBellBallODictionary.h"
 #import "NUBellBall.h"
 
-NUUInt64 NUBellBallODictionaryKeyHash(NUUInt8 *aKey, NUOpaqueODictionary *aDictionary);
+NUUInt64 NUBellBallODictionaryKeyHash(NUUInt8 *aKey, NUOpaqueODictionary *aDictionary, void *aContext);
 BOOL NUBellBallODictionaryKeyEqual(NUUInt8 *aKey1, NUUInt8 *aKey2, NUOpaqueODictionary *aDictionary);
 void NUBellBallODictionarySetKey(NUUInt8 *aDestinationKey, NUUInt8 *aSourceKey, NUOpaqueODictionary *aDictionary);
 
-NUUInt64 NUBellBallODictionaryKeyHash(NUUInt8 *aKey, NUOpaqueODictionary *aDictionary)
+NUUInt64 NUBellBallODictionaryKeyHash(NUUInt8 *aKey, NUOpaqueODictionary *aDictionary, void *aContext)
 {
     return ((NUBellBall *)aKey)->oop ^ ((NUBellBall *)aKey)->grade;
 }
@@ -39,7 +39,8 @@ void NUBellBallODictionarySetKey(NUUInt8 *aDestinationKey, NUUInt8 *aSourceKey, 
                 allocAssociations:NUOpaqueODictionaryDefaultAllocAssociations
               reallocAssociations:NUOpaqueODictionaryDefaultReallocAssociations
                    getAssociation:NUOpaqueODictionaryDefaultGetAssociation
-                  moveAssociation:NUOpaqueODictionaryDefaultMoveAssociation];
+                  moveAssociation:NUOpaqueODictionaryDefaultMoveAssociation
+                          context:NULL];
     
     return self;
 }

@@ -21,7 +21,7 @@ typedef struct NUOpaqueOBucket {
 
 @class NUOpaqueODictionary;
 
-typedef NUUInt64 (*NUOpaqueODictionaryKeyHash)(NUUInt8 *aKey, NUOpaqueODictionary *aDictionary);
+typedef NUUInt64 (*NUOpaqueODictionaryKeyHash)(NUUInt8 *aKey, NUOpaqueODictionary *aDictionary, void *aContext);
 typedef BOOL (*NUOpaqueODictionaryKeyEqual)(NUUInt8 *aKey1, NUUInt8 *aKey2, NUOpaqueODictionary *aDictionary);
 typedef void (*NUOpaqueODictionarySetKey)(NUUInt8 *aDestinationKey, NUUInt8 *aSourceKey, NUOpaqueODictionary *aDictionary);
 typedef NUOpaqueOAssociation *(*NUOpaqueODictionaryGetAssociation)(NUUInt64 anIndex, NUOpaqueOBucket *aBucket, NUOpaqueODictionary *aDictionary);
@@ -42,6 +42,7 @@ NUOpaqueOAssociation *NUOpaqueODictionaryDefaultReallocAssociations(NUOpaqueOAss
     NUUInt64 bucketLoadCountLimit;
     NUOpaqueOBucket *buckets;
     NUUInt64 keySize;
+    void *context;
     NUOpaqueODictionaryKeyHash keyHash;
     NUOpaqueODictionaryKeyEqual keyEqual;
     NUOpaqueODictionarySetKey setKey;
@@ -53,7 +54,7 @@ NUOpaqueOAssociation *NUOpaqueODictionaryDefaultReallocAssociations(NUOpaqueOAss
 
 + (id)dictionary;
 
-- (id)initWithKeySize:(NUUInt64)aKeySize keyHash:(NUOpaqueODictionaryKeyHash)aKeyHash keyEqual:(NUOpaqueODictionaryKeyEqual)aKeyEqual setKey:(NUOpaqueODictionarySetKey)aSetKey allocAssociations:(NUOpaqueODictionaryAllocAssociations)anAllocAssociations reallocAssociations:(NUOpaqueODictionaryReallocAssociations)aReallocAssociations getAssociation:(NUOpaqueODictionaryGetAssociation) aGetAssociation moveAssociation:(NUOpaqueODictionaryMoveAssociation)aMoveAssociation;
+- (id)initWithKeySize:(NUUInt64)aKeySize keyHash:(NUOpaqueODictionaryKeyHash)aKeyHash keyEqual:(NUOpaqueODictionaryKeyEqual)aKeyEqual setKey:(NUOpaqueODictionarySetKey)aSetKey allocAssociations:(NUOpaqueODictionaryAllocAssociations)anAllocAssociations reallocAssociations:(NUOpaqueODictionaryReallocAssociations)aReallocAssociations getAssociation:(NUOpaqueODictionaryGetAssociation) aGetAssociation moveAssociation:(NUOpaqueODictionaryMoveAssociation)aMoveAssociation context:(void *)aContext;
 
 - (id)objectForOpaqueKey:(NUUInt8 *)aKey;
 - (void)setObject:(id)anObject forOpaqueKey:(NUUInt8 *)aKey;
