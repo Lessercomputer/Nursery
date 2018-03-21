@@ -16,9 +16,9 @@
 
 @implementation NUPairedMainBranchSandbox
 
-+ (id)sandboxWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker
++ (id)sandboxWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
 {
-    return [[[self alloc] initWithNursery:aNursery usesGradeSeeker:aUsesGradeSeeker] autorelease];
+    return [[[self alloc] initWithNursery:aNursery grade:aGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:aRetainFlag] autorelease];
 }
 
 - (NUPairedMainBranchAliaser *)pairedMainBranchAliaser

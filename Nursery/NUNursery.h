@@ -24,7 +24,6 @@ typedef enum : NSUInteger {
 @interface NUNursery : NSObject
 {
     NUNurseryOpenStatus openStatus;
-	NUSandbox *sandbox;
 }
 @end
 
@@ -33,8 +32,6 @@ typedef enum : NSUInteger {
 @end
 
 @interface NUNursery (Accessing)
-
-- (NUSandbox *)sandbox;
 
 @end
 
@@ -56,10 +53,8 @@ typedef enum : NSUInteger {
 
 @interface NUNursery (Sandbox)
 
-- (NUSandbox *)createSandbox;
-- (NUSandbox *)createSandboxWithGrade:(NUUInt64)aGrade;
-
-- (void)sandboxDidClose:(NUSandbox *)aSandbox;
+- (NUSandbox *)makeSandbox;
+- (NUSandbox *)makeSandboxWithGrade:(NUUInt64)aGrade;
 
 @end
 
@@ -70,8 +65,6 @@ typedef enum : NSUInteger {
 @end
 
 @interface NUNursery (Private)
-
-- (void)setSandbox:(NUSandbox *)aSandbox;
 
 - (BOOL)open;
 - (void)close;

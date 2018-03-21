@@ -81,7 +81,7 @@
 - (void)setGrade:(NUUInt64)aGrade;
 - (void)setRetainedGrades:(NSMutableDictionary *)aGrades;
 
-- (NUPairedMainBranchSandbox *)createPairdSandbox;
+- (NUPairedMainBranchSandbox *)makePairdSandbox;
 
 - (NUSandbox *)sandboxForSeeker;
 - (NUSandbox *)sandboxForParader;

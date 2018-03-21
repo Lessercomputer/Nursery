@@ -8,21 +8,21 @@
 
 #import "NUU64ODictionary.h"
 
-NUUInt64 NUU64ODictionary2KeyHash(NUUInt8 *aKey, NUOpaqueODictionary *aDictionary);
-BOOL NUU64ODictionary2KeyEqual(NUUInt8 *aKey1, NUUInt8 *aKey2, NUOpaqueODictionary *aDictionary);
-void NUU64ODictionary2SetKey(NUUInt8 *aDestinationKey, NUUInt8 *aSourceKey, NUOpaqueODictionary *aDictionary);
+NUUInt64 NUU64ODictionaryKeyHash(NUUInt8 *aKey, NUOpaqueODictionary *aDictionary);
+BOOL NUU64ODictionaryKeyEqual(NUUInt8 *aKey1, NUUInt8 *aKey2, NUOpaqueODictionary *aDictionary);
+void NUU64ODictionarySetKey(NUUInt8 *aDestinationKey, NUUInt8 *aSourceKey, NUOpaqueODictionary *aDictionary);
 
-NUUInt64 NUU64ODictionary2KeyHash(NUUInt8 *aKey, NUOpaqueODictionary *aDictionary)
+NUUInt64 NUU64ODictionaryKeyHash(NUUInt8 *aKey, NUOpaqueODictionary *aDictionary)
 {
     return *(NUUInt64 *)aKey;
 }
 
-BOOL NUU64ODictionary2KeyEqual(NUUInt8 *aKey1, NUUInt8 *aKey2, NUOpaqueODictionary *aDictionary)
+BOOL NUU64ODictionaryKeyEqual(NUUInt8 *aKey1, NUUInt8 *aKey2, NUOpaqueODictionary *aDictionary)
 {
     return *(NUUInt64 *)aKey1 == *(NUUInt64 *)aKey2;
 }
 
-void NUU64ODictionary2SetKey(NUUInt8 *aDestinationKey, NUUInt8 *aSourceKey, NUOpaqueODictionary *aDictionary)
+void NUU64ODictionarySetKey(NUUInt8 *aDestinationKey, NUUInt8 *aSourceKey, NUOpaqueODictionary *aDictionary)
 {
     *(NUUInt64 *)aDestinationKey = *(NUUInt64 *)aSourceKey;
 }
@@ -32,9 +32,9 @@ void NUU64ODictionary2SetKey(NUUInt8 *aDestinationKey, NUUInt8 *aSourceKey, NUOp
 - (id)init
 {
     self = [super initWithKeySize:sizeof(NUUInt64)
-                          keyHash:NUU64ODictionary2KeyHash
-                         keyEqual:NUU64ODictionary2KeyEqual
-                           setKey:NUU64ODictionary2SetKey
+                          keyHash:NUU64ODictionaryKeyHash
+                         keyEqual:NUU64ODictionaryKeyEqual
+                           setKey:NUU64ODictionarySetKey
                 allocAssociations:NUOpaqueODictionaryDefaultAllocAssociations
               reallocAssociations:NUOpaqueODictionaryDefaultReallocAssociations
                    getAssociation:NUOpaqueODictionaryDefaultGetAssociation

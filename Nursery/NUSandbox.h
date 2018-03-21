@@ -36,16 +36,20 @@ extern NSString * const NUObjectLoadingException;
     NSRecursiveLock *lock;
     NUUInt64 sandboxID;
     BOOL isInMoveUp;
+    BOOL retainNursery;
 }
 @end
 
 @interface NUSandbox (InitializingAndRelease)
 
++ (id)sandboxWithNursery:(NUNursery *)aNursery;
 + (id)sandboxWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker;
 + (id)sandboxWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker;
++ (id)sandboxWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag;
++ (id)sandboxWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag;
 
-- (id)initWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker;
-- (id)initWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker;
+- (id)initWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag;
+- (id)initWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag;
 
 @end
 
@@ -120,7 +124,6 @@ extern NSString * const NUObjectLoadingException;
 - (void)moveUpObject:(id)anObject;
 
 - (NUFarmOutStatus)farmOut;
-- (void)close;
 
 @end
 
@@ -188,5 +191,7 @@ extern NSString * const NUObjectLoadingException;
 
 - (void)collectGradeLessThan:(NUUInt64)aGrade;
 - (void)collectBellsWithGradeLessThan:(NUUInt64)aGrade;
+
+- (void)close;
 
 @end

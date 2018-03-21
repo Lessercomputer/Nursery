@@ -36,30 +36,46 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 @implementation NUSandbox (InitializingAndRelease)
 
++ (id)sandboxWithNursery:(NUNursery *)aNursery
+{
+    return [self sandboxWithNursery:aNursery usesGradeSeeker:YES];
+}
+
 + (id)sandboxWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker
 {
-    return [self sandboxWithNursery:aNursery grade:NUNilGrade usesGradeSeeker:aUsesGradeSeeker];
+    return [self sandboxWithNursery:aNursery usesGradeSeeker:aUsesGradeSeeker retainNursery:YES];
 }
 
 + (id)sandboxWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker
 {
-    Class aSandboxClass = [aNursery isMainBranch] ? [NUMainBranchSandbox class] : [NUBranchSandbox class];
-    return [[[aSandboxClass alloc] initWithNursery:aNursery grade:aGrade usesGradeSeeker:aUsesGradeSeeker] autorelease];
+    return [self sandboxWithNursery:aNursery grade:aGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:YES];
 }
 
-- (id)initWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker
++ (id)sandboxWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
 {
-    return [self initWithNursery:aNursery grade:NUNilGrade usesGradeSeeker:aUsesGradeSeeker];
+    return [self sandboxWithNursery:aNursery grade:NUNilGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:aRetainFlag];
 }
 
-- (id)initWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker
++ (id)sandboxWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
+{
+    Class aSandboxClass = [aNursery isMainBranch] ? [NUMainBranchSandbox class] : [NUBranchSandbox class];
+    return [[[aSandboxClass alloc] initWithNursery:aNursery grade:aGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:aRetainFlag] autorelease];
+}
+
+- (id)initWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
+{
+    return [self initWithNursery:aNursery grade:NUNilGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:aRetainFlag];
+}
+
+- (id)initWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker  retainNursery:(BOOL)aRetainFlag
 {
     if (self = [super init])
     {
         lock = [NSRecursiveLock new];
         sandboxID = [aNursery isMainBranch] ? [(NUMainBranchNursery *)aNursery newSandboxID] : NUNilSandboxID;
         grade = aGrade;
-        [self setNursery:aNursery];
+        nursery = aRetainFlag ? [aNursery retain] : aNursery;
+        retainNursery = aRetainFlag;
         [self setObjectToBellDictionary:[NSMutableDictionary dictionary]];
         bells = [NUU64ODictionary new];
         [self setChangedObjects:[NUU64ODictionary dictionary]];
@@ -77,8 +93,20 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     return self;
 }
 
+- (instancetype)retain
+{
+    return [super retain];
+}
+
 - (void)dealloc
 {
+    [self close];
+    
+    if (retainNursery)
+        [nursery release];
+    
+    nursery = nil;
+    
 	[self setNurseryRoot:nil];
 	[self setCharacters:nil];
 	[self setObjectToBellDictionary:nil];
@@ -302,27 +330,6 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 - (NUFarmOutStatus)farmOut
 {    
     return NUFarmOutStatusFailed;
-}
-
-- (void)close
-{
-    [[self gradeSeeker] terminate];
-    
-    @try {
-        [self lock];
-        
-//        [[[[self bellSet] copy] autorelease] enumerateObjectsUsingBlock:^(id aBell, BOOL *stop) {
-//            [aBell invalidate];
-//        }];
-        [[[[self bells] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop){
-            [aBell invalidate];
-        }];
-        
-        [[self nursery] sandboxDidClose:self];
-    }
-    @finally {
-        [self unlock];
-    }
 }
 
 @end
@@ -829,6 +836,25 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
                 [self removeBell:aBell];
 
         } ];
+    }
+    @finally {
+        [self unlock];
+    }
+}
+
+- (void)close
+{
+    [[self gradeSeeker] terminate];
+    
+    @try {
+        [self lock];
+        
+        //        [[[[self bellSet] copy] autorelease] enumerateObjectsUsingBlock:^(id aBell, BOOL *stop) {
+        //            [aBell invalidate];
+        //        }];
+        [[[[self bells] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop){
+            [aBell invalidate];
+        }];
     }
     @finally {
         [self unlock];

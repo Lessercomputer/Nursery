@@ -36,27 +36,28 @@ static NSString *NUNurseryTestFilePath = nil;
 {
 	NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
 	XCTAssertNotNil(aNursery, @"");
-	[[aNursery sandbox] close];
 }
 
 - (void)testSaveEmptyNUNursery
 {
-	NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-	XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-	[[aNursery sandbox] close];
+	NUMainBranchNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NSLog(@"retainCount of %@ is %@", aNursery, @([aNursery retainCount]));
+    NUSandbox *aSandbox = [NUSandbox sandboxWithNursery:aNursery];
+    NSLog(@"retainCount of %@ is %@", aNursery, @([aNursery retainCount]));
+    NSLog(@"retainCount of %@ is %@", aSandbox, @([aSandbox retainCount]));
+	XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
 }
 
 - (void)testDoubleOpenNUNursery
 {
     NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+    NUSandbox *aSandbox = [NUSandbox sandboxWithNursery:aNursery];
+    XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
     
     NUNursery *aNursery2 = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    [[aNursery2 sandbox] root];
+    NUSandbox *aSandbox2 = [NUSandbox sandboxWithNursery:aNursery2];
+    [aSandbox2 root];
     XCTAssertEqual([aNursery2 openStatus], NUNurseryOpenStatusClose);
-
-    [[aNursery sandbox] close];
-    [[aNursery2 sandbox] close];
 }
 
 - (void)testSaveManyNSObject
@@ -68,83 +69,89 @@ static NSString *NUNurseryTestFilePath = nil;
     }
     
     [self measureBlock:^{
-        NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-        [[aNursery sandbox] setRoot:anObjects];
-        XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-        [[aNursery sandbox] close];
+        @autoreleasepool
+        {
+            NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+            NUSandbox *aSandbox = [NUSandbox sandboxWithNursery:aNursery];
+            [aSandbox setRoot:anObjects];
+            XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+        }
     }];
 }
 
 - (void)testLoadRootFromNUNursery
 {
 	NSString *theRootObject = @"The Root Object";
-	NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-	[[aNursery sandbox] setRoot:theRootObject];
-	XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-	XCTAssertEqualObjects(theRootObject, [[aNursery sandbox] root], @"");
-	[[aNursery sandbox] close];
+    @autoreleasepool
+    {
+        NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+        NUSandbox *aSandbox = [NUSandbox sandboxWithNursery:aNursery];
+        [aSandbox setRoot:theRootObject];
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+        XCTAssertEqualObjects(theRootObject, [aSandbox root], @"");
+    };
 	
-	aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    XCTAssertEqualObjects([[aNursery sandbox] root], theRootObject, @"");
-	[[aNursery sandbox] close];
+	NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUSandbox *aSandbox = [NUSandbox sandboxWithNursery:aNursery];
+    XCTAssertEqualObjects([aSandbox root], theRootObject, @"");
 }
 
 - (void)testSaveAndLoadNumberFromNUNursery
 {
 	NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
     NSNumber *aNumber = [NSNumber numberWithUnsignedLongLong:1];
-    [[aNursery sandbox] setRoot:aNumber];
-	XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-    NUSandbox *aSandbox2 = [aNursery createSandbox];
+    NUSandbox *aSandbox = [aNursery makeSandbox];
+    [aSandbox setRoot:aNumber];
+	XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+    NUSandbox *aSandbox2 = [aNursery makeSandbox];
     XCTAssertEqualObjects(aNumber, [aSandbox2 root], @"");
-    [aSandbox2 close];
-	[[aNursery sandbox] close];
 }
 
 - (void)testRepeatSaveAndLoad
 {
-	NSMutableArray *anArray =
-		[NSMutableArray arrayWithObjects:
-			@"Smalltalk-72", @"Smalltalk-74", @"Smalltalk-76", @"Smalltalk-78", @"Smalltalk-80", nil];
-	NSMutableArray *aLoadedArray = nil;
-	NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-	[[aNursery sandbox] setRoot:anArray];
-	XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-	
-	[anArray addObject:@"ObjectWorks"];
-	[[aNursery sandbox] markChangedObject:anArray];
-	XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-	
-	[anArray addObject:@"VisualWorks"];
-	[[aNursery sandbox] markChangedObject:anArray];
-	XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-	
-	[anArray addObject:@"Squeak"];
-	[[aNursery sandbox] markChangedObject:anArray];
-	XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+    NSMutableArray *anArray =
+    [NSMutableArray arrayWithObjects:
+     @"Smalltalk-72", @"Smalltalk-74", @"Smalltalk-76", @"Smalltalk-78", @"Smalltalk-80", nil];
+    NSMutableArray *aLoadedArray = nil;
 
-	[anArray addObject:@"Pharo"];
-	[[aNursery sandbox] markChangedObject:anArray];
-	XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-	
-	NSDate *aDate = [NSDate date];
-	[anArray addObject:aDate];
-	[[aNursery sandbox] markChangedObject:anArray];
-	XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-	
-	[[aNursery sandbox] close];
+    @autoreleasepool
+    {
+        NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+        NUSandbox *aSandbox = [aNursery makeSandbox];
+        [aSandbox setRoot:anArray];
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+        
+        [anArray addObject:@"ObjectWorks"];
+        [aSandbox markChangedObject:anArray];
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+        
+        [anArray addObject:@"VisualWorks"];
+        [aSandbox markChangedObject:anArray];
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+        
+        [anArray addObject:@"Squeak"];
+        [aSandbox markChangedObject:anArray];
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
 
-	aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-	aLoadedArray = [[aNursery sandbox] root];
+        [anArray addObject:@"Pharo"];
+        [aSandbox markChangedObject:anArray];
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+        
+        NSDate *aDate = [NSDate date];
+        [anArray addObject:aDate];
+        [aSandbox markChangedObject:anArray];
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+    }
+    
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUSandbox *aSandbox = [aNursery makeSandbox];
+	aLoadedArray = [aSandbox root];
 	XCTAssertEqualObjects(anArray, aLoadedArray, @"");
     [aLoadedArray addObject:@"DolphinSmalltalk"];
-	[[aNursery sandbox] close];
 }
 
 - (void)testSaveAndLoadIndexSet
 {
-    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    
     NSMutableArray *anArray = [NSMutableArray array];
     NSIndexSet *anEmptyIndexSet = [NSIndexSet indexSet];
     NSIndexSet *aSingleRangeIndexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 10)];
@@ -158,93 +165,105 @@ static NSString *NUNurseryTestFilePath = nil;
     [anArray addObject:aMultiRangeIndexSet];
     [anArray addObject:aMultiRangeIndexSet2];
     
-    [[aNursery sandbox] setRoot:anArray];
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+    @autoreleasepool
+    {
+        NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+        NUSandbox *aSandbox = [aNursery makeSandbox];
+        
+        [aSandbox setRoot:anArray];
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+    }
     
-    [[aNursery sandbox] close];
-    
-    aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    NSArray *aLoadedArray = [[aNursery sandbox] root];
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUSandbox *aSandbox = [aNursery makeSandbox];
+    NSArray *aLoadedArray = [aSandbox root];
     
     XCTAssertEqualObjects([aLoadedArray objectAtIndex:0], anEmptyIndexSet, @"");
     XCTAssertEqualObjects([aLoadedArray objectAtIndex:1], aSingleRangeIndexSet, @"");
     XCTAssertEqualObjects([aLoadedArray objectAtIndex:2], aMultiRangeIndexSet, @"");
     XCTAssertEqualObjects([aLoadedArray objectAtIndex:3], aMultiRangeIndexSet2, @"");
-
-    [[aNursery sandbox] close];
 }
 
 - (void)testSaveAndLoadSet
 {
-    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-
     NSMutableSet *aMutableSet = [NSMutableSet set];
     [aMutableSet addObject:@"aString"];
-    [[aNursery sandbox] setRoot:aMutableSet];
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-    [[aNursery sandbox] close];
-
-    aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    NSMutableSet *aLoadedMutableSet = [[aNursery sandbox] root];
+    
+    @autoreleasepool
+    {
+        NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+        NUSandbox *aSandbox = [aNursery makeSandbox];
+        [aSandbox setRoot:aMutableSet];
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+    }
+    
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUSandbox *aSandbox = [aNursery makeSandbox];
+    NSMutableSet *aLoadedMutableSet = [aSandbox root];
     
     XCTAssertEqualObjects(aLoadedMutableSet, aMutableSet, @"");
     [aLoadedMutableSet addObject:@"aString2"];
-    [[aNursery sandbox] close];
 }
 
 - (void)testSaveLargeObject
 {
     const int aMaxCount = 1000000;
     NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUSandbox *aSandbox = [aNursery makeSandbox];
     
     NSMutableArray *anArray = [NSMutableArray array];
     int i = 0;
     for (; i < aMaxCount; i++)
         [anArray addObject:[NSString stringWithFormat:@"%06d", i]];
-    [[aNursery sandbox] setRoot:anArray];
+    [aSandbox setRoot:anArray];
     
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"[aNursery save] failed");
-    
-    [[aNursery sandbox] close];
+    XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"[aNursery save] failed");
 }
 
 - (void)testSaveAndLoadLargeObject
 {
     const int aMaxCount = 100000;//45000;
+    NSMutableArray *anArray = [NSMutableArray array];
+
+    @autoreleasepool
+    {
+        NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+        NUSandbox *aSandbox = [aNursery makeSandbox];
+        
+        int i = 0;
+        for (; i < aMaxCount; i++)
+            [anArray addObject:[NSString stringWithFormat:@"%06d", i]];
+        [aSandbox setRoot:anArray];
+        
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"[aSandbox farmOut] failed");
+    }
+    
 	NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-	
-	NSMutableArray *anArray = [NSMutableArray array];
-	int i = 0;
-	for (; i < aMaxCount; i++)
-		[anArray addObject:[NSString stringWithFormat:@"%06d", i]];
-	[[aNursery sandbox] setRoot:anArray];
-	
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"[aNursery save] failed");
-	
-	[[aNursery sandbox] close];
-	
-	aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-	NSMutableArray *aUserRoot = [[aNursery sandbox] root];
+    NUSandbox *aSandbox = [aNursery makeSandbox];
+	NSMutableArray *aUserRoot = [aSandbox root];
 	
 	XCTAssertFalse(anArray == aUserRoot, @"");
 	XCTAssertEqualObjects(anArray, aUserRoot, @"");
-	[[aNursery sandbox] close];
 }
 
 - (void)testSaveAndLoadMutableString
 {
-    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
     NSMutableString *aMutableString = [[@"string" mutableCopy] autorelease];
-    [[aNursery sandbox] setRoot:aMutableString];
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"[aNursery save] failed");
-    [[aNursery sandbox] close];
+
+    @autoreleasepool
+    {
+        NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+        NUSandbox *aSandbox = [aNursery makeSandbox];
+        [aSandbox setRoot:aMutableString];
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"[aNursery save] failed");
+    }
     
-    aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-	NSMutableString *aUserRoot = [[aNursery sandbox] root];
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUSandbox *aSandbox = [aNursery makeSandbox];
+	NSMutableString *aUserRoot = [aSandbox root];
 	
 	XCTAssertFalse(aMutableString == aUserRoot, @"");
 	XCTAssertEqualObjects(aMutableString, aUserRoot, @"");
-	[[aNursery sandbox] close];
 }
 
 - (void)testSaveAndLoadAndSearchNULibrary
@@ -257,13 +276,17 @@ static NSString *NUNurseryTestFilePath = nil;
         [aLibrary setObject:aNumber forKey:aNumber];
     }
     
-    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    [[aNursery sandbox] setRoot:aLibrary];
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"[aNursery save] failed");
-    [[aNursery sandbox] close];
+    @autoreleasepool
+    {
+        NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+        NUSandbox *aSandbox = [aNursery makeSandbox];
+        [aSandbox setRoot:aLibrary];
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"[aSandbox farmOut] failed");
+    }
 
-    aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    aLibrary = [[aNursery sandbox] root];
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUSandbox *aSandbox = [aNursery makeSandbox];
+    aLibrary = [aSandbox root];
     
     NSMutableArray *aNumbers = [NSMutableArray array];
 
@@ -280,34 +303,33 @@ static NSString *NUNurseryTestFilePath = nil;
         XCTAssertTrue(aCurrent % 2 == 0);
 //        NSLog(@"%@", obj);
     }];
-    
-    [[aNursery sandbox] close];
 }
 
 - (void)testRetainCount
 {
     Person *aPerson = [[Person alloc] initWithFirstName:@"aFirstName" lastName:@"aLastName"];
     
-    NSAutoreleasePool *aPool = [NSAutoreleasePool new];
-
-    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    [[aNursery sandbox] setRoot:aPerson];
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-    [[aNursery sandbox] close];
-    [aPool release];
+    @autoreleasepool
+    {
+        NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+        NUSandbox *aSandbox = [aNursery makeSandbox];
+        [aSandbox setRoot:aPerson];
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+    }
     
     XCTAssertTrue([aPerson retainCount] == 1, @"");
     [aPerson release];
     
-    aPool = [NSAutoreleasePool new];
-    aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    aPerson = [[[aNursery sandbox] root] retain];
-//    NUBell *aPersonBell = [aPerson bell];
-//    NSMutableSet *anOOPSet = [[aNursery sandbox] bellSet];
-//    NSLog(@"%@", aPersonBell);
-//    NSLog(@"%@", anOOPSet);
-    [[aNursery sandbox] close];
-    [aPool release];
+    @autoreleasepool
+    {
+        NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+        NUSandbox *aSandbox = [aNursery makeSandbox];
+        aPerson = [[aSandbox root] retain];
+    //    NUBell *aPersonBell = [aPerson bell];
+    //    NSMutableSet *anOOPSet = [aSandbox bellSet];
+    //    NSLog(@"%@", aPersonBell);
+    //    NSLog(@"%@", anOOPSet);
+    }
     
     XCTAssertTrue([aPerson retainCount] == 1, @"");
     [aPerson release];
@@ -315,84 +337,104 @@ static NSString *NUNurseryTestFilePath = nil;
 
 - (void)testUpgradeCharacter
 {
-    NSAutoreleasePool *aPool = [NSAutoreleasePool new];
+    Person *aPerson0 = nil, *aPerson1 = nil, *aPerson2 = nil;
     
-    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    NSMutableArray *aPersons = [NSMutableArray array];
-    Person *aPerson0 = [[[Person alloc] initWithFirstName:@"aFirstName0" lastName:@"aLastName0"] autorelease];
-    
-    [aPersons addObject:aPerson0];
-    [[aNursery sandbox] setRoot:aPersons];
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-    [[aNursery sandbox] close];
-    
-    aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    [Person setCharacterVersion:1];
-    [[[aNursery sandbox] characterForName:@"NSObject#0!Person#0"] setTargetClass:[Person class]];
-    aPersons = [[aNursery sandbox] root];
-    Person *aPerson1 = [[[Person alloc] initWithFirstName:@"aFirstName1" lastName:@"aLastName1"] autorelease];
-    [aPerson1 setMiddleName:@"aMiddleName1"];
-    [aPersons addObject:aPerson1];
-    [[aNursery sandbox] markChangedObject:aPersons];
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-    [[aNursery sandbox] close];
-    
-    aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    [Person setCharacterVersion:2];
-    [[[aNursery sandbox] characterForName:@"NSObject#0!Person#0"] setTargetClass:[Person class]];
-    [[[aNursery sandbox] characterForName:@"NSObject#0!Person#1"] setTargetClass:[Person class]];
-    aPersons = [[aNursery sandbox] root];
-    Person *aPerson2 = [[[Person alloc] initWithFirstName:@"aFirstName2" lastName:@"aLastName2"] autorelease];
-    [aPerson2 setMiddleName:@"aMiddleName2"];
-    [aPerson2 setAge:11];
-    [aPersons addObject:aPerson2];
-    [[aNursery sandbox] markChangedObject:aPersons];
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-    [[aNursery sandbox] close];
+    @autoreleasepool
+    {
+        NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+        NUSandbox *aSandbox = [aNursery makeSandbox];
+        NSMutableArray *aPersons = [NSMutableArray array];
 
-    aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    [[[aNursery sandbox] characterForName:@"NSObject#0!Person#0"] setTargetClass:[Person class]];
-    [[[aNursery sandbox] characterForName:@"NSObject#0!Person#1"] setTargetClass:[Person class]];
-    [[[aNursery sandbox] characterForName:@"NSObject#0!Person#2"] setTargetClass:[Person class]];
-    aPersons = [[aNursery sandbox] root];
+        aPerson0 = [[Person alloc] initWithFirstName:@"aFirstName0" lastName:@"aLastName0"];
+        [aPersons addObject:aPerson0];
+        [aSandbox setRoot:aPersons];
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+    }
+    
+    @autoreleasepool
+    {
+        NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+        NUSandbox *aSandbox = [aNursery makeSandbox];
+        [Person setCharacterVersion:1];
+        [[aSandbox characterForName:@"NSObject#0!Person#0"] setTargetClass:[Person class]];
+        NSMutableArray *aPersons = [aSandbox root];
+        aPerson1 = [[Person alloc] initWithFirstName:@"aFirstName1" lastName:@"aLastName1"];
+        [aPerson1 setMiddleName:@"aMiddleName1"];
+        [aPersons addObject:aPerson1];
+        [aSandbox markChangedObject:aPersons];
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+    }
+    
+    @autoreleasepool
+    {
+        NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+        NUSandbox *aSandbox = [aNursery makeSandbox];
+        [Person setCharacterVersion:2];
+        [[aSandbox characterForName:@"NSObject#0!Person#0"] setTargetClass:[Person class]];
+        [[aSandbox characterForName:@"NSObject#0!Person#1"] setTargetClass:[Person class]];
+        NSMutableArray *aPersons = [aSandbox root];
+        aPerson2 = [[Person alloc] initWithFirstName:@"aFirstName2" lastName:@"aLastName2"];
+        [aPerson2 setMiddleName:@"aMiddleName2"];
+        [aPerson2 setAge:11];
+        [aPersons addObject:aPerson2];
+        [aSandbox markChangedObject:aPersons];
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+    }
+    
+    @autoreleasepool
+    {
+        NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+        NUSandbox *aSandbox = [aNursery makeSandbox];
+        [[aSandbox characterForName:@"NSObject#0!Person#0"] setTargetClass:[Person class]];
+        [[aSandbox characterForName:@"NSObject#0!Person#1"] setTargetClass:[Person class]];
+        [[aSandbox characterForName:@"NSObject#0!Person#2"] setTargetClass:[Person class]];
+        NSMutableArray *aPersons = [aSandbox root];
 
-    [Person setCharacterVersion:0];
-    XCTAssertEqualObjects(aPersons[0], aPerson0, @"");
-    [Person setCharacterVersion:1];
-    XCTAssertEqualObjects(aPersons[1], aPerson1, @"");
-    [Person setCharacterVersion:2];
-    XCTAssertEqualObjects(aPersons[2], aPerson2, @"");
+        [Person setCharacterVersion:0];
+        XCTAssertEqualObjects(aPersons[0], aPerson0, @"");
+        [Person setCharacterVersion:1];
+        XCTAssertEqualObjects(aPersons[1], aPerson1, @"");
+        [Person setCharacterVersion:2];
+        XCTAssertEqualObjects(aPersons[2], aPerson2, @"");
+        
+        [aPersons[0] setMiddleName:@"aMiddleName0"];
+        [aSandbox markChangedObject:aPersons[0]];
+        [aPersons[1] setMiddleName:@"aMiddleName1-2"];
+        [aSandbox markChangedObject:aPersons[1]];
+        [aPersons[2] setMiddleName:@"aMiddleName2-2"];
+        [aSandbox markChangedObject:aPersons[2]];
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+        [aPerson0 autorelease];
+        [aPerson1 autorelease];
+        [aPerson2 autorelease];
+    }
     
-    [aPersons[0] setMiddleName:@"aMiddleName0"];
-    [[aNursery sandbox] markChangedObject:aPersons[0]];
-    [aPersons[1] setMiddleName:@"aMiddleName1-2"];
-    [[aNursery sandbox] markChangedObject:aPersons[1]];
-    [aPersons[2] setMiddleName:@"aMiddleName2-2"];
-    [[aNursery sandbox] markChangedObject:aPersons[2]];
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-    [[aNursery sandbox] close];
-    
-    aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    aPersons = [[aNursery sandbox] root];
-    XCTAssertEqualObjects([aPersons[0] middleName], @"aMiddleName0", @"");
-    XCTAssertEqualObjects([aPersons[1] middleName], @"aMiddleName1-2", @"");
-    XCTAssertEqualObjects([aPersons[2] middleName], @"aMiddleName2-2", @"");
-    [[aNursery sandbox] close];
-    
-    [aPool release];
+    @autoreleasepool
+    {
+        NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+        NUSandbox *aSandbox = [aNursery makeSandbox];
+        NSMutableArray *aPersons = [aSandbox root];
+        XCTAssertEqualObjects([aPersons[0] middleName], @"aMiddleName0", @"");
+        XCTAssertEqualObjects([aPersons[1] middleName], @"aMiddleName1-2", @"");
+        XCTAssertEqualObjects([aPersons[2] middleName], @"aMiddleName2-2", @"");
+    }
 }
 
 - (void)testAllTypesObject
 {
     AllTypesObject *anObject = [[AllTypesObject new] autorelease];
-    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    [[aNursery sandbox] setRoot:anObject];
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-    [[aNursery sandbox] close];
     
-    aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    XCTAssertEqualObjects([[aNursery sandbox] root], anObject);
-    [[aNursery sandbox] close];
+    @autoreleasepool
+    {
+        NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+        NUSandbox *aSandbox = [aNursery makeSandbox];
+        [aSandbox setRoot:anObject];
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+    }
+    
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUSandbox *aSandbox = [aNursery makeSandbox];
+    XCTAssertEqualObjects([aSandbox root], anObject);
 }
 
 - (void)testAllTypesObjectWithKeyedCoding
@@ -400,57 +442,57 @@ static NSString *NUNurseryTestFilePath = nil;
     [AllTypesObject setUseKeyedCoding:YES];
     
     AllTypesObject *anObject = [[AllTypesObject new] autorelease];
-    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    [[aNursery sandbox] setRoot:anObject];
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-    [[aNursery sandbox] close];
     
-    aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    XCTAssertEqualObjects([[aNursery sandbox] root], anObject);
-    [[aNursery sandbox] close];
+    @autoreleasepool
+    {
+        NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+        NUSandbox *aSandbox = [aNursery makeSandbox];
+        [aSandbox setRoot:anObject];
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+    }
+    
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUSandbox *aSandbox = [aNursery makeSandbox];
+    XCTAssertEqualObjects([aSandbox root], anObject);
 }
 
-- (void)testCreateSandboxWithGrade
+- (void)testMakeSandboxWithGrade
 {
     NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUSandbox *aSandbox = [aNursery makeSandbox];
     
-    [[aNursery sandbox] setRoot:@"NextStep"];
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-    NUSandbox *aSandboxWithPastGrade1 = [aNursery createSandboxWithGrade:[[aNursery sandbox] grade]];
+    [aSandbox setRoot:@"NextStep"];
+    XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+    NUSandbox *aSandboxWithPastGrade1 = [aNursery makeSandboxWithGrade:[aSandbox grade]];
     
-    [[aNursery sandbox] setRoot:@"NeXTstep"];
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-    NUSandbox *aSandboxWithPastGrade2 = [aNursery createSandboxWithGrade:[[aNursery sandbox] grade]];
+    [aSandbox setRoot:@"NeXTstep"];
+    XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+    NUSandbox *aSandboxWithPastGrade2 = [aNursery makeSandboxWithGrade:[aSandbox grade]];
     
-    [[aNursery sandbox] setRoot:@"NeXTSTEP"];
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-    NUSandbox *aSandboxWithPastGrade3 = [aNursery createSandboxWithGrade:[[aNursery sandbox] grade]];
+    [aSandbox setRoot:@"NeXTSTEP"];
+    XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+    NUSandbox *aSandboxWithPastGrade3 = [aNursery makeSandboxWithGrade:[aSandbox grade]];
     
-    [[aNursery sandbox] setRoot:@"NEXTSTEP"];
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-    NUSandbox *aSandboxWithPastGrade4 = [aNursery createSandboxWithGrade:[[aNursery sandbox] grade]];
+    [aSandbox setRoot:@"NEXTSTEP"];
+    XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+    NUSandbox *aSandboxWithPastGrade4 = [aNursery makeSandboxWithGrade:[aSandbox grade]];
     
     XCTAssertEqualObjects([aSandboxWithPastGrade1 root], @"NextStep");
     XCTAssertEqualObjects([aSandboxWithPastGrade2 root], @"NeXTstep");
     XCTAssertEqualObjects([aSandboxWithPastGrade3 root], @"NeXTSTEP");
     XCTAssertEqualObjects([aSandboxWithPastGrade4 root], @"NEXTSTEP");
-    
-    [aSandboxWithPastGrade1 close];
-    [aSandboxWithPastGrade2 close];
-    [aSandboxWithPastGrade3 close];
-    [aSandboxWithPastGrade4 close];
-    [[aNursery sandbox] close];
 }
 
 - (void)testMoveUp
 {
     NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUSandbox *aSandbox = [aNursery makeSandbox];
     
-    [[aNursery sandbox] setRoot:[[@"first" mutableCopy] autorelease]];
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+    [aSandbox setRoot:[[@"first" mutableCopy] autorelease]];
+    XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
     
-    NUSandbox *aSandboxA = [aNursery createSandbox];
-    NUSandbox *aSandboxB = [aNursery createSandbox];
+    NUSandbox *aSandboxA = [aNursery makeSandbox];
+    NUSandbox *aSandboxB = [aNursery makeSandbox];
     
     [(NSMutableString *)[aSandboxA root] setString:@"A"];
     [aSandboxA markChangedObject:[aSandboxA root]];
@@ -469,10 +511,6 @@ static NSString *NUNurseryTestFilePath = nil;
     [aSandboxB markChangedObject:[aSandboxB root]];
     
     XCTAssertEqual([aSandboxB farmOut], NUFarmOutStatusSucceeded, @"");
-    
-    [aSandboxA close];
-    [aSandboxB close];
-    [[aNursery sandbox] close];
 }
 
 @class NUNSNumber;
@@ -480,64 +518,63 @@ static NSString *NUNurseryTestFilePath = nil;
 - (void)testMoveUpOfMutableArray
 {
     NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUSandbox *aSandbox = [aNursery makeSandbox];
     
-    [[aNursery sandbox] setRoot:[NSMutableArray array]];
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+    [aSandbox setRoot:[NSMutableArray array]];
+    XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
     
-    NUSandbox *aSandboxA = [aNursery createSandbox];
+    NUSandbox *aSandboxA = [aNursery makeSandbox];
     NSMutableArray *aMutableArray = [aSandboxA root];
     [aMutableArray addObject:@(1)];
     [aSandboxA markChangedObject:aMutableArray];
     XCTAssertEqual([aSandboxA farmOut], NUFarmOutStatusSucceeded, @"");
     
-    [[aNursery sandbox] moveUp];
-    [[aNursery sandbox] moveUpObject:[[aNursery sandbox] root]];
+    [aSandbox moveUp];
+    [aSandbox moveUpObject:[aSandbox root]];
     
 //    NSLog(@"[[aNursery sandbox] root]:%@, [aSandboxA root]:%@", [[aNursery sandbox] root], [aSandboxA root]);
     
-    XCTAssertEqualObjects([[aNursery sandbox] root], [aSandboxA root]);
-    
-    [[aNursery sandbox] close];
+    XCTAssertEqualObjects([aSandbox root], [aSandboxA root]);
 }
 
 - (void)testMoveUpOfMutableDictionary
 {
     NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUSandbox *aSandbox = [aNursery makeSandbox];
     
-    [[aNursery sandbox] setRoot:[NSMutableDictionary dictionary]];
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+    [aSandbox setRoot:[NSMutableDictionary dictionary]];
+    XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
     
-    NUSandbox *aSandboxA = [aNursery createSandbox];
+    NUSandbox *aSandboxA = [aNursery makeSandbox];
     NSMutableDictionary *aMutableDictionary = [aSandboxA root];
     [aMutableDictionary setObject:@(1) forKey:@(1)];
     [aSandboxA markChangedObject:aMutableDictionary];
     XCTAssertEqual([aSandboxA farmOut], NUFarmOutStatusSucceeded, @"");
     
-    [[aNursery sandbox] moveUp];
-    [[aNursery sandbox] moveUpObject:[[aNursery sandbox] root]];
+    [aSandbox moveUp];
+    [aSandbox moveUpObject:[aSandbox root]];
     
-    XCTAssertEqualObjects([[aNursery sandbox] root], [aSandboxA root]);
-    [[aNursery sandbox] close];
+    XCTAssertEqualObjects([aSandbox root], [aSandboxA root]);
 }
 
 - (void)testMoveUpOfMutableSet
 {
     NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUSandbox *aSandbox = [aNursery makeSandbox];
     
-    [[aNursery sandbox] setRoot:[NSMutableSet set]];
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+    [aSandbox setRoot:[NSMutableSet set]];
+    XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
     
-    NUSandbox *aSandboxA = [aNursery createSandbox];
+    NUSandbox *aSandboxA = [aNursery makeSandbox];
     NSMutableSet *aMutableSet = [aSandboxA root];
     [aMutableSet addObject:@(1)];
     [aSandboxA markChangedObject:aMutableSet];
     XCTAssertEqual([aSandboxA farmOut], NUFarmOutStatusSucceeded, @"");
     
-    [[aNursery sandbox] moveUp];
-    [[aNursery sandbox] moveUpObject:[[aNursery sandbox] root]];
+    [aSandbox moveUp];
+    [aSandbox moveUpObject:[aSandbox root]];
     
-    XCTAssertEqualObjects([[aNursery sandbox] root], [aSandboxA root]);
-    [[aNursery sandbox] close];
+    XCTAssertEqualObjects([aSandbox root], [aSandboxA root]);
 }
 
 @end

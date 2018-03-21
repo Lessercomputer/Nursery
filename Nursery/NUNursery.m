@@ -33,9 +33,14 @@ NUUInt64 NUFirstSandboxID = 1000;
     return self;
 }
 
+- (instancetype)retain
+{
+    return [super retain];
+}
+
 - (void)dealloc
 {
-    [sandbox release];
+    [self close];
     
 	[super dealloc];
 }
@@ -43,11 +48,6 @@ NUUInt64 NUFirstSandboxID = 1000;
 @end
 
 @implementation NUNursery (Accessing)
-
-- (NUSandbox *)sandbox
-{
-	return sandbox;
-}
 
 @end
 
@@ -106,20 +106,15 @@ NUUInt64 NUFirstSandboxID = 1000;
 
 @implementation NUNursery (Sandbox)
 
-- (NUSandbox *)createSandbox
+- (NUSandbox *)makeSandbox
 {
-    return [self createSandboxWithGrade:NUNilGrade];
+    return [self makeSandboxWithGrade:NUNilGrade];
 }
 
-- (NUSandbox *)createSandboxWithGrade:(NUUInt64)aGrade
+- (NUSandbox *)makeSandboxWithGrade:(NUUInt64)aGrade
 {
     NUSandbox *aSandbox = [NUSandbox sandboxWithNursery:self grade:aGrade usesGradeSeeker:YES];
     return aSandbox;
-}
-
-- (void)sandboxDidClose:(NUSandbox *)aSandbox
-{
-    if ([aSandbox isEqual:[self sandbox]]) [self close];
 }
 
 @end
@@ -135,12 +130,6 @@ NUUInt64 NUFirstSandboxID = 1000;
 
 @implementation NUNursery (Private)
 
-- (void)setSandbox:(NUSandbox *)aSandbox
-{
-    [sandbox autorelease];
-    sandbox = [aSandbox retain];
-}
-
 - (BOOL)open
 {
     openStatus = NUNurseryOpenStatusOpenWithFile;
@@ -149,11 +138,6 @@ NUUInt64 NUFirstSandboxID = 1000;
 
 - (void)close
 {
-    NUSandbox *aSandbox = [self sandbox];
-    sandbox = nil;
-    [aSandbox close];
-    [aSandbox release];
-    
     openStatus = NUNurseryOpenStatusClose;
 }
 

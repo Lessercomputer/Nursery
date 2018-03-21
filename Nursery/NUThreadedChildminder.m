@@ -47,8 +47,7 @@ const int NUThreadedChildminderTerminateCondition   = 2;
 
 - (void)setSandbox:(NUSandbox *)aSandbox
 {
-    [sandbox autorelease];
-    sandbox = [aSandbox retain];
+    sandbox = aSandbox;
 }
 
 - (void)prepare

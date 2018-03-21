@@ -23,7 +23,6 @@
     if (self = [super init])
     {
         _netClient = [[NUNurseryNetClient alloc] initWithServiceName:aServiceName];
-        sandbox = [[NUSandbox sandboxWithNursery:self usesGradeSeeker:YES] retain];
         pupilAlbum = [NUPupilAlbum new];
     }
     

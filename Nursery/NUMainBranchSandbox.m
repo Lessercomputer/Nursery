@@ -15,9 +15,9 @@
 
 @implementation NUMainBranchSandbox
 
-- (id)initWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker
+- (id)initWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
 {
-    if (self = [super initWithNursery:aNursery grade:aGrade usesGradeSeeker:aUsesGradeSeeker])
+    if (self = [super initWithNursery:aNursery grade:aGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:aRetainFlag])
     {
         farmOutLock = [NSLock new];
     }
@@ -30,11 +30,6 @@
     [farmOutLock release];
     
     [super dealloc];
-}
-
-- (id)retain
-{
-    return [super retain];
 }
 
 @end

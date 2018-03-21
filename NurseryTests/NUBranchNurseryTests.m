@@ -36,25 +36,26 @@ static NSString *NUNurseryTestFilePath;
 - (void)testBranchNurseryCallFor
 {
     NUMainBranchNursery *aMainBranchNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUSandbox *aMainBranchSandbox = [aMainBranchNursery makeSandbox];
     
-    [[aMainBranchNursery sandbox] setRoot:@"theRoot"];
-    XCTAssertEqual([[aMainBranchNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+    [aMainBranchSandbox setRoot:@"theRoot"];
+    XCTAssertEqual([aMainBranchSandbox farmOut], NUFarmOutStatusSucceeded, @"");
     
-    NUSandbox *aSandbox = [aMainBranchNursery createSandbox];
+    NUSandbox *aSandbox = [aMainBranchNursery makeSandbox];
     XCTAssertEqualObjects([aSandbox root], @"theRoot");
-    [aSandbox close];
     
     NUNurseryNetService *aNurseryNetService = [NUNurseryNetService netServiceWithNursery:aMainBranchNursery serviceName:@"nursery"];
     
     [aNurseryNetService start];
     
-    NUBranchNursery *aBranchNursery = [NUBranchNursery branchNurseryWithServiceName:@"nursery"];
-    XCTAssertEqualObjects([[aBranchNursery sandbox] root], @"theRoot", @"");
-
-    [aNurseryNetService stop];
+    @autoreleasepool
+    {
+        NUBranchNursery *aBranchNursery = [NUBranchNursery branchNurseryWithServiceName:@"nursery"];
+        NUSandbox *aBranchSandbox = [aBranchNursery makeSandbox];
+        XCTAssertEqualObjects([aBranchSandbox root], @"theRoot", @"");
+    }
     
-    [[aBranchNursery sandbox] close];
-    [[aMainBranchNursery sandbox] close];
+    [aNurseryNetService stop];
 }
 
 - (void)testBranchNurseryFarmOut
@@ -64,16 +65,16 @@ static NSString *NUNurseryTestFilePath;
     NUNurseryNetService *aNurseryNetService = [NUNurseryNetService netServiceWithNursery:aMainBranchNursery serviceName:@"nursery"];
     
     [aNurseryNetService start];
-        
-    NUBranchNursery *aBranchNursery = [NUBranchNursery branchNurseryWithServiceName:@"nursery"];
     
-    [[aBranchNursery sandbox] setRoot:@"theRoot"];
-    XCTAssertEqual([[aBranchNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
+    @autoreleasepool
+    {
+        NUBranchNursery *aBranchNursery = [NUBranchNursery branchNurseryWithServiceName:@"nursery"];
+        NUSandbox *aBranchSandbox = [aBranchNursery makeSandbox];
+        [aBranchSandbox setRoot:@"theRoot"];
+        XCTAssertEqual([aBranchSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+    }
     
     [aNurseryNetService stop];
-    
-    [[aBranchNursery sandbox] close];
-    [[aMainBranchNursery sandbox] close];
 }
 
 - (void)testBranchNurseryFarmOutAndCallFor
@@ -84,44 +85,41 @@ static NSString *NUNurseryTestFilePath;
     
     [aNurseryNetService start];
     
-    NUBranchNursery *aBranchNursery = [NUBranchNursery branchNurseryWithServiceName:@"nursery"];
+    @autoreleasepool
+    {
+        NUBranchNursery *aBranchNursery = [NUBranchNursery branchNurseryWithServiceName:@"nursery"];
 
-    NUSandbox *aBranchSandbox2 = [aBranchNursery createSandbox];
-    NUSandbox *aBranchSandbox3 = [aBranchNursery createSandbox];
-    NUSandbox *aBranchSandbox4 = [aBranchNursery createSandbox];
-    NUSandbox *aBranchSandbox5 = [aBranchNursery createSandbox];
-    
-    [[aBranchNursery sandbox] setRoot:@"theRoot"];
-    XCTAssertEqual([[aBranchNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-    
-    XCTAssertEqualObjects([aBranchSandbox2 root], @"theRoot", @"");
-    
-    [aBranchSandbox3 setRoot:@"theRoot3"];
-    XCTAssertEqual([aBranchSandbox3 farmOut], NUFarmOutStatusSucceeded, @"");
-    XCTAssertEqualObjects([aBranchSandbox3 root], @"theRoot3", @"");
-    XCTAssertEqualObjects([aBranchSandbox4 root], @"theRoot3", @"");
-    
-    [aBranchSandbox2 setRoot:@"theRoot2"];
-    NSString *theRoot2 = [[[aBranchSandbox2 root] retain] autorelease];
-    XCTAssertEqual([aBranchSandbox2 farmOut], NUFarmOutStatusNurseryGradeUnmatched, @"");
-    [aBranchSandbox2 moveUp];
-    XCTAssertEqualObjects([aBranchSandbox2 root], @"theRoot3", @"");
-    [aBranchSandbox2 setRoot:theRoot2];
-    XCTAssertEqualObjects([aBranchSandbox2 root], @"theRoot2", @"");
-    XCTAssertTrue([aBranchSandbox2 gradeIsEqualToNurseryGrade], @"");
-    XCTAssertEqual([aBranchSandbox2 farmOut], NUFarmOutStatusSucceeded, @"");
-    XCTAssertEqualObjects([aBranchSandbox2 root], @"theRoot2", @"");
-    
-    XCTAssertEqualObjects([aBranchSandbox5 root], @"theRoot2", @"");
-    
-    [aBranchSandbox2 close];
-    [aBranchSandbox3 close];
-    [aBranchSandbox4 close];
-    [aBranchSandbox5 close];
+        NUSandbox *aBranchSandbox1 = [aBranchNursery makeSandbox];
+        NUSandbox *aBranchSandbox2 = [aBranchNursery makeSandbox];
+        NUSandbox *aBranchSandbox3 = [aBranchNursery makeSandbox];
+        NUSandbox *aBranchSandbox4 = [aBranchNursery makeSandbox];
+        NUSandbox *aBranchSandbox5 = [aBranchNursery makeSandbox];
+        
+        [aBranchSandbox1 setRoot:@"theRoot"];
+        XCTAssertEqual([aBranchSandbox1 farmOut], NUFarmOutStatusSucceeded, @"");
+        
+        XCTAssertEqualObjects([aBranchSandbox2 root], @"theRoot", @"");
+        
+        [aBranchSandbox3 setRoot:@"theRoot3"];
+        XCTAssertEqual([aBranchSandbox3 farmOut], NUFarmOutStatusSucceeded, @"");
+        XCTAssertEqualObjects([aBranchSandbox3 root], @"theRoot3", @"");
+        XCTAssertEqualObjects([aBranchSandbox4 root], @"theRoot3", @"");
+        
+        [aBranchSandbox2 setRoot:@"theRoot2"];
+        NSString *theRoot2 = [[[aBranchSandbox2 root] retain] autorelease];
+        XCTAssertEqual([aBranchSandbox2 farmOut], NUFarmOutStatusNurseryGradeUnmatched, @"");
+        [aBranchSandbox2 moveUp];
+        XCTAssertEqualObjects([aBranchSandbox2 root], @"theRoot3", @"");
+        [aBranchSandbox2 setRoot:theRoot2];
+        XCTAssertEqualObjects([aBranchSandbox2 root], @"theRoot2", @"");
+        XCTAssertTrue([aBranchSandbox2 gradeIsEqualToNurseryGrade], @"");
+        XCTAssertEqual([aBranchSandbox2 farmOut], NUFarmOutStatusSucceeded, @"");
+        XCTAssertEqualObjects([aBranchSandbox2 root], @"theRoot2", @"");
+        
+        XCTAssertEqualObjects([aBranchSandbox5 root], @"theRoot2", @"");
+    }
     
     [aNurseryNetService stop];
-    
-    [aMainBranchNursery close];
 }
 
 - (void)testBranchNurseryMoveUp
@@ -132,39 +130,37 @@ static NSString *NUNurseryTestFilePath;
     
     [aNurseryNetService start];
     
-    NUBranchNursery *aBranchNursery = [NUBranchNursery branchNurseryWithServiceName:@"nursery"];
+    @autoreleasepool
+    {
+        NUBranchNursery *aBranchNursery = [NUBranchNursery branchNurseryWithServiceName:@"nursery"];
+        NUSandbox *aBranchSandbox = [aBranchNursery makeSandbox];
 
-    [[aBranchNursery sandbox] setRoot:[[@"first" mutableCopy] autorelease]];
-    XCTAssertEqual([[aBranchNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-    
-    NUSandbox *aSandboxA = [aBranchNursery createSandbox];
-    NUSandbox *aSandboxB = [aBranchNursery createSandbox];
-    
-    [(NSMutableString *)[aSandboxA root] setString:@"A"];
-    [aSandboxA markChangedObject:[aSandboxA root]];
-    
-    [(NSMutableString *)[aSandboxB root] setString:@"B"];
-    [aSandboxB markChangedObject:[aSandboxB root]];
-    
-    XCTAssertEqual([aSandboxA farmOut], NUFarmOutStatusSucceeded, @"");
-    
-    XCTAssertEqual([aSandboxB farmOut], NUFarmOutStatusNurseryGradeUnmatched, @"");
-    
-    [aSandboxB moveUp];
-    [aSandboxB moveUpObject:[aSandboxB root]];
-    XCTAssertEqualObjects([aSandboxB root], @"A");
-    [(NSMutableString *)[aSandboxB root] setString:@"B"];
-    [aSandboxB markChangedObject:[aSandboxB root]];
-    
-    XCTAssertEqual([aSandboxB farmOut], NUFarmOutStatusSucceeded, @"");
-    
-    [aSandboxA close];
-    [aSandboxB close];
-    [[aBranchNursery sandbox] close];
+        [aBranchSandbox setRoot:[[@"first" mutableCopy] autorelease]];
+        XCTAssertEqual([aBranchSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+        
+        NUSandbox *aSandboxA = [aBranchNursery makeSandbox];
+        NUSandbox *aSandboxB = [aBranchNursery makeSandbox];
+        
+        [(NSMutableString *)[aSandboxA root] setString:@"A"];
+        [aSandboxA markChangedObject:[aSandboxA root]];
+        
+        [(NSMutableString *)[aSandboxB root] setString:@"B"];
+        [aSandboxB markChangedObject:[aSandboxB root]];
+        
+        XCTAssertEqual([aSandboxA farmOut], NUFarmOutStatusSucceeded, @"");
+        
+        XCTAssertEqual([aSandboxB farmOut], NUFarmOutStatusNurseryGradeUnmatched, @"");
+        
+        [aSandboxB moveUp];
+        [aSandboxB moveUpObject:[aSandboxB root]];
+        XCTAssertEqualObjects([aSandboxB root], @"A");
+        [(NSMutableString *)[aSandboxB root] setString:@"B"];
+        [aSandboxB markChangedObject:[aSandboxB root]];
+        
+        XCTAssertEqual([aSandboxB farmOut], NUFarmOutStatusSucceeded, @"");
+    }
     
     [aNurseryNetService stop];
-    
-    [[aMainBranchNursery sandbox] close];
 }
 
 @end

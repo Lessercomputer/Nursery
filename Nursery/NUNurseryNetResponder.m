@@ -104,10 +104,7 @@
     }
     else if (aMessageKind == NUNurseryNetMessageKindCloseSandbox)
     {
-        NSNumber *aPairID = [[[self receivedMessage] argumentAt:0] value];
-        NUPairedMainBranchSandbox *aPairedSandbox = [[self pairedSandboxes] objectForKey:aPairID];
-        
-        [aPairedSandbox close];
+        NSNumber *aPairID = [[[self receivedMessage] argumentAt:0] value];        
         [[self pairedSandboxes] removeObjectForKey:aPairID];
         
         NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindCloseSandboxResponse];
@@ -255,7 +252,7 @@
     NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindOpenSandboxResponse];
     
     NUUInt64 aPairID = [[self nursery] newSandboxID];
-    [[self pairedSandboxes] setObject:[[self nursery] createPairdSandbox] forKey:@(aPairID)];
+    [[self pairedSandboxes] setObject:[[self nursery] makePairdSandbox] forKey:@(aPairID)];
     
     [aResponse addArgumentOfTypeUInt64WithValue:aPairID];
 

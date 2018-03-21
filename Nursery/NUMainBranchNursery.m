@@ -54,11 +54,10 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
         [self setReversedObjectTable:[[[NUReversedObjectTable alloc] initWithRootLocation:0 on:[self spaces]] autorelease]];
         [[self spaces] prepareNodeOOPToTreeDictionary];
         retainedGrades = [NSMutableDictionary new];
-        [self setSeeker:[NUSeeker seekerWithSandbox:[NUSandbox sandboxWithNursery:self usesGradeSeeker:NO]]];
-        [self setParader:[NUParader paraderWithSandbox:[NUSandbox sandboxWithNursery:self usesGradeSeeker:NO]]];
+        [self setSeeker:[NUSeeker seekerWithSandbox:[NUSandbox sandboxWithNursery:self usesGradeSeeker:NO retainNursery:NO]]];
+        [self setParader:[NUParader paraderWithSandbox:[NUSandbox sandboxWithNursery:self usesGradeSeeker:NO retainNursery:NO]]];
         [[self seeker] prepare];
         [[self parader] prepare];
-        [self setSandbox:[NUSandbox sandboxWithNursery:self usesGradeSeeker:YES]];
     }
     
 	return self;
@@ -66,6 +65,8 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 
 - (void)dealloc
 {
+    [self close];
+    
 	[self setObjectTable:nil];
     [self setReversedObjectTable:nil];
 	[self setSpaces:nil];
@@ -325,7 +326,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     retainedGrades = [aGrades retain];
 }
 
-- (NUPairedMainBranchSandbox *)createPairdSandbox
+- (NUPairedMainBranchSandbox *)makePairdSandbox
 {
     NUPairedMainBranchSandbox *aSandbox = [NUPairedMainBranchSandbox sandboxWithNursery:self usesGradeSeeker:NO];
     return aSandbox;
