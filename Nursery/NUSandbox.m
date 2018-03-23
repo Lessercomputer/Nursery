@@ -118,6 +118,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     [self setRetainedGrades:nil];
     [self setGradeSeeker:nil];
     [lock release];
+    lock = nil;
 
 	[super dealloc];
 }

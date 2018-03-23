@@ -38,7 +38,9 @@
 {
     [_netClient stop];
     [_netClient release];
+    _netClient = nil;
     [pupilAlbum release];
+    pupilAlbum = nil;
     
     [super dealloc];
 }

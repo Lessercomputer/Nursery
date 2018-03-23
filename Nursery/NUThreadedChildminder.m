@@ -24,7 +24,7 @@ const int NUThreadedChildminderTerminateCondition   = 2;
 {
 	if (self = [super init])
     {
-        [self setSandbox:aSandbox];
+        sandbox = aSandbox;
         shouldTerminate = NO;
         shouldStop = NO;
         conditionLock = [[NSConditionLock alloc] initWithCondition:NUThreadedChildminderDeactiveCondition];
@@ -35,6 +35,8 @@ const int NUThreadedChildminderTerminateCondition   = 2;
 
 - (void)dealloc
 {
+    [self setSandbox:nil];
+
 	[conditionLock release];
 	
 	[super dealloc];
@@ -92,8 +94,6 @@ const int NUThreadedChildminderTerminateCondition   = 2;
     }
     
     [conditionLock unlockWithCondition:NUThreadedChildminderDeactiveCondition];
-    
-    [self setSandbox:nil];
     
 #ifdef DEBUG
     NSLog(@"%@: end #terminate", self);

@@ -65,6 +65,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 
 - (void)dealloc
 {
+    NSLog(@"beginning of dealloc:%@", self);
     [self close];
     
 	[self setObjectTable:nil];
@@ -74,7 +75,11 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 	[self setSeeker:nil];
     [self setParader:nil];
     [retainedGrades release];
+    retainedGrades = nil;
     [lock release];
+    lock = nil;
+
+    NSLog(@"ending of dealloc:%@", self);
 
 	[super dealloc];
 }
@@ -469,7 +474,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 
 - (BOOL)open
 {
-    BOOL shouldStartChildminders = NO;
+    BOOL aShouldStartChildminders = NO;
     
     @try
     {
@@ -480,7 +485,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
             case NUNurseryOpenStatusClose:
                 [self createFileAndOpenIfNeeded];
                 if ([self isOpen] && [self grade] != NUNilGrade)
-                    shouldStartChildminders = YES;
+                    aShouldStartChildminders = YES;
                 break;
             case NUNurseryOpenStatusOpenWithoutFile:
                 [self createFileAndOpenIfNeeded];
@@ -495,7 +500,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
         [lock unlock];
     }
     
-    if (shouldStartChildminders)
+    if (aShouldStartChildminders)
     {
         [[self seeker] start];
         [[self parader] start];

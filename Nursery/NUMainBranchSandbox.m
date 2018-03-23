@@ -27,7 +27,9 @@
 
 - (void)dealloc
 {
+    NSLog(@"dealloc:%@", self);
     [farmOutLock release];
+    farmOutLock = nil;
     
     [super dealloc];
 }

@@ -24,6 +24,7 @@ static NSString *NUNurseryTestFilePath;
     [super setUp];
     NUNurseryTestFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"nursery.nursery"];
     [[NSFileManager defaultManager] removeItemAtPath:NUNurseryTestFilePath error:nil];
+    [NSThread sleepForTimeInterval:0.1];
 }
 
 - (void)tearDown

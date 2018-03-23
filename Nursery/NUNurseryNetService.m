@@ -19,14 +19,7 @@ NSString *NUNurseryNetServiceNetworkException = @"NUNurseryNetServiceNetworkExce
 const NSTimeInterval NUNurseryNetServiceRunLoopRunningTimeInterval = 0.003;
 
 @interface NUNurseryNetService ()
-{
-//    BOOL shouldStop;
-}
 
-//- (BOOL)shouldStop;
-//- (void)setShouldStop:(BOOL)aFlagForShouldStop;
-
-//@property (nonatomic, retain) NSLock *lockForShouldStop;
 @property (nonatomic, retain) NSRecursiveLock *netRespondersLock;
 
 - (void)startInNewThread;
@@ -61,6 +54,7 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
 
 - (void)dealloc
 {
+    NSLog(@"dealloc:%@", self);
     [_netResponders release];
     [_netRespondersLock release];
     [_serviceName release];
@@ -118,26 +112,6 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
     
     [[self statusCondition] unlock];
 }
-
-//- (BOOL)shouldStop
-//{
-//    [[self lockForShouldStop] lock];
-//
-//    BOOL aFlagForShouldStop = shouldStop;
-//
-//    [[self lockForShouldStop] unlock];
-//
-//    return aFlagForShouldStop;
-//}
-//
-//- (void)setShouldStop:(BOOL)aFlagForShouldStop
-//{
-//    [[self lockForShouldStop] lock];
-//
-//    shouldStop = aFlagForShouldStop;
-//
-//    [[self lockForShouldStop] unlock];
-//}
 
 - (NUNurseryNetServiceStatus)status
 {
@@ -257,6 +231,9 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
     
     CFStreamCreatePairWithSocket(kCFAllocatorDefault, *(CFSocketNativeHandle *)data, &aReadStream, &aWriteStream);
     
+    CFReadStreamSetProperty(aReadStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
+    CFWriteStreamSetProperty(aWriteStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
+    
     NSInputStream *anInputStream = (NSInputStream *)aReadStream;
     NSOutputStream *anOutputStream = (NSOutputStream *)aWriteStream;
     
@@ -271,6 +248,7 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
 
 - (void)netResponderDidStop:(NUNurseryNetResponder *)sender
 {
+    NSLog(@"netResponderDidStop:%@", sender);
     [[self netRespondersLock] lock];
 
     [[self statusCondition] lock];

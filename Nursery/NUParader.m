@@ -30,6 +30,24 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     return [[[self alloc] initWithSandbox:aSandbox] autorelease];
 }
 
+- (id)initWithSandbox:(NUSandbox *)aSandbox
+{
+    if (self = [super initWithSandbox:aSandbox])
+    {
+        sandbox = [aSandbox retain];
+    }
+    
+    return self;
+}
+
+- (void)dealloc
+{
+    NSLog(@"dealloc:%@", self);
+    [sandbox release];
+    
+    [super dealloc];
+}
+
 - (NUMainBranchNursery *)nursery
 {
     return (NUMainBranchNursery *)[[self sandbox] nursery];

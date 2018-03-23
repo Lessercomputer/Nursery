@@ -41,6 +41,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 {
 	if (self = [super initWithSandbox:aSandbox])
 	{
+        sandbox = [aSandbox retain];
         currentPhase = NUSeekerNonePhase;
         shouldLoadGrayOOPs = NO;
         grayOOPs = [[NUIndexArray alloc] initWithCapacity:NUSeekerDefaultGrayOOPCapacity comparator:[NUIndexArray comparator]];
@@ -52,8 +53,10 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
 - (void)dealloc
 {
+    NSLog(@"dealloc:%@", self);
 	[grayOOPs release];
 	[aperture release];
+    [sandbox release];
 	
 	[super dealloc];
 }

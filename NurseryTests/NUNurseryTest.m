@@ -42,7 +42,7 @@ static NSString *NUNurseryTestFilePath = nil;
 {
 	NUMainBranchNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
     NSLog(@"retainCount of %@ is %@", aNursery, @([aNursery retainCount]));
-    NUSandbox *aSandbox = [NUSandbox sandboxWithNursery:aNursery];
+    NUSandbox *aSandbox = [aNursery makeSandbox];
     NSLog(@"retainCount of %@ is %@", aNursery, @([aNursery retainCount]));
     NSLog(@"retainCount of %@ is %@", aSandbox, @([aSandbox retainCount]));
 	XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");

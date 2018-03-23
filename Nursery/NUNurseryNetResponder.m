@@ -42,6 +42,8 @@
 
 - (void)dealloc
 {
+    NSLog(@"dealloc:%@", self);
+
     [_pairedSandboxes release];
     [_lockForShouldStop release];
     
@@ -67,7 +69,10 @@
                  
             if ([[self inputStream] streamStatus] == NSStreamStatusError
                 || [[self outputStream] streamStatus] == NSStreamStatusError)
+            {
+                NSLog(@"inputStream error:%@, outputStream error:%@", [[self inputStream] streamError], [[self outputStream] streamError]);
                 @throw [NSException exceptionWithName:NUNurseryNetServiceNetworkException reason:NUNurseryNetServiceNetworkException userInfo:nil];
+            }
             
             if ([[self inputStream] streamStatus] == NSStreamStatusClosed
                 || [[self outputStream] streamStatus] == NSStreamStatusClosed)

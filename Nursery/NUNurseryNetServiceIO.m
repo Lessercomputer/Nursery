@@ -16,11 +16,23 @@ const NUUInt64 NUNurseryNetworkerReadBufferSize = 4096;
 - (void)dealloc
 {
     [_inputStream close];
-    [_inputStream setDelegate:nil];
     [_inputStream release];
+    _inputStream = nil;
     [_outputStream close];
-    [_outputStream setDelegate:nil];
     [_outputStream release];
+    _outputStream = nil;
+    
+    [_inputData release];
+    _inputData = nil;
+    
+    [_receivedMessage release];
+    _receivedMessage = nil;
+    
+    [_sendingMessage release];
+    _sendingMessage = nil;
+    
+    [_thread release];
+    _thread = nil;
     
     [super dealloc];
 }

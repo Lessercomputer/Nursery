@@ -349,33 +349,38 @@ static NSString *NUNurseryTestFilePath = nil;
 
 - (void)testSaveAndLoadLibrary
 {
-    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    
-    const NUUInt64 MaxCount = 1000;
-    NULibrary *aLibrary = [NULibrary library];
-    NSMutableSet *aNumberSet = [NSMutableSet set];
-    NSArray *aNumbers;
-    for (int i = 0; i < MaxCount; i++)
-        [aNumberSet addObject:[NSNumber numberWithUnsignedLongLong:random()]];
-    aNumbers = [aNumberSet allObjects];
-    
-    [aNumbers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [aLibrary setObject:obj forKey:obj];
-    }];
+    NSArray *aNumbers = nil;
 
-    [[aNursery sandbox] setRoot:aLibrary];
-    XCTAssertEqual([[aNursery sandbox] farmOut], NUFarmOutStatusSucceeded, @"");
-    [[aNursery sandbox] close];
+    @autoreleasepool
+    {
+        NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+        NUSandbox *aSandbox = [aNursery makeSandbox];
+        
+        const NUUInt64 MaxCount = 10000;
+        NULibrary *aLibrary = [NULibrary library];
+        NSMutableSet *aNumberSet = [NSMutableSet set];
+        for (int i = 0; i < MaxCount; i++)
+            [aNumberSet addObject:[NSNumber numberWithUnsignedLongLong:random()]];
+        aNumbers = [[aNumberSet allObjects] retain];
+        
+        [aNumbers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            [aLibrary setObject:obj forKey:obj];
+        }];
+
+        [aSandbox setRoot:aLibrary];
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+    }
     
-    aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    NULibrary *aLoadedLibrary = [[aNursery sandbox] root];
+    [aNumbers autorelease];
+    
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUSandbox *aSandbox = [aNursery makeSandbox];
+    NULibrary *aLoadedLibrary = [aSandbox root];
     
     XCTAssertEqual((NUUInt64)[aLoadedLibrary count], [aNumbers count], @"");
     [aNumbers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         XCTAssertEqualObjects([aLoadedLibrary objectForKey:obj], obj, @"");
     }];
-    
-    [[aNursery sandbox] close];
 }
 
 @end

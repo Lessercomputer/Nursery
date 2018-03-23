@@ -76,11 +76,19 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
 - (void)dealloc
 {
     [_netService release];
+    _netService = nil;
+    [_serviceBrowser release];
+    _serviceBrowser = nil;
     [_serviceName release];
+    _serviceName = nil;
     [_nursery release];
+    _nursery = nil;
     [_statusCondition release];
+    _statusCondition = nil;
     [_statusLock release];
+    _statusLock = nil;
     [_lock release];
+    _lock = nil;
     
     [super dealloc];
 }
@@ -132,6 +140,9 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
     NSOutputStream *anOutputStream;
     
     CFStreamCreatePairWithSocketToCFHost(kCFAllocatorDefault, aHost, (SInt)[[self netService] port], &aReadStream, &aWriteStream);
+    
+    CFReadStreamSetProperty(aReadStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
+    CFWriteStreamSetProperty(aWriteStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
     
     anInputStream = (NSInputStream *)aReadStream;
     anOutputStream = (NSOutputStream *)aWriteStream;
@@ -224,6 +235,7 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
     NSLog(@"%@", [[self netService] hostName]);
     
     [[self netService] stop];
+    [[self netService] setDelegate:nil];
     
     [self setStatus:NUNurseryNetClientStatusDidResolveService];
 }
