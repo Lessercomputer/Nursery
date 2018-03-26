@@ -799,8 +799,15 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         [self lock];
         
         [[[[self bells] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop){
-            if ([aBell retainCount] == 1 && (![aBell hasObject] || [[aBell object] retainCount] == 1))
-                [self invalidateBell:aBell];
+            @autoreleasepool
+            {
+                NSInteger aRetainCountOfBellInSandbox = 2;
+                if ([aBell hasObject] && ![[aBell object] conformsToProtocol:@protocol(NUCoding)])
+                    aRetainCountOfBellInSandbox++;
+                
+                if ([aBell retainCount] == aRetainCountOfBellInSandbox && (![aBell hasObject] || [[aBell object] retainCount] == 1))
+                    [self invalidateBell:aBell];
+            }
         }];
     }
     @finally {
@@ -831,12 +838,15 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     @try {
         [self lock];
         
-        [[[[self bells] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop) {
-            if ([aBell gradeAtCallFor] < aGrade
-                && ([aBell retainCount] == 1 && (![aBell hasObject] || [[aBell object] retainCount] == 1)))
-                [self removeBell:aBell];
+        @autoreleasepool
+        {
+            [[[[self bells] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop) {
+                if ([aBell gradeAtCallFor] < aGrade
+                    && ([aBell retainCount] == 2 && (![aBell hasObject] || [[aBell object] retainCount] == 1)))
+                    [self removeBell:aBell];
 
-        } ];
+            }];
+        }
     }
     @finally {
         [self unlock];
@@ -850,9 +860,6 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     @try {
         [self lock];
         
-        //        [[[[self bellSet] copy] autorelease] enumerateObjectsUsingBlock:^(id aBell, BOOL *stop) {
-        //            [aBell invalidate];
-        //        }];
         [[[[self bells] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop){
             [aBell invalidate];
         }];

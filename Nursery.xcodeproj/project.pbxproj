@@ -225,6 +225,7 @@
 		61FD7A771FFA48E9009ED9D5 /* NUNurseryNetMessageArgument.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FD7A751FFA48E9009ED9D5 /* NUNurseryNetMessageArgument.m */; };
 		B812EF8D2062725100BB7513 /* NUNodeDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = B812EF8B2062725100BB7513 /* NUNodeDictionary.h */; };
 		B812EF8E2062725100BB7513 /* NUNodeDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = B812EF8C2062725100BB7513 /* NUNodeDictionary.m */; };
+		B8BD5EAC2069058B00091994 /* SelfReferenceObject.m in Sources */ = {isa = PBXBuildFile; fileRef = B8BD5EAB2069058B00091994 /* SelfReferenceObject.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -478,6 +479,8 @@
 		61FD7A751FFA48E9009ED9D5 /* NUNurseryNetMessageArgument.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUNurseryNetMessageArgument.m; sourceTree = "<group>"; };
 		B812EF8B2062725100BB7513 /* NUNodeDictionary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUNodeDictionary.h; sourceTree = "<group>"; };
 		B812EF8C2062725100BB7513 /* NUNodeDictionary.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUNodeDictionary.m; sourceTree = "<group>"; };
+		B8BD5EAA2069058B00091994 /* SelfReferenceObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SelfReferenceObject.h; sourceTree = "<group>"; };
+		B8BD5EAB2069058B00091994 /* SelfReferenceObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SelfReferenceObject.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -888,6 +891,8 @@
 				619B07B11913ED8D00A4BAA2 /* NurseryTests.m */,
 				61DCED6219DCEEC8009E4E9E /* AllTypesObject.h */,
 				61DCED6319DCEEC8009E4E9E /* AllTypesObject.m */,
+				B8BD5EAA2069058B00091994 /* SelfReferenceObject.h */,
+				B8BD5EAB2069058B00091994 /* SelfReferenceObject.m */,
 				6116644E1FCBDEFC00774707 /* NUQueueTest.m */,
 				619B07AC1913ED8D00A4BAA2 /* Supporting Files */,
 			);
@@ -1212,6 +1217,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B8BD5EAC2069058B00091994 /* SelfReferenceObject.m in Sources */,
 				619B096C1913F2EE00A4BAA2 /* NUBellBallODictionaryTests.m in Sources */,
 				619B07B21913ED8D00A4BAA2 /* NurseryTests.m in Sources */,
 				619B096F1913F2EE00A4BAA2 /* Person.m in Sources */,
@@ -1391,6 +1397,7 @@
 		619B07B91913ED8D00A4BAA2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -1413,6 +1420,7 @@
 		619B07BA1913ED8D00A4BAA2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",

@@ -10,6 +10,7 @@
 #import <Nursery/Nursery.h>
 #import "Person.h"
 #import "AllTypesObject.h"
+#import "SelfReferenceObject.h"
 
 static NSString *NUNurseryTestFilePath = nil;
 
@@ -575,6 +576,62 @@ static NSString *NUNurseryTestFilePath = nil;
     [aSandbox moveUpObject:[aSandbox root]];
     
     XCTAssertEqualObjects([aSandbox root], [aSandboxA root]);
+}
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-circular-container"
+- (void)testCircularReferenceOfObjectNotConformingToNUCoding
+{
+    NSMutableArray *anArray = [NSMutableArray new];
+    
+    [anArray addObject:anArray];
+
+    [self _testCircularReferenceOf:anArray replacedBy:[NSMutableArray array] expectedRetainCountOfBell:2];
+    
+    [anArray removeAllObjects];
+    [anArray release];
+}
+#pragma clang diagnostic pop
+
+- (void)testCircularReferenceOfObjectConformingToNUCoding
+{
+    SelfReferenceObject *aSelfReferenceObject = [SelfReferenceObject new];
+    [aSelfReferenceObject setMyself:aSelfReferenceObject];
+    
+    [self _testCircularReferenceOf:aSelfReferenceObject replacedBy:[[SelfReferenceObject new] autorelease] expectedRetainCountOfBell:1];
+    
+    [aSelfReferenceObject setMyself:nil];
+//    NSLog(@"retainCount of %@ is %@", aSelfReferenceObject, @([aSelfReferenceObject retainCount]));
+    [aSelfReferenceObject release];
+}
+
+- (void)_testCircularReferenceOf:(id)anObject replacedBy:(id)aNewObject expectedRetainCountOfBell:(NSInteger)anExpectedRetainCount
+{
+    NUNursery *aNursery = nil;
+    NUSandbox *aSandbox = nil;
+    NUUInt64 aRootOOP = 0;
+    
+    @autoreleasepool
+    {
+        aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+        aSandbox = [aNursery makeSandbox];
+        
+        
+        [aSandbox setRoot:anObject];
+        
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+        
+        aRootOOP = [[aSandbox bellForObject:[aSandbox root]] OOP];
+        
+        [aSandbox setRoot:aNewObject];
+
+        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+        
+        [NSThread sleepForTimeInterval:5];
+        NUBell *aBell = [aSandbox bellForOOP:aRootOOP];
+        XCTAssertEqual([aBell retainCount], anExpectedRetainCount);
+//        NSLog(@"retainCount of %@ is %@", aBell, @([aBell retainCount]));
+    }
 }
 
 @end
