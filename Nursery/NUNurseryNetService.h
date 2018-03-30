@@ -14,6 +14,7 @@ typedef enum : NSUInteger {
     NUNurseryNetServiceStatusNone,
     NUNurseryNetServiceStatusPublishing,
     NUNurseryNetServiceStatusRunning,
+    NUNurseryNetServiceStatusShouldStop,
     NUNurseryNetServiceStatusStopping,
     NUNurseryNetServiceStatusStopped
 } NUNurseryNetServiceStatus;

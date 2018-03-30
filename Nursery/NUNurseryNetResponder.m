@@ -19,6 +19,7 @@
 - (NUMainBranchNursery *)nursery;
 
 - (NUNurseryNetMessage *)responseForOpenSandbox;
+- (NUNurseryNetMessage *)responseForCloseSandbox;
 
 @end
 
@@ -32,7 +33,6 @@
     {
         _pairedSandboxes = [NSMutableDictionary new];
         _netService = aNetService;
-        _lockForShouldStop = [NSLock new];
         _inputStream = [anInputStream retain];
         _outputStream = [anOutputStream retain];
     }
@@ -45,7 +45,6 @@
     NSLog(@"dealloc:%@", self);
 
     [_pairedSandboxes release];
-    [_lockForShouldStop release];
     
     [super dealloc];
 }
@@ -66,17 +65,17 @@
                  
             if ([[self outputStream] hasSpaceAvailable])
                  [self sendMessageOnStream];
-                 
+            
+            if ([[self inputStream] streamStatus] == NSStreamStatusClosed
+                || [[self outputStream] streamStatus] == NSStreamStatusClosed)
+                [[self thread] cancel];
+            
             if ([[self inputStream] streamStatus] == NSStreamStatusError
                 || [[self outputStream] streamStatus] == NSStreamStatusError)
             {
                 NSLog(@"inputStream error:%@, outputStream error:%@", [[self inputStream] streamError], [[self outputStream] streamError]);
                 @throw [NSException exceptionWithName:NUNurseryNetServiceNetworkException reason:NUNurseryNetServiceNetworkException userInfo:nil];
             }
-            
-            if ([[self inputStream] streamStatus] == NSStreamStatusClosed
-                || [[self outputStream] streamStatus] == NSStreamStatusClosed)
-                [[self thread] cancel];
         }
         
         [[self inputStream] close];
@@ -109,11 +108,8 @@
     }
     else if (aMessageKind == NUNurseryNetMessageKindCloseSandbox)
     {
-        NSNumber *aPairID = [[[self receivedMessage] argumentAt:0] value];        
-        [[self pairedSandboxes] removeObjectForKey:aPairID];
-        
-        NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindCloseSandboxResponse];
-        [aResponse serialize];
+        NUNurseryNetMessage *aResponse = [self responseForCloseSandbox];
+//        [aResponse serialize];
         [self setSendingMessage:aResponse];
     }
     else if (aMessageKind == NUNurseryNetMessageKindRootOOP)
@@ -246,7 +242,6 @@
 
 @implementation NUNurseryNetResponder (Private)
 
-
 - (NUMainBranchNursery *)nursery
 {
     return [[self netService] nursery];
@@ -262,6 +257,19 @@
     [aResponse addArgumentOfTypeUInt64WithValue:aPairID];
 
     return aResponse;
+}
+
+- (NUNurseryNetMessage *)responseForCloseSandbox
+{
+//    NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindCloseSandboxResponse];
+    
+    NSNumber *aPairID = [[[self receivedMessage] argumentAt:0] value];
+    [[self pairedSandboxes] removeObjectForKey:aPairID];
+    
+    [self stop];
+    
+//    return aResponse;
+    return nil;
 }
 
 @end

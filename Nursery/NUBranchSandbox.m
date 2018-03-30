@@ -29,11 +29,12 @@
     return self;
 }
 
-- (void)dealloc
+- (void)close
 {
+    [[self gradeSeeker] stop];
     [[self netClient] closeSandboxWithID:[self ID]];
     
-    [super dealloc];
+    [super close];
 }
 
 - (NUBranchAliaser *)branchAliaser

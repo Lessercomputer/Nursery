@@ -366,7 +366,8 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
     
     [aMessage addArgumentOfTypeUInt64WithValue:anID];
     
-    [self sendAndReceiveMessage:aMessage];
+//    [self sendAndReceiveMessage:aMessage];
+    [self sendMessage:aMessage];
     
     [[self lock] unlock];
 }

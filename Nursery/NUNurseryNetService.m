@@ -55,6 +55,8 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
 - (void)dealloc
 {
     NSLog(@"dealloc:%@", self);
+    [_netService release];
+    [_netServiceThread release];
     [_netResponders release];
     [_netRespondersLock release];
     [_serviceName release];
@@ -67,7 +69,10 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
 
 - (void)start
 {
-    NSThread *aThread = [[[NSThread alloc] initWithTarget:self selector:@selector(startInNewThread) object:nil] autorelease];
+    NSThread *aThread = [[[NSThread alloc] initWithBlock:^{
+        [self startInNewThread];
+    }] autorelease];
+    
     [self setNetServiceThread:aThread];
     [[self netServiceThread] setName:@"org.nursery-framework.NUNurseryNetServiceNetworking"];
     
@@ -91,21 +96,28 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
     
     [[self netService] publish];
 
-    while (![[self netServiceThread] isCancelled])
+    while ([self status] != NUNurseryNetServiceStatusStopped)
+    {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:NUNurseryNetServiceRunLoopRunningTimeInterval]];
+        
+        if ([self status] == NUNurseryNetServiceStatusShouldStop)
+        {
+            [self setStatus:NUNurseryNetServiceStatusStopping];
+            [[self netService] stop];
+        }
+    }
     
-    [[self netService] stop];
+    [[self netService] removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    [[self netService] setDelegate:nil];
 }
 
 - (void)stop
 {
-//    [self setShouldStop:YES];
-    
     [[self netServiceThread] cancel];
     
     [[self statusCondition] lock];
     
-    [self setStatus:NUNurseryNetServiceStatusStopping];
+    [self setStatus:NUNurseryNetServiceStatusShouldStop];
     
     while ([self status] != NUNurseryNetServiceStatusStopped)
         [[self statusCondition] wait];
@@ -161,6 +173,19 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
     }];
     
     [[self netRespondersLock] unlock];
+    
+    while ([self status] != NUNurseryNetServiceStatusStopped)
+    {
+        [[self statusCondition] lock];
+        
+        if ([self status] == NUNurseryNetServiceStatusStopping && ![[self netResponders] count])
+        {
+            [self setStatus:NUNurseryNetServiceStatusStopped];
+            [[self statusCondition] signal];
+        }
+        
+        [[self statusCondition] unlock];
+    }
 }
 
 - (void)prepareListeningSocket
@@ -219,9 +244,6 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
 
 void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, const void *data, void *info)
 {
-    NSLog(@"handleConnect");
-    NSLog(@"currentMode:%@", [[NSRunLoop currentRunLoop] currentMode]);
-    
     if (type != kCFSocketAcceptCallBack)
         @throw [NSException exceptionWithName:NUNurseryNetServiceNetworkException reason:NUNurseryNetServiceNetworkException userInfo:nil];
     
@@ -250,16 +272,8 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
 {
     NSLog(@"netResponderDidStop:%@", sender);
     [[self netRespondersLock] lock];
-
-    [[self statusCondition] lock];
     
     [[self netResponders] removeObject:sender];
-    
-    if ([self status] == NUNurseryNetServiceStatusStopping && ![[self netResponders] count])
-        [self setStatus:NUNurseryNetServiceStatusStopped];
-    
-    [[self statusCondition] signal];
-    [[self statusCondition] unlock];
     
     [[self netRespondersLock] unlock];
 }

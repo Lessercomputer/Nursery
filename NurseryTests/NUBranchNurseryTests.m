@@ -34,6 +34,31 @@ static NSString *NUNurseryTestFilePath;
     [super tearDown];
 }
 
+- (void)testNurseryNetServiceStartAndStop
+{
+    [self _testNurseryNetServiceStartAndStopTimes:1];
+}
+
+- (void)testNurseryNetServiceStartAndStop2Times
+{
+    [self _testNurseryNetServiceStartAndStopTimes:2];
+}
+
+- (void)_testNurseryNetServiceStartAndStopTimes:(NSUInteger)aTimes
+{
+    while (!aTimes && aTimes-- )
+    {
+        @autoreleasepool
+        {
+            NUMainBranchNursery *aMainBranchNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+            NUNurseryNetService *aNurseryNetService = [NUNurseryNetService netServiceWithNursery:aMainBranchNursery serviceName:@"nursery"];
+            
+            [aNurseryNetService start];
+            [aNurseryNetService stop];
+        }
+    }
+}
+
 - (void)testBranchNurseryCallFor
 {
     NUMainBranchNursery *aMainBranchNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
