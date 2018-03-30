@@ -43,6 +43,8 @@ extern const NUUInt64 NUNurseryNetMessageKindCallForPupilResponse;
 extern const NUUInt64 NUNurseryNetMessageKindFarmOutPupils;
 extern const NUUInt64 NUNurseryNetMessageKindFarmOutPupilsResponse;
 
+extern const NUUInt64 NUNurseryNetMessageKindNetClientWillStop;
+
 @class NUNurseryNetMessageArgument;
 
 @interface NUNurseryNetMessage : NSObject

@@ -44,6 +44,8 @@ const NUUInt64 NUNurseryNetMessageKindCallForPupilResponse = 20;
 const NUUInt64 NUNurseryNetMessageKindFarmOutPupils = 21;
 const NUUInt64 NUNurseryNetMessageKindFarmOutPupilsResponse = 22;
 
+const NUUInt64 NUNurseryNetMessageKindNetClientWillStop = 23;
+
 @implementation NUNurseryNetMessage
 
 - (instancetype)init

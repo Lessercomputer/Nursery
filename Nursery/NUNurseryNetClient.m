@@ -274,6 +274,8 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
 - (void)stop
 {
     [[self lock] lock];
+    
+    [self netClientWillStop];
     [[self thread] cancel];
     
     [[self statusCondition] lock];
@@ -527,6 +529,13 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
     [[self lock] unlock];
     
     return aStatus;
+}
+
+- (void)netClientWillStop
+{
+    NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindNetClientWillStop];
+    
+    [self sendMessage:aMessage];
 }
 
 @end

@@ -36,6 +36,7 @@
 
 - (void)dealloc
 {
+    NSLog(@"dealloc:%@", self);
     [_netClient stop];
     [_netClient release];
     _netClient = nil;

@@ -74,7 +74,8 @@
                 || [[self outputStream] streamStatus] == NSStreamStatusError)
             {
                 NSLog(@"inputStream error:%@, outputStream error:%@", [[self inputStream] streamError], [[self outputStream] streamError]);
-                @throw [NSException exceptionWithName:NUNurseryNetServiceNetworkException reason:NUNurseryNetServiceNetworkException userInfo:nil];
+//                @throw [NSException exceptionWithName:NUNurseryNetServiceNetworkException reason:NUNurseryNetServiceNetworkException userInfo:nil];
+                [[self thread] cancel];
             }
         }
         
@@ -226,6 +227,10 @@
         [aResponse serialize];
         [self setSendingMessage:aResponse];
     }
+    else if (aMessageKind == NUNurseryNetMessageKindNetClientWillStop)
+    {
+        [self stop];
+    }
 }
 
 - (NUPairedMainBranchSandbox *)pairedMainBranchSandboxFor:(NUUInt64)aPairID
@@ -265,8 +270,6 @@
     
     NSNumber *aPairID = [[[self receivedMessage] argumentAt:0] value];
     [[self pairedSandboxes] removeObjectForKey:aPairID];
-    
-    [self stop];
     
 //    return aResponse;
     return nil;
