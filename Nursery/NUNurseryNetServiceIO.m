@@ -18,6 +18,7 @@ const NUUInt64 NUNurseryNetworkerReadBufferSize = 4096;
     [_inputStream close];
     [_inputStream release];
     _inputStream = nil;
+    
     [_outputStream close];
     [_outputStream release];
     _outputStream = nil;
@@ -45,24 +46,17 @@ const NUUInt64 NUNurseryNetworkerReadBufferSize = 4096;
 - (void)sendMessageOnStream
 {
     if (![self sendingMessage])
-    {
-//        NSLog(@"has sendingMessage?:%@, %@", [self sendingMessage] ? @"YES": @"NO", self);
         return;
-    }
     
-//    NSLog(@"sendMessageOnStream, %@", self);
-
     NSData *aSendingMessageData = [[self sendingMessage] serializedData];
     
     NUUInt64 aWriteCount = [[self outputStream] write:[aSendingMessageData bytes] + [self writtenBytesCount] maxLength:[aSendingMessageData length] - [self writtenBytesCount]];
     
     [self setWrittenBytesCount:[self writtenBytesCount] + aWriteCount];
-//    NSLog(@"writeCount:%@", @(aWriteCount));
     
     if ([self writtenBytesCount] == [aSendingMessageData length])
     {
         [self messageDidSend];
-//        NSLog(@"messageDidSend, %@", self);
         
         [self setWrittenBytesCount:0];
         [self setSendingMessage:nil];
@@ -75,8 +69,6 @@ const NUUInt64 NUNurseryNetworkerReadBufferSize = 4096;
 
 - (void)receiveMessageOnStream
 {
-//    NSLog(@"receiveMessageOnStream, %@", self);
-    
     NUUInt8 *aReadBuffer = NULL;
     NUUInt64 aReadBytesCount;
     
@@ -88,9 +80,7 @@ const NUUInt64 NUNurseryNetworkerReadBufferSize = 4096;
         [self setInputData:[NSMutableData data]];
     
     [[self inputData] appendBytes:aReadBuffer length:aReadBytesCount];
-    
-//    NSLog(@"readCount:%@", @(aReadBytesCount));
-    
+        
     free(aReadBuffer);
     
     if (![self receivingMessageSize] && [[self inputData] length] >= sizeof(NUUInt64))

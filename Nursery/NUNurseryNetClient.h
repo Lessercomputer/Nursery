@@ -28,7 +28,6 @@ typedef enum : NSUInteger {
 @interface NUNurseryNetClient : NUNurseryNetServiceIO <NSNetServiceBrowserDelegate, NSNetServiceDelegate>
 {
     NUNurseryNetClientStatus status;
-    BOOL shouldStop;
 }
 
 @property (nonatomic, retain) NUBranchNursery *nursery;
@@ -47,9 +46,12 @@ typedef enum : NSUInteger {
 - (instancetype)initWithServiceName:(NSString *)aServiceName;
 
 - (void)start;
+- (void)startInNewThread;
+- (void)findNetService;
+- (void)resolveNetService;
+- (void)getStreams;
+- (void)runUntileCancel;
 - (void)stop;
-
-- (void)startIfNeeded;
 
 - (void)sendMessage:(NUNurseryNetMessage *)aSendingMessage;
 - (void)sendAndReceiveMessage:(NUNurseryNetMessage *)aSendingMessage;

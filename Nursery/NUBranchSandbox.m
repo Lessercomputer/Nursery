@@ -120,7 +120,7 @@
 {
     if ([self ID] == NUNilSandboxID)
     {
-        [[self netClient] startIfNeeded];
+        [[self netClient] start];
         [self setID:[[[self branchNursery] netClient] openSandbox]];
     }
         

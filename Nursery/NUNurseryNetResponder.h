@@ -12,7 +12,6 @@
 
 @interface NUNurseryNetResponder : NUNurseryNetServiceIO
 
-
 @property (nonatomic, retain) NSMutableDictionary *pairedSandboxes;
 @property (nonatomic, assign) NUNurseryNetService *netService;
 
@@ -23,3 +22,21 @@
 
 @end
 
+@interface NUNurseryNetResponder (Private)
+
+- (NUMainBranchNursery *)nursery;
+
+- (NUNurseryNetMessage *)responseForOpenSandbox;
+- (NUNurseryNetMessage *)responseForCloseSandbox;
+- (NUNurseryNetMessage *)responseForRootOOP;
+- (NUNurseryNetMessage *)responseForLatestGrade;
+- (NUNurseryNetMessage *)responseForOlderRetainedGrade;
+- (NUNurseryNetMessage *)responseForRetainLatestGrade;
+- (NUNurseryNetMessage *)responseForRetainGradeIfValid;
+- (NUNurseryNetMessage *)responseForRetainGrade;
+- (NUNurseryNetMessage *)responseForReleaseGradeLessThan;
+- (NUNurseryNetMessage *)responseForCallForPupil;
+- (NUNurseryNetMessage *)responseForFarmOutPupils;
+- (NUNurseryNetMessage *)responseForNetClientWillStop;
+
+@end

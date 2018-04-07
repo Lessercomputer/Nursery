@@ -30,7 +30,6 @@ extern const NUUInt64 NUNurseryNetworkerReadBufferSize;
 
 @property (nonatomic, retain) NSThread *thread;
 
-
 - (void)streamDidOpen:(NSStream *)aStream;
 
 - (void)sendMessageOnStream;

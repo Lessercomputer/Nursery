@@ -19,11 +19,25 @@ NSString *NUNurseryNetServiceNetworkException = @"NUNurseryNetServiceNetworkExce
 const NSTimeInterval NUNurseryNetServiceRunLoopRunningTimeInterval = 0.003;
 
 @interface NUNurseryNetService ()
+{
+    NUNurseryNetServiceStatus status;
+}
 
+@property (nonatomic, retain) NSNetService *netService;
+@property (nonatomic, retain) NSMutableArray *netResponders;
+@property (nonatomic, retain) NUMainBranchNursery *nursery;
+@property (nonatomic, retain) NSString *netServiceName;
+@property (nonatomic, retain) NSThread *netServiceThread;
+@property (nonatomic, retain) NSLock *lock;
+@property (nonatomic, retain) NSLock *statusLock;
+@property (nonatomic, retain) NSCondition *statusCondition;
+@property (nonatomic) int port;
 @property (nonatomic, retain) NSRecursiveLock *netRespondersLock;
 
 - (void)startInNewThread;
 - (void)prepareListeningSocket;
+- (void)prepareListeningSocketForIPv4WithSocketContext:(CFSocketContext)aSocketContext;
+- (void)prepareListeningSocketForIPv6WithSocketContext:(CFSocketContext)aSocketContext;
 
 void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, const void *data, void *info);
 
@@ -43,10 +57,11 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
         status = NUNurseryNetServiceStatusNone;
         _statusCondition = [NSCondition new];
         _nursery = [aNursery retain];
-        _serviceName = [aServiceName copy];
+        _netServiceName = [aServiceName copy];
         _netResponders = [NSMutableArray new];
         _netRespondersLock = [NSRecursiveLock new];
         _statusLock = [NSLock new];
+        _lock = [NSLock new];
     }
     
     return self;
@@ -56,41 +71,67 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
 {
     NSLog(@"dealloc:%@", self);
     [_netService release];
+    _netService = nil;
+    
     [_netServiceThread release];
+    _netServiceThread = nil;
+    
     [_netResponders release];
+    _netResponders = nil;
+    
     [_netRespondersLock release];
-    [_serviceName release];
+    _netRespondersLock = nil;
+    
+    [_netServiceName release];
+    _netServiceName = nil;
+    
     [_nursery release];
+    _nursery = nil;
+    
     [_statusCondition release];
+    _statusCondition = nil;
+    
     [_statusLock release];
+    _statusLock = nil;
+    
+    [_lock release];
+    _lock = nil;
     
     [super dealloc];
 }
 
 - (void)start
 {
-    NSThread *aThread = [[[NSThread alloc] initWithBlock:^{
-        [self startInNewThread];
-    }] autorelease];
+    [[self lock] lock];
     
-    [self setNetServiceThread:aThread];
-    [[self netServiceThread] setName:@"org.nursery-framework.NUNurseryNetServiceNetworking"];
+    if ([self status] == NUNurseryNetServiceStatusNone
+        || [self status] == NUNurseryNetServiceStatusStopped)
+    {
+        [[self statusCondition] lock];
+
+        NSThread *aThread = [[[NSThread alloc] initWithBlock:^{
+            [self startInNewThread];
+        }] autorelease];
+        
+        [self setNetServiceThread:aThread];
+        [[self netServiceThread] setName:@"org.nursery-framework.NUNurseryNetServiceNetworking"];
+        
+        [[self netServiceThread] start];
+        
+        while ([self status] != NUNurseryNetServiceStatusRunning)
+            [[self statusCondition] wait];
+        
+        [[self statusCondition] unlock];
+    }
     
-    [[self netServiceThread] start];
-    
-    [[self statusCondition] lock];
-    
-    while ([self status] != NUNurseryNetServiceStatusRunning)
-        [[self statusCondition] wait];
-    
-    [[self statusCondition] unlock];
+    [[self lock] unlock];
 }
 
 - (void)startInNewThread
 {
     [self prepareListeningSocket];
     
-    [self setNetService:[[[NSNetService alloc] initWithDomain:@"" type:NUNurseryNetServiceType name:[self serviceName] port:[self port]] autorelease]];
+    [self setNetService:[[[NSNetService alloc] initWithDomain:@"" type:NUNurseryNetServiceType name:[self netServiceName] port:[self port]] autorelease]];
     [[self netService] setDelegate:self];
     [[self netService] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     
@@ -113,16 +154,23 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
 
 - (void)stop
 {
-    [[self netServiceThread] cancel];
+    [[self lock] lock];
     
     [[self statusCondition] lock];
     
-    [self setStatus:NUNurseryNetServiceStatusShouldStop];
-    
-    while ([self status] != NUNurseryNetServiceStatusStopped)
-        [[self statusCondition] wait];
+    if (![[self netServiceThread] isCancelled])
+    {
+        [[self netServiceThread] cancel];
+        
+        [self setStatus:NUNurseryNetServiceStatusShouldStop];
+        
+        while ([self status] != NUNurseryNetServiceStatusStopped)
+            [[self statusCondition] wait];
+    }
     
     [[self statusCondition] unlock];
+    
+    [[self lock] unlock];
 }
 
 - (NUNurseryNetServiceStatus)status
@@ -197,8 +245,13 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
     aSocketContext.retain = NULL;
     aSocketContext.version = 0;
     
+    [self prepareListeningSocketForIPv4WithSocketContext:aSocketContext];
+    [self prepareListeningSocketForIPv6WithSocketContext:aSocketContext];
+}
+
+- (void)prepareListeningSocketForIPv4WithSocketContext:(CFSocketContext)aSocketContext
+{
     CFSocketRef anIPv4CFSocket = CFSocketCreate(kCFAllocatorDefault, PF_INET, SOCK_STREAM, IPPROTO_TCP, kCFSocketAcceptCallBack, handleConnect, &aSocketContext);
-    CFSocketRef anIPv6CFSocket = CFSocketCreate(kCFAllocatorDefault, PF_INET6, SOCK_STREAM, IPPROTO_TCP, kCFSocketAcceptCallBack, handleConnect, &aSocketContext);
     
     struct sockaddr_in aSockAddrIn;
     
@@ -213,7 +266,17 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
     if (CFSocketSetAddress(anIPv4CFSocket, aSockAddrInData) != kCFSocketSuccess)
         @throw [NSException exceptionWithName:NUNurseryNetServiceNetworkException reason:NUNurseryNetServiceNetworkException userInfo:nil];
     
+    CFRunLoopSourceRef aSocketRunLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, anIPv4CFSocket, 0);
+    CFRunLoopAddSource(CFRunLoopGetCurrent(), aSocketRunLoopSource, kCFRunLoopDefaultMode);
+
     CFRelease(aSockAddrInData);
+    CFRelease(anIPv4CFSocket);
+    CFRelease(aSocketRunLoopSource);
+}
+
+- (void)prepareListeningSocketForIPv6WithSocketContext:(CFSocketContext)aSocketContext
+{
+    CFSocketRef anIPv6CFSocket = CFSocketCreate(kCFAllocatorDefault, PF_INET6, SOCK_STREAM, IPPROTO_TCP, kCFSocketAcceptCallBack, handleConnect, &aSocketContext);
     
     struct sockaddr_in6 aSockAddrIn6;
     
@@ -228,18 +291,17 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
     if (CFSocketSetAddress(anIPv6CFSocket, aSockAddrIn6Data) != kCFSocketSuccess)
         @throw [NSException exceptionWithName:NUNurseryNetServiceNetworkException reason:NUNurseryNetServiceNetworkException userInfo:nil];
     
-    CFRelease(aSockAddrIn6Data);
-    
-    CFDataRef               aSocketAddressData = CFSocketCopyAddress(anIPv6CFSocket);
-    struct sockaddr_in      *aSockAddr = (struct sockaddr_in*)CFDataGetBytePtr(aSocketAddressData);
+    CFDataRef aSocketAddressData = CFSocketCopyAddress(anIPv6CFSocket);
+    struct sockaddr_in *aSockAddr = (struct sockaddr_in*)CFDataGetBytePtr(aSocketAddressData);
     
     [self setPort:ntohs(aSockAddr->sin_port)];
     
-    CFRunLoopSourceRef aSocketRunLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, anIPv4CFSocket, 0);
-    CFRunLoopAddSource(CFRunLoopGetCurrent(), aSocketRunLoopSource, kCFRunLoopDefaultMode);
-    
     CFRunLoopSourceRef aSocketRunLoopSource6 = CFSocketCreateRunLoopSource(kCFAllocatorDefault, anIPv6CFSocket, 0);
     CFRunLoopAddSource(CFRunLoopGetCurrent(), aSocketRunLoopSource6, kCFRunLoopDefaultMode);
+
+    CFRelease(aSockAddrIn6Data);
+    CFRelease(anIPv6CFSocket);
+    CFRelease(aSocketRunLoopSource6);
 }
 
 void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, const void *data, void *info)

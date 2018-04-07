@@ -22,17 +22,6 @@ typedef enum : NSUInteger {
 @class NUMainBranchNursery, NUNurseryNetResponder;
 
 @interface NUNurseryNetService : NSObject <NSNetServiceDelegate>
-{
-    NUNurseryNetServiceStatus status;
-}
-@property (nonatomic, retain) NSNetService *netService;
-@property (nonatomic, retain) NSMutableArray *netResponders;
-@property (nonatomic, retain) NUMainBranchNursery *nursery;
-@property (nonatomic, retain) NSString *serviceName;
-@property (nonatomic, retain) NSThread *netServiceThread;
-@property (nonatomic, retain) NSLock *statusLock;
-@property (nonatomic, retain) NSCondition *statusCondition;
-@property (nonatomic) int port;
 
 + (instancetype)netServiceWithNursery:(NUMainBranchNursery *)aNursery serviceName:(NSString *)aServiceName;
 - (instancetype)initWithNursery:(NUMainBranchNursery *)aNursery serviceName:(NSString *)aServiceName;

@@ -17,6 +17,7 @@
 
 const NUUInt64 NUNurseryNetClientReadBufferSize = 4096;
 const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
+const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
 
 
 @implementation NUNurseryNetClient
@@ -34,6 +35,32 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
     return self;
 }
 
+- (void)dealloc
+{
+    [_netService release];
+    _netService = nil;
+    
+    [_serviceBrowser release];
+    _serviceBrowser = nil;
+    
+    [_serviceName release];
+    _serviceName = nil;
+    
+    [_nursery release];
+    _nursery = nil;
+    
+    [_statusCondition release];
+    _statusCondition = nil;
+    
+    [_statusLock release];
+    _statusLock = nil;
+    
+    [_lock release];
+    _lock = nil;
+    
+    [super dealloc];
+}
+
 - (NUNurseryNetClientStatus)status
 {
     [[self statusLock] lock];
@@ -49,7 +76,6 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
 {
     [[self statusLock] lock];
     status = aStatus;
-//    NSLog(@"status:%@", @(status));
     [[self statusLock] unlock];
 }
 
@@ -73,39 +99,42 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
     return [self status] == NUNurseryNetClientStatusReceivingMessage;
 }
 
-- (void)dealloc
-{
-    [_netService release];
-    _netService = nil;
-    [_serviceBrowser release];
-    _serviceBrowser = nil;
-    [_serviceName release];
-    _serviceName = nil;
-    [_nursery release];
-    _nursery = nil;
-    [_statusCondition release];
-    _statusCondition = nil;
-    [_statusLock release];
-    _statusLock = nil;
-    [_lock release];
-    _lock = nil;
-    
-    [super dealloc];
-}
-
-
 - (void)start
 {
     [[self lock] lock];
     
+    if ([self isNotStarted])
+    {
+        [[self statusCondition] lock];
+        
+        NSThread *aThread = [[[NSThread alloc] initWithBlock:^{
+            [self startInNewThread];
+        }] autorelease];
+        [aThread setName:@"org.nursery-framework.NUNurseryNetClientNetworking"];
+        [self setThread:aThread];
+        
+        [aThread start];
+        
+        while ([self isNotStarted])
+            [[self statusCondition] wait];
+        
+        [[self statusCondition] unlock];
+    }
+    
+    [[self lock] unlock];
+}
+
+- (void)stop
+{
+    [[self lock] lock];
+    
+    [self netClientWillStop];
+    
+    [[self thread] cancel];
+    
     [[self statusCondition] lock];
     
-    NSThread *aThread = [[[NSThread alloc] initWithTarget:self selector:@selector(startInNewThread:) object:nil] autorelease];
-    [aThread setName:@"org.nursery-framework.NUNurseryNetClientNetworking"];
-    [self setThread:aThread];
-    [aThread start];
-    
-    while ([self isNotStarted])
+    while ([self status] == NUNurseryNetClientStatusDidStop)
         [[self statusCondition] wait];
     
     [[self statusCondition] unlock];
@@ -113,44 +142,17 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
     [[self lock] unlock];
 }
 
-- (void)startInNewThread:(id)anObject
+- (void)startInNewThread
 {
     [[self statusCondition] lock];
     
     [self setServiceBrowser:[[NSNetServiceBrowser new] autorelease]];
     [[self serviceBrowser] setDelegate:self];
 
-    [self setStatus:NUNurseryNetClientStatusFindingService];
-    [[self serviceBrowser] searchForServicesOfType:NUNurseryNetServiceType inDomain:@""];
-    
-    while ([self status] != NUNurseryNetClientStatusDidFindService)
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:NUNurseryNetClientRunLoopRunningTimeInterval]];
-    
-    [self setStatus:NUNurseryNetClientStatusResolvingService];
-    [[self netService] setDelegate:self];
-    [[self netService] resolveWithTimeout:0];
-    
-    while ([self status] != NUNurseryNetClientStatusDidResolveService)
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:NUNurseryNetClientRunLoopRunningTimeInterval]];
+    [self findNetService];
+    [self resolveNetService];
+    [self getStreams];
 
-    CFHostRef aHost = CFHostCreateWithName(kCFAllocatorDefault, (CFStringRef)[[self netService] hostName]);
-    CFReadStreamRef aReadStream;
-    CFWriteStreamRef aWriteStream;
-    NSInputStream *anInputStream;
-    NSOutputStream *anOutputStream;
-    
-    CFStreamCreatePairWithSocketToCFHost(kCFAllocatorDefault, aHost, (SInt)[[self netService] port], &aReadStream, &aWriteStream);
-    
-    CFReadStreamSetProperty(aReadStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
-    CFWriteStreamSetProperty(aWriteStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
-    
-    anInputStream = (NSInputStream *)aReadStream;
-    anOutputStream = (NSOutputStream *)aWriteStream;
-    
-    [self setInputStream:anInputStream];
-    
-    [self setOutputStream:anOutputStream];
-    
     [[self inputStream] open];
     [[self outputStream] open];
     
@@ -159,45 +161,7 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
     [[self statusCondition] signal];
     [[self statusCondition] unlock];
     
-    while (![[self thread] isCancelled])
-    {
-        [NSThread sleepForTimeInterval:0.001];
-        
-        [[self statusCondition] lock];
-        
-        switch ([self status])
-        {
-            case NUNurseryNetClientStatusSendingMessage:
-              
-                if ([[self outputStream] hasSpaceAvailable])
-                    [self sendMessageOnStream];
-                
-                break;
-                
-            case NUNurseryNetClientStatusReceivingMessage:
-                
-                if ([[self inputStream] hasBytesAvailable])
-                    [self receiveMessageOnStream];
-                
-                break;
-                
-            case NUNurseryNetClientStatusDidSendMessage:
-            
-                break;
-                
-            case NUNurseryNetClientStatusDidReceiveMessage:
-                
-                break;
-                
-            default:
-                break;
-        }
-        
-        if (!([self isSendingMessage] || [self isReceivingMessage]))
-            [[self statusCondition] signal];
-        
-        [[self statusCondition] unlock];
-    }
+    [self runUntileCancel];
     
     [[self inputStream] close];
     [[self outputStream] close];
@@ -209,7 +173,82 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
     [[self statusCondition] unlock];
 }
 
--(void)netServiceBrowser:(NSNetServiceBrowser *)aBrowser
+- (void)findNetService
+{
+    [self setStatus:NUNurseryNetClientStatusFindingService];
+    [[self serviceBrowser] searchForServicesOfType:NUNurseryNetServiceType inDomain:@""];
+    
+    while ([self status] != NUNurseryNetClientStatusDidFindService)
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:NUNurseryNetClientRunLoopRunningTimeInterval]];
+}
+
+- (void)resolveNetService
+{
+    [self setStatus:NUNurseryNetClientStatusResolvingService];
+    [[self netService] setDelegate:self];
+    [[self netService] resolveWithTimeout:0];
+    
+    while ([self status] != NUNurseryNetClientStatusDidResolveService)
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:NUNurseryNetClientRunLoopRunningTimeInterval]];
+}
+
+- (void)getStreams
+{
+    CFHostRef aHost = CFHostCreateWithName(kCFAllocatorDefault, (CFStringRef)[[self netService] hostName]);
+    CFReadStreamRef aReadStream;
+    CFWriteStreamRef aWriteStream;
+    NSInputStream *anInputStream;
+    NSOutputStream *anOutputStream;
+    
+    CFStreamCreatePairWithSocketToCFHost(kCFAllocatorDefault, aHost, (SInt)[[self netService] port], &aReadStream, &aWriteStream);
+    CFRelease(aHost);
+    
+    CFReadStreamSetProperty(aReadStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
+    CFWriteStreamSetProperty(aWriteStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
+    
+    anInputStream = (NSInputStream *)aReadStream;
+    anOutputStream = (NSOutputStream *)aWriteStream;
+    
+    [self setInputStream:anInputStream];
+    [self setOutputStream:anOutputStream];
+    
+    CFRelease(aReadStream);
+    CFRelease(aWriteStream);
+}
+
+- (void)runUntileCancel
+{
+    while (![[self thread] isCancelled])
+    {
+        [NSThread sleepForTimeInterval:NUNurseryNetClientSleepTimeInterval];
+        
+        [[self statusCondition] lock];
+        
+//        if ([[self inputStream] streamStatus] == NSStreamStatusAtEnd)
+//            NSLog(@"stream at end");
+        
+        switch ([self status])
+        {
+            case NUNurseryNetClientStatusSendingMessage:
+                if ([[self outputStream] hasSpaceAvailable])
+                    [self sendMessageOnStream];
+                break;
+            case NUNurseryNetClientStatusReceivingMessage:
+                if ([[self inputStream] hasBytesAvailable])
+                    [self receiveMessageOnStream];
+                break;
+            default:
+                break;
+        }
+        
+        if (!([self isSendingMessage] || [self isReceivingMessage]))
+            [[self statusCondition] signal];
+        
+        [[self statusCondition] unlock];
+    }
+}
+
+- (void)netServiceBrowser:(NSNetServiceBrowser *)aBrowser
            didFindService:(NSNetService *)aService
                moreComing:(BOOL)aMoreComing
 {
@@ -240,54 +279,6 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
     [self setStatus:NUNurseryNetClientStatusDidResolveService];
 }
 
-- (void)streamDidOpen:(NSStream *)aStream
-{
-//    if (aStream == [self outputStream])
-//    {
-//        CFSocketContext aSocketContext;
-//        memset(&aSocketContext, 0, sizeof(aSocketContext));
-//        aSocketContext.info = (void *)self;
-//
-//        CFDataRef aSocketData = CFWriteStreamCopyProperty((CFWriteStreamRef)[self outputStream], kCFStreamPropertySocketNativeHandle);
-//
-//        CFSocketNativeHandle aHandle;
-//        CFDataGetBytes(aSocketData, CFRangeMake(0, sizeof(CFSocketNativeHandle)), (UInt8 *)&aHandle);
-//
-////        CFSocketRef aSocket = CFSocketCreateWithNative(NULL, aHandle, kCFSocketNoCallBack, nil, &aSocketContext);
-//
-//        int aYes = 1;
-//        int aResult = setsockopt(aHandle, IPPROTO_TCP, TCP_NODELAY, (void *)&aYes, sizeof(aYes));
-//        NSLog(@"setsockopt:%@", @(aResult));
-//    }
-}
-
-- (void)startIfNeeded
-{
-    [[self lock] lock];
-    
-    if ([self isNotStarted])
-        [self start];
-    
-    [[self lock] unlock];
-}
-
-- (void)stop
-{
-    [[self lock] lock];
-    
-    [self netClientWillStop];
-    [[self thread] cancel];
-    
-    [[self statusCondition] lock];
-    
-    while ([self status] == NUNurseryNetClientStatusDidStop)
-        [[self statusCondition] wait];
-    
-    [[self statusCondition] unlock];
-    
-    [[self lock] unlock];
-}
-
 - (void)sendMessage:(NUNurseryNetMessage *)aSendingMessage
 {
     [[self statusCondition] lock];
@@ -314,8 +305,6 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
 
 - (void)receiveMessage
 {
-//    NSLog(@"receiveMessage, %@", self);
-    
     [[self statusCondition] lock];
     
     [self setStatus:NUNurseryNetClientStatusReceivingMessage];
@@ -344,7 +333,6 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
 
 - (NUUInt64)openSandbox
 {
-//    NSLog(@"openSandbox");
     NUUInt64 aPairID = 0;
     
     [[self lock] lock];
@@ -368,7 +356,6 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
     
     [aMessage addArgumentOfTypeUInt64WithValue:anID];
     
-//    [self sendAndReceiveMessage:aMessage];
     [self sendMessage:aMessage];
     
     [[self lock] unlock];
@@ -376,7 +363,6 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
 
 - (NUUInt64)rootOOPForSandboxWithID:(NUUInt64)anID
 {
-//    NSLog(@"rootOOPForSandboxWithID");
     NUUInt64 aRootOOP = 0;
     
     [[self lock] lock];
@@ -539,4 +525,3 @@ const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
 }
 
 @end
-
