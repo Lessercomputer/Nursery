@@ -12,7 +12,7 @@
 #import "NUIvar.h"
 #import "NUAliaser.h"
 #import "NUBell.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 
 @implementation NUCharacterDictionary
 
@@ -54,7 +54,7 @@
     
     [[self dictionary] setObject:anObject forKey:aKey];
     [[aCharacter superCharacter] addSubCharacter:aCharacter];
-    [[[self bell] sandbox] markChangedObject:self];
+    [[[self bell] garden] markChangedObject:self];
 }
 
 - (NSEnumerator *)keyEnumerator
@@ -72,7 +72,7 @@
 	bell = aBell;
 }
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUGarden *)aGarden
 {
     [aCharacter addOOPIvarWithName:@"dictionary"];
 }

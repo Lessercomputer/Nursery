@@ -10,11 +10,11 @@
 
 extern const NUUInt64 NUNurseryNetMessageKindUndefined;
 
-extern const NUUInt64 NUNurseryNetMessageKindOpenSandbox;
-extern const NUUInt64 NUNurseryNetMessageKindOpenSandboxResponse;
+extern const NUUInt64 NUNurseryNetMessageKindOpenGarden;
+extern const NUUInt64 NUNurseryNetMessageKindOpenGardenResponse;
 
-extern const NUUInt64 NUNurseryNetMessageKindCloseSandbox;
-extern const NUUInt64 NUNurseryNetMessageKindCloseSandboxResponse;
+extern const NUUInt64 NUNurseryNetMessageKindCloseGarden;
+extern const NUUInt64 NUNurseryNetMessageKindCloseGardenResponse;
 
 extern const NUUInt64 NUNurseryNetMessageKindRootOOP;
 extern const NUUInt64 NUNurseryNetMessageKindRootOOPResponse;

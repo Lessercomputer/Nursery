@@ -6,23 +6,23 @@
 //
 //
 
-@class NUSandbox;
+@class NUGarden;
 
 @interface NUThreadedChildminder : NSObject
 {
-    NUSandbox *sandbox;
+    NUGarden *garden;
 	NSConditionLock *conditionLock;
 	BOOL shouldStop;
 	BOOL shouldTerminate;
     BOOL isTerminated;
 }
 
-+ (id)threadedChildminderWithSandbox:(NUSandbox *)aSandbox;
++ (id)threadedChildminderWithGarden:(NUGarden *)aGarden;
 
-- (id)initWithSandbox:(NUSandbox *)aSandbox;
+- (id)initWithGarden:(NUGarden *)aGarden;
 
-- (NUSandbox *)sandbox;
-- (void)setSandbox:(NUSandbox *)aSandbox;
+- (NUGarden *)garden;
+- (void)setGarden:(NUGarden *)aGarden;
 
 - (void)prepare;
 - (void)start;

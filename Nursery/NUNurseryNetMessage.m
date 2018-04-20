@@ -11,11 +11,11 @@
 
 const NUUInt64 NUNurseryNetMessageKindUndefined = 0;
 
-const NUUInt64 NUNurseryNetMessageKindOpenSandbox = 1;
-const NUUInt64 NUNurseryNetMessageKindOpenSandboxResponse = 2;
+const NUUInt64 NUNurseryNetMessageKindOpenGarden = 1;
+const NUUInt64 NUNurseryNetMessageKindOpenGardenResponse = 2;
 
-const NUUInt64 NUNurseryNetMessageKindCloseSandbox = 3;
-const NUUInt64 NUNurseryNetMessageKindCloseSandboxResponse = 4;
+const NUUInt64 NUNurseryNetMessageKindCloseGarden = 3;
+const NUUInt64 NUNurseryNetMessageKindCloseGardenResponse = 4;
 
 const NUUInt64 NUNurseryNetMessageKindRootOOP = 5;
 const NUUInt64 NUNurseryNetMessageKindRootOOPResponse = 6;
@@ -72,7 +72,7 @@ const NUUInt64 NUNurseryNetMessageKindNetClientWillStop = 23;
 
 + (instancetype)message
 {
-    return [self messageOfKind:NUNurseryNetMessageKindOpenSandbox];
+    return [self messageOfKind:NUNurseryNetMessageKindOpenGarden];
 }
 
 + (instancetype)messageOfKind:(NUUInt64)aMessageKind

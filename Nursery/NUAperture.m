@@ -17,12 +17,12 @@
 
 @implementation NUAperture
 
-+ (id)apertureWithNursery:(NUNursery *)aNursery sandbox:(NUSandbox *)aSandbox
++ (id)apertureWithNursery:(NUNursery *)aNursery garden:(NUGarden *)aGarden
 {
-	return [[[self alloc] initWithNursery:aNursery sandbox:aSandbox] autorelease];
+	return [[[self alloc] initWithNursery:aNursery garden:aGarden] autorelease];
 }
 
-- (id)initWithNursery:(NUNursery *)aNursery sandbox:(NUSandbox *)aSandbox
+- (id)initWithNursery:(NUNursery *)aNursery garden:(NUGarden *)aGarden
 {
 	self = [super init];
 		

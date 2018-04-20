@@ -10,7 +10,7 @@
 #import "NUBellBall.h"
 #import "NUBell.h"
 #import "NUAperture.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 #import "NUMainBranchNursery.h"
 #import "NUObjectTable.h"
 
@@ -18,11 +18,11 @@
 
 - (void)seekIvarsOfObjectFor:(NUBell *)aBell
 {
-    NUMainBranchNursery *aNursery = (NUMainBranchNursery *)[[self sandbox] nursery];
+    NUMainBranchNursery *aNursery = (NUMainBranchNursery *)[[self garden] nursery];
     
     @try
     {
-        [[self sandbox] lock];
+        [[self garden] lock];
         [aNursery lockForRead];
         
         NUUInt64 aGrade;
@@ -31,15 +31,15 @@
         [[self aperture] peekAt:aBellBall];
         
         while ([[self aperture] hasNextFixedOOP])
-            [self pushBellIfNeeded:[[self sandbox] bellForOOP:[[self aperture] nextFixedOOP]]];
+            [self pushBellIfNeeded:[[self garden] bellForOOP:[[self aperture] nextFixedOOP]]];
         
         while ([[self aperture] hasNextIndexedOOP])
-            [self pushBellIfNeeded:[[self sandbox] bellForOOP:[[self aperture] nextIndexedOOP]]];
+            [self pushBellIfNeeded:[[self garden] bellForOOP:[[self aperture] nextIndexedOOP]]];
     }
     @finally
     {
         [aNursery unlockForRead];
-        [[self sandbox] unlock];
+        [[self garden] unlock];
     }
 }
 

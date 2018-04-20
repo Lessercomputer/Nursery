@@ -8,7 +8,7 @@
 
 #import "NUAliaser.h"
 
-@class NUBranchSandbox, NUBranchNursery, NUPupilAlbum;
+@class NUBranchGarden, NUBranchNursery, NUPupilAlbum;
 @protocol NUMainBranchNurseryAssociation;
 
 extern NSString *NUPupilNoteNotFoundException;
@@ -18,7 +18,7 @@ extern NSString *NUPupilNoteNotFoundException;
 @property (nonatomic, retain) NSArray *reducedEncodedPupils;
 @property (nonatomic, retain) NUU64ODictionary *reducedEncodedPupilsDictionary;
 
-- (NUBranchSandbox *)branchSandbox;
+- (NUBranchGarden *)branchGarden;
 - (NUBranchNursery *)branchNursery;
 - (NUPupilAlbum *)pupilAlbum;
 

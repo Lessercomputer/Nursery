@@ -8,7 +8,7 @@
 
 #import "NUArrayCoder.h"
 #import "NUCharacter.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 #import "NUAliaser.h"
 
 @implementation NUArrayCoder
@@ -80,7 +80,7 @@
     
     NSMutableArray *anArray = anObject;
     [anArray setArray:[self decodeObjectWithAliaser:anAliaser]];
-    [[anAliaser sandbox] unmarkChangedObject:anArray];
+    [[anAliaser garden] unmarkChangedObject:anArray];
 }
 
 @end

@@ -9,7 +9,7 @@
 #import "NUThreadedChildminder.h"
 #import "NUTypes.h"
 
-@class NUSandbox, NUBell, NUAperture;
+@class NUGarden, NUBell, NUAperture;
 
 @interface NUGradeSeeker : NUThreadedChildminder <NSLocking>
 {
@@ -19,10 +19,10 @@
     NSRecursiveLock *lock;
 }
 
-+ (id)gradeSeekerWithSandbox:(NUSandbox *)aSandbox;
-+ (id)gradeSeekerWithSandbox:(NUSandbox *)aSandbox aperture:(NUAperture *)aAperture;
++ (id)gradeSeekerWithGarden:(NUGarden *)aGarden;
++ (id)gradeSeekerWithGarden:(NUGarden *)aGarden aperture:(NUAperture *)aAperture;
 
-- (id)initWithSandbox:(NUSandbox *)aSandbox aperture:(NUAperture *)aAperture;
+- (id)initWithGarden:(NUGarden *)aGarden aperture:(NUAperture *)aAperture;
 
 - (void)pushRootBell:(NUBell *)aBell;
 - (void)pushBellIfNeeded:(NUBell *)aBell;

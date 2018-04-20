@@ -8,7 +8,7 @@
 
 #import "NUBranchAperture.h"
 #import "NUBranchNursery.h"
-#import "NUBranchSandbox.h"
+#import "NUBranchGarden.h"
 #import "NUBranchAliaser.h"
 #import "NUPupilNote.h"
 #import "NUObjectTable.h"
@@ -17,12 +17,12 @@
 
 @implementation NUBranchAperture
 
-- (id)initWithNursery:(NUNursery *)aNursery sandbox:(NUSandbox *)aSandbox
+- (id)initWithNursery:(NUNursery *)aNursery garden:(NUGarden *)aGarden
 {
-    if (self = [super initWithNursery:aNursery sandbox:aSandbox])
+    if (self = [super initWithNursery:aNursery garden:aGarden])
     {
         nursery = (NUBranchNursery *)aNursery;
-        sandbox = (NUBranchSandbox *)aSandbox;
+        garden = (NUBranchGarden *)aGarden;
     }
     
     return self;
@@ -30,7 +30,7 @@
 
 - (void)peekAt:(NUBellBall)aBellBall
 {
-    NUBranchAliaser *anAliaser = (NUBranchAliaser *)[sandbox aliaser];
+    NUBranchAliaser *anAliaser = (NUBranchAliaser *)[garden aliaser];
     
     currentFixedOOPIvarIndex = 0;
 	currentIndexedOOPIndex = 0;
@@ -42,7 +42,7 @@
         pupilNote = [[anAliaser callForPupilNoteWithBellBall:aBellBall] retain];
         
         NUUInt64 aCharacterOOP = [pupilNote readUInt64At:0];
-        character = [sandbox objectForOOP:aCharacterOOP];
+        character = [garden objectForOOP:aCharacterOOP];
         if ([character isIndexedIvars] || [character isFixedAndIndexedIvars])
             indexedOOPCount = [pupilNote readUInt64At:sizeof(NUUInt64)] / sizeof(NUUInt64);
     }

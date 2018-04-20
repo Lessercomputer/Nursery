@@ -10,7 +10,7 @@
 #import "NUPages.h"
 #import "NUObjectTable.h"
 #import "NUReversedObjectTable.h"
-#import "NUPairedMainBranchSandbox.h"
+#import "NUPairedMainBranchGarden.h"
 #import "NUU64ODictionary.h"
 #import "NUSpaces.h"
 #import "NUCodingContextWithPupilNote.h"
@@ -21,9 +21,9 @@
 
 @implementation NUPairedMainBranchAliaser
 
-- (id)initWithSandbox:(NUSandbox *)aSandbox
+- (id)initWithGarden:(NUGarden *)aGarden
 {
-    if (self = [super initWithSandbox:aSandbox])
+    if (self = [super initWithGarden:aGarden])
     {
         _pupilsDictionary = [NUU64ODictionary new];
     }
@@ -31,9 +31,9 @@
     return self;
 }
 
-- (NUPairedMainBranchSandbox *)pairedMainBranchSandbox
+- (NUPairedMainBranchGarden *)pairedMainBranchGarden
 {
-    return (NUPairedMainBranchSandbox *)[self sandbox];
+    return (NUPairedMainBranchGarden *)[self garden];
 }
 
 - (void)setPupils:(NSArray *)aPupils
@@ -66,7 +66,7 @@
 {
     NUPupilNote *aPupilNote = [[self pupilsDictionary] objectForKey:[aBell OOP]];
     
-    if (!aPupilNote && ![[self pairedMainBranchSandbox] OOPIsProbationary:[aBell OOP]])
+    if (!aPupilNote && ![[self pairedMainBranchGarden] OOPIsProbationary:[aBell OOP]])
             aPupilNote = [[self fixedOOPToProbationaryPupils] objectForKey:[aBell OOP]];
     
     if (aPupilNote)
@@ -168,7 +168,7 @@
         [[NSException exceptionWithName:NUObjectLocationNotFoundException reason:NUObjectLocationNotFoundException userInfo:nil] raise];
     
     aCharacterOOP = [[self pages] readUInt64At:anObjectLocation];
-    aCharacter = [[self sandbox] objectForOOP:aCharacterOOP];
+    aCharacter = [[self garden] objectForOOP:aCharacterOOP];
     anObjectSize = [self previousSizeOfObjectForBellBall:aBellBall];
     
     aUInt64Value = NSSwapHostLongLongToBig(aBellBall.oop);
@@ -229,7 +229,7 @@
 {
     [[self pupilsDictionary] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 anOOP, NUPupilNote *aPupilNote, BOOL *stop) {
         
-        if ([[self pairedMainBranchSandbox] OOPIsProbationary:[aPupilNote OOP]])
+        if ([[self pairedMainBranchGarden] OOPIsProbationary:[aPupilNote OOP]])
         {
             NUBellBall aFixedBellBall = [self fixedBellBallForPupilWithOOP:[aPupilNote OOP]];
 
@@ -243,7 +243,7 @@
 
 - (NUBellBall)fixedBellBallForPupilWithOOP:(NUUInt64)anOOP
 {
-    if ([[self pairedMainBranchSandbox] OOPIsProbationary:anOOP])
+    if ([[self pairedMainBranchGarden] OOPIsProbationary:anOOP])
         return [[self objectTable] allocateBellBallWithGrade:[self gradeForSave]];
     else
         return NUMakeBellBall(anOOP, [self gradeForSave]);
@@ -258,7 +258,7 @@
 //    NSLog(@"aReferencedOOP:%llu", aReferencedOOP);
 //#endif
     
-    if ([[self pairedMainBranchSandbox] OOPIsProbationary:aReferencedOOP])
+    if ([[self pairedMainBranchGarden] OOPIsProbationary:aReferencedOOP])
     {
         NUPupilNote *aReferencedPupilNote = [[self pupilsDictionary] objectForKey:aReferencedOOP];
         NUBellBall aFixedBellBall = NUNotFoundBellBall;
@@ -266,7 +266,7 @@
         if (!aReferencedPupilNote)
             @throw [NSException exceptionWithName:NSGenericException reason:NSGenericException userInfo:nil];
         
-        if ([[self pairedMainBranchSandbox] OOPIsProbationary:aReferencedPupilNote.OOP])
+        if ([[self pairedMainBranchGarden] OOPIsProbationary:aReferencedPupilNote.OOP])
         {
             aFixedBellBall = [self fixedBellBallForPupilWithOOP:[aReferencedPupilNote OOP]];
             [aReferencedPupilNote setBellBall:aFixedBellBall];
@@ -305,7 +305,7 @@
     NSMutableData *aProbationaryOOPAndFixedOOPData = [NSMutableData data];
     
     [[self pupilsDictionary] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 anOOP, NUPupilNote *aPupilNote, BOOL *stop) {
-        if ([[self pairedMainBranchSandbox] OOPIsProbationary:anOOP])
+        if ([[self pairedMainBranchGarden] OOPIsProbationary:anOOP])
         {
             NUUInt64 aProbationaryOOP = NSSwapHostLongLongToBig(anOOP);
             NUUInt64 aFixedOOP = NSSwapHostLongLongToBig([aPupilNote OOP]);
@@ -319,7 +319,7 @@
 
 - (NUUInt64)fixedRootOOPForOOP:(NUUInt64)anOOP
 {
-    if ([[self pairedMainBranchSandbox] OOPIsProbationary:anOOP])
+    if ([[self pairedMainBranchGarden] OOPIsProbationary:anOOP])
         return [[[self pupilsDictionary] objectForKey:anOOP] OOP];
     else
         return anOOP;

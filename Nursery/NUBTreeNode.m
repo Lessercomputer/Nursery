@@ -12,7 +12,7 @@
 #import "NUIvar.h"
 #import "NUAliaser.h"
 #import "NUBell.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 
 @implementation NUBTreeNode
 
@@ -281,16 +281,16 @@
 {
     [[[self leftNode] leftNode] setRightNode:self];
     [self setLeftNode:[[self leftNode] leftNode]];
-    [[[self bell] sandbox] markChangedObject:[self keys]];
-    [[[self bell] sandbox] markChangedObject:[self values]];
+    [[[self bell] garden] markChangedObject:[self keys]];
+    [[[self bell] garden] markChangedObject:[self values]];
 }
 
 - (void)mergeRightNode
 {
     [[[self rightNode] rightNode] setLeftNode:self];
     [self setRightNode:[[self rightNode] rightNode]];
-    [[[self bell] sandbox] markChangedObject:[self keys]];
-    [[[self bell] sandbox] markChangedObject:[self values]];
+    [[[self bell] garden] markChangedObject:[self keys]];
+    [[[self bell] garden] markChangedObject:[self values]];
 }
 
 @end
@@ -302,7 +302,7 @@
 	return YES;
 }
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUGarden *)aGarden
 {
     if (![[self class] isEqual:[NUBTreeNode class]]) return;
 

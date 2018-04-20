@@ -18,7 +18,7 @@ extern NSString *NUParaderInvalidNodeLocationException;
     NUUInt64 nextLocation;
 }
 
-+ (id)paraderWithSandbox:(NUSandbox *)aSandbox;
++ (id)paraderWithGarden:(NUGarden *)aGarden;
 
 - (NUMainBranchNursery *)nursery;
 

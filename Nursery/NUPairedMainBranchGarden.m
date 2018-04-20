@@ -1,12 +1,12 @@
 //
-//  NUPairedMainBranchSandbox.m
+//  NUPairedMainBranchGarden.m
 //  Nursery
 //
 //  Created by Akifumi Takata on 2014/03/15.
 //
 //
 
-#import "NUPairedMainBranchSandbox.h"
+#import "NUPairedMainBranchGarden.h"
 #import "NUGradeSeeker.h"
 #import "NUMainBranchAliaser.h"
 #import "NUPairedMainBranchAliaser.h"
@@ -14,9 +14,9 @@
 #import "NUMainBranchNursery.h"
 #import "NUNurseryRoot.h"
 
-@implementation NUPairedMainBranchSandbox
+@implementation NUPairedMainBranchGarden
 
-+ (id)sandboxWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
++ (id)gardenWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
 {
     return [[[self alloc] initWithNursery:aNursery grade:aGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:aRetainFlag] autorelease];
 }
@@ -28,7 +28,7 @@
 
 @end
 
-@implementation NUPairedMainBranchSandbox (Pupil)
+@implementation NUPairedMainBranchGarden (Pupil)
 
 - (NSData *)callForPupilWithOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade containsFellowPupils:(BOOL)aContainsFellowPupils
 {
@@ -67,12 +67,12 @@
             [[self pairedMainBranchAliaser] setGradeForSave:aNewGrade];
 //            NSData *aCopiedPupilData = [NSData dataWithData:aPupilData];
 //            aPupilData = [[aPupilData mutableCopy] autorelease];
-//            NSLog(@"In NUPairedMainBranchSandbox farmOutPupils:, aPupilData length:%lu", [aPupilData length]);
+//            NSLog(@"In NUPairedMainBranchGarden farmOutPupils:, aPupilData length:%lu", [aPupilData length]);
 //            void *anEncodedPupilBytes = malloc([aPupilData length]);
 //            [aPupilData getBytes:anEncodedPupilBytes length:[aPupilData length]];
 //            NSData *aCopiedPupilData = [[NSData alloc] initWithBytesNoCopy:anEncodedPupilBytes length:[aPupilData length] freeWhenDone:YES];
-//            NSLog(@"In NUPairedMainBranchSandbox farmOutPupils:, aCopiedPupilData length:%lu", [aCopiedPupilData length]);
-//            [aPupilData writeToFile:[@"~/Desktop/NUPairedMainBranchSandbox_encodedObjects" stringByExpandingTildeInPath] atomically:YES];
+//            NSLog(@"In NUPairedMainBranchGarden farmOutPupils:, aCopiedPupilData length:%lu", [aCopiedPupilData length]);
+//            [aPupilData writeToFile:[@"~/Desktop/NUPairedMainBranchGarden_encodedObjects" stringByExpandingTildeInPath] atomically:YES];
 //            aPupils = [[self pairedMainBranchAliaser] pupilsFromData:aCopiedPupilData];
             aPupils = [[self pairedMainBranchAliaser] pupilsFromData:aPupilData];
             [[self pairedMainBranchAliaser] setPupils:aPupils];
@@ -99,7 +99,7 @@
 
             if (aFarmOutStatus == NUFarmOutStatusSucceeded)
             {
-                [[self mainBranchNursery] retainGrade:aNewGrade bySandbox:self];
+                [[self mainBranchNursery] retainGrade:aNewGrade byGarden:self];
                 [self setGrade:aNewGrade];
                 [[self gradeSeeker] pushRootBell:[[self nurseryRoot] bell]];
             }

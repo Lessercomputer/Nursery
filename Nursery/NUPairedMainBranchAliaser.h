@@ -8,7 +8,7 @@
 
 #import "NUMainBranchAliaser.h"
 
-@class NUPairedMainBranchSandbox, NUU64ODictionary;
+@class NUPairedMainBranchGarden, NUU64ODictionary;
 
 @interface NUPairedMainBranchAliaser : NUMainBranchAliaser
 
@@ -16,7 +16,7 @@
 @property (nonatomic, retain) NUU64ODictionary *pupilsDictionary;
 @property (nonatomic, retain) NUU64ODictionary *fixedOOPToProbationaryPupils;
 
-- (NUPairedMainBranchSandbox *)pairedMainBranchSandbox;
+- (NUPairedMainBranchGarden *)pairedMainBranchGarden;
 
 @end
 

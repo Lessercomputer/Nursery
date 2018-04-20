@@ -8,7 +8,7 @@
 
 #import <Nursery/NUTypes.h>
 
-@class NUSandbox, NUPages, NUCodingContext, NUIndexArray, NUObjectTable, NUBell, NUPupilNote, NUCharacter, NUQueue, NUU64ODictionary;
+@class NUGarden, NUPages, NUCodingContext, NUIndexArray, NUObjectTable, NUBell, NUPupilNote, NUCharacter, NUQueue, NUU64ODictionary;
 
 extern NSString *NUObjectLocationNotFoundException;
 extern NSString *NUBellBallNotFoundException;
@@ -17,7 +17,7 @@ extern NSString *NUAliaserCannotDecodeObjectException;
 
 @interface NUAliaser : NSObject
 {
-	NUSandbox *sandbox;
+	NUGarden *garden;
 	NSMutableArray *contexts;
 	NSMutableArray *roots;
 	NUQueue *objectsToEncode;
@@ -28,16 +28,16 @@ extern NSString *NUAliaserCannotDecodeObjectException;
 
 @interface NUAliaser (Initializing)
 
-+ (id)aliaserWithSandbox:(NUSandbox *)aSandbox;
++ (id)aliaserWithGarden:(NUGarden *)aGarden;
 
-- (id)initWithSandbox:(NUSandbox *)aSandbox;
+- (id)initWithGarden:(NUGarden *)aGarden;
 
 @end
 
 @interface NUAliaser (Accessing)
 
-- (NUSandbox *)sandbox;
-- (void)setSandbox:(NUSandbox *)aSandbox;
+- (NUGarden *)garden;
+- (void)setGarden:(NUGarden *)aGarden;
 
 - (NSMutableArray *)contexts;
 - (void)setContexts:(NSMutableArray *)aContexts;
@@ -104,7 +104,7 @@ extern NSString *NUAliaserCannotDecodeObjectException;
 - (void)objectDidEncode:(NUBell *)aBell;
 - (id)nextObjectToEncode;
 
-- (void)validateSandboxOfEncodingObject:(id)anObject;
+- (void)validateGardenOfEncodingObject:(id)anObject;
 
 - (void)encodeObject:(id)anObject;
 - (NUUInt64)preEncodeObject:(id)anObject;

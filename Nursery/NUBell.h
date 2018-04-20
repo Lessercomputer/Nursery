@@ -8,7 +8,7 @@
 
 #import "NUTypes.h"
 
-@class NUSandbox;
+@class NUGarden;
 
 
 @interface NUBell : NSObject <NSCopying>
@@ -16,16 +16,16 @@
 	NUBellBall ball;
     NUUInt64 gradeAtCallFor;
     NUUInt64 gradeForSeeker;
-	NUSandbox *sandbox;
+	NUGarden *garden;
     BOOL isLoaded;
 	id object;
 }
 
 + (id)bellWithBall:(NUBellBall)aBall;
-+ (id)bellWithBall:(NUBellBall)aBall sandbox:(NUSandbox *)aSandbox;
-+ (id)bellWithBall:(NUBellBall)aBall isLoaded:(BOOL)anIsLoaded sandbox:(NUSandbox *)aSandbox;
++ (id)bellWithBall:(NUBellBall)aBall garden:(NUGarden *)aGarden;
++ (id)bellWithBall:(NUBellBall)aBall isLoaded:(BOOL)anIsLoaded garden:(NUGarden *)aGarden;
 
-- (id)initWithBall:(NUBellBall)aBall isLoaded:(BOOL)anIsLoaded sandbox:(NUSandbox *)aSandbox;
+- (id)initWithBall:(NUBellBall)aBall isLoaded:(BOOL)anIsLoaded garden:(NUGarden *)aGarden;
 
 - (NUBellBall)ball;
 - (void)setBall:(NUBellBall)aBall;
@@ -42,8 +42,8 @@
 - (NUUInt64)gradeForSeeker;
 - (void)setGradeForSeeker:(NUUInt64)aGrade;
 
-- (NUSandbox *)sandbox;
-- (void)setSandbox:(NUSandbox *)aSandbox;
+- (NUGarden *)garden;
+- (void)setGarden:(NUGarden *)aGarden;
 
 - (id)object;
 - (void)setObject:(id)anObject;

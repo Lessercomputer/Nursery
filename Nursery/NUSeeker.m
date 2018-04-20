@@ -15,7 +15,7 @@
 #import "NUAperture.h"
 #import "NUBell.h"
 #import "NUBellBall.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 #import "NUMainBranchAperture.h"
 #import "NUAliaser.h"
 
@@ -32,20 +32,20 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
 @implementation NUSeeker
 
-+ (id)seekerWithSandbox:(NUSandbox *)aSandbox
++ (id)seekerWithGarden:(NUGarden *)aGarden
 {
-	return [[[self alloc] initWithSandbox:aSandbox] autorelease];
+	return [[[self alloc] initWithGarden:aGarden] autorelease];
 }
 
-- (id)initWithSandbox:(NUSandbox *)aSandbox
+- (id)initWithGarden:(NUGarden *)aGarden
 {
-	if (self = [super initWithSandbox:aSandbox])
+	if (self = [super initWithGarden:aGarden])
 	{
-        sandbox = [aSandbox retain];
+        garden = [aGarden retain];
         currentPhase = NUSeekerNonePhase;
         shouldLoadGrayOOPs = NO;
         grayOOPs = [[NUIndexArray alloc] initWithCapacity:NUSeekerDefaultGrayOOPCapacity comparator:[NUIndexArray comparator]];
-        aperture = [[NUMainBranchAperture alloc] initWithNursery:[aSandbox nursery] sandbox:aSandbox];
+        aperture = [[NUMainBranchAperture alloc] initWithNursery:[aGarden nursery] garden:aGarden];
     }
     
 	return self;
@@ -56,7 +56,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
     NSLog(@"dealloc:%@", self);
 	[grayOOPs release];
 	[aperture release];
-    [sandbox release];
+    [garden release];
 	
 	[super dealloc];
 }
@@ -81,7 +81,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
 - (NUMainBranchNursery *)nursery
 {
-    return (NUMainBranchNursery *)[[self sandbox] nursery];
+    return (NUMainBranchNursery *)[[self garden] nursery];
 }
 
 - (NUUInt64)grade
@@ -105,7 +105,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 	{
 		if (shouldLoadGrayOOPs)
             [self loadGrayOOPs];
-        [[self sandbox] moveUpTo:[self grade]];
+        [[self garden] moveUpTo:[self grade]];
 	}
 	else if (currentPhase == NUSeekerNonePhase)
 	{
@@ -116,7 +116,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
             return;
         }
 		currentPhase = NUSeekerSeekPhase;
-        [[self sandbox] moveUpTo:[self grade]];
+        [[self garden] moveUpTo:[self grade]];
         [self pushRootOOP];
 	}
 	
@@ -215,7 +215,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
 - (void)pushRootOOP
 {
-	NUBell *anOOP = [[self sandbox] bellForObject:[[self sandbox] nurseryRoot]];
+	NUBell *anOOP = [[self garden] bellForObject:[[self garden] nurseryRoot]];
 	if (anOOP) [self pushOOPAsGrayIfWhite:[anOOP OOP]];
 }
 

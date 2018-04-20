@@ -7,7 +7,7 @@
 //
 
 #import "NUBranchGradeSeeker.h"
-#import "NUBranchSandbox.h"
+#import "NUBranchGarden.h"
 #import "NUBranchAliaser.h"
 #import "NUAperture.h"
 #import "NUBell.h"
@@ -19,10 +19,10 @@
     [[self aperture] peekAt:aBell.ball];
     
     while ([[self aperture] hasNextFixedOOP])
-        [self pushBellIfNeeded:[[self sandbox] bellForOOP:[[self aperture] nextFixedOOP]]];
+        [self pushBellIfNeeded:[[self garden] bellForOOP:[[self aperture] nextFixedOOP]]];
     
     while ([[self aperture] hasNextIndexedOOP])
-        [self pushBellIfNeeded:[[self sandbox] bellForOOP:[[self aperture] nextIndexedOOP]]];
+        [self pushBellIfNeeded:[[self garden] bellForOOP:[[self aperture] nextIndexedOOP]]];
 }
 
 @end

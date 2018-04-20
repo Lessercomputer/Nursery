@@ -8,12 +8,12 @@
 
 #import <Nursery/NUTypes.h>
 
-@class NUCharacter, NUBell, NUObjectWrapper, NUAliaser, NUNurseryRoot, NUSandbox;
+@class NUCharacter, NUBell, NUObjectWrapper, NUAliaser, NUNurseryRoot, NUGarden;
 
 extern NSString * const NUOOPNotFoundException;
 
-extern NUUInt64 NUNilSandboxID;
-extern NUUInt64 NUFirstSandboxID;
+extern NUUInt64 NUNilGardenID;
+extern NUUInt64 NUFirstGardenID;
 
 typedef enum : NSUInteger {
     NUNurseryOpenStatusClose,
@@ -37,24 +37,24 @@ typedef enum : NSUInteger {
 
 @interface NUNursery (Grade)
 
-- (NUUInt64)latestGrade:(NUSandbox *)sender;
-- (NUUInt64)olderRetainedGrade:(NUSandbox *)sender;
+- (NUUInt64)latestGrade:(NUGarden *)sender;
+- (NUUInt64)olderRetainedGrade:(NUGarden *)sender;
 
-- (NUUInt64)retainLatestGradeBySandbox:(NUSandbox *)sender;
-- (NUUInt64)retainGradeIfValid:(NUUInt64)aGrade bySandbox:(NUSandbox *)sender;
-- (void)retainGrade:(NUUInt64)aGrade bySandbox:(NUSandbox *)sender;
-- (void)releaseGradeLessThan:(NUUInt64)aGrade bySandbox:(NUSandbox *)sender;
+- (NUUInt64)retainLatestGradeByGarden:(NUGarden *)sender;
+- (NUUInt64)retainGradeIfValid:(NUUInt64)aGrade byGarden:(NUGarden *)sender;
+- (void)retainGrade:(NUUInt64)aGrade byGarden:(NUGarden *)sender;
+- (void)releaseGradeLessThan:(NUUInt64)aGrade byGarden:(NUGarden *)sender;
 
-- (NUUInt64)retainLatestGradeBySandboxWithID:(NUUInt64)anID;
-- (void)retainGrade:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID;
-- (void)releaseGradeLessThan:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID;
+- (NUUInt64)retainLatestGradeByGardenWithID:(NUUInt64)anID;
+- (void)retainGrade:(NUUInt64)aGrade byGardenWithID:(NUUInt64)anID;
+- (void)releaseGradeLessThan:(NUUInt64)aGrade byGardenWithID:(NUUInt64)anID;
 
 @end
 
-@interface NUNursery (Sandbox)
+@interface NUNursery (Garden)
 
-- (NUSandbox *)makeSandbox;
-- (NUSandbox *)makeSandboxWithGrade:(NUUInt64)aGrade;
+- (NUGarden *)makeGarden;
+- (NUGarden *)makeGardenWithGrade:(NUUInt64)aGrade;
 
 @end
 

@@ -24,9 +24,9 @@ extern const NUUInt8 NUSeekerCollectPhase;
 	NUAperture *aperture;
 }
 
-+ (id)seekerWithSandbox:(NUSandbox *)aSandbox;
++ (id)seekerWithGarden:(NUGarden *)aGarden;
 
-- (id)initWithSandbox:(NUSandbox *)aSandbox;
+- (id)initWithGarden:(NUGarden *)aGarden;
 
 - (void)objectDidEncode:(NUUInt64)anOOP;
 

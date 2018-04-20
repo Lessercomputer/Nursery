@@ -7,7 +7,7 @@
 //
 
 #import "NUNursery.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 #import "NUNurseryRoot.h"
 #import "NURegion.h"
 #import "NUIvar.h"
@@ -16,8 +16,8 @@
 
 NSString * const NUOOPNotFoundException = @"NUOOPNotFoundException";
 
-NUUInt64 NUNilSandboxID = 0;
-NUUInt64 NUFirstSandboxID = 1000;
+NUUInt64 NUNilGardenID = 0;
+NUUInt64 NUFirstGardenID = 1000;
 
 @implementation NUNursery
 
@@ -53,22 +53,22 @@ NUUInt64 NUFirstSandboxID = 1000;
 
 @implementation NUNursery (Grade)
 
-- (NUUInt64)latestGrade:(NUSandbox *)sender
+- (NUUInt64)latestGrade:(NUGarden *)sender
 {
     return NUNilGrade;
 }
 
-- (NUUInt64)olderRetainedGrade:(NUSandbox *)sender
+- (NUUInt64)olderRetainedGrade:(NUGarden *)sender
 {
     return NUNilGrade;
 }
 
-- (NUUInt64)retainLatestGradeBySandbox:(NUSandbox *)sender
+- (NUUInt64)retainLatestGradeByGarden:(NUGarden *)sender
 {
-    return [self retainLatestGradeBySandboxWithID:[sender ID]];
+    return [self retainLatestGradeByGardenWithID:[sender ID]];
 }
 
-- (NUUInt64)retainGradeIfValid:(NUUInt64)aGrade bySandbox:(NUSandbox *)sender
+- (NUUInt64)retainGradeIfValid:(NUUInt64)aGrade byGarden:(NUGarden *)sender
 {
     NUUInt64 anOlderGrade = [self olderRetainedGrade:sender];
     NUUInt64 aLatestGrade = [self latestGrade:sender];
@@ -79,42 +79,42 @@ NUUInt64 NUFirstSandboxID = 1000;
         return NUNilGrade;
 }
 
-- (void)retainGrade:(NUUInt64)aGrade bySandbox:(NUSandbox *)sender
+- (void)retainGrade:(NUUInt64)aGrade byGarden:(NUGarden *)sender
 {
-    [self retainGrade:aGrade bySandboxWithID:[sender ID]];
+    [self retainGrade:aGrade byGardenWithID:[sender ID]];
 }
 
-- (void)releaseGradeLessThan:(NUUInt64)aGrade bySandbox:(NUSandbox *)sender
+- (void)releaseGradeLessThan:(NUUInt64)aGrade byGarden:(NUGarden *)sender
 {
-    [self releaseGradeLessThan:aGrade bySandboxWithID:[sender ID]];
+    [self releaseGradeLessThan:aGrade byGardenWithID:[sender ID]];
 }
 
-- (NUUInt64)retainLatestGradeBySandboxWithID:(NUUInt64)anID
+- (NUUInt64)retainLatestGradeByGardenWithID:(NUUInt64)anID
 {
     return NUNilGrade;
 }
 
-- (void)retainGrade:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID
+- (void)retainGrade:(NUUInt64)aGrade byGardenWithID:(NUUInt64)anID
 {
 }
 
-- (void)releaseGradeLessThan:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID
+- (void)releaseGradeLessThan:(NUUInt64)aGrade byGardenWithID:(NUUInt64)anID
 {
 }
 
 @end
 
-@implementation NUNursery (Sandbox)
+@implementation NUNursery (Garden)
 
-- (NUSandbox *)makeSandbox
+- (NUGarden *)makeGarden
 {
-    return [self makeSandboxWithGrade:NUNilGrade];
+    return [self makeGardenWithGrade:NUNilGrade];
 }
 
-- (NUSandbox *)makeSandboxWithGrade:(NUUInt64)aGrade
+- (NUGarden *)makeGardenWithGrade:(NUUInt64)aGrade
 {
-    NUSandbox *aSandbox = [NUSandbox sandboxWithNursery:self grade:aGrade usesGradeSeeker:YES];
-    return aSandbox;
+    NUGarden *aGarden = [NUGarden gardenWithNursery:self grade:aGrade usesGradeSeeker:YES];
+    return aGarden;
 }
 
 @end

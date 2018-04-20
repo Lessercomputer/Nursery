@@ -8,7 +8,7 @@
 
 #import "NUSetCoder.h"
 #import "NUCharacter.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 #import "NUAliaser.h"
 
 @implementation NUSetCoder
@@ -81,6 +81,6 @@
     
     NSMutableSet *aSet = anObject;
     [aSet setSet:[self decodeObjectWithAliaser:anAliaser]];
-    [[anAliaser sandbox] unmarkChangedObject:aSet];
+    [[anAliaser garden] unmarkChangedObject:aSet];
 }
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "NUBell.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 #import "NUCoding.h"
 #import "NUBellBall.h"
 
@@ -16,27 +16,27 @@
 
 + (id)bellWithBall:(NUBellBall)aBall
 {
-    return [[[self alloc] initWithBall:aBall isLoaded:NO sandbox:nil] autorelease];
+    return [[[self alloc] initWithBall:aBall isLoaded:NO garden:nil] autorelease];
 }
 
-+ (id)bellWithBall:(NUBellBall)aBall sandbox:(NUSandbox *)aSandbox
++ (id)bellWithBall:(NUBellBall)aBall garden:(NUGarden *)aGarden
 {
-    return [[[self alloc] initWithBall:aBall isLoaded:NO sandbox:aSandbox] autorelease];
+    return [[[self alloc] initWithBall:aBall isLoaded:NO garden:aGarden] autorelease];
 }
 
-+ (id)bellWithBall:(NUBellBall)aBall isLoaded:(BOOL)anIsLoaded sandbox:(NUSandbox *)aSandbox
++ (id)bellWithBall:(NUBellBall)aBall isLoaded:(BOOL)anIsLoaded garden:(NUGarden *)aGarden
 {
-	return [[[self alloc] initWithBall:aBall isLoaded:anIsLoaded sandbox:aSandbox] autorelease];
+	return [[[self alloc] initWithBall:aBall isLoaded:anIsLoaded garden:aGarden] autorelease];
 }
 
-- (id)initWithBall:(NUBellBall)aBall isLoaded:(BOOL)anIsLoaded sandbox:(NUSandbox *)aSandbox
+- (id)initWithBall:(NUBellBall)aBall isLoaded:(BOOL)anIsLoaded garden:(NUGarden *)aGarden
 {
 	if (self = [super init])
     {
         ball = aBall;
         isLoaded = anIsLoaded;
         gradeAtCallFor = NUNilGrade;
-        sandbox = aSandbox;
+        garden = aGarden;
 	}
     
 	return self;
@@ -75,9 +75,9 @@
 	ball.oop = anOOP;
 }
 
-- (NUSandbox *)sandbox
+- (NUGarden *)garden
 {
-	return sandbox;
+	return garden;
 }
 
 - (NUUInt64)grade
@@ -110,9 +110,9 @@
     gradeForSeeker = aGrade;
 }
 
-- (void)setSandbox:(NUSandbox *)aSandbox
+- (void)setGarden:(NUGarden *)aGarden
 {
-	sandbox = aSandbox;
+	garden = aGarden;
 }
 
 - (id)object
@@ -130,7 +130,7 @@
 
 - (id)loadObject
 {
-    id anObject = [[self sandbox] objectForBell:self];
+    id anObject = [[self garden] objectForBell:self];
 	return anObject;
 }
 
@@ -160,24 +160,24 @@
 {
 	if (self == anOOP) return YES;
 	if ([self OOP] != [anOOP OOP]) return NO;
-	if (![[self sandbox] isEqual:[anOOP sandbox]]) return NO;
+	if (![[self garden] isEqual:[anOOP garden]]) return NO;
 	
 	return YES;
 }
 
 - (void)markChanged
 {
-    [[self sandbox] markChangedObject:[self object]];
+    [[self garden] markChangedObject:[self object]];
 }
 
 - (void)invalidate
 {
-    [[self sandbox] invalidateBell:self];
+    [[self garden] invalidateBell:self];
 }
 
 - (void)invalidateObjectIfNotReferenced
 {
-    [[self sandbox] invalidateObjectIfNotReferencedForBell:self];
+    [[self garden] invalidateObjectIfNotReferencedForBell:self];
 }
 
 - (NSString *)description

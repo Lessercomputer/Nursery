@@ -9,7 +9,7 @@
 #import "NUCharacter.h"
 #import "NUBell.h"
 #import "NUIvar.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 #import "NUAliaser.h"
 #import "NUCoder.h"
 
@@ -400,7 +400,7 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
         if (![[self subCharacters] containsObject:aCharacter])
         {
             [[self subCharacters] addObject:aCharacter];
-            [[[self bell] sandbox] markChangedObject:[self subCharacters]];
+            [[[self bell] garden] markChangedObject:[self subCharacters]];
         }
     }
     @finally
@@ -418,7 +418,7 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
         if ([[self subCharacters] containsObject:aCharacter])
         {
             [[self subCharacters] removeObject:aCharacter];
-            [[[self bell] sandbox] markChangedObject:[self subCharacters]];
+            [[[self bell] garden] markChangedObject:[self subCharacters]];
         }
     }
     @finally
@@ -701,7 +701,7 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
     }
 }
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUGarden *)aGarden
 {
     if ([self isEqual:[NUCharacter class]])
 	{
@@ -775,7 +775,7 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
 
 - (void)moveUp
 {
-    [[[[self bell] sandbox] aliaser] moveUp:self ignoreGradeAtCallFor:YES];
+    [[[[self bell] garden] aliaser] moveUp:self ignoreGradeAtCallFor:YES];
 }
 
 - (NSString *)description

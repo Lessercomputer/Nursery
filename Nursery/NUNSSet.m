@@ -8,7 +8,7 @@
 
 #import "NUNSSet.h"
 #import "NUCharacter.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 #import "NUSetCoder.h"
 
 @implementation NSSet (NUCharacter)
@@ -34,7 +34,7 @@
 
 @implementation NUNSSet
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUGarden *)aGarden
 {
     [aCharacter setIsMutable:NO];
 	[aCharacter setFormat:NUIndexedIvars];
@@ -46,7 +46,7 @@
 
 @implementation NUNSMutableSet
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUGarden *)aGarden
 {
 	[aCharacter setFormat:NUIndexedIvars];
 	[aCharacter setCoderClass:[NUSetCoder class]];

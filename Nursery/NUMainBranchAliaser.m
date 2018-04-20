@@ -8,7 +8,7 @@
 
 #import "NUMainBranchAliaser.h"
 #import "NUMainBranchNursery.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 #import "NUCoder.h"
 #import "NUPages.h"
 #import "NUMainBranchCodingContext.h"
@@ -38,7 +38,7 @@
 
 - (NUMainBranchNursery *)nursery
 {
-    return (NUMainBranchNursery *)[[self sandbox] nursery];
+    return (NUMainBranchNursery *)[[self garden] nursery];
 }
 
 - (NUPages *)pages
@@ -72,8 +72,8 @@
 
 - (NUBell *)allocateBellForObject:(id)anObject
 {
-	NUBell *aBell = [[self sandbox] allocateBellForBellBall:[[self objectTable] allocateBellBallWithGrade:[self gradeForSave]] isLoaded:YES];
-    [[self sandbox] setObject:anObject forBell:aBell];
+	NUBell *aBell = [[self garden] allocateBellForBellBall:[[self objectTable] allocateBellBallWithGrade:[self gradeForSave]] isLoaded:YES];
+    [[self garden] setObject:anObject forBell:aBell];
 	return aBell;
 }
 
@@ -124,7 +124,7 @@
 
 - (void)prepareCodingContextForEncode:(id)anObject
 {
-    NUBell *aBell = [[self sandbox] bellForObject:anObject];
+    NUBell *aBell = [[self garden] bellForObject:anObject];
 
     if (!aBell) aBell = [self allocateBellForObject:anObject];
     else if ([aBell grade] != [self gradeForSave]) [aBell setGrade:[self gradeForSave]];
@@ -218,14 +218,14 @@
 
 - (NUUInt64)previousSizeOfObject:(id)anObject
 {
-	return [self previousSizeOfObjectForBellBall:[[[self sandbox] bellForObject:anObject] ball]];
+	return [self previousSizeOfObjectForBellBall:[[[self garden] bellForObject:anObject] ball]];
 }
 
 - (NUUInt64)previousSizeOfObjectForBellBall:(NUBellBall)aBellBall
 {
 	NUUInt64 aLocation = [[[self nursery] objectTable] objectLocationFor:aBellBall];
     if (aLocation == NUNotFound64) [[NSException exceptionWithName:NUObjectLocationNotFoundException reason:NUObjectLocationNotFoundException userInfo:nil] raise];
-	NUCharacter *aCharacter = [[self sandbox] objectForOOP:[[self pages] readUInt64At:aLocation]];
+	NUCharacter *aCharacter = [[self garden] objectForOOP:[[self pages] readUInt64At:aLocation]];
 	NUUInt64 aSize = [aCharacter basicSize];
 	
 	if (aLocation == NUNotFound64 || aLocation == 0) return 0;
@@ -259,7 +259,7 @@
 
 - (NUUInt64)locationForObject:(id)anObject
 {
-	NUBell *anOOP = [[self sandbox] bellForObject:anObject];
+	NUBell *anOOP = [[self garden] bellForObject:anObject];
 	if (anOOP) return [self locationForOOP:anOOP];
 	return NUNotFound64;
 }

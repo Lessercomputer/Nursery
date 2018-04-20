@@ -8,7 +8,7 @@
 
 #import "NUDictionaryCoder.h"
 #import "NUCharacter.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 #import "NUAliaser.h"
 
 @implementation NUDictionaryCoder
@@ -80,7 +80,7 @@
     
     NSMutableDictionary *aDictionary = anObject;
     [aDictionary setDictionary:[self decodeObjectWithAliaser:anAliaser]];
-    [[anAliaser sandbox] unmarkChangedObject:aDictionary];
+    [[anAliaser garden] unmarkChangedObject:aDictionary];
 }
 
 @end

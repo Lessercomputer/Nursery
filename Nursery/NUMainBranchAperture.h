@@ -8,12 +8,12 @@
 
 #import "NUAperture.h"
 
-@class NUMainBranchNursery, NUMainBranchSandbox;
+@class NUMainBranchNursery, NUMainBranchGarden;
 
 @interface NUMainBranchAperture : NUAperture
 {
     NUMainBranchNursery *nursery;
-    NUMainBranchSandbox *sandbox;
+    NUMainBranchGarden *garden;
 	NUUInt64 oop;
 	NUUInt64 objectLocation;
 }

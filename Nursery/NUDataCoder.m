@@ -8,7 +8,7 @@
 
 #import "NUDataCoder.h"
 #import "NUCharacter.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 #import "NUAliaser.h"
 
 @implementation NUDataCoder : NUCoder
@@ -68,7 +68,7 @@
     
     NSMutableData *aData = anObject;
     [aData setData:[self decodeObjectWithAliaser:anAliaser]];
-    [[anAliaser sandbox] unmarkChangedObject:aData];
+    [[anAliaser garden] unmarkChangedObject:aData];
 }
 
 @end

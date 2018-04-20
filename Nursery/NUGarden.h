@@ -1,5 +1,5 @@
 //
-//  NUSandbox.h
+//  NUGarden.h
 //  Nursery
 //
 //  Created by Akifumi Takata on 10/09/09.
@@ -18,7 +18,7 @@ typedef enum NUFarmOutStatus {
 
 extern NSString * const NUObjectLoadingException;
 
-@interface NUSandbox : NSObject
+@interface NUGarden : NSObject
 {
     NUNursery *nursery;
     NUUInt64 grade;
@@ -34,26 +34,26 @@ extern NSString * const NUObjectLoadingException;
     BOOL usesGradeSeeker;
     NUGradeSeeker *gradeSeeker;
     NSRecursiveLock *lock;
-    NUUInt64 sandboxID;
+    NUUInt64 gardenID;
     BOOL isInMoveUp;
     BOOL retainNursery;
 }
 @end
 
-@interface NUSandbox (InitializingAndRelease)
+@interface NUGarden (InitializingAndRelease)
 
-+ (id)sandboxWithNursery:(NUNursery *)aNursery;
-+ (id)sandboxWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker;
-+ (id)sandboxWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker;
-+ (id)sandboxWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag;
-+ (id)sandboxWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag;
++ (id)gardenWithNursery:(NUNursery *)aNursery;
++ (id)gardenWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker;
++ (id)gardenWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker;
++ (id)gardenWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag;
++ (id)gardenWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag;
 
 - (id)initWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag;
 - (id)initWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag;
 
 @end
 
-@interface NUSandbox (Accessing)
+@interface NUGarden (Accessing)
 
 - (NUNursery *)nursery;
 
@@ -93,7 +93,7 @@ extern NSString * const NUObjectLoadingException;
 
 @end
 
-@interface NUSandbox (Bell)
+@interface NUGarden (Bell)
 
 - (id)objectForBell:(NUBell *)aBell;
 - (id)objectForOOP:(NUUInt64)anOOP;
@@ -114,7 +114,7 @@ extern NSString * const NUObjectLoadingException;
 
 @end
 
-@interface NUSandbox (SaveAndLoad)
+@interface NUGarden (SaveAndLoad)
 
 - (void)moveUp;
 - (void)moveUpTo:(NUUInt64)aGrade;
@@ -127,7 +127,7 @@ extern NSString * const NUObjectLoadingException;
 
 @end
 
-@interface NUSandbox (Characters)
+@interface NUGarden (Characters)
 
 - (NSDictionary *)systemCharacterOOPToClassDictionary;
 
@@ -145,14 +145,14 @@ extern NSString * const NUObjectLoadingException;
 
 @end
 
-@interface NUSandbox (ObjectState)
+@interface NUGarden (ObjectState)
 
 - (void)markChangedObject:(id)anObject;
 - (void)unmarkChangedObject:(id)anObject;
 
 @end
 
-@interface NUSandbox (Testing)
+@interface NUGarden (Testing)
 
 - (BOOL)contains:(id)anObject;
 - (BOOL)needsEncode:(id)anObject;
@@ -164,7 +164,7 @@ extern NSString * const NUObjectLoadingException;
 
 @end
 
-@interface NUSandbox (Private) <NSLocking>
+@interface NUGarden (Private) <NSLocking>
 
 - (void)setNursery:(NUNursery *)aNursery;
 

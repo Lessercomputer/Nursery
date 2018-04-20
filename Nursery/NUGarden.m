@@ -1,12 +1,12 @@
 //
-//  NUSandbox.m
+//  NUGarden.m
 //  Nursery
 //
 //  Created by Akifumi Takata on 10/09/09.
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
-#import "NUSandbox.h"
+#import "NUGarden.h"
 #import "NUObjectTable.h"
 #import "NUCharacter.h"
 #import "NUBell.h"
@@ -16,9 +16,9 @@
 #import "NUNursery.h"
 #import "NUNurseryRoot.h"
 #import "NUIvar.h"
-#import "NUMainBranchSandbox.h"
+#import "NUMainBranchGarden.h"
 #import "NUMainBranchNursery.h"
-#import "NUBranchSandbox.h"
+#import "NUBranchGarden.h"
 #import "NUBellBall.h"
 #import "NUCharacterDictionary.h"
 #import "NUMutableDictionary.h"
@@ -31,35 +31,35 @@
 
 NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
-@implementation NUSandbox
+@implementation NUGarden
 @end
 
-@implementation NUSandbox (InitializingAndRelease)
+@implementation NUGarden (InitializingAndRelease)
 
-+ (id)sandboxWithNursery:(NUNursery *)aNursery
++ (id)gardenWithNursery:(NUNursery *)aNursery
 {
-    return [self sandboxWithNursery:aNursery usesGradeSeeker:YES];
+    return [self gardenWithNursery:aNursery usesGradeSeeker:YES];
 }
 
-+ (id)sandboxWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker
++ (id)gardenWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker
 {
-    return [self sandboxWithNursery:aNursery usesGradeSeeker:aUsesGradeSeeker retainNursery:YES];
+    return [self gardenWithNursery:aNursery usesGradeSeeker:aUsesGradeSeeker retainNursery:YES];
 }
 
-+ (id)sandboxWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker
++ (id)gardenWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker
 {
-    return [self sandboxWithNursery:aNursery grade:aGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:YES];
+    return [self gardenWithNursery:aNursery grade:aGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:YES];
 }
 
-+ (id)sandboxWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
++ (id)gardenWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
 {
-    return [self sandboxWithNursery:aNursery grade:NUNilGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:aRetainFlag];
+    return [self gardenWithNursery:aNursery grade:NUNilGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:aRetainFlag];
 }
 
-+ (id)sandboxWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
++ (id)gardenWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
 {
-    Class aSandboxClass = [aNursery isMainBranch] ? [NUMainBranchSandbox class] : [NUBranchSandbox class];
-    return [[[aSandboxClass alloc] initWithNursery:aNursery grade:aGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:aRetainFlag] autorelease];
+    Class aGardenClass = [aNursery isMainBranch] ? [NUMainBranchGarden class] : [NUBranchGarden class];
+    return [[[aGardenClass alloc] initWithNursery:aNursery grade:aGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:aRetainFlag] autorelease];
 }
 
 - (id)initWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
@@ -72,7 +72,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     if (self = [super init])
     {
         lock = [NSRecursiveLock new];
-        sandboxID = [aNursery isMainBranch] ? [(NUMainBranchNursery *)aNursery newSandboxID] : NUNilSandboxID;
+        gardenID = [aNursery isMainBranch] ? [(NUMainBranchNursery *)aNursery newGardenID] : NUNilGardenID;
         grade = aGrade;
         nursery = aRetainFlag ? [aNursery retain] : aNursery;
         retainNursery = aRetainFlag;
@@ -80,13 +80,13 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         bells = [NUU64ODictionary new];
         [self setChangedObjects:[NUU64ODictionary dictionary]];
         [self setKeyObject:[NUObjectWrapper objectWrapperWithObject:nil]];
-        [self setKeyBell:[NUBell bellWithBall:NUNotFoundBellBall sandbox:self]];
-        [self setAliaser:[NUAliaser aliaserWithSandbox:self]];
+        [self setKeyBell:[NUBell bellWithBall:NUNotFoundBellBall garden:self]];
+        [self setAliaser:[NUAliaser aliaserWithGarden:self]];
         [self setCharacters:[NUMutableDictionary dictionary]];
         [self setRetainedGrades:[NSMutableIndexSet indexSet]];
         [self establishSystemCharacters];
         usesGradeSeeker = aUsesGradeSeeker;
-        if (aUsesGradeSeeker) gradeSeeker = [[NUGradeSeeker gradeSeekerWithSandbox:self] retain];
+        if (aUsesGradeSeeker) gradeSeeker = [[NUGradeSeeker gradeSeekerWithGarden:self] retain];
         [[self gradeSeeker] prepare];
     }
     
@@ -125,7 +125,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 @end
 
-@implementation NUSandbox (Accessing)
+@implementation NUGarden (Accessing)
 
 - (NUNursery *)nursery
 {
@@ -134,7 +134,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 - (NUUInt64)ID
 {
-    return sandboxID;
+    return gardenID;
 }
 
 - (NUUInt64)grade
@@ -258,7 +258,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 @end
 
-@implementation NUSandbox (SaveAndLoad)
+@implementation NUGarden (SaveAndLoad)
 
 - (void)moveUp
 {
@@ -302,14 +302,14 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 - (void)mergeCharacters
 {
-    [[[[self characters] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(Class _Nonnull aClassForCharacter, NUCharacter * _Nonnull aCharacterInSandbox, BOOL * _Nonnull aStop) {
-        NUCharacter *aCharacterInNurseryRoot = [self characterForName:[aCharacterInSandbox fullName]];
+    [[[[self characters] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(Class _Nonnull aClassForCharacter, NUCharacter * _Nonnull aCharacterInGarden, BOOL * _Nonnull aStop) {
+        NUCharacter *aCharacterInNurseryRoot = [self characterForName:[aCharacterInGarden fullName]];
         
         if (!aCharacterInNurseryRoot)
             return;
         
-        [aCharacterInNurseryRoot setTargetClass:[aCharacterInSandbox targetClass]];
-        [aCharacterInNurseryRoot setCoderClass:[aCharacterInSandbox coderClass]];
+        [aCharacterInNurseryRoot setTargetClass:[aCharacterInGarden targetClass]];
+        [aCharacterInNurseryRoot setCoderClass:[aCharacterInGarden coderClass]];
         
         if ([self characterForClass:[aCharacterInNurseryRoot targetClass]] != aCharacterInNurseryRoot)
             [self setCharacter:aCharacterInNurseryRoot forClass:[aCharacterInNurseryRoot targetClass]];
@@ -335,7 +335,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 @end
 
-@implementation NUSandbox (Bell)
+@implementation NUGarden (Bell)
 
 - (id)objectForBell:(NUBell *)aBell
 {
@@ -414,7 +414,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 - (NUBell *)allocateBellForBellBall:(NUBellBall)aBellBall isLoaded:(BOOL)anIsLoaded
 {
-    NUBell *aBell = [NUBell bellWithBall:aBellBall isLoaded:anIsLoaded sandbox:self];
+    NUBell *aBell = [NUBell bellWithBall:aBellBall isLoaded:anIsLoaded garden:self];
     
     @try {
         [self lock];
@@ -465,7 +465,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
             [aBell setObject:nil];
         }
 
-        [aBell setSandbox:nil];
+        [aBell setGarden:nil];
         [[self bells] removeObjectForKey:[aBell OOP]];
     }
     @finally {
@@ -480,7 +480,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 @end
 
-@implementation NUSandbox (Characters)
+@implementation NUGarden (Characters)
 
 - (NSDictionary *)systemCharacterOOPToClassDictionary
 {
@@ -593,7 +593,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 @end
 
-@implementation NUSandbox (ObjectState)
+@implementation NUGarden (ObjectState)
 
 - (void)markChangedObject:(id)anObject
 {
@@ -618,7 +618,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 @end
 
-@implementation NUSandbox (Testing)
+@implementation NUGarden (Testing)
 
 - (BOOL)contains:(id)anObject
 {
@@ -648,7 +648,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 @end
 
-@implementation NUSandbox (Private)
+@implementation NUGarden (Private)
 
 - (void)lock
 {
@@ -674,7 +674,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     @try {
         [self lock];
         
-        NUUInt64 aGrade = [[self nursery] retainLatestGradeBySandbox:self];
+        NUUInt64 aGrade = [[self nursery] retainLatestGradeByGarden:self];
         [[self retainedGrades] addIndex:aGrade];
         return aGrade;
     }
@@ -690,7 +690,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 - (void)setID:(NUUInt64)anID
 {
-    sandboxID = anID;
+    gardenID = anID;
 }
 
 - (void)setIsInMoveUp:(BOOL)aFlag
@@ -716,7 +716,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         if ([self isInMoveUp] || [self grade] == NUNilGrade)
             [self setGrade:usesGradeSeeker ? [self retainLatestGradeOfNursery] : [[self nursery] latestGrade:self]];
         else
-            [self setGrade:[[self nursery] retainGradeIfValid:[self grade] bySandbox:self]];
+            [self setGrade:[[self nursery] retainGradeIfValid:[self grade] byGarden:self]];
         
         NUBell *aNurseryRootBell = [self allocateBellForBellBall:NUMakeBellBall(aNurseryRootOOP, NUNilGrade)];
         aNurseryRoot = [self objectForBell:aNurseryRootBell];
@@ -801,11 +801,11 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         [[[[self bells] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop){
             @autoreleasepool
             {
-                NSInteger aRetainCountOfBellInSandbox = 2;
+                NSInteger aRetainCountOfBellInGarden = 2;
                 if ([aBell hasObject] && ![[aBell object] conformsToProtocol:@protocol(NUCoding)])
-                    aRetainCountOfBellInSandbox++;
+                    aRetainCountOfBellInGarden++;
                 
-                if ([aBell retainCount] == aRetainCountOfBellInSandbox && (![aBell hasObject] || [[aBell object] retainCount] == 1))
+                if ([aBell retainCount] == aRetainCountOfBellInGarden && (![aBell hasObject] || [[aBell object] retainCount] == 1))
                     [self invalidateBell:aBell];
             }
         }];
@@ -826,7 +826,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         [self lock];
         
         [self collectBellsWithGradeLessThan:aGrade];
-        [[self nursery] releaseGradeLessThan:aGrade bySandbox:self];            
+        [[self nursery] releaseGradeLessThan:aGrade byGarden:self];            
     }
     @finally {
         [self unlock];

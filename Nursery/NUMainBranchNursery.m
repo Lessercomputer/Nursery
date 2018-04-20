@@ -7,7 +7,7 @@
 //
 
 #import "NUMainBranchNursery.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 #import "NUNurseryRoot.h"
 #import "NUObjectTable.h"
 #import "NUReversedObjectTable.h"
@@ -20,7 +20,7 @@
 #import "NUIvar.h"
 #import "NUAliaser.h"
 #import "NUBellBall.h"
-#import "NUPairedMainBranchSandbox.h"
+#import "NUPairedMainBranchGarden.h"
 
 const NUUInt64 NURootObjectOOPOffset = 13;
 const NUUInt64 NUNurseryCurrentGradeOffset = 93;
@@ -46,7 +46,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 //            return nil;
 //        }
         
-        nextSandboxID = NUFirstSandboxID;
+        nextGardenID = NUFirstGardenID;
         lock = [NSRecursiveLock new];
         [self setFilePath:aFilePath];
         [self setSpaces:[NUSpaces spacesWithNursery:self]];
@@ -54,8 +54,8 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
         [self setReversedObjectTable:[[[NUReversedObjectTable alloc] initWithRootLocation:0 on:[self spaces]] autorelease]];
         [[self spaces] prepareNodeOOPToTreeDictionary];
         retainedGrades = [NSMutableDictionary new];
-        [self setSeeker:[NUSeeker seekerWithSandbox:[NUSandbox sandboxWithNursery:self usesGradeSeeker:NO retainNursery:NO]]];
-        [self setParader:[NUParader paraderWithSandbox:[NUSandbox sandboxWithNursery:self usesGradeSeeker:NO retainNursery:NO]]];
+        [self setSeeker:[NUSeeker seekerWithGarden:[NUGarden gardenWithNursery:self usesGradeSeeker:NO retainNursery:NO]]];
+        [self setParader:[NUParader paraderWithGarden:[NUGarden gardenWithNursery:self usesGradeSeeker:NO retainNursery:NO]]];
         [[self seeker] prepare];
         [[self parader] prepare];
     }
@@ -158,23 +158,23 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 
 @end
 
-@implementation NUMainBranchNursery (Sandbox)
+@implementation NUMainBranchNursery (Garden)
 
-- (NUUInt64)newSandboxID
+- (NUUInt64)newGardenID
 {
-    NUUInt64 aNewSandboxID;
+    NUUInt64 aNewGardenID;
     
     [lock lock];
     
-    aNewSandboxID = nextSandboxID;
-    nextSandboxID++;
+    aNewGardenID = nextGardenID;
+    nextGardenID++;
     
     [lock unlock];
     
-    return aNewSandboxID;
+    return aNewGardenID;
 }
 
-- (void)releaseSandboxID:(NUInt64)anID
+- (void)releaseGardenID:(NUInt64)anID
 {
     
 }
@@ -183,7 +183,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 
 @implementation NUMainBranchNursery (Grade)
 
-- (NUUInt64)latestGrade:(NUSandbox *)sender
+- (NUUInt64)latestGrade:(NUGarden *)sender
 {
     [lock lock];
     
@@ -194,13 +194,13 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     return aGrade;
 }
 
-- (NUUInt64)olderRetainedGrade:(NUSandbox *)sender
+- (NUUInt64)olderRetainedGrade:(NUGarden *)sender
 {
     [lock lock];
     
     __block NUUInt64 aGrade = NUNotFoundGrade;
     
-    [[self retainedGrades] enumerateKeysAndObjectsUsingBlock:^(NSNumber *aGradeNumber, NSMutableIndexSet *aSandboxIDs, BOOL *aStop) {
+    [[self retainedGrades] enumerateKeysAndObjectsUsingBlock:^(NSNumber *aGradeNumber, NSMutableIndexSet *aGardenIDs, BOOL *aStop) {
         NUUInt64 aRetainedGradeNumber = [aGradeNumber unsignedLongLongValue];
         if (aRetainedGradeNumber < aGrade) aGrade = aRetainedGradeNumber;
     }];
@@ -212,43 +212,43 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     return aGrade;
 }
 
-- (NUUInt64)retainLatestGradeBySandboxWithID:(NUUInt64)anID
+- (NUUInt64)retainLatestGradeByGardenWithID:(NUUInt64)anID
 {
     [lock lock];
     
     NUUInt64 aGrade = [self grade];
-    [self retainGrade:aGrade bySandboxWithID:anID];
+    [self retainGrade:aGrade byGardenWithID:anID];
     
     [lock unlock];
     
     return aGrade;
 }
 
-- (void)retainGrade:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID
+- (void)retainGrade:(NUUInt64)aGrade byGardenWithID:(NUUInt64)anID
 {
     [lock lock];
     
     NSNumber *aGradeNumber = @(aGrade);
-    NSMutableIndexSet *aSandboxIDs = [[self retainedGrades] objectForKey:aGradeNumber];
+    NSMutableIndexSet *aGardenIDs = [[self retainedGrades] objectForKey:aGradeNumber];
     
-    if (!aSandboxIDs)
+    if (!aGardenIDs)
     {
-        aSandboxIDs = [NSMutableIndexSet indexSet];
-        [[self retainedGrades] setObject:aSandboxIDs forKey:aGradeNumber];
+        aGardenIDs = [NSMutableIndexSet indexSet];
+        [[self retainedGrades] setObject:aGardenIDs forKey:aGradeNumber];
     }
     
-    [aSandboxIDs addIndex:anID];
+    [aGardenIDs addIndex:anID];
     
     [lock unlock];
 }
 
-- (void)releaseGradeLessThan:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID
+- (void)releaseGradeLessThan:(NUUInt64)aGrade byGardenWithID:(NUUInt64)anID
 {
     [lock lock];
     
     NSMutableIndexSet *aRetainedGrades = [NSMutableIndexSet indexSet];
     
-    [[self retainedGrades] enumerateKeysAndObjectsUsingBlock:^(NSNumber *aRetainedGradeNumber, NSMutableIndexSet *aSandboxIDs, BOOL *stop) {
+    [[self retainedGrades] enumerateKeysAndObjectsUsingBlock:^(NSNumber *aRetainedGradeNumber, NSMutableIndexSet *aGardenIDs, BOOL *stop) {
         NUUInt64 aRetainedGrade = [aRetainedGradeNumber unsignedLongLongValue];
         if (aRetainedGrade < aGrade)
             [aRetainedGrades addIndex:aRetainedGrade];
@@ -256,13 +256,13 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     
     [aRetainedGrades enumerateIndexesUsingBlock:^(NSUInteger aRetainedGrade, BOOL *stop) {
         NSNumber *aGradeNumber = @(aRetainedGrade);
-        NSMutableIndexSet *aSandboxIDs = [[self retainedGrades] objectForKey:aGradeNumber];
+        NSMutableIndexSet *aGardenIDs = [[self retainedGrades] objectForKey:aGradeNumber];
         
-        if (aSandboxIDs)
+        if (aGardenIDs)
         {
-            [aSandboxIDs removeIndex:anID];
+            [aGardenIDs removeIndex:anID];
             
-            if (![aSandboxIDs count])
+            if (![aGardenIDs count])
                 [[self retainedGrades] removeObjectForKey:aGradeNumber];
         }
     }];
@@ -331,20 +331,20 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     retainedGrades = [aGrades retain];
 }
 
-- (NUPairedMainBranchSandbox *)makePairdSandbox
+- (NUPairedMainBranchGarden *)makePairdGarden
 {
-    NUPairedMainBranchSandbox *aSandbox = [NUPairedMainBranchSandbox sandboxWithNursery:self usesGradeSeeker:NO];
-    return aSandbox;
+    NUPairedMainBranchGarden *aGarden = [NUPairedMainBranchGarden gardenWithNursery:self usesGradeSeeker:NO];
+    return aGarden;
 }
 
-- (NUSandbox *)sandboxForSeeker
+- (NUGarden *)gardenForSeeker
 {
-    return [[self seeker] sandbox];
+    return [[self seeker] garden];
 }
 
-- (NUSandbox *)sandboxForParader
+- (NUGarden *)gardenForParader
 {
-    return [[self parader] sandbox];
+    return [[self parader] garden];
 }
 
 - (NUUInt64)gradeForSeeker
@@ -353,7 +353,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     {
         [self lockForChange];
         
-        NUUInt64 aGrade = [self olderRetainedGrade:[self sandboxForSeeker]];
+        NUUInt64 aGrade = [self olderRetainedGrade:[self gardenForSeeker]];
         if (aGrade == NUNotFoundGrade) aGrade = [self grade];
         return aGrade;
     }

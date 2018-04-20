@@ -27,7 +27,7 @@ static NUUInt32 characterVersion = 0;
 	return YES;
 }
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUGarden *)aGarden
 {
     [aCharacter setVersion:[self characterVersion]];
  

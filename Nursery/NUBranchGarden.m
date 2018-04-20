@@ -1,12 +1,12 @@
 //
-//  NUBranchSandbox.m
+//  NUBranchGarden.m
 //  Nursery
 //
 //  Created by Akifumi Takata on 2013/10/23.
 //
 //
 
-#import "NUBranchSandbox.h"
+#import "NUBranchGarden.h"
 #import "NUGradeSeeker.h"
 #import "NUBranchAliaser.h"
 #import "NUBell.h"
@@ -17,7 +17,7 @@
 #import "NUU64ODictionary.h"
 #import "NUNurseryNetClient.h"
 
-@implementation NUBranchSandbox
+@implementation NUBranchGarden
 
 - (id)initWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
 {
@@ -32,7 +32,7 @@
 - (void)close
 {
     [[self gradeSeeker] stop];
-    [[self netClient] closeSandboxWithID:[self ID]];
+    [[self netClient] closeGardenWithID:[self ID]];
     
     [super close];
 }
@@ -66,7 +66,7 @@
 
 @end
 
-@implementation NUBranchSandbox (SaveAndLoad)
+@implementation NUBranchGarden (SaveAndLoad)
 
 - (NUFarmOutStatus)farmOut
 {
@@ -90,8 +90,8 @@
             [[self aliaser] encodeObjects];
             NSData *anEncodedObjectsData = [[self branchAliaser] encodedPupilData];
 //            NSMutableData *aCopiedEncodedObjectsData = [anEncodedObjectsData mutableCopy];
-//            [anEncodedObjectsData writeToFile:[@"~/Desktop/NUBranchSandbox_encodedObjects" stringByExpandingTildeInPath] atomically:YES];
-            aFarmOutStatus = [[[self branchNursery] netClient] farmOutPupils:anEncodedObjectsData rootOOP:[[[self nurseryRoot] bell] OOP] sandboxWithID:[self ID] fixedOOPs:&aFixedOOPs latestGrade:&aLatestGrade];
+//            [anEncodedObjectsData writeToFile:[@"~/Desktop/NUBranchGarden_encodedObjects" stringByExpandingTildeInPath] atomically:YES];
+            aFarmOutStatus = [[[self branchNursery] netClient] farmOutPupils:anEncodedObjectsData rootOOP:[[[self nurseryRoot] bell] OOP] gardenWithID:[self ID] fixedOOPs:&aFixedOOPs latestGrade:&aLatestGrade];
             
 //            [aCopiedEncodedObjectsData release];
             
@@ -114,14 +114,14 @@
 
 @end
 
-@implementation NUBranchSandbox (Private)
+@implementation NUBranchGarden (Private)
 
 - (NUNurseryRoot *)loadNurseryRoot
 {
-    if ([self ID] == NUNilSandboxID)
+    if ([self ID] == NUNilGardenID)
     {
         [[self netClient] start];
-        [self setID:[[[self branchNursery] netClient] openSandbox]];
+        [self setID:[[[self branchNursery] netClient] openGarden]];
     }
         
     return [super loadNurseryRoot];

@@ -1,16 +1,16 @@
 //
-//  NUBranchSandbox.h
+//  NUBranchGarden.h
 //  Nursery
 //
 //  Created by Akifumi Takata on 2013/10/23.
 //
 //
 
-#import "NUSandbox.h"
+#import "NUGarden.h"
 
 @class NUBranchAliaser, NUBranchNursery, NUMainBranchNurseryAssociation;
 
-@interface NUBranchSandbox : NUSandbox
+@interface NUBranchGarden : NUGarden
 {
     NUUInt64 nextProbationaryOOP;
 }
@@ -22,7 +22,7 @@
 
 @end
 
-@interface NUBranchSandbox (Private)
+@interface NUBranchGarden (Private)
 
 - (void)replaceProbationaryOOPsWithFixedOOPs:(NSData *)aProbationaryOOPsFixedOOPs inPupils:(NUU64ODictionary *)aProbationaryPupils grade:(NUUInt64)aLatestGrade;
 

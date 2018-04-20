@@ -8,7 +8,7 @@
 
 #import "NUTypes.h"
 
-@class NUNursery, NUCharacter, NUSandbox;
+@class NUNursery, NUCharacter, NUGarden;
 
 @interface NUAperture : NSObject
 {
@@ -18,9 +18,9 @@
     NUUInt64 indexedOOPCount;
 }
 
-+ (id)apertureWithNursery:(NUNursery *)aNursery sandbox:(NUSandbox *)aSandbox;
++ (id)apertureWithNursery:(NUNursery *)aNursery garden:(NUGarden *)aGarden;
 
-- (id)initWithNursery:(NUNursery *)aNursery sandbox:(NUSandbox *)aSandbox;
+- (id)initWithNursery:(NUNursery *)aNursery garden:(NUGarden *)aGarden;
 
 - (void)peekAt:(NUBellBall)aBellBall;
 - (BOOL)hasNextFixedOOP;

@@ -7,7 +7,7 @@
 //
 
 #import "NUNurseryNetServiceIO.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 
 @class NUBranchNursery;
 
@@ -56,19 +56,19 @@ typedef enum : NSUInteger {
 - (void)sendMessage:(NUNurseryNetMessage *)aSendingMessage;
 - (void)sendAndReceiveMessage:(NUNurseryNetMessage *)aSendingMessage;
 
-- (NUUInt64)openSandbox;
-- (void)closeSandboxWithID:(NUUInt64)anID;
+- (NUUInt64)openGarden;
+- (void)closeGardenWithID:(NUUInt64)anID;
 
-- (NUUInt64)rootOOPForSandboxWithID:(NUUInt64)anID;
+- (NUUInt64)rootOOPForGardenWithID:(NUUInt64)anID;
 
 - (NUUInt64)latestGrade;
 - (NUUInt64)olderRetainedGrade;
-- (NUUInt64)retainLatestGradeBySandboxWithID:(NUUInt64)anID;
-- (NUUInt64)retainGradeIfValid:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID;
-- (void)retainGrade:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID;
-- (void)releaseGradeLessThan:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID;
+- (NUUInt64)retainLatestGradeByGardenWithID:(NUUInt64)anID;
+- (NUUInt64)retainGradeIfValid:(NUUInt64)aGrade byGardenWithID:(NUUInt64)anID;
+- (void)retainGrade:(NUUInt64)aGrade byGardenWithID:(NUUInt64)anID;
+- (void)releaseGradeLessThan:(NUUInt64)aGrade byGardenWithID:(NUUInt64)anID;
 
-- (NSData *)callForPupilWithOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade sandboxWithID:(NUUInt64)anID containsFellowPupils:(BOOL)aContainsFellowPupils;
-- (NUFarmOutStatus)farmOutPupils:(NSData *)aPupilData rootOOP:(NUUInt64)aRootOOP sandboxWithID:(NUUInt64)anID fixedOOPs:(NSData **)aFixedOOPs latestGrade:(NUUInt64 *)aLatestGrade;
+- (NSData *)callForPupilWithOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade gardenWithID:(NUUInt64)anID containsFellowPupils:(BOOL)aContainsFellowPupils;
+- (NUFarmOutStatus)farmOutPupils:(NSData *)aPupilData rootOOP:(NUUInt64)aRootOOP gardenWithID:(NUUInt64)anID fixedOOPs:(NSData **)aFixedOOPs latestGrade:(NUUInt64 *)aLatestGrade;
 
 @end

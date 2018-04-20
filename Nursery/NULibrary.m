@@ -12,7 +12,7 @@
 #import "NUIvar.h"
 #import "NUAliaser.h"
 #import "NUBell.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 
 @implementation NULibrary
 
@@ -165,7 +165,7 @@
 	return YES;
 }
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUGarden *)aGarden
 {
     [aCharacter addOOPIvarWithName:@"tree"];
 }

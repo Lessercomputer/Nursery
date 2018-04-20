@@ -7,7 +7,7 @@
 //
 
 #import "NUBranchNursery.h"
-#import "NUBranchSandbox.h"
+#import "NUBranchGarden.h"
 #import "NUPupilAlbum.h"
 #import "NUNurseryNetClient.h"
 
@@ -50,24 +50,24 @@
 
 @implementation NUBranchNursery (Grade)
 
-- (NUUInt64)latestGrade:(NUSandbox *)sender
+- (NUUInt64)latestGrade:(NUGarden *)sender
 {
     return [[self netClient] latestGrade];
 }
 
-- (NUUInt64)olderRetainedGrade:(NUSandbox *)sender
+- (NUUInt64)olderRetainedGrade:(NUGarden *)sender
 {
     return [[self netClient] olderRetainedGrade];
 }
 
-- (NUUInt64)retainLatestGradeBySandbox:(NUSandbox *)sender
+- (NUUInt64)retainLatestGradeByGarden:(NUGarden *)sender
 {
-    return [[self netClient] retainLatestGradeBySandboxWithID:[sender ID]];
+    return [[self netClient] retainLatestGradeByGardenWithID:[sender ID]];
 }
 
-- (void)retainGrade:(NUUInt64)aGrade bySandbox:(NUSandbox *)sender
+- (void)retainGrade:(NUUInt64)aGrade byGarden:(NUGarden *)sender
 {
-    [[self netClient] retainGrade:aGrade bySandboxWithID:[sender ID]];
+    [[self netClient] retainGrade:aGrade byGardenWithID:[sender ID]];
 }
 
 @end

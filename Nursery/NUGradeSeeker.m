@@ -7,7 +7,7 @@
 //
 
 #import "NUGradeSeeker.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 #import "NUNurseryRoot.h"
 #import "NUBell.h"
 #import "NUBellBall.h"
@@ -19,21 +19,21 @@
 
 @implementation NUGradeSeeker
 
-+ (id)gradeSeekerWithSandbox:(NUSandbox *)aSandbox
++ (id)gradeSeekerWithGarden:(NUGarden *)aGarden
 {
-    Class aApertureClass = [aSandbox isForMainBranch] ? [NUMainBranchAperture class] : [NUBranchAperture class];
-    Class aSeekerClass = [aSandbox isForMainBranch] ? [NUMainBranchGradeSeeker class] : [NUBranchGradeSeeker class];
-    return [[[aSeekerClass alloc] initWithSandbox:aSandbox aperture:[aApertureClass apertureWithNursery:[aSandbox nursery] sandbox:aSandbox]] autorelease];
+    Class aApertureClass = [aGarden isForMainBranch] ? [NUMainBranchAperture class] : [NUBranchAperture class];
+    Class aSeekerClass = [aGarden isForMainBranch] ? [NUMainBranchGradeSeeker class] : [NUBranchGradeSeeker class];
+    return [[[aSeekerClass alloc] initWithGarden:aGarden aperture:[aApertureClass apertureWithNursery:[aGarden nursery] garden:aGarden]] autorelease];
 }
 
-+ (id)gradeSeekerWithSandbox:(NUSandbox *)aSandbox aperture:(NUAperture *)aAperture
++ (id)gradeSeekerWithGarden:(NUGarden *)aGarden aperture:(NUAperture *)aAperture
 {
-    return [[[self alloc] initWithSandbox:aSandbox aperture:aAperture] autorelease];
+    return [[[self alloc] initWithGarden:aGarden aperture:aAperture] autorelease];
 }
 
-- (id)initWithSandbox:(NUSandbox *)aSandbox aperture:(NUAperture *)aAperture
+- (id)initWithGarden:(NUGarden *)aGarden aperture:(NUAperture *)aAperture
 {
-    if (self = [super initWithSandbox:aSandbox])
+    if (self = [super initWithGarden:aGarden])
     {
         aperture = [aAperture retain];
         bellsLock = [NSRecursiveLock new];
@@ -118,7 +118,7 @@
 
 - (NUUInt64)grade
 {
-    return [[self sandbox] grade];
+    return [[self garden] grade];
 }
 
 - (void)process
@@ -162,12 +162,12 @@
     __block BOOL aGradeLessThanCurrentFound = NO;
     
     @try {
-        [[self sandbox] lock];
+        [[self garden] lock];
         
-        [[self sandbox] invalidateBellsWithNotReferencedObject];
-        [[self sandbox] invalidateNotReferencedBells];
+        [[self garden] invalidateBellsWithNotReferencedObject];
+        [[self garden] invalidateNotReferencedBells];
         
-        [[[self sandbox] bells] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop) {
+        [[[self garden] bells] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop) {
             if ([aBell gradeForSeeker] < [self grade])
             {
                 aGradeLessThanCurrentFound = YES;
@@ -186,18 +186,18 @@
         }
     }
     @finally {
-        [[self sandbox] unlock];
+        [[self garden] unlock];
     }
 }
 
 - (NSMutableArray *)collectBellWithGradeLessThanCurrent
 {
     @try {
-        [[self sandbox] lock];
+        [[self garden] lock];
         
         NSMutableArray *aBells = [NSMutableArray array];
         
-        [[[self sandbox] bells] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop) {
+        [[[self garden] bells] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop) {
             if ([aBell gradeForSeeker] < [self grade])
                 [aBells addObject:aBell];
         }];
@@ -205,7 +205,7 @@
         return aBells;
     }
     @finally {
-        [[self sandbox] unlock];
+        [[self garden] unlock];
     }
 }
 
@@ -215,7 +215,7 @@
     NSLog(@"<%@:%p> #collectGradeLessThan:%llu", [self class], self, aGrade);
 #endif
     
-    [[self sandbox] collectGradeLessThan:aGrade];
+    [[self garden] collectGradeLessThan:aGrade];
 }
 
 - (void)bellDidLoadIvars:(NUBell *)aBell
@@ -229,7 +229,7 @@
 
 - (void)objectDidLoadIvars:(id)anObject
 {
-    [self bellDidLoadIvars:[[self sandbox] bellForObject:anObject]];
+    [self bellDidLoadIvars:[[self garden] bellForObject:anObject]];
 }
 
 @end

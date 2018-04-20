@@ -17,7 +17,7 @@
 #import "NUOpaqueBTreeNode.h"
 #import "NUMainBranchAliaser.h"
 #import "NUBellBall.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 
 const NUUInt64 NUParaderNextLocationOffset = 69;
 
@@ -25,16 +25,16 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 
 @implementation NUParader
 
-+ (id)paraderWithSandbox:(NUSandbox *)aSandbox
++ (id)paraderWithGarden:(NUGarden *)aGarden
 {
-    return [[[self alloc] initWithSandbox:aSandbox] autorelease];
+    return [[[self alloc] initWithGarden:aGarden] autorelease];
 }
 
-- (id)initWithSandbox:(NUSandbox *)aSandbox
+- (id)initWithGarden:(NUGarden *)aGarden
 {
-    if (self = [super initWithSandbox:aSandbox])
+    if (self = [super initWithGarden:aGarden])
     {
-        sandbox = [aSandbox retain];
+        garden = [aGarden retain];
     }
     
     return self;
@@ -43,14 +43,14 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 - (void)dealloc
 {
     NSLog(@"dealloc:%@", self);
-    [sandbox release];
+    [garden release];
     
     [super dealloc];
 }
 
 - (NUMainBranchNursery *)nursery
 {
-    return (NUMainBranchNursery *)[[self sandbox] nursery];
+    return (NUMainBranchNursery *)[[self garden] nursery];
 }
 
 - (void)save
@@ -89,7 +89,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
         {
             [[self nursery] lockForChange];
             
-            [[self sandbox] moveUpTo:[[self nursery] gradeForParader]];
+            [[self garden] moveUpTo:[[self nursery] gradeForParader]];
             
             NURegion aFreeRegion = [[[self nursery] spaces] nextParaderTargetFreeSpaceForLocation:nextLocation];
             
@@ -145,7 +145,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     NSLog(@"#paradeObject nextLocation:%llu bellBall:%@ freeRegion:%@", nextLocation, NUStringFromBellBall(aBellBall), NUStringFromRegion(aFreeRegion));
 #endif
     
-    NUUInt64 anObjectSize = [(NUMainBranchAliaser *)[[self sandbox] aliaser] previousSizeOfObjectForBellBall:aBellBall];
+    NUUInt64 anObjectSize = [(NUMainBranchAliaser *)[[self garden] aliaser] previousSizeOfObjectForBellBall:aBellBall];
     NURegion aNewFreeRegion = NUMakeRegion(aFreeRegion.location + anObjectSize, aFreeRegion.length);
     [[[self nursery] pages] moveBytesAt:nextLocation length:anObjectSize to:aFreeRegion.location buffer:aBuffer length:aBufferSize];
     //[[[self nursery] spaces] moveFreeSpaceAtLocation:aFreeRegion.location toLocation:aNewFreeRegion.location];

@@ -354,7 +354,7 @@ static NSString *NUNurseryTestFilePath = nil;
     @autoreleasepool
     {
         NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-        NUSandbox *aSandbox = [aNursery makeSandbox];
+        NUGarden *aGarden = [aNursery makeGarden];
         
         const NUUInt64 MaxCount = 10000;
         NULibrary *aLibrary = [NULibrary library];
@@ -367,15 +367,15 @@ static NSString *NUNurseryTestFilePath = nil;
             [aLibrary setObject:obj forKey:obj];
         }];
 
-        [aSandbox setRoot:aLibrary];
-        XCTAssertEqual([aSandbox farmOut], NUFarmOutStatusSucceeded, @"");
+        [aGarden setRoot:aLibrary];
+        XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded, @"");
     }
     
     [aNumbers autorelease];
     
     NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    NUSandbox *aSandbox = [aNursery makeSandbox];
-    NULibrary *aLoadedLibrary = [aSandbox root];
+    NUGarden *aGarden = [aNursery makeGarden];
+    NULibrary *aLoadedLibrary = [aGarden root];
     
     XCTAssertEqual((NUUInt64)[aLoadedLibrary count], [aNumbers count], @"");
     [aNumbers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {

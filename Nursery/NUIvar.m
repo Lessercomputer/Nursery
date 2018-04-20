@@ -10,7 +10,7 @@
 #import "NUAliaser.h"
 #import "NUCharacter.h"
 #import "NUBell.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 #import "NUGradeSeeker.h"
 
 const NUIvarType NUOOPIvarType			= 0;
@@ -177,7 +177,7 @@ NSString *NUIvarInvalidTypeException = @"NUIvarInvalidTypeException";
 	return YES;
 }
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUGarden *)aGarden
 {
     if ([self isEqual:[NUIvar class]])
     {

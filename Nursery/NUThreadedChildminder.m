@@ -15,16 +15,16 @@ const int NUThreadedChildminderTerminateCondition   = 2;
 
 @implementation NUThreadedChildminder
 
-+ (id)threadedChildminderWithSandbox:(NUSandbox *)aSandbox
++ (id)threadedChildminderWithGarden:(NUGarden *)aGarden
 {
-	return [[[self alloc] initWithSandbox:aSandbox] autorelease];
+	return [[[self alloc] initWithGarden:aGarden] autorelease];
 }
 
-- (id)initWithSandbox:(NUSandbox *)aSandbox
+- (id)initWithGarden:(NUGarden *)aGarden
 {
 	if (self = [super init])
     {
-        sandbox = aSandbox;
+        garden = aGarden;
         shouldTerminate = NO;
         shouldStop = NO;
         conditionLock = [[NSConditionLock alloc] initWithCondition:NUThreadedChildminderDeactiveCondition];
@@ -35,21 +35,21 @@ const int NUThreadedChildminderTerminateCondition   = 2;
 
 - (void)dealloc
 {
-    [self setSandbox:nil];
+    [self setGarden:nil];
 
 	[conditionLock release];
 	
 	[super dealloc];
 }
 
-- (NUSandbox *)sandbox
+- (NUGarden *)garden
 {
-    return sandbox;
+    return garden;
 }
 
-- (void)setSandbox:(NUSandbox *)aSandbox
+- (void)setGarden:(NUGarden *)aGarden
 {
-    sandbox = aSandbox;
+    garden = aGarden;
 }
 
 - (void)prepare

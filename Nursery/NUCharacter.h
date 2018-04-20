@@ -18,16 +18,16 @@ extern const NUObjectFormat NUIndexedBytes;
 extern NSString *NUCharacterIvarAlreadyExistsException;
 extern NSString *NUCharacterInvalidObjectFormatException;
 
-@class NUBell, NUIvar, NUCharacter, NUSandbox, NUCoder;
+@class NUBell, NUIvar, NUCharacter, NUGarden, NUCoder;
 
 @protocol NUCharacter
 
 + (BOOL)automaticallyEstablishCharacter;
-+ (NUCharacter *)characterOn:(NUSandbox *)aSandbox;
-+ (NUCharacter *)establishCharacterOn:(NUSandbox *)aSandbox;
-+ (NUCharacter *)createCharacterOn:(NUSandbox *)aSandbox;
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox;
-+ (NSString *)CharacterNameOn:(NUSandbox *)aSandbox;
++ (NUCharacter *)characterOn:(NUGarden *)aGarden;
++ (NUCharacter *)establishCharacterOn:(NUGarden *)aGarden;
++ (NUCharacter *)createCharacterOn:(NUGarden *)aGarden;
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUGarden *)aGarden;
++ (NSString *)CharacterNameOn:(NUGarden *)aGarden;
 - (Class)classForNursery;
 
 @end

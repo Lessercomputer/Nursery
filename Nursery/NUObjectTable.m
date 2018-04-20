@@ -17,7 +17,7 @@
 #import "NURegion.h"
 #import "NUMainBranchNursery.h"
 #import "NUMainBranchAliaser.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 
 
 const NUUInt64 NUNilOOP                             = 0;
@@ -321,7 +321,7 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
     [lock lock];
         
 	NURegion aRegion = NUMakeRegion([self objectLocationFor:aBellBall]
-										, [(NUMainBranchAliaser *)[[[self nursery] sandboxForSeeker] aliaser]  previousSizeOfObjectForBellBall:aBellBall]);
+										, [(NUMainBranchAliaser *)[[[self nursery] gardenForSeeker] aliaser]  previousSizeOfObjectForBellBall:aBellBall]);
 
 #ifdef DEBUG
     NSLog(@"NUObjectTable #removeObjectFor:%@; aRegion:%@", NUStringFromBellBall(aBellBall), NUStringFromRegion(aRegion));

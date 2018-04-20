@@ -14,16 +14,16 @@
 #import "NUIvar.h"
 #import "NUBellBall.h"
 #import "NUAliaser.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 
 @implementation NUMainBranchAperture
 
-- (id)initWithNursery:(NUNursery *)aNursery sandbox:(NUSandbox *)aSandbox
+- (id)initWithNursery:(NUNursery *)aNursery garden:(NUGarden *)aGarden
 {
-	if (self = [super initWithNursery:aNursery sandbox:aSandbox])
+	if (self = [super initWithNursery:aNursery garden:aGarden])
 	{
         nursery = (NUMainBranchNursery *)aNursery;
-        sandbox = (NUMainBranchSandbox *)aSandbox;
+        garden = (NUMainBranchGarden *)aGarden;
 	}
     
 	return self;
@@ -47,7 +47,7 @@
                 [[NSException exceptionWithName:NUObjectLocationNotFoundException reason:NUObjectLocationNotFoundException userInfo:nil] raise];
             
             NUUInt64 aCharacterOOP = [[nursery pages] readUInt64At:objectLocation];
-            character = [sandbox objectForOOP:aCharacterOOP];
+            character = [garden objectForOOP:aCharacterOOP];
             if ([character isIndexedIvars] || [character isFixedAndIndexedIvars])
                 indexedOOPCount = [[nursery pages] readUInt64At:objectLocation + sizeof(NUUInt64)]
                 / sizeof(NUUInt64);

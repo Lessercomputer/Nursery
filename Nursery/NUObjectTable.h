@@ -8,7 +8,7 @@
 
 #import "NUOpaqueBTree.h"
 
-@class NUSandbox, NUObjectTableLeaf;
+@class NUGarden, NUObjectTableLeaf;
 
 extern const NUUInt64 NUNilOOP;
 extern const NUUInt64 NUCharacterOOP;

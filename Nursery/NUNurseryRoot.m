@@ -13,7 +13,7 @@
 #import "NUAliaser.h"
 #import "NUTypes.h"
 #import "NUIvar.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 #import "NUCharacterDictionary.h"
 
 @implementation NUNurseryRoot
@@ -43,7 +43,7 @@
 	[super dealloc];
 }
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUGarden *)aGarden
 {
     [aCharacter addOOPIvarWithName:@"characters"];
     [aCharacter addOOPIvarWithName:@"userRoot"];
@@ -96,7 +96,7 @@
 - (void)setUserRoot:(id)aRoot
 {
     NUSetIvar(&userRoot, aRoot);
-    [[[self bell] sandbox] markChangedObject:self];
+    [[[self bell] garden] markChangedObject:self];
 }
 
 - (NUCharacterDictionary *)characters

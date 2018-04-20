@@ -1,19 +1,19 @@
 //
-//  NUMainBranchSandbox.m
+//  NUMainBranchGarden.m
 //  Nursery
 //
 //  Created by Akifumi Takata on 2013/10/23.
 //
 //
 
-#import "NUMainBranchSandbox.h"
+#import "NUMainBranchGarden.h"
 #import "NUGradeSeeker.h"
 #import "NUMainBranchNursery.h"
 #import "NUMainBranchAliaser.h"
 #import "NUNurseryRoot.h"
 #import "NUBell.h"
 
-@implementation NUMainBranchSandbox
+@implementation NUMainBranchGarden
 
 - (id)initWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
 {
@@ -36,7 +36,7 @@
 
 @end
 
-@implementation NUMainBranchSandbox (SaveAndLoad)
+@implementation NUMainBranchGarden (SaveAndLoad)
 
 - (NUFarmOutStatus)farmOut
 {
@@ -77,7 +77,7 @@
                     
                     if (aFarmOutStatus == NUFarmOutStatusSucceeded)
                     {
-                        [[self mainBranchNursery] retainGrade:aNewGrade bySandbox:self];
+                        [[self mainBranchNursery] retainGrade:aNewGrade byGarden:self];
                         [self setGrade:aNewGrade];
                         [[self gradeSeeker] pushRootBell:[[self nurseryRoot] bell]];
                     }
@@ -103,7 +103,7 @@
 
 @end
 
-@implementation NUMainBranchSandbox (Private)
+@implementation NUMainBranchGarden (Private)
 
 - (NUMainBranchNursery *)mainBranchNursery
 {

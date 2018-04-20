@@ -11,7 +11,7 @@
 #import "NUMainBranchNursery.h"
 #import "NUNurseryNetMessage.h"
 #import "NUNurseryNetMessageArgument.h"
-#import "NUPairedMainBranchSandbox.h"
+#import "NUPairedMainBranchGarden.h"
 #import "NUPairedMainBranchAliaser.h"
 
 const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
@@ -22,7 +22,7 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
 {
     if (self = [super init])
     {
-        _pairedSandboxes = [NSMutableDictionary new];
+        _pairedGardenes = [NSMutableDictionary new];
         _netService = aNetService;
         _inputStream = [anInputStream retain];
         _outputStream = [anOutputStream retain];
@@ -35,7 +35,7 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
 {
     NSLog(@"dealloc:%@", self);
 
-    [_pairedSandboxes release];
+    [_pairedGardenes release];
     
     [super dealloc];
 }
@@ -90,13 +90,13 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
     NUUInt64 aMessageKind = [[self receivedMessage] messageKind];
     NUNurseryNetMessage *aResponse = nil;
     
-    if (aMessageKind == NUNurseryNetMessageKindOpenSandbox)
+    if (aMessageKind == NUNurseryNetMessageKindOpenGarden)
     {
-        aResponse = [self responseForOpenSandbox];
+        aResponse = [self responseForOpenGarden];
     }
-    else if (aMessageKind == NUNurseryNetMessageKindCloseSandbox)
+    else if (aMessageKind == NUNurseryNetMessageKindCloseGarden)
     {
-        aResponse = [self responseForCloseSandbox];
+        aResponse = [self responseForCloseGarden];
     }
     else if (aMessageKind == NUNurseryNetMessageKindRootOOP)
     {
@@ -143,14 +143,9 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
     [self setSendingMessage:aResponse];
 }
 
-- (NUPairedMainBranchSandbox *)pairedMainBranchSandboxFor:(NUUInt64)aPairID
+- (NUPairedMainBranchGarden *)pairedMainBranchGardenFor:(NUUInt64)aPairID
 {
-    return [[self pairedSandboxes] objectForKey:@(aPairID)];
-}
-
-- (void)messageDidSend
-{
-    [[self outputStream] removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    return [[self pairedGardenes] objectForKey:@(aPairID)];
 }
 
 @end
@@ -162,22 +157,22 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
     return [[self netService] nursery];
 }
 
-- (NUNurseryNetMessage *)responseForOpenSandbox
+- (NUNurseryNetMessage *)responseForOpenGarden
 {
-    NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindOpenSandboxResponse];
+    NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindOpenGardenResponse];
     
-    NUUInt64 aPairID = [[self nursery] newSandboxID];
-    [[self pairedSandboxes] setObject:[[self nursery] makePairdSandbox] forKey:@(aPairID)];
+    NUUInt64 aPairID = [[self nursery] newGardenID];
+    [[self pairedGardenes] setObject:[[self nursery] makePairdGarden] forKey:@(aPairID)];
     
     [aResponse addArgumentOfTypeUInt64WithValue:aPairID];
 
     return aResponse;
 }
 
-- (NUNurseryNetMessage *)responseForCloseSandbox
+- (NUNurseryNetMessage *)responseForCloseGarden
 {
     NSNumber *aPairID = [[[self receivedMessage] argumentAt:0] value];
-    [[self pairedSandboxes] removeObjectForKey:aPairID];
+    [[self pairedGardenes] removeObjectForKey:aPairID];
     
     return nil;
 }
@@ -185,9 +180,9 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
 - (NUNurseryNetMessage *)responseForRootOOP
 {
     NUUInt64 aPairID = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
-    NUPairedMainBranchSandbox *aPairedMainBranchSandbox = [[self pairedSandboxes] objectForKey:@(aPairID)];
+    NUPairedMainBranchGarden *aPairedMainBranchGarden = [[self pairedGardenes] objectForKey:@(aPairID)];
     
-    NUUInt64 aRootOOP = [[aPairedMainBranchSandbox pairedMainBranchAliaser] rootOOP];
+    NUUInt64 aRootOOP = [[aPairedMainBranchGarden pairedMainBranchAliaser] rootOOP];
     
     NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindRootOOPResponse];
     [aResponse addArgumentOfTypeUInt64WithValue:aRootOOP];
@@ -218,9 +213,9 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
 - (NUNurseryNetMessage *)responseForRetainLatestGrade
 {
     NUUInt64 aPairID = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
-    NUPairedMainBranchSandbox *aPairedMainBranchSandbox = [self pairedMainBranchSandboxFor:aPairID];
+    NUPairedMainBranchGarden *aPairedMainBranchGarden = [self pairedMainBranchGardenFor:aPairID];
     
-    NUUInt64 aRetaindLatestGrade = [aPairedMainBranchSandbox retainLatestGradeOfNursery];
+    NUUInt64 aRetaindLatestGrade = [aPairedMainBranchGarden retainLatestGradeOfNursery];
     
     NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindRetainLatestGradeResponse];
     [aResponse addArgumentOfTypeUInt64WithValue:aRetaindLatestGrade];
@@ -232,9 +227,9 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
 {
     NUUInt64 aPairID = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
     NUUInt64 aGrade = [[[self receivedMessage] argumentAt:1] UInt64FromValue];
-    NUPairedMainBranchSandbox *aPairedMainBranchSandbox = [self pairedMainBranchSandboxFor:aPairID];
+    NUPairedMainBranchGarden *aPairedMainBranchGarden = [self pairedMainBranchGardenFor:aPairID];
     
-    NUUInt64 aRetaindGradeOrNilGrade = [[[self netService] nursery] retainGradeIfValid:aGrade bySandbox:aPairedMainBranchSandbox];
+    NUUInt64 aRetaindGradeOrNilGrade = [[[self netService] nursery] retainGradeIfValid:aGrade byGarden:aPairedMainBranchGarden];
     
     NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindRetainGradeIfValidResponse];
     [aResponse addArgumentOfTypeUInt64WithValue:aRetaindGradeOrNilGrade];
@@ -247,7 +242,7 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
     NUUInt64 aPairID = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
     NUUInt64 aGrade = [[[self receivedMessage] argumentAt:1] UInt64FromValue];
     
-    [[[self netService] nursery] retainGrade:aGrade bySandboxWithID:aPairID];
+    [[[self netService] nursery] retainGrade:aGrade byGardenWithID:aPairID];
     
     NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindRetainGradeResponse];
     
@@ -259,7 +254,7 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
     NUUInt64 aPairID = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
     NUUInt64 aGrade = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
     
-    [[[self netService] nursery] releaseGradeLessThan:aGrade bySandboxWithID:aPairID];
+    [[[self netService] nursery] releaseGradeLessThan:aGrade byGardenWithID:aPairID];
     
     NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindReleaseGradeLessThanResponse];
     
@@ -273,9 +268,9 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
     NUUInt64 aPairID = [[[self receivedMessage] argumentAt:2] UInt64FromValue];
     BOOL aContainsFellowPupils = [[[self receivedMessage] argumentAt:3] BOOLFromValue];
     
-    NUPairedMainBranchSandbox *aPairdMainBranchSandbox = [self pairedMainBranchSandboxFor:aPairID];
+    NUPairedMainBranchGarden *aPairdMainBranchGarden = [self pairedMainBranchGardenFor:aPairID];
     
-    NSData *aPupilsData = [aPairdMainBranchSandbox callForPupilWithOOP:anOOP  gradeLessThanOrEqualTo:aGrade containsFellowPupils:aContainsFellowPupils];
+    NSData *aPupilsData = [aPairdMainBranchGarden callForPupilWithOOP:anOOP  gradeLessThanOrEqualTo:aGrade containsFellowPupils:aContainsFellowPupils];
     
     NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindCallForPupilResponse];
     
@@ -289,11 +284,11 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
     NSData *aPupilData = [[[self receivedMessage] argumentAt:0] dataFromValue];
     NUUInt64 aRootOOP = [[[self receivedMessage] argumentAt:1] UInt64FromValue];
     NUUInt64 aPairID = [[[self receivedMessage] argumentAt:2] UInt64FromValue];
-    NUPairedMainBranchSandbox *aPairedMainBranchSandbox = [self pairedMainBranchSandboxFor:aPairID];
+    NUPairedMainBranchGarden *aPairedMainBranchGarden = [self pairedMainBranchGardenFor:aPairID];
     NSData *aFixedOOPs = nil;
     NUUInt64 aLatestGrade;
     
-    NUFarmOutStatus aFarmOutStatus = [aPairedMainBranchSandbox farmOutPupils:aPupilData rootOOP:aRootOOP fixedOOPs:&aFixedOOPs latestGrade:&aLatestGrade];
+    NUFarmOutStatus aFarmOutStatus = [aPairedMainBranchGarden farmOutPupils:aPupilData rootOOP:aRootOOP fixedOOPs:&aFixedOOPs latestGrade:&aLatestGrade];
     
     NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindFarmOutPupilsResponse];
     [aResponse addArgumentOfTypeUInt64WithValue:aFarmOutStatus];

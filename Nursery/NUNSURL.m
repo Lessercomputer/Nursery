@@ -8,7 +8,7 @@
 
 #import "NUNSURL.h"
 #import "NUCharacter.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 #import "NUURLCoder.h"
 
 @implementation NSURL (NUCharacter)
@@ -18,7 +18,7 @@
 	return [self isEqual:[NSURL class]];
 }
 
-+ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUSandbox *)aSandbox
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUGarden *)aGarden
 {
     [aCharacter setIsMutable:NO];
     

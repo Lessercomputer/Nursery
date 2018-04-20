@@ -8,11 +8,11 @@
 
 #import "NUNurseryNetServiceIO.h"
 
-@class NUNurseryNetService, NUPairedMainBranchSandbox, NUMainBranchNursery;
+@class NUNurseryNetService, NUPairedMainBranchGarden, NUMainBranchNursery;
 
 @interface NUNurseryNetResponder : NUNurseryNetServiceIO
 
-@property (nonatomic, retain) NSMutableDictionary *pairedSandboxes;
+@property (nonatomic, retain) NSMutableDictionary *pairedGardenes;
 @property (nonatomic, assign) NUNurseryNetService *netService;
 
 - (instancetype)initWithNetService:(NUNurseryNetService *)aNetService inputStream:(NSInputStream *)anInputStream outputStream:(NSOutputStream *)anOutputStream;
@@ -26,8 +26,8 @@
 
 - (NUMainBranchNursery *)nursery;
 
-- (NUNurseryNetMessage *)responseForOpenSandbox;
-- (NUNurseryNetMessage *)responseForCloseSandbox;
+- (NUNurseryNetMessage *)responseForOpenGarden;
+- (NUNurseryNetMessage *)responseForCloseGarden;
 - (NUNurseryNetMessage *)responseForRootOOP;
 - (NUNurseryNetMessage *)responseForLatestGrade;
 - (NUNurseryNetMessage *)responseForOlderRetainedGrade;

@@ -8,7 +8,7 @@
 
 #import "NUNursery.h"
 
-@class NUObjectTable, NUReversedObjectTable, NUSpaces, NUPages, NUSeeker, NUParader, NUMainBranchSandbox, NUPairedMainBranchSandbox;
+@class NUObjectTable, NUReversedObjectTable, NUSpaces, NUPages, NUSeeker, NUParader, NUMainBranchGarden, NUPairedMainBranchGarden;
 
 @interface NUMainBranchNursery : NUNursery
 {
@@ -20,7 +20,7 @@
     NSMutableDictionary *retainedGrades;
 	NUSeeker *seeker;
     NUParader *parader;
-    NUUInt64 nextSandboxID;
+    NUUInt64 nextGardenID;
     NSRecursiveLock *lock;
     BOOL backups;
 }
@@ -57,10 +57,10 @@
 
 @end
 
-@interface NUMainBranchNursery (Sandbox)
+@interface NUMainBranchNursery (Garden)
 
-- (NUUInt64)newSandboxID;
-- (void)releaseSandboxID:(NUInt64)anID;
+- (NUUInt64)newGardenID;
+- (void)releaseGardenID:(NUInt64)anID;
 
 @end
 
@@ -81,10 +81,10 @@
 - (void)setGrade:(NUUInt64)aGrade;
 - (void)setRetainedGrades:(NSMutableDictionary *)aGrades;
 
-- (NUPairedMainBranchSandbox *)makePairdSandbox;
+- (NUPairedMainBranchGarden *)makePairdGarden;
 
-- (NUSandbox *)sandboxForSeeker;
-- (NUSandbox *)sandboxForParader;
+- (NUGarden *)gardenForSeeker;
+- (NUGarden *)gardenForParader;
 
 - (NUUInt64)gradeForSeeker;
 - (NUUInt64)gradeForParader;

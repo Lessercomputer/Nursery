@@ -8,7 +8,7 @@
 
 #import <Nursery/NUNursery.h>
 
-@class NUBranchSandbox, NUPupilAlbum, NUNurseryNetClient;
+@class NUBranchGarden, NUPupilAlbum, NUNurseryNetClient;
 
 @interface NUBranchNursery : NUNursery
 {

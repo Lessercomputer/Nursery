@@ -9,7 +9,7 @@
 #import "NUBTreeLeaf.h"
 #import "NUBTree.h"
 #import "NUBell.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 
 @implementation NUBTreeLeaf
 
@@ -65,8 +65,8 @@
         result = NUBTreeSetObjectResultAdd;
     }
     
-    [[[self bell] sandbox] markChangedObject:[self keys]];
-    [[[self bell] sandbox] markChangedObject:[self values]];
+    [[[self bell] garden] markChangedObject:[self keys]];
+    [[[self bell] garden] markChangedObject:[self values]];
 
     return result;
 }
@@ -79,8 +79,8 @@
     {
         [[self keys] removeObjectAtIndex:aKeyIndex];
         [[self values] removeObjectAtIndex:aKeyIndex];
-        [[[self bell] sandbox] markChangedObject:[self keys]];
-        [[[self bell] sandbox] markChangedObject:[self values]];
+        [[[self bell] garden] markChangedObject:[self keys]];
+        [[[self bell] garden] markChangedObject:[self values]];
 
         return YES;
     }
@@ -98,8 +98,8 @@
 
     [[self keys] removeObjectsInRange:aRange];
     [[self values] removeObjectsInRange:aRange];
-    [[[self bell] sandbox] markChangedObject:[self keys]];
-    [[[self bell] sandbox] markChangedObject:[self values]];
+    [[[self bell] garden] markChangedObject:[self keys]];
+    [[[self bell] garden] markChangedObject:[self values]];
 
     [self insertRightSiblingNode:aLeaf];
     
@@ -117,10 +117,10 @@
     [[self values] insertObjects:aValues atIndexes:anIndexSet];
     [[aLeftNode keys] removeObjectsInRange:aRange];
     [[aLeftNode values] removeObjectsInRange:aRange];
-    [[[self bell] sandbox] markChangedObject:[self keys]];
-    [[[self bell] sandbox] markChangedObject:[self values]];
-    [[[self bell] sandbox] markChangedObject:[aLeftNode keys]];
-    [[[self bell] sandbox] markChangedObject:[aLeftNode values]];
+    [[[self bell] garden] markChangedObject:[self keys]];
+    [[[self bell] garden] markChangedObject:[self values]];
+    [[[self bell] garden] markChangedObject:[aLeftNode keys]];
+    [[[self bell] garden] markChangedObject:[aLeftNode values]];
 }
 
 - (void)shuffleRightNode
@@ -134,10 +134,10 @@
     [[self values] insertObjects:aValues atIndexes:anIndexSet];
     [[aRightNode keys] removeObjectsInRange:aRange];
     [[aRightNode values] removeObjectsInRange:aRange];
-    [[[self bell] sandbox] markChangedObject:[self keys]];
-    [[[self bell] sandbox] markChangedObject:[self values]];
-    [[[self bell] sandbox] markChangedObject:[aRightNode keys]];
-    [[[self bell] sandbox] markChangedObject:[aRightNode values]];
+    [[[self bell] garden] markChangedObject:[self keys]];
+    [[[self bell] garden] markChangedObject:[self values]];
+    [[[self bell] garden] markChangedObject:[aRightNode keys]];
+    [[[self bell] garden] markChangedObject:[aRightNode values]];
 }
 
 - (void)mergeLeftNode
@@ -166,7 +166,7 @@
     if ([self getKeyIndexLessThanOrEqualTo:aKey keyIndexInto:&aKeyIndex])
     {
         [[self keys] replaceObjectAtIndex:aKeyIndex withObject:aKey];
-        [[[self bell] sandbox] markChangedObject:[self keys]];
+        [[[self bell] garden] markChangedObject:[self keys]];
     }
 }
 

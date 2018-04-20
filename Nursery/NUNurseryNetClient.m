@@ -331,13 +331,13 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
     [self receiveMessage];
 }
 
-- (NUUInt64)openSandbox
+- (NUUInt64)openGarden
 {
     NUUInt64 aPairID = 0;
     
     [[self lock] lock];
     
-    NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindOpenSandbox];
+    NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindOpenGarden];
     
     [self sendAndReceiveMessage:aMessage];
     
@@ -348,11 +348,11 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
     return aPairID;
 }
 
-- (void)closeSandboxWithID:(NUUInt64)anID
+- (void)closeGardenWithID:(NUUInt64)anID
 {
     [[self lock] lock];
     
-    NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindCloseSandbox];
+    NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindCloseGarden];
     
     [aMessage addArgumentOfTypeUInt64WithValue:anID];
     
@@ -361,7 +361,7 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
     [[self lock] unlock];
 }
 
-- (NUUInt64)rootOOPForSandboxWithID:(NUUInt64)anID
+- (NUUInt64)rootOOPForGardenWithID:(NUUInt64)anID
 {
     NUUInt64 aRootOOP = 0;
     
@@ -410,7 +410,7 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
     return anOlderRetainedGrade;
 }
 
-- (NUUInt64)retainLatestGradeBySandboxWithID:(NUUInt64)anID
+- (NUUInt64)retainLatestGradeByGardenWithID:(NUUInt64)anID
 {
     NUUInt64 aGrade;
     
@@ -429,7 +429,7 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
     return aGrade;
 }
 
-- (NUUInt64)retainGradeIfValid:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID
+- (NUUInt64)retainGradeIfValid:(NUUInt64)aGrade byGardenWithID:(NUUInt64)anID
 {
     [[self lock] lock];
     
@@ -447,7 +447,7 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
     return aRetainedGradeOrNilGrade;
 }
 
-- (void)retainGrade:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID
+- (void)retainGrade:(NUUInt64)aGrade byGardenWithID:(NUUInt64)anID
 {
     [[self lock] lock];
     
@@ -461,7 +461,7 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
     [[self lock] unlock];
 }
 
-- (void)releaseGradeLessThan:(NUUInt64)aGrade bySandboxWithID:(NUUInt64)anID
+- (void)releaseGradeLessThan:(NUUInt64)aGrade byGardenWithID:(NUUInt64)anID
 {
     [[self lock] lock];
     
@@ -475,7 +475,7 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
     [[self lock] unlock];
 }
 
-- (NSData *)callForPupilWithOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade sandboxWithID:(NUUInt64)anID containsFellowPupils:(BOOL)aContainsFellowPupils
+- (NSData *)callForPupilWithOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade gardenWithID:(NUUInt64)anID containsFellowPupils:(BOOL)aContainsFellowPupils
 {
     [[self lock] lock];
     
@@ -495,7 +495,7 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
     return aPupilsData;
 }
 
-- (NUFarmOutStatus)farmOutPupils:(NSData *)aPupilData rootOOP:(NUUInt64)aRootOOP sandboxWithID:(NUUInt64)anID fixedOOPs:(NSData **)aFixedOOPs latestGrade:(NUUInt64 *)aLatestGrade
+- (NUFarmOutStatus)farmOutPupils:(NSData *)aPupilData rootOOP:(NUUInt64)aRootOOP gardenWithID:(NUUInt64)anID fixedOOPs:(NSData **)aFixedOOPs latestGrade:(NUUInt64 *)aLatestGrade
 {
     [[self lock] lock];
     

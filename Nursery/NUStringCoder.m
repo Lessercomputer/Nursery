@@ -8,7 +8,7 @@
 
 #import "NUStringCoder.h"
 #import "NUCharacter.h"
-#import "NUSandbox.h"
+#import "NUGarden.h"
 #import "NUAliaser.h"
 
 @implementation NUStringCoder
@@ -70,7 +70,7 @@
     
     NSMutableString *aString = anObject;
     [aString setString:[self decodeObjectWithAliaser:anAliaser]];
-    [[anAliaser sandbox] unmarkChangedObject:aString];
+    [[anAliaser garden] unmarkChangedObject:aString];
 }
 
 @end

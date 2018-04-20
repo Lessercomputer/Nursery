@@ -1,22 +1,22 @@
 //
-//  NUMainBranchSandbox.h
+//  NUMainBranchGarden.h
 //  Nursery
 //
 //  Created by Akifumi Takata on 2013/10/23.
 //
 //
 
-#import "NUSandbox.h"
+#import "NUGarden.h"
 
 @class NUMainBranchNursery, NUMainBranchAliaser;
 
-@interface NUMainBranchSandbox : NUSandbox
+@interface NUMainBranchGarden : NUGarden
 {
     NSLock *farmOutLock;
 }
 @end
 
-@interface NUMainBranchSandbox (Private)
+@interface NUMainBranchGarden (Private)
 
 - (NUMainBranchNursery *)mainBranchNursery;
 - (NUMainBranchAliaser *)mainBranchAliaser;

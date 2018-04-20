@@ -14,7 +14,7 @@
 #import <Nursery/NUMainBranchNursery.h>
 #import <Nursery/NUBranchNursery.h>
 
-#import <Nursery/NUSandbox.h>
+#import <Nursery/NUGarden.h>
 
 #import <Nursery/NUAliaser.h>
 #import <Nursery/NUCoding.h>
