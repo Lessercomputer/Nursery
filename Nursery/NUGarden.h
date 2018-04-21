@@ -187,6 +187,7 @@ extern NSString * const NUObjectLoadingException;
 - (void)invalidateBellsWithNotReferencedObject;
 - (void)invalidateObjectIfNotReferencedForBell:(NUBell *)aBell;
 - (void)invalidateNotReferencedBells;
+- (NSUInteger)basicRetainCountOfBellInGarden:(NUBell *)aBell;
 - (void)invalidateBell:(NUBell *)aBell;
 
 - (void)collectGradeLessThan:(NUUInt64)aGrade;

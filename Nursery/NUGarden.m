@@ -801,11 +801,9 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         [[[[self bells] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop){
             @autoreleasepool
             {
-                NSInteger aRetainCountOfBellInGarden = 2;
-                if ([aBell hasObject] && ![[aBell object] conformsToProtocol:@protocol(NUCoding)])
-                    aRetainCountOfBellInGarden++;
+                NSInteger aBasicRetainCountOfBellInGarden = [self basicRetainCountOfBellInGarden:aBell];
                 
-                if ([aBell retainCount] == aRetainCountOfBellInGarden && (![aBell hasObject] || [[aBell object] retainCount] == 1))
+                if ([aBell retainCount] == aBasicRetainCountOfBellInGarden && (![aBell hasObject] || [[aBell object] retainCount] == 1))
                     [self invalidateBell:aBell];
             }
         }];
@@ -813,6 +811,16 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     @finally {
         [self unlock];
     }
+}
+
+- (NSUInteger)basicRetainCountOfBellInGarden:(NUBell *)aBell
+{
+    NSInteger aBasicRetainCountOfBellInGarden = 2;
+    
+    if ([aBell hasObject] && ![[aBell object] conformsToProtocol:@protocol(NUCoding)])
+        aBasicRetainCountOfBellInGarden++;
+    
+    return aBasicRetainCountOfBellInGarden;
 }
 
 - (void)invalidateBell:(NUBell *)aBell

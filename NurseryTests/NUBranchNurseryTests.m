@@ -13,6 +13,7 @@
 #import "NUNurseryNetService.h"
 
 static NSString *NUNurseryTestFilePath;
+static NSString *NUNurseryTestFilePath2;
 
 @interface NUBranchNurseryTests : XCTestCase
 @end
@@ -22,14 +23,20 @@ static NSString *NUNurseryTestFilePath;
 - (void)setUp
 {
     [super setUp];
+    
     NUNurseryTestFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"nursery.nursery"];
     [[NSFileManager defaultManager] removeItemAtPath:NUNurseryTestFilePath error:nil];
+    
+    NUNurseryTestFilePath2 = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"nursery2.nursery"];
+    [[NSFileManager defaultManager] removeItemAtPath:NUNurseryTestFilePath2 error:nil];
+    
     [NSThread sleepForTimeInterval:0.1];
 }
 
 - (void)tearDown
 {
     [[NSFileManager defaultManager] removeItemAtPath:NUNurseryTestFilePath error:nil];
+    [[NSFileManager defaultManager] removeItemAtPath:NUNurseryTestFilePath2 error:nil];
 
     [super tearDown];
 }
@@ -57,6 +64,23 @@ static NSString *NUNurseryTestFilePath;
             [aNurseryNetService stop];
         }
     }
+}
+
+- (void)testNurseryNetServiceStartSameServiceName
+{
+    NUMainBranchNursery *aMainBranchNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUNurseryNetService *aNurseryNetService = [NUNurseryNetService netServiceWithNursery:aMainBranchNursery serviceName:@"nursery"];
+    
+    NUMainBranchNursery *aMainBranchNursery2 = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath2];
+    NUNurseryNetService *aNurseryNetService2 = [NUNurseryNetService netServiceWithNursery:aMainBranchNursery2 serviceName:@"nursery"];
+    
+    [aNurseryNetService start];
+    
+    [NSThread sleepForTimeInterval:1];
+    
+    XCTAssertThrowsSpecificNamed([aNurseryNetService2 start], NSException, NUNurseryNetServiceNetworkException);
+    
+    [aNurseryNetService stop];
 }
 
 - (void)testBranchNurseryCallFor
