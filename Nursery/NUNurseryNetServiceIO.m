@@ -8,6 +8,11 @@
 
 #import "NUNurseryNetServiceIO.h"
 #import "NUNurseryNetMessage.h"
+//#include <sys/socket.h>
+//#include <sys/socketvar.h>
+//#include <netinet/in.h>
+//#include <netinet/tcp.h>
+//#include <netinet/tcp_var.h>
 
 const NUUInt64 NUNurseryNetworkerReadBufferSize = 4096;
 
@@ -106,5 +111,25 @@ const NUUInt64 NUNurseryNetworkerReadBufferSize = 4096;
 - (void)messageDidReceive
 {
 }
+
+- (int)nativeSocketHandleForStream:(NSStream *)aStream
+{
+    NSData *aNativeSocketHandleData = [aStream propertyForKey:(__bridge NSString *)kCFStreamPropertySocketNativeHandle];
+
+    return *(const int *)[aNativeSocketHandleData bytes];
+}
+
+//- (void)setKeepAliveOptionsForSocket:(int)aSocket
+//{
+//    int anOption = 1;
+//    setsockopt(aSocket, SOL_SOCKET, SO_KEEPALIVE, (void *)&anOption, sizeof(anOption));
+//
+//    anOption = 60;
+//    setsockopt(aSocket, IPPROTO_TCP, TCPCTL_KEEPIDLE, (void *)&anOption, sizeof(anOption));
+//    anOption = 30;
+//    setsockopt(aSocket, IPPROTO_TCP, TCP_KEEPINTVL, (void *)&anOption, sizeof(anOption));
+//    anOption =  4;
+//    setsockopt(aSocket, IPPROTO_TCP, TCP_KEEPCNT, (void *)&anOption, sizeof(anOption));
+//}
 
 @end

@@ -38,4 +38,7 @@ extern const NUUInt64 NUNurseryNetworkerReadBufferSize;
 - (void)receiveMessageOnStream;
 - (void)messageDidReceive;
 
+- (int)nativeSocketHandleForStream:(NSStream *)aStream;
+//- (void)setKeepAliveOptionsForSocket:(int)aSocket;
+
 @end

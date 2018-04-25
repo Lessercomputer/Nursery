@@ -11,6 +11,8 @@
 
 @class NUBranchNursery;
 
+extern NSString *NUNurseryNetClientNetworkException;
+
 typedef enum : NSUInteger {
     NUNurseryNetClientStatusNotStarted,
     NUNurseryNetClientStatusFindingService,
@@ -22,7 +24,8 @@ typedef enum : NSUInteger {
     NUNurseryNetClientStatusDidSendMessage,
     NUNurseryNetClientStatusReceivingMessage,
     NUNurseryNetClientStatusDidReceiveMessage,
-    NUNurseryNetClientStatusDidStop
+    NUNurseryNetClientStatusDidStop,
+    NUNurseryNetClientStatusDidFail
 } NUNurseryNetClientStatus;
 
 @interface NUNurseryNetClient : NUNurseryNetServiceIO <NSNetServiceBrowserDelegate, NSNetServiceDelegate>
@@ -56,6 +59,10 @@ typedef enum : NSUInteger {
 - (void)sendMessage:(NUNurseryNetMessage *)aSendingMessage;
 - (void)sendAndReceiveMessage:(NUNurseryNetMessage *)aSendingMessage;
 
+@end
+
+@interface NUNurseryNetClient (MessagingToNetService)
+
 - (NUUInt64)openGarden;
 - (void)closeGardenWithID:(NUUInt64)anID;
 
@@ -70,5 +77,7 @@ typedef enum : NSUInteger {
 
 - (NSData *)callForPupilWithOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade gardenWithID:(NUUInt64)anID containsFellowPupils:(BOOL)aContainsFellowPupils;
 - (NUFarmOutStatus)farmOutPupils:(NSData *)aPupilData rootOOP:(NUUInt64)aRootOOP gardenWithID:(NUUInt64)anID fixedOOPs:(NSData **)aFixedOOPs latestGrade:(NUUInt64 *)aLatestGrade;
+
+- (void)netClientWillStop;
 
 @end

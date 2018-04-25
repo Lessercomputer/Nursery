@@ -11,9 +11,12 @@
 #import "NUNurseryNetMessage.h"
 #import "NUNurseryNetMessageArgument.h"
 #import "NUBranchNursery.h"
+#import "NUBellBall.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
+
+NSString *NUNurseryNetClientNetworkException = @"NUNurseryNetClientNetworkException";
 
 const NUUInt64 NUNurseryNetClientReadBufferSize = 4096;
 const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
@@ -218,15 +221,23 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
 
 - (void)runUntileCancel
 {
+//    BOOL aShouldSetKeepAliveOptions = YES;
+    
     while (![[self thread] isCancelled])
     {
         [NSThread sleepForTimeInterval:NUNurseryNetClientSleepTimeInterval];
         
         [[self statusCondition] lock];
         
-//        if ([[self inputStream] streamStatus] == NSStreamStatusAtEnd)
-//            NSLog(@"stream at end");
-        
+//        if (aShouldSetKeepAliveOptions && [[self inputStream] streamStatus] == NSStreamStatusOpen)
+//        {
+//            [self setKeepAliveOptionsForSocket:[self nativeSocketHandleForStream:[self inputStream]]];
+//            aShouldSetKeepAliveOptions = NO;
+//        }
+
+        if ([[self inputStream] streamStatus] == NSStreamStatusAtEnd)
+            [self setStatus:NUNurseryNetClientStatusDidFail];
+
         switch ([self status])
         {
             case NUNurseryNetClientStatusSendingMessage:
@@ -292,10 +303,18 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
     
     [[self statusCondition] lock];
     
-    while ([self isSendingMessage])
-        [[self statusCondition] wait];
-    
-    [[self statusCondition] unlock];
+    @try
+    {
+        while ([self isSendingMessage])
+            [[self statusCondition] wait];
+        
+        if ([self status] == NUNurseryNetClientStatusDidFail)
+            @throw [NSException exceptionWithName:NUNurseryNetClientNetworkException reason:nil userInfo:nil];
+    }
+    @finally
+    {
+        [[self statusCondition] unlock];
+    }
 }
 
 - (void)messageDidSend
@@ -314,10 +333,18 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
     
     [[self statusCondition] lock];
     
-    while ([self isReceivingMessage])
-        [[self statusCondition] wait];
-    
-    [[self statusCondition] unlock];
+    @try
+    {
+        while ([self isReceivingMessage])
+            [[self statusCondition] wait];
+        
+        if ([self status] == NUNurseryNetClientStatusDidFail)
+            @throw [NSException exceptionWithName:NUNurseryNetClientNetworkException reason:nil userInfo:nil];
+    }
+    @finally
+    {
+        [[self statusCondition] unlock];
+    }
 }
 
 - (void)messageDidReceive
@@ -331,19 +358,28 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
     [self receiveMessage];
 }
 
+@end
+
+@implementation NUNurseryNetClient (MessagingToNetService)
+
 - (NUUInt64)openGarden
 {
     NUUInt64 aPairID = 0;
     
     [[self lock] lock];
     
-    NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindOpenGarden];
-    
-    [self sendAndReceiveMessage:aMessage];
-    
-    aPairID = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
-    
-    [[self lock] unlock];
+    @try
+    {
+        NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindOpenGarden];
+        
+        [self sendAndReceiveMessage:aMessage];
+        
+        aPairID = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
+    }
+    @finally
+    {
+        [[self lock] unlock];
+    }
     
     return aPairID;
 }
@@ -352,13 +388,18 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
 {
     [[self lock] lock];
     
-    NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindCloseGarden];
-    
-    [aMessage addArgumentOfTypeUInt64WithValue:anID];
-    
-    [self sendMessage:aMessage];
-    
-    [[self lock] unlock];
+    @try
+    {
+        NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindCloseGarden];
+        
+        [aMessage addArgumentOfTypeUInt64WithValue:anID];
+        
+        [self sendMessage:aMessage];
+    }
+    @finally
+    {
+        [[self lock] unlock];
+    }
 }
 
 - (NUUInt64)rootOOPForGardenWithID:(NUUInt64)anID
@@ -367,83 +408,117 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
     
     [[self lock] lock];
     
-    NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindRootOOP];
-    
-    [aMessage addArgumentOfTypeUInt64WithValue:anID];
-    
-    [self sendAndReceiveMessage:aMessage];
-    
-    aRootOOP = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
-    
-    [[self lock] unlock];
+    @try
+    {
+        NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindRootOOP];
+        
+        [aMessage addArgumentOfTypeUInt64WithValue:anID];
+        
+        [self sendAndReceiveMessage:aMessage];
+        
+        aRootOOP = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
+    }
+    @finally
+    {
+        [[self lock] unlock];
+
+    }
 
     return aRootOOP;
 }
 
 - (NUUInt64)latestGrade
 {
+    NUUInt64 aLatestGrade = NUNilGrade;
+    
     [[self lock] lock];
     
-    NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindLatestGrade];
-    
-    [self sendAndReceiveMessage:aMessage];
-    
-    NUUInt64 aLatestGrade = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
-    
-    [[self lock] unlock];
-    
+    @try
+    {
+        NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindLatestGrade];
+        
+        [self sendAndReceiveMessage:aMessage];
+        
+        aLatestGrade = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
+    }
+    @finally
+    {
+        [[self lock] unlock];
+
+    }
+
     return aLatestGrade;
 }
 
 - (NUUInt64)olderRetainedGrade
 {
+    NUUInt64 anOlderRetainedGrade = NUNilGrade;
+    
     [[self lock] lock];
     
-    NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindOlderRetainedGrade];
-    
-    [self sendAndReceiveMessage:aMessage];
-    
-    NUUInt64 anOlderRetainedGrade = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
-    
-    [[self lock] unlock];
-    
+    @try
+    {
+        NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindOlderRetainedGrade];
+        
+        [self sendAndReceiveMessage:aMessage];
+        
+        anOlderRetainedGrade = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
+    }
+    @finally
+    {
+        [[self lock] unlock];
+    }
+
     return anOlderRetainedGrade;
 }
 
 - (NUUInt64)retainLatestGradeByGardenWithID:(NUUInt64)anID
 {
-    NUUInt64 aGrade;
+    NUUInt64 aGrade = NUNilGrade;
     
     [[self lock] lock];
     
-    NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindRetainLatestGrade];
-    
-    [aMessage addArgumentOfTypeUInt64WithValue:anID];
-    
-    [self sendAndReceiveMessage:aMessage];
-    
-    aGrade = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
-    
-    [[self lock] unlock];
+    @try
+    {
+        NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindRetainLatestGrade];
+        
+        [aMessage addArgumentOfTypeUInt64WithValue:anID];
+        
+        [self sendAndReceiveMessage:aMessage];
+        
+        aGrade = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
+    }
+    @finally
+    {
+        [[self lock] unlock];
+    }
     
     return aGrade;
 }
 
 - (NUUInt64)retainGradeIfValid:(NUUInt64)aGrade byGardenWithID:(NUUInt64)anID
 {
+    NUUInt64 aRetainedGradeOrNilGrade = NUNilGrade;
+    
     [[self lock] lock];
     
-    NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindRetainGradeIfValid];
-    
-    [aMessage addArgumentOfTypeUInt64WithValue:aGrade];
-    [aMessage addArgumentOfTypeUInt64WithValue:anID];
-    
-    [self sendAndReceiveMessage:aMessage];
-    
-    NUUInt64 aRetainedGradeOrNilGrade = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
-    
-    [[self lock] unlock];
-    
+    @try
+    {
+        NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindRetainGradeIfValid];
+        
+        [aMessage addArgumentOfTypeUInt64WithValue:aGrade];
+        [aMessage addArgumentOfTypeUInt64WithValue:anID];
+        
+        [self sendAndReceiveMessage:aMessage];
+        
+        aRetainedGradeOrNilGrade = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
+    }
+    @finally
+    {
+        [[self lock] unlock];
+
+    }
+
     return aRetainedGradeOrNilGrade;
 }
 
@@ -451,68 +526,94 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
 {
     [[self lock] lock];
     
-    NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindRetainGrade];
-    
-    [aMessage addArgumentOfTypeUInt64WithValue:aGrade];
-    [aMessage addArgumentOfTypeUInt64WithValue:anID];
+    @try
+    {
+        NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindRetainGrade];
+        
+        [aMessage addArgumentOfTypeUInt64WithValue:aGrade];
+        [aMessage addArgumentOfTypeUInt64WithValue:anID];
+        
+        [self sendAndReceiveMessage:aMessage];
 
-    [self sendAndReceiveMessage:aMessage];
-    
-    [[self lock] unlock];
+    }
+    @finally
+    {
+        [[self lock] unlock];
+
+    }
 }
 
 - (void)releaseGradeLessThan:(NUUInt64)aGrade byGardenWithID:(NUUInt64)anID
 {
     [[self lock] lock];
     
-    NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindReleaseGradeLessThan];
-    
-    [aMessage addArgumentOfTypeUInt64WithValue:aGrade];
-    [aMessage addArgumentOfTypeUInt64WithValue:anID];
-    
-    [self sendAndReceiveMessage:aMessage];
-    
-    [[self lock] unlock];
+    @try
+    {
+        NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindReleaseGradeLessThan];
+        
+        [aMessage addArgumentOfTypeUInt64WithValue:aGrade];
+        [aMessage addArgumentOfTypeUInt64WithValue:anID];
+        
+        [self sendAndReceiveMessage:aMessage];
+    }
+    @finally
+    {
+        [[self lock] unlock];
+    }
 }
 
 - (NSData *)callForPupilWithOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade gardenWithID:(NUUInt64)anID containsFellowPupils:(BOOL)aContainsFellowPupils
 {
+    NSData *aPupilsData = nil;
+    
     [[self lock] lock];
     
-    NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindCallForPupil];
-    
-    [aMessage addArgumentOfTypeUInt64WithValue:anOOP];
-    [aMessage addArgumentOfTypeUInt64WithValue:aGrade];
-    [aMessage addArgumentOfTypeUInt64WithValue:anID];
-    [aMessage addArgumentOfTypeBOOLWithValue:aContainsFellowPupils];
-    
-    [self sendAndReceiveMessage:aMessage];
-    
-    NSData *aPupilsData = [[[self receivedMessage] argumentAt:0] dataFromValue];
-    
-    [[self lock] unlock];
+    @try
+    {
+        NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindCallForPupil];
+        
+        [aMessage addArgumentOfTypeUInt64WithValue:anOOP];
+        [aMessage addArgumentOfTypeUInt64WithValue:aGrade];
+        [aMessage addArgumentOfTypeUInt64WithValue:anID];
+        [aMessage addArgumentOfTypeBOOLWithValue:aContainsFellowPupils];
+        
+        [self sendAndReceiveMessage:aMessage];
+        
+        aPupilsData = [[[self receivedMessage] argumentAt:0] dataFromValue];
+    }
+    @finally
+    {
+        [[self lock] unlock];
+    }
     
     return aPupilsData;
 }
 
 - (NUFarmOutStatus)farmOutPupils:(NSData *)aPupilData rootOOP:(NUUInt64)aRootOOP gardenWithID:(NUUInt64)anID fixedOOPs:(NSData **)aFixedOOPs latestGrade:(NUUInt64 *)aLatestGrade
 {
+    NUFarmOutStatus aStatus = NUFarmOutStatusFailed;
+    
     [[self lock] lock];
     
-    NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindFarmOutPupils];
-    
-    [aMessage addArgumentOfTypeBytesWithValue:(void *)[aPupilData bytes] length:[aPupilData length]];
-    [aMessage addArgumentOfTypeUInt64WithValue:aRootOOP];
-    [aMessage addArgumentOfTypeUInt64WithValue:anID];
-    
-    [self sendAndReceiveMessage:aMessage];
-    
-    NUFarmOutStatus aStatus = (NUFarmOutStatus)[[[self receivedMessage] argumentAt:0] UInt64FromValue];
-    
-    *aFixedOOPs = [[[self receivedMessage] argumentAt:1] dataFromValue];
-    *aLatestGrade = [[[self receivedMessage] argumentAt:2] UInt64FromValue];
-    
-    [[self lock] unlock];
+    @try
+    {
+        NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindFarmOutPupils];
+        
+        [aMessage addArgumentOfTypeBytesWithValue:(void *)[aPupilData bytes] length:[aPupilData length]];
+        [aMessage addArgumentOfTypeUInt64WithValue:aRootOOP];
+        [aMessage addArgumentOfTypeUInt64WithValue:anID];
+        
+        [self sendAndReceiveMessage:aMessage];
+        
+        aStatus = (NUFarmOutStatus)[[[self receivedMessage] argumentAt:0] UInt64FromValue];
+        
+        *aFixedOOPs = [[[self receivedMessage] argumentAt:1] dataFromValue];
+        *aLatestGrade = [[[self receivedMessage] argumentAt:2] UInt64FromValue];
+    }
+    @finally
+    {
+        [[self lock] unlock];
+    }
     
     return aStatus;
 }

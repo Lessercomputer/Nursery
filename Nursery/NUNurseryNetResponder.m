@@ -22,7 +22,7 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
 {
     if (self = [super init])
     {
-        _pairedGardenes = [NSMutableDictionary new];
+        _pairedGardens = [NSMutableDictionary new];
         _netService = aNetService;
         _inputStream = [anInputStream retain];
         _outputStream = [anOutputStream retain];
@@ -35,7 +35,7 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
 {
     NSLog(@"dealloc:%@", self);
 
-    [_pairedGardenes release];
+    [_pairedGardens release];
     
     [super dealloc];
 }
@@ -60,14 +60,6 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
             if ([[self inputStream] streamStatus] == NSStreamStatusAtEnd
                 || [[self outputStream] streamStatus] == NSStreamStatusAtEnd)
                 [[self thread] cancel];
-            
-            if ([[self inputStream] streamStatus] == NSStreamStatusError
-                || [[self outputStream] streamStatus] == NSStreamStatusError)
-            {
-                NSLog(@"inputStream error:%@, outputStream error:%@", [[self inputStream] streamError], [[self outputStream] streamError]);
-//                @throw [NSException exceptionWithName:NUNurseryNetServiceNetworkException reason:NUNurseryNetServiceNetworkException userInfo:nil];
-                [[self thread] cancel];
-            }
         }
         
         [[self inputStream] close];
@@ -145,7 +137,7 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
 
 - (NUPairedMainBranchGarden *)pairedMainBranchGardenFor:(NUUInt64)aPairID
 {
-    return [[self pairedGardenes] objectForKey:@(aPairID)];
+    return [[self pairedGardens] objectForKey:@(aPairID)];
 }
 
 @end
@@ -162,7 +154,7 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
     NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindOpenGardenResponse];
     
     NUUInt64 aPairID = [[self nursery] newGardenID];
-    [[self pairedGardenes] setObject:[[self nursery] makePairdGarden] forKey:@(aPairID)];
+    [[self pairedGardens] setObject:[[self nursery] makePairdGarden] forKey:@(aPairID)];
     
     [aResponse addArgumentOfTypeUInt64WithValue:aPairID];
 
@@ -172,7 +164,7 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
 - (NUNurseryNetMessage *)responseForCloseGarden
 {
     NSNumber *aPairID = [[[self receivedMessage] argumentAt:0] value];
-    [[self pairedGardenes] removeObjectForKey:aPairID];
+    [[self pairedGardens] removeObjectForKey:aPairID];
     
     return nil;
 }
@@ -180,7 +172,7 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
 - (NUNurseryNetMessage *)responseForRootOOP
 {
     NUUInt64 aPairID = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
-    NUPairedMainBranchGarden *aPairedMainBranchGarden = [[self pairedGardenes] objectForKey:@(aPairID)];
+    NUPairedMainBranchGarden *aPairedMainBranchGarden = [[self pairedGardens] objectForKey:@(aPairID)];
     
     NUUInt64 aRootOOP = [[aPairedMainBranchGarden pairedMainBranchAliaser] rootOOP];
     
