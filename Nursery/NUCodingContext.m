@@ -6,6 +6,8 @@
 //  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSException.h>
+
 #import "NUCodingContext.h"
 #import "NURegion.h"
 #import "NUCharacter.h"

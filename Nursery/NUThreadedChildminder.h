@@ -6,6 +6,9 @@
 //
 //
 
+#import <Foundation/NSObject.h>
+
+@class NSConditionLock;
 @class NUGarden;
 
 @interface NUThreadedChildminder : NSObject

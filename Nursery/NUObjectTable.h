@@ -8,6 +8,7 @@
 
 #import "NUOpaqueBTree.h"
 
+@class NSRecursiveLock;
 @class NUGarden, NUObjectTableLeaf;
 
 extern const NUUInt64 NUNilOOP;

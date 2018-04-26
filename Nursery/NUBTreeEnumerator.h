@@ -6,6 +6,7 @@
 //
 //
 
+#import <Foundation/NSEnumerator.h>
 #import "NUTypes.h"
 
 @class NUBTree, NUBTreeLeaf;

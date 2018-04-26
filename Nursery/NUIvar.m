@@ -6,6 +6,8 @@
 //  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSException.h>
+
 #import "NUIvar.h"
 #import "NUAliaser.h"
 #import "NUCharacter.h"

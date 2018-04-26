@@ -9,12 +9,13 @@
 #import "NUTypes.h"
 #import "NUCodingNote.h"
 
+@class NSFileHandle, NSMutableData, NSRecursiveLock;
+@class NUPage, NUChangedRegionArray, NUU64ODictionary;
+
 extern NSString *NUPageDataDoesNotExistException;
 extern NSString *NUInvalidPageLocationException;
 extern const NUUInt32 NUDefaultPageSize;
 extern const NUUInt64 NUNextPageLocationOffset;
-
-@class NUPage, NUChangedRegionArray, NUU64ODictionary;
 
 @interface NUPages : NSObject <NUCodingNote>
 {

@@ -6,6 +6,7 @@
 //
 //
 
+#import <Foundation/NSDate.h>
 
 @interface NSDate (NUCharacter)
 @end

@@ -6,6 +6,9 @@
 //
 //
 
+#import <Foundation/NSArray.h>
+#import <Foundation/NSException.h>
+
 #import "NUMainBranchAliaser.h"
 #import "NUMainBranchNursery.h"
 #import "NUGarden.h"

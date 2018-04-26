@@ -6,6 +6,10 @@
 //  Copyright © 2018年 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSThread.h>
+#import <Foundation/NSData.h>
+
 #import "NUNurseryNetResponder.h"
 #import "NUNurseryNetService.h"
 #import "NUMainBranchNursery.h"
@@ -163,10 +167,12 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
 
 - (NUNurseryNetMessage *)responseForCloseGarden
 {
+    NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindCloseGardenResponse];
+    
     NSNumber *aPairID = [[[self receivedMessage] argumentAt:0] value];
     [[self pairedGardens] removeObjectForKey:aPairID];
     
-    return nil;
+    return aResponse;
 }
 
 - (NUNurseryNetMessage *)responseForRootOOP
@@ -294,7 +300,7 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
 {
     [self stop];
     
-    return nil;
+    return [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindNetClientWillStopResponse];;
 }
 
 @end

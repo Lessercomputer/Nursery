@@ -6,6 +6,14 @@
 //
 //
 
+#include <string.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSIndexSet.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSPathUtilities.h>
+#import <Foundation/NSFileManager.h>
+#import <Foundation/NSFileHandle.h>
+
 #import "NUMainBranchNursery.h"
 #import "NUGarden.h"
 #import "NUNurseryRoot.h"

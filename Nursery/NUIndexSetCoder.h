@@ -9,6 +9,8 @@
 #import "NUCoder.h"
 #import "NUTypes.h"
 
+@class NSIndexSet, NSMutableIndexSet;
+
 @interface NUIndexSetCoder : NUCoder
 
 - (void)setIndexesToIndexSet:(NSMutableIndexSet *)anIndexSet withAliaser:(NUAliaser *)anAliaser;

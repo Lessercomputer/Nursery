@@ -6,6 +6,11 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSLock.h>
+#import <Foundation/NSSet.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSException.h>
+
 #import "NUSpaces.h"
 #import "NUOpaqueBTreeBranch.h"
 #import "NULocationTree.h"

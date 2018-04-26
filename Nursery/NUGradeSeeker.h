@@ -6,9 +6,12 @@
 //
 //
 
+#import <Foundation/NSLock.h>
+
 #import "NUThreadedChildminder.h"
 #import "NUTypes.h"
 
+@class NSMutableArray, NSRecursiveLock;
 @class NUGarden, NUBell, NUAperture;
 
 @interface NUGradeSeeker : NUThreadedChildminder <NSLocking>

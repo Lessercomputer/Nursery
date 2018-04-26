@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/NSString.h>
+
 #import "NUBellBall.h"
 
 const NUUInt64 NUNilGrade           = 0;

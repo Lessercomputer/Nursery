@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/NSArray.h>
+
 #import "NUPupilAlbum.h"
 #import "NUPupilNote.h"
 #import "NUBell.h"

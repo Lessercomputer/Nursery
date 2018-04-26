@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/NSDictionary.h>
+
 #import "NUTypes.h"
 
 @interface NSDictionary (NUCharacter)

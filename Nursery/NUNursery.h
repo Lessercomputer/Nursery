@@ -6,8 +6,11 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSObjCRuntime.h>
+#import <Foundation/NSObject.h>
 #import <Nursery/NUTypes.h>
 
+@class NSString;
 @class NUCharacter, NUBell, NUObjectWrapper, NUAliaser, NUNurseryRoot, NUGarden;
 
 extern NSString * const NUOOPNotFoundException;

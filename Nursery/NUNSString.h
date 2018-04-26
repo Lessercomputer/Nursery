@@ -6,6 +6,7 @@
 //
 //
 
+#import <Foundation/NSString.h>
 #import "NUTypes.h"
 
 @interface NSString (NUCharacter)

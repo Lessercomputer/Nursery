@@ -6,6 +6,10 @@
 //
 //
 
+#import <Foundation/NSArray.h>
+#import <Foundation/NSData.h>
+#import <Foundation/NSByteOrder.h>
+
 #import "NUBranchGarden.h"
 #import "NUGradeSeeker.h"
 #import "NUBranchAliaser.h"
@@ -89,12 +93,8 @@
             
             [[self aliaser] encodeObjects];
             NSData *anEncodedObjectsData = [[self branchAliaser] encodedPupilData];
-//            NSMutableData *aCopiedEncodedObjectsData = [anEncodedObjectsData mutableCopy];
-//            [anEncodedObjectsData writeToFile:[@"~/Desktop/NUBranchGarden_encodedObjects" stringByExpandingTildeInPath] atomically:YES];
             aFarmOutStatus = [[[self branchNursery] netClient] farmOutPupils:anEncodedObjectsData rootOOP:[[[self nurseryRoot] bell] OOP] gardenWithID:[self ID] fixedOOPs:&aFixedOOPs latestGrade:&aLatestGrade];
-            
-//            [aCopiedEncodedObjectsData release];
-            
+                        
             if (aFarmOutStatus == NUFarmOutStatusSucceeded)
             {
                 [self replaceProbationaryOOPsWithFixedOOPs:aFixedOOPs inPupils:[[self branchAliaser] reducedEncodedPupilsDictionary] grade:aLatestGrade];

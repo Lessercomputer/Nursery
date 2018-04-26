@@ -6,6 +6,9 @@
 //
 //
 
+#include <stdlib.h>
+#import <Foundation/NSData.h>
+
 #import "NUDataCoder.h"
 #import "NUCharacter.h"
 #import "NUGarden.h"

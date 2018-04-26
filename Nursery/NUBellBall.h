@@ -6,7 +6,10 @@
 //
 //
 
+#import <objc/objc.h>
 #import <Nursery/NUTypes.h>
+
+@class NSString;
 
 extern const NUUInt64 NUNilGrade;
 extern const NUUInt64 NUFirstGrade;

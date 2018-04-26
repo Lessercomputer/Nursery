@@ -6,8 +6,11 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSObject.h>
+
 #import "NUTypes.h"
 
+@class NSString;
 @class NUPages;
 
 extern NSString *NUOpaqueArrayOutOfRangeException;

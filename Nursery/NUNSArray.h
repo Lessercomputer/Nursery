@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/NSArray.h>
+
 #import "NUTypes.h"
 
 @interface NSArray (NUCharacter)

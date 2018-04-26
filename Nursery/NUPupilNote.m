@@ -6,6 +6,10 @@
 //
 //
 
+#import <Foundation/NSByteOrder.h>
+#import <Foundation/NSData.h>
+#import <Foundation/NSString.h>
+
 #import "NUPupilNote.h"
 #import "NUBellBall.h"
 #import "NURegion.h"

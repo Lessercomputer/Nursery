@@ -6,6 +6,9 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
+#import <objc/objc.h>
+#import <Foundation/NSRange.h>
+
 #import <Nursery/NUTypes.h>
 
 @class NSString;

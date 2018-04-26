@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/NSString.h>
+
 #import "NUBellBallArray.h"
 #import "NUPages.h"
 #import "NUBellBall.h"

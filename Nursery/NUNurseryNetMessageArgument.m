@@ -6,6 +6,9 @@
 //  Copyright © 2018年 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSValue.h>
+#import <Foundation/NSData.h>
+
 #import "NUNurseryNetMessageArgument.h"
 #import "NUTypes.h"
 

@@ -6,6 +6,8 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSString.h>
+
 #import "NURegionArray.h"
 #import "NUPages.h"
 #import "NURegion.h"

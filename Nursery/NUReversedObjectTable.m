@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/NSLock.h>
+
 #import "NUReversedObjectTable.h"
 #import "NUIndexArray.h"
 #import "NUReversedObjectTableBranch.h"

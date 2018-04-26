@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/NSSet.h>
+
 #import "NUMutableDictionary.h"
 #import "NUBell.h"
 #import "NUGarden.h"

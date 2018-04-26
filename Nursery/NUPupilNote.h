@@ -9,6 +9,8 @@
 #import "NUTypes.h"
 #import "NUCodingNote.h"
 
+@class NSMutableData;
+
 @interface NUPupilNote : NSObject <NUCodingNote>
 {
     NUBellBall bellBall;

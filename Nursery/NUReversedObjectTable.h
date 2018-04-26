@@ -8,6 +8,8 @@
 
 #import "NUOpaqueBTree.h"
 
+@class NSRecursiveLock;
+
 @interface NUReversedObjectTable : NUOpaqueBTree
 {
     NSRecursiveLock *lock;

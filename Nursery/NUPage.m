@@ -6,6 +6,10 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSData.h>
+#import <Foundation/NSFileHandle.h>
+#import <Foundation/NSByteOrder.h>
+
 #import "NUPage.h"
 
 

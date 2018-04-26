@@ -6,9 +6,12 @@
 //
 //
 
+#import <Foundation/NSDictionary.h>
+
 #import "NUCoding.h"
 #import "NUMovingUp.h"
 
+@class NSMutableSet;
 @class NUBell;
 
 @interface NUMutableDictionary : NSMutableDictionary <NUCoding, NUMovingUp>

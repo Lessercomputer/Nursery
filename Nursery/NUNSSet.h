@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/NSSet.h>
+
 #import "NUTypes.h"
 
 @interface NSSet (NUCharacter)

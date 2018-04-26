@@ -6,6 +6,7 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSLock.h>
 #import <Nursery/NUTypes.h>
 
 typedef enum NUFarmOutStatus {
@@ -14,6 +15,7 @@ typedef enum NUFarmOutStatus {
     NUFarmOutStatusNurseryGradeUnmatched = 2
 } NUFarmOutStatus;
 
+@class NSMutableDictionary, NSMutableIndexSet;
 @class NUNursery, NUNurseryRoot, NUObjectWrapper, NUBell, NUCharacter, NUAliaser, NUGradeSeeker, NUMutableDictionary, NUU64ODictionary;
 
 extern NSString * const NUObjectLoadingException;

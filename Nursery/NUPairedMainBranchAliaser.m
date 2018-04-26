@@ -6,6 +6,11 @@
 //
 //
 
+#import <Foundation/NSArray.h>
+#import <Foundation/NSByteOrder.h>
+#import <Foundation/NSData.h>
+#import <Foundation/NSException.h>
+
 #import "NUPairedMainBranchAliaser.h"
 #import "NUPages.h"
 #import "NUObjectTable.h"

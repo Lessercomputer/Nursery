@@ -6,6 +6,9 @@
 //
 //
 
+#include <string.h>
+#import <Foundation/NSException.h>
+
 #import "NUNSNumber.h"
 #import "NUNSObject.h"
 #import "NUCharacter.h"

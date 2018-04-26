@@ -6,6 +6,8 @@
 //  Copyright © 2017年 Nursery-Framework. All rights reserved.
 //
 
+#include <stdlib.h>
+
 #import "NUQueue.h"
 
 const NUUInt64 NUQueueDefaultObjectsSize = 7;

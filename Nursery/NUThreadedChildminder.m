@@ -6,6 +6,9 @@
 //
 //
 
+#import <Foundation/NSLock.h>
+#import <Foundation/NSThread.h>
+
 #import "NUThreadedChildminder.h"
 #import "NUMainBranchNursery.h"
 

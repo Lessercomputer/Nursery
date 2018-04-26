@@ -6,6 +6,12 @@
 //  Copyright © 2017年 Nursery-Framework. All rights reserved.
 //
 
+#import <objc/NSObjCRuntime.h>
+#import <Foundation/NSObject.h>
+#import <Foundation/NSNetServices.h>
+
+@class NSString;
+
 extern NSString *NUNurseryNetServiceType;
 
 extern NSString *NUNurseryNetServiceNetworkException;

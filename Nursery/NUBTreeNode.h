@@ -10,6 +10,7 @@
 #import "NUComparator.h"
 #import "NUCoding.h"
 
+@class NSMutableArray;
 @class NUBTree, NUBTreeLeaf, NUBell;
 
 typedef enum NUBTreeSetObjectResult

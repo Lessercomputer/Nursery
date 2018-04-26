@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/NSObject.h>
+
 #import "NUTypes.h"
 
 @class NUBell, NUPupilNote, NUU64ODictionary, NUBellBallODictionary;

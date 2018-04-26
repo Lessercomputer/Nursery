@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/NSObject.h>
+
 @protocol NUComparator <NSObject>
 
 - (NSComparisonResult)compareObject:(id)anObject1 toObject:(id)anObject2;

@@ -6,8 +6,11 @@
 //  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSRange.h>
+#import <Foundation/NSGeometry.h>
 #import <Nursery/NUTypes.h>
 
+@class NSMutableArray;
 @class NUGarden, NUPages, NUCodingContext, NUIndexArray, NUObjectTable, NUBell, NUPupilNote, NUCharacter, NUQueue, NUU64ODictionary;
 
 extern NSString *NUObjectLocationNotFoundException;

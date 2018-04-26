@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/NSArray.h>
+
 #import "NUGradeSeeker.h"
 #import "NUGarden.h"
 #import "NUNurseryRoot.h"

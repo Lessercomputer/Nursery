@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/NSDate.h>
+
 #import "NUDateCoder.h"
 #import "NUAliaser.h"
 

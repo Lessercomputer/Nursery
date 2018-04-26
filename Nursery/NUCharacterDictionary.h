@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/NSObject.h>
+
 #import "NUCoding.h"
 #import "NUMovingUp.h"
 

@@ -6,11 +6,23 @@
 //  Copyright © 2017年 Nursery-Framework. All rights reserved.
 //
 
-#import "NUNurseryNetService.h"
-#import "NUNurseryNetResponder.h"
-#include <CoreFoundation/CoreFoundation.h>
+#import <Foundation/NSLock.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSThread.h>
+#import <Foundation/NSException.h>
+#import <Foundation/NSDictionary.h>
+#include <CoreFoundation/CFStream.h>
+#include <CoreFoundation/CFSocket.h>
+#include <CoreFoundation/CFNumber.h>
+#include <CFNetwork/CFSocketStream.h>
+#include <string.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+
+#import "NUNurseryNetService.h"
+#import "NUNurseryNetResponder.h"
+
+@class NSMutableArray, NSLock, NSCondition, NSRecursiveLock, NSException;
 
 NSString *NUNurseryNetServiceType = @"_nunurserynetservice._tcp.";
 

@@ -8,6 +8,7 @@
 
 #import "NUNurseryNetServiceIO.h"
 
+@class NSMutableDictionary;
 @class NUNurseryNetService, NUPairedMainBranchGarden, NUMainBranchNursery;
 
 @interface NUNurseryNetResponder : NUNurseryNetServiceIO

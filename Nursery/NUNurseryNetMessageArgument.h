@@ -6,6 +6,7 @@
 //  Copyright © 2018年 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSObject.h>
 #import <Nursery/NUTypes.h>
 
 extern const NUUInt64 NUNurseryNetMessageArgumentTypeUInt64;

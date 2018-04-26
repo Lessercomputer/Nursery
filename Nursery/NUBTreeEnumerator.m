@@ -6,6 +6,7 @@
 //
 //
 
+#import <Foundation/NSException.h>
 #import "NUBTreeEnumerator.h"
 #import "NUBTree.h"
 #import "NUBTreeLeaf.h"

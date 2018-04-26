@@ -6,15 +6,24 @@
 //  Copyright © 2017年 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSString.h>
+#import <Foundation/NSThread.h>
+#import <Foundation/NSException.h>
+#import <Foundation/NSData.h>
+#import <CFNetwork/CFHost.h>
+#import <CFNetwork/CFSocketStream.h>
+#import <CoreFoundation/CFNumber.h>
+#include <libkern/OSTypes.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+
 #import "NUNurseryNetClient.h"
 #import "NUNurseryNetService.h"
 #import "NUNurseryNetMessage.h"
 #import "NUNurseryNetMessageArgument.h"
 #import "NUBranchNursery.h"
 #import "NUBellBall.h"
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netinet/tcp.h>
 
 NSString *NUNurseryNetClientNetworkException = @"NUNurseryNetClientNetworkException";
 
@@ -394,7 +403,7 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
         
         [aMessage addArgumentOfTypeUInt64WithValue:anID];
         
-        [self sendMessage:aMessage];
+        [self sendAndReceiveMessage:aMessage];
     }
     @finally
     {
@@ -622,7 +631,7 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
 {
     NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindNetClientWillStop];
     
-    [self sendMessage:aMessage];
+    [self sendAndReceiveMessage:aMessage];
 }
 
 @end

@@ -6,6 +6,9 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSException.h>
+#import <Foundation/NSByteOrder.h>
+
 #import "NUIndexArray.h"
 #import "NUPages.h"
 

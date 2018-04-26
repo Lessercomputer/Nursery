@@ -8,6 +8,7 @@
 
 #import "NUMainBranchAliaser.h"
 
+@class NSMutableData;
 @class NUPairedMainBranchGarden, NUU64ODictionary;
 
 @interface NUPairedMainBranchAliaser : NUMainBranchAliaser

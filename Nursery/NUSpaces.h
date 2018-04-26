@@ -6,8 +6,11 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSObject.h>
+
 #import "NUTypes.h"
 
+@class NSString, NSMutableSet, NSMutableArray, NSMutableDictionary, NSFileHandle, NSRecursiveLock;
 @class NULocationTree, NULengthTree, NULengthTreeLeaf, NUOpaqueBTreeNode, NUOpaqueBTreeBranch, NUPages, NUMainBranchNursery, NUCharacter, NUU64ODictionary;
 
 extern NSString *NURegionAlreadyReleasedException;

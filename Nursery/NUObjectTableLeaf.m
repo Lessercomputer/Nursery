@@ -6,6 +6,9 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSArray.h>
+#import <Foundation/NSString.h>
+
 #import "NUObjectTableLeaf.h"
 #import "NUObjectTable.h"
 #import "NUOpaqueArray.h"

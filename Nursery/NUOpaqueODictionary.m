@@ -6,6 +6,10 @@
 //
 //
 
+#include <string.h>
+#include <stdlib.h>
+#import <Foundation/NSException.h>
+
 #import "NUOpaqueODictionary.h"
 
 const NUUInt64 NUOpaqueODictionaryInitialBucketCount = 17;

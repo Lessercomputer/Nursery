@@ -7,6 +7,8 @@
  *
  */
 
+#include <stdint.h>
+
 #import "NUTypes.h"
 
 const NUUInt64 NUUInt64Max = UINT64_MAX;

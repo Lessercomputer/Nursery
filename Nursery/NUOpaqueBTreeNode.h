@@ -6,8 +6,10 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSObject.h>
 #import "NUTypes.h"
 
+@class NSString;
 @class NUOpaqueBTree, NUOpaqueArray, NUSpaces, NUPages, NUPage, NUOpaqueBTreeLeaf, NUOpaqueBTreeBranch;
 
 extern const NUUInt32 NUOpaqueBTreeNodeOOPOffset;

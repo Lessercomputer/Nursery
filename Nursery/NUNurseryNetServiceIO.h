@@ -1,16 +1,19 @@
 //
-//  NUNurseryNetworker.h
+//  NUNurseryNetServiceIO.h
 //  Nursery
 //
 //  Created by Akifumi Takata on 2018/01/10.
 //  Copyright © 2018年 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSStream.h>
+
 #import <Nursery/NUTypes.h>
 
-extern const NUUInt64 NUNurseryNetworkerReadBufferSize;
-
+@class NSMutableData, NSThread;
 @class NUNurseryNetMessage;
+
+extern const NUUInt64 NUNurseryNetworkerReadBufferSize;
 
 @interface NUNurseryNetServiceIO : NSObject <NSStreamDelegate>
 {

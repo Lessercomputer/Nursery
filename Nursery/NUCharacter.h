@@ -6,9 +6,15 @@
 //  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSObjCRuntime.h>
+#import <Foundation/NSObject.h>
+
 #import <Nursery/NUTypes.h>
 #import <Nursery/NUCoding.h>
 #import <Nursery/NUMovingUp.h>
+
+@class NSString, NSMutableArray, NSMutableSet, NSRecursiveLock;
+@class NUBell, NUIvar, NUCharacter, NUGarden, NUCoder;
 
 extern const NUObjectFormat NUFixedIvars;
 extern const NUObjectFormat NUIndexedIvars;
@@ -17,8 +23,6 @@ extern const NUObjectFormat NUIndexedBytes;
 
 extern NSString *NUCharacterIvarAlreadyExistsException;
 extern NSString *NUCharacterInvalidObjectFormatException;
-
-@class NUBell, NUIvar, NUCharacter, NUGarden, NUCoder;
 
 @protocol NUCharacter
 

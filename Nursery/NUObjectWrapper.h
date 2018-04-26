@@ -6,6 +6,7 @@
 //  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSObject.h>
 
 @interface NUObjectWrapper : NSObject <NSCopying>
 {

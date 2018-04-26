@@ -6,6 +6,9 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSString.h>
+#import <Foundation/NSByteOrder.h>
+
 #import "NURegion.h"
 
 NURegion NUMakeRegion(NUUInt64 aLocation, NUUInt64 aLength)

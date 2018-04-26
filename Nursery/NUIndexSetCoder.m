@@ -6,6 +6,8 @@
 //
 //
 
+#import <stdlib.h>
+
 #import "NUIndexSetCoder.h"
 #import "NUNSIndexSet.h"
 #import "NUCharacter.h"

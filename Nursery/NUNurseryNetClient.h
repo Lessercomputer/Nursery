@@ -6,6 +6,8 @@
 //  Copyright © 2017年 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSNetServices.h>
+
 #import "NUNurseryNetServiceIO.h"
 #import "NUGarden.h"
 

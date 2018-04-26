@@ -6,6 +6,8 @@
 //
 //
 
+#include <stdlib.h>
+#import <Foundation/NSException.h>
 #import "NUParader.h"
 #import "NUTypes.h"
 #import "NUMainBranchNursery.h"

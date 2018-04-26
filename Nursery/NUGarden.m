@@ -6,6 +6,10 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
+#import <stdlib.h>
+#import <Foundation/NSIndexSet.h>
+#import <Foundation/NSException.h>
+
 #import "NUGarden.h"
 #import "NUObjectTable.h"
 #import "NUCharacter.h"

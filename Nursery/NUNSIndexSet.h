@@ -6,6 +6,7 @@
 //
 //
 
+#import <Foundation/NSIndexSet.h>
 #import "NUTypes.h"
 
 @interface NSIndexSet (NUCharacter)

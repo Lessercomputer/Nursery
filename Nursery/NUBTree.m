@@ -6,6 +6,9 @@
 //
 //
 
+#include <math.h>
+#import <Foundation/NSException.h>
+
 #import "NUBTree.h"
 #import "NUBTreeNode.h"
 #import "NUBTreeLeaf.h"

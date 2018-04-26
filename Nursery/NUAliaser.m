@@ -6,6 +6,10 @@
 //  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 
+#include <stdlib.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSException.h>
+
 #import "NUAliaser.h"
 #import "NUGarden.h"
 #import "NUPages.h"

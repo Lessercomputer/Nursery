@@ -8,6 +8,7 @@
 
 #import "NUNursery.h"
 
+@class NSFileHandle, NSMutableDictionary,NSRecursiveLock;
 @class NUObjectTable, NUReversedObjectTable, NUSpaces, NUPages, NUSeeker, NUParader, NUMainBranchGarden, NUPairedMainBranchGarden;
 
 @interface NUMainBranchNursery : NUNursery

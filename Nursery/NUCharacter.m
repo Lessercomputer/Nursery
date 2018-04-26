@@ -6,6 +6,12 @@
 //  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSArray.h>
+#import <Foundation/NSSet.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSException.h>
+
 #import "NUCharacter.h"
 #import "NUBell.h"
 #import "NUIvar.h"

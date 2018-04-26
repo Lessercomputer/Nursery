@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/NSArray.h>
+
 #import "NUBTreeNode.h"
 #import "NUBTree.h"
 #import "NUCharacter.h"

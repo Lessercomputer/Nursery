@@ -6,6 +6,8 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSString.h>
+
 #import "NULocationTreeLeaf.h"
 #import "NUObjectTable.h"
 #import "NUPages.h"

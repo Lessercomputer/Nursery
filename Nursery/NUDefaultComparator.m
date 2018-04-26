@@ -6,6 +6,10 @@
 //
 //
 
+#import <Foundation/NSDate.h>
+#import <Foundation/NSValue.h>
+#import <Foundation/NSString.h>
+
 #import "NUDefaultComparator.h"
 #import "NUCharacter.h"
 
@@ -13,7 +17,7 @@
 
 - (NSComparisonResult)compareObject:(id)anObject1 toObject:(id)anObject2
 {
-    return [anObject1 compare:anObject2];
+    return (NSComparisonResult)[anObject1 compare:anObject2];
 }
 
 @end

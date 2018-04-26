@@ -6,6 +6,8 @@
 //  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSObject.h>
+
 #import "NUCoding.h"
 #import "NUMovingUp.h"
 

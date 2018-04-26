@@ -6,6 +6,8 @@
 //  Copyright © 2017年 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSObject.h>
+
 #import "NUTypes.h"
 
 @interface NUQueue : NSObject

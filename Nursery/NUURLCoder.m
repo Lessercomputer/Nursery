@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/NSURL.h>
+
 #import "NUURLCoder.h"
 #import "NUAliaser.h"
 

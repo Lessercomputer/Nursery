@@ -6,6 +6,12 @@
 //
 //
 
+#import <Foundation/NSByteOrder.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSException.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSData.h>
+
 #import "NUBranchAliaser.h"
 #import "NUBranchNursery.h"
 #import "NUBell.h"

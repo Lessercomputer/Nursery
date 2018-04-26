@@ -7,6 +7,7 @@
 //
 
 #import "NUTypes.h"
+#import <Foundation/NSData.h>
 
 @interface NSData (NUCharacter)
 

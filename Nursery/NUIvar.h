@@ -6,9 +6,12 @@
 //  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSObject.h>
+
 #import <Nursery/NUTypes.h>
 #import <Nursery/NUCoding.h>
 
+@class NSString;
 @class NUBell;
 
 extern const NUIvarType NUOOPIvarType;

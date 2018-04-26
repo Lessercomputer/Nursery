@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/NSException.h>
+
 #import "NUMainBranchAperture.h"
 #import "NUMainBranchNursery.h"
 #import "NUPages.h"

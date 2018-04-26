@@ -6,6 +6,9 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
+#include <math.h>
+#import <Foundation/NSException.h>
+
 #import "NUOpaqueBTreeNode.h"
 #import "NUOpaqueBTree.h"
 #import "NUSpaces.h"

@@ -6,6 +6,9 @@
 //
 //
 
+#import <Foundation/NSArray.h>
+#import <Foundation/NSIndexSet.h>
+
 #import "NUBTreeBranch.h"
 #import "NUBTree.h"
 #import "NUBell.h"

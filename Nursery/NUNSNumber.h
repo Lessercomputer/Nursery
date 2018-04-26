@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/NSValue.h>
+
 #import "NUTypes.h"
 
 @interface NSNumber (NUCharacter)

@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/NSEnumerator.h>
+
 #import "NUTypes.h"
 
 typedef struct NUOpaqueOAssociation {

@@ -6,6 +6,10 @@
 //  Copyright © 2018年 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSArray.h>
+#import <Foundation/NSData.h>
+#import <Foundation/NSByteOrder.h>
+
 #import "NUNurseryNetMessage.h"
 #import "NUNurseryNetMessageArgument.h"
 
@@ -45,6 +49,7 @@ const NUUInt64 NUNurseryNetMessageKindFarmOutPupils = 21;
 const NUUInt64 NUNurseryNetMessageKindFarmOutPupilsResponse = 22;
 
 const NUUInt64 NUNurseryNetMessageKindNetClientWillStop = 23;
+const NUUInt64 NUNurseryNetMessageKindNetClientWillStopResponse = 24;
 
 @implementation NUNurseryNetMessage
 

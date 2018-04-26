@@ -6,6 +6,11 @@
 //
 //
 
+#include <stdlib.h>
+#include <string.h>
+#import <Foundation/NSByteOrder.h>
+#import <Foundation/NSException.h>
+
 #import "NUNumberCoder.h"
 #import "NUTypes.h"
 #import "NUAliaser.h"

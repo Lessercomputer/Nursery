@@ -6,6 +6,11 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#import <Foundation/NSException.h>
+
 #import "NUOpaqueArray.h"
 #import "NUPages.h"
 

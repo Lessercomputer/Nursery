@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/NSException.h>
+
 #import "NUNSObject.h"
 #import "NUGarden.h"
 
