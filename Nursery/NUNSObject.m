@@ -13,11 +13,6 @@
 
 @implementation NSObject (NUCharacter)
 
-+ (BOOL)automaticallyEstablishCharacter
-{
-	return NO;
-}
-
 + (NUCharacter *)characterOn:(NUGarden *)aGarden
 {
 	NUCharacter *anEstablishedCharacter = [aGarden characterForClass:self];

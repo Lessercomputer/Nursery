@@ -26,13 +26,15 @@ extern NSString *NUCharacterInvalidObjectFormatException;
 
 @protocol NUCharacter
 
-+ (BOOL)automaticallyEstablishCharacter;
 + (NUCharacter *)characterOn:(NUGarden *)aGarden;
 + (NUCharacter *)establishCharacterOn:(NUGarden *)aGarden;
 + (NUCharacter *)createCharacterOn:(NUGarden *)aGarden;
 + (void)defineCharacter:(NUCharacter *)aCharacter on:(NUGarden *)aGarden;
 + (NSString *)CharacterNameOn:(NUGarden *)aGarden;
 - (Class)classForNursery;
+
+@optional
++ (BOOL)automaticallyEstablishCharacter;
 
 @end
 

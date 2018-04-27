@@ -181,6 +181,7 @@ extern NSString * const NUObjectLoadingException;
 - (void)setIsInMoveUp:(BOOL)aFlag;
 
 - (BOOL)class:(Class)aClass isKindOfClass:(Class)anAnsestorClass;
+- (BOOL)classAutomaticallyEstablishCharacter:(Class)aClass;
 
 - (void)setKeyObject:(NUObjectWrapper *)anObjectWrapper;
 

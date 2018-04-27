@@ -552,8 +552,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
             
             if (!class_isMetaClass(aClass)
                 && [self class:aClass isKindOfClass:[NSObject class]]
-				&& [aClass automaticallyEstablishCharacter]
-                && ![NSStringFromClass(aClass) hasPrefix:@"NSKVONotifying_"])
+				&& [self classAutomaticallyEstablishCharacter:aClass])
                 [aClass characterOn:self];
         }
         free(aClasses);
@@ -754,6 +753,13 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 	return aSuperClass ? YES : NO;
 }
 
+- (BOOL)classAutomaticallyEstablishCharacter:(Class)aClass
+{
+    Method aMethod = class_getClassMethod(aClass, @selector(automaticallyEstablishCharacter));
+    
+    return aMethod && [aClass automaticallyEstablishCharacter];
+}
+
 - (void)setKeyObject:(NUObjectWrapper *)anObjectWrapper
 {
     [keyObject autorelease];
@@ -807,7 +813,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
             {
                 NSInteger aBasicRetainCountOfBellInGarden = [self basicRetainCountOfBellInGarden:aBell];
                 
-                if ([aBell retainCount] == aBasicRetainCountOfBellInGarden && (![aBell hasObject] || [[aBell object] retainCount] == 1))
+                if ([aBell retainCount] == aBasicRetainCountOfBellInGarden + 1 && (![aBell hasObject] || [[aBell object] retainCount] == 1))
                     [self invalidateBell:aBell];
             }
         }];
@@ -819,7 +825,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 - (NSUInteger)basicRetainCountOfBellInGarden:(NUBell *)aBell
 {
-    NSInteger aBasicRetainCountOfBellInGarden = 2;
+    NSInteger aBasicRetainCountOfBellInGarden = 1;
     
     if ([aBell hasObject] && ![[aBell object] conformsToProtocol:@protocol(NUCoding)])
         aBasicRetainCountOfBellInGarden++;
