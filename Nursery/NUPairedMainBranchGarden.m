@@ -6,12 +6,15 @@
 //
 //
 
+#import "NUGarden+Project.h"
 #import "NUPairedMainBranchGarden.h"
 #import "NUGradeSeeker.h"
 #import "NUMainBranchAliaser.h"
 #import "NUPairedMainBranchAliaser.h"
 #import "NUObjectTable.h"
+#import "NUNursery+Project.h"
 #import "NUMainBranchNursery.h"
+#import "NUMainBranchNursery+Project.h"
 #import "NUNurseryRoot.h"
 
 @implementation NUPairedMainBranchGarden
@@ -65,26 +68,16 @@
             NUUInt64 aFixedRootOOP;
 
             [[self pairedMainBranchAliaser] setGradeForSave:aNewGrade];
-//            NSData *aCopiedPupilData = [NSData dataWithData:aPupilData];
-//            aPupilData = [[aPupilData mutableCopy] autorelease];
-//            NSLog(@"In NUPairedMainBranchGarden farmOutPupils:, aPupilData length:%lu", [aPupilData length]);
-//            void *anEncodedPupilBytes = malloc([aPupilData length]);
-//            [aPupilData getBytes:anEncodedPupilBytes length:[aPupilData length]];
-//            NSData *aCopiedPupilData = [[NSData alloc] initWithBytesNoCopy:anEncodedPupilBytes length:[aPupilData length] freeWhenDone:YES];
-//            NSLog(@"In NUPairedMainBranchGarden farmOutPupils:, aCopiedPupilData length:%lu", [aCopiedPupilData length]);
-//            [aPupilData writeToFile:[@"~/Desktop/NUPairedMainBranchGarden_encodedObjects" stringByExpandingTildeInPath] atomically:YES];
-//            aPupils = [[self pairedMainBranchAliaser] pupilsFromData:aCopiedPupilData];
+
+            
             aPupils = [[self pairedMainBranchAliaser] pupilsFromData:aPupilData];
             [[self pairedMainBranchAliaser] setPupils:aPupils];
-//            [aCopiedPupilData release];
             
             if ([[self mainBranchNursery] rootOOP] == NUNilOOP)
                 [self moveUpTo:aNewGrade];
             
             [[self pairedMainBranchAliaser] fixProbationaryOOPsInPupils];
-//#ifdef DEBUG
-//            NSLog(@"%@", [[self pairedMainBranchAliaser] descriptionForPupils]);
-//#endif
+
             [[self pairedMainBranchAliaser] writeEncodedObjectsToPages];
             *aFixedOOPs = [[self pairedMainBranchAliaser] dataWithProbationaryOOPAndFixedOOP];
             

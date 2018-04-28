@@ -16,8 +16,10 @@
 #import "NUSpaces.h"
 #import "NURegion.h"
 #import "NUMainBranchNursery.h"
+#import "NUMainBranchNursery+Project.h"
 #import "NUMainBranchAliaser.h"
 #import "NUGarden.h"
+#import "NUGarden+Project.h"
 
 
 const NUUInt64 NUNilOOP                             = 0;

@@ -10,6 +10,7 @@
 #import <Nursery/Nursery.h>
 #import "Person.h"
 #import "NUBranchNursery.h"
+#import "NUGarden+Project.h"
 #import "NUNurseryNetService.h"
 
 static NSString *NUNurseryTestFilePath;

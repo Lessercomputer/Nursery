@@ -7,6 +7,7 @@
 //
 
 #import "NUBranchGradeSeeker.h"
+#import "NUGarden+Project.h"
 #import "NUBranchGarden.h"
 #import "NUBranchAliaser.h"
 #import "NUAperture.h"

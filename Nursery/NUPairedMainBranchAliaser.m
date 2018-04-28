@@ -12,6 +12,7 @@
 #import <Foundation/NSException.h>
 
 #import "NUPairedMainBranchAliaser.h"
+#import "NUGarden+Project.h"
 #import "NUPages.h"
 #import "NUObjectTable.h"
 #import "NUReversedObjectTable.h"
@@ -21,6 +22,7 @@
 #import "NUCodingContextWithPupilNote.h"
 #import "NUPupilNote.h"
 #import "NUMainBranchNursery.h"
+#import "NUMainBranchNursery+Project.h"
 #import "NUBell.h"
 #import "NUBellBall.h"
 

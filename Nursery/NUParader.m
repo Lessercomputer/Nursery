@@ -11,6 +11,7 @@
 #import "NUParader.h"
 #import "NUTypes.h"
 #import "NUMainBranchNursery.h"
+#import "NUMainBranchNursery+Project.h"
 #import "NUPages.h"
 #import "NUObjectTable.h"
 #import "NUReversedObjectTable.h"
@@ -20,6 +21,7 @@
 #import "NUMainBranchAliaser.h"
 #import "NUBellBall.h"
 #import "NUGarden.h"
+#import "NUGarden+Project.h"
 
 const NUUInt64 NUParaderNextLocationOffset = 69;
 

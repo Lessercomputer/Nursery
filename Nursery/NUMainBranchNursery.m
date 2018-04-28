@@ -14,7 +14,9 @@
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSFileHandle.h>
 
+#import "NUNursery+Project.h"
 #import "NUMainBranchNursery.h"
+#import "NUMainBranchNursery+Project.h"
 #import "NUGarden.h"
 #import "NUNurseryRoot.h"
 #import "NUObjectTable.h"

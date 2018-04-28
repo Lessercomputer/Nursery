@@ -8,6 +8,8 @@
 
 #import <XCTest/XCTest.h>
 #import <Nursery/Nursery.h>
+#import "NUNursery+Project.h"
+#import "NUGarden+Project.h"
 #import "Person.h"
 #import "AllTypesObject.h"
 #import "SelfReferenceObject.h"

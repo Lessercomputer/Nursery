@@ -10,6 +10,7 @@
 
 #import "NUGradeSeeker.h"
 #import "NUGarden.h"
+#import "NUGarden+Project.h"
 #import "NUNurseryRoot.h"
 #import "NUBell.h"
 #import "NUBellBall.h"

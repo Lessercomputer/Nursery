@@ -13,19 +13,14 @@
 @interface NUBranchNursery : NUNursery
 {
     NUPupilAlbum *pupilAlbum;
+    NUNurseryNetClient *netClient;
 }
 
 + (instancetype)branchNurseryWithServiceName:(NSString *)aServiceName;
 
 - (instancetype)initWithServiceName:(NSString *)aServiceName;
 
-@property (nonatomic, retain) NUNurseryNetClient *netClient;
-- (NUPupilAlbum *)pupilAlbum;
+
 
 @end
 
-@interface NUBranchNursery (Private)
-
-- (void)setPupilAlbum:(NUPupilAlbum *)aPupilAlbum;
-
-@end

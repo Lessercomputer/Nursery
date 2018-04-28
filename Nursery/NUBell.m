@@ -10,6 +10,7 @@
 
 #import "NUBell.h"
 #import "NUGarden.h"
+#import "NUGarden+Project.h"
 #import "NUCoding.h"
 #import "NUBellBall.h"
 

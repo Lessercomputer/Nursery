@@ -7,9 +7,12 @@
 //
 
 #import "NUBranchNursery.h"
+#import "NUBranchNursery+Project.h"
+#import "NUGarden+Project.h"
 #import "NUBranchGarden.h"
 #import "NUPupilAlbum.h"
 #import "NUNurseryNetClient.h"
+
 
 @implementation NUBranchNursery
 
@@ -22,24 +25,19 @@
 {
     if (self = [super init])
     {
-        _netClient = [[NUNurseryNetClient alloc] initWithServiceName:aServiceName];
+        netClient = [[NUNurseryNetClient alloc] initWithServiceName:aServiceName];
         pupilAlbum = [NUPupilAlbum new];
     }
     
     return self;
 }
 
-- (NUPupilAlbum *)pupilAlbum
-{
-    return pupilAlbum;
-}
-
 - (void)dealloc
 {
     NSLog(@"dealloc:%@", self);
-    [_netClient stop];
-    [_netClient release];
-    _netClient = nil;
+    [netClient stop];
+    [netClient release];
+    netClient = nil;
     [pupilAlbum release];
     pupilAlbum = nil;
     
@@ -82,6 +80,22 @@
 @end
 
 @implementation NUBranchNursery (Private)
+
+- (NUNurseryNetClient *)netClient
+{
+    return netClient;
+}
+
+- (void)setNetClient:(NUNurseryNetClient *)aNetClient
+{
+    [netClient release];
+    netClient = [aNetClient retain];
+}
+
+- (NUPupilAlbum *)pupilAlbum
+{
+    return pupilAlbum;
+}
 
 - (void)setPupilAlbum:(NUPupilAlbum *)aPupilAlbum
 {

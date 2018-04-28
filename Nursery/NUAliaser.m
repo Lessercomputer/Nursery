@@ -12,6 +12,7 @@
 
 #import "NUAliaser.h"
 #import "NUGarden.h"
+#import "NUGarden+Project.h"
 #import "NUPages.h"
 #import "NUCodingContext.h"
 #import "NUIndexArray.h"

@@ -8,6 +8,7 @@
 
 #import "NUBranchAperture.h"
 #import "NUBranchNursery.h"
+#import "NUGarden+Project.h"
 #import "NUBranchGarden.h"
 #import "NUBranchAliaser.h"
 #import "NUPupilNote.h"

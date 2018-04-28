@@ -10,6 +10,7 @@
 
 #import "NUNSObject.h"
 #import "NUGarden.h"
+#import "NUGarden+Project.h"
 
 @implementation NSObject (NUCharacter)
 

@@ -38,41 +38,9 @@ typedef enum : NSUInteger {
 
 @end
 
-@interface NUNursery (Grade)
-
-- (NUUInt64)latestGrade:(NUGarden *)sender;
-- (NUUInt64)olderRetainedGrade:(NUGarden *)sender;
-
-- (NUUInt64)retainLatestGradeByGarden:(NUGarden *)sender;
-- (NUUInt64)retainGradeIfValid:(NUUInt64)aGrade byGarden:(NUGarden *)sender;
-- (void)retainGrade:(NUUInt64)aGrade byGarden:(NUGarden *)sender;
-- (void)releaseGradeLessThan:(NUUInt64)aGrade byGarden:(NUGarden *)sender;
-
-- (NUUInt64)retainLatestGradeByGardenWithID:(NUUInt64)anID;
-- (void)retainGrade:(NUUInt64)aGrade byGardenWithID:(NUUInt64)anID;
-- (void)releaseGradeLessThan:(NUUInt64)aGrade byGardenWithID:(NUUInt64)anID;
-
-@end
-
 @interface NUNursery (Garden)
 
 - (NUGarden *)makeGarden;
 - (NUGarden *)makeGardenWithGrade:(NUUInt64)aGrade;
-
-@end
-
-@interface NUNursery (Testing)
-
-- (BOOL)isMainBranch;
-
-@end
-
-@interface NUNursery (Private)
-
-- (BOOL)open;
-- (void)close;
-
-- (NUNurseryOpenStatus)openStatus;
-- (void)setOpenStatus:(NUNurseryOpenStatus)aStatus;
 
 @end

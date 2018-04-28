@@ -16,6 +16,7 @@
 #import "NUBell.h"
 #import "NUIvar.h"
 #import "NUGarden.h"
+#import "NUGarden+Project.h"
 #import "NUAliaser.h"
 #import "NUCoder.h"
 

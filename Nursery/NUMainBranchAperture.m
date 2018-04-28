@@ -10,6 +10,7 @@
 
 #import "NUMainBranchAperture.h"
 #import "NUMainBranchNursery.h"
+#import "NUMainBranchNursery+Project.h"
 #import "NUPages.h"
 #import "NUCharacter.h"
 #import "NUObjectTable.h"
@@ -17,6 +18,7 @@
 #import "NUBellBall.h"
 #import "NUAliaser.h"
 #import "NUGarden.h"
+#import "NUGarden+Project.h"
 
 @implementation NUMainBranchAperture
 
