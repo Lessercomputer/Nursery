@@ -14,6 +14,13 @@
 #import "NUBell.h"
 #import "NUGarden.h"
 
+@interface NULibrary (Private)
+
+- (NUBTree *)tree;
+- (void)setTree:(NUBTree *)aTree;
+
+@end
+
 @implementation NULibrary
 
 + (id)library

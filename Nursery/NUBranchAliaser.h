@@ -8,7 +8,7 @@
 
 #import "NUAliaser.h"
 
-@class NUBranchGarden, NUBranchNursery, NUPupilAlbum;
+@class NUBranchGarden, NUBranchNursery, NUPupilNote, NUPupilAlbum;
 @protocol NUMainBranchNurseryAssociation;
 
 extern NSString *NUPupilNoteNotFoundException;

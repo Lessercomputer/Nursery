@@ -13,6 +13,7 @@
 #import "NUGarden+Project.h"
 #import "NUNurseryRoot.h"
 #import "NUBell.h"
+#import "NUBell+Project.h"
 #import "NUBellBall.h"
 #import "NUMainBranchAperture.h"
 #import "NUBranchAperture.h"

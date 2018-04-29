@@ -16,7 +16,7 @@ typedef enum NUFarmOutStatus {
 } NUFarmOutStatus;
 
 @class NSMutableDictionary, NSMutableIndexSet;
-@class NUNursery, NUNurseryRoot, NUObjectWrapper, NUBell, NUCharacter, NUAliaser, NUGradeSeeker, NUMutableDictionary, NUU64ODictionary;
+@class NUNursery, NUNurseryRoot, NUObjectWrapper, NUBell, NUAliaser, NUGradeSeeker, NUMutableDictionary, NUU64ODictionary;
 
 extern NSString * const NUObjectLoadingException;
 

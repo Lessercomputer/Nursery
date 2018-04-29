@@ -13,6 +13,7 @@
 #import <Foundation/NSException.h>
 
 #import "NUCharacter.h"
+#import "NUCharacter+Project.h"
 #import "NUBell.h"
 #import "NUIvar.h"
 #import "NUGarden.h"

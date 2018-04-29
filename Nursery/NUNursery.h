@@ -11,7 +11,7 @@
 #import <Nursery/NUTypes.h>
 
 @class NSString;
-@class NUCharacter, NUBell, NUObjectWrapper, NUAliaser, NUNurseryRoot, NUGarden;
+@class NUGarden;
 
 extern NSString * const NUOOPNotFoundException;
 

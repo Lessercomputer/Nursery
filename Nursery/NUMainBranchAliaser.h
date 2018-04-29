@@ -8,7 +8,7 @@
 
 #import "NUAliaser.h"
 
-@class NUBell, NUMainBranchNursery,NUReversedObjectTable;
+@class NUPages, NUBell, NUMainBranchNursery, NUObjectTable, NUReversedObjectTable;
 
 @interface NUMainBranchAliaser : NUAliaser
 {

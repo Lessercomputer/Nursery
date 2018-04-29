@@ -9,6 +9,7 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSException.h>
 
+#import "NUAliaser+Project.h"
 #import "NUMainBranchAliaser.h"
 #import "NUMainBranchNursery.h"
 #import "NUMainBranchNursery+Project.h"
@@ -26,6 +27,7 @@
 #import "NUSpaces.h"
 #import "NUCharacter.h"
 #import "NUBell.h"
+#import "NUBell+Project.h"
 #import "NUBellBall.h"
 #import "NURegion.h"
 #import "NUU64ODictionary.h"

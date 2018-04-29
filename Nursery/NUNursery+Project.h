@@ -8,6 +8,8 @@
 
 #import "NUNursery.h"
 
+@class NUCharacter, NUBell, NUObjectWrapper, NUAliaser, NUNurseryRoot;
+
 @interface NUNursery (Grade)
 
 - (NUUInt64)latestGrade:(NUGarden *)sender;

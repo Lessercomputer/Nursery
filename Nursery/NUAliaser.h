@@ -11,7 +11,7 @@
 #import <Nursery/NUTypes.h>
 
 @class NSMutableArray;
-@class NUGarden, NUPages, NUCodingContext, NUIndexArray, NUObjectTable, NUBell, NUPupilNote, NUCharacter, NUQueue, NUU64ODictionary;
+@class NUGarden, NUIndexArray, NUBell, NUCharacter, NUQueue;
 
 extern NSString *NUObjectLocationNotFoundException;
 extern NSString *NUBellBallNotFoundException;
@@ -40,89 +40,40 @@ extern NSString *NUAliaserCannotDecodeObjectException;
 @interface NUAliaser (Accessing)
 
 - (NUGarden *)garden;
-- (void)setGarden:(NUGarden *)aGarden;
-
-- (NSMutableArray *)contexts;
-- (void)setContexts:(NSMutableArray *)aContexts;
-
-- (NSMutableArray *)roots;
-- (void)setRoots:(NSMutableArray *)aRoots;
-
-- (NUQueue *)objectsToEncode;
-- (void)setObjectsToEncode:(NUQueue *)anObjectsToEncode;
-
-- (NSMutableArray *)encodedPupils;
-- (void)setEncodedPupils:(NSMutableArray *)anEncodedPupils;
 
 - (NUUInt64)indexedIvarOffset;
-- (void)setIndexedIvarOffset:(NUUInt64)anOffset;
 - (NUUInt64)indexedIvarsSize;
-- (void)setIndexedIvarsSize:(NUUInt64)aSize;
-
 - (NUCharacter *)character;
-
 - (NUUInt64)rootOOP;
 
-- (NUUInt64)grade;
-- (NUUInt64)gradeForSave;
 
 @end
 
 @interface NUAliaser (Testing)
 
-- (BOOL)isForMainBranch;
-
 - (BOOL)containsValueForKey:(NSString *)aKey;
-
-@end
-
-@interface NUAliaser (Bell)
-
-- (NUBell *)allocateBellForObject:(id)anObject;
-
-@end
-
-@interface NUAliaser (Contexts)
-
-- (NUCodingContext *)currentContext;
-- (void)pushContext:(NUCodingContext *)aContext;
-- (NUCodingContext *)popContext;
 
 @end
 
 @interface NUAliaser (Encoding)
 
-- (void)encodeObjects;
-- (void)encodeRoots;
-- (void)encodeChangedObjects;
-
-- (void)encodeObjectsFromStarter;
-- (void)encodeObjectReally:(id)anObject;
-- (void)ensureCharacterRegistration:(NUCharacter *)aCharacter;
-- (void)prepareCodingContextForEncode:(id)anObject;
-- (NUU64ODictionary *)reducedEncodedPupilsDictionary:(NSArray *)anEncodedPupils;
-- (NSArray *)reducedEncodedPupilsFor:(NSArray *)anEncodedPupils with:(NUU64ODictionary *)aReducedEncodedPupilsDictionary;
-- (NUUInt64)sizeOfEncodedObjects:(NSArray *)aReducedEncodedPupils;
-- (NUUInt64)sizeOfEncodedObjects:(NSArray *)aReducedEncodedPupils with:(NUU64ODictionary *)aReducedEncodedPupilsDictionary;
-- (void)objectDidEncode:(NUBell *)aBell;
-- (id)nextObjectToEncode;
-
-- (void)validateGardenOfEncodingObject:(id)anObject;
-
 - (void)encodeObject:(id)anObject;
-- (NUUInt64)preEncodeObject:(id)anObject;
-- (void)encodeBOOL:(BOOL)aValue;
+
 - (void)encodeInt8:(NUInt8)aValue;
 - (void)encodeInt16:(NUInt16)aValue;
 - (void)encodeInt32:(NUInt32)aValue;
 - (void)encodeInt64:(NUInt64)aValue;
+
 - (void)encodeUInt8:(NUUInt8)aValue;
 - (void)encodeUInt16:(NUUInt16)aValue;
 - (void)encodeUInt32:(NUUInt32)aValue;
 - (void)encodeUInt64:(NUUInt64)aValue;
 - (void)encodeUInt64Array:(NUUInt64 *)aValues count:(NUUInt64)aCount;
+
 - (void)encodeFloat:(NUFloat)aValue;
 - (void)encodeDouble:(NUDouble)aValue;
+- (void)encodeBOOL:(BOOL)aValue;
+
 - (void)encodeRegion:(NURegion)aValue;
 - (void)encodeRange:(NSRange)aValue;
 - (void)encodePoint:(NSPoint)aValue;
@@ -159,28 +110,24 @@ extern NSString *NUAliaserCannotDecodeObjectException;
 
 @interface NUAliaser (Decoding)
 
-- (NSMutableArray *)decodeRoots;
-- (NSMutableArray *)decodeObjectsFromStarter;
-
 - (id)decodeObject;
 - (id)decodeObjectReally;
-- (id)decodeObjectForOOP:(NUUInt64)aRawOOP really:(BOOL)aReallyDecode;
-- (id)decodeObjectForBell:(NUBell *)aBell;
-- (void)prepareCodingContextForDecode:(NUBell *)aBell;
-- (id)decodeObjectForBell:(NUBell *)aBell classOOP:(NUUInt64)aClassOOP;
-- (void)ensureCharacterForDecoding:(NUCharacter *)aCharacter;
-- (BOOL)decodeBOOL;
+
 - (NUInt8)decodeInt8;
 - (NUInt16)decodeInt16;
 - (NUInt16)decodeInt32;
 - (NUInt64)decodeInt64;
+
 - (NUUInt8)decodeUInt8;
 - (NUUInt16)decodeUInt16;
 - (NUUInt32)decodeUInt32;
 - (NUUInt64)decodeUInt64;
 - (void)decodeUInt64Array:(NUUInt64 *)aValues count:(NUUInt64)aCount;
+
 - (NUFloat)decodeFloat;
 - (NUDouble)decodeDouble;
+- (BOOL)decodeBOOL;
+
 - (NURegion)decodeRegion;
 - (NSRange)decodeRange;
 - (NSPoint)decodePoint;
@@ -215,21 +162,6 @@ extern NSString *NUAliaserCannotDecodeObjectException;
 
 - (void)moveUp:(id)anObject;
 - (void)moveUp:(id)anObject ignoreGradeAtCallFor:(BOOL)anIgnoreFlag;
-- (void)prepareCodingContextForMoveUp:(NUBell *)aBell;
-
-- (NUUInt64)objectLocationForBell:(NUBell *)aBell gradeInto:(NUUInt64 *)aGrade;
 
 @end
 
-@interface NUAliaser (ObjectSpace)
-
-- (NUUInt64)computeSizeOfObject:(id)anObject;
-
-@end
-
-@interface NUAliaser (Pupil)
-
-- (void)fixProbationaryOOPsInPupil:(NUPupilNote *)aPupilNote;
-- (void)fixProbationaryOOPAtOffset:(NUUInt64)anIvarOffset inPupil:(NUPupilNote *)aPupilNote character:(NUCharacter *)aCharacter;
-
-@end

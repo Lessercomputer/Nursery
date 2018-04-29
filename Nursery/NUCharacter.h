@@ -69,7 +69,6 @@ extern NSString *NUCharacterInvalidObjectFormatException;
 - (id)initWithName:(NSString *)aName super:(NUCharacter *)aSuper;
 
 - (NUCharacter *)superCharacter;
-- (void)setSuperCharacter:(NUCharacter *)aSuper;
 
 - (NUObjectFormat)format;
 - (void)setFormat:(NUObjectFormat)aFormat;
@@ -78,10 +77,8 @@ extern NSString *NUCharacterInvalidObjectFormatException;
 - (void)setVersion:(NUUInt32)aVersion;
 
 - (NSString *)name;
-- (void)setName:(NSString *)aName;
 
 - (NSMutableArray *)ivars;
-- (void)setIvars:(NSMutableArray *)anIvars;
 
 - (void)addOOPIvarWithName:(NSString *)aName;
 - (void)addInt8IvarWithName:(NSString *)aName;
@@ -103,7 +100,6 @@ extern NSString *NUCharacterInvalidObjectFormatException;
 - (void)addIvarWithName:(NSString *)aName type:(NUIvarType)aType;
 - (void)addIvar:(NUIvar *)anIvar;
 
-- (void)setAllOOPIvars:(NSArray *)anOOPIvars;
 - (NSArray *)allOOPIvars;
 - (NSUInteger)allOOPIvarsCount;
 - (NUIvar *)ivarInAllOOPIvarsAt:(NSUInteger)anIndex;
@@ -112,7 +108,6 @@ extern NSString *NUCharacterInvalidObjectFormatException;
 - (NSArray *)copyAllIvars;
 - (NSArray *)allIvars;
 - (NSDictionary *)allIvarDictionary;
-- (void)setAllIvars:(NSArray *)anIvars;
 - (NSArray *)getAllIvars;
 - (NSDictionary *)allIvarDictionaryFrom:(NSArray *)anIvars;
 
@@ -123,7 +118,6 @@ extern NSString *NUCharacterInvalidObjectFormatException;
 - (NSArray *)ancestors;
 
 - (NSMutableSet *)subCharacters;
-- (void)setSubCharacters:(NSMutableSet *)aSubCharacters;
 
 - (void)addSubCharacter:(NUCharacter *)aCharacter;
 - (void)removeSubCharacter:(NUCharacter *)aCharacter;
@@ -138,7 +132,6 @@ extern NSString *NUCharacterInvalidObjectFormatException;
 
 - (NSString *)fullName;
 - (NSString *)getFullName;
-- (void)setFullName:(NSString *)aFullName;
 
 - (Class)targetClass;
 - (void)setTargetClass:(Class)aClass;

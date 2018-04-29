@@ -8,6 +8,8 @@
 
 #import "NUGarden.h"
 
+@class NUCharacter;
+
 @interface NUGarden (ProjectAccessing)
 
 - (NUUInt64)ID;

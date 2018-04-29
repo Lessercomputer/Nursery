@@ -9,6 +9,7 @@
 #import <Foundation/NSString.h>
 
 #import "NUBell.h"
+#import "NUBell+Project.h"
 #import "NUGarden.h"
 #import "NUGarden+Project.h"
 #import "NUCoding.h"
@@ -183,19 +184,15 @@
     [[self garden] invalidateObjectIfNotReferencedForBell:self];
 }
 
+- (void)setIsLoaded:(BOOL)aLoadedFlag
+{
+    isLoaded = aLoadedFlag;
+}
+
 - (NSString *)description
 {
 	return [NSString stringWithFormat:
 				@"<%@:%p>rawOOP: %llu", NSStringFromClass([self class]), self, [self OOP]];
-}
-
-@end
-
-@implementation NUBell (Private)
-
-- (void)setIsLoaded:(BOOL)aLoadedFlag
-{
-    isLoaded = aLoadedFlag;
 }
 
 @end

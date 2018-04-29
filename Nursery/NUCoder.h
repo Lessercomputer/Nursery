@@ -13,7 +13,6 @@
 
 @interface NUCoder : NSObject
 {
-
 }
 
 + (id)coder;

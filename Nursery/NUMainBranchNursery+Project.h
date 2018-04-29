@@ -8,6 +8,9 @@
 
 #import "NUMainBranchNursery.h"
 
+@class NSFileHandle;
+@class NUPages, NUMainBranchGarden, NUPairedMainBranchGarden;
+
 @interface NUMainBranchNursery (ProjectAccessing)
 
 - (NSFileHandle *)fileHandle;

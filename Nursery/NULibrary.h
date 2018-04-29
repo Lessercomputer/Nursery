@@ -53,9 +53,3 @@
 @interface NULibrary (Coding) <NUCoding>
 @end
 
-@interface NULibrary (Private)
-
-- (NUBTree *)tree;
-- (void)setTree:(NUBTree *)aTree;
-
-@end

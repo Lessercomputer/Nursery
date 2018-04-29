@@ -30,42 +30,18 @@
 - (id)initWithBall:(NUBellBall)aBall isLoaded:(BOOL)anIsLoaded garden:(NUGarden *)aGarden;
 
 - (NUBellBall)ball;
-- (void)setBall:(NUBellBall)aBall;
-
 - (NUUInt64)OOP;
-- (void)setOOP:(NUUInt64)anOOP;
-
 - (NUUInt64)grade;
-- (void)setGrade:(NUUInt64)aGrade;
-
 - (NUUInt64)gradeAtCallFor;
-- (void)setGradeAtCallFor:(NUUInt64)aGrade;
-
-- (NUUInt64)gradeForSeeker;
-- (void)setGradeForSeeker:(NUUInt64)aGrade;
-
 - (NUGarden *)garden;
-- (void)setGarden:(NUGarden *)aGarden;
 
 - (id)object;
-- (void)setObject:(id)anObject;
-
-- (id)loadObject;
 
 - (BOOL)isLoaded;
 - (BOOL)hasObject;
 - (BOOL)isEqualToBell:(NUBell *)anOOP;
 
 - (void)markChanged;
-
-- (void)invalidate;
-- (void)invalidateObjectIfNotReferenced;
-
-@end
-
-@interface NUBell (Private)
-
-- (void)setIsLoaded:(BOOL)aLoadedFlag;
 
 @end
 
