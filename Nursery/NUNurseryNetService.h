@@ -26,7 +26,7 @@ typedef enum : NSUInteger {
     NUNurseryNetServiceStatusFailed
 } NUNurseryNetServiceStatus;
 
-@class NUMainBranchNursery, NUNurseryNetResponder;
+@class NUMainBranchNursery;
 
 @interface NUNurseryNetService : NSObject <NSNetServiceDelegate>
 
@@ -35,9 +35,5 @@ typedef enum : NSUInteger {
 
 - (void)start;
 - (void)stop;
-
-- (NUMainBranchNursery *)nursery;
-
-- (void)netResponderDidStop:(NUNurseryNetResponder *)sender;
 
 @end
