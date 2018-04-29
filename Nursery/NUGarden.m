@@ -555,9 +555,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         {
             Class aClass = aClasses[i];
             
-            if (!class_isMetaClass(aClass)
-                && [self class:aClass isKindOfClass:[NSObject class]]
-				&& [self classAutomaticallyEstablishCharacter:aClass])
+            if ([self classAutomaticallyEstablishCharacter:aClass])
                 [aClass characterOn:self];
         }
         free(aClasses);
