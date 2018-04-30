@@ -26,12 +26,6 @@
 
 @end
 
-@interface NUNursery (Testing)
-
-- (BOOL)isMainBranch;
-
-@end
-
 @interface NUNursery (Private)
 
 - (BOOL)open;

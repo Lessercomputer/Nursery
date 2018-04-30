@@ -41,6 +41,11 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 
 @implementation NUMainBranchNursery (InitializingAndRelease)
 
++ (instancetype)nursery
+{
+    return [self nurseryWithContentsOfFile:nil];
+}
+
 + (id)nurseryWithContentsOfFile:(NSString *)aFilePath
 {
 	return [[[self alloc] initWithContentsOfFile:aFilePath] autorelease];
@@ -101,6 +106,12 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 - (NSString *)filePath
 {
 	return filePath;
+}
+
+- (void)setFilePath:(NSString *)aFilePath
+{
+    [filePath autorelease];
+    filePath = [aFilePath copy];
 }
 
 - (NSFileHandle *)fileHandle
@@ -293,12 +304,6 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 @end
 
 @implementation NUMainBranchNursery (Private)
-
-- (void)setFilePath:(NSString *)aFilePath
-{
-    [filePath autorelease];
-	filePath = [aFilePath copy];
-}
 
 - (void)setSpaces:(NUSpaces *)aSpaces
 {

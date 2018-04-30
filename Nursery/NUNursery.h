@@ -38,6 +38,12 @@ typedef enum : NSUInteger {
 
 @end
 
+@interface NUNursery (Testing)
+
+- (BOOL)isMainBranch;
+
+@end
+
 @interface NUNursery (Garden)
 
 - (NUGarden *)makeGarden;

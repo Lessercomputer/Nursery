@@ -37,7 +37,6 @@
 
 @interface NUMainBranchNursery (Private)
 
-- (void)setFilePath:(NSString *)aFilePath;
 - (void)setSpaces:(NUSpaces *)aSpaces;
 - (void)setObjectTable:(NUObjectTable *)anObjectTable;
 - (void)setReversedObjectTable:(NUReversedObjectTable *)aReversedObjectTable;

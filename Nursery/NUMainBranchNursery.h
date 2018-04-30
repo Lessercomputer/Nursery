@@ -29,6 +29,7 @@
 
 @interface NUMainBranchNursery (InitializingAndRelease)
 
++ (instancetype)nursery;
 + (id)nurseryWithContentsOfFile:(NSString *)aFilePath;
 
 - (id)initWithContentsOfFile:(NSString *)aFilePath;
@@ -38,6 +39,7 @@
 @interface NUMainBranchNursery (Accessing)
 
 - (NSString *)filePath;
+- (void)setFilePath:(NSString *)aFilePath;
 
 - (NUUInt64)grade;
 
