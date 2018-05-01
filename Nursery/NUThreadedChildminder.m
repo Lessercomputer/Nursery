@@ -8,6 +8,7 @@
 
 #import <Foundation/NSLock.h>
 #import <Foundation/NSThread.h>
+#import <Foundation/NSString.h>
 
 #import "NUThreadedChildminder.h"
 #import "NUMainBranchNursery.h"
@@ -55,9 +56,16 @@ const int NUThreadedChildminderTerminateCondition   = 2;
     garden = aGarden;
 }
 
+- (NSString *)threadName
+{
+    return [NSString stringWithFormat:@"org.nursery-framework.%@", self];
+}
+
 - (void)prepare
 {
-	[NSThread detachNewThreadSelector:@selector(startThread:) toTarget:self withObject:nil];
+    NSThread *aThread = [[[NSThread alloc] initWithTarget:self selector:@selector(startThread:) object:nil] autorelease];
+    [aThread setName:[self threadName]];
+    [aThread start];
 }
 
 - (void)start

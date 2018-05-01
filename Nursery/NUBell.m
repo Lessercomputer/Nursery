@@ -53,6 +53,8 @@
 
 - (void)dealloc
 {
+    [object setBell:nil];
+    
     [object release];
     object = nil;
     

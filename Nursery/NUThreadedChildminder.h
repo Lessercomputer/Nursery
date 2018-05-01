@@ -27,6 +27,8 @@
 - (NUGarden *)garden;
 - (void)setGarden:(NUGarden *)aGarden;
 
+- (NSString *)threadName;
+
 - (void)prepare;
 - (void)start;
 - (void)startWithoutWait;
