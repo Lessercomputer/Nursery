@@ -758,9 +758,41 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 - (BOOL)classAutomaticallyEstablishCharacter:(Class)aClass
 {
-    Method aMethod = class_getClassMethod(aClass, @selector(automaticallyEstablishCharacter));
+    const char *aClassName = class_getName(aClass);
     
-    return aMethod && [aClass automaticallyEstablishCharacter];
+    if (!objc_getClass(aClassName))
+        return NO;
+    
+    Class aMetaClass = objc_getMetaClass(aClassName);
+    
+    do
+    {
+        unsigned int aCountOfMethods = 0;
+        Method *aMethodList = class_copyMethodList(aMetaClass, &aCountOfMethods);
+        BOOL aMethodIsFound = NO;
+        
+        for (unsigned i = 0; i < aCountOfMethods; i++)
+        {
+            Method aMethod = aMethodList[i];
+            
+            if (method_getName(aMethod) == @selector(automaticallyEstablishCharacter))
+            {
+                aMethodIsFound = YES;
+                break;
+            }
+        }
+        
+        free(aMethodList);
+        
+        if (aMethodIsFound)
+            return [aClass automaticallyEstablishCharacter];
+        
+        aMetaClass = class_getSuperclass(aMetaClass);
+        aClassName = class_getName(aMetaClass);
+    }
+    while (aMetaClass);
+    
+    return NO;
 }
 
 - (void)setKeyObject:(NUObjectWrapper *)anObjectWrapper
