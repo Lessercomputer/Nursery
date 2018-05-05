@@ -18,6 +18,8 @@
 #import "NUMainBranchAliaser.h"
 #import "NUNurseryRoot.h"
 #import "NUBell.h"
+#import "NUMainBranchGradeSeeker.h"
+#import "NUMainBranchAperture.h"
 
 @implementation NUMainBranchGarden
 
@@ -29,6 +31,21 @@
     }
     
     return self;
+}
+
++ (Class)aliaserClass
+{
+    return [NUMainBranchAliaser class];
+}
+
++ (Class)gradeSeekerClass
+{
+    return [NUMainBranchGradeSeeker class];
+}
+
++ (Class)apertureClass
+{
+    return [NUAperture class];
 }
 
 - (void)dealloc

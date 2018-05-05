@@ -51,8 +51,8 @@
 
 - (void)encodeWithAliaser:(NUAliaser *)anAliaser
 {
-	[anAliaser encodeObject:characters];
-	[anAliaser encodeObject:userRoot];
+    [anAliaser encodeObject:characters forKey:@"characters"];
+	[anAliaser encodeObject:userRoot forKey:@"userRoot"];
 }
 
 - (id)initWithAliaser:(NUAliaser *)anAliaser
@@ -71,7 +71,7 @@
 - (void)decodeIvarsWithAliaser:(NUAliaser *)anAliaser
 {
     NUSetIvar(&characters, [anAliaser decodeObjectReally]);
-    NUSetIvar(&userRoot, [anAliaser decodeObject]);
+    NUSetIvar(&userRoot, [anAliaser decodeObjectForKey:@"userRoot"]);
 }
 
 - (NUBell *)bell

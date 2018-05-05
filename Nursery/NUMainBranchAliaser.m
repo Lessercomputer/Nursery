@@ -189,7 +189,7 @@
         anObjectLocation = [self allocateObjectSpaceFor:aBell];
     else
     {
-        NURegion aPreviousRegion = NUMakeRegion(anObjectLocation, [self previousSizeOfObjectForBellBall:[aBell ball]]);
+        NURegion aPreviousRegion = NUMakeRegion(anObjectLocation, [self sizeOfObjectForBellBall:[aBell ball]]);
         NUUInt64 aCurrentObjectSize = [self computeSizeOfObject:[aBell object]];
         
         if (aPreviousRegion.length != aCurrentObjectSize)
@@ -223,12 +223,12 @@
     return anObjectLocation;
 }
 
-- (NUUInt64)previousSizeOfObject:(id)anObject
+- (NUUInt64)sizeOfObject:(id)anObject
 {
-	return [self previousSizeOfObjectForBellBall:[[[self garden] bellForObject:anObject] ball]];
+	return [self sizeOfObjectForBellBall:[[[self garden] bellForObject:anObject] ball]];
 }
 
-- (NUUInt64)previousSizeOfObjectForBellBall:(NUBellBall)aBellBall
+- (NUUInt64)sizeOfObjectForBellBall:(NUBellBall)aBellBall
 {
 	NUUInt64 aLocation = [[[self nursery] objectTable] objectLocationFor:aBellBall];
     if (aLocation == NUNotFound64) [[NSException exceptionWithName:NUObjectLocationNotFoundException reason:NUObjectLocationNotFoundException userInfo:nil] raise];

@@ -161,8 +161,12 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
 {
     NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindOpenGardenResponse];
     
+    [[self nursery] open];
+    
     NUUInt64 aPairID = [[self nursery] newGardenID];
-    [[self pairedGardens] setObject:[[self nursery] makePairdGarden] forKey:@(aPairID)];
+    NUPairedMainBranchGarden *aPairedMainBranchGarden = [[self nursery] makePairdGarden];
+    
+    [[self pairedGardens] setObject:aPairedMainBranchGarden forKey:@(aPairID)];
     
     [aResponse addArgumentOfTypeUInt64WithValue:aPairID];
 
@@ -182,8 +186,8 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
 - (NUNurseryNetMessage *)responseForRootOOP
 {
     NUUInt64 aPairID = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
-    NUPairedMainBranchGarden *aPairedMainBranchGarden = [[self pairedGardens] objectForKey:@(aPairID)];
-    
+    NUPairedMainBranchGarden *aPairedMainBranchGarden = [self pairedMainBranchGardenFor:aPairID];
+        
     NUUInt64 aRootOOP = [[aPairedMainBranchGarden pairedMainBranchAliaser] rootOOP];
     
     NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindRootOOPResponse];

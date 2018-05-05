@@ -50,8 +50,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 
 + (id)aliaserWithGarden:(NUGarden *)aGarden
 {
-    Class aClass = [aGarden isForMainBranch] ? ([aGarden isKindOfClass:[NUPairedMainBranchGarden class]] ? [NUPairedMainBranchAliaser class] : [NUMainBranchAliaser class]) : [NUBranchAliaser class];
-	return [[[aClass alloc] initWithGarden:aGarden] autorelease];
+	return [[[self alloc] initWithGarden:aGarden] autorelease];
 }
 
 - (id)initWithGarden:(NUGarden *)aGarden

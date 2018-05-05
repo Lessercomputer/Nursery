@@ -19,14 +19,14 @@
 
 @implementation NUPairedMainBranchGarden
 
-+ (id)gardenWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
-{
-    return [[[self alloc] initWithNursery:aNursery grade:aGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:aRetainFlag] autorelease];
-}
-
 - (NUPairedMainBranchAliaser *)pairedMainBranchAliaser
 {
     return (NUPairedMainBranchAliaser *)[self aliaser];
+}
+
++ (Class)aliaserClass
+{
+    return [NUPairedMainBranchAliaser class];
 }
 
 @end

@@ -38,8 +38,8 @@
 - (NUUInt64)ensureObjectSpaceFor:(NUBell *)aBell;
 - (NUUInt64)allocateObjectSpaceFor:(NUBell *)aBell;
 - (NUUInt64)reallocateObjectSpaceFor:(NUBell *)aBell oldSpace:(NURegion)anOldRegion withNewSize:(NUUInt64)aNewSize;
-- (NUUInt64)previousSizeOfObject:(id)anObject;
-- (NUUInt64)previousSizeOfObjectForBellBall:(NUBellBall)aBellBall;
+- (NUUInt64)sizeOfObject:(id)anObject;
+- (NUUInt64)sizeOfObjectForBellBall:(NUBellBall)aBellBall;
 
 - (NUUInt64)objectLocationForOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade gradeInto:(NUUInt64 *)aFoundGrade;
 

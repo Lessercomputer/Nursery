@@ -6,6 +6,7 @@
 //
 //
 
+#import "NUNursery+Project.h"
 #import "NUBranchNursery.h"
 #import "NUBranchNursery+Project.h"
 #import "NUGarden+Project.h"
@@ -30,6 +31,11 @@
     }
     
     return self;
+}
+
++ (Class)gardenClass
+{
+    return [NUBranchGarden class];
 }
 
 - (void)dealloc

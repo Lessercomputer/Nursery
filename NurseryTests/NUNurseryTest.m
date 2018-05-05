@@ -54,11 +54,11 @@ static NSString *NUNurseryTestFilePath = nil;
 - (void)testDoubleOpenNUNursery
 {
     NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    NUGarden *aGarden = [NUGarden gardenWithNursery:aNursery];
+    NUGarden *aGarden = [aNursery makeGarden];
     XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded, @"");
     
     NUNursery *aNursery2 = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    NUGarden *aGarden2 = [NUGarden gardenWithNursery:aNursery2];
+    NUGarden *aGarden2 = [aNursery2 makeGarden];
     [aGarden2 root];
     XCTAssertEqual([aNursery2 openStatus], NUNurseryOpenStatusClose);
 }
@@ -75,7 +75,7 @@ static NSString *NUNurseryTestFilePath = nil;
         @autoreleasepool
         {
             NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-            NUGarden *aGarden = [NUGarden gardenWithNursery:aNursery];
+            NUGarden *aGarden = [aNursery makeGarden];
             [aGarden setRoot:anObjects];
             XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded, @"");
         }
@@ -88,14 +88,14 @@ static NSString *NUNurseryTestFilePath = nil;
     @autoreleasepool
     {
         NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-        NUGarden *aGarden = [NUGarden gardenWithNursery:aNursery];
+        NUGarden *aGarden = [aNursery makeGarden];
         [aGarden setRoot:theRootObject];
         XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded, @"");
         XCTAssertEqualObjects(theRootObject, [aGarden root], @"");
     };
 	
 	NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    NUGarden *aGarden = [NUGarden gardenWithNursery:aNursery];
+    NUGarden *aGarden = [aNursery makeGarden];
     XCTAssertEqualObjects([aGarden root], theRootObject, @"");
 }
 

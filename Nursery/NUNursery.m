@@ -108,6 +108,11 @@ NUUInt64 NUFirstGardenID = 1000;
 
 @implementation NUNursery (Garden)
 
+- (Class)gardenClass
+{
+    return nil;
+}
+
 - (NUGarden *)makeGarden
 {
     return [self makeGardenWithGrade:NUNilGrade];
@@ -115,7 +120,7 @@ NUUInt64 NUFirstGardenID = 1000;
 
 - (NUGarden *)makeGardenWithGrade:(NUUInt64)aGrade
 {
-    NUGarden *aGarden = [NUGarden gardenWithNursery:self grade:aGrade usesGradeSeeker:YES];
+    NUGarden *aGarden = [[[self class] gardenClass] gardenWithNursery:self grade:aGrade usesGradeSeeker:YES];
     return aGarden;
 }
 

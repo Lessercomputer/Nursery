@@ -149,7 +149,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     NSLog(@"#paradeObject nextLocation:%llu bellBall:%@ freeRegion:%@", nextLocation, NUStringFromBellBall(aBellBall), NUStringFromRegion(aFreeRegion));
 #endif
     
-    NUUInt64 anObjectSize = [(NUMainBranchAliaser *)[[self garden] aliaser] previousSizeOfObjectForBellBall:aBellBall];
+    NUUInt64 anObjectSize = [(NUMainBranchAliaser *)[[self garden] aliaser] sizeOfObjectForBellBall:aBellBall];
     NURegion aNewFreeRegion = NUMakeRegion(aFreeRegion.location + anObjectSize, aFreeRegion.length);
     [[[self nursery] pages] moveBytesAt:nextLocation length:anObjectSize to:aFreeRegion.location buffer:aBuffer length:aBufferSize];
     //[[[self nursery] spaces] moveFreeSpaceAtLocation:aFreeRegion.location toLocation:aNewFreeRegion.location];

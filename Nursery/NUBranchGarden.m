@@ -12,7 +12,7 @@
 
 #import "NUGarden+Project.h"
 #import "NUBranchGarden.h"
-#import "NUGradeSeeker.h"
+#import "NUBranchGradeSeeker.h"
 #import "NUAliaser+Project.h"
 #import "NUBranchAliaser.h"
 #import "NUBell.h"
@@ -24,6 +24,7 @@
 #import "NUPupilAlbum.h"
 #import "NUU64ODictionary.h"
 #import "NUNurseryNetClient.h"
+#import "NUBranchAperture.h"
 
 @implementation NUBranchGarden
 
@@ -70,6 +71,21 @@
     @finally {
         [lock unlock];
     }
+}
+
++ (Class)aliaserClass
+{
+    return [NUBranchAliaser class];
+}
+
++ (Class)gradeSeekerClass
+{
+    return [NUBranchGradeSeeker class];
+}
+
++ (Class)apertureClass
+{
+    return [NUBranchAperture class];
 }
 
 @end
@@ -125,7 +141,7 @@
     if ([self ID] == NUNilGardenID)
     {
         [[self netClient] start];
-        [self setID:[[[self branchNursery] netClient] openGarden]];
+        [self setID:[[self netClient] openGarden]];
     }
         
     return [super loadNurseryRoot];

@@ -69,13 +69,18 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
         [self setReversedObjectTable:[[[NUReversedObjectTable alloc] initWithRootLocation:0 on:[self spaces]] autorelease]];
         [[self spaces] prepareNodeOOPToTreeDictionary];
         retainedGrades = [NSMutableDictionary new];
-        [self setSeeker:[NUSeeker seekerWithGarden:[NUGarden gardenWithNursery:self usesGradeSeeker:NO retainNursery:NO]]];
-        [self setParader:[NUParader paraderWithGarden:[NUGarden gardenWithNursery:self usesGradeSeeker:NO retainNursery:NO]]];
+        [self setSeeker:[NUSeeker seekerWithGarden:[[[self class] gardenClass] gardenWithNursery:self usesGradeSeeker:NO retainNursery:NO]]];
+        [self setParader:[NUParader paraderWithGarden:[[[self class] gardenClass] gardenWithNursery:self usesGradeSeeker:NO retainNursery:NO]]];
         [[self seeker] prepare];
         [[self parader] prepare];
     }
     
 	return self;
+}
+
++ (Class)gardenClass
+{
+    return [NUMainBranchGarden class];
 }
 
 - (void)dealloc

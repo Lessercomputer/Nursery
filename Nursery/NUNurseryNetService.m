@@ -22,6 +22,7 @@
 #import "NUNurseryNetService.h"
 #import "NUNurseryNetResponder.h"
 
+
 @class NSMutableArray, NSLock, NSCondition, NSRecursiveLock, NSException;
 
 NSString *NUNurseryNetServiceType = @"_nunurserynetservice._tcp.";
@@ -126,6 +127,8 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
             || [self status] == NUNurseryNetServiceStatusStopped)
         {
             [[self statusCondition] lock];
+            
+            [self setStatus:NUNurseryNetServiceStatusNone];
 
             NSThread *aThread = [[[NSThread alloc] initWithBlock:^{
                 [self startInNewThread];
@@ -218,6 +221,15 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
         
         [[self lock] unlock];
     }
+}
+
+- (BOOL)isRunning
+{
+    NUNurseryNetServiceStatus aStatus = [self status];
+    
+    return !(aStatus == NUNurseryNetServiceStatusNone
+             || aStatus == NUNurseryNetServiceStatusStopped
+             || aStatus == NUNurseryNetServiceStatusFailed);
 }
 
 - (NUNurseryNetServiceStatus)status

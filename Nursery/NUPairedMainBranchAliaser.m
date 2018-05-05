@@ -132,7 +132,7 @@
 //    NSLog(@"aPageStartingLocation: %llu aNextPageStartingLocation: %llu", aPageStartingLocation, aNextPageStartingLocation);
 //#endif
 
-    for (NUUInt64 aLocation = aPageStartingLocation; aLocation < aNextPageStartingLocation; aLocation += [self previousSizeOfObjectForBellBall:aBellBall])
+    for (NUUInt64 aLocation = aPageStartingLocation; aLocation < aNextPageStartingLocation; aLocation += [self sizeOfObjectForBellBall:aBellBall])
     {
         aBellBall = [[self reversedObjectTable] bellBallForObjectLocationGreaterThanOrEqualTo:aLocation];
                 
@@ -178,7 +178,7 @@
     
     aCharacterOOP = [[self pages] readUInt64At:anObjectLocation];
     aCharacter = [[self garden] objectForOOP:aCharacterOOP];
-    anObjectSize = [self previousSizeOfObjectForBellBall:aBellBall];
+    anObjectSize = [self sizeOfObjectForBellBall:aBellBall];
     
     aUInt64Value = NSSwapHostLongLongToBig(aBellBall.oop);
     [aData appendBytes:&aUInt64Value length:sizeof(NUUInt64)];

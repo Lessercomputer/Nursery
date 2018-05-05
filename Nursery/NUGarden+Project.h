@@ -42,6 +42,10 @@
 - (NUGradeSeeker *)gradeSeeker;
 - (void)setGradeSeeker:(NUGradeSeeker *)aGradeSeeker;
 
++ (Class)aliaserClass;
++ (Class)apertureClass;
++ (Class)gradeSeekerClass;
+
 @end
 
 @interface NUGarden (Bell)
@@ -115,7 +119,6 @@
 - (void)setID:(NUUInt64)anID;
 - (void)setIsInMoveUp:(BOOL)aFlag;
 
-- (BOOL)class:(Class)aClass isKindOfClass:(Class)anAnsestorClass;
 - (BOOL)classAutomaticallyEstablishCharacter:(Class)aClass;
 
 - (void)setKeyObject:(NUObjectWrapper *)anObjectWrapper;

@@ -25,9 +25,7 @@
 
 + (id)gradeSeekerWithGarden:(NUGarden *)aGarden
 {
-    Class aApertureClass = [aGarden isForMainBranch] ? [NUMainBranchAperture class] : [NUBranchAperture class];
-    Class aSeekerClass = [aGarden isForMainBranch] ? [NUMainBranchGradeSeeker class] : [NUBranchGradeSeeker class];
-    return [[[aSeekerClass alloc] initWithGarden:aGarden aperture:[aApertureClass apertureWithNursery:[aGarden nursery] garden:aGarden]] autorelease];
+    return [[[self alloc] initWithGarden:aGarden aperture:[[[aGarden class] apertureClass] apertureWithNursery:[aGarden nursery] garden:aGarden]] autorelease];
 }
 
 + (id)gradeSeekerWithGarden:(NUGarden *)aGarden aperture:(NUAperture *)aAperture

@@ -67,8 +67,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 + (id)gardenWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
 {
-    Class aGardenClass = [aNursery isMainBranch] ? [NUMainBranchGarden class] : [NUBranchGarden class];
-    return [[[aGardenClass alloc] initWithNursery:aNursery grade:aGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:aRetainFlag] autorelease];
+    return [[[self alloc] initWithNursery:aNursery grade:aGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:aRetainFlag] autorelease];
 }
 
 - (id)initWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
@@ -90,12 +89,13 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         [self setChangedObjects:[NUU64ODictionary dictionary]];
         [self setKeyObject:[NUObjectWrapper objectWrapperWithObject:nil]];
         [self setKeyBell:[NUBell bellWithBall:NUNotFoundBellBall garden:self]];
-        [self setAliaser:[NUAliaser aliaserWithGarden:self]];
+        [self setAliaser:[[[self class] aliaserClass] aliaserWithGarden:self]];
         [self setCharacters:[NUMutableDictionary dictionary]];
         [self setRetainedGrades:[NSMutableIndexSet indexSet]];
         [self establishSystemCharacters];
         usesGradeSeeker = aUsesGradeSeeker;
-        if (aUsesGradeSeeker) gradeSeeker = [[NUGradeSeeker gradeSeekerWithGarden:self] retain];
+        if (aUsesGradeSeeker)
+            gradeSeeker = [[[[self class] gradeSeekerClass] gradeSeekerWithGarden:self] retain];
         [[self gradeSeeker] prepare];
     }
     
@@ -744,16 +744,6 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     [[self systemCharacterOOPToClassDictionary] enumerateKeysAndObjectsUsingBlock:^(NSNumber *anOOP, Class aClass, BOOL *aStop) {
         [self markChangedObject:[self objectForOOP:[anOOP unsignedLongLongValue]]];
     }];
-}
-
-- (BOOL)class:(Class)aClass isKindOfClass:(Class)anAnsestorClass
-{
-	Class aSuperClass = aClass;
-	
-	while (aSuperClass && aSuperClass != anAnsestorClass)
-		aSuperClass = class_getSuperclass(aSuperClass);
-	
-	return aSuperClass ? YES : NO;
 }
 
 - (BOOL)classAutomaticallyEstablishCharacter:(Class)aClass
