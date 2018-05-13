@@ -197,41 +197,44 @@
 //#endif
 }
 
-- (NSArray *)pupilsFromData:(NSData *)aPupilData
+- (NSData *)dataFromPupilNotes:(NSArray *)aPupilNotes
 {
-    @try
+    NSMutableData *aData = [NSMutableData data];
+    
+    [aPupilNotes enumerateObjectsUsingBlock:^(NUPupilNote *  _Nonnull aPupilNote, NSUInteger idx, BOOL * _Nonnull stop) {
+        NUUInt64 aUInt64Value = NSSwapHostLongLongToBig([aPupilNote OOP]);
+        [aData appendBytes:&aUInt64Value length:sizeof(NUUInt64)];
+        aUInt64Value = NSSwapHostLongLongToBig([aPupilNote grade]);
+        [aData appendBytes:&aUInt64Value length:sizeof(NUUInt64)];
+        aUInt64Value = NSSwapHostLongLongToBig([aPupilNote size]);
+        [aData appendBytes:&aUInt64Value length:sizeof(NUUInt64)];
+        [aData appendData:[aPupilNote data]];
+    }];
+    
+    return aData;
+}
+
+- (NSArray *)pupilNotesFromData:(NSData *)aPupilData
+{
+    NSMutableArray *aPupils = [NSMutableArray array];
+    NUUInt8 *aPupilDataBtyes = (NUUInt8 *)[aPupilData bytes];
+    NUPupilNote *aPupilNote;
+    NUUInt64 i = 0;
+    
+    while(i < [aPupilData length])
     {
-        NSMutableArray *aPupils = [NSMutableArray array];
-        NUUInt8 *aPupilDataBtyes = (NUUInt8 *)[aPupilData bytes];
-        NUPupilNote *aPupilNote;
-        NUUInt64 i = 0;
+        NUUInt64 anOOP = NSSwapBigLongLongToHost(*((NUUInt64 *)&(aPupilDataBtyes[i])));
+        i += sizeof(NUUInt64);
+        NUUInt64 aSize = NSSwapBigLongLongToHost(*((NUUInt64 *)&(aPupilDataBtyes[i])));
+        i += sizeof(NUUInt64);
         
-        while(i < [aPupilData length])
-        {
-            NUUInt64 anOOP = NSSwapBigLongLongToHost(*((NUUInt64 *)&(aPupilDataBtyes[i])));
-            i += sizeof(NUUInt64);
-            NUUInt64 aSize = NSSwapBigLongLongToHost(*((NUUInt64 *)&(aPupilDataBtyes[i])));
-            i += sizeof(NUUInt64);
-            
-//            if (aSize > 10000)
-//                NSLog(@"in pupilsFromData:, aSize > 1000:%llu", aSize);
-            
-            aPupilNote = [NUPupilNote pupilNoteWithOOP:anOOP grade:[self gradeForSave] size:aSize bytes:(NUUInt8 *)&(aPupilDataBtyes[i])];
-//            if (aSize != [aPupilNote size])
-//                NSLog(@"aSize != [aPupilNote size], %llu:%llu", aSize, [aPupilNote size]);
-            [aPupils addObject:aPupilNote];
-            i += [aPupilNote size];
-    //        NSLog(@"i += [aPupilNote size]:%llu",i);
-        }
+        aPupilNote = [NUPupilNote pupilNoteWithOOP:anOOP grade:[self gradeForSave] size:aSize bytes:(NUUInt8 *)&(aPupilDataBtyes[i])];
         
-//        NSLog(@"In pupilsFromData:,i:%llu", i);
-        
-        return aPupils;
-    } @catch (NSException *exception)
-    {
-        NSLog(@"%@", exception);
-        @throw exception;
+        [aPupils addObject:aPupilNote];
+        i += [aPupilNote size];
     }
+    
+    return aPupils;
 }
 
 - (void)fixProbationaryOOPsInPupils

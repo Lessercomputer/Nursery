@@ -112,7 +112,7 @@
                 [[self aliaser] setRoots:[NSMutableArray arrayWithObject:[self nurseryRoot]]];
             
             [[self aliaser] encodeObjects];
-            NSData *anEncodedObjectsData = [[self branchAliaser] encodedPupilData];
+            NSData *anEncodedObjectsData = [[self branchAliaser] encodedPupilNotesData];
             aFarmOutStatus = [[[self branchNursery] netClient] farmOutPupils:anEncodedObjectsData rootOOP:[[[self nurseryRoot] bell] OOP] gardenWithID:[self ID] fixedOOPs:&aFixedOOPs latestGrade:&aLatestGrade];
                         
             if (aFarmOutStatus == NUFarmOutStatusSucceeded)

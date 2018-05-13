@@ -9,6 +9,7 @@
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSThread.h>
 #import <Foundation/NSData.h>
+#import <Foundation/NSArray.h>
 
 #import "NUNurseryNetResponder.h"
 #import "NUNurseryNetService.h"
@@ -21,6 +22,7 @@
 #import "NUGarden+Project.h"
 #import "NUPairedMainBranchGarden.h"
 #import "NUPairedMainBranchAliaser.h"
+#import "NUBranchAliaser.h"
 #import "NUPupilNoteCache.h"
 
 const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
@@ -281,16 +283,25 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
     BOOL aContainsFellowPupils = [[[self receivedMessage] argumentAt:3] BOOLFromValue];
     
     NUPairedMainBranchGarden *aPairdMainBranchGarden = [self pairedMainBranchGardenFor:aPairID];
-    
-//    NSArray *aPupils = [[self pupilNoteCache] pupilNoteForOOP:anOOP grade:aGrade containsFellowPupils:aContainsFellowPupils];
-//    if (aPupils)
-//        ;
 
-    NSData *aPupilsData = [aPairdMainBranchGarden callForPupilWithOOP:anOOP  gradeLessThanOrEqualTo:aGrade containsFellowPupils:aContainsFellowPupils];
+    NSArray *aPupilNotes = nil;
+    NUPupilNote *aPupilNote = [[self pupilNoteCache] pupilNoteForOOP:anOOP grade:aGrade containsFellowPupils:aContainsFellowPupils maxPupilNotesSizeInBytes:1024 * 4 * 4 pupilNotesInto:&aPupilNotes];
+    NSData *aPupilNotesData = nil;
+    
+    if (aPupilNote)
+    {
+        aPupilNotesData = [[aPairdMainBranchGarden pairedMainBranchAliaser] dataFromPupilNotes:aPupilNotes];
+    }
+    else
+    {
+        aPupilNotesData = [aPairdMainBranchGarden callForPupilWithOOP:anOOP gradeLessThanOrEqualTo:aGrade containsFellowPupils:aContainsFellowPupils];
+        aPupilNotes = [NUBranchAliaser pupilNotesFromPupilNoteData:aPupilNotesData pupilNoteOOP:anOOP pupilNoteInto:NULL];
+        [[self pupilNoteCache] addPupilNotes:aPupilNotes grade:aGrade];
+    }
     
     NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindCallForPupilResponse];
     
-    [aResponse addArgumentOfTypeBytesWithValue:(void *)[aPupilsData bytes] length:[aPupilsData length]];
+    [aResponse addArgumentOfTypeBytesWithValue:(void *)[aPupilNotesData bytes] length:[aPupilNotesData length]];
     
     return aResponse;
 }

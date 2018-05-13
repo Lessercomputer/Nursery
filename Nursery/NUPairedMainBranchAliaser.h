@@ -29,7 +29,8 @@
 - (void)addPupilDataAtLocation:(NUUInt64)anObjectLocation toData:(NSMutableData *)aData;
 - (void)addPupilDataWithBellBall:(NUBellBall)aBellBall toData:(NSMutableData *)aData;
 
-- (NSArray *)pupilsFromData:(NSData *)aPupilData;
+- (NSData *)dataFromPupilNotes:(NSArray *)aPupilNotes;
+- (NSArray *)pupilNotesFromData:(NSData *)aPupilData;
 
 - (void)fixProbationaryOOPsInPupils;
 - (NUBellBall)fixedBellBallForPupilWithOOP:(NUUInt64)anOOP;

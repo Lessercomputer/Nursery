@@ -163,24 +163,30 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
 
 - (void)startInNewThread
 {
-    [self prepareListeningSocket];
-    
-    [self setNetService:[[[NSNetService alloc] initWithDomain:@"" type:NUNurseryNetServiceType name:[self netServiceName] port:[self port]] autorelease]];
-    [[self netService] setDelegate:self];
-    [[self netService] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    
-    [[self netService] publish];
+    @autoreleasepool
+    {
+        [self prepareListeningSocket];
 
+        [self setNetService:[[[NSNetService alloc] initWithDomain:@"" type:NUNurseryNetServiceType name:[self netServiceName] port:[self port]] autorelease]];
+        [[self netService] setDelegate:self];
+        [[self netService] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+
+        [[self netService] publish];
+    }
+    
     @try
     {
         while ([self status] != NUNurseryNetServiceStatusStopped)
         {
-            [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:NUNurseryNetServiceRunLoopRunningTimeInterval]];
-            
-            if ([self status] == NUNurseryNetServiceStatusShouldStop)
+            @autoreleasepool
             {
-                [self setStatus:NUNurseryNetServiceStatusStopping];
-                [[self netService] stop];
+                [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:NUNurseryNetServiceRunLoopRunningTimeInterval]];
+                
+                if ([self status] == NUNurseryNetServiceStatusShouldStop)
+                {
+                    [self setStatus:NUNurseryNetServiceStatusStopping];
+                    [[self netService] stop];
+                }
             }
         }
     }
@@ -404,6 +410,11 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
     [[self netResponders] removeObject:sender];
     
     [[self netRespondersLock] unlock];
+}
+
+- (NUPupilNoteCache *)pupilNoteCache
+{
+    return pupilNoteCache;
 }
 
 @end

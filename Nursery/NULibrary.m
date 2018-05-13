@@ -104,7 +104,7 @@
 
 - (void)enumerateKeysAndObjectsUsingBlock:(void (^)(id aKey, id anObj, BOOL *aStop))aBlock
 {
-    [self enumerateKeysAndObjectsWithOptions:NSEnumerationConcurrent usingBlock:aBlock];
+    [self enumerateKeysAndObjectsWithOptions:0 usingBlock:aBlock];
 }
 
 -(void)enumerateKeysAndObjectsWithOptions:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
@@ -114,12 +114,12 @@
 
 - (void)enumerateKeysAndObjectsWithKeyGreaterThan:(id)aKey orEqual:(BOOL)anOrEqualFlag options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
 {
-    [self enumerateKeysAndObjectsWithKeyGreaterThan:aKey orEqual:anOrEqualFlag options:anOpts usingBlock:aBlock];
+    [self enumerateKeysAndObjectsWithKeyGreaterThan:aKey orEqual:anOrEqualFlag andKeyLessThan:nil orEqual:YES options:anOpts usingBlock:aBlock];
 }
 
 - (void)enumerateKeysAndObjectsWithKeyLessThan:(id)aKey orEqual:(BOOL)anOrEqualFlag options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
 {
-    [self enumerateKeysAndObjectsWithKeyGreaterThan:aKey orEqual:anOrEqualFlag options:anOpts usingBlock:aBlock];
+    [self enumerateKeysAndObjectsWithKeyGreaterThan:nil orEqual:YES andKeyLessThan:aKey orEqual:anOrEqualFlag options:anOpts usingBlock:aBlock];
 }
 
 - (void)enumerateKeysAndObjectsWithKeyGreaterThan:(id)aKey1 orEqual:(BOOL)anOrEqualFlag1 andKeyLessThan:(id)aKey2 orEqual:(BOOL)anOrEqualFlag2 options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock

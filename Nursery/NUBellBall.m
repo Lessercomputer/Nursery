@@ -31,6 +31,21 @@ NUComparisonResult NUBellBallCompare(NUUInt8 *aBellBall1Pointer, NUUInt8 *aBellB
     }
 }
 
+NUComparisonResult NUBellBallCompareWithGradeOOP(NUUInt8 *aBellBall1Pointer, NUUInt8 *aBellBall2Pointer)
+{
+    NUBellBall *aBellBall1 = (NUBellBall *)aBellBall1Pointer;
+    NUBellBall *aBellBall2 = (NUBellBall *)aBellBall2Pointer;
+    
+    if (aBellBall1->grade < aBellBall2->grade) return NUOrderedAscending;
+    else if (aBellBall1->grade > aBellBall2->grade) return NUOrderedDescending;
+    else
+    {
+        if (aBellBall1->oop < aBellBall2->oop) return NUOrderedAscending;
+        else if (aBellBall1->oop < aBellBall2->oop) return NUOrderedDescending;
+        else return NUOrderedSame;
+    }
+}
+
 NUBellBall NUMakeBellBall(NUUInt64 anOOP, NUUInt64 aGrade)
 {
     NUBellBall aBellBall;

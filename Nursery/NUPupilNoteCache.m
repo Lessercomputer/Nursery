@@ -79,12 +79,42 @@
     return aPupilNote;
 }
 
-- (NUPupilNote *)pupilNoteForOOP:(NUUInt64)anOOP grade:(NUUInt64)aGrade containsFellowPupils:(BOOL)aContainsFellowPupils
+- (NUPupilNote *)pupilNoteForOOP:(NUUInt64)anOOP grade:(NUUInt64)aGrade containsFellowPupils:(BOOL)aContainsFellowPupils maxPupilNotesSizeInBytes:(NUUInt64)aMaxPupilNotesSizeInBytes pupilNotesInto:(NSArray **)aPupilNotes
 {
-    if (!aContainsFellowPupils)
-        return [self pupilNoteForOOP:anOOP grade:aGrade];
+    __block NUPupilNote *aPupilNote = nil;
     
-    return nil;
+    if (!aContainsFellowPupils)
+    {
+        aPupilNote = [self pupilNoteForOOP:anOOP grade:aGrade];
+        return aPupilNote;
+    }
+    
+    NSMutableArray *aPupilNotesArray = [NSMutableArray array];
+    __block NUUInt64 aCurrentPupilNotesSizeInBytes = 0;
+    NUPupilNoteCacheKey *aKey = [NUPupilNoteCacheKey keyWithGrade:aGrade oop:anOOP];
+    [gradeAndOOPToLinkedListElementLibrary enumerateKeysAndObjectsWithKeyGreaterThan:aKey orEqual:YES options:0 usingBlock:^(NUPupilNoteCacheKey *aKey, NUPupilNoteCacheLinkedListElement *aLinkedListElement, BOOL *aStop) {
+        
+        if ([aKey bellBall].grade == aGrade)
+        {
+            if ([aKey bellBall].oop == anOOP)
+                aPupilNote = [aLinkedListElement pupilNote];
+            
+            if (aCurrentPupilNotesSizeInBytes + [[aLinkedListElement pupilNote] size] <= aMaxPupilNotesSizeInBytes)
+            {
+                [aPupilNotesArray addObject:[aLinkedListElement pupilNote]];
+                aCurrentPupilNotesSizeInBytes += [[aLinkedListElement pupilNote] size];
+            }
+            else
+                *aStop = YES;
+        }
+        else
+            *aStop = YES;
+    }];
+    
+    if (aPupilNotes)
+        *aPupilNotes = aPupilNotesArray;
+    
+    return aPupilNote;
 }
 
 - (void)addPupilNote:(NUPupilNote *)aPupilNote grade:(NUUInt64)aGrade
@@ -147,16 +177,36 @@
 {
     if (!aLinkedListElement) return;
     
-    if (head)
+    if ([aLinkedListElement previous] && [aLinkedListElement next])
     {
-        [head setPrevious:aLinkedListElement];
+        [[aLinkedListElement previous] setNext:[aLinkedListElement next]];
+        [[aLinkedListElement next] setPrevious:[aLinkedListElement previous]];
+        
+        [aLinkedListElement setPrevious:nil];
         [aLinkedListElement setNext:head];
         head = aLinkedListElement;
     }
+    else if ([aLinkedListElement previous])
+    {
+        [[aLinkedListElement previous] setNext:nil];
+    }
+    else if ([aLinkedListElement next])
+    {
+        [[aLinkedListElement next] setPrevious:nil];
+    }
     else
     {
-        head = aLinkedListElement;
-        tail = aLinkedListElement;
+        if (head)
+        {
+            [aLinkedListElement setNext:head];
+            [head setPrevious:aLinkedListElement];
+            head = aLinkedListElement;
+        }
+        else
+        {
+            head = aLinkedListElement;
+            tail = aLinkedListElement;
+        }
     }
 }
 

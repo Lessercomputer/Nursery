@@ -108,7 +108,7 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
     return aPupilNote;
 }
 
-- (NSArray *)pupilNotesFromPupilNoteData:(NSData *)aPupilNoteData pupilNoteOOP:(NUUInt64)aTargetOOP pupilNoteInto:(NUPupilNote **)aTargetPupilNote
++ (NSArray *)pupilNotesFromPupilNoteData:(NSData *)aPupilNoteData pupilNoteOOP:(NUUInt64)aTargetOOP pupilNoteInto:(NUPupilNote **)aTargetPupilNote
 {
     NSMutableArray *aPupils = [NSMutableArray array];
     NUUInt8 *aBytes = (NUUInt8 *)[aPupilNoteData bytes];
@@ -120,7 +120,7 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
         NUUInt64 aGrade;
         NUUInt64 aSize;
         NUPupilNote *aPupilNote;
-
+        
         aUInt64Value = *(NUUInt64 *)&aBytes[i];
         anOOP = NSSwapBigLongLongToHost(aUInt64Value);
         i += sizeof(NUUInt64);
@@ -130,15 +130,20 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
         aUInt64Value = *(NUUInt64 *)&aBytes[i];
         aSize = NSSwapBigLongLongToHost(aUInt64Value);
         i += sizeof(NUUInt64);
-
+        
         aPupilNote = [NUPupilNote pupilNoteWithOOP:anOOP grade:aGrade size:aSize bytes:&aBytes[i]];
         [aPupils addObject:aPupilNote];
         i += aSize;
         
-        if (anOOP == aTargetOOP) *aTargetPupilNote = aPupilNote;
+        if (anOOP == aTargetOOP && aTargetPupilNote) *aTargetPupilNote = aPupilNote;
     }
     
     return aPupils;
+}
+
+- (NSArray *)pupilNotesFromPupilNoteData:(NSData *)aPupilNoteData pupilNoteOOP:(NUUInt64)aTargetOOP pupilNoteInto:(NUPupilNote **)aTargetPupilNote
+{
+    return [[self class] pupilNotesFromPupilNoteData:aPupilNoteData pupilNoteOOP:aTargetOOP pupilNoteInto:aTargetPupilNote];
 }
 
 - (NUPupilNote *)currentPupilNote
@@ -173,55 +178,25 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 	[self pushContext:aContext];
 }
 
-- (NSData *)encodedPupilData
++ (NSData *)encodedPupilNotesDataFromPupilNotes:(NSArray *)aPupilNotes
 {
     NSMutableData *aData = [NSMutableData data];
-
-    [[self reducedEncodedPupils] enumerateObjectsUsingBlock:^(NUPupilNote * _Nonnull aPupilNote, NSUInteger idx, BOOL * _Nonnull stop) {
+    
+    [aPupilNotes enumerateObjectsUsingBlock:^(NUPupilNote * _Nonnull aPupilNote, NSUInteger idx, BOOL * _Nonnull stop) {
         NUUInt64 aValue = NSSwapHostLongLongToBig([aPupilNote OOP]);
         [aData appendBytes:&aValue length:sizeof(NUUInt64)];
-//        if ([aPupilNote size] > 10000)
-//            NSLog(@"[aPupilNote size] > 10000:%llu", [aPupilNote size]);
         aValue = NSSwapHostLongLongToBig([aPupilNote size]);
         [aData appendBytes:&aValue length:sizeof(NUUInt64)];
         [aData appendData:[aPupilNote data]];
     }];
     
-//    NSArray *aPupils = [self pupilsFromData:aData];
-//    NSLog(@"%@", aPupils);
-
-//    return [NSData dataWithBytes:[aData bytes] length:[aData length]];
-//    NSLog(@"In NUBranchAliaser encodedPupilData, aData length:%lu", [aData length]);
     return aData;
 }
 
-//- (NSArray *)pupilsFromData:(NSData *)aPupilData
-//{
-//    NSMutableArray *aPupils = [NSMutableArray array];
-//    NUUInt8 *aPupilDataBtyes = (NUUInt8 *)[aPupilData bytes];
-//    NUPupilNote *aPupilNote;
-//    NUUInt64 i = 0;
-//    
-//    while( i < [aPupilData length])
-//    {
-//        NUUInt64 anOOP = NSSwapBigLongLongToHost(*((NUUInt64 *)&(aPupilDataBtyes[i])));
-//        i += sizeof(NUUInt64);
-//        NUUInt64 aSize = NSSwapBigLongLongToHost(*((NUUInt64 *)&(aPupilDataBtyes[i])));
-//        i += sizeof(NUUInt64);
-//        
-//        if (aSize > 1000)
-//            NSLog(@"in pupilsFromData:, aSize > 1000:%llu", aSize);
-//        
-//        aPupilNote = [NUPupilNote pupilNoteWithOOP:anOOP grade:[self gradeForSave] size:aSize bytes:(NUUInt8 *)&(aPupilDataBtyes[i])];
-//        if (aSize != [aPupilNote size])
-//            NSLog(@"aSize != [aPupilNote size], %llu:%llu", aSize, [aPupilNote size]);
-//        [aPupils addObject:aPupilNote];
-//        i += [aPupilNote size];
-//        //NSLog(@"i += [aPupilNote size]:%llu",i);
-//    }
-//    
-//    return aPupils;
-//}
+- (NSData *)encodedPupilNotesData
+{
+    return [[self class] encodedPupilNotesDataFromPupilNotes:[self reducedEncodedPupils]];
+}
 
 @end
 

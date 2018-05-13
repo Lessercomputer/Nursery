@@ -70,7 +70,7 @@
             [[self pairedMainBranchAliaser] setGradeForSave:aNewGrade];
 
             
-            aPupils = [[self pairedMainBranchAliaser] pupilsFromData:aPupilData];
+            aPupils = [[self pairedMainBranchAliaser] pupilNotesFromData:aPupilData];
             [[self pairedMainBranchAliaser] setPupils:aPupils];
             
             if ([[self mainBranchNursery] rootOOP] == NUNilOOP)

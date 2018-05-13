@@ -33,7 +33,7 @@
 - (NUUInt64)cacheablePupilNoteMaxSizeInBytes;
 
 - (NUPupilNote *)pupilNoteForOOP:(NUUInt64)anOOP grade:(NUUInt64)aGrade;
-- (NUPupilNote *)pupilNoteForOOP:(NUUInt64)anOOP grade:(NUUInt64)aGrade containsFellowPupils:(BOOL)aContainsFellowPupils;
+- (NUPupilNote *)pupilNoteForOOP:(NUUInt64)anOOP grade:(NUUInt64)aGrade containsFellowPupils:(BOOL)aContainsFellowPupils maxPupilNotesSizeInBytes:(NUUInt64)aMaxPupilNotesSizeInBytes pupilNotesInto:(NSArray **)aPupilNotes;
 
 - (void)addPupilNote:(NUPupilNote *)aPupilNote grade:(NUUInt64)aGrade;
 - (void)addPupilNotes:(NSArray *)aPupilNotes grade:(NUUInt64)aGrade;

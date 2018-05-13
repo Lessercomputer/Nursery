@@ -234,37 +234,34 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
     
     while (![[self thread] isCancelled])
     {
-        [NSThread sleepForTimeInterval:NUNurseryNetClientSleepTimeInterval];
-        
-        [[self statusCondition] lock];
-        
-//        if (aShouldSetKeepAliveOptions && [[self inputStream] streamStatus] == NSStreamStatusOpen)
-//        {
-//            [self setKeepAliveOptionsForSocket:[self nativeSocketHandleForStream:[self inputStream]]];
-//            aShouldSetKeepAliveOptions = NO;
-//        }
-
-        if ([[self inputStream] streamStatus] == NSStreamStatusAtEnd)
-            [self setStatus:NUNurseryNetClientStatusDidFail];
-
-        switch ([self status])
+        @autoreleasepool
         {
-            case NUNurseryNetClientStatusSendingMessage:
-                if ([[self outputStream] hasSpaceAvailable])
-                    [self sendMessageOnStream];
-                break;
-            case NUNurseryNetClientStatusReceivingMessage:
-                if ([[self inputStream] hasBytesAvailable])
-                    [self receiveMessageOnStream];
-                break;
-            default:
-                break;
+            [NSThread sleepForTimeInterval:NUNurseryNetClientSleepTimeInterval];
+            
+            [[self statusCondition] lock];
+
+            if ([[self inputStream] streamStatus] == NSStreamStatusAtEnd)
+                [self setStatus:NUNurseryNetClientStatusDidFail];
+
+            switch ([self status])
+            {
+                case NUNurseryNetClientStatusSendingMessage:
+                    if ([[self outputStream] hasSpaceAvailable])
+                        [self sendMessageOnStream];
+                    break;
+                case NUNurseryNetClientStatusReceivingMessage:
+                    if ([[self inputStream] hasBytesAvailable])
+                        [self receiveMessageOnStream];
+                    break;
+                default:
+                    break;
+            }
+            
+            if (!([self isSendingMessage] || [self isReceivingMessage]))
+                [[self statusCondition] signal];
+            
+            [[self statusCondition] unlock];
         }
-        
-        if (!([self isSendingMessage] || [self isReceivingMessage]))
-            [[self statusCondition] signal];
-        
-        [[self statusCondition] unlock];
     }
 }
 

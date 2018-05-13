@@ -18,6 +18,7 @@ extern const NUUInt64 NUTemporaryGrade;
 extern const NUUInt64 NUNotFoundGrade;
 
 NUComparisonResult NUBellBallCompare(NUUInt8 *aBellBall1Pointer, NUUInt8 *aBellBall2Pointer);
+NUComparisonResult NUBellBallCompareWithGradeOOP(NUUInt8 *aBellBall1Pointer, NUUInt8 *aBellBall2Pointer);
 
 NUBellBall NUMakeBellBall(NUUInt64 anOOP, NUUInt64 aGrade);
 

@@ -31,6 +31,7 @@ extern NSString *NUPupilNoteNotFoundException;
 - (NUPupilNote *)callForPupilNoteWithBell:(NUBell *)aBell;
 - (NUPupilNote *)callForPupilNoteWithBellBall:(NUBellBall)aBellBall;
 - (NUPupilNote *)callForPupilNoteReallyWithOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade;
++ (NSArray *)pupilNotesFromPupilNoteData:(NSData *)aPupilNoteData pupilNoteOOP:(NUUInt64)aTargetOOP pupilNoteInto:(NUPupilNote **)aTargetPupilNote;
 - (NSArray *)pupilNotesFromPupilNoteData:(NSData *)aPupilNoteData pupilNoteOOP:(NUUInt64)aTargetOOP pupilNoteInto:(NUPupilNote **)aTargetPupilNote;
 
 - (NUPupilNote *)currentPupilNote;
@@ -39,6 +40,7 @@ extern NSString *NUPupilNoteNotFoundException;
 
 @interface NUBranchAliaser (Encoding)
 
-- (NSData *)encodedPupilData;
++ (NSData *)encodedPupilNotesDataFromPupilNotes:(NSArray *)aPupilNotes;
+- (NSData *)encodedPupilNotesData;
 
 @end
