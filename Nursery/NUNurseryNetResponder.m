@@ -21,6 +21,7 @@
 #import "NUGarden+Project.h"
 #import "NUPairedMainBranchGarden.h"
 #import "NUPairedMainBranchAliaser.h"
+#import "NUPupilNoteCache.h"
 
 const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
 
@@ -157,6 +158,11 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
     return [[self netService] nursery];
 }
 
+- (NUPupilNoteCache *)pupilNoteCache
+{
+    return [[self netService] pupilNoteCache];
+}
+
 - (NUNurseryNetMessage *)responseForOpenGarden
 {
     NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindOpenGardenResponse];
@@ -276,6 +282,10 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
     
     NUPairedMainBranchGarden *aPairdMainBranchGarden = [self pairedMainBranchGardenFor:aPairID];
     
+//    NSArray *aPupils = [[self pupilNoteCache] pupilNoteForOOP:anOOP grade:aGrade containsFellowPupils:aContainsFellowPupils];
+//    if (aPupils)
+//        ;
+
     NSData *aPupilsData = [aPairdMainBranchGarden callForPupilWithOOP:anOOP  gradeLessThanOrEqualTo:aGrade containsFellowPupils:aContainsFellowPupils];
     
     NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindCallForPupilResponse];

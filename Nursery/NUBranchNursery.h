@@ -8,11 +8,11 @@
 
 #import <Nursery/NUNursery.h>
 
-@class NUPupilAlbum, NUNurseryNetClient;
+@class NUPupilNoteCache, NUNurseryNetClient;
 
 @interface NUBranchNursery : NUNursery
 {
-    NUPupilAlbum *pupilAlbum;
+    NUPupilNoteCache *pupilNoteCache;
     NUNurseryNetClient *netClient;
 }
 

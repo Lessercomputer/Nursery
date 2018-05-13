@@ -21,7 +21,7 @@
 #import "NUNurseryRoot.h"
 #import "NUBranchNursery.h"
 #import "NUBranchNursery+Project.h"
-#import "NUPupilAlbum.h"
+#import "NUPupilNoteCache.h"
 #import "NUU64ODictionary.h"
 #import "NUNurseryNetClient.h"
 #import "NUBranchAperture.h"
@@ -181,7 +181,7 @@
         }
         
         [aPupilNote setGrade:aLatestGrade];
-        [[[self branchAliaser] pupilAlbum] addPupilNote:aPupilNote grade:aLatestGrade];
+        [[[self branchAliaser] pupilNoteCache] addPupilNote:aPupilNote grade:aLatestGrade];
     }];
 }
 

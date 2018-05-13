@@ -151,8 +151,8 @@
 		619B09131913EEC000A4BAA2 /* NUParader.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08461913EEBF00A4BAA2 /* NUParader.m */; };
 		619B09141913EEC000A4BAA2 /* NUAperture.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08471913EEBF00A4BAA2 /* NUAperture.h */; };
 		619B09151913EEC000A4BAA2 /* NUAperture.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08481913EEBF00A4BAA2 /* NUAperture.m */; };
-		619B09161913EEC000A4BAA2 /* NUPupilAlbum.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08491913EEBF00A4BAA2 /* NUPupilAlbum.h */; };
-		619B09171913EEC000A4BAA2 /* NUPupilAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B084A1913EEBF00A4BAA2 /* NUPupilAlbum.m */; };
+		619B09161913EEC000A4BAA2 /* NUPupilNoteCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08491913EEBF00A4BAA2 /* NUPupilNoteCache.h */; };
+		619B09171913EEC000A4BAA2 /* NUPupilNoteCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B084A1913EEBF00A4BAA2 /* NUPupilNoteCache.m */; };
 		619B09181913EEC000A4BAA2 /* NUPupilNote.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B084B1913EEBF00A4BAA2 /* NUPupilNote.h */; };
 		619B09191913EEC000A4BAA2 /* NUPupilNote.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B084C1913EEBF00A4BAA2 /* NUPupilNote.m */; };
 		619B091A1913EEC000A4BAA2 /* NURegion.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B084D1913EEBF00A4BAA2 /* NURegion.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -411,8 +411,8 @@
 		619B08461913EEBF00A4BAA2 /* NUParader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUParader.m; sourceTree = "<group>"; };
 		619B08471913EEBF00A4BAA2 /* NUAperture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = NUAperture.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		619B08481913EEBF00A4BAA2 /* NUAperture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = NUAperture.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		619B08491913EEBF00A4BAA2 /* NUPupilAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUPupilAlbum.h; sourceTree = "<group>"; };
-		619B084A1913EEBF00A4BAA2 /* NUPupilAlbum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUPupilAlbum.m; sourceTree = "<group>"; };
+		619B08491913EEBF00A4BAA2 /* NUPupilNoteCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUPupilNoteCache.h; sourceTree = "<group>"; };
+		619B084A1913EEBF00A4BAA2 /* NUPupilNoteCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUPupilNoteCache.m; sourceTree = "<group>"; };
 		619B084B1913EEBF00A4BAA2 /* NUPupilNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUPupilNote.h; sourceTree = "<group>"; };
 		619B084C1913EEBF00A4BAA2 /* NUPupilNote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUPupilNote.m; sourceTree = "<group>"; };
 		619B084D1913EEBF00A4BAA2 /* NURegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NURegion.h; sourceTree = "<group>"; };
@@ -712,8 +712,8 @@
 				619B08371913EEBF00A4BAA2 /* NUObjectWrapper.m */,
 				619B084B1913EEBF00A4BAA2 /* NUPupilNote.h */,
 				619B084C1913EEBF00A4BAA2 /* NUPupilNote.m */,
-				619B08491913EEBF00A4BAA2 /* NUPupilAlbum.h */,
-				619B084A1913EEBF00A4BAA2 /* NUPupilAlbum.m */,
+				619B08491913EEBF00A4BAA2 /* NUPupilNoteCache.h */,
+				619B084A1913EEBF00A4BAA2 /* NUPupilNoteCache.m */,
 				610E4BDF19151C29000D5247 /* CodingContexts */,
 				610E4BE019151CD3000D5247 /* Coders */,
 			);
@@ -1005,7 +1005,7 @@
 				B86D152320943B0000D95C4C /* NUGarden+Project.h in Headers */,
 				619B091A1913EEC000A4BAA2 /* NURegion.h in Headers */,
 				619B08BA1913EEC000A4BAA2 /* NUBellBall.h in Headers */,
-				619B09161913EEC000A4BAA2 /* NUPupilAlbum.h in Headers */,
+				619B09161913EEC000A4BAA2 /* NUPupilNoteCache.h in Headers */,
 				6172CCAA1FF8F6670037EE37 /* NUNurseryNetClient.h in Headers */,
 				619B090B1913EEC000A4BAA2 /* NUPage.h in Headers */,
 				619B08F31913EEC000A4BAA2 /* NUNSDictionary.h in Headers */,
@@ -1184,7 +1184,7 @@
 				619B088E1913EEC000A4BAA2 /* NUCharacter.m in Sources */,
 				619B08D61913EEC000A4BAA2 /* NUDateCoder.m in Sources */,
 				61785DFA20060AF800590C8D /* NUNurseryNetServiceIO.m in Sources */,
-				619B09171913EEC000A4BAA2 /* NUPupilAlbum.m in Sources */,
+				619B09171913EEC000A4BAA2 /* NUPupilNoteCache.m in Sources */,
 				619B09111913EEC000A4BAA2 /* NUPairedMainBranchGarden.m in Sources */,
 				619B08B21913EEC000A4BAA2 /* NUBranchGarden.m in Sources */,
 				619B08AB1913EEC000A4BAA2 /* NUGarden.m in Sources */,

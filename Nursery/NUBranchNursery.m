@@ -11,7 +11,7 @@
 #import "NUBranchNursery+Project.h"
 #import "NUGarden+Project.h"
 #import "NUBranchGarden.h"
-#import "NUPupilAlbum.h"
+#import "NUPupilNoteCache.h"
 #import "NUNurseryNetClient.h"
 
 
@@ -27,7 +27,7 @@
     if (self = [super init])
     {
         netClient = [[NUNurseryNetClient alloc] initWithServiceName:aServiceName];
-        pupilAlbum = [NUPupilAlbum new];
+        pupilNoteCache = [[NUPupilNoteCache alloc] initWithMaxCacheSizeInBytes:1024 * 1024 * 30 cacheablePupilNoteMaxSizeInBytes:1024 * 4];;
     }
     
     return self;
@@ -44,8 +44,8 @@
     [netClient stop];
     [netClient release];
     netClient = nil;
-    [pupilAlbum release];
-    pupilAlbum = nil;
+    [pupilNoteCache release];
+    pupilNoteCache = nil;
     
     [super dealloc];
 }
@@ -98,15 +98,15 @@
     netClient = [aNetClient retain];
 }
 
-- (NUPupilAlbum *)pupilAlbum
+- (NUPupilNoteCache *)pupilNoteCache
 {
-    return pupilAlbum;
+    return pupilNoteCache;
 }
 
-- (void)setPupilAlbum:(NUPupilAlbum *)aPupilAlbum
+- (void)setPupilNoteCache:(NUPupilNoteCache *)aPupilNoteCache
 {
-    [pupilAlbum autorelease];
-    pupilAlbum = [aPupilAlbum retain];
+    [pupilNoteCache autorelease];
+    pupilNoteCache = [aPupilNoteCache retain];
 }
 
 @end

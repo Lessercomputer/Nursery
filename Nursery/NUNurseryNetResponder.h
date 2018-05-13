@@ -9,7 +9,7 @@
 #import "NUNurseryNetServiceIO.h"
 
 @class NSMutableDictionary;
-@class NUNurseryNetService, NUPairedMainBranchGarden, NUMainBranchNursery;
+@class NUNurseryNetService, NUPairedMainBranchGarden, NUMainBranchNursery, NUPupilNoteCache;
 
 @interface NUNurseryNetResponder : NUNurseryNetServiceIO
 
@@ -26,6 +26,7 @@
 @interface NUNurseryNetResponder (Private)
 
 - (NUMainBranchNursery *)nursery;
+- (NUPupilNoteCache *)pupilNoteCache;
 
 - (NUNurseryNetMessage *)responseForOpenGarden;
 - (NUNurseryNetMessage *)responseForCloseGarden;

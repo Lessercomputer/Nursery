@@ -23,7 +23,7 @@
 #import "NUCodingContextWithPupilNote.h"
 #import "NUCoder.h"
 #import "NUPupilNote.h"
-#import "NUPupilAlbum.h"
+#import "NUPupilNoteCache.h"
 #import "NUGarden+Project.h"
 #import "NUBranchGarden.h"
 #import "NUU64ODictionary.h"
@@ -48,9 +48,9 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
     return (NUBranchNursery *)[[self garden] nursery];
 }
 
-- (NUPupilAlbum *)pupilAlbum
+- (NUPupilNoteCache *)pupilNoteCache
 {
-    return [[self branchNursery] pupilAlbum];
+    return [[self branchNursery] pupilNoteCache];
 }
 
 - (void)removeAllEncodedPupils
@@ -81,14 +81,15 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 
 - (NUPupilNote *)callForPupilNoteWithBellBall:(NUBellBall)aBellBall
 {
-    NUPupilNote *aPupilNote;
+    NUPupilNote *aPupilNote = nil;;
     
     if (aBellBall.grade == NUNilGrade)
-        aPupilNote = [[self pupilAlbum] pupilNoteForBellBall:NUMakeBellBall(aBellBall.oop, [self grade])];
+        aPupilNote = [[self pupilNoteCache] pupilNoteForOOP:aBellBall.oop grade:[self grade]];
     else
-        aPupilNote = [[self pupilAlbum] pupilNoteForBellBall:aBellBall];
+        NSLog(@"%@", NUStringFromBellBall(aBellBall));
     
-    if (!aPupilNote) aPupilNote = [self callForPupilNoteReallyWithOOP:aBellBall.oop gradeLessThanOrEqualTo:[self grade]];
+    if (!aPupilNote)
+        aPupilNote = [self callForPupilNoteReallyWithOOP:aBellBall.oop gradeLessThanOrEqualTo:[self grade]];
     
     return aPupilNote;
 }
@@ -99,7 +100,7 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
     NSData *aPupilNoteData = [aNetClient callForPupilWithOOP:anOOP gradeLessThanOrEqualTo:aGrade gardenWithID:[[self garden] ID] containsFellowPupils:YES];
     NUPupilNote *aPupilNote = nil;
     NSArray *aPupilNotes = [self pupilNotesFromPupilNoteData:aPupilNoteData pupilNoteOOP:anOOP pupilNoteInto:&aPupilNote];
-    [[self pupilAlbum] addPupilNotes:aPupilNotes grade:aGrade];
+    [[self pupilNoteCache] addPupilNotes:aPupilNotes grade:aGrade];
     
     if (!aPupilNote)
         [[NSException exceptionWithName:NUPupilNoteNotFoundException reason:NUPupilNoteNotFoundException userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@(anOOP),@"OOP", @(aGrade),@"Grade", nil]] raise];

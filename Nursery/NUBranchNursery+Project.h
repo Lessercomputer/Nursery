@@ -13,7 +13,7 @@
 - (NUNurseryNetClient *)netClient;
 - (void)setNetClient:(NUNurseryNetClient *)aNetClient;
 
-- (NUPupilAlbum *)pupilAlbum;
-- (void)setPupilAlbum:(NUPupilAlbum *)aPupilAlbum;
+- (NUPupilNoteCache *)pupilNoteCache;
+- (void)setPupilNoteCache:(NUPupilNoteCache *)aPupilNoteCache;
 
 @end

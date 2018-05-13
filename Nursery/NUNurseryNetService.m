@@ -21,6 +21,7 @@
 
 #import "NUNurseryNetService.h"
 #import "NUNurseryNetResponder.h"
+#import "NUPupilNoteCache.h"
 
 
 @class NSMutableArray, NSLock, NSCondition, NSRecursiveLock, NSException;
@@ -34,6 +35,7 @@ const NSTimeInterval NUNurseryNetServiceRunLoopRunningTimeInterval = 0.003;
 @interface NUNurseryNetService ()
 {
     NUNurseryNetServiceStatus status;
+    NUPupilNoteCache *pupilNoteCache;
 }
 
 @property (nonatomic, retain) NSNetService *netService;
@@ -71,6 +73,7 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
         status = NUNurseryNetServiceStatusNone;
         _statusCondition = [NSCondition new];
         _nursery = [aNursery retain];
+        pupilNoteCache = [[NUPupilNoteCache alloc] initWithMaxCacheSizeInBytes:1024 * 1024 * 300 cacheablePupilNoteMaxSizeInBytes:1024 * 4];
         _netServiceName = [aServiceName copy];
         _netResponders = [NSMutableArray new];
         _netRespondersLock = [NSRecursiveLock new];
@@ -98,6 +101,9 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
     
     [_netServiceName release];
     _netServiceName = nil;
+    
+    [pupilNoteCache release];
+    pupilNoteCache = nil;
     
     [_nursery release];
     _nursery = nil;

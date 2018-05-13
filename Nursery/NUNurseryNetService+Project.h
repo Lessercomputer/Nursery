@@ -8,12 +8,13 @@
 
 #import "NUNurseryNetService.h"
 
-@class NUNurseryNetResponder;
+@class NUNurseryNetResponder, NUPupilNoteCache;
 
 
 @interface NUNurseryNetService (Private)
 
 - (NUMainBranchNursery *)nursery;
+- (NUPupilNoteCache *)pupilNoteCache;
 
 - (void)netResponderDidStop:(NUNurseryNetResponder *)sender;
 
