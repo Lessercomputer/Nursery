@@ -252,7 +252,7 @@
 {
     NUBellBall anOtherBellBall = [anOtherKey bellBall];
     
-    return (NSComparisonResult)NUBellBallCompare((NUUInt8 *)&_bellBall, (NUUInt8 *)&anOtherBellBall);
+    return (NSComparisonResult)NUBellBallCompareWithGradeOOP((NUUInt8 *)&_bellBall, (NUUInt8 *)&anOtherBellBall);
 }
 
 @end
