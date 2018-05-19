@@ -234,6 +234,8 @@
 		B86D152D20958C9200D95C4C /* NUBell+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B86D152C20958C9200D95C4C /* NUBell+Project.h */; };
 		B86D152F2095EA9200D95C4C /* NUNurseryNetService+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B86D152E2095EA9200D95C4C /* NUNurseryNetService+Project.h */; };
 		B8BD5EAC2069058B00091994 /* SelfReferenceObject.m in Sources */ = {isa = PBXBuildFile; fileRef = B8BD5EAB2069058B00091994 /* SelfReferenceObject.m */; };
+		B8D59EB820AFC415009FC4A9 /* NUPairedMainBranchAperture.h in Headers */ = {isa = PBXBuildFile; fileRef = B8D59EB620AFC415009FC4A9 /* NUPairedMainBranchAperture.h */; };
+		B8D59EB920AFC415009FC4A9 /* NUPairedMainBranchAperture.m in Sources */ = {isa = PBXBuildFile; fileRef = B8D59EB720AFC415009FC4A9 /* NUPairedMainBranchAperture.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -497,6 +499,8 @@
 		B86D152E2095EA9200D95C4C /* NUNurseryNetService+Project.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NUNurseryNetService+Project.h"; sourceTree = "<group>"; };
 		B8BD5EAA2069058B00091994 /* SelfReferenceObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SelfReferenceObject.h; sourceTree = "<group>"; };
 		B8BD5EAB2069058B00091994 /* SelfReferenceObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SelfReferenceObject.m; sourceTree = "<group>"; };
+		B8D59EB620AFC415009FC4A9 /* NUPairedMainBranchAperture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUPairedMainBranchAperture.h; sourceTree = "<group>"; };
+		B8D59EB720AFC415009FC4A9 /* NUPairedMainBranchAperture.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUPairedMainBranchAperture.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -686,6 +690,8 @@
 				619B081E1913EEBF00A4BAA2 /* NUMainBranchAperture.m */,
 				619B07FA1913EEBF00A4BAA2 /* NUBranchAperture.h */,
 				619B07FB1913EEBF00A4BAA2 /* NUBranchAperture.m */,
+				B8D59EB620AFC415009FC4A9 /* NUPairedMainBranchAperture.h */,
+				B8D59EB720AFC415009FC4A9 /* NUPairedMainBranchAperture.m */,
 			);
 			name = Childminders;
 			sourceTree = "<group>";
@@ -992,6 +998,7 @@
 				619B094A1913EEC000A4BAA2 /* NUChangedRegionArray.h in Headers */,
 				619B09421913EEC000A4BAA2 /* NUReversedObjectTableLeaf.h in Headers */,
 				619B08DA1913EEC000A4BAA2 /* NUIndexArray.h in Headers */,
+				B8D59EB820AFC415009FC4A9 /* NUPairedMainBranchAperture.h in Headers */,
 				619B08991913EEC000A4BAA2 /* NUMainBranchNursery.h in Headers */,
 				619B09411913EEC000A4BAA2 /* NUReversedObjectTableBranch.h in Headers */,
 				619B09211913EEC000A4BAA2 /* NUSpaces.h in Headers */,
@@ -1163,6 +1170,7 @@
 				619B08A31913EEC000A4BAA2 /* NUNSURL.m in Sources */,
 				619B09501913EEC000A4BAA2 /* NULengthTreeBranch.m in Sources */,
 				619B08BB1913EEC000A4BAA2 /* NUBellBall.m in Sources */,
+				B8D59EB920AFC415009FC4A9 /* NUPairedMainBranchAperture.m in Sources */,
 				619B08971913EEC000A4BAA2 /* NUMainBranchAliaser.m in Sources */,
 				619B08931913EEC000A4BAA2 /* NUDictionaryCoder.m in Sources */,
 				619B091B1913EEC000A4BAA2 /* NURegion.m in Sources */,

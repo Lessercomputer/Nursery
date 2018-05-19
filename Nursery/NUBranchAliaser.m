@@ -83,13 +83,15 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 {
     NUPupilNote *aPupilNote = nil;;
     
-    if (aBellBall.grade == NUNilGrade)
-        aPupilNote = [[self pupilNoteCache] pupilNoteForOOP:aBellBall.oop grade:[self grade]];
-    else
-        NSLog(@"%@", NUStringFromBellBall(aBellBall));
+    aPupilNote = [[self pupilNoteCache] pupilNoteForOOP:aBellBall.oop grade:[self grade]];
     
     if (!aPupilNote)
         aPupilNote = [self callForPupilNoteReallyWithOOP:aBellBall.oop gradeLessThanOrEqualTo:[self grade]];
+//    else
+//    {
+//        [self setCacheHitCount:[self cacheHitCount] + 1];
+//        NSLog(@"branch aliaser cache hit count:%@", @([self cacheHitCount]));
+//    }
     
     return aPupilNote;
 }

@@ -23,9 +23,9 @@
 
 @interface NUPairedMainBranchAliaser (Pupil)
 
-- (NSData *)callForPupilWithOOP:(NUUInt64)anOOP containsFellowPupils:(BOOL)aContainsFellowPupils;
+- (NSData *)callForPupilWithOOP:(NUUInt64)anOOP containsFellowPupils:(BOOL)aContainsFellowPupils maxFellowPupilNotesSizeInBytes:(NUUInt64)aMaxFellowPupilNotesSizeInBytes;
 
-- (void)addPupilsDataFromLocation:(NUUInt64)anObjectLocation toData:(NSMutableData *)aData;
+- (void)addPupilsDataFromLocation:(NUUInt64)anObjectLocation toData:(NSMutableData *)aData maxFellowPupilNotesSizeInBytes:(NUUInt64)aMaxFellowPupilNotesSizeInBytes;
 - (void)addPupilDataAtLocation:(NUUInt64)anObjectLocation toData:(NSMutableData *)aData;
 - (void)addPupilDataWithBellBall:(NUBellBall)aBellBall toData:(NSMutableData *)aData;
 

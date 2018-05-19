@@ -92,7 +92,7 @@
 
 @implementation NUPairedMainBranchAliaser (Pupil)
 
-- (NSData *)callForPupilWithOOP:(NUUInt64)anOOP containsFellowPupils:(BOOL)aContainsFellowPupils
+- (NSData *)callForPupilWithOOP:(NUUInt64)anOOP containsFellowPupils:(BOOL)aContainsFellowPupils maxFellowPupilNotesSizeInBytes:(NUUInt64)aMaxFellowPupilNotesSizeInBytes
 {
     NSMutableData *aPupilsData = [NSMutableData data];
     
@@ -109,7 +109,7 @@
 //#endif
         
         if (aContainsFellowPupils)
-            [self addPupilsDataFromLocation:anObjectLocation toData:aPupilsData];
+            [self addPupilsDataFromLocation:anObjectLocation toData:aPupilsData maxFellowPupilNotesSizeInBytes:aMaxFellowPupilNotesSizeInBytes];
         else
             [self addPupilDataAtLocation:anObjectLocation toData:aPupilsData];
         
@@ -120,10 +120,10 @@
     }
 }
 
-- (void)addPupilsDataFromLocation:(NUUInt64)anObjectLocation toData:(NSMutableData *)aData
+- (void)addPupilsDataFromLocation:(NUUInt64)anObjectLocation toData:(NSMutableData *)aData maxFellowPupilNotesSizeInBytes:(NUUInt64)aMaxFellowPupilNotesSizeInBytes
 {
     NUUInt64 aPageStartingLocation = [[self pages] pageStatingLocationFor:anObjectLocation];
-    NUUInt64 aNextPageStartingLocation = aPageStartingLocation + [[self pages] pageSize] * 4;
+    NUUInt64 aNextPageStartingLocation = aPageStartingLocation + aMaxFellowPupilNotesSizeInBytes / [[self pages] pageSize] * [[self pages] pageSize];
     NUBellBall aBellBall;
     
 //#ifdef DEBUG

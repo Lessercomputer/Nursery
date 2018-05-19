@@ -48,6 +48,11 @@ typedef enum : NSUInteger {
 @property (nonatomic, readonly) BOOL isReceivingMessage;
 @property (nonatomic, retain) NSCondition *statusCondition;
 
+@property (nonatomic, retain) NSDate *baseCallDate;
+@property (nonatomic) NUUInt64 callCount;
+@property (nonatomic) NUUInt64 maxFellowPupilNotesSizeInBytes;
+@property (nonatomic) NUUInt64 totalCallCount;
+
 - (instancetype)initWithServiceName:(NSString *)aServiceName;
 
 - (void)start;

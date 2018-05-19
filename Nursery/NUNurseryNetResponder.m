@@ -24,6 +24,10 @@
 #import "NUPairedMainBranchAliaser.h"
 #import "NUBranchAliaser.h"
 #import "NUPupilNoteCache.h"
+#import "NUPairedMainBranchAperture.h"
+#import "NUBellBall.h"
+#import "NUPupilNote.h"
+#import "NUQueue.h"
 
 const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
 
@@ -60,17 +64,20 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
         
         while (![[self thread] isCancelled])
         {
-            [NSThread sleepForTimeInterval:NUNurseryNetResponderSleepTimeInterval];
-            
-            if ([[self inputStream] hasBytesAvailable])
-                 [self receiveMessageOnStream];
-                 
-            if ([[self outputStream] hasSpaceAvailable])
-                 [self sendMessageOnStream];
-            
-            if ([[self inputStream] streamStatus] == NSStreamStatusAtEnd
-                || [[self outputStream] streamStatus] == NSStreamStatusAtEnd)
-                [[self thread] cancel];
+            @autoreleasepool
+            {
+                [NSThread sleepForTimeInterval:NUNurseryNetResponderSleepTimeInterval];
+                
+                if ([[self inputStream] hasBytesAvailable])
+                    [self receiveMessageOnStream];
+                
+                if ([[self outputStream] hasSpaceAvailable])
+                    [self sendMessageOnStream];
+
+                if ([[self inputStream] streamStatus] == NSStreamStatusAtEnd
+                    || [[self outputStream] streamStatus] == NSStreamStatusAtEnd)
+                    [[self thread] cancel];
+            }
         }
         
         [[self inputStream] close];
@@ -281,29 +288,101 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
     NUUInt64 aGrade = [[[self receivedMessage] argumentAt:1] UInt64FromValue];
     NUUInt64 aPairID = [[[self receivedMessage] argumentAt:2] UInt64FromValue];
     BOOL aContainsFellowPupils = [[[self receivedMessage] argumentAt:3] BOOLFromValue];
-    
+    NUUInt64 aMaxFellowPupilNotesSizeInBytes = [[[self receivedMessage] argumentAt:4] UInt64FromValue];
     NUPairedMainBranchGarden *aPairdMainBranchGarden = [self pairedMainBranchGardenFor:aPairID];
+    
+    [self setMaxFellowPupilNotesSizeInBytes:aMaxFellowPupilNotesSizeInBytes];
+    
+    NSData *aPupilNotesData = [aPairdMainBranchGarden callForPupilWithOOP:anOOP gradeLessThanOrEqualTo:aGrade containsFellowPupils:aContainsFellowPupils maxFellowPupilNotesSizeInBytes:aMaxFellowPupilNotesSizeInBytes];
 
-    NSArray *aPupilNotes = nil;
-    NUPupilNote *aPupilNote = [[self pupilNoteCache] pupilNoteForOOP:anOOP grade:aGrade containsFellowPupils:aContainsFellowPupils maxPupilNotesSizeInBytes:1024 * 4 * 4 pupilNotesInto:&aPupilNotes];
-    NSData *aPupilNotesData = nil;
-    
-    if (aPupilNote)
-    {
-        aPupilNotesData = [[aPairdMainBranchGarden pairedMainBranchAliaser] dataFromPupilNotes:aPupilNotes];
-    }
-    else
-    {
-        aPupilNotesData = [aPairdMainBranchGarden callForPupilWithOOP:anOOP gradeLessThanOrEqualTo:aGrade containsFellowPupils:aContainsFellowPupils];
-        aPupilNotes = [NUBranchAliaser pupilNotesFromPupilNoteData:aPupilNotesData pupilNoteOOP:anOOP pupilNoteInto:NULL];
-        [[self pupilNoteCache] addPupilNotes:aPupilNotes grade:aGrade];
-    }
-    
     NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindCallForPupilResponse];
     
     [aResponse addArgumentOfTypeBytesWithValue:(void *)[aPupilNotesData bytes] length:[aPupilNotesData length]];
     
     return aResponse;
+}
+
+//- (NUNurseryNetMessage *)responseForCallForPupil
+//{
+//    NUUInt64 anOOP = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
+//    NUUInt64 aGrade = [[[self receivedMessage] argumentAt:1] UInt64FromValue];
+//    NUUInt64 aPairID = [[[self receivedMessage] argumentAt:2] UInt64FromValue];
+//    BOOL aContainsFellowPupils = [[[self receivedMessage] argumentAt:3] BOOLFromValue];
+//    NUUInt64 aMaxFellowPupilNotesSizeInBytes = [[[self receivedMessage] argumentAt:4] UInt64FromValue];
+//
+//    NUPairedMainBranchGarden *aPairdMainBranchGarden = [self pairedMainBranchGardenFor:aPairID];
+//    NSData *aPupilNotesData = nil;
+//    NSMutableArray *aPupilNotes = [NSMutableArray array];
+//
+//    //    NSLog(@"responseForCallForPupil:%@, id:%@", self, @(aPairID));
+//    //    if (aMaxFellowPupilNotesSizeInBytes > [self maxFellowPupilNotesSizeInBytes])
+//    //    {
+//    //        [self loadPupilNotesDataWithOOP:anOOP grade:aGrade garden:aPairdMainBranchGarden];
+//    //    }
+//
+//    [self setMaxFellowPupilNotesSizeInBytes:aMaxFellowPupilNotesSizeInBytes];
+//
+//    NUPupilNote *aPupilNote = [[self pupilNoteCache] pupilNoteForOOP:anOOP grade:aGrade];
+//
+//    if (!aPupilNote)
+//    {
+//        [self loadAndCachePupilNotesDataWithOOP:anOOP grade:aGrade garden:aPairdMainBranchGarden containsFellowPupils:aContainsFellowPupils];
+//    }
+//
+//    NUPairedMainBranchAperture *aPairedAperture = [NUPairedMainBranchAperture apertureWithNursery:[self nursery] garden:aPairdMainBranchGarden];
+//    NUQueue *anOOPQueue = [NUQueue queue];
+//    NSNumber *anOOPNumber = @(anOOP);
+//    NUUInt64 currentFellowPupilNotesSizeInBytes = 0;
+//
+//    [aPairedAperture setResponder:self];
+//
+//    [anOOPQueue push:anOOPNumber];
+//
+//    while ((anOOPNumber = [anOOPQueue pop]))
+//    {
+//        aPupilNote = [[self pupilNoteCache] pupilNoteForOOP:[anOOPNumber unsignedLongLongValue] grade:aGrade];
+//
+//        if (aPupilNote)
+//        {
+//            if (currentFellowPupilNotesSizeInBytes + [aPupilNote size] > [self maxFellowPupilNotesSizeInBytes])
+//                break;
+//
+//            currentFellowPupilNotesSizeInBytes += [aPupilNote size];
+//
+//            [aPupilNotes addObject:aPupilNote];
+//
+//            [aPairedAperture peekAt:[aPupilNote bellBall]];
+//
+//            while ([aPairedAperture hasNextFixedOOP])
+//            {
+//                NUUInt64 aNextOOP = [aPairedAperture nextFixedOOP];
+//                [anOOPQueue push:@(aNextOOP)];
+//            }
+//
+//            while ([aPairedAperture hasNextIndexedOOP])
+//            {
+//                NUUInt64 aNextOOP = [aPairedAperture nextIndexedOOP];
+//                [anOOPQueue push:@(aNextOOP)];
+//            }
+//        }
+//    }
+//
+//    aPupilNotesData = [[aPairdMainBranchGarden pairedMainBranchAliaser] dataFromPupilNotes:aPupilNotes];
+//
+//    NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindCallForPupilResponse];
+//
+//    [aResponse addArgumentOfTypeBytesWithValue:(void *)[aPupilNotesData bytes] length:[aPupilNotesData length]];
+//
+//    return aResponse;
+//}
+
+- (NSData *)loadAndCachePupilNotesDataWithOOP:(NUUInt64)anOOP grade:(NUUInt64)aGrade garden:(NUPairedMainBranchGarden *)aPairdMainBranchGarden containsFellowPupils:(BOOL)aContainsFellowPupils
+{
+    NSData *aPupilNotesData = [aPairdMainBranchGarden callForPupilWithOOP:anOOP gradeLessThanOrEqualTo:aGrade containsFellowPupils:aContainsFellowPupils maxFellowPupilNotesSizeInBytes:[self maxFellowPupilNotesSizeInBytes]];
+    NSArray *aPupilNotes = [NUBranchAliaser pupilNotesFromPupilNoteData:aPupilNotesData pupilNoteOOP:anOOP pupilNoteInto:NULL];
+    [[self pupilNoteCache] addPupilNotes:aPupilNotes grade:aGrade];
+    
+    return aPupilNotesData;
 }
 
 - (NUNurseryNetMessage *)responseForFarmOutPupils

@@ -285,7 +285,6 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 	[self objectDidEncode:[[self currentContext] bell]];
 	[[self garden] unmarkChangedObject:anObject];
 	[self popContext];
-
 }
 
 - (void)ensureCharacterRegistration:(NUCharacter *)aCharacter

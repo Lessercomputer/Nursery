@@ -24,6 +24,16 @@ const NUUInt64 NUNurseryNetworkerReadBufferSize = 4096;
 
 @implementation NUNurseryNetServiceIO
 
+- (instancetype)init
+{
+    if (self = [super init])
+    {
+        readBufferSize = NUNurseryNetworkerReadBufferSize;
+    }
+    
+    return self;
+}
+
 - (void)dealloc
 {
     [_inputStream close];
@@ -81,16 +91,17 @@ const NUUInt64 NUNurseryNetworkerReadBufferSize = 4096;
 - (void)receiveMessageOnStream
 {
     NUUInt8 *aReadBuffer = NULL;
-    NUUInt64 aReadBytesCount;
+    NUInt64 aReadBytesCount;
     
-    aReadBuffer = malloc(NUNurseryNetworkerReadBufferSize);
+    aReadBuffer = malloc([self readBufferSize]);
     
-    aReadBytesCount = [[self inputStream] read:aReadBuffer maxLength:NUNurseryNetworkerReadBufferSize];
+    aReadBytesCount = [[self inputStream] read:aReadBuffer maxLength:[self readBufferSize]];
     
-    if (aReadBytesCount && ![self inputData])
+    if (aReadBytesCount > 0  && ![self inputData])
         [self setInputData:[NSMutableData data]];
     
-    [[self inputData] appendBytes:aReadBuffer length:aReadBytesCount];
+    if (aReadBytesCount > 0)
+        [[self inputData] appendBytes:aReadBuffer length:aReadBytesCount];
         
     free(aReadBuffer);
     
@@ -116,6 +127,11 @@ const NUUInt64 NUNurseryNetworkerReadBufferSize = 4096;
 
 - (void)messageDidReceive
 {
+}
+
+- (NUUInt64)readBufferSize
+{
+    return readBufferSize;
 }
 
 - (int)nativeSocketHandleForStream:(NSStream *)aStream

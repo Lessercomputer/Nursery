@@ -18,6 +18,8 @@ extern NSString *NUPupilNoteNotFoundException;
 @property (nonatomic, retain) NSArray *reducedEncodedPupils;
 @property (nonatomic, retain) NUU64ODictionary *reducedEncodedPupilsDictionary;
 
+@property (nonatomic) NUUInt64 cacheHitCount;
+
 - (NUBranchGarden *)branchGarden;
 - (NUBranchNursery *)branchNursery;
 - (NUPupilNoteCache *)pupilNoteCache;

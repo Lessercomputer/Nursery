@@ -19,6 +19,7 @@ extern const NUUInt64 NUNurseryNetworkerReadBufferSize;
 {
     NSInputStream *_inputStream;
     NSOutputStream *_outputStream;
+    NUUInt64 readBufferSize;
 }
 
 @property (nonatomic, retain) NSInputStream *inputStream;
@@ -41,6 +42,7 @@ extern const NUUInt64 NUNurseryNetworkerReadBufferSize;
 - (void)receiveMessageOnStream;
 - (void)messageDidReceive;
 
+- (NUUInt64)readBufferSize;
 - (int)nativeSocketHandleForStream:(NSStream *)aStream;
 //- (void)setKeepAliveOptionsForSocket:(int)aSocket;
 

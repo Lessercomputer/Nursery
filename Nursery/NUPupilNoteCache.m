@@ -79,7 +79,7 @@
     return aPupilNote;
 }
 
-- (NUPupilNote *)pupilNoteForOOP:(NUUInt64)anOOP grade:(NUUInt64)aGrade containsFellowPupils:(BOOL)aContainsFellowPupils maxPupilNotesSizeInBytes:(NUUInt64)aMaxPupilNotesSizeInBytes pupilNotesInto:(NSArray **)aPupilNotes
+- (NUPupilNote *)pupilNoteForOOP:(NUUInt64)anOOP grade:(NUUInt64)aGrade containsFellowPupils:(BOOL)aContainsFellowPupils maxFellowPupilNotesSizeInBytes:(NUUInt64)aMaxFellowPupilNotesSizeInBytes pupilNotesInto:(NSArray **)aPupilNotes
 {
     __block NUPupilNote *aPupilNote = nil;
     
@@ -99,10 +99,11 @@
             if ([aKey bellBall].oop == anOOP)
                 aPupilNote = [aLinkedListElement pupilNote];
             
-            if (aCurrentPupilNotesSizeInBytes + [[aLinkedListElement pupilNote] size] <= aMaxPupilNotesSizeInBytes)
+            if (aCurrentPupilNotesSizeInBytes + [[aLinkedListElement pupilNote] size] <= aMaxFellowPupilNotesSizeInBytes)
             {
                 [aPupilNotesArray addObject:[aLinkedListElement pupilNote]];
                 aCurrentPupilNotesSizeInBytes += [[aLinkedListElement pupilNote] size];
+//                NSLog(@"oop:%@", @([[aLinkedListElement pupilNote] OOP]));
             }
             else
                 *aStop = YES;
