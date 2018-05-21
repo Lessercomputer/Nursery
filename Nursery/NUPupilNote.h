@@ -28,6 +28,7 @@
 - (void)setGrade:(NUUInt64)aGrade;
 - (NUBellBall)bellBall;
 - (void)setBellBall:(NUBellBall)aBellBall;
+- (NUUInt64)basicSizeForSerialization;
 - (NUUInt64)size;
 - (void)setSize:(NUUInt64)aSize;
 - (NUUInt64)isa;

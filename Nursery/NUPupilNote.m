@@ -91,6 +91,11 @@
     bellBall = aBellBall;
 }
 
+- (NUUInt64)basicSizeForSerialization
+{
+    return sizeof(NUUInt64) * 3;
+}
+
 - (NUUInt64)size
 {
     return [data length];

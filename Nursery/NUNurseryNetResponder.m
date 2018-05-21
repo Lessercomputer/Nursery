@@ -27,7 +27,8 @@
 #import "NUPairedMainBranchAperture.h"
 #import "NUBellBall.h"
 #import "NUPupilNote.h"
-#import "NUQueue.h"
+#import "NUQueueWithDepth.h"
+#import "NUObjectTable.h"
 
 const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
 
@@ -180,6 +181,7 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
     
     NUUInt64 aPairID = [[self nursery] newGardenID];
     NUPairedMainBranchGarden *aPairedMainBranchGarden = [[self nursery] makePairdGarden];
+    [aPairedMainBranchGarden loadNurseryRoot];
     
     [[self pairedGardens] setObject:aPairedMainBranchGarden forKey:@(aPairID)];
     
@@ -336,39 +338,61 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
     }
 
     NUPairedMainBranchAperture *aPairedAperture = [NUPairedMainBranchAperture apertureWithNursery:[self nursery] garden:aPairdMainBranchGarden];
-    NUQueue *anOOPQueue = [NUQueue queue];
+    NUQueue *aQueueOfOOPQueue = [NUQueue queue];
+    NUQueueWithDepth *anOOPQueue = [NUQueueWithDepth queue];
     NSNumber *anOOPNumber = @(anOOP);
     NUUInt64 currentFellowPupilNotesSizeInBytes = 0;
+    NUUInt64 aDepthLimit = 2;
 
     [aPairedAperture setResponder:self];
-
     [anOOPQueue push:anOOPNumber];
+    [aQueueOfOOPQueue push:anOOPQueue];
 
-    while ((anOOPNumber = [anOOPQueue pop]))
+    while ((anOOPQueue = [aQueueOfOOPQueue pop]))
     {
-        aPupilNote = [[self pupilNoteCache] pupilNoteForOOP:[anOOPNumber unsignedLongLongValue] grade:aGrade];
-
-        if (aPupilNote)
+        if ([anOOPQueue depth] <= aDepthLimit)
         {
-            if (currentFellowPupilNotesSizeInBytes + [aPupilNote size] > [self maxFellowPupilNotesSizeInBytes])
-                break;
-
-            currentFellowPupilNotesSizeInBytes += [aPupilNote size] + sizeof(NUUInt64) * 3;
-
-            [aPupilNotes addObject:aPupilNote];
-
-            [aPairedAperture peekAt:[aPupilNote bellBall]];
-
-            while ([aPairedAperture hasNextFixedOOP])
+            while ((anOOPNumber = [anOOPQueue pop]))
             {
-                NUUInt64 aNextOOP = [aPairedAperture nextFixedOOP];
-                [anOOPQueue push:@(aNextOOP)];
-            }
-
-            while ([aPairedAperture hasNextIndexedOOP])
-            {
-                NUUInt64 aNextOOP = [aPairedAperture nextIndexedOOP];
-                [anOOPQueue push:@(aNextOOP)];
+                NUUInt64 anOOP = [anOOPNumber unsignedLongLongValue];
+                NUQueueWithDepth *aReferensedOOPQueue = [NUQueueWithDepth queue];
+                
+                aPupilNote = [[self pupilNoteCache] pupilNoteForOOP:anOOP grade:aGrade];
+                
+                if (!aPupilNote)
+                {
+                    [self loadAndCachePupilNotesDataWithOOP:anOOP grade:aGrade garden:aPairdMainBranchGarden containsFellowPupils:aContainsFellowPupils];
+                    aPupilNote = [[self pupilNoteCache] pupilNoteForOOP:anOOP grade:aGrade];
+                }
+                
+                if (currentFellowPupilNotesSizeInBytes + [aPupilNote basicSizeForSerialization] + [aPupilNote size] > [self maxFellowPupilNotesSizeInBytes])
+                    break;
+                
+                currentFellowPupilNotesSizeInBytes += [aPupilNote basicSizeForSerialization] + [aPupilNote size];
+                
+                [aPupilNotes addObject:aPupilNote];
+                
+                if ([anOOPQueue depth] + 1 <= aDepthLimit)
+                {
+                    [aPairedAperture peekAt:NUMakeBellBall([aPupilNote OOP], aGrade)];
+                    
+                    while ([aPairedAperture hasNextFixedOOP])
+                    {
+                        NUUInt64 aNextOOP = [aPairedAperture nextFixedOOP];
+                        if (aNextOOP != NUNilOOP)
+                            [aReferensedOOPQueue push:@(aNextOOP)];
+                    }
+                    
+                    while ([aPairedAperture hasNextIndexedOOP])
+                    {
+                        NUUInt64 aNextOOP = [aPairedAperture nextIndexedOOP];
+                        if (aNextOOP != NUNilOOP)
+                            [aReferensedOOPQueue push:@(aNextOOP)];
+                    }
+                    
+                    [aReferensedOOPQueue setDepth:[anOOPQueue depth] + 1];
+                    [aQueueOfOOPQueue push:aReferensedOOPQueue];
+                }
             }
         }
     }
