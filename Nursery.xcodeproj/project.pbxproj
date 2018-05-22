@@ -227,6 +227,8 @@
 		B812EF8E2062725100BB7513 /* NUNodeDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = B812EF8C2062725100BB7513 /* NUNodeDictionary.m */; };
 		B848ECE820B2F56200B1C06E /* NUQueueWithDepth.h in Headers */ = {isa = PBXBuildFile; fileRef = B848ECE620B2F56200B1C06E /* NUQueueWithDepth.h */; };
 		B848ECE920B2F56200B1C06E /* NUQueueWithDepth.m in Sources */ = {isa = PBXBuildFile; fileRef = B848ECE720B2F56200B1C06E /* NUQueueWithDepth.m */; };
+		B861518820B3FED400862B9D /* NULazyMutableArray.h in Headers */ = {isa = PBXBuildFile; fileRef = B861518620B3FED400862B9D /* NULazyMutableArray.h */; };
+		B861518920B3FED400862B9D /* NULazyMutableArray.m in Sources */ = {isa = PBXBuildFile; fileRef = B861518720B3FED400862B9D /* NULazyMutableArray.m */; };
 		B86D152220943AF900D95C4C /* NUNursery+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B86D152120943AEF00D95C4C /* NUNursery+Project.h */; };
 		B86D152320943B0000D95C4C /* NUGarden+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B86D15202093FB2400D95C4C /* NUGarden+Project.h */; };
 		B86D152520943DA600D95C4C /* NUMainBranchNursery+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B86D152420943DA600D95C4C /* NUMainBranchNursery+Project.h */; };
@@ -493,6 +495,8 @@
 		B812EF8C2062725100BB7513 /* NUNodeDictionary.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUNodeDictionary.m; sourceTree = "<group>"; };
 		B848ECE620B2F56200B1C06E /* NUQueueWithDepth.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUQueueWithDepth.h; sourceTree = "<group>"; };
 		B848ECE720B2F56200B1C06E /* NUQueueWithDepth.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUQueueWithDepth.m; sourceTree = "<group>"; };
+		B861518620B3FED400862B9D /* NULazyMutableArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NULazyMutableArray.h; sourceTree = "<group>"; };
+		B861518720B3FED400862B9D /* NULazyMutableArray.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NULazyMutableArray.m; sourceTree = "<group>"; };
 		B86D15202093FB2400D95C4C /* NUGarden+Project.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NUGarden+Project.h"; sourceTree = "<group>"; };
 		B86D152120943AEF00D95C4C /* NUNursery+Project.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NUNursery+Project.h"; sourceTree = "<group>"; };
 		B86D152420943DA600D95C4C /* NUMainBranchNursery+Project.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NUMainBranchNursery+Project.h"; sourceTree = "<group>"; };
@@ -811,6 +815,8 @@
 				619B07C21913EEBF00A4BAA2 /* NUCharacterDictionary.m */,
 				619B08201913EEBF00A4BAA2 /* NUMutableDictionary.h */,
 				619B08211913EEBF00A4BAA2 /* NUMutableDictionary.m */,
+				B861518620B3FED400862B9D /* NULazyMutableArray.h */,
+				B861518720B3FED400862B9D /* NULazyMutableArray.m */,
 				619B08151913EEBF00A4BAA2 /* NULibrary.h */,
 				619B08161913EEBF00A4BAA2 /* NULibrary.m */,
 				619B08681913EEC000A4BAA2 /* NUComparator.h */,
@@ -983,6 +989,7 @@
 				619B088A1913EEC000A4BAA2 /* NUBell.h in Headers */,
 				619B08C01913EEC000A4BAA2 /* NUCodingContextWithPupilNote.h in Headers */,
 				61FD7A6E1FF9E4E2009ED9D5 /* NUNurseryNetResponder.h in Headers */,
+				B861518820B3FED400862B9D /* NULazyMutableArray.h in Headers */,
 				B86D152F2095EA9200D95C4C /* NUNurseryNetService+Project.h in Headers */,
 				619B08AA1913EEC000A4BAA2 /* NUGarden.h in Headers */,
 				619B08C11913EEC000A4BAA2 /* NUBranchGradeSeeker.h in Headers */,
@@ -1196,6 +1203,7 @@
 				619B08C81913EEC000A4BAA2 /* NUBranchAperture.m in Sources */,
 				61FD7A771FFA48E9009ED9D5 /* NUNurseryNetMessageArgument.m in Sources */,
 				619B08951913EEC000A4BAA2 /* NUGradeSeeker.m in Sources */,
+				B861518920B3FED400862B9D /* NULazyMutableArray.m in Sources */,
 				619B08CF1913EEC000A4BAA2 /* NUChangedRegionArray.m in Sources */,
 				619B088E1913EEC000A4BAA2 /* NUCharacter.m in Sources */,
 				619B08D61913EEC000A4BAA2 /* NUDateCoder.m in Sources */,
