@@ -9,8 +9,9 @@
 #import <Foundation/NSArray.h>
 #import <Nursery/NUTypes.h>
 #import <Nursery/NUCoding.h>
+#import <Nursery/NUMovingUp.h>
 
-@interface NULazyMutableArray : NSMutableArray <NUIndexedCoding>
+@interface NULazyMutableArray : NSMutableArray <NUIndexedCoding, NUMovingUp>
 {
     NUUInt64 *oops;
     id *objects;
@@ -19,5 +20,7 @@
 }
 
 @property (nonatomic, assign) NUBell *bell;
+
+- (void)grow;
 
 @end

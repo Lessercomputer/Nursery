@@ -44,7 +44,7 @@
 {
     if (index >= count)
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:nil userInfo:nil];
-    
+
     if (!oops)
         return objects[index];
     
@@ -62,7 +62,7 @@
 
 - (void)insertObject:(id)anObject atIndex:(NSUInteger)index
 {
-    if (index >= count || !anObject)
+    if (index > count || !anObject)
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:nil userInfo:nil];
 
     [self loadObjects];
@@ -70,12 +70,19 @@
     if (capacity <= count)
         [self grow];
     
-    if (index < count)
+    if (count && index < count)
     {
         NSUInteger anIndexToMove = count - 1;
         
-        for (; anIndexToMove >= index; anIndexToMove--)
+        while (YES)
+        {
             objects[anIndexToMove + 1] = objects[anIndexToMove];
+            
+            if (anIndexToMove > index)
+                anIndexToMove--;
+            else
+                break;
+        }
     }
     
     objects[index] = [anObject retain];
