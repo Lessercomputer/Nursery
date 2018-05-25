@@ -13,6 +13,7 @@
 #import "Person.h"
 #import "AllTypesObject.h"
 #import "SelfReferenceObject.h"
+#import "NULazyMutableArray.h"
 
 static NSString *NUNurseryTestFilePath = nil;
 
@@ -634,6 +635,29 @@ static NSString *NUNurseryTestFilePath = nil;
         XCTAssertEqual([aBell retainCount], anExpectedRetainCount);
 //        NSLog(@"retainCount of %@ is %@", aBell, @([aBell retainCount]));
     }
+}
+
+- (void)testSaveEmptyLazyMutableArray
+{
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NULazyMutableArray *aLazyArray = [NULazyMutableArray array];
+    NUGarden *aGarden = [aNursery makeGarden];
+    [aGarden setRoot:aLazyArray];
+    XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded, @"");
+    NUGarden *aGarden2 = [aNursery makeGarden];
+    XCTAssertEqualObjects(aLazyArray, [aGarden2 root], @"");
+}
+
+- (void)testSaveLazyMutableArray
+{
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NULazyMutableArray *aLazyArray = [NULazyMutableArray array];
+    NUGarden *aGarden = [aNursery makeGarden];
+    [aGarden setRoot:aLazyArray];
+    [aLazyArray addObject:@"first"];
+    XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded, @"");
+    NUGarden *aGarden2 = [aNursery makeGarden];
+    XCTAssertEqualObjects(aLazyArray, [aGarden2 root], @"");
 }
 
 @end

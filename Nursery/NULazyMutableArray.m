@@ -13,8 +13,15 @@
 #import "NUBell.h"
 #import "NUGarden.h"
 #import "NUGarden+Project.h"
+#import "NUCharacter.h"
+#import "NUAliaser.h"
 
 @implementation NULazyMutableArray
+
++ (instancetype)array
+{
+    return [[self new] autorelease];
+}
 
 - (instancetype)init
 {
@@ -154,6 +161,63 @@
     [anObject retain];
     [objects[index] release];
     objects[index] = anObject;
+}
+
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUGarden *)aGarden
+{
+    [aCharacter setFormat:NUIndexedIvars];
+}
+
+- (Class)classForNursery
+{
+    return [NULazyMutableArray class];
+}
+
+- (NUUInt64)indexedIvarsSize
+{
+    return sizeof(NUUInt64) * [self count];
+}
+
+- (void)encodeWithAliaser:(NUAliaser *)anAliaser
+{
+    [self encodeIndexedIvarsWithAliaser:anAliaser];
+}
+
+- (void)encodeIndexedIvarsWithAliaser:(NUAliaser *)anAliaser
+{
+    if (count)
+    {
+        [self loadObjects];
+        
+        [anAliaser encodeIndexedIvars:objects count:count];
+    }
+}
+
+- (id)initWithAliaser:(NUAliaser *)anAliaser
+{
+    if (self = [super init])
+    {
+        NUUInt64 aSize = [anAliaser indexedIvarsSize];
+        NUUInt64 aCount = aSize / sizeof(NUUInt64);
+        
+        if (aCount)
+        {
+            oops = malloc(sizeof(id) * aCount);
+            
+            [anAliaser decodeUInt64Array:oops count:aCount];
+
+            objects = calloc(aCount, sizeof(id));
+            count = aCount;
+            capacity = aCount;
+        }
+    }
+    
+    return self;
+}
+
+- (void)moveUpWithAliaser:(NUAliaser *)anAliaser
+{
+    ;
 }
 
 @end
