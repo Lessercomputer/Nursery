@@ -10,8 +10,7 @@
 #import "NUComparator.h"
 #import "NUCoding.h"
 
-@class NSMutableArray;
-@class NUBTree, NUBTreeLeaf, NUBell;
+@class NUBTree, NUBTreeLeaf, NUBell, NULazyMutableArray;
 
 typedef enum NUBTreeSetObjectResult
 {
@@ -21,8 +20,8 @@ typedef enum NUBTreeSetObjectResult
 
 @interface NUBTreeNode : NSObject
 {
-    NSMutableArray *keys;
-    NSMutableArray *values;
+    NULazyMutableArray *keys;
+    NULazyMutableArray *values;
     NUBTree *tree;
     NUBTreeNode *leftNode;
     NUBTreeNode *rightNode;
@@ -31,17 +30,17 @@ typedef enum NUBTreeSetObjectResult
 }
 
 + (id)nodeWithTree:(NUBTree *)aTree;
-+ (id)nodeWithTree:(NUBTree *)aTree keys:(NSMutableArray *)aKeys values:(NSMutableArray *)aValues;
++ (id)nodeWithTree:(NUBTree *)aTree keys:(NULazyMutableArray *)aKeys values:(NULazyMutableArray *)aValues;
 
 - (id)initWithTree:(NUBTree *)aTree;
-- (id)initWithTree:(NUBTree *)aTree keys:(NSMutableArray *)aKeys values:(NSMutableArray *)aValues;
+- (id)initWithTree:(NUBTree *)aTree keys:(NULazyMutableArray *)aKeys values:(NULazyMutableArray *)aValues;
 
 - (id)objectForKey:(id)aKey;
 - (NUBTreeSetObjectResult)setObject:(id)anObject forKey:(id)aKey;
 - (BOOL)removeObjectForKey:(id)aKey;
 
-- (NSMutableArray *)keys;
-- (NSMutableArray *)values;
+- (NULazyMutableArray *)keys;
+- (NULazyMutableArray *)values;
 
 - (NUBTreeNode *)leftNode;
 - (NUBTreeNode *)rightNode;
@@ -82,8 +81,8 @@ typedef enum NUBTreeSetObjectResult
 
 @interface NUBTreeNode (Private)
 
-- (void)setKeys:(NSMutableArray *)aKeys;
-- (void)setValues:(NSMutableArray *)aValues;
+- (void)setKeys:(NULazyMutableArray *)aKeys;
+- (void)setValues:(NULazyMutableArray *)aValues;
 
 - (void)setLeftNode:(NUBTreeNode *)aLeftNode;
 - (void)setRightNode:(NUBTreeNode *)aRightNode;

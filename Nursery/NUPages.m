@@ -17,6 +17,7 @@
 #import "NURegion.h"
 #import "NUChangedRegionArray.h"
 #import "NUU64ODictionary.h"
+#import "NUPageLocationODictionary.h"
 
 NSString *NUPageDataDoesNotExistException = @"NUPageDataDoesNotExistException";
 NSString *NUInvalidPageLocationException = @"NUInvalidPageLocationException";
@@ -38,7 +39,7 @@ const NUUInt64 NULogDataLengthOffset = 85;
 	
     lock = [NSRecursiveLock new];
 	pageSize = NUDefaultPageSize;
-	pageBuffer = [NUU64ODictionary new];
+	pageBuffer = [[NUPageLocationODictionary alloc] initWithPages:self];
 	changedRegions = [[NUChangedRegionArray alloc] initWithCapacity:pageSize];
 	
 	return self;

@@ -6,9 +6,9 @@
 //
 //
 
-#import <Foundation/NSArray.h>
 
 #import "NUBTreeNode.h"
+#import "NULazyMutableArray.h"
 #import "NUBTree.h"
 #import "NUCharacter.h"
 #import "NUIvar.h"
@@ -23,7 +23,7 @@
     return [[[self alloc] initWithTree:aTree] autorelease];
 }
 
-+ (id)nodeWithTree:(NUBTree *)aTree keys:(NSMutableArray *)aKeys values:(NSMutableArray *)aValues
++ (id)nodeWithTree:(NUBTree *)aTree keys:(NULazyMutableArray *)aKeys values:(NULazyMutableArray *)aValues
 {
     return [[[self alloc] initWithTree:aTree keys:aKeys values:aValues] autorelease];
 }
@@ -31,11 +31,11 @@
 - (id)initWithTree:(NUBTree *)aTree
 {   
     return [self initWithTree:aTree
-                         keys:[NSMutableArray arrayWithCapacity:[aTree keyCapacity]]
-                       values:[NSMutableArray arrayWithCapacity:[self isLeaf] ? [aTree keyCapacity] : [aTree keyCapacity] + 1]];
+                         keys:[NULazyMutableArray arrayWithCapacity:[aTree keyCapacity]]
+                       values:[NULazyMutableArray arrayWithCapacity:[self isLeaf] ? [aTree keyCapacity] : [aTree keyCapacity] + 1]];
 }
 
-- (id)initWithTree:(NUBTree *)aTree keys:(NSMutableArray *)aKeys values:(NSMutableArray *)aValues
+- (id)initWithTree:(NUBTree *)aTree keys:(NULazyMutableArray *)aKeys values:(NULazyMutableArray *)aValues
 {
     [super init];
     
@@ -74,12 +74,12 @@
     return NO;
 }
 
-- (NSMutableArray *)keys
+- (NULazyMutableArray *)keys
 {
     return NUGetIvar(&keys);
 }
 
-- (NSMutableArray *)values
+- (NULazyMutableArray *)values
 {
     return NUGetIvar(&values);
 }
@@ -308,6 +308,7 @@
 {
     if (![[self class] isEqual:[NUBTreeNode class]]) return;
 
+    [aCharacter setVersion:1];
     [aCharacter addOOPIvarWithName:@"keys"];
     [aCharacter addOOPIvarWithName:@"values"];
     [aCharacter addOOPIvarWithName:@"tree"];
@@ -354,13 +355,13 @@
 
 @implementation NUBTreeNode (Private)
 
-- (void)setKeys:(NSMutableArray *)aKeys
+- (void)setKeys:(NULazyMutableArray *)aKeys
 {
     NUSetIvar(&keys, aKeys);
     [[self bell] markChanged];
 }
 
-- (void)setValues:(NSMutableArray *)aValues
+- (void)setValues:(NULazyMutableArray *)aValues
 {
     NUSetIvar(&values, aValues);
     [[self bell] markChanged];

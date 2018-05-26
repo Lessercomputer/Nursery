@@ -18,17 +18,47 @@
 
 @implementation NULazyMutableArray
 
-+ (instancetype)array
-{
-    return [[self new] autorelease];
-}
-
 - (instancetype)init
 {
     if (self = [super init])
     {
         capacity = 7;
         objects = malloc(sizeof(id) * capacity);
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithCapacity:(NSUInteger)numItems
+{
+    if (self = [super init])
+    {
+        capacity = numItems;
+        objects = malloc(sizeof(id) * capacity);
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithObjects:(id  _Nonnull const [])anObjects count:(NSUInteger)aCount
+{
+    if (self = [super init])
+    {
+        if (aCount)
+        {
+            objects = malloc(sizeof(id) * aCount);
+            
+            for (NSUInteger i = 0; i < aCount; i++)
+                objects[i] = [anObjects[i] retain];
+            
+            capacity = aCount;
+            count = aCount;
+        }
+        else
+        {
+            capacity = 7;
+            objects = malloc(sizeof(id) * capacity);
+        }
     }
     
     return self;
@@ -161,6 +191,27 @@
     [anObject retain];
     [objects[index] release];
     objects[index] = anObject;
+}
+
+- (NULazyMutableArray *)subLazyMutableArrayWithRange:(NSRange)aRange
+{
+    if (!aRange.length)
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:nil userInfo:nil];
+    
+    id *anObjects = malloc(sizeof(id) * aRange.length);
+    
+    [self getObjects:anObjects range:aRange];
+    
+    id aSubLazyMutableArray = [[[[self class] alloc] initWithObjects:anObjects count:aRange.length] autorelease];
+    
+    free(anObjects);
+    
+    return aSubLazyMutableArray;
+}
+
++ (BOOL)automaticallyEstablishCharacter
+{
+    return YES;
 }
 
 + (void)defineCharacter:(NUCharacter *)aCharacter on:(NUGarden *)aGarden

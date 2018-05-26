@@ -13,6 +13,7 @@
 #import "NUBTree.h"
 #import "NUBell.h"
 #import "NUGarden.h"
+#import "NULazyMutableArray.h"
 
 @implementation NUBTreeLeaf
 
@@ -94,8 +95,8 @@
 - (NUBTreeNode *)split
 {
     NSRange aRange = NSMakeRange([self minKeyCount], [self keyCount] - [self minKeyCount]);
-    NSMutableArray *aKeys = [[[[self keys] subarrayWithRange:aRange] mutableCopy] autorelease];
-    NSMutableArray *aNodes = [[[[self values] subarrayWithRange:aRange] mutableCopy] autorelease];
+    NULazyMutableArray *aKeys = [[self keys] subLazyMutableArrayWithRange:aRange];
+    NULazyMutableArray *aNodes = [[self values] subLazyMutableArrayWithRange:aRange];
     
     NUBTreeLeaf *aLeaf = [[self class] nodeWithTree:[self tree] keys:aKeys values:aNodes];
 
@@ -146,15 +147,15 @@
 - (void)mergeLeftNode
 {
     NSIndexSet *anIndexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [[self leftNode] keyCount])];
-    [[self keys] insertObjects:[[self leftNode] keys] atIndexes:anIndexSet];
-    [[self values] insertObjects:[[self leftNode] values] atIndexes:anIndexSet];
+    [[self keys] insertObjects:(NSArray *)[[self leftNode] keys] atIndexes:anIndexSet];
+    [[self values] insertObjects:(NSArray *)[[self leftNode] values] atIndexes:anIndexSet];
     [super mergeLeftNode];
 }
 
 - (void)mergeRightNode
 {
-    [[self keys] addObjectsFromArray:[[self rightNode] keys]];
-    [[self values] addObjectsFromArray:[[self rightNode] values]];
+    [[self keys] addObjectsFromArray:(NSArray *)[[self rightNode] keys]];
+    [[self values] addObjectsFromArray:(NSArray *)[[self rightNode] values]];
     [super mergeRightNode];
 }
 

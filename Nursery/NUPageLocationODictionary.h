@@ -8,10 +8,13 @@
 
 #import "NUU64ODictionary.h"
 
-@class NUSpaces;
+@class NUPages;
 
-@interface NUNodeDictionary : NUU64ODictionary
+@interface NUPageLocationODictionary : NUU64ODictionary
+{
+    NUUInt64 pageSize;
+}
 
-- (instancetype)initWithSpaces:(NUSpaces *)aSpaces;
+- (instancetype)initWithPages:(NUPages *)aPages;
 
 @end

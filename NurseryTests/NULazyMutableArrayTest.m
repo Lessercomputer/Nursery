@@ -25,6 +25,32 @@
     [super tearDown];
 }
 
+- (void)testArray
+{
+    id anArray = [NULazyMutableArray array];
+    XCTAssertTrue([anArray isKindOfClass:[NULazyMutableArray class]]);
+}
+
+- (void)testArrayWithCapacity
+{
+    NULazyMutableArray *aLazyArray = [NULazyMutableArray arrayWithCapacity:3];
+    [aLazyArray addObject:@(0)];
+    [aLazyArray addObject:@(1)];
+    [aLazyArray addObject:@(2)];
+    [aLazyArray addObject:@(3)];
+}
+
+- (void)testSubLazyMutableArrayWithRange
+{
+    NULazyMutableArray *aLazyArray = [NULazyMutableArray array];
+    [aLazyArray addObject:@(0)];
+    [aLazyArray addObject:@(1)];
+    [aLazyArray addObject:@(2)];
+    [aLazyArray addObject:@(3)];
+    id aSubArray = [aLazyArray subLazyMutableArrayWithRange:NSMakeRange(0, 2)];
+    XCTAssertTrue([aSubArray isKindOfClass:[NULazyMutableArray class]]);
+}
+
 - (void)testInsert
 {
     NULazyMutableArray *aLazyArray = [[[NULazyMutableArray alloc] init] autorelease];

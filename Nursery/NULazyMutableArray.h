@@ -22,5 +22,6 @@
 @property (nonatomic, assign) NUBell *bell;
 
 - (void)grow;
+- (NULazyMutableArray *)subLazyMutableArrayWithRange:(NSRange)aRange;
 
 @end

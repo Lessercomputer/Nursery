@@ -13,6 +13,7 @@
 #import "NUBTree.h"
 #import "NUBell.h"
 #import "NUGarden.h"
+#import "NULazyMutableArray.h"
 
 @implementation NUBTreeBranch
 
@@ -152,8 +153,8 @@
     NSRange aNewKeyRange = NSMakeRange(aKeyRemoveRange.location + 1, aKeyRemoveRange.length - 1);
     NSRange aNewValueRange = NSMakeRange(aKeyRemoveRange.location + 1, aKeyRemoveRange.length);
     
-    NSMutableArray *aKeys = [[[[self keys] subarrayWithRange:aNewKeyRange] mutableCopy] autorelease];
-    NSMutableArray *aValues = [[[[self values] subarrayWithRange:aNewValueRange] mutableCopy] autorelease];
+    NULazyMutableArray *aKeys = [[self keys] subLazyMutableArrayWithRange:aNewKeyRange];
+    NULazyMutableArray *aValues = [[self values] subLazyMutableArrayWithRange:aNewValueRange];
     
     [[self keys] removeObjectsInRange:aKeyRemoveRange];
     [[self values] removeObjectsInRange:aNewValueRange];
@@ -182,8 +183,8 @@
 {
     NSRange aKeyRange = NSMakeRange([[self tree] minKeyCount], [[self leftNode] keyCount] - [[self tree] minKeyCount]);
     NSRange aValueRange = NSMakeRange(aKeyRange.location + 1, aKeyRange.length);
-    NSMutableArray *aKeys = [[[[[self leftNode] keys] subarrayWithRange:aKeyRange] mutableCopy] autorelease];
-    NSArray *aValues = [[[self leftNode] values] subarrayWithRange:aValueRange];
+    NULazyMutableArray *aKeys = [[[self leftNode] keys] subLazyMutableArrayWithRange:aKeyRange];
+    NULazyMutableArray *aValues = [[[self leftNode] values] subLazyMutableArrayWithRange:aValueRange];
     
     [[[self leftNode] keys] removeObjectsInRange:aKeyRange];
     [[[self leftNode] values] removeObjectsInRange:aValueRange];
@@ -193,7 +194,7 @@
     [aKeys removeObjectAtIndex:0];
     [aKeys addObject:[self firstKey]];
     
-    [[self keys] insertObjects:aKeys atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [aKeys count])]];
+    [[self keys] insertObjects:(NSArray *)aKeys atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [aKeys count])]];
     [[self values] insertObjects:aValues atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [aValues count])]];
     [[[self bell] garden] markChangedObject:[self keys]];
     [[[self bell] garden] markChangedObject:[self values]];
@@ -210,8 +211,8 @@
 - (void)shuffleRightNode
 {
     NSRange aRange = NSMakeRange(0, [[self rightNode] keyCount] - [[self tree] minKeyCount]);
-    NSMutableArray *aKeys = [[[[[self rightNode] keys] subarrayWithRange:aRange] mutableCopy] autorelease];
-    NSArray *aValues = [[[self rightNode] values] subarrayWithRange:aRange];
+    NULazyMutableArray *aKeys = [[[self rightNode] keys] subLazyMutableArrayWithRange:aRange];
+    NULazyMutableArray *aValues = [[[self rightNode] values] subLazyMutableArrayWithRange:aRange];
     
     [[[self rightNode] keys] removeObjectsInRange:aRange];
     [[[self rightNode] values] removeObjectsInRange:aRange];
@@ -226,7 +227,7 @@
     [aKeys removeLastObject];
     [aKeys insertObject:[[aValues objectAtIndex:0] firstKey] atIndex:0];
     
-    [[self keys] addObjectsFromArray:aKeys];
+    [[self keys] addObjectsFromArray:(NSArray *)aKeys];
     [[self values] addObjectsFromArray:aValues];
     [[[self bell] garden] markChangedObject:[self keys]];
     [[[self bell] garden] markChangedObject:[self values]];
@@ -242,11 +243,11 @@
 
 - (void)mergeLeftNode
 {
-    NSMutableArray *aKeys = [[[[self leftNode] keys] mutableCopy] autorelease];
+    NULazyMutableArray *aKeys = [[[[self leftNode] keys] mutableCopy] autorelease];
     [aKeys addObject:[self firstKey]];
     
-    [[self keys] insertObjects:aKeys atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [aKeys count])]];
-    [[self values] insertObjects:[[self leftNode] values] atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [[self leftNode] valueCount])]];
+    [[self keys] insertObjects:(NSArray *)aKeys atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [aKeys count])]];
+    [[self values] insertObjects:(NSArray *)[[self leftNode] values] atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [[self leftNode] valueCount])]];
     
     [[[self leftNode] values] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         [obj setParentNode:self];
@@ -263,8 +264,8 @@
 - (void)mergeRightNode
 {
     [[self keys] addObject:[[self rightNode] firstKey]];
-    [[self keys] addObjectsFromArray:[[self rightNode] keys]];
-    [[self values] addObjectsFromArray:[[self rightNode] values]];
+    [[self keys] addObjectsFromArray:(NSArray *)[[self rightNode] keys]];
+    [[self values] addObjectsFromArray:(NSArray *)[[self rightNode] values]];
     [[[self rightNode] values] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         [obj setParentNode:self];
     }];
@@ -319,7 +320,7 @@
 
 @implementation NUBTreeBranch (Private)
 
-- (void)setValues:(NSMutableArray *)aValues
+- (void)setValues:(NULazyMutableArray *)aValues
 {
     [super setValues:aValues];
     [[self values] makeObjectsPerformSelector:@selector(setParentNode:) withObject:self];
