@@ -814,6 +814,11 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
     return [self decodeObjectForOOP:[self decodeUInt64ForKey:aKey] really:NO];
 }
 
+- (id)decodeObjectReallyForKey:(NSString *)aKey
+{
+    return [self decodeObjectForOOP:[self decodeUInt64ForKey:aKey] really:YES];
+}
+
 - (NUInt8)decodeInt8ForKey:(NSString *)aKey
 {
     return [[self currentContext] decodeUInt8ForKey:aKey];

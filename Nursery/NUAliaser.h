@@ -135,6 +135,7 @@ extern NSString *NUAliaserCannotDecodeObjectException;
 - (NSRect)decodeRect;
 
 - (id)decodeObjectForKey:(NSString *)aKey;
+- (id)decodeObjectReallyForKey:(NSString *)aKey;
 
 - (NUInt8)decodeInt8ForKey:(NSString *)aKey;
 - (NUInt16)decodeInt16ForKey:(NSString *)aKey;

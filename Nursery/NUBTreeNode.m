@@ -331,8 +331,25 @@
 {
     [super init];
     
-    NUSetIvar(&keys, [anAliaser decodeObject]);
-    NUSetIvar(&values, [anAliaser decodeObject]);
+    NUCharacter *aCharacter = [anAliaser character];
+    aCharacter = [[self class] isEqual:[NUBTreeNode class]] ? aCharacter : [aCharacter superCharacter];
+    
+    if ([aCharacter version] == 0)
+    {
+        NSMutableArray *anArray = [anAliaser decodeObjectReally];
+        NULazyMutableArray *aLazyArray = [NULazyMutableArray arrayWithArray:anArray];
+        NUSetIvar(&keys, aLazyArray);
+        
+        anArray = [anAliaser decodeObjectReally];
+        aLazyArray = [NULazyMutableArray arrayWithArray:anArray];
+        NUSetIvar(&values, aLazyArray);
+    }
+    else
+    {
+        NUSetIvar(&keys, [anAliaser decodeObject]);
+        NUSetIvar(&values, [anAliaser decodeObject]);
+    }
+    
     NUSetIvar(&tree, [anAliaser decodeObject]);
     NUSetIvar(&leftNode, [anAliaser decodeObject]);
     NUSetIvar(&rightNode, [anAliaser decodeObject]);
