@@ -160,6 +160,8 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
 
 - (void)startInNewThread
 {
+//    [NSThread setThreadPriority:0.9];
+    
     [[self statusCondition] lock];
     
     [self setServiceBrowser:[[NSNetServiceBrowser new] autorelease]];
@@ -583,19 +585,16 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
 
     if ([aCurrentDate timeIntervalSinceDate:[self baseCallDate]] < 1.5)
     {
-        if ([self maxFellowPupilNotesSizeInBytes] <= anUpperLimitForMaxFellowPupilNotesSizeInBytes)
-        {
-            [self setMaxFellowPupilNotesSizeInBytes:[self maxFellowPupilNotesSizeInBytes] * 2];
-//            [self setCallCount:1];
-        }
-        else
+        [self setMaxFellowPupilNotesSizeInBytes:[self maxFellowPupilNotesSizeInBytes] * 2];
+
+        if ([self maxFellowPupilNotesSizeInBytes] > anUpperLimitForMaxFellowPupilNotesSizeInBytes)
             [self setMaxFellowPupilNotesSizeInBytes:anUpperLimitForMaxFellowPupilNotesSizeInBytes];
     }
     else
     {
-        if ([self maxFellowPupilNotesSizeInBytes] >= aLowerLimitForMaxFellowPupilNotesSizeInBytes)
-            [self setMaxFellowPupilNotesSizeInBytes:[self maxFellowPupilNotesSizeInBytes] / 2];
-        else
+        [self setMaxFellowPupilNotesSizeInBytes:[self maxFellowPupilNotesSizeInBytes] / 2];
+
+        if ([self maxFellowPupilNotesSizeInBytes] < aLowerLimitForMaxFellowPupilNotesSizeInBytes)
             [self setMaxFellowPupilNotesSizeInBytes:aLowerLimitForMaxFellowPupilNotesSizeInBytes];
     }
 

@@ -60,6 +60,8 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
 {
     NSThread *aThread = [[[NSThread alloc] initWithBlock:^{
         
+//        [NSThread setThreadPriority:0.9];
+        
         [[self inputStream] open];
         [[self outputStream] open];
         
@@ -67,7 +69,7 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
         {
             @autoreleasepool
             {
-                [NSThread sleepForTimeInterval:NUNurseryNetResponderSleepTimeInterval];
+//                [NSThread sleepForTimeInterval:NUNurseryNetResponderSleepTimeInterval];
                 
                 if ([[self inputStream] hasBytesAvailable])
                     [self receiveMessageOnStream];
