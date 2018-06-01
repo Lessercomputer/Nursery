@@ -9,19 +9,19 @@
 #import <Foundation/NSObject.h>
 
 #import "NUTypes.h"
+#import "NULinkedListElement.h"
 
 @class NSLock, NSMutableIndexSet;
-@class NUBell, NUPupilNote, NUBellBallODictionary, NULibrary, NUPupilNoteCacheLinkedListElement;
+@class NUBell, NUPupilNote, NUBellBallODictionary, NULibrary, NUPupilNoteCacheLinkedListElement, NULinkedList;
 
 @interface NUPupilNoteCache : NSObject
 {
     NUBellBallODictionary *bellBallToLinkedListElementDictionary;
     NULibrary *gradeAndOOPToLinkedListElementLibrary;
+    NULinkedList *linkedList;
     NUUInt64 cachSizeInBytes;
     NUUInt64 maxCacheSizeInBytes;
     NUUInt64 cacheablePupilNoteMaxSizeInBytes;
-    NUPupilNoteCacheLinkedListElement *head;
-    NUPupilNoteCacheLinkedListElement *tail;
     NSLock *lock;
 }
 
@@ -56,19 +56,11 @@
 
 @end
 
-@interface NUPupilNoteCacheLinkedListElement : NSObject
+@interface NUPupilNoteCacheLinkedListElement : NULinkedListElement
 
-+ (instancetype)linkedListElementWithPupilNote:(NUPupilNote *)aPupilNote;
-
-- (instancetype)initWithPupilNote:(NUPupilNote *)aPupilNote;
-
-@property (nonatomic, retain) NUPupilNote *pupilNote;
+- (NUPupilNote *)pupilNote;
 
 @property (nonatomic, retain) NSMutableIndexSet *referencingGrades;
-
-@property (nonatomic, assign) NUPupilNoteCacheLinkedListElement *next;
-
-@property (nonatomic, assign) NUPupilNoteCacheLinkedListElement *previous;
 
 - (void)addReferencingGrade:(NUUInt64)aGrade;
 

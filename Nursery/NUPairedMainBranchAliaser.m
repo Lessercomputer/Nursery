@@ -206,7 +206,7 @@
         [aData appendBytes:&aUInt64Value length:sizeof(NUUInt64)];
         aUInt64Value = NSSwapHostLongLongToBig([aPupilNote grade]);
         [aData appendBytes:&aUInt64Value length:sizeof(NUUInt64)];
-        aUInt64Value = NSSwapHostLongLongToBig([aPupilNote size]);
+        aUInt64Value = NSSwapHostLongLongToBig([aPupilNote dataSize]);
         [aData appendBytes:&aUInt64Value length:sizeof(NUUInt64)];
         [aData appendData:[aPupilNote data]];
     }];
@@ -231,7 +231,7 @@
         aPupilNote = [NUPupilNote pupilNoteWithOOP:anOOP grade:[self gradeForSave] size:aSize bytes:(NUUInt8 *)&(aPupilDataBtyes[i])];
         
         [aPupils addObject:aPupilNote];
-        i += [aPupilNote size];
+        i += [aPupilNote dataSize];
     }
     
     return aPupils;
@@ -303,13 +303,13 @@
         [[self objectTable] setObjectLocation:anObjectLocation for:[aPupilNote bellBall]];
         [[self reversedObjectTable] setBellBall:[aPupilNote bellBall] forObjectLocation:anObjectLocation];
         [[self pages] writeData:[aPupilNote data] at:anObjectLocation];
-        anObjectLocation += [aPupilNote size];
+        anObjectLocation += [aPupilNote dataSize];
     }];
 }
 
 - (NUUInt64)allocateObjectSpaceForPupil:(NUPupilNote *)aPupilNote
 {
-    return [[[self nursery] spaces] allocateSpace:[aPupilNote size]];
+    return [[[self nursery] spaces] allocateSpace:[aPupilNote dataSize]];
 }
 
 - (NSData *)dataWithProbationaryOOPAndFixedOOP

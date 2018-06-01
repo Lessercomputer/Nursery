@@ -323,7 +323,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
     __block NUUInt64 anEncodedObjectsSize = 0;
     
     [aReducedEncodedPupils enumerateObjectsUsingBlock:^(NUPupilNote * _Nonnull aPupilNote, NSUInteger idx, BOOL * _Nonnull stop) {
-            anEncodedObjectsSize += [aPupilNote size];
+            anEncodedObjectsSize += [aPupilNote dataSize];
     }];
     
     return anEncodedObjectsSize;
@@ -335,7 +335,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
     
     [aReducedEncodedPupils enumerateObjectsUsingBlock:^(NUPupilNote * _Nonnull aPupilNote, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([aReducedEncodedPupilsDictionary objectForKey:[aPupilNote OOP]] == aPupilNote)
-            anEncodedObjectsSize += [aPupilNote size];
+            anEncodedObjectsSize += [aPupilNote dataSize];
     }];
     
     return anEncodedObjectsSize;

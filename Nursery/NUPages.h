@@ -10,7 +10,7 @@
 #import "NUCodingNote.h"
 
 @class NSFileHandle, NSMutableData, NSRecursiveLock;
-@class NUPage, NUChangedRegionArray, NUPageLocationODictionary;
+@class NUPage, NUChangedRegionArray, NUPageLocationODictionary, NULinkedList;
 
 extern NSString *NUPageDataDoesNotExistException;
 extern NSString *NUInvalidPageLocationException;
@@ -22,6 +22,7 @@ extern const NUUInt64 NUNextPageLocationOffset;
 	NUUInt32 pageSize;
 	NUUInt32 capacity;
 	NUPageLocationODictionary *pageBuffer;
+    NULinkedList *pageLinkedList;
 	NUUInt64 nextPageLocation;
 	NUUInt64 savedNextPageLocation;
 	NUUInt64 fileSize;

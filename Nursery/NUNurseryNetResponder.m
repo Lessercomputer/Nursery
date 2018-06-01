@@ -367,10 +367,10 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
                     aPupilNote = [[self pupilNoteCache] pupilNoteForOOP:anOOP grade:aGrade];
                 }
                 
-                if (currentFellowPupilNotesSizeInBytes + [aPupilNote basicSizeForSerialization] + [aPupilNote size] > [self maxFellowPupilNotesSizeInBytes])
+                if (currentFellowPupilNotesSizeInBytes + [aPupilNote sizeForSerialization] > [self maxFellowPupilNotesSizeInBytes])
                     break;
                 
-                currentFellowPupilNotesSizeInBytes += [aPupilNote basicSizeForSerialization] + [aPupilNote size];
+                currentFellowPupilNotesSizeInBytes += [aPupilNote sizeForSerialization];
                 
                 [aPupilNotes addObject:aPupilNote];
                 

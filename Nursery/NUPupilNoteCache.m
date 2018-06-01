@@ -15,6 +15,7 @@
 #import "NUBellBall.h"
 #import "NUBellBallODictionary.h"
 #import "NULibrary.h"
+#import "NULinkedList.h"
 
 @implementation NUPupilNoteCache
 
@@ -30,6 +31,7 @@
         lock = [NSLock new];
         bellBallToLinkedListElementDictionary = [NUBellBallODictionary new];
         gradeAndOOPToLinkedListElementLibrary = [NULibrary new];
+        linkedList = [NULinkedList new];
         maxCacheSizeInBytes = aMaxCacheSizeInBytes;
         cacheablePupilNoteMaxSizeInBytes = aCacheablePupilNoteMaxSizeInBytes;
     }
@@ -46,6 +48,7 @@
 {
     [bellBallToLinkedListElementDictionary release];
     [gradeAndOOPToLinkedListElementLibrary release];
+    [linkedList release];
     [lock release];
     
     [super dealloc];
@@ -99,10 +102,10 @@
             if ([aKey bellBall].oop == anOOP)
                 aPupilNote = [aLinkedListElement pupilNote];
             
-            if (aCurrentPupilNotesSizeInBytes + [[aLinkedListElement pupilNote] size] <= aMaxFellowPupilNotesSizeInBytes)
+            if (aCurrentPupilNotesSizeInBytes + [[aLinkedListElement pupilNote] sizeForSerialization] <= aMaxFellowPupilNotesSizeInBytes)
             {
                 [aPupilNotesArray addObject:[aLinkedListElement pupilNote]];
-                aCurrentPupilNotesSizeInBytes += [[aLinkedListElement pupilNote] size];
+                aCurrentPupilNotesSizeInBytes += [[aLinkedListElement pupilNote] sizeForSerialization];
 //                NSLog(@"oop:%@", @([[aLinkedListElement pupilNote] OOP]));
             }
             else
@@ -120,21 +123,20 @@
 
 - (void)addPupilNote:(NUPupilNote *)aPupilNote grade:(NUUInt64)aGrade
 {
-    if ([aPupilNote size] > [self cacheablePupilNoteMaxSizeInBytes])
+    if ([aPupilNote sizeForSerialization] > [self cacheablePupilNoteMaxSizeInBytes])
         return;
     
     [lock lock];
 
     if ([self addLinkedListElementForPupilNoteIfNeeded:aPupilNote])
-        cachSizeInBytes += [aPupilNote size];
-        
-    NUBellBall aBellBallForPupilNote = NUMakeBellBall([aPupilNote OOP], [aPupilNote grade]);
+        cachSizeInBytes += [aPupilNote sizeForSerialization];
+    
     NUPupilNoteCacheKey *aKeyWithGradeAndOOP = [NUPupilNoteCacheKey keyWithGrade:aGrade oop:[aPupilNote OOP]];
     NUPupilNoteCacheLinkedListElement *aLinkedListElement = [gradeAndOOPToLinkedListElementLibrary objectForKey:aKeyWithGradeAndOOP];
     
     if (!aLinkedListElement)
     {
-        aLinkedListElement = [bellBallToLinkedListElementDictionary objectForKey:aBellBallForPupilNote];
+        aLinkedListElement = [bellBallToLinkedListElementDictionary objectForKey:[aPupilNote bellBall]];
         
         [aLinkedListElement addReferencingGrade:aGrade];
         
@@ -158,14 +160,15 @@
 
 - (BOOL)addLinkedListElementForPupilNoteIfNeeded:(NUPupilNote *)aPupilNote
 {
-    NUBellBall aBellBallForPupilNote = NUMakeBellBall([aPupilNote OOP], [aPupilNote grade]);
+    NUBellBall aBellBallForPupilNote = [aPupilNote bellBall];
     NUPupilNoteCacheLinkedListElement *anExistingLinkedListElement = [bellBallToLinkedListElementDictionary objectForKey:aBellBallForPupilNote];
     NUPupilNoteCacheLinkedListElement *anExistingOrNewLinkedListElement = anExistingLinkedListElement;
     
     if (!anExistingLinkedListElement)
     {
-        anExistingOrNewLinkedListElement = [NUPupilNoteCacheLinkedListElement linkedListElementWithPupilNote:aPupilNote];
+        anExistingOrNewLinkedListElement = [NUPupilNoteCacheLinkedListElement listElementWithObject:aPupilNote];
         
+        [linkedList addElementToFirst:anExistingOrNewLinkedListElement];
         [bellBallToLinkedListElementDictionary setObject:anExistingOrNewLinkedListElement forKey:aBellBallForPupilNote];
         
         return YES;
@@ -178,55 +181,26 @@
 {
     if (!aLinkedListElement) return;
     
-    if ([aLinkedListElement previous] && [aLinkedListElement next])
-    {
-        [[aLinkedListElement previous] setNext:[aLinkedListElement next]];
-        [[aLinkedListElement next] setPrevious:[aLinkedListElement previous]];
-        
-        [aLinkedListElement setPrevious:nil];
-        [aLinkedListElement setNext:head];
-        head = aLinkedListElement;
-    }
-    else if ([aLinkedListElement previous])
-    {
-        [[aLinkedListElement previous] setNext:nil];
-    }
-    else if ([aLinkedListElement next])
-    {
-        [[aLinkedListElement next] setPrevious:nil];
-    }
-    else
-    {
-        if (head)
-        {
-            [aLinkedListElement setNext:head];
-            [head setPrevious:aLinkedListElement];
-            head = aLinkedListElement;
-        }
-        else
-        {
-            head = aLinkedListElement;
-            tail = aLinkedListElement;
-        }
-    }
+    [linkedList moveToFirst:aLinkedListElement];
 }
 
 - (void)trimIfOverLimit
 {
     while (cachSizeInBytes > maxCacheSizeInBytes)
     {
-        NUPupilNoteCacheLinkedListElement *anOldTail = tail;
+        NUPupilNoteCacheLinkedListElement *anOldTail = [(NUPupilNoteCacheLinkedListElement *)[linkedList last] retain];
         
-        [[tail previous] setNext:nil];
-        tail = [tail previous];
+        [linkedList removeLast];
         
-        cachSizeInBytes -= [[anOldTail pupilNote] size];
+        cachSizeInBytes -= [[anOldTail pupilNote] sizeForSerialization];
         
         [[anOldTail referencingGrades] enumerateIndexesUsingBlock:^(NSUInteger aGrade, BOOL * _Nonnull stop) {
             [gradeAndOOPToLinkedListElementLibrary removeObjectForKey:[NUPupilNoteCacheKey keyWithGrade:aGrade oop:[[anOldTail pupilNote] OOP]]];
         }];
         
-        [bellBallToLinkedListElementDictionary removeObjectForKey:NUMakeBellBall([[anOldTail pupilNote] OOP], [[anOldTail pupilNote] grade])];
+        [bellBallToLinkedListElementDictionary removeObjectForKey:[[anOldTail pupilNote] bellBall]];
+        
+        [anOldTail release];
     }
 }
 
@@ -260,28 +234,26 @@
 
 @implementation NUPupilNoteCacheLinkedListElement
 
-+ (instancetype)linkedListElementWithPupilNote:(NUPupilNote *)aPupilNote
+- (instancetype)initWithObject:(id)anObject
 {
-    return [[[self alloc] initWithPupilNote:aPupilNote] autorelease];
+    if (self = [super initWithObject:anObject])
+    {
+        _referencingGrades = [NSMutableIndexSet new];
+    }
+    
+    return self;
 }
 
 - (void)dealloc
 {
-    [_pupilNote release];
     [_referencingGrades release];
     
     [super dealloc];
 }
 
-- (instancetype)initWithPupilNote:(NUPupilNote *)aPupilNote
+- (NUPupilNote *)pupilNote
 {
-    if (self = [super init])
-    {
-        _pupilNote = [aPupilNote retain];
-        _referencingGrades = [NSMutableIndexSet new];
-    }
-    
-    return self;
+    return [self object];
 }
 
 - (void)addReferencingGrade:(NUUInt64)aGrade

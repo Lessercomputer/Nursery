@@ -123,7 +123,7 @@
         [[self objectTable] setObjectLocation:anObjectLocation for:[aPupilNote bellBall]];
         [[self reversedObjectTable] setBellBall:[aPupilNote bellBall] forObjectLocation:anObjectLocation];
         [[self pages] writeData:[aPupilNote data] at:anObjectLocation];
-        anObjectLocation += [aPupilNote size];
+        anObjectLocation += [aPupilNote dataSize];
     }];
     
     [[self encodedPupils] removeAllObjects];

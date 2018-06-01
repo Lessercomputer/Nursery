@@ -18,6 +18,8 @@
 #import "NUChangedRegionArray.h"
 #import "NUU64ODictionary.h"
 #import "NUPageLocationODictionary.h"
+#import "NULinkedList.h"
+#import "NULinkedListElement.h"
 
 NSString *NUPageDataDoesNotExistException = @"NUPageDataDoesNotExistException";
 NSString *NUInvalidPageLocationException = @"NUInvalidPageLocationException";
@@ -40,6 +42,7 @@ const NUUInt64 NULogDataLengthOffset = 85;
     lock = [NSRecursiveLock new];
 	pageSize = NUDefaultPageSize;
 	pageBuffer = [[NUPageLocationODictionary alloc] initWithPages:self];
+    pageLinkedList = [NULinkedList new];
 	changedRegions = [[NUChangedRegionArray alloc] initWithCapacity:pageSize];
 	
 	return self;
@@ -49,6 +52,7 @@ const NUUInt64 NULogDataLengthOffset = 85;
 {
 	[self setFileHandle:nil];
 	[pageBuffer release];
+    [pageLinkedList release];
 	[changedRegions release];
     [lock release];
 	
@@ -530,10 +534,18 @@ const NUUInt64 NULogDataLengthOffset = 85;
     
     [lock lock];
     
-	NUPage *aPage = [pageBuffer objectForKey:aPageStartingLocation];
+    NULinkedListElement *aListElementWithPage = [pageBuffer objectForKey:aPageStartingLocation];
+    NUPage *aPage = nil;
 	
-    if (!aPage) aPage = [self loadPageAt:aPageStartingLocation];
-	
+    if (aListElementWithPage)
+    {
+        aPage = [aListElementWithPage object];
+        
+        [pageLinkedList moveToFirst:aListElementWithPage];
+    }
+    else
+        aPage = [self loadPageAt:aPageStartingLocation];
+    
     [lock unlock];
     
 	return aPage;
@@ -543,7 +555,11 @@ const NUUInt64 NULogDataLengthOffset = 85;
 {
 	NSMutableData *aPageData = [[[self loadPageDataAt:aPageStartingLocation] mutableCopy] autorelease];
 	NUPage *aPage = [NUPage pageWithLocation:aPageStartingLocation data:aPageData];
-	[pageBuffer setObject:aPage forKey:aPageStartingLocation];
+    NULinkedListElement *aListElementWithPage = [NULinkedListElement listElementWithObject:aPage];
+	
+    [pageBuffer setObject:aListElementWithPage forKey:aPageStartingLocation];
+    [pageLinkedList addElementToFirst:aListElementWithPage];
+    
 	return aPage;
 }
 
@@ -610,9 +626,13 @@ const NUUInt64 NULogDataLengthOffset = 85;
     savedNextPageLocation = nextPageLocation;
     
     NSEnumerator *anEnumerator = [pageBuffer objectEnumerator];
-    NUPage *aPage = nil;
-    while (aPage = [anEnumerator nextObject])
+    NULinkedListElement *aListElementWithPage = nil;
+    
+    while (aListElementWithPage = [anEnumerator nextObject])
+    {
+        NUPage *aPage = [aListElementWithPage object];
         [aPage setIsChanged:NO];
+    }
     
     [changedRegions removeAll];
 }
@@ -736,9 +756,13 @@ const NUUInt64 NULogDataLengthOffset = 85;
     [[self fileHandle] synchronizeFile];
     
     NSEnumerator *anEnumerator = [pageBuffer objectEnumerator];
-    NUPage *aPage = nil;
-    while (aPage = [anEnumerator nextObject])
+    NULinkedListElement *aListElementWithPage = nil;
+    
+    while (aListElementWithPage = [anEnumerator nextObject])
+    {
+        NUPage *aPage = [aListElementWithPage object];
         [aPage setIsChanged:NO];
+    }
     
     [changedRegions removeAll];
 }

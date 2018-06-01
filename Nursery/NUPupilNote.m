@@ -54,7 +54,7 @@
     
     [aDescription appendString:@"{"];
     
-    [aDescription appendFormat:@"oop: %llu, grade: %llu, isa: %llu, size: %llu", [self OOP], [self grade], [self isa], [self size]];
+    [aDescription appendFormat:@"oop: %llu, grade: %llu, isa: %llu, size: %llu", [self OOP], [self grade], [self isa], [self dataSize]];
     
     [aDescription appendString:@"}"];
     
@@ -91,19 +91,34 @@
     bellBall = aBellBall;
 }
 
+- (NUUInt64)basicSize
+{
+    return sizeof(NUUInt64) * 2;
+}
+
 - (NUUInt64)basicSizeForSerialization
 {
     return sizeof(NUUInt64) * 3;
 }
 
-- (NUUInt64)size
+- (NUUInt64)dataSize
 {
     return [data length];
 }
 
-- (void)setSize:(NUUInt64)aSize
+- (void)setDataSize:(NUUInt64)aSize
 {
     [data setLength:aSize];
+}
+
+- (NUUInt64)size
+{
+    return [self basicSize] + [self dataSize];
+}
+
+- (NUUInt64)sizeForSerialization
+{
+    return [self basicSizeForSerialization] + [self dataSize];
 }
 
 - (NUUInt64)isa

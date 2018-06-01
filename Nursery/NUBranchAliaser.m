@@ -187,7 +187,7 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
     [aPupilNotes enumerateObjectsUsingBlock:^(NUPupilNote * _Nonnull aPupilNote, NSUInteger idx, BOOL * _Nonnull stop) {
         NUUInt64 aValue = NSSwapHostLongLongToBig([aPupilNote OOP]);
         [aData appendBytes:&aValue length:sizeof(NUUInt64)];
-        aValue = NSSwapHostLongLongToBig([aPupilNote size]);
+        aValue = NSSwapHostLongLongToBig([aPupilNote dataSize]);
         [aData appendBytes:&aValue length:sizeof(NUUInt64)];
         [aData appendData:[aPupilNote data]];
     }];
