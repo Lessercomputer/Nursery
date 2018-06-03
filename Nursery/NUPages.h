@@ -23,6 +23,8 @@ extern const NUUInt64 NUNextPageLocationOffset;
 	NUUInt32 capacity;
 	NUPageLocationODictionary *pageBuffer;
     NULinkedList *pageLinkedList;
+    NUUInt64 unchangedPageBufferCount;
+    NUUInt64 maximumUnchangedPageBufferCount;
 	NUUInt64 nextPageLocation;
 	NUUInt64 savedNextPageLocation;
 	NUUInt64 fileSize;
@@ -111,5 +113,8 @@ extern const NUUInt64 NUNextPageLocationOffset;
 
 - (NURegion)firstPageRegion;
 - (NURegion)allRegionButFirstPage;
+
+- (void)setChangeStatusOfAllPagesToUnchanged;
+- (void)removeUnchangedPagesFromBufferIfNeeded;
 
 @end

@@ -24,6 +24,7 @@
 NSString *NUPageDataDoesNotExistException = @"NUPageDataDoesNotExistException";
 NSString *NUInvalidPageLocationException = @"NUInvalidPageLocationException";
 const NUUInt32 NUDefaultPageSize = 4096;
+const NUUInt64 NUDefaultMaximumUnchangedPageBufferCount = 20000;
 const NUUInt64 NUNextPageLocationOffset = 5;
 const NUUInt64 NULogDataLocationOffset = 77;
 const NUUInt64 NULogDataLengthOffset = 85;
@@ -37,14 +38,16 @@ const NUUInt64 NULogDataLengthOffset = 85;
 
 - (id)init
 {
-	[super init];
-	
-    lock = [NSRecursiveLock new];
-	pageSize = NUDefaultPageSize;
-	pageBuffer = [[NUPageLocationODictionary alloc] initWithPages:self];
-    pageLinkedList = [NULinkedList new];
-	changedRegions = [[NUChangedRegionArray alloc] initWithCapacity:pageSize];
-	
+	if (self = [super init])
+    {
+        lock = [NSRecursiveLock new];
+        pageSize = NUDefaultPageSize;
+        pageBuffer = [[NUPageLocationODictionary alloc] initWithPages:self];
+        pageLinkedList = [NULinkedList new];
+        maximumUnchangedPageBufferCount = NUDefaultMaximumUnchangedPageBufferCount;
+        changedRegions = [[NUChangedRegionArray alloc] initWithCapacity:pageSize];
+    }
+    
 	return self;
 }
 
@@ -488,8 +491,14 @@ const NUUInt64 NULogDataLengthOffset = 85;
 
 - (void)write:(const NUUInt8 *)aBytes length:(NUUInt64)aWritingLength toPageStartingAt:(NUUInt64)aPageStartingLocation offset:(NUUInt64)aWritingOffsetInPage
 {
+    BOOL aPageIsChangedBeforeWrite = NO;
+    NUPage *aPage = nil;
+    
     [lock lock];
-	[[self pageAt:aPageStartingLocation] write:aBytes length:aWritingLength offset:aWritingOffsetInPage];
+    aPage = [self pageAt:aPageStartingLocation];
+    aPageIsChangedBeforeWrite = [aPage isChanged];
+	[aPage write:aBytes length:aWritingLength offset:aWritingOffsetInPage];
+    if (!aPageIsChangedBeforeWrite) unchangedPageBufferCount--;
     [lock unlock];
 }
 
@@ -559,6 +568,8 @@ const NUUInt64 NULogDataLengthOffset = 85;
 	
     [pageBuffer setObject:aListElementWithPage forKey:aPageStartingLocation];
     [pageLinkedList addElementToFirst:aListElementWithPage];
+    unchangedPageBufferCount++;
+    [self removeUnchangedPagesFromBufferIfNeeded];
     
 	return aPage;
 }
@@ -625,14 +636,7 @@ const NUUInt64 NULogDataLengthOffset = 85;
     fileSize = nextPageLocation;
     savedNextPageLocation = nextPageLocation;
     
-    NSEnumerator *anEnumerator = [pageBuffer objectEnumerator];
-    NULinkedListElement *aListElementWithPage = nil;
-    
-    while (aListElementWithPage = [anEnumerator nextObject])
-    {
-        NUPage *aPage = [aListElementWithPage object];
-        [aPage setIsChanged:NO];
-    }
+    [self setChangeStatusOfAllPagesToUnchanged];
     
     [changedRegions removeAll];
 }
@@ -754,15 +758,8 @@ const NUUInt64 NULogDataLengthOffset = 85;
     [self writeUInt64:0 at:NULogDataLengthOffset];
     [self writeDataWithRegion:[self firstPageRegion]];
     [[self fileHandle] synchronizeFile];
-    
-    NSEnumerator *anEnumerator = [pageBuffer objectEnumerator];
-    NULinkedListElement *aListElementWithPage = nil;
-    
-    while (aListElementWithPage = [anEnumerator nextObject])
-    {
-        NUPage *aPage = [aListElementWithPage object];
-        [aPage setIsChanged:NO];
-    }
+
+    [self setChangeStatusOfAllPagesToUnchanged];
     
     [changedRegions removeAll];
 }
@@ -899,5 +896,41 @@ const NUUInt64 NULogDataLengthOffset = 85;
     return NUMakeRegion([self pageSize], NUUInt64Max - [self pageSize]);
 }
 
+- (void)setChangeStatusOfAllPagesToUnchanged
+{
+    [pageBuffer enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NULinkedListElement *aListElementWithPage, BOOL *stop) {
+        NUPage *aPage = [aListElementWithPage object];
+        
+        if ([aPage isChanged])
+        {
+            [aPage setIsChanged:NO];
+            unchangedPageBufferCount++;
+        }
+        
+        [self removeUnchangedPagesFromBufferIfNeeded];
+    }];
+}
+
+- (void)removeUnchangedPagesFromBufferIfNeeded
+{
+    NULinkedListElement *aListElementWithPage = [pageLinkedList last];
+    
+    while (unchangedPageBufferCount > maximumUnchangedPageBufferCount)
+    {
+        NUPage *aPage = [aListElementWithPage object];
+        
+        if (![aPage isChanged])
+        {
+            [aListElementWithPage retain];
+            [pageLinkedList remove:aListElementWithPage];
+            [pageBuffer removeObjectForKey:[aPage location]];
+            unchangedPageBufferCount--;
+        }
+        
+        aListElementWithPage = [aListElementWithPage previous];
+        
+        if (![aPage isChanged]) [aListElementWithPage release];
+    }
+}
 
 @end
