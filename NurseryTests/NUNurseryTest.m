@@ -83,6 +83,74 @@ static NSString *NUNurseryTestFilePath = nil;
     }];
 }
 
+- (void)testSaveManyNSNumbersUsingSameGarden
+{
+    [self _testSaveManyNSNumbersUsingSameGardenTimes:10 withCountPerSave:1000000];
+}
+
+- (void)testSaveManyNSNumbersUsingDifferentGardens
+{
+    [self _testSaveManyNSNumbersUsingDifferentGardensTimes:10 withCountPerSave:100];
+}
+
+- (void)_testSaveManyNSNumbersUsingSameGardenTimes:(NUUInt64)aTimes withCountPerSave:(NUUInt64)anObjectCountPerSave
+{
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUGarden *aGarden = [aNursery makeGarden];
+    NULibrary *aLibrary = [NULibrary library];
+    [aGarden setRoot:aLibrary];
+
+    for (NUUInt64 i = 0; i < aTimes; i++)
+    {
+        @autoreleasepool
+        {
+            NUUInt64 j = i * anObjectCountPerSave;
+            NUUInt64 k = (i + 1) * anObjectCountPerSave;
+            
+            for (; j < k; j++)
+            {
+                NSNumber *aNumber = @(j);
+                [aLibrary setObject:aNumber forKey:aNumber];
+            }
+            
+            XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded);
+        }
+    }
+}
+
+- (void)_testSaveManyNSNumbersUsingDifferentGardensTimes:(NUUInt64)aTimes withCountPerSave:(NUUInt64)anObjectCountPerSave
+{
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    
+    for (NUUInt64 i = 0; i < aTimes; i++)
+    {
+        @autoreleasepool
+        {
+            NUGarden *aGarden = [aNursery makeGarden];
+            NULibrary *aLibrary = nil;
+            
+            if (i == 0)
+            {
+                aLibrary = [NULibrary library];
+                [aGarden setRoot:aLibrary];
+            }
+            else
+                aLibrary = [aGarden root];
+            
+            NUUInt64 j = i * anObjectCountPerSave;
+            NUUInt64 k = (i + 1) * anObjectCountPerSave;
+            
+            for (; j < k; j++)
+            {
+                NSNumber *aNumber = @(j);
+                [aLibrary setObject:aNumber forKey:aNumber];
+            }
+            
+            XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded);
+        }
+    }
+}
+
 - (void)testLoadRootFromNUNursery
 {
 	NSString *theRootObject = @"The Root Object";

@@ -30,6 +30,9 @@ NSString *NUNurseryNetClientNetworkException = @"NUNurseryNetClientNetworkExcept
 const NUUInt64 NUNurseryNetClientReadBufferSize = 4096;
 const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
 const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
+const NSTimeInterval NUNurseryNetClientMaximumTimeIntervalOfContinuation = 0.3;
+const NUUInt64 NUNurseryNetClientUpperLimitForMaximumFellowPupilNotesSizeInBytes = 1024 * 8 * 1024;
+const NUUInt64 NUNurseryNetClientLowerLimitForMaximumFellowPupilNotesSizeInBytes = 1024 * 4 * 4;
 
 
 @implementation NUNurseryNetClient
@@ -42,7 +45,10 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
         _statusLock = [NSLock new];
         _statusCondition = [NSCondition new];
         _serviceName = [aServiceName copy];
-        _baseCallDate = [[NSDate distantPast] copy];
+        _previousCallEndDate = [[NSDate distantPast] copy];
+        _upperLimitForMaximumFellowPupilNotesSizeInBytes = NUNurseryNetClientUpperLimitForMaximumFellowPupilNotesSizeInBytes;
+        _lowerLimitForMaximumFellowPupilNotesSizeInBytes = NUNurseryNetClientLowerLimitForMaximumFellowPupilNotesSizeInBytes;
+        _maximumTimeIntervalOfContinuation = NUNurseryNetClientMaximumTimeIntervalOfContinuation;
     }
     
     return self;
@@ -59,8 +65,8 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
     [_serviceName release];
     _serviceName = nil;
     
-    [_baseCallDate release];
-    _baseCallDate = nil;
+    [_previousCallEndDate release];
+    _previousCallEndDate = nil;
     
     [_nursery release];
     _nursery = nil;
@@ -574,33 +580,30 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
 - (NSData *)callForPupilWithOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade gardenWithID:(NUUInt64)anID containsFellowPupils:(BOOL)aContainsFellowPupils
 {
     NSData *aPupilsData = nil;
-    NUUInt64 anUpperLimitForMaxFellowPupilNotesSizeInBytes = 1024 * 4 * 1024;
-    NUUInt64 aLowerLimitForMaxFellowPupilNotesSizeInBytes = 1024 * 4 * 4;
+    NSDate *aCallBeginDate = [NSDate date];
     
     [[self lock] lock];
     
-    NSDate *aCurrentDate = [NSDate date];
 //    [self setCallCount:[self callCount] + 1];
     [self setTotalCallCount:[self totalCallCount] + 1];
 
-    if ([aCurrentDate timeIntervalSinceDate:[self baseCallDate]] < 1.5)
+    if ([aCallBeginDate timeIntervalSinceDate:[self previousCallEndDate]] < [self maximumTimeIntervalOfContinuation])
     {
-        [self setMaxFellowPupilNotesSizeInBytes:[self maxFellowPupilNotesSizeInBytes] * 2];
+        [self setMaximumFellowPupilNotesSizeInBytes:[self maximumFellowPupilNotesSizeInBytes] * 6];
 
-        if ([self maxFellowPupilNotesSizeInBytes] > anUpperLimitForMaxFellowPupilNotesSizeInBytes)
-            [self setMaxFellowPupilNotesSizeInBytes:anUpperLimitForMaxFellowPupilNotesSizeInBytes];
+        if ([self maximumFellowPupilNotesSizeInBytes] > [self upperLimitForMaximumFellowPupilNotesSizeInBytes])
+            [self setMaximumFellowPupilNotesSizeInBytes:[self upperLimitForMaximumFellowPupilNotesSizeInBytes]];
     }
     else
     {
-        [self setMaxFellowPupilNotesSizeInBytes:[self maxFellowPupilNotesSizeInBytes] / 2];
+        [self setMaximumFellowPupilNotesSizeInBytes:[self maximumFellowPupilNotesSizeInBytes] / 6];
 
-        if ([self maxFellowPupilNotesSizeInBytes] < aLowerLimitForMaxFellowPupilNotesSizeInBytes)
-            [self setMaxFellowPupilNotesSizeInBytes:aLowerLimitForMaxFellowPupilNotesSizeInBytes];
+        if ([self maximumFellowPupilNotesSizeInBytes] < [self lowerLimitForMaximumFellowPupilNotesSizeInBytes])
+            [self setMaximumFellowPupilNotesSizeInBytes:[self lowerLimitForMaximumFellowPupilNotesSizeInBytes]];
     }
 
-    [self setBaseCallDate:aCurrentDate];
 
-    readBufferSize = [self maxFellowPupilNotesSizeInBytes];
+    readBufferSize = [self maximumFellowPupilNotesSizeInBytes];
     
     NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindCallForPupil];
     
@@ -608,7 +611,7 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
     [aMessage addArgumentOfTypeUInt64WithValue:aGrade];
     [aMessage addArgumentOfTypeUInt64WithValue:anID];
     [aMessage addArgumentOfTypeBOOLWithValue:aContainsFellowPupils];
-    [aMessage addArgumentOfTypeUInt64WithValue:[self maxFellowPupilNotesSizeInBytes]];
+    [aMessage addArgumentOfTypeUInt64WithValue:[self maximumFellowPupilNotesSizeInBytes]];
     
     @try
     {
@@ -622,6 +625,8 @@ const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
     aPupilsData = [[[self receivedMessage] argumentAt:0] dataFromValue];
     
 //    NSLog(@"total call count:%@, max fellow pupil notes size:%@, pupil data size:%@", @([self totalCallCount]), @([self maxFellowPupilNotesSizeInBytes]), @([aPupilsData length]));
+
+    [self setPreviousCallEndDate:[NSDate date]];
 
     return aPupilsData;
 }
