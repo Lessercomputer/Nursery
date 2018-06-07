@@ -38,6 +38,12 @@ extern NSString *NUCharacterInvalidObjectFormatException;
 
 @end
 
+@protocol NUCharacterTargetClassResolving
+
+- (BOOL)resolveTargetClassOrCoderForCharacter:(NUCharacter *)aCharacter onGarden:(NUGarden *)aGarden;
+
+@end
+
 @interface NUCharacter : NSObject <NUCoding, NUMovingUp>
 {
 	NUCharacter *superCharacter;

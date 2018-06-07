@@ -27,7 +27,7 @@
 + (NUCharacter *)establishCharacterOn:(NUGarden *)aGarden
 {
 	NUCharacter *aCharacter = [self createCharacterOn:aGarden];
-	NUCharacter *anEstablishedCharacter = [aGarden characterForName:[aCharacter fullName]];
+	NUCharacter *anEstablishedCharacter = [aGarden characterForFullName:[aCharacter fullName]];
 	
 	if (anEstablishedCharacter)
 	{

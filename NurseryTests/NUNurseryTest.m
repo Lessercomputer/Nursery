@@ -14,6 +14,7 @@
 #import "AllTypesObject.h"
 #import "SelfReferenceObject.h"
 #import "NULazyMutableArray.h"
+#import "CharacterTargetClassResolver.h"
 
 static NSString *NUNurseryTestFilePath = nil;
 
@@ -407,9 +408,12 @@ static NSString *NUNurseryTestFilePath = nil;
     [aPerson release];
 }
 
+
+
 - (void)testUpgradeCharacter
 {
     Person *aPerson0 = nil, *aPerson1 = nil, *aPerson2 = nil;
+    CharacterTargetClassResolver *aCharacterTargetClassResolver = [[CharacterTargetClassResolver new] autorelease];
     
     @autoreleasepool
     {
@@ -427,8 +431,9 @@ static NSString *NUNurseryTestFilePath = nil;
     {
         NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
         NUGarden *aGarden = [aNursery makeGarden];
+
+        [aGarden addCharacterTargetClassResolver:aCharacterTargetClassResolver];
         [Person setCharacterVersion:1];
-        [[aGarden characterForName:@"NSObject#0!Person#0"] setTargetClass:[Person class]];
         NSMutableArray *aPersons = [aGarden root];
         aPerson1 = [[Person alloc] initWithFirstName:@"aFirstName1" lastName:@"aLastName1"];
         [aPerson1 setMiddleName:@"aMiddleName1"];
@@ -442,8 +447,7 @@ static NSString *NUNurseryTestFilePath = nil;
         NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
         NUGarden *aGarden = [aNursery makeGarden];
         [Person setCharacterVersion:2];
-        [[aGarden characterForName:@"NSObject#0!Person#0"] setTargetClass:[Person class]];
-        [[aGarden characterForName:@"NSObject#0!Person#1"] setTargetClass:[Person class]];
+        [aGarden addCharacterTargetClassResolver:aCharacterTargetClassResolver];
         NSMutableArray *aPersons = [aGarden root];
         aPerson2 = [[Person alloc] initWithFirstName:@"aFirstName2" lastName:@"aLastName2"];
         [aPerson2 setMiddleName:@"aMiddleName2"];
@@ -457,9 +461,7 @@ static NSString *NUNurseryTestFilePath = nil;
     {
         NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
         NUGarden *aGarden = [aNursery makeGarden];
-        [[aGarden characterForName:@"NSObject#0!Person#0"] setTargetClass:[Person class]];
-        [[aGarden characterForName:@"NSObject#0!Person#1"] setTargetClass:[Person class]];
-        [[aGarden characterForName:@"NSObject#0!Person#2"] setTargetClass:[Person class]];
+        [aGarden addCharacterTargetClassResolver:aCharacterTargetClassResolver];
         NSMutableArray *aPersons = [aGarden root];
 
         [Person setCharacterVersion:0];

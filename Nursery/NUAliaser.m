@@ -290,8 +290,8 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 - (void)ensureCharacterRegistration:(NUCharacter *)aCharacter
 {
     do {
-        if (![[self garden] characterForName:[aCharacter fullName]])
-            [[self garden] setCharacter:aCharacter forName:[aCharacter fullName]];
+        if (![[self garden] characterForFullName:[aCharacter fullName]])
+            [[self garden] setCharacter:aCharacter forFullName:[aCharacter fullName]];
     } while ((aCharacter = [aCharacter superCharacter]));
 }
 

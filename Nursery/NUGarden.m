@@ -91,6 +91,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         [self setKeyBell:[NUBell bellWithBall:NUNotFoundBellBall garden:self]];
         [self setAliaser:[[[self class] aliaserClass] aliaserWithGarden:self]];
         [self setCharacters:[NUMutableDictionary dictionary]];
+        characterTargetClassResolvers = [NSMutableArray new];
         [self setRetainedGrades:[NSMutableIndexSet indexSet]];
         [self establishSystemCharacters];
         usesGradeSeeker = aUsesGradeSeeker;
@@ -117,6 +118,8 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     nursery = nil;
     
 	[self setNurseryRoot:nil];
+    [characterTargetClassResolvers release];
+    characterTargetClassResolvers = nil;
 	[self setCharacters:nil];
 	[self setObjectToBellDictionary:nil];
     [bells release];
@@ -267,6 +270,24 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 @end
 
+@implementation NUGarden (ResolvingCharacterTargetClass)
+
+- (void)addCharacterTargetClassResolver:(id <NUCharacterTargetClassResolving>)aTargetClassResolver
+{
+    [self lock];
+    [characterTargetClassResolvers addObject:aTargetClassResolver];
+    [self unlock];
+}
+
+- (void)removeCharacterTargetClassResolver:(id <NUCharacterTargetClassResolving>)aTargetClassResolver
+{
+    [self lock];
+    [characterTargetClassResolvers removeObject:aTargetClassResolver];
+    [self unlock];
+}
+
+@end
+
 @implementation NUGarden (SaveAndLoad)
 
 - (void)moveUp
@@ -312,7 +333,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 - (void)mergeCharacters
 {
     [[[[self characters] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(Class _Nonnull aClassForCharacter, NUCharacter * _Nonnull aCharacterInGarden, BOOL * _Nonnull aStop) {
-        NUCharacter *aCharacterInNurseryRoot = [self characterForName:[aCharacterInGarden fullName]];
+        NUCharacter *aCharacterInNurseryRoot = [self characterForFullName:[aCharacterInGarden fullName]];
         
         if (!aCharacterInNurseryRoot)
             return;
@@ -546,18 +567,18 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 {
     @try {
         [self lock];
-        
-        int aClassCount = objc_getClassList(NULL, 0);
-        Class *aClasses = malloc(sizeof(Class) * aClassCount);
-        aClassCount = objc_getClassList(aClasses, aClassCount);
-        int i;
-        for (i = 0; i < aClassCount; i++)
+
+        unsigned int aClassCount = objc_getClassList(NULL, 0);
+        Class *aClasses = objc_copyClassList(&aClassCount);
+
+        for (unsigned int i = 0; i < aClassCount; i++)
         {
             Class aClass = aClasses[i];
             
             if ([self classAutomaticallyEstablishCharacter:aClass])
                 [aClass characterOn:self];
         }
+        
         free(aClasses);
     }
     @finally {
@@ -582,12 +603,12 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 	[[self characters] setObject:aCharacter forKey:(id <NSCopying>)aClass];
 }
 
-- (NUCharacter *)characterForName:(NSString *)aName
+- (NUCharacter *)characterForFullName:(NSString *)aName
 {
 	return [[[self nurseryRoot] characters] objectForKey:aName];
 }
 
-- (void)setCharacter:(NUCharacter *)aCharacter forName:(NSString *)aName
+- (void)setCharacter:(NUCharacter *)aCharacter forFullName:(NSString *)aName
 {
 	[[[self nurseryRoot] characters] setObject:aCharacter forKey:aName];
 }
@@ -735,8 +756,28 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     
     if (aShouldMoveUpSystemCharacters)
         [self moveUpSystemCharacters];
+    
+    [self resolveTargetClassForTargetClassUnresolvedCharacters];
 
 	return aNurseryRoot;
+}
+
+- (void)resolveTargetClassForTargetClassUnresolvedCharacters
+{
+    NSEnumerator *anEnumerator = [[[self nurseryRoot] characters] keyEnumerator];
+    NSString *aCharacterFullName = nil;
+    NUCharacter *aCharacter = nil;
+    while (aCharacterFullName = [anEnumerator nextObject])
+    {
+        aCharacter = [[[self nurseryRoot] characters] objectForKey:aCharacterFullName];
+        
+        if ([aCharacter targetClass] || [aCharacter coderClass])
+            continue;
+        
+        [characterTargetClassResolvers enumerateObjectsUsingBlock:^(id <NUCharacterTargetClassResolving>  _Nonnull aCharacterTargetClassResolver, NSUInteger anIndex, BOOL * _Nonnull aStop) {
+            *aStop = [aCharacterTargetClassResolver resolveTargetClassOrCoderForCharacter:aCharacter onGarden:self];
+        }];
+    }
 }
 
 - (void)markSystemCharactersChanged

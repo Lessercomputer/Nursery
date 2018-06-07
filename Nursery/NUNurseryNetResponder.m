@@ -183,7 +183,7 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
     
     NUUInt64 aPairID = [[self nursery] newGardenID];
     NUPairedMainBranchGarden *aPairedMainBranchGarden = [[self nursery] makePairdGarden];
-    [aPairedMainBranchGarden loadNurseryRoot];
+    [aPairedMainBranchGarden nurseryRoot];
     
     [[self pairedGardens] setObject:aPairedMainBranchGarden forKey:@(aPairID)];
     

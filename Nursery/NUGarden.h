@@ -7,7 +7,9 @@
 //
 
 #import <Foundation/NSLock.h>
+
 #import <Nursery/NUTypes.h>
+#import <Nursery/NUCharacter.h>
 
 typedef enum NUFarmOutStatus {
     NUFarmOutStatusSucceeded = 0,
@@ -39,6 +41,7 @@ extern NSString * const NUObjectLoadingException;
     NUUInt64 gardenID;
     BOOL isInMoveUp;
     BOOL retainNursery;
+    NSMutableArray *characterTargetClassResolvers;
 }
 @end
 
@@ -62,6 +65,13 @@ extern NSString * const NUObjectLoadingException;
 
 - (id)root;
 - (void)setRoot:(id)aRoot;
+
+@end
+
+@interface NUGarden (ResolvingCharacterTargetClass)
+
+- (void)addCharacterTargetClassResolver:(id <NUCharacterTargetClassResolving>)aTargetClassResolver;
+- (void)removeCharacterTargetClassResolver:(id <NUCharacterTargetClassResolving>)aTargetClassResolver;
 
 @end
 
