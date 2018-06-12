@@ -11,7 +11,9 @@
 #import "NUCoding.h"
 #import "NUMovingUp.h"
 
-@class NUMutableDictionary;
+@class NSString;
+
+@class NUMutableDictionary, NUCharacter;
 
 @interface NUCharacterDictionary : NSObject <NUCoding, NUMovingUp>
 {
@@ -24,6 +26,7 @@
 - (NSUInteger)count;
 - (id)objectForKey:(id)aKey;
 - (void)setObject:(id)anObject forKey:(id<NSCopying>)aKey;
+- (void)enumerateUsingBlock:(void (^)(NSString *anInheritanceNameWithVersion, NUCharacter *aCharacter, BOOL *aStop))aBlock;
 - (NSEnumerator *)keyEnumerator;
 
 @end

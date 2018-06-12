@@ -290,8 +290,8 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 - (void)ensureCharacterRegistration:(NUCharacter *)aCharacter
 {
     do {
-        if (![[self garden] characterForFullName:[aCharacter fullName]])
-            [[self garden] setCharacter:aCharacter forFullName:[aCharacter fullName]];
+        if (![[self garden] characterForInheritanceNameWithVersion:[aCharacter inheritanceNameWithVersion]])
+            [[self garden] setCharacter:aCharacter forInheritanceNameWithVersion:[aCharacter inheritanceNameWithVersion]];
     } while ((aCharacter = [aCharacter superCharacter]));
 }
 
@@ -713,13 +713,6 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 
 - (void)ensureCharacterForDecoding:(NUCharacter *)aCharacter
 {
-    if (![aCharacter targetClass] && ![aCharacter coderClass])
-    {
-        Class aClass = NSClassFromString([aCharacter name]);
-        if (aClass && [aClass conformsToProtocol:@protocol(NUCoding)])
-            [aCharacter setTargetClass:aClass];
-    }
-    
     if (![aCharacter targetClass] && ![aCharacter coderClass])
         [[NSException exceptionWithName:NUAliaserCannotDecodeObjectException reason:NUAliaserCannotDecodeObjectException userInfo:nil] raise];
 }

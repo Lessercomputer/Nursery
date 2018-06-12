@@ -29,6 +29,7 @@ extern NSString * const NUObjectLoadingException;
     NSMutableIndexSet *retainedGrades;
     NUNurseryRoot *root;
 	NUMutableDictionary *characters;
+    NSMutableDictionary *nameWithVersionKeyedCharacters;
     NUObjectWrapper *keyObject;
     NSMutableDictionary *objectToBellDictionary;
 	NUBell *keyBell;

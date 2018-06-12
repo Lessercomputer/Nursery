@@ -27,7 +27,7 @@
 + (NUCharacter *)establishCharacterOn:(NUGarden *)aGarden
 {
 	NUCharacter *aCharacter = [self createCharacterOn:aGarden];
-	NUCharacter *anEstablishedCharacter = [aGarden characterForFullName:[aCharacter fullName]];
+	NUCharacter *anEstablishedCharacter = [aGarden characterForNameWithVersion:[aCharacter nameWithVersion]];
 	
 	if (anEstablishedCharacter)
 	{
@@ -35,10 +35,7 @@
 		[anEstablishedCharacter setTargetClass:[aCharacter targetClass]];
 	}
 	else
-	{
-		//[aGarden setObjectLayout:aCharacter forName:[aCharacter fullName]];
 		anEstablishedCharacter = aCharacter;
-	}
 	
 	[aGarden setCharacter:anEstablishedCharacter forClass:self];
     [[anEstablishedCharacter superCharacter] addSubCharacter:anEstablishedCharacter];
@@ -49,7 +46,7 @@
 + (NUCharacter *)createCharacterOn:(NUGarden *)aGarden
 {
 	NUCharacter *aSuper = self == [NSObject class] ? nil : [[[self classForNursery] superclass] characterOn:aGarden];
-	NUCharacter *aCharacter = [NUCharacter characterWithName:[self CharacterNameOn:aGarden] super:aSuper];
+	NUCharacter *aCharacter = [NUCharacter characterWithName:[self characterNameOn:aGarden] super:aSuper];
 	[aCharacter setTargetClass:self];
     [self defineCharacter:aCharacter on:aGarden];
     
@@ -69,7 +66,7 @@
         [aCharacter addOOPIvarWithName:@"isa"];
 }
 
-+ (NSString *)CharacterNameOn:(NUGarden *)aGarden
++ (NSString *)characterNameOn:(NUGarden *)aGarden
 {
 	Class aClass = [self classForNursery];
     

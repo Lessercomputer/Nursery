@@ -57,6 +57,13 @@
     [[[self bell] garden] markChangedObject:self];
 }
 
+- (void)enumerateUsingBlock:(void (^)(NSString *anInheritanceNameWithVersion, NUCharacter *aCharacter, BOOL *aStop))aBlock
+{
+    [[self dictionary] enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        aBlock(key, obj, stop);
+    }];
+}
+
 - (NSEnumerator *)keyEnumerator
 {
     return [[self dictionary] keyEnumerator];

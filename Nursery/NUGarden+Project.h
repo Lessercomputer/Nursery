@@ -86,8 +86,11 @@
 - (NUCharacter *)characterForClass:(Class)aClass;
 - (void)setCharacter:(NUCharacter *)aCharacter forClass:(Class)aClass;
 
-- (NUCharacter *)characterForFullName:(NSString *)aName;
-- (void)setCharacter:(NUCharacter *)aCharacter forFullName:(NSString *)aName;
+- (NUCharacter *)characterForNameWithVersion:(NSString *)aName;
+- (void)setCharacter:(NUCharacter *)aCharacter forNameWithVersion:(NSString *)aName;
+
+- (NUCharacter *)characterForInheritanceNameWithVersion:(NSString *)aName;
+- (void)setCharacter:(NUCharacter *)aCharacter forInheritanceNameWithVersion:(NSString *)aName;
 
 - (void)establishCharacterFor:(Class)aClass;
 
@@ -111,6 +114,7 @@
 
 - (void)saveNurseryRootOOP;
 - (NUNurseryRoot *)loadNurseryRoot;
+- (void)prepareNameWithVersionKeyedCharacters;
 - (void)resolveTargetClassForTargetClassUnresolvedCharacters;
 - (void)markSystemCharactersChanged;
 

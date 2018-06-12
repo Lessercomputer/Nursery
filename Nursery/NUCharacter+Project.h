@@ -18,6 +18,6 @@
 - (void)setAllIvars:(NSArray *)anIvars;
 
 - (void)setSubCharacters:(NSMutableSet *)aSubCharacters;
-- (void)setFullName:(NSString *)aFullName;
+- (void)setInheritanceNameWithVersion:(NSString *)anInheritanceNameWithVersion;
 
 @end

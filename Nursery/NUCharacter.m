@@ -513,34 +513,39 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
 	bell = aBell;
 }
 
-- (NSString *)fullName
+- (NSString *)nameWithVersion
 {
-	if (!fullName) [self setFullName:[self getFullName]];
-	return fullName;
+    return [NSString stringWithFormat:@"%@#%d", [self name], [self version]];
 }
 
-- (NSString *)getFullName
+- (NSString *)inheritanceNameWithVersion
 {
-	NSMutableString *aFullName;
+	if (!inheritanceName) [self setInheritanceNameWithVersion:[self getInheritanceNameWithVersion]];
+	return inheritanceName;
+}
+
+- (NSString *)getInheritanceNameWithVersion
+{
+	NSMutableString *anInheritanceNameWithVersion;
 	
  	if ([self isRoot])
-		aFullName = [[[self name] mutableCopy] autorelease];
+		anInheritanceNameWithVersion = [[[self name] mutableCopy] autorelease];
 	else
 	{
-		aFullName = [[[[self superCharacter] fullName] mutableCopy] autorelease];
-		[aFullName appendString:@"!"];
-		[aFullName appendString:[self name]];
+		anInheritanceNameWithVersion = [[[[self superCharacter] inheritanceNameWithVersion] mutableCopy] autorelease];
+		[anInheritanceNameWithVersion appendString:@"!"];
+		[anInheritanceNameWithVersion appendString:[self name]];
 	}
 	
-	[aFullName appendFormat:@"#%d", [self version]];
+	[anInheritanceNameWithVersion appendFormat:@"#%d", [self version]];
 	
-	return aFullName;
+	return anInheritanceNameWithVersion;
 }
 
-- (void)setFullName:(NSString *)aFullName
+- (void)setInheritanceNameWithVersion:(NSString *)anInheritanceNameWithVersion
 {
-	[fullName autorelease];
-	fullName = [aFullName copy];
+	[inheritanceName autorelease];
+	inheritanceName = [anInheritanceNameWithVersion copy];
 }
 
 - (Class)targetClass

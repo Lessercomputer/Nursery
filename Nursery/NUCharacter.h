@@ -30,7 +30,7 @@ extern NSString *NUCharacterInvalidObjectFormatException;
 + (NUCharacter *)establishCharacterOn:(NUGarden *)aGarden;
 + (NUCharacter *)createCharacterOn:(NUGarden *)aGarden;
 + (void)defineCharacter:(NUCharacter *)aCharacter on:(NUGarden *)aGarden;
-+ (NSString *)CharacterNameOn:(NUGarden *)aGarden;
++ (NSString *)characterNameOn:(NUGarden *)aGarden;
 - (Class)classForNursery;
 
 @optional
@@ -58,7 +58,7 @@ extern NSString *NUCharacterInvalidObjectFormatException;
     NUCoder *coder;
 	BOOL needsComputeBasicSize;
 	NUUInt64 basicSize;
-	NSString *fullName;
+	NSString *inheritanceName;
 	BOOL isMutable;
 	NSArray *allOOPIvars;
 	NSArray *allIvars;
@@ -136,8 +136,9 @@ extern NSString *NUCharacterInvalidObjectFormatException;
 - (void)computeIvarOffset;
 - (NUUInt64)indexedIvarOffset;
 
-- (NSString *)fullName;
-- (NSString *)getFullName;
+- (NSString *)nameWithVersion;
+- (NSString *)inheritanceNameWithVersion;
+- (NSString *)getInheritanceNameWithVersion;
 
 - (Class)targetClass;
 - (void)setTargetClass:(Class)aClass;
