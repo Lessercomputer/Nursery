@@ -331,8 +331,7 @@
 {
     [super init];
     
-    NUCharacter *aCharacter = [anAliaser character];
-    aCharacter = [[self class] isEqual:[NUBTreeNode class]] ? aCharacter : [aCharacter superCharacter];
+    NUCharacter *aCharacter = [anAliaser characterForClass:[NUBTreeNode class]];
     
     if ([aCharacter version] == 0)
     {

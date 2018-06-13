@@ -159,6 +159,11 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
     return [[self currentContext] character];
 }
 
+- (NUCharacter *)characterForClass:(Class)aClass
+{
+    return [[self garden] characterForClass:aClass];
+}
+
 - (NUUInt64)rootOOP
 {
     return NUNilOOP;

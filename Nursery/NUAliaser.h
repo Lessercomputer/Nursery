@@ -44,8 +44,8 @@ extern NSString *NUAliaserCannotDecodeObjectException;
 - (NUUInt64)indexedIvarOffset;
 - (NUUInt64)indexedIvarsSize;
 - (NUCharacter *)character;
+- (NUCharacter *)characterForClass:(Class)aClass;
 - (NUUInt64)rootOOP;
-
 
 @end
 
