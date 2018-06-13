@@ -7,28 +7,28 @@
 //
 
 #import <Foundation/NSException.h>
-#import "NUBTreeEnumerator.h"
-#import "NUBTree.h"
-#import "NUBTreeLeaf.h"
+#import "NUBPlusTreeEnumerator.h"
+#import "NUBPlusTree.h"
+#import "NUBPlusTreeLeaf.h"
 
-@implementation NUBTreeEnumerator
+@implementation NUBPlusTreeEnumerator
 
-+ (id)enumeratorWithTree:(NUBTree *)aTree keyGreaterThanOrEqualTo:(id)aKey1 keyLessThanOrEqualTo:(id)aKey2 options:(NSEnumerationOptions)anOpts;
++ (id)enumeratorWithTree:(NUBPlusTree *)aTree keyGreaterThanOrEqualTo:(id)aKey1 keyLessThanOrEqualTo:(id)aKey2 options:(NSEnumerationOptions)anOpts;
 {
     return [[[self alloc] initWithTree:aTree keyGreaterThanOrEqualTo:aKey1 keyLessThanOrEqualTo:aKey2 options:anOpts] autorelease];
 }
 
-+ (id)enumeratorWithTree:(NUBTree *)aTree keyGreaterThan:(id)aKey1 orEqual:(BOOL)anOrEqualFlag1 keyLessThan:(id)aKey2 orEqual:(BOOL)anOrEqualFlag2 options:(NSEnumerationOptions)anOpts
++ (id)enumeratorWithTree:(NUBPlusTree *)aTree keyGreaterThan:(id)aKey1 orEqual:(BOOL)anOrEqualFlag1 keyLessThan:(id)aKey2 orEqual:(BOOL)anOrEqualFlag2 options:(NSEnumerationOptions)anOpts
 {
     return [[[self alloc] initWithTree:aTree keyGreaterThan:aKey1 orEqual:anOrEqualFlag1 keyLessThan:aKey2 orEqual:anOrEqualFlag2 options:anOpts] autorelease];
 }
 
-- (id)initWithTree:(NUBTree *)aTree keyGreaterThanOrEqualTo:(id)aKey1 keyLessThanOrEqualTo:(id)aKey2 options:(NSEnumerationOptions)anOpts
+- (id)initWithTree:(NUBPlusTree *)aTree keyGreaterThanOrEqualTo:(id)aKey1 keyLessThanOrEqualTo:(id)aKey2 options:(NSEnumerationOptions)anOpts
 {
     return [self initWithTree:aTree keyGreaterThan:aKey1 orEqual:YES keyLessThan:aKey2 orEqual:YES options:anOpts];
 }
 
-- (id)initWithTree:(NUBTree *)aTree keyGreaterThan:(id)aKey1 orEqual:(BOOL)anOrEqualFlag1 keyLessThan:(id)aKey2 orEqual:(BOOL)anOrEqualFlag2 options:(NSEnumerationOptions)anOpts
+- (id)initWithTree:(NUBPlusTree *)aTree keyGreaterThan:(id)aKey1 orEqual:(BOOL)anOrEqualFlag1 keyLessThan:(id)aKey2 orEqual:(BOOL)anOrEqualFlag2 options:(NSEnumerationOptions)anOpts
 {
     self = [super init];
     
@@ -117,7 +117,7 @@
                 if (nextValueIndex >= [node valueCount])
                 {
                     [node autorelease];
-                    node = (NUBTreeLeaf *)[[node rightNode] retain];
+                    node = (NUBPlusTreeLeaf *)[[node rightNode] retain];
                     nextValueIndex = 0;
                 }
                 
@@ -142,7 +142,7 @@
                 if (nextValueIndex < 0)
                 {
                     [node autorelease];
-                    node = (NUBTreeLeaf *)[[node leftNode] retain];
+                    node = (NUBPlusTreeLeaf *)[[node leftNode] retain];
                     nextValueIndex = (NUInt32)[node valueCount] - 1;
                 }
                 

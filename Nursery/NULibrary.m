@@ -7,7 +7,7 @@
 //
 
 #import "NULibrary.h"
-#import "NUBTree.h"
+#import "NUBPlusTree.h"
 #import "NUCharacter.h"
 #import "NUIvar.h"
 #import "NUAliaser.h"
@@ -16,8 +16,8 @@
 
 @interface NULibrary (Private)
 
-- (NUBTree *)tree;
-- (void)setTree:(NUBTree *)aTree;
+- (NUBPlusTree *)tree;
+- (void)setTree:(NUBPlusTree *)aTree;
 
 @end
 
@@ -35,14 +35,14 @@
 
 - (id)init
 {
-    return [self initWithComparator:[[[NUBTree defaultComparatorClass] new] autorelease]];
+    return [self initWithComparator:[[[NUBPlusTree defaultComparatorClass] new] autorelease]];
 }
 
 - (id)initWithComparator:(id <NUComparator>)aComparator
 {
     [super init];
     
-    NUSetIvar(&tree, [NUBTree treeWithKeyCapacity:[NUBTree defaultKeyCapacity] comparator:aComparator]);
+    NUSetIvar(&tree, [NUBPlusTree treeWithKeyCapacity:[NUBPlusTree defaultKeyCapacity] comparator:aComparator]);
     
     return self;
 }
@@ -205,12 +205,12 @@
 
 @implementation NULibrary (Private)
 
-- (NUBTree *)tree
+- (NUBPlusTree *)tree
 {
     return NUGetIvar(&tree);
 }
 
-- (void)setTree:(NUBTree *)aTree
+- (void)setTree:(NUBPlusTree *)aTree
 {
     NUSetIvar(&tree, aTree);
     [[self bell] markChanged];

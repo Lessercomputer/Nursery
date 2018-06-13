@@ -17,7 +17,7 @@
 #import "NUReversedObjectTable.h"
 #import "NUSpaces.h"
 #import "NURegion.h"
-#import "NUOpaqueBTreeNode.h"
+#import "NUOpaqueBPlusTreeNode.h"
 #import "NUMainBranchAliaser.h"
 #import "NUBellBall.h"
 #import "NUGarden.h"
@@ -187,7 +187,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 #ifdef DEBUG
             NSLog(@"[[self nursery] spaces] nodeIsUsedFor:%llu] == YES", nextLocation);
 #endif
-            NUOpaqueBTreeNode *aNode = [[[self nursery] spaces] nodeFor:aCurrentNodeRegion.location];
+            NUOpaqueBPlusTreeNode *aNode = [[[self nursery] spaces] nodeFor:aCurrentNodeRegion.location];
             
             [aNode changeNodePageWith:aMovedNodeRegion.location];
             [[[self nursery] pages] moveBytesAt:aCurrentNodeRegion.location length:aCurrentNodeRegion.length to:aMovedNodeRegion.location buffer:aBuffer length:aBufferSize];

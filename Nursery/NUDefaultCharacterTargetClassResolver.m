@@ -9,12 +9,34 @@
 #import <Foundation/NSString.h>
 
 #import "NUDefaultCharacterTargetClassResolver.h"
-#import "NUBTreeNode.h"
+#import "NUBPlusTree.h"
+#import "NUBPlusTreeBranch.h"
+#import "NUBPlusTreeLeaf.h"
 
 @implementation NUDefaultCharacterTargetClassResolver
 
 - (BOOL)resolveTargetClassOrCoderForCharacter:(NUCharacter *)aCharacter onGarden:(NUGarden *)aGarden
 {
+    NSString *aCharacterName = [aCharacter name];
+    
+    if ([aCharacterName isEqualToString:@"NUBTree"])
+    {
+        [aCharacter setTargetClass:[NUBPlusTree class]];
+        return YES;
+    }
+    
+    if ([aCharacterName isEqualToString:@"NUBTreeBranch"])
+    {
+        [aCharacter setTargetClass:[NUBPlusTreeBranch class]];
+        return YES;
+    }
+    
+    if ([aCharacterName isEqualToString:@"NUBTreeLeaf"])
+    {
+        [aCharacter setTargetClass:[NUBPlusTreeLeaf class]];
+        return YES;
+    }
+    
     return NO;
 }
 

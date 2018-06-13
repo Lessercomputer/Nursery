@@ -1,5 +1,5 @@
 //
-//  NUBTreeBranch.m
+//  NUBPlusTreeBranch.m
 //  Nursery
 //
 //  Created by Akifumi Takata on 2013/01/20.
@@ -9,20 +9,20 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSIndexSet.h>
 
-#import "NUBTreeBranch.h"
-#import "NUBTree.h"
+#import "NUBPlusTreeBranch.h"
+#import "NUBPlusTree.h"
 #import "NUBell.h"
 #import "NUGarden.h"
 #import "NULazyMutableArray.h"
 
-@implementation NUBTreeBranch
+@implementation NUBPlusTreeBranch
 
-+ (id)nodeWithTree:(NUBTree *)aTree key:(id)aKey leftChildNode:(NUBTreeNode *)aLeftChildNode rightChildNode:(NUBTreeNode *)aRightChildNode
++ (id)nodeWithTree:(NUBPlusTree *)aTree key:(id)aKey leftChildNode:(NUBPlusTreeNode *)aLeftChildNode rightChildNode:(NUBPlusTreeNode *)aRightChildNode
 {
     return [[[self alloc] initWithTree:aTree key:aKey leftChildNode:aLeftChildNode rightChildNode:aRightChildNode] autorelease];
 }
 
-- (id)initWithTree:(NUBTree *)aTree key:(id)aKey leftChildNode:(NUBTreeNode *)aLeftChildNode rightChildNode:(NUBTreeNode *)aRightChildNode
+- (id)initWithTree:(NUBPlusTree *)aTree key:(id)aKey leftChildNode:(NUBPlusTreeNode *)aLeftChildNode rightChildNode:(NUBPlusTreeNode *)aRightChildNode
 {
     [super initWithTree:aTree];
     
@@ -58,15 +58,15 @@
     return [[self nodeForKey:aKey] objectForKey:aKey];
 }
 
-- (NUBTreeSetObjectResult)setObject:(id)anObject forKey:(id)aKey
+- (NUBPlusTreeSetObjectResult)setObject:(id)anObject forKey:(id)aKey
 {
     NUUInt64 aNodeIndex = [self nodeIndexForKey:aKey];
-    NUBTreeNode *aNode = [self valueAt:aNodeIndex];
-    NUBTreeSetObjectResult aSetResult = [aNode setObject:anObject forKey:aKey];
+    NUBPlusTreeNode *aNode = [self valueAt:aNodeIndex];
+    NUBPlusTreeSetObjectResult aSetResult = [aNode setObject:anObject forKey:aKey];
     
     if ([aNode isOverflow])
     {
-        NUBTreeBranch *aNewChildNode = (NUBTreeBranch *)[aNode split];
+        NUBPlusTreeBranch *aNewChildNode = (NUBPlusTreeBranch *)[aNode split];
         [self insertKey:[aNewChildNode firstKey] at:aNodeIndex];
         [self insertNode:aNewChildNode at:aNodeIndex + 1];
     }
@@ -77,7 +77,7 @@
 - (BOOL)removeObjectForKey:(id)aKey
 {
     NUUInt64 aNodeIndex = [self nodeIndexForKey:aKey];
-    NUBTreeNode *aNode = [self valueAt:aNodeIndex];
+    NUBPlusTreeNode *aNode = [self valueAt:aNodeIndex];
     BOOL aRemoved = [aNode removeObjectForKey:aKey];
     
     if ([aNode isUnderflow])
@@ -147,7 +147,7 @@
     return aRemoved;
 }
 
-- (NUBTreeNode *)split
+- (NUBPlusTreeNode *)split
 {
     NSRange aKeyRemoveRange = NSMakeRange([self minKeyCount], [self keyCount] - [self minKeyCount]);
     NSRange aNewKeyRange = NSMakeRange(aKeyRemoveRange.location + 1, aKeyRemoveRange.length - 1);
@@ -167,7 +167,7 @@
         NSLog(@"error");
 #endif
     
-    NUBTreeBranch *aBranch = [[self class] nodeWithTree:[self tree] keys:aKeys values:aValues];
+    NUBPlusTreeBranch *aBranch = [[self class] nodeWithTree:[self tree] keys:aKeys values:aValues];
     
 #ifdef DEBUG
     if ([aBranch keyCount] + 1 != [self valueCount])
@@ -278,7 +278,7 @@
     [super mergeRightNode];
 }
 
-- (NUBTreeNode *)nodeForKey:(id)aKey
+- (NUBPlusTreeNode *)nodeForKey:(id)aKey
 {
     return [self valueAt:[self nodeIndexForKey:aKey]];
 }
@@ -290,12 +290,12 @@
     return aKeyIndex == NUNotFound64 ? 0 : aKeyIndex + 1;
 }
 
-- (void)addNode:(NUBTreeNode *)aNode
+- (void)addNode:(NUBPlusTreeNode *)aNode
 {
     [self insertNode:aNode at:[self valueCount]];
 }
 
-- (void)insertNode:(NUBTreeNode *)aNode at:(NUUInt64)anIndex
+- (void)insertNode:(NUBPlusTreeNode *)aNode at:(NUUInt64)anIndex
 {
     [[self values] insertObject:aNode atIndex:anIndex];
     [aNode setParentNode:self];
@@ -304,7 +304,7 @@
 
 - (void)removeNodeAt:(NUUInt64)anIndex
 {
-    NUBTreeNode *aNode = [self valueAt:anIndex];
+    NUBPlusTreeNode *aNode = [self valueAt:anIndex];
     [[self values] removeObjectAtIndex:anIndex];
     [aNode setParentNode:nil];
     [[[self bell] garden] markChangedObject:[self values]];
@@ -318,7 +318,7 @@
 
 @end
 
-@implementation NUBTreeBranch (Private)
+@implementation NUBPlusTreeBranch (Private)
 
 - (void)setValues:(NULazyMutableArray *)aValues
 {
@@ -339,12 +339,12 @@
     [[self valueAt:aKeyIndex != NUNotFound64 ? aKeyIndex + 1 : 0] updateKey:aKey];
 }
 
-- (NUBTreeLeaf *)firstLeaf
+- (NUBPlusTreeLeaf *)firstLeaf
 {
     return [[self valueAt:0] firstLeaf];
 }
 
--(NUBTreeLeaf *)lastLeaf
+-(NUBPlusTreeLeaf *)lastLeaf
 {
     return [[self valueAt:[self valueCount] - 1] lastLeaf];
 }
@@ -358,12 +358,12 @@
     return aKeyIndex != NUNotFound64 ? aKeyIndex + 1 : 0;
 }
 
-- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThan:(id)aKey orEqualToKey:(BOOL)anOrEqualToKeyFlag keyIndex:(NUUInt64 *)aKeyIndex
+- (NUBPlusTreeLeaf *)leafNodeContainingKeyGreaterThan:(id)aKey orEqualToKey:(BOOL)anOrEqualToKeyFlag keyIndex:(NUUInt64 *)aKeyIndex
 {
     return [[self valueAt:[self insertionTargetNodeIndexFor:aKey]] leafNodeContainingKeyGreaterThan:aKey orEqualToKey:anOrEqualToKeyFlag keyIndex:aKeyIndex];
 }
 
-- (NUBTreeLeaf *)leafNodeContainingKeyLessThan:(id)aKey orEqualToKey:(BOOL)anOrEqualToKeyFlag keyIndex:(NUUInt64 *)aKeyIndex
+- (NUBPlusTreeLeaf *)leafNodeContainingKeyLessThan:(id)aKey orEqualToKey:(BOOL)anOrEqualToKeyFlag keyIndex:(NUUInt64 *)aKeyIndex
 {
     return [[self valueAt:[self insertionTargetNodeIndexFor:aKey]] leafNodeContainingKeyLessThan:aKey orEqualToKey:anOrEqualToKeyFlag keyIndex:aKeyIndex];
 }

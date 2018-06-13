@@ -1,42 +1,42 @@
 //
-//  NUOpaqueBTreeBranch.h
+//  NUOpaqueBPlusTreeBranch.h
 //  Nursery
 //
 //  Created by Akifumi Takata on 10/10/27.
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
-#import "NUOpaqueBTreeNode.h"
+#import "NUOpaqueBPlusTreeNode.h"
 
 @class NUIndexArray;
 
-extern NSString *NUBtreeNodeIsNotChildNodeException;
+extern NSString *NUBPlusTreeNodeIsNotChildNodeException;
 
-@interface NUOpaqueBTreeBranch : NUOpaqueBTreeNode
+@interface NUOpaqueBPlusTreeBranch : NUOpaqueBPlusTreeNode
 {
 
 }
 @end
 
-@interface NUOpaqueBTreeBranch (Accessing)
+@interface NUOpaqueBPlusTreeBranch (Accessing)
 
 - (NUUInt32)lastNodeIndex;
 - (NUUInt32)insertionTargetNodeIndexFor:(NUUInt8 *)aKey;
-- (NUOpaqueBTreeNode *)nodeAt:(NUUInt32)anIndex;
+- (NUOpaqueBPlusTreeNode *)nodeAt:(NUUInt32)anIndex;
 - (NUUInt64)nodeLocationAt:(NUUInt32)anIndex;
 - (NUIndexArray *)nodeLocations;
 
 - (NUUInt32)leftKeyIndexForNodeAt:(NUUInt32)anIndex;
 - (NUUInt32)rightKeyIndexForNodeAt:(NUUInt32)anIndex;
 
-- (NUOpaqueBTreeBranch *)leftBranch;
-- (NUOpaqueBTreeBranch *)rightBranch;
+- (NUOpaqueBPlusTreeBranch *)leftBranch;
+- (NUOpaqueBPlusTreeBranch *)rightBranch;
 
-- (NUOpaqueBTreeBranch *)parentNodeOf:(NUOpaqueBTreeNode *)aNode;
+- (NUOpaqueBPlusTreeBranch *)parentNodeOf:(NUOpaqueBPlusTreeNode *)aNode;
 
 @end
 
-@interface NUOpaqueBTreeBranch (Modifying)
+@interface NUOpaqueBPlusTreeBranch (Modifying)
 
 - (void)addNode:(NUUInt64)aNodeLocation;
 - (void)insertNode:(NUUInt64)aNodeLocation at:(NUUInt32)anIndex;
@@ -46,15 +46,15 @@ extern NSString *NUBtreeNodeIsNotChildNodeException;
 - (void)removeNodesAt:(NUUInt32)anIndex count:(NUUInt32)aCount;
 - (void)replaceNodeAt:(NUUInt32)anIndex with:(NUUInt64)aNodeLocation;
 
-- (NUOpaqueBTreeNode *)insertChildNode:(NUOpaqueBTreeNode *)aChildNode at:(NUUInt32)aChildNodeIndex;
+- (NUOpaqueBPlusTreeNode *)insertChildNode:(NUOpaqueBPlusTreeNode *)aChildNode at:(NUUInt32)aChildNodeIndex;
 
 - (void)branchDidInsertNodes:(NUUInt8 *)aNodeLocations at:(NUUInt32)anIndex count:(NUUInt32)aCount;
 
-- (void)setFirstNode:(NUOpaqueBTreeNode *)aFirstNode secondNode:(NUOpaqueBTreeNode *)aSecondNode key:(NUUInt8 *)aKey;
+- (void)setFirstNode:(NUOpaqueBPlusTreeNode *)aFirstNode secondNode:(NUOpaqueBPlusTreeNode *)aSecondNode key:(NUUInt8 *)aKey;
 
 @end
 
-@interface NUOpaqueBTreeBranch (ManagingPage)
+@interface NUOpaqueBPlusTreeBranch (ManagingPage)
 
 - (void)fixVirtualNodes;
 

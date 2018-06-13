@@ -10,11 +10,11 @@
 #import <Nursery/NUComparator.h>
 #import <Nursery/NUCoding.h>
 
-@class NUBTree, NUBell;
+@class NUBPlusTree, NUBell;
 
 @interface NULibrary : NSObject
 {
-    NUBTree *tree;
+    NUBPlusTree *tree;
     NUBell *bell;
 }
 

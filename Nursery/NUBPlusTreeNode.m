@@ -1,5 +1,5 @@
 //
-//  NUBTreeNode.m
+//  NUBPlusTreeNode.m
 //  Nursery
 //
 //  Created by Akifumi Takata on 2013/01/20.
@@ -7,35 +7,35 @@
 //
 
 
-#import "NUBTreeNode.h"
+#import "NUBPlusTreeNode.h"
 #import "NULazyMutableArray.h"
-#import "NUBTree.h"
+#import "NUBPlusTree.h"
 #import "NUCharacter.h"
 #import "NUIvar.h"
 #import "NUAliaser.h"
 #import "NUBell.h"
 #import "NUGarden.h"
 
-@implementation NUBTreeNode
+@implementation NUBPlusTreeNode
 
-+ (id)nodeWithTree:(NUBTree *)aTree
++ (id)nodeWithTree:(NUBPlusTree *)aTree
 {
     return [[[self alloc] initWithTree:aTree] autorelease];
 }
 
-+ (id)nodeWithTree:(NUBTree *)aTree keys:(NULazyMutableArray *)aKeys values:(NULazyMutableArray *)aValues
++ (id)nodeWithTree:(NUBPlusTree *)aTree keys:(NULazyMutableArray *)aKeys values:(NULazyMutableArray *)aValues
 {
     return [[[self alloc] initWithTree:aTree keys:aKeys values:aValues] autorelease];
 }
 
-- (id)initWithTree:(NUBTree *)aTree
+- (id)initWithTree:(NUBPlusTree *)aTree
 {   
     return [self initWithTree:aTree
                          keys:[NULazyMutableArray arrayWithCapacity:[aTree keyCapacity]]
                        values:[NULazyMutableArray arrayWithCapacity:[self isLeaf] ? [aTree keyCapacity] : [aTree keyCapacity] + 1]];
 }
 
-- (id)initWithTree:(NUBTree *)aTree keys:(NULazyMutableArray *)aKeys values:(NULazyMutableArray *)aValues
+- (id)initWithTree:(NUBPlusTree *)aTree keys:(NULazyMutableArray *)aKeys values:(NULazyMutableArray *)aValues
 {
     [super init];
     
@@ -64,9 +64,9 @@
     return nil;
 }
 
-- (NUBTreeSetObjectResult)setObject:(id)anObject forKey:(id)aKey
+- (NUBPlusTreeSetObjectResult)setObject:(id)anObject forKey:(id)aKey
 {
-    return NUBTreeSetObjectResultAdd;
+    return NUBPlusTreeSetObjectResultAdd;
 }
 
 - (BOOL)removeObjectForKey:(id)aKey
@@ -84,22 +84,22 @@
     return NUGetIvar(&values);
 }
 
-- (NUBTreeNode *)leftNode
+- (NUBPlusTreeNode *)leftNode
 {
     return NUGetIvar(&leftNode);
 }
 
-- (NUBTreeNode *)rightNode
+- (NUBPlusTreeNode *)rightNode
 {
     return NUGetIvar(&rightNode);
 }
 
-- (NUBTreeNode *)parentNode
+- (NUBPlusTreeNode *)parentNode
 {
     return NUGetIvar(&parentNode);
 }
 
-- (NUBTree *)tree
+- (NUBPlusTree *)tree
 {
     return NUGetIvar(&tree);
 }
@@ -264,7 +264,7 @@
     }
 }
 
-- (NUBTreeNode *)split
+- (NUBPlusTreeNode *)split
 {
     return nil;
 }
@@ -297,7 +297,7 @@
 
 @end
 
-@implementation NUBTreeNode (Coding)
+@implementation NUBPlusTreeNode (Coding)
 
 + (BOOL)automaticallyEstablishCharacter
 {
@@ -306,7 +306,7 @@
 
 + (void)defineCharacter:(NUCharacter *)aCharacter on:(NUGarden *)aGarden
 {
-    if (![[self class] isEqual:[NUBTreeNode class]]) return;
+    if (![[self class] isEqual:[NUBPlusTreeNode class]]) return;
 
     [aCharacter setVersion:1];
     [aCharacter addOOPIvarWithName:@"keys"];
@@ -331,7 +331,7 @@
 {
     [super init];
     
-    NUCharacter *aCharacter = [anAliaser characterForClass:[NUBTreeNode class]];
+    NUCharacter *aCharacter = [anAliaser characterForClass:[NUBPlusTreeNode class]];
     
     if ([aCharacter version] == 0)
     {
@@ -369,7 +369,7 @@
 
 @end
 
-@implementation NUBTreeNode (Private)
+@implementation NUBPlusTreeNode (Private)
 
 - (void)setKeys:(NULazyMutableArray *)aKeys
 {
@@ -383,34 +383,34 @@
     [[self bell] markChanged];
 }
 
-- (void)setLeftNode:(NUBTreeNode *)aLeftNode
+- (void)setLeftNode:(NUBPlusTreeNode *)aLeftNode
 {
     NUSetIvar(&leftNode, aLeftNode);
     [[self bell] markChanged];
 }
 
-- (void)setRightNode:(NUBTreeNode *)aRightNode
+- (void)setRightNode:(NUBPlusTreeNode *)aRightNode
 {
     NUSetIvar(&rightNode, aRightNode);
     [[self bell] markChanged];
 }
 
-- (void)setParentNode:(NUBTreeNode *)aParentNode
+- (void)setParentNode:(NUBPlusTreeNode *)aParentNode
 {
     NUSetIvar(&parentNode, aParentNode);
     [[self bell] markChanged];
 }
 
-- (void)insertRightSiblingNode:(NUBTreeNode *)aNode
+- (void)insertRightSiblingNode:(NUBPlusTreeNode *)aNode
 {
-    NUBTreeNode *anOldRightSibling = [self rightNode];
+    NUBPlusTreeNode *anOldRightSibling = [self rightNode];
     [aNode setLeftNode:self];
     [aNode setRightNode:anOldRightSibling];
     [self setRightNode:aNode];
     [anOldRightSibling setLeftNode:aNode];
 }
 
-- (void)setTree:(NUBTree *)aTree
+- (void)setTree:(NUBPlusTree *)aTree
 {
     NUSetIvar(&tree, aTree);
     [[self bell] markChanged];
@@ -421,32 +421,32 @@
     
 }
 
-- (NUBTreeLeaf *)firstLeaf
+- (NUBPlusTreeLeaf *)firstLeaf
 {
     return nil;
 }
 
--(NUBTreeLeaf *)lastLeaf
+-(NUBPlusTreeLeaf *)lastLeaf
 {
     return nil;
 }
 
-- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex
+- (NUBPlusTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex
 {
     return [self leafNodeContainingKeyGreaterThan:aKey orEqualToKey:YES keyIndex:aKeyIndex];
 }
 
-- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThan:(id)aKey orEqualToKey:(BOOL)anOrEqualToKeyFlag keyIndex:(NUUInt64 *)aKeyIndex
+- (NUBPlusTreeLeaf *)leafNodeContainingKeyGreaterThan:(id)aKey orEqualToKey:(BOOL)anOrEqualToKeyFlag keyIndex:(NUUInt64 *)aKeyIndex
 {
     return nil;
 }
 
--(NUBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex
+-(NUBPlusTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex
 {
     return [self leafNodeContainingKeyLessThan:aKey orEqualToKey:YES keyIndex:aKeyIndex];
 }
 
-- (NUBTreeLeaf *)leafNodeContainingKeyLessThan:(id)aKey orEqualToKey:(BOOL)anOrEqualToKeyFlag keyIndex:(NUUInt64 *)aKeyIndex
+- (NUBPlusTreeLeaf *)leafNodeContainingKeyLessThan:(id)aKey orEqualToKey:(BOOL)anOrEqualToKeyFlag keyIndex:(NUUInt64 *)aKeyIndex
 {
     return nil;
 }

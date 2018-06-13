@@ -20,7 +20,7 @@
 //#include <netinet/tcp.h>
 //#include <netinet/tcp_var.h>
 
-const NUUInt64 NUNurseryNetworkerReadBufferSize = 4096;
+const NUUInt64 NUNurseryNetServiceIODefaultReadBufferSize = 4096;
 
 @implementation NUNurseryNetServiceIO
 
@@ -28,7 +28,7 @@ const NUUInt64 NUNurseryNetworkerReadBufferSize = 4096;
 {
     if (self = [super init])
     {
-        readBufferSize = NUNurseryNetworkerReadBufferSize;
+        readBufferSize = NUNurseryNetServiceIODefaultReadBufferSize;
     }
     
     return self;

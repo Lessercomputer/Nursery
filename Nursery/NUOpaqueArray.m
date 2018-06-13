@@ -270,7 +270,7 @@ NSString *NUOpaqueArrayCannotGrowException = @"NUOpaqueArrayCannotGrowException"
 
 @end
 
-@implementation NUOpaqueArray (SupportForBTree)
+@implementation NUOpaqueArray (SupportForBPlusTree)
 
 - (NUOpaqueArray *)insert:(NUUInt8 *)aValue to:(NUUInt32)anIndex insertedTo:(NUOpaqueArray **)aValues at:(NUUInt32 *)anInsertedIndex
 {

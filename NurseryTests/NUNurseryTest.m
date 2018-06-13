@@ -89,6 +89,30 @@ static NSString *NUNurseryTestFilePath = nil;
     [self _testSaveManyNSNumbersUsingSameGardenTimes:10 withCountPerSave:1000000];
 }
 
+- (void)testSaveFewNSNumbersManyTimesUsingSameGarden
+{
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUGarden *aGarden = [aNursery makeGarden];
+    NULibrary *aLibrary = [NULibrary library];
+    [aGarden setRoot:aLibrary];
+    
+    [self measureBlock:
+    ^{
+        NUUInt64 aNumber = 0;
+        
+        for (NSUInteger i = 0; i < 1000; i++)
+        {
+            for (NSUInteger j = 0; j < 3; j++)
+            {
+                NSNumber *aNumberObject = @(aNumber++);
+                [aLibrary setObject:aNumberObject forKey:aNumberObject];
+            }
+            
+            XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded);
+        }
+    }];
+}
+
 - (void)testSaveManyNSNumbersUsingDifferentGardens
 {
     [self _testSaveManyNSNumbersUsingDifferentGardensTimes:10 withCountPerSave:100];

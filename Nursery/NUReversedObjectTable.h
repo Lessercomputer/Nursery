@@ -6,11 +6,11 @@
 //
 //
 
-#import "NUOpaqueBTree.h"
+#import "NUOpaqueBPlusTree.h"
 
 @class NSRecursiveLock;
 
-@interface NUReversedObjectTable : NUOpaqueBTree
+@interface NUReversedObjectTable : NUOpaqueBPlusTree
 {
     NSRecursiveLock *lock;
 }

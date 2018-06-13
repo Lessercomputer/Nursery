@@ -1,5 +1,5 @@
 //
-//  NUBTreeLeaf.m
+//  NUBPlusTreeLeaf.m
 //  Nursery
 //
 //  Created by Akifumi Takata on 2013/01/20.
@@ -9,13 +9,13 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSIndexSet.h>
 
-#import "NUBTreeLeaf.h"
-#import "NUBTree.h"
+#import "NUBPlusTreeLeaf.h"
+#import "NUBPlusTree.h"
 #import "NUBell.h"
 #import "NUGarden.h"
 #import "NULazyMutableArray.h"
 
-@implementation NUBTreeLeaf
+@implementation NUBPlusTreeLeaf
 
 - (BOOL)isLeaf
 {
@@ -47,17 +47,17 @@
     return nil;
 }
 
-- (NUBTreeSetObjectResult)setObject:(id)anObject forKey:(id)aKey
+- (NUBPlusTreeSetObjectResult)setObject:(id)anObject forKey:(id)aKey
 {
     NUUInt64 aKeyIndex;
-    NUBTreeSetObjectResult result;
+    NUBPlusTreeSetObjectResult result;
     
     if ([self getKeyIndexGreaterThanOrEqualTo:aKey keyIndexInto:&aKeyIndex])
     {
         [[self keys] replaceObjectAtIndex:aKeyIndex withObject:aKey];
         [[self values] replaceObjectAtIndex:aKeyIndex withObject:anObject];
         
-        result = NUBTreeSetObjectResultReplace;
+        result = NUBPlusTreeSetObjectResultReplace;
     }
     else
     {
@@ -66,7 +66,7 @@
         [[self keys] insertObject:aKey atIndex:aKeyIndex];
         [[self values] insertObject:anObject atIndex:aKeyIndex];
 
-        result = NUBTreeSetObjectResultAdd;
+        result = NUBPlusTreeSetObjectResultAdd;
     }
     
     [[[self bell] garden] markChangedObject:[self keys]];
@@ -92,13 +92,13 @@
     return NO;
 }
 
-- (NUBTreeNode *)split
+- (NUBPlusTreeNode *)split
 {
     NSRange aRange = NSMakeRange([self minKeyCount], [self keyCount] - [self minKeyCount]);
     NULazyMutableArray *aKeys = [[self keys] subLazyMutableArrayWithRange:aRange];
     NULazyMutableArray *aNodes = [[self values] subLazyMutableArrayWithRange:aRange];
     
-    NUBTreeLeaf *aLeaf = [[self class] nodeWithTree:[self tree] keys:aKeys values:aNodes];
+    NUBPlusTreeLeaf *aLeaf = [[self class] nodeWithTree:[self tree] keys:aKeys values:aNodes];
 
     [[self keys] removeObjectsInRange:aRange];
     [[self values] removeObjectsInRange:aRange];
@@ -112,7 +112,7 @@
 
 - (void)shuffleLeftNode
 {
-    NUBTreeLeaf *aLeftNode = (NUBTreeLeaf *)[self leftNode];
+    NUBPlusTreeLeaf *aLeftNode = (NUBPlusTreeLeaf *)[self leftNode];
     NSRange aRange = NSMakeRange([[self tree] minKeyCount], [aLeftNode keyCount] - [aLeftNode minKeyCount]);
     NSArray *aKeys = [[aLeftNode keys] subarrayWithRange:aRange];
     NSArray *aValues = [[aLeftNode values] subarrayWithRange:aRange];
@@ -129,7 +129,7 @@
 
 - (void)shuffleRightNode
 {
-    NUBTreeLeaf *aRightNode = (NUBTreeLeaf *)[self rightNode];
+    NUBPlusTreeLeaf *aRightNode = (NUBPlusTreeLeaf *)[self rightNode];
     NSRange aRange = NSMakeRange(0, [aRightNode keyCount] - [aRightNode minKeyCount]);
     NSArray *aKeys = [[aRightNode keys] subarrayWithRange:aRange];
     NSArray *aValues = [[aRightNode values] subarrayWithRange:aRange];
@@ -161,7 +161,7 @@
 
 @end
 
-@implementation NUBTreeLeaf (Private)
+@implementation NUBPlusTreeLeaf (Private)
 
 - (void)updateKey:(id)aKey
 {
@@ -174,17 +174,17 @@
     }
 }
 
-- (NUBTreeLeaf *)firstLeaf
+- (NUBPlusTreeLeaf *)firstLeaf
 {
     return self;
 }
 
-- (NUBTreeLeaf *)lastLeaf
+- (NUBPlusTreeLeaf *)lastLeaf
 {
     return self;
 }
 
-- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThan:(id)aKey orEqualToKey:(BOOL)anOrEqualToKeyFlag keyIndex:(NUUInt64 *)aKeyIndex
+- (NUBPlusTreeLeaf *)leafNodeContainingKeyGreaterThan:(id)aKey orEqualToKey:(BOOL)anOrEqualToKeyFlag keyIndex:(NUUInt64 *)aKeyIndex
 {
     NUUInt64 aCandidateKeyIndex;
     BOOL aSameKeyExists = [self getKeyIndexGreaterThanOrEqualTo:aKey keyIndexInto:&aCandidateKeyIndex];
@@ -198,7 +198,7 @@
         }
         else
         {
-            NUBTreeLeaf *aCandidateLeaf = self;
+            NUBPlusTreeLeaf *aCandidateLeaf = self;
             
             while (YES)
             {
@@ -219,7 +219,7 @@
         return nil;
 }
 
-- (NUBTreeLeaf *)leafNodeContainingKeyLessThan:(id)aKey orEqualToKey:(BOOL)anOrEqualToKeyFlag keyIndex:(NUUInt64 *)aKeyIndex
+- (NUBPlusTreeLeaf *)leafNodeContainingKeyLessThan:(id)aKey orEqualToKey:(BOOL)anOrEqualToKeyFlag keyIndex:(NUUInt64 *)aKeyIndex
 {
     NUUInt64 aCandidateKeyIndex;
     BOOL aSameKeyExists = [self getKeyIndexLessThanOrEqualTo:aKey keyIndexInto:&aCandidateKeyIndex];
@@ -233,7 +233,7 @@
         }
         else
         {
-            NUBTreeLeaf *aCandidateLeaf = self;
+            NUBPlusTreeLeaf *aCandidateLeaf = self;
             
             while (YES)
             {

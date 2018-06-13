@@ -13,7 +13,7 @@
 @class NSMutableData, NSThread;
 @class NUNurseryNetMessage;
 
-extern const NUUInt64 NUNurseryNetworkerReadBufferSize;
+extern const NUUInt64 NUNurseryNetServiceIODefaultReadBufferSize;
 
 @interface NUNurseryNetServiceIO : NSObject <NSStreamDelegate>
 {

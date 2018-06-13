@@ -1,5 +1,5 @@
 //
-//  NUOpaqueBTreeNode.m
+//  NUOpaqueBPlusTreeNode.m
 //  Nursery
 //
 //  Created by Akifumi Takata on 10/09/09.
@@ -9,25 +9,25 @@
 #include <math.h>
 #import <Foundation/NSException.h>
 
-#import "NUOpaqueBTreeNode.h"
-#import "NUOpaqueBTree.h"
+#import "NUOpaqueBPlusTreeNode.h"
+#import "NUOpaqueBPlusTree.h"
 #import "NUSpaces.h"
 #import "NUPages.h"
 #import "NUPage.h"
 #import "NUObjectTable.h"
 #import "NUIndexArray.h"
-#import "NUOpaqueBTreeBranch.h"
+#import "NUOpaqueBPlusTreeBranch.h"
 
-const NUUInt32 NUOpaqueBTreeNodeOOPOffset = 0;
-const NUUInt32 NUOpaqueBTreeNodeLeftNodeLocationOffset = 8;
-const NUUInt32 NUOpaqueBTreeNodeRightNodeLocationOffset = 16;
-const NUUInt32 NUOpaqueBTreeNodeKeyCountOffset = 24;
-const NUUInt32 NUOpaqueBTreeNodeBodyOffset = 28;
+const NUUInt32 NUOpaqueBPlusTreeNodeOOPOffset = 0;
+const NUUInt32 NUOpaqueBPlusTreeNodeLeftNodeLocationOffset = 8;
+const NUUInt32 NUOpaqueBPlusTreeNodeRightNodeLocationOffset = 16;
+const NUUInt32 NUOpaqueBPlusTreeNodeKeyCountOffset = 24;
+const NUUInt32 NUOpaqueBPlusTreeNodeBodyOffset = 28;
 
 NSString *NUUnderflowNodeFoundException = @"NUUnderflowNodeFoundException";
 NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValueCountIsInvalidException";
 
-@implementation NUOpaqueBTreeNode
+@implementation NUOpaqueBPlusTreeNode
 
 - (oneway void)release
 {
@@ -46,24 +46,24 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 @end
 
-@implementation NUOpaqueBTreeNode (InitializingAndRelease)
+@implementation NUOpaqueBPlusTreeNode (InitializingAndRelease)
 
-+ (id)nodeWithTree:(NUOpaqueBTree *)aTree pageLocation:(NUUInt64)aPageLocation
++ (id)nodeWithTree:(NUOpaqueBPlusTree *)aTree pageLocation:(NUUInt64)aPageLocation
 {
 	return [[[self alloc] initWithTree:aTree pageLocation:aPageLocation] autorelease];
 }
 
-+ (id)nodeWithTree:(NUOpaqueBTree *)aTree pageLocation:(NUUInt64)aPageLocation keys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aValues
++ (id)nodeWithTree:(NUOpaqueBPlusTree *)aTree pageLocation:(NUUInt64)aPageLocation keys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aValues
 {
 	return [[[self alloc] initWithTree:aTree pageLocation:aPageLocation keys:aKeys values:aValues] autorelease];
 }
 
-- (id)initWithTree:(NUOpaqueBTree *)aTree pageLocation:(NUUInt64)aPageLocation
+- (id)initWithTree:(NUOpaqueBPlusTree *)aTree pageLocation:(NUUInt64)aPageLocation
 {
 	return [self initWithTree:aTree pageLocation:aPageLocation keys:nil values:nil];
 }
 
-- (id)initWithTree:(NUOpaqueBTree *)aTree pageLocation:(NUUInt64)aPageLocation keys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aValues
+- (id)initWithTree:(NUOpaqueBPlusTree *)aTree pageLocation:(NUUInt64)aPageLocation keys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aValues
 {
 	[super init];
 	
@@ -101,10 +101,10 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 	NUOpaqueArray *aKeys = [self makeKeyArray];
 	NUOpaqueArray *aValues = [self makeValueArray];
 	
-	[self setLeftNodeLocation:[[self pages] readUInt64At:NUOpaqueBTreeNodeLeftNodeLocationOffset of:aPageLocation]];
-	[self setRightNodeLocation:[[self pages] readUInt64At:NUOpaqueBTreeNodeRightNodeLocationOffset of:aPageLocation]];
+	[self setLeftNodeLocation:[[self pages] readUInt64At:NUOpaqueBPlusTreeNodeLeftNodeLocationOffset of:aPageLocation]];
+	[self setRightNodeLocation:[[self pages] readUInt64At:NUOpaqueBPlusTreeNodeRightNodeLocationOffset of:aPageLocation]];
 	[aKeys readFrom:[self pages] at:aPageLocation + [[self tree] nodeHeaderLength]
-		capacity:[self keyCapacity] count:[[self pages] readUInt32At:NUOpaqueBTreeNodeKeyCountOffset of:aPageLocation]];
+		capacity:[self keyCapacity] count:[[self pages] readUInt32At:NUOpaqueBPlusTreeNodeKeyCountOffset of:aPageLocation]];
 	[aValues readFrom:[self pages] at:aPageLocation + [[self tree] nodeHeaderLength] + [aKeys size]
 		capacity:[self valueCapacity] count:[self valueCountForKeyCount:[aKeys count]]];
 	[self setKeys:aKeys];
@@ -121,11 +121,11 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 @end
 
-@implementation NUOpaqueBTreeNode (Accessing)
+@implementation NUOpaqueBPlusTreeNode (Accessing)
 
-- (NUOpaqueBTree *)tree { return tree; }
+- (NUOpaqueBPlusTree *)tree { return tree; }
 
-- (void)setTree:(NUOpaqueBTree *)aTree
+- (void)setTree:(NUOpaqueBPlusTree *)aTree
 {
 	tree = aTree;
 }
@@ -134,12 +134,12 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 - (NUPages *)pages { return [[self tree] pages]; }
 
-- (NUOpaqueBTreeBranch *)parentNode
+- (NUOpaqueBPlusTreeBranch *)parentNode
 {
     return [[self tree] parentNodeOf:self];
 }
 
-- (NUOpaqueBTreeBranch *)parentNodeOf:(NUOpaqueBTreeNode *)aNode
+- (NUOpaqueBPlusTreeBranch *)parentNodeOf:(NUOpaqueBPlusTreeNode *)aNode
 {
     return nil;
 }
@@ -189,17 +189,17 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 	return [[self keys] indexLessThanOrEqualTo:aKey];
 }
 
-- (NUOpaqueBTreeLeaf *)leafNodeContainingKey:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
+- (NUOpaqueBPlusTreeLeaf *)leafNodeContainingKey:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
 {
 	return nil;
 }
 
-- (NUOpaqueBTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
+- (NUOpaqueBPlusTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
 {
 	return nil;
 }
 
-- (NUOpaqueBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
+- (NUOpaqueBPlusTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
 {
 	return nil;
 }
@@ -264,22 +264,22 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 	return [[self values] first];
 }
 
-- (NUOpaqueBTreeNode *)leftNode
+- (NUOpaqueBPlusTreeNode *)leftNode
 {
 	return [[self tree] nodeFor:[self leftNodeLocation]];
 }
 
-- (NUOpaqueBTreeNode *)rightNode
+- (NUOpaqueBPlusTreeNode *)rightNode
 {
 	return [[self tree] nodeFor:[self rightNodeLocation]];
 }
 
-- (NUOpaqueBTreeLeaf *)mostLeftNode
+- (NUOpaqueBPlusTreeLeaf *)mostLeftNode
 {
 	return nil;
 }
 
-- (NUOpaqueBTreeLeaf *)mostRightNode
+- (NUOpaqueBPlusTreeLeaf *)mostRightNode
 {
 	return nil;
 }
@@ -402,7 +402,7 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 	return [self isLeaf] ? aKeyCount : aKeyCount + 1;
 }
 
-- (NUOpaqueBTreeNode *)setOpaqueValue:(NUUInt8 *)aValue forKey:(NUUInt8 *)aKey
+- (NUOpaqueBPlusTreeNode *)setOpaqueValue:(NUUInt8 *)aValue forKey:(NUUInt8 *)aKey
 {
 	return nil;
 }
@@ -418,7 +418,7 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 @end
 
-@implementation NUOpaqueBTreeNode (Modifying)
+@implementation NUOpaqueBPlusTreeNode (Modifying)
 
 - (void)addKey:(NUUInt8 *)aKey
 {
@@ -567,9 +567,9 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 @end
 
-@implementation NUOpaqueBTreeNode (Balancing)
+@implementation NUOpaqueBPlusTreeNode (Balancing)
 
-- (void)insertRightNode:(NUOpaqueBTreeNode *)aNewNode
+- (void)insertRightNode:(NUOpaqueBPlusTreeNode *)aNewNode
 {
 	[aNewNode setRightNodeLocation:[self rightNodeLocation]];
 	[self setRightNodeLocation:[aNewNode pageLocation]];
@@ -588,7 +588,7 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 - (void)mergeRightNode
 {
-    NUOpaqueBTreeNode *aRightNode = [self rightNode];
+    NUOpaqueBPlusTreeNode *aRightNode = [self rightNode];
     [self setRightNodeLocation:[[self rightNode] rightNodeLocation]];
     [[self rightNode] setLeftNodeLocation:[self pageLocation]];
     [aRightNode releaseNodePageAndCache];
@@ -596,7 +596,7 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 - (void)mergeLeftNode
 {
-    NUOpaqueBTreeNode *aLeftNode = [self leftNode];
+    NUOpaqueBPlusTreeNode *aLeftNode = [self leftNode];
     [[[self leftNode] leftNode] setRightNodeLocation:[self pageLocation]];
     [self setLeftNodeLocation:[[self leftNode] leftNodeLocation]];
     [aLeftNode releaseNodePageAndCache];
@@ -604,7 +604,7 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 @end
 
-@implementation NUOpaqueBTreeNode (Testing)
+@implementation NUOpaqueBPlusTreeNode (Testing)
 
 - (BOOL)isBranch { return NO; }
 
@@ -655,7 +655,7 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 @end
 
-@implementation NUOpaqueBTreeNode (ManagingPage)
+@implementation NUOpaqueBPlusTreeNode (ManagingPage)
 
 - (void)releaseNodePageAndCache
 {
@@ -682,7 +682,7 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
     [[self tree] updateRootLocationIfNeeded];
 }
 
-- (void)changeNodePageWith:(NUUInt64)aPageLocation of:(NUOpaqueBTreeNode *)aNode
+- (void)changeNodePageWith:(NUUInt64)aPageLocation of:(NUOpaqueBPlusTreeNode *)aNode
 {
 }
 
@@ -690,13 +690,13 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 {
 	NUPages *aPages = [self pages];
 
-	[aPages writeUInt64:[[self class] nodeOOP] at:NUOpaqueBTreeNodeOOPOffset of:pageLocation];
-	[aPages writeUInt64:[self leftNodeLocation] at:NUOpaqueBTreeNodeLeftNodeLocationOffset of:pageLocation];
-	[aPages writeUInt64:[self rightNodeLocation] at:NUOpaqueBTreeNodeRightNodeLocationOffset of:pageLocation];
-	[aPages writeUInt32:[self keyCount] at:NUOpaqueBTreeNodeKeyCountOffset of:pageLocation];
-	[[self keys] writeTo:aPages at:[self pageLocation] + NUOpaqueBTreeNodeBodyOffset];
-	[[self values] writeTo:aPages at:[self pageLocation] + NUOpaqueBTreeNodeBodyOffset + [[self keys] size]];
-	[self writeExtraValuesToPages:aPages at:[self pageLocation] + NUOpaqueBTreeNodeBodyOffset + [[self keys] size] + [[self values] size]];
+	[aPages writeUInt64:[[self class] nodeOOP] at:NUOpaqueBPlusTreeNodeOOPOffset of:pageLocation];
+	[aPages writeUInt64:[self leftNodeLocation] at:NUOpaqueBPlusTreeNodeLeftNodeLocationOffset of:pageLocation];
+	[aPages writeUInt64:[self rightNodeLocation] at:NUOpaqueBPlusTreeNodeRightNodeLocationOffset of:pageLocation];
+	[aPages writeUInt32:[self keyCount] at:NUOpaqueBPlusTreeNodeKeyCountOffset of:pageLocation];
+	[[self keys] writeTo:aPages at:[self pageLocation] + NUOpaqueBPlusTreeNodeBodyOffset];
+	[[self values] writeTo:aPages at:[self pageLocation] + NUOpaqueBPlusTreeNodeBodyOffset + [[self keys] size]];
+	[self writeExtraValuesToPages:aPages at:[self pageLocation] + NUOpaqueBPlusTreeNodeBodyOffset + [[self keys] size] + [[self values] size]];
 	
 	[self clearChanged];
 }
@@ -707,7 +707,7 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 @end
 
-@implementation NUOpaqueBTreeNode (Debug)
+@implementation NUOpaqueBPlusTreeNode (Debug)
 
 - (void)validateAllNodeLocations
 {
@@ -734,7 +734,7 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
             [[NSException exceptionWithName:NUNodeKeyCountOrValueCountIsInvalidException reason:NUNodeKeyCountOrValueCountIsInvalidException userInfo:nil] raise];
     }
     
-    NUOpaqueBTreeBranch *aBranchNode = (NUOpaqueBTreeBranch *)self;
+    NUOpaqueBPlusTreeBranch *aBranchNode = (NUOpaqueBPlusTreeBranch *)self;
     NUUInt32 i = 0;
     for (; i < [aBranchNode valueCount]; i++)
     {

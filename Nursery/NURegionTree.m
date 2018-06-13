@@ -7,7 +7,7 @@
 //
 
 #import "NURegionTree.h"
-#import "NUOpaqueBTreeNode.h"
+#import "NUOpaqueBPlusTreeNode.h"
 #import "NURegion.h"
 #import "NUPages.h"
 #import "NUSpaces.h"
@@ -25,7 +25,7 @@
 	[[self spaces] delayedReleaseNodePage:aNodePage];
 }
 
-- (void)branch:(NUOpaqueBTreeBranch *)aBranch didInsertNodes:(NUUInt8 *)aNodeLocations at:(NUUInt32)anIndex count:(NUUInt32)aCount
+- (void)branch:(NUOpaqueBPlusTreeBranch *)aBranch didInsertNodes:(NUUInt8 *)aNodeLocations at:(NUUInt32)anIndex count:(NUUInt32)aCount
 {
 	NUUInt64 *aNodes = (NUUInt64 *)aNodeLocations;
 	int i = 0;

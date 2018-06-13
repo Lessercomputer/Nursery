@@ -1,5 +1,5 @@
 //
-//  NUOpaqueBTreeNode.h
+//  NUOpaqueBPlusTreeNode.h
 //  Nursery
 //
 //  Created by Akifumi Takata on 10/09/09.
@@ -10,20 +10,20 @@
 #import "NUTypes.h"
 
 @class NSString;
-@class NUOpaqueBTree, NUOpaqueArray, NUSpaces, NUPages, NUPage, NUOpaqueBTreeLeaf, NUOpaqueBTreeBranch;
+@class NUOpaqueBPlusTree, NUOpaqueArray, NUSpaces, NUPages, NUPage, NUOpaqueBPlusTreeLeaf, NUOpaqueBPlusTreeBranch;
 
-extern const NUUInt32 NUOpaqueBTreeNodeOOPOffset;
-extern const NUUInt32 NUOpaqueBTreeNodeLeftNodeLocationOffset;
-extern const NUUInt32 NUOpaqueBTreeNodeRightNodeLocationOffset;
-extern const NUUInt32 NUOpaqueBTreeNodeKeyCountOffset;
-extern const NUUInt32 NUOpaqueBTreeNodeBodyOffset;
+extern const NUUInt32 NUOpaqueBPlusTreeNodeOOPOffset;
+extern const NUUInt32 NUOpaqueBPlusTreeNodeLeftNodeLocationOffset;
+extern const NUUInt32 NUOpaqueBPlusTreeNodeRightNodeLocationOffset;
+extern const NUUInt32 NUOpaqueBPlusTreeNodeKeyCountOffset;
+extern const NUUInt32 NUOpaqueBPlusTreeNodeBodyOffset;
 
 extern NSString *NUUnderflowNodeFoundException;
 extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 
-@interface NUOpaqueBTreeNode : NSObject
+@interface NUOpaqueBPlusTreeNode : NSObject
 {
-	NUOpaqueBTree *tree;
+	NUOpaqueBPlusTree *tree;
 	NUOpaqueArray *keys;
 	NUOpaqueArray *values;
 	NUUInt64 pageLocation;
@@ -35,28 +35,28 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 
 @end
 
-@interface NUOpaqueBTreeNode (InitializingAndRelease)
+@interface NUOpaqueBPlusTreeNode (InitializingAndRelease)
 
-+ (id)nodeWithTree:(NUOpaqueBTree *)aTree pageLocation:(NUUInt64)aPageLocation;
-+ (id)nodeWithTree:(NUOpaqueBTree *)aTree pageLocation:(NUUInt64)aPageLocation keys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aValues;
++ (id)nodeWithTree:(NUOpaqueBPlusTree *)aTree pageLocation:(NUUInt64)aPageLocation;
++ (id)nodeWithTree:(NUOpaqueBPlusTree *)aTree pageLocation:(NUUInt64)aPageLocation keys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aValues;
 
-- (id)initWithTree:(NUOpaqueBTree *)aTree pageLocation:(NUUInt64)aPageLocation;
-- (id)initWithTree:(NUOpaqueBTree *)aTree pageLocation:(NUUInt64)aPageLocation keys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aValues;
+- (id)initWithTree:(NUOpaqueBPlusTree *)aTree pageLocation:(NUUInt64)aPageLocation;
+- (id)initWithTree:(NUOpaqueBPlusTree *)aTree pageLocation:(NUUInt64)aPageLocation keys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aValues;
 
 - (void)loadKeysAndValuesFrom:(NUUInt64)aPageLocation;
 - (void)readExtraValuesFromPages:(NUPages *)aPages at:(NUUInt64)aLocation count:(NUUInt32)aCount;
 
 @end
 
-@interface NUOpaqueBTreeNode (Accessing)
+@interface NUOpaqueBPlusTreeNode (Accessing)
 
-- (NUOpaqueBTree *)tree;
-- (void)setTree:(NUOpaqueBTree *)aTree;
+- (NUOpaqueBPlusTree *)tree;
+- (void)setTree:(NUOpaqueBPlusTree *)aTree;
 - (NUSpaces *)spaces;
 - (NUPages *)pages;
 
-- (NUOpaqueBTreeBranch *)parentNode;
-- (NUOpaqueBTreeBranch *)parentNodeOf:(NUOpaqueBTreeNode *)aNode;
+- (NUOpaqueBPlusTreeBranch *)parentNode;
+- (NUOpaqueBPlusTreeBranch *)parentNodeOf:(NUOpaqueBPlusTreeNode *)aNode;
 
 - (NUUInt64)pageLocation;
 - (void)setPageLocation:(NUUInt64)aPageLocation;
@@ -70,9 +70,9 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 - (NUUInt32)keyIndexGreaterThanOrEqualToKey:(NUUInt8 *)aKey;
 - (NUInt32)keyIndexLessThanOrEqualToKey:(NUUInt8 *)aKey;
 
-- (NUOpaqueBTreeLeaf *)leafNodeContainingKey:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex;
-- (NUOpaqueBTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex;
-- (NUOpaqueBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex;
+- (NUOpaqueBPlusTreeLeaf *)leafNodeContainingKey:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex;
+- (NUOpaqueBPlusTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex;
+- (NUOpaqueBPlusTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex;
 
 - (NUOpaqueArray *)keys;
 - (void)setKeys:(NUOpaqueArray *)aKeys;
@@ -89,10 +89,10 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 
 - (NUUInt32)shufflableKeyCount;
 
-- (NUOpaqueBTreeNode *)leftNode;
-- (NUOpaqueBTreeNode *)rightNode;
-- (NUOpaqueBTreeLeaf *)mostLeftNode;
-- (NUOpaqueBTreeLeaf *)mostRightNode;
+- (NUOpaqueBPlusTreeNode *)leftNode;
+- (NUOpaqueBPlusTreeNode *)rightNode;
+- (NUOpaqueBPlusTreeLeaf *)mostLeftNode;
+- (NUOpaqueBPlusTreeLeaf *)mostRightNode;
 
 - (NUUInt64)leftNodeLocation;
 - (void)setLeftNodeLocation:(NUUInt64)aLocation;
@@ -119,12 +119,12 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 - (NUUInt32)valueCountForKeyCount:(NUUInt32)aKeyCount;
 
 - (NUUInt8 *)valueFor:(NUUInt8 *)aKey;
-- (NUOpaqueBTreeNode *)setOpaqueValue:(NUUInt8 *)aValue forKey:(NUUInt8 *)aKey;
+- (NUOpaqueBPlusTreeNode *)setOpaqueValue:(NUUInt8 *)aValue forKey:(NUUInt8 *)aKey;
 - (void)removeValueFor:(NUUInt8 *)aKey;
 
 @end
 
-@interface NUOpaqueBTreeNode (Modifying)
+@interface NUOpaqueBPlusTreeNode (Modifying)
 
 - (void)addKey:(NUUInt8 *)aKey;
 - (void)addKeys:(NUOpaqueArray *)aKeys;
@@ -158,9 +158,9 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 
 @end
 
-@interface NUOpaqueBTreeNode (Balancing)
+@interface NUOpaqueBPlusTreeNode (Balancing)
 
-- (void)insertRightNode:(NUOpaqueBTreeNode *)aNewNode;
+- (void)insertRightNode:(NUOpaqueBPlusTreeNode *)aNewNode;
 - (void)shuffleLeftNode;
 - (void)shuffleRightNode;
 - (void)mergeRightNode;
@@ -168,7 +168,7 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 
 @end
 
-@interface NUOpaqueBTreeNode (Testing)
+@interface NUOpaqueBPlusTreeNode (Testing)
 
 - (BOOL)isBranch;
 - (BOOL)isLeaf;
@@ -187,18 +187,18 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 
 @end
 
-@interface NUOpaqueBTreeNode (ManagingPage)
+@interface NUOpaqueBPlusTreeNode (ManagingPage)
 
 - (void)releaseNodePageAndCache;
 - (void)changeNodePageWith:(NUUInt64)aPageLocation;
-- (void)changeNodePageWith:(NUUInt64)aPageLocation of:(NUOpaqueBTreeNode *)aNode;
+- (void)changeNodePageWith:(NUUInt64)aPageLocation of:(NUOpaqueBPlusTreeNode *)aNode;
 
 - (void)save;
 - (void)writeExtraValuesToPages:(NUPages *)aPages at:(NUUInt64)aLocation;
 
 @end
 
-@interface NUOpaqueBTreeNode (Debug)
+@interface NUOpaqueBPlusTreeNode (Debug)
 
 - (void)validateAllNodeLocations;
 

@@ -6,10 +6,10 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
-#import "NUOpaqueBTreeBranch.h"
+#import "NUOpaqueBPlusTreeBranch.h"
 
 
-@interface NULengthTreeBranch : NUOpaqueBTreeBranch
+@interface NULengthTreeBranch : NUOpaqueBPlusTreeBranch
 {
 
 }

@@ -85,7 +85,7 @@ extern NSString *NUOpaqueArrayCannotGrowException;
 
 @end
 
-@interface NUOpaqueArray (SupportForBTree)
+@interface NUOpaqueArray (SupportForBPlusTree)
 
 - (NUOpaqueArray *)insert:(NUUInt8 *)aValue to:(NUUInt32)anIndex insertedTo:(NUOpaqueArray **)aValues at:(NUUInt32 *)anInsertedIndex;
 - (NUOpaqueArray *)insert:(NUUInt8 *)aValue to:(NUUInt32)anIndex indexOfValueToPromote:(NUUInt32)anIndexToPromote into:(NUOpaqueArray **)aValueToPromote;

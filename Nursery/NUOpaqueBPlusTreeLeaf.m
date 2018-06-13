@@ -1,19 +1,19 @@
 //
-//  NUOpaqueBTreeLeaf.m
+//  NUOpaqueBPlusTreeLeaf.m
 //  Nursery
 //
 //  Created by Akifumi Takata on 10/10/27.
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
-#import "NUOpaqueBTreeLeaf.h"
+#import "NUOpaqueBPlusTreeLeaf.h"
 #import "NUOpaqueArray.h"
-#import "NUOpaqueBTree.h"
+#import "NUOpaqueBPlusTree.h"
 
-@implementation NUOpaqueBTreeLeaf
+@implementation NUOpaqueBPlusTreeLeaf
 @end
 
-@implementation NUOpaqueBTreeLeaf (Accessing)
+@implementation NUOpaqueBPlusTreeLeaf (Accessing)
 
 - (NUUInt8 *)valueFor:(NUUInt8 *)aKey
 {
@@ -25,7 +25,7 @@
 		return [self valueAt:aKeyIndex];
 }
 
-- (NUOpaqueBTreeNode *)setOpaqueValue:(NUUInt8 *)aValue forKey:(NUUInt8 *)aKey
+- (NUOpaqueBPlusTreeNode *)setOpaqueValue:(NUUInt8 *)aValue forKey:(NUUInt8 *)aKey
 {
 	NUUInt32 anIndexToInsert = [[self keys] indexToInsert:aKey];
 	
@@ -38,7 +38,7 @@
     NUOpaqueArray *aNewValues = [self insertOpaqueValue:aValue at:anIndexToInsert];
     NSArray *anExtraValues = [self insertNewExtraValueTo:anIndexToInsert];
     NUOpaqueArray *aNewKeys = [self insertOpaqueKey:aKey at:anIndexToInsert];
-    NUOpaqueBTreeLeaf *aNewNode = nil;
+    NUOpaqueBPlusTreeLeaf *aNewNode = nil;
 
     if (aNewKeys)
     {
@@ -108,7 +108,7 @@
 {
 }
 
-- (NUOpaqueBTreeLeaf *)leafNodeContainingKey:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
+- (NUOpaqueBPlusTreeLeaf *)leafNodeContainingKey:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
 {
 	NUUInt32 aCandidateKeyIndex = [self keyIndexEqualTo:aKey];
 	
@@ -121,7 +121,7 @@
 	return nil;
 }
 
-- (NUOpaqueBTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
+- (NUOpaqueBPlusTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
 {
 	NUUInt32 aCandidateKeyIndex = [self keyIndexGreaterThanOrEqualToKey:aKey];
 	
@@ -136,7 +136,7 @@
         return nil;
 }
 
-- (NUOpaqueBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
+- (NUOpaqueBPlusTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
 {
     NUUInt32 aCandidateKeyIndex = [self keyIndexLessThanOrEqualToKey:aKey];
     
@@ -151,19 +151,19 @@
         return nil;
 }
 
-- (NUOpaqueBTreeLeaf *)mostLeftNode
+- (NUOpaqueBPlusTreeLeaf *)mostLeftNode
 {
 	return self;
 }
 
-- (NUOpaqueBTreeLeaf *)mostRightNode
+- (NUOpaqueBPlusTreeLeaf *)mostRightNode
 {
 	return self;
 }
 
 @end
 
-@implementation NUOpaqueBTreeLeaf (Balancing)
+@implementation NUOpaqueBPlusTreeLeaf (Balancing)
 
 - (void)shuffleLeftNode
 {    
@@ -202,7 +202,7 @@
 
 - (void)mergeRightNode
 {	
-    NUOpaqueBTreeLeaf *aRightNode = (NUOpaqueBTreeLeaf *)[self rightNode];
+    NUOpaqueBPlusTreeLeaf *aRightNode = (NUOpaqueBPlusTreeLeaf *)[self rightNode];
     [self addKeys:[aRightNode keys]];
 	[self addValues:[aRightNode values]];
 	[self mergeExtraValuesOfRightNode:aRightNode];
@@ -214,7 +214,7 @@
 
 - (void)mergeLeftNode
 {	
-    NUOpaqueBTreeLeaf *aLeftNode = (NUOpaqueBTreeLeaf *)[self leftNode];
+    NUOpaqueBPlusTreeLeaf *aLeftNode = (NUOpaqueBPlusTreeLeaf *)[self leftNode];
     [self insertKeys:[aLeftNode keys] at:0];
 	[self insertValues:[aLeftNode values] at:0];
 	[self mergeExtraValuesOfLeftNode:aLeftNode];
@@ -224,7 +224,7 @@
     [super mergeLeftNode];
 }
 
-- (void)mergeNode:(NUOpaqueBTreeLeaf *)aNode
+- (void)mergeNode:(NUOpaqueBPlusTreeLeaf *)aNode
 {
 	[self addKeys:[aNode keys]];
 	[self addValues:[aNode values]];
@@ -241,17 +241,17 @@
 {
 }
 
-- (void)mergeExtraValuesOfLeftNode:(NUOpaqueBTreeLeaf *)aNode
+- (void)mergeExtraValuesOfLeftNode:(NUOpaqueBPlusTreeLeaf *)aNode
 {
 }
 
-- (void)mergeExtraValuesOfRightNode:(NUOpaqueBTreeLeaf *)aNode
+- (void)mergeExtraValuesOfRightNode:(NUOpaqueBPlusTreeLeaf *)aNode
 {
 }
 
 @end
 
-@implementation NUOpaqueBTreeLeaf (Testing)
+@implementation NUOpaqueBPlusTreeLeaf (Testing)
 
 - (BOOL)isLeaf { return YES; }
 

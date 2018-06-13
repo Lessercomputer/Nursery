@@ -6,10 +6,10 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
-#import "NUOpaqueBTreeLeaf.h"
+#import "NUOpaqueBPlusTreeLeaf.h"
 
 
-@interface NUObjectTableLeaf : NUOpaqueBTreeLeaf
+@interface NUObjectTableLeaf : NUOpaqueBPlusTreeLeaf
 {
 	NUOpaqueArray *gcMarks;
 }

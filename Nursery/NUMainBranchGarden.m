@@ -72,6 +72,7 @@
             [farmOutLock lock];
             [[self gradeSeeker] stop];
             [self lock];
+            [[self mainBranchNursery] lockForFarmOut];
             
             if (![[self nursery] open])
             {
@@ -83,8 +84,6 @@
             }
             else
             {
-                [[self mainBranchNursery] lockForFarmOut];
-                
                 if ([self gradeIsEqualToNurseryGrade])
                 {
                     NUUInt64 aNewGrade = [[self mainBranchNursery] newGrade];
@@ -109,13 +108,12 @@
                 {
                     aFarmOutStatus = NUFarmOutStatusNurseryGradeUnmatched;
                 }
-                
-                [[self mainBranchNursery] unlockForFarmOut];
             }
         }
     }
     @finally
     {
+        [[self mainBranchNursery] unlockForFarmOut];
         [self unlock];
         [[self gradeSeeker] startWithoutWait];
         [farmOutLock unlock];

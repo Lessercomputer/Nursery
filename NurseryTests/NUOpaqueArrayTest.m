@@ -68,7 +68,7 @@
 	XCTAssertTrue(*[aDataArray at:2] == 'c', @"");
 }
 
-- (void)testBtreeSupport
+- (void)testBPlusTreeSupport
 {
 //    NUOpaqueArray *anOpaqueArray = [[[NUOpaqueArray alloc] initWithValueLength:sizeof(NUUInt64) capacity:2] autorelease];
 //    NUOpaqueArray *anInsertedArray = nil;

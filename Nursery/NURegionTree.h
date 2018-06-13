@@ -6,11 +6,11 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
-#import "NUOpaqueBTree.h"
+#import "NUOpaqueBPlusTree.h"
 
 @class NUSpaces;
 
-@interface NURegionTree : NUOpaqueBTree 
+@interface NURegionTree : NUOpaqueBPlusTree 
 {
 }
 

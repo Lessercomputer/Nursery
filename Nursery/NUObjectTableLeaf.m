@@ -126,14 +126,14 @@
     [self shuffleRightNodeKeysOrValues:[self gcMarks] with:[(NUObjectTableLeaf *)[self rightNode] gcMarks]];
 }
 
-- (void)mergeExtraValuesOfLeftNode:(NUOpaqueBTreeLeaf *)aNode
+- (void)mergeExtraValuesOfLeftNode:(NUOpaqueBPlusTreeLeaf *)aNode
 {
     NUObjectTableLeaf *aLeaf = (NUObjectTableLeaf *)aNode;
 	[[self gcMarks] insert:[[aLeaf gcMarks] at:0] to:0 count:[[aLeaf gcMarks] count]];
 	[aLeaf removeAllGCMarks];
 }
 
-- (void)mergeExtraValuesOfRightNode:(NUOpaqueBTreeLeaf *)aNode
+- (void)mergeExtraValuesOfRightNode:(NUOpaqueBPlusTreeLeaf *)aNode
 {
 	NUObjectTableLeaf *aLeaf = (NUObjectTableLeaf *)aNode;
 	[[self gcMarks] addValues:[aLeaf gcMarks]];

@@ -11,7 +11,7 @@
 #import "NUTypes.h"
 
 @class NSString, NSMutableSet, NSMutableArray, NSMutableDictionary, NSFileHandle, NSRecursiveLock;
-@class NULocationTree, NULengthTree, NULengthTreeLeaf, NUOpaqueBTreeNode, NUOpaqueBTreeBranch, NUPages, NUMainBranchNursery, NUCharacter, NUU64ODictionary;
+@class NULocationTree, NULengthTree, NULengthTreeLeaf, NUOpaqueBPlusTreeNode, NUOpaqueBPlusTreeBranch, NUPages, NUMainBranchNursery, NUCharacter, NUU64ODictionary;
 
 extern NSString *NURegionAlreadyReleasedException;
 extern NSString *NUSpaceInvalidOperationException;
@@ -90,8 +90,8 @@ extern NSString *NUSpaceInvalidOperationException;
 - (BOOL)nodePageLocationIsVirtual:(NUUInt64)aNodePageLocation;
 - (BOOL)nodePageLocationIsNotVirtual:(NUUInt64)aNodePageLocation;
 - (NSMutableArray *)pagesToRelease;
-- (void)addBranchNeedsVirtualPageCheck:(NUOpaqueBTreeBranch *)aBranch;
-- (void)removeBranchNeedsVirtualPageCheck:(NUOpaqueBTreeBranch *)aBranch;
+- (void)addBranchNeedsVirtualPageCheck:(NUOpaqueBPlusTreeBranch *)aBranch;
+- (void)removeBranchNeedsVirtualPageCheck:(NUOpaqueBPlusTreeBranch *)aBranch;
 
 - (void)fixNodePages;
 - (void)releasePagesToRelease;
@@ -99,7 +99,7 @@ extern NSString *NUSpaceInvalidOperationException;
 - (void)setNodePageLocation:(NUUInt64)aPageLocation forVirtualNodePageLocation:(NUUInt64)aVirtualNodePageLocation;
 - (NUUInt64)nodePageLocationForVirtualNodePageLocation:(NUUInt64)aVirtualNodePageLocation;
 
-- (NUOpaqueBTreeNode *)nodeFor:(NUUInt64)aNodeLocation;
+- (NUOpaqueBPlusTreeNode *)nodeFor:(NUUInt64)aNodeLocation;
 
 - (BOOL)nodeIsUsedFor:(NUUInt64)aNodeLocation;
 - (void)movePageToReleaseAtLocation:(NUUInt64)aNodeLocation toLocation:(NUUInt64)aNewLocation;

@@ -12,7 +12,7 @@
 #import <Foundation/NSException.h>
 
 #import "NUSpaces.h"
-#import "NUOpaqueBTreeBranch.h"
+#import "NUOpaqueBPlusTreeBranch.h"
 #import "NULocationTree.h"
 #import "NULocationTreeLeaf.h"
 #import "NULengthTree.h"
@@ -426,13 +426,13 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 	return pagesToRelease;
 }
 
-- (void)addBranchNeedsVirtualPageCheck:(NUOpaqueBTreeBranch *)aBranch
+- (void)addBranchNeedsVirtualPageCheck:(NUOpaqueBPlusTreeBranch *)aBranch
 {
     if (aBranch)
         [branchesNeedVirtualPageCheck addObject:aBranch];
 }
 
-- (void)removeBranchNeedsVirtualPageCheck:(NUOpaqueBTreeBranch *)aBranch
+- (void)removeBranchNeedsVirtualPageCheck:(NUOpaqueBPlusTreeBranch *)aBranch
 {
 	[branchesNeedVirtualPageCheck removeObject:aBranch];
 }
@@ -453,7 +453,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 		
 		if (aVirtualPageLocation > nextVirtualPageLocation)
 		{
-			NUOpaqueBTreeNode *aNode = [locationTree nodeFor:aVirtualPageLocation];
+			NUOpaqueBPlusTreeNode *aNode = [locationTree nodeFor:aVirtualPageLocation];
 			if (!aNode) aNode = [lengthTree nodeFor:aVirtualPageLocation];
 			
 			if (aNode)
@@ -477,14 +477,14 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 	
 	for (; aVirtualPageLocation >= nextVirtualPageLocation + aPageSize; aVirtualPageLocation -= aPageSize)
 	{
-		NUOpaqueBTreeNode *aNode = [locationTree nodeFor:aVirtualPageLocation];
+		NUOpaqueBPlusTreeNode *aNode = [locationTree nodeFor:aVirtualPageLocation];
 		if (!aNode) aNode = [lengthTree nodeFor:aVirtualPageLocation];
 		
 		if (aNode) [aNode changeNodePageWith:[self allocateNodePageWithPreventNodeRelease]];
 	}
 	
 	NSEnumerator *anEnumerator = [branchesNeedVirtualPageCheck objectEnumerator];
-	NUOpaqueBTreeBranch *aBranch = nil;
+	NUOpaqueBPlusTreeBranch *aBranch = nil;
 	while (aBranch = [anEnumerator nextObject])
 		[aBranch fixVirtualNodes];
 	
@@ -506,7 +506,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 				objectForKey:[NSNumber numberWithUnsignedLongLong:aVirtualNodePageLocation]] unsignedLongLongValue];
 }
 
-- (NUOpaqueBTreeNode *)nodeFor:(NUUInt64)aNodeLocation
+- (NUOpaqueBPlusTreeNode *)nodeFor:(NUUInt64)aNodeLocation
 {
     NUUInt64 aNodeOOP = [[self pages] readUInt64At:aNodeLocation];    
     return [[[self nodeOOPToTreeDictionary] objectForKey:aNodeOOP] nodeFor:aNodeLocation];

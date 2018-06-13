@@ -1,5 +1,5 @@
 //
-//  NUBTree.h
+//  NUBPlusTree.h
 //  Nursery
 //
 //  Created by Akifumi Takata on 2013/01/20.
@@ -10,11 +10,11 @@
 #import "NUComparator.h"
 #import "NUCoding.h"
 
-@class NUBTreeNode, NUBTreeLeaf;
+@class NUBPlusTreeNode, NUBPlusTreeLeaf;
 
-@interface NUBTree : NSObject
+@interface NUBPlusTree : NSObject
 {
-    NUBTreeNode *root;
+    NUBPlusTreeNode *root;
     NUUInt64 count;
     NUUInt64 depth;
     NUUInt64 keyCapacity;
@@ -41,7 +41,7 @@
 - (NUUInt64)count;
 - (NUUInt64)depth;
 
-- (NUBTreeNode *)root;
+- (NUBPlusTreeNode *)root;
 - (NUUInt64)keyCapacity;
 - (NUUInt64)minKeyCount;
 
@@ -58,24 +58,24 @@
 
 @end
 
-@interface NUBTree (Coding) <NUCoding>
+@interface NUBPlusTree (Coding) <NUCoding>
 @end
 
-@interface NUBTree (Private)
+@interface NUBPlusTree (Private)
 
-- (void)setRoot:(NUBTreeNode *)aRoot;
+- (void)setRoot:(NUBPlusTreeNode *)aRoot;
 - (void)setComparator:(id <NUComparator>)aComparator;
 - (void)updateKey:(id)aKey;
 
-- (NUBTreeLeaf *)firstLeaf;
-- (NUBTreeLeaf *)lastLeaf;
+- (NUBPlusTreeLeaf *)firstLeaf;
+- (NUBPlusTreeLeaf *)lastLeaf;
 
-- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex;
-- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThan:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex;
-- (NUBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex;
-- (NUBTreeLeaf *)leafNodeContainingKeyLessThan:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex;
+- (NUBPlusTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex;
+- (NUBPlusTreeLeaf *)leafNodeContainingKeyGreaterThan:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex;
+- (NUBPlusTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex;
+- (NUBPlusTreeLeaf *)leafNodeContainingKeyLessThan:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex;
 
-- (NUBTreeLeaf *)getNextKeyIndex:(NUUInt64 *)aKeyIndex node:(NUBTreeLeaf *)aNode;
-- (NUBTreeLeaf *)getPreviousKeyIndex:(NUUInt64 *)aKeyIndex node:(NUBTreeLeaf *)aNode;
+- (NUBPlusTreeLeaf *)getNextKeyIndex:(NUUInt64 *)aKeyIndex node:(NUBPlusTreeLeaf *)aNode;
+- (NUBPlusTreeLeaf *)getPreviousKeyIndex:(NUUInt64 *)aKeyIndex node:(NUBPlusTreeLeaf *)aNode;
 
 @end

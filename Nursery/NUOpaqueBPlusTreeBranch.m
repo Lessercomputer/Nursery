@@ -1,5 +1,5 @@
 //
-//  NUOpaqueBTreeBranch.m
+//  NUOpaqueBPlusTreeBranch.m
 //  Nursery
 //
 //  Created by Akifumi Takata on 10/10/27.
@@ -8,46 +8,46 @@
 
 #import <Foundation/NSException.h>
 
-#import "NUOpaqueBTreeBranch.h"
+#import "NUOpaqueBPlusTreeBranch.h"
 #import "NUIndexArray.h"
-#import "NUOpaqueBTree.h"
+#import "NUOpaqueBPlusTree.h"
 #import "NURegionTree.h"
 #import "NUSpaces.h"
 
-NSString *NUBtreeNodeIsNotChildNodeException = @"NUBtreeNodeIsNotChildNodeException";
+NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNodeException";
 
-@implementation NUOpaqueBTreeBranch
+@implementation NUOpaqueBPlusTreeBranch
 @end
 
-@implementation NUOpaqueBTreeBranch (Accessing)
+@implementation NUOpaqueBPlusTreeBranch (Accessing)
 
 - (NUUInt32)lastNodeIndex
 {
 	return [self valueCount] - 1;
 }
 
-- (NUOpaqueBTreeBranch *)leftBranch
+- (NUOpaqueBPlusTreeBranch *)leftBranch
 {
-	return (NUOpaqueBTreeBranch *)[self leftNode];
+	return (NUOpaqueBPlusTreeBranch *)[self leftNode];
 }
 
-- (NUOpaqueBTreeBranch *)rightBranch
+- (NUOpaqueBPlusTreeBranch *)rightBranch
 {
-	return  (NUOpaqueBTreeBranch *)[self rightNode];
+	return  (NUOpaqueBPlusTreeBranch *)[self rightNode];
 }
 
-- (NUOpaqueBTreeBranch *)parentNodeOf:(NUOpaqueBTreeNode *)aNode
+- (NUOpaqueBPlusTreeBranch *)parentNodeOf:(NUOpaqueBPlusTreeNode *)aNode
 {
     if ([self isEqual:aNode]) return nil;
     
-    NUOpaqueBTreeNode *aChildNode = [self nodeAt:[self insertionTargetNodeIndexFor:[aNode mostLeftKey]]];
+    NUOpaqueBPlusTreeNode *aChildNode = [self nodeAt:[self insertionTargetNodeIndexFor:[aNode mostLeftKey]]];
     
     if ([aChildNode isEqual:aNode]) return self;
     
     return [aChildNode parentNodeOf:aNode];
 }
 
-- (NUOpaqueBTreeNode *)nodeAt:(NUUInt32)anIndex
+- (NUOpaqueBPlusTreeNode *)nodeAt:(NUUInt32)anIndex
 {
 	return [[self tree] nodeFor:[self nodeLocationAt:anIndex]];
 }
@@ -77,17 +77,17 @@ NSString *NUBtreeNodeIsNotChildNodeException = @"NUBtreeNodeIsNotChildNodeExcept
 	return [self keyIndexLessThanOrEqualToKey:aKey] + 1;
 }
 
-- (NUOpaqueBTreeLeaf *)leafNodeContainingKey:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
+- (NUOpaqueBPlusTreeLeaf *)leafNodeContainingKey:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
 {
 	return [[self nodeAt:[self insertionTargetNodeIndexFor:aKey]] leafNodeContainingKey:aKey keyIndex:aKeyIndex];
 }
 
-- (NUOpaqueBTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
+- (NUOpaqueBPlusTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
 {
 	return [[self nodeAt:[self insertionTargetNodeIndexFor:aKey]] leafNodeContainingKeyGreaterThanOrEqualTo:aKey keyIndex:aKeyIndex];
 }
 
-- (NUOpaqueBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
+- (NUOpaqueBPlusTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
 {
 	return [[self nodeAt:[self insertionTargetNodeIndexFor:aKey]] leafNodeContainingKeyLessThanOrEqualTo:aKey keyIndex:aKeyIndex];
 }
@@ -97,12 +97,12 @@ NSString *NUBtreeNodeIsNotChildNodeException = @"NUBtreeNodeIsNotChildNodeExcept
 	return [[self nodeAt:0] mostLeftKey];
 }
 
-- (NUOpaqueBTreeLeaf *)mostLeftNode
+- (NUOpaqueBPlusTreeLeaf *)mostLeftNode
 {
 	return [[self nodeAt:0] mostLeftNode];
 }
 
-- (NUOpaqueBTreeLeaf *)mostRightNode
+- (NUOpaqueBPlusTreeLeaf *)mostRightNode
 {
 	return [[self nodeAt:[self valueCount] - 1] mostRightNode];
 }
@@ -115,15 +115,15 @@ NSString *NUBtreeNodeIsNotChildNodeException = @"NUBtreeNodeIsNotChildNodeExcept
 - (NUUInt8 *)valueFor:(NUUInt8 *)aKey
 {
 	NUUInt32 aNodeIndex = [self insertionTargetNodeIndexFor:aKey];
-	NUOpaqueBTreeNode *aNode = [self nodeAt:aNodeIndex];
+	NUOpaqueBPlusTreeNode *aNode = [self nodeAt:aNodeIndex];
 	return [aNode valueFor:aKey];
 }
 
-- (NUOpaqueBTreeNode *)setOpaqueValue:(NUUInt8 *)aValue forKey:(NUUInt8 *)aKey
+- (NUOpaqueBPlusTreeNode *)setOpaqueValue:(NUUInt8 *)aValue forKey:(NUUInt8 *)aKey
 {
 	NUUInt32 aChildNodeIndex = [self insertionTargetNodeIndexFor:aKey];
-	NUOpaqueBTreeNode *aChildNode = [self nodeAt:aChildNodeIndex];
-	NUOpaqueBTreeNode *aSiblingNodeOfChildNode = [aChildNode setOpaqueValue:aValue forKey:aKey];
+	NUOpaqueBPlusTreeNode *aChildNode = [self nodeAt:aChildNodeIndex];
+	NUOpaqueBPlusTreeNode *aSiblingNodeOfChildNode = [aChildNode setOpaqueValue:aValue forKey:aKey];
 	
 	if (aSiblingNodeOfChildNode)
 		return [self insertChildNode:aSiblingNodeOfChildNode at:aChildNodeIndex + 1];
@@ -134,7 +134,7 @@ NSString *NUBtreeNodeIsNotChildNodeException = @"NUBtreeNodeIsNotChildNodeExcept
 - (void)removeValueFor:(NUUInt8 *)aKey
 {
 	NUUInt32 aNodeIndex = [self insertionTargetNodeIndexFor:aKey];
-	NUOpaqueBTreeNode *aNode = [self nodeAt:aNodeIndex];
+	NUOpaqueBPlusTreeNode *aNode = [self nodeAt:aNodeIndex];
     
 	[aNode removeValueFor:aKey];
     
@@ -181,7 +181,7 @@ NSString *NUBtreeNodeIsNotChildNodeException = @"NUBtreeNodeIsNotChildNodeExcept
 
 @end
 
-@implementation NUOpaqueBTreeBranch (Modifying)
+@implementation NUOpaqueBPlusTreeBranch (Modifying)
 
 - (void)addNode:(NUUInt64)aNodeLocation
 {
@@ -225,12 +225,12 @@ NSString *NUBtreeNodeIsNotChildNodeException = @"NUBtreeNodeIsNotChildNodeExcept
 	[self replaceValueAt:anIndex with:(NUUInt8 *)&aNodeLocation];
 }
 
-- (NUOpaqueBTreeNode *)insertChildNode:(NUOpaqueBTreeNode *)aChildNode at:(NUUInt32)aChildNodeIndex
+- (NUOpaqueBPlusTreeNode *)insertChildNode:(NUOpaqueBPlusTreeNode *)aChildNode at:(NUUInt32)aChildNodeIndex
 {
     NUUInt64 aChildNodePageLocation = [aChildNode pageLocation];
     NUOpaqueArray *aNewValues = [self insertOpaqueValue:(NUUInt8 *)&aChildNodePageLocation at:aChildNodeIndex];
     NUOpaqueArray *aNewKeys = [self insertOpaqueKey:[aChildNode mostLeftKey] at:aChildNodeIndex - 1];
-    NUOpaqueBTreeBranch *aNewNode = nil;
+    NUOpaqueBPlusTreeBranch *aNewNode = nil;
     
     if (aChildNodeIndex < [self valueCount]) [self nodeDidInsertValues:[self valueAt:aChildNodeIndex] at:aChildNodeIndex count:1];
     
@@ -273,7 +273,7 @@ NSString *NUBtreeNodeIsNotChildNodeException = @"NUBtreeNodeIsNotChildNodeExcept
 	[[self tree] branch:self didInsertNodes:aNodeLocations at:anIndex count:aCount];
 }
 
-- (void)setFirstNode:(NUOpaqueBTreeNode *)aFirstNode secondNode:(NUOpaqueBTreeNode *)aSecondNode key:(NUUInt8 *)aKey
+- (void)setFirstNode:(NUOpaqueBPlusTreeNode *)aFirstNode secondNode:(NUOpaqueBPlusTreeNode *)aSecondNode key:(NUUInt8 *)aKey
 {	
 	[self addKey:aKey];
 	[self addNode:[aFirstNode pageLocation]];
@@ -282,7 +282,7 @@ NSString *NUBtreeNodeIsNotChildNodeException = @"NUBtreeNodeIsNotChildNodeExcept
 
 @end
 
-@implementation NUOpaqueBTreeBranch (Balancing)
+@implementation NUOpaqueBPlusTreeBranch (Balancing)
 
 - (void)shuffleLeftNode
 {
@@ -328,7 +328,7 @@ NSString *NUBtreeNodeIsNotChildNodeException = @"NUBtreeNodeIsNotChildNodeExcept
 
 - (void)mergeRightNode
 {
-	NUOpaqueBTreeBranch *aRightNode = [self rightBranch];
+	NUOpaqueBPlusTreeBranch *aRightNode = [self rightBranch];
 	[self insertKey:[aRightNode mostLeftKey] at:[self keyCount]];
 	[self insertKeys:[aRightNode firstkey] at:[self keyCount] count:[aRightNode keyCount]];
 	[aRightNode removeAllKeys];
@@ -344,7 +344,7 @@ NSString *NUBtreeNodeIsNotChildNodeException = @"NUBtreeNodeIsNotChildNodeExcept
 
 - (void)mergeLeftNode
 {
-	NUOpaqueBTreeBranch *aLeftNode = [self leftBranch];
+	NUOpaqueBPlusTreeBranch *aLeftNode = [self leftBranch];
 	[self insertKey:[self mostLeftKey] at:0];
 	[self insertKeys:[aLeftNode firstkey] at:0 count:[aLeftNode keyCount]];
 	[aLeftNode removeAllKeys];
@@ -360,21 +360,21 @@ NSString *NUBtreeNodeIsNotChildNodeException = @"NUBtreeNodeIsNotChildNodeExcept
 
 @end
 
-@implementation NUOpaqueBTreeBranch (Testing)
+@implementation NUOpaqueBPlusTreeBranch (Testing)
 
 - (BOOL)isBranch { return YES; }
 
 @end
 
-@implementation NUOpaqueBTreeBranch (ManagingPage)
+@implementation NUOpaqueBPlusTreeBranch (ManagingPage)
 
-- (void)changeNodePageWith:(NUUInt64)aPageLocation of:(NUOpaqueBTreeNode *)aNode
+- (void)changeNodePageWith:(NUUInt64)aPageLocation of:(NUOpaqueBPlusTreeNode *)aNode
 {
     NUUInt32 aNodeIndex = [self insertionTargetNodeIndexFor:[aNode firstkey]];
-    NUOpaqueBTreeNode *aChildNode = [self nodeAt:aNodeIndex];
+    NUOpaqueBPlusTreeNode *aChildNode = [self nodeAt:aNodeIndex];
     
     if (![aChildNode isEqual:aNode])
-        [[NSException exceptionWithName:@"NUBtreeNodeIsNotChildNodeException" reason:nil userInfo:nil] raise];
+        [[NSException exceptionWithName:@"NUBPlusTreeNodeIsNotChildNodeException" reason:nil userInfo:nil] raise];
     
     [self replaceNodeAt:aNodeIndex with:aPageLocation];
 }

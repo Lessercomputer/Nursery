@@ -1,5 +1,5 @@
 //
-//  NUBTree.m
+//  NUBPlusTree.m
 //  Nursery
 //
 //  Created by Akifumi Takata on 2013/01/20.
@@ -9,18 +9,18 @@
 #include <math.h>
 #import <Foundation/NSException.h>
 
-#import "NUBTree.h"
-#import "NUBTreeNode.h"
-#import "NUBTreeLeaf.h"
-#import "NUBTreeBranch.h"
+#import "NUBPlusTree.h"
+#import "NUBPlusTreeNode.h"
+#import "NUBPlusTreeLeaf.h"
+#import "NUBPlusTreeBranch.h"
 #import "NUDefaultComparator.h"
-#import "NUBTreeEnumerator.h"
+#import "NUBPlusTreeEnumerator.h"
 #import "NUIvar.h"
 #import "NUCharacter.h"
 #import "NUBell.h"
 #import "NUAliaser.h"
 
-@implementation NUBTree
+@implementation NUBPlusTree
 
 + (id)treeWithKeyCapacity:(NUUInt64)aKeyCapacity comparator:(id <NUComparator>)aComparator
 {
@@ -33,7 +33,7 @@
     
     keyCapacity = aKeyCapacity;
     NUSetIvar(&comparator, aComparator);
-    NUSetIvar(&root, [NUBTreeLeaf nodeWithTree:self]);
+    NUSetIvar(&root, [NUBPlusTreeLeaf nodeWithTree:self]);
     depth = 1;
     
     return self;
@@ -54,7 +54,7 @@
 
 - (void)setObject:(id)anObject forKey:(id)aKey
 {
-    if ([[self root] setObject:anObject forKey:aKey] == NUBTreeSetObjectResultAdd)
+    if ([[self root] setObject:anObject forKey:aKey] == NUBPlusTreeSetObjectResultAdd)
     {
         count++;
         [[self bell] markChanged];
@@ -64,8 +64,8 @@
     
     if ([[self root] isOverflow])
     {
-        NUBTreeNode *aNewRightSibling = [[self root] split];
-        NUBTreeBranch *aNewRoot = [NUBTreeBranch nodeWithTree:self key:[aNewRightSibling firstKey] leftChildNode:[self root] rightChildNode:aNewRightSibling];
+        NUBPlusTreeNode *aNewRightSibling = [[self root] split];
+        NUBPlusTreeBranch *aNewRoot = [NUBPlusTreeBranch nodeWithTree:self key:[aNewRightSibling firstKey] leftChildNode:[self root] rightChildNode:aNewRightSibling];
         [self setRoot:aNewRoot];
         depth++;
     }
@@ -82,8 +82,8 @@
     
     if ([[self root] isBranch] && [[self root] valueCount] == 1)
     {
-        NUBTreeBranch *anOldRoot = (NUBTreeBranch *)[self root];
-        NUBTreeNode *aNewRoot = [anOldRoot valueAt:0];
+        NUBPlusTreeBranch *anOldRoot = (NUBPlusTreeBranch *)[self root];
+        NUBPlusTreeNode *aNewRoot = [anOldRoot valueAt:0];
         [self setRoot:aNewRoot];
         [anOldRoot removeNodeAt:0];
         depth--;
@@ -103,7 +103,7 @@
 - (id)keyGreaterThanOrEqualTo:(id)aKey
 {
     NUUInt64 aKeyIndex;
-    NUBTreeLeaf *aLeaf = [self leafNodeContainingKeyGreaterThanOrEqualTo:(id)aKey keyIndex:&aKeyIndex];
+    NUBPlusTreeLeaf *aLeaf = [self leafNodeContainingKeyGreaterThanOrEqualTo:(id)aKey keyIndex:&aKeyIndex];
     
     return aLeaf ? [aLeaf keyAt:aKeyIndex] : nil;
 }
@@ -111,7 +111,7 @@
 - (id)keyGreaterThan:(id)aKey
 {
     NUUInt64 aKeyIndex;
-    NUBTreeLeaf *aLeaf = [self leafNodeContainingKeyGreaterThan:aKey keyIndex:&aKeyIndex];
+    NUBPlusTreeLeaf *aLeaf = [self leafNodeContainingKeyGreaterThan:aKey keyIndex:&aKeyIndex];
     
     return aLeaf ? [aLeaf keyAt:aKeyIndex] : nil;
 }
@@ -119,7 +119,7 @@
 - (id)keyLessThanOrEqualTo:(id)aKey
 {
     NUUInt64 aKeyIndex;
-    NUBTreeLeaf *aLeaf = [self leafNodeContainingKeyLessThanOrEqualTo:aKey keyIndex:&aKeyIndex];
+    NUBPlusTreeLeaf *aLeaf = [self leafNodeContainingKeyLessThanOrEqualTo:aKey keyIndex:&aKeyIndex];
     
     return aLeaf ? [aLeaf keyAt:aKeyIndex] : nil;
 }
@@ -127,7 +127,7 @@
 - (id)keyLessThan:(id)aKey
 {
     NUUInt64 aKeyIndex;
-    NUBTreeLeaf *aLeaf = [self leafNodeContainingKeyLessThan:aKey keyIndex:&aKeyIndex];
+    NUBPlusTreeLeaf *aLeaf = [self leafNodeContainingKeyLessThan:aKey keyIndex:&aKeyIndex];
     
     return aLeaf ? [aLeaf keyAt:aKeyIndex] : nil;
 }
@@ -142,7 +142,7 @@
     return depth;
 }
 
-- (NUBTreeNode *)root
+- (NUBPlusTreeNode *)root
 {
     return NUGetIvar(&root);
 }
@@ -185,7 +185,7 @@
 
 - (void)enumerateKeysAndObjectsWithKeyGreaterThan:(id)aKey1 orEqual:(BOOL)anOrEqualFlag1 andKeyLessThan:(id)aKey2 orEqual:(BOOL)anOrEqualFlag2 options:(NSEnumerationOptions)anOpts usingBlock:(void (^)(id, id, BOOL *))aBlock
 {
-    NUBTreeEnumerator *anEnumerator = [NUBTreeEnumerator enumeratorWithTree:self keyGreaterThan:aKey1 orEqual:anOrEqualFlag1 keyLessThan:aKey2 orEqual:anOrEqualFlag2 options:anOpts];
+    NUBPlusTreeEnumerator *anEnumerator = [NUBPlusTreeEnumerator enumeratorWithTree:self keyGreaterThan:aKey1 orEqual:anOrEqualFlag1 keyLessThan:aKey2 orEqual:anOrEqualFlag2 options:anOpts];
     [anEnumerator enumerateKeysAndObjectsUsingBlock:aBlock];
 }
 
@@ -201,7 +201,7 @@
 
 @end
 
-@implementation NUBTree (Coding)
+@implementation NUBPlusTree (Coding)
 
 + (BOOL)automaticallyEstablishCharacter
 {
@@ -251,9 +251,9 @@
 
 @end
 
-@implementation NUBTree (Private)
+@implementation NUBPlusTree (Private)
 
-- (void)setRoot:(NUBTreeNode *)aRoot
+- (void)setRoot:(NUBPlusTreeNode *)aRoot
 {
     NUSetIvar(&root, aRoot);
     [[self bell] markChanged];
@@ -269,37 +269,37 @@
 {
     [[self root] updateKey:aKey];
 }
-- (NUBTreeLeaf *)firstLeaf
+- (NUBPlusTreeLeaf *)firstLeaf
 {
     return [[self root] firstLeaf];
 }
 
-- (NUBTreeLeaf *)lastLeaf
+- (NUBPlusTreeLeaf *)lastLeaf
 {
     return [[self root] lastLeaf];
 }
 
-- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex
+- (NUBPlusTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex
 {
     return [[self root] leafNodeContainingKeyGreaterThanOrEqualTo:aKey keyIndex:aKeyIndex];
 }
 
-- (NUBTreeLeaf *)leafNodeContainingKeyGreaterThan:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex
+- (NUBPlusTreeLeaf *)leafNodeContainingKeyGreaterThan:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex
 {
     return [[self root] leafNodeContainingKeyGreaterThan:aKey orEqualToKey:NO keyIndex:aKeyIndex];
 }
 
--(NUBTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex
+-(NUBPlusTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex
 {
     return [[self root] leafNodeContainingKeyLessThanOrEqualTo:aKey keyIndex:aKeyIndex];
 }
 
-- (NUBTreeLeaf *)leafNodeContainingKeyLessThan:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex
+- (NUBPlusTreeLeaf *)leafNodeContainingKeyLessThan:(id)aKey keyIndex:(NUUInt64 *)aKeyIndex
 {
     return [[self root] leafNodeContainingKeyLessThan:aKey orEqualToKey:NO keyIndex:aKeyIndex];
 }
 
-- (NUBTreeLeaf *)getNextKeyIndex:(NUUInt64 *)aKeyIndex node:(NUBTreeLeaf *)aNode
+- (NUBPlusTreeLeaf *)getNextKeyIndex:(NUUInt64 *)aKeyIndex node:(NUBPlusTreeLeaf *)aNode
 {
     if (!aKeyIndex)
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:NSInvalidArgumentException userInfo:nil];
@@ -314,23 +314,23 @@
         else
         {
             *aKeyIndex = 0;
-            return (NUBTreeLeaf *)aNode;
+            return (NUBPlusTreeLeaf *)aNode;
         }
     }
     
     if (*aKeyIndex + 1 < [aNode keyCount])
     {
         (*aKeyIndex)++;
-        return (NUBTreeLeaf *)aNode;
+        return (NUBPlusTreeLeaf *)aNode;
     }
     else
     {
         *aKeyIndex = 0;
-        return (NUBTreeLeaf *)[aNode rightNode];
+        return (NUBPlusTreeLeaf *)[aNode rightNode];
     }
 }
 
-- (NUBTreeLeaf *)getPreviousKeyIndex:(NUUInt64 *)aKeyIndex node:(NUBTreeLeaf *)aNode
+- (NUBPlusTreeLeaf *)getPreviousKeyIndex:(NUUInt64 *)aKeyIndex node:(NUBPlusTreeLeaf *)aNode
 {
     if (!aKeyIndex)
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:NSInvalidArgumentException userInfo:nil];
@@ -345,19 +345,19 @@
         else
         {
             *aKeyIndex = [aNode keyCount] - 1;
-            return (NUBTreeLeaf *)aNode;
+            return (NUBPlusTreeLeaf *)aNode;
         }
     }
     
     if (*aKeyIndex != 0)
     {
         (*aKeyIndex)--;
-        return (NUBTreeLeaf *)aNode;
+        return (NUBPlusTreeLeaf *)aNode;
     }
     else
     {
         *aKeyIndex = [aNode keyCount] - 1;
-        return (NUBTreeLeaf *)[aNode leftNode];
+        return (NUBPlusTreeLeaf *)[aNode leftNode];
     }
 }
 

@@ -6,8 +6,8 @@
 //
 //
 
-#import "NUOpaqueBTreeBranch.h"
+#import "NUOpaqueBPlusTreeBranch.h"
 
-@interface NUReversedObjectTableBranch : NUOpaqueBTreeBranch
+@interface NUReversedObjectTableBranch : NUOpaqueBPlusTreeBranch
 
 @end

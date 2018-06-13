@@ -6,7 +6,7 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
-#import "NUOpaqueBTree.h"
+#import "NUOpaqueBPlusTree.h"
 
 @class NSRecursiveLock;
 @class NUGarden, NUObjectTableLeaf;
@@ -56,7 +56,7 @@ extern const NUUInt8 NUGCMarkBlack;
 extern const NUUInt8 NUGCMarkWithoutColorBitsMask;
 extern const NUUInt8 NUGCMarkColorBitsMask;
 
-@interface NUObjectTable : NUOpaqueBTree
+@interface NUObjectTable : NUOpaqueBPlusTree
 {
 	NUUInt64 nextOOP;
 	NSRecursiveLock *lock;

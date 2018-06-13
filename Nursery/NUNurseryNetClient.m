@@ -27,13 +27,14 @@
 
 NSString *NUNurseryNetClientNetworkException = @"NUNurseryNetClientNetworkException";
 
-const NUUInt64 NUNurseryNetClientReadBufferSize = 4096;
-const NSTimeInterval NUNurseryNetClientRunLoopRunningTimeInterval = 0.003;
-const NSTimeInterval NUNurseryNetClientSleepTimeInterval = 0.001;
-const NSTimeInterval NUNurseryNetClientMaximumTimeIntervalOfContinuation = 0.3;
-const NUUInt64 NUNurseryNetClientUpperLimitForMaximumFellowPupilNotesSizeInBytes = 1024 * 8 * 1024;
-const NUUInt64 NUNurseryNetClientLowerLimitForMaximumFellowPupilNotesSizeInBytes = 1024 * 4 * 4;
-
+const NUUInt64 NUNurseryNetClientDefaultReadBufferSize = 4096;
+const NSTimeInterval NUNurseryNetClientDefaultRunLoopRunningTimeInterval = 0.003;
+const NSTimeInterval NUNurseryNetClientDefaultSleepTimeInterval = 0.001;
+const NSTimeInterval NUNurseryNetClientDefaultMaximumTimeIntervalOfContinuation = 0.3;
+const NUUInt64 NUNurseryNetClientDefaultUpperLimitForMaximumFellowPupilNotesSizeInBytes = 1024 * 8 * 1024;
+const NUUInt64 NUNurseryNetClientDefaultLowerLimitForMaximumFellowPupilNotesSizeInBytes = 1024 * 4 * 4;
+const NUUInt64 NUNurseryNetClientDefaultMaximumFellowPupilNotesSizeGrowUpFactor = 6;
+const NUUInt64 NUNurseryNetClientDefaultMaximumFellowPupilNotesSizeGrowDownFactor = 6;
 
 @implementation NUNurseryNetClient
 
@@ -46,9 +47,12 @@ const NUUInt64 NUNurseryNetClientLowerLimitForMaximumFellowPupilNotesSizeInBytes
         _statusCondition = [NSCondition new];
         _serviceName = [aServiceName copy];
         _previousCallEndDate = [[NSDate distantPast] copy];
-        _upperLimitForMaximumFellowPupilNotesSizeInBytes = NUNurseryNetClientUpperLimitForMaximumFellowPupilNotesSizeInBytes;
-        _lowerLimitForMaximumFellowPupilNotesSizeInBytes = NUNurseryNetClientLowerLimitForMaximumFellowPupilNotesSizeInBytes;
-        _maximumTimeIntervalOfContinuation = NUNurseryNetClientMaximumTimeIntervalOfContinuation;
+        readBufferSize = NUNurseryNetClientDefaultReadBufferSize;
+        _upperLimitForMaximumFellowPupilNotesSizeInBytes = NUNurseryNetClientDefaultUpperLimitForMaximumFellowPupilNotesSizeInBytes;
+        _lowerLimitForMaximumFellowPupilNotesSizeInBytes = NUNurseryNetClientDefaultLowerLimitForMaximumFellowPupilNotesSizeInBytes;
+        _maximumFellowPupilNotesSizeGrowUpFactor = NUNurseryNetClientDefaultMaximumFellowPupilNotesSizeGrowUpFactor;
+        _maximumFellowPupilNotesSizeGrowDownFactor = NUNurseryNetClientDefaultMaximumFellowPupilNotesSizeGrowDownFactor;
+        _maximumTimeIntervalOfContinuation = NUNurseryNetClientDefaultMaximumTimeIntervalOfContinuation;
     }
     
     return self;
@@ -203,7 +207,7 @@ const NUUInt64 NUNurseryNetClientLowerLimitForMaximumFellowPupilNotesSizeInBytes
     [[self serviceBrowser] searchForServicesOfType:NUNurseryNetServiceType inDomain:@""];
     
     while ([self status] != NUNurseryNetClientStatusDidFindService)
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:NUNurseryNetClientRunLoopRunningTimeInterval]];
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:NUNurseryNetClientDefaultRunLoopRunningTimeInterval]];
 }
 
 - (void)resolveNetService
@@ -213,7 +217,7 @@ const NUUInt64 NUNurseryNetClientLowerLimitForMaximumFellowPupilNotesSizeInBytes
     [[self netService] resolveWithTimeout:0];
     
     while ([self status] != NUNurseryNetClientStatusDidResolveService)
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:NUNurseryNetClientRunLoopRunningTimeInterval]];
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:NUNurseryNetClientDefaultRunLoopRunningTimeInterval]];
 }
 
 - (void)getStreams
@@ -248,7 +252,8 @@ const NUUInt64 NUNurseryNetClientLowerLimitForMaximumFellowPupilNotesSizeInBytes
     {
         @autoreleasepool
         {
-            [NSThread sleepForTimeInterval:NUNurseryNetClientSleepTimeInterval];
+            if (NUNurseryNetClientDefaultSleepTimeInterval > 0)
+                [NSThread sleepForTimeInterval:NUNurseryNetClientDefaultSleepTimeInterval];
             
             [[self statusCondition] lock];
 
@@ -589,14 +594,14 @@ const NUUInt64 NUNurseryNetClientLowerLimitForMaximumFellowPupilNotesSizeInBytes
 
     if ([aCallBeginDate timeIntervalSinceDate:[self previousCallEndDate]] < [self maximumTimeIntervalOfContinuation])
     {
-        [self setMaximumFellowPupilNotesSizeInBytes:[self maximumFellowPupilNotesSizeInBytes] * 6];
+        [self setMaximumFellowPupilNotesSizeInBytes:[self maximumFellowPupilNotesSizeInBytes] * [self maximumFellowPupilNotesSizeGrowUpFactor]];
 
         if ([self maximumFellowPupilNotesSizeInBytes] > [self upperLimitForMaximumFellowPupilNotesSizeInBytes])
             [self setMaximumFellowPupilNotesSizeInBytes:[self upperLimitForMaximumFellowPupilNotesSizeInBytes]];
     }
     else
     {
-        [self setMaximumFellowPupilNotesSizeInBytes:[self maximumFellowPupilNotesSizeInBytes] / 6];
+        [self setMaximumFellowPupilNotesSizeInBytes:[self maximumFellowPupilNotesSizeInBytes] / [self maximumFellowPupilNotesSizeGrowDownFactor]];
 
         if ([self maximumFellowPupilNotesSizeInBytes] < [self lowerLimitForMaximumFellowPupilNotesSizeInBytes])
             [self setMaximumFellowPupilNotesSizeInBytes:[self lowerLimitForMaximumFellowPupilNotesSizeInBytes]];
