@@ -582,7 +582,7 @@ static NSString *NUNurseryTestFilePath = nil;
     XCTAssertEqualObjects([aGardenWithPastGrade4 root], @"NEXTSTEP");
 }
 
-- (void)testMoveUp
+- (void)testMoveUpAfterGradeUnmatched
 {
     NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
     NUGarden *aGarden = [aNursery makeGarden];
@@ -610,6 +610,26 @@ static NSString *NUNurseryTestFilePath = nil;
     [aGardenB markChangedObject:[aGardenB root]];
     
     XCTAssertEqual([aGardenB farmOut], NUFarmOutStatusSucceeded, @"");
+}
+
+- (void)testMoveUpOfMutableString
+{
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUGarden *aGarden = [aNursery makeGarden];
+    
+    [aGarden setRoot:[NSMutableString string]];
+    XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded, @"");
+    
+    NUGarden *aGardenA = [aNursery makeGarden];
+    NSMutableString *aMutableString = [aGardenA root];
+    [aMutableString appendString:@"A"];
+    [aGardenA markChangedObject:aMutableString];
+    XCTAssertEqual([aGardenA farmOut], NUFarmOutStatusSucceeded, @"");
+    
+    [aGarden moveUp];
+    [aGarden moveUpObject:[aGarden root]];
+        
+    XCTAssertEqualObjects([aGarden root], [aGardenA root]);
 }
 
 @class NUNSNumber;
@@ -668,6 +688,47 @@ static NSString *NUNurseryTestFilePath = nil;
     NSMutableSet *aMutableSet = [aGardenA root];
     [aMutableSet addObject:@(1)];
     [aGardenA markChangedObject:aMutableSet];
+    XCTAssertEqual([aGardenA farmOut], NUFarmOutStatusSucceeded, @"");
+    
+    [aGarden moveUp];
+    [aGarden moveUpObject:[aGarden root]];
+    
+    XCTAssertEqualObjects([aGarden root], [aGardenA root]);
+}
+
+- (void)testMoveUpOfMutableData
+{
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUGarden *aGarden = [aNursery makeGarden];
+    
+    [aGarden setRoot:[NSMutableData data]];
+    XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded, @"");
+    
+    NUGarden *aGardenA = [aNursery makeGarden];
+    NSMutableData *aMutableData = [aGardenA root];
+    NUUInt64 aValue = 1;
+    [aMutableData appendBytes:&aValue length:sizeof(NUUInt64)];
+    [aGardenA markChangedObject:aMutableData];
+    XCTAssertEqual([aGardenA farmOut], NUFarmOutStatusSucceeded, @"");
+    
+    [aGarden moveUp];
+    [aGarden moveUpObject:[aGarden root]];
+    
+    XCTAssertEqualObjects([aGarden root], [aGardenA root]);
+}
+
+- (void)testMoveUpOfMutableIndexSet
+{
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUGarden *aGarden = [aNursery makeGarden];
+    
+    [aGarden setRoot:[NSMutableIndexSet indexSet]];
+    XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded, @"");
+    
+    NUGarden *aGardenA = [aNursery makeGarden];
+    NSMutableIndexSet *aMutableIndexSet = [aGardenA root];
+    [aMutableIndexSet addIndex:0];
+    [aGardenA markChangedObject:aMutableIndexSet];
     XCTAssertEqual([aGardenA farmOut], NUFarmOutStatusSucceeded, @"");
     
     [aGarden moveUp];

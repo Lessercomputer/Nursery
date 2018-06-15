@@ -23,8 +23,6 @@
 
 @protocol NUIndexedCoding <NUCoding>
 
-- (void)encodeIndexedIvarsWithAliaser:(NUAliaser *)anAliaser;
-
 - (NUUInt64)indexedIvarsSize;
 
 @end

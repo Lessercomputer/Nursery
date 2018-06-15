@@ -231,11 +231,6 @@
 
 - (void)encodeWithAliaser:(NUAliaser *)anAliaser
 {
-    [self encodeIndexedIvarsWithAliaser:anAliaser];
-}
-
-- (void)encodeIndexedIvarsWithAliaser:(NUAliaser *)anAliaser
-{
     if (count)
     {
         [self loadObjects];

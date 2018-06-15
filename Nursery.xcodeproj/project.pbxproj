@@ -955,13 +955,13 @@
 				B8727BD220C8FEAA00D92DE6 /* CharacterTargetClassResolver.m */,
 				619B09561913F2EE00A4BAA2 /* NUNurseryTest.m */,
 				619B09581913F2EE00A4BAA2 /* NUBranchNurseryTests.m */,
-				619B07B11913ED8D00A4BAA2 /* NurseryTests.m */,
 				61DCED6219DCEEC8009E4E9E /* AllTypesObject.h */,
 				61DCED6319DCEEC8009E4E9E /* AllTypesObject.m */,
 				B8BD5EAA2069058B00091994 /* SelfReferenceObject.h */,
 				B8BD5EAB2069058B00091994 /* SelfReferenceObject.m */,
 				6116644E1FCBDEFC00774707 /* NUQueueTest.m */,
 				B8BDFF1520B6B96300839DCF /* NULazyMutableArrayTest.m */,
+				619B07B11913ED8D00A4BAA2 /* NurseryTests.m */,
 				619B07AC1913ED8D00A4BAA2 /* Supporting Files */,
 			);
 			path = NurseryTests;
