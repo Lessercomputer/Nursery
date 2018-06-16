@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "NUQueue.h"
+#import "NUQueue2.h"
 
 @interface NUQueueTest : XCTestCase
 
@@ -46,6 +47,60 @@
 - (void)testPushAndPop2
 {
     NUQueue *aQueue = [NUQueue queue];
+    NUUInt64 aCount = 7;
+    
+    for (NUUInt64 i = 0; i < aCount; i++)
+    {
+        [aQueue push:@(i)];
+        XCTAssertTrue([aQueue count] == i + 1);
+    }
+    
+    XCTAssertEqualObjects([aQueue pop], @(0));
+    XCTAssertTrue([aQueue count] == 6);
+    
+    XCTAssertEqualObjects([aQueue pop], @(1));
+    XCTAssertTrue([aQueue count] == 5);
+    
+    XCTAssertEqualObjects([aQueue pop], @(2));
+    XCTAssertTrue([aQueue count] == 4);
+    
+    [aQueue push:@(7)];
+    XCTAssertTrue([aQueue count] == 5);
+    
+    [aQueue push:@(8)];
+    XCTAssertTrue([aQueue count] == 6);
+    
+    [aQueue push:@(9)];
+    XCTAssertTrue([aQueue count] == 7);
+    
+    [aQueue push:@(10)];
+    XCTAssertTrue([aQueue count] == 8);
+    
+    XCTAssertEqualObjects([aQueue pop], @(3));
+    XCTAssertTrue([aQueue count] == 7);
+}
+
+- (void)testPushAndPopForNUQueue2
+{
+    NUQueue2 *aQueue = [NUQueue2 queue];
+    NUUInt64 aCount = 1000000;
+    
+    for (NUUInt64 i = 0; i < aCount; i++)
+    {
+        [aQueue push:@(i)];
+        XCTAssertTrue([aQueue count] == i + 1);
+    }
+    
+    for (NUUInt64 i = 0; i < aCount; i++)
+    {
+        XCTAssertEqualObjects([aQueue pop], @(i));
+        XCTAssertTrue([aQueue count] == aCount - i - 1);
+    }
+}
+
+- (void)testPushAndPop2ForNUQueue2
+{
+    NUQueue2 *aQueue = [NUQueue2 queue];
     NUUInt64 aCount = 7;
     
     for (NUUInt64 i = 0; i < aCount; i++)
