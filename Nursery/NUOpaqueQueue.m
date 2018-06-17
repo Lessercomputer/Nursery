@@ -85,7 +85,7 @@ const NUUInt64 NUOpaqueQueueDefaultValuesCapacity = 7;
     
     NUUInt8 *aValue = [self getValueAt:firstIndex in:values];
     [self willPopValue:aValue];
-    [self clearValueAt:firstIndex in:values];
+    [self clearValueIfNeededAt:firstIndex in:values];
     
     firstIndex++;
     
@@ -124,7 +124,7 @@ const NUUInt64 NUOpaqueQueueDefaultValuesCapacity = 7;
 {
 }
 
-- (void)clearValueAt:(NUUInt64)anIndex in:(NUUInt8 *)aValues
+- (void)clearValueIfNeededAt:(NUUInt64)anIndex in:(NUUInt8 *)aValues
 {
 }
 

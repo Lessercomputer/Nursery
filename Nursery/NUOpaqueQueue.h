@@ -31,6 +31,6 @@
 - (NUUInt8 *)allocValuesWithCapacity:(NUUInt64)aCapacity;
 - (NUUInt8 *)getValueAt:(NUUInt64)anIndex in:(NUUInt8 *)aValues;
 - (void)setValue:(NUUInt8 *)aValue at:(NUUInt64)anIndex in:(NUUInt8 *)aValues;
-- (void)clearValueAt:(NUUInt64)anIndex in:(NUUInt8 *)aValues;
+- (void)clearValueIfNeededAt:(NUUInt64)anIndex in:(NUUInt8 *)aValues;
 
 @end

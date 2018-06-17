@@ -52,7 +52,7 @@
     anObjects[anIndex] = anObject;
 }
 
-- (void)clearValueAt:(NUUInt64)anIndex in:(NUUInt8 *)aValues
+- (void)clearValueIfNeededAt:(NUUInt64)anIndex in:(NUUInt8 *)aValues
 {
     id *anObjects = (id *)aValues;
     anObjects[anIndex] = nil;
