@@ -21,10 +21,15 @@ const NUUInt64 NUOpaqueQueueDefaultValuesCapacity = 7;
 
 - (instancetype)init
 {
+    return [self initWithCapacity:NUOpaqueQueueDefaultValuesCapacity];
+}
+
+- (instancetype)initWithCapacity:(NUUInt64)aCapacity
+{
     self = [super init];
     if (self)
     {
-        valuesCapacity = NUOpaqueQueueDefaultValuesCapacity;
+        valuesCapacity = aCapacity;
         values = [self allocValuesWithCapacity:valuesCapacity];
     }
     return self;
@@ -100,6 +105,11 @@ const NUUInt64 NUOpaqueQueueDefaultValuesCapacity = 7;
 - (NUUInt64)count
 {
     return count;
+}
+
+- (BOOL)isFull
+{
+    return count == valuesCapacity;
 }
 
 - (void)willPushValue:(NUUInt8 *)aValue

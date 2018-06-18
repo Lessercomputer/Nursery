@@ -1,29 +1,16 @@
 //
-//  NUQueue.h
+//  NUQueue2.h
 //  Nursery
 //
-//  Created by Akifumi Takata on 2017/11/27.
-//  Copyright © 2017年 Nursery-Framework. All rights reserved.
+//  Created by Akifumi Takata on 2018/06/16.
+//  Copyright © 2018年 Nursery-Framework. All rights reserved.
 //
 
-#import <Foundation/NSObject.h>
+#import "NUOpaqueQueue.h"
 
-#import "NUTypes.h"
-
-@interface NUQueue : NSObject
-{
-    id *objects;
-    NUUInt64 objectsSize;
-    NUUInt64 count;
-    NUUInt64 topIndex;
-    NUUInt64 bottomIndex;
-}
-
-+ (instancetype)queue;
+@interface NUQueue : NUOpaqueQueue
 
 - (void)push:(id)anObject;
 - (id)pop;
-
-- (NUUInt64)count;
 
 @end

@@ -9,7 +9,7 @@
 #import <Foundation/NSException.h>
 
 #import "NUSeeker.h"
-#import "NUIndexArray.h"
+#import "NUUInt64Queue.h"
 #import "NUMainBranchNursery.h"
 #import "NUMainBranchNursery+Project.h"
 #import "NUPages.h"
@@ -48,7 +48,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
         garden = [aGarden retain];
         currentPhase = NUSeekerNonePhase;
         shouldLoadGrayOOPs = NO;
-        grayOOPs = [[NUIndexArray alloc] initWithCapacity:NUSeekerDefaultGrayOOPCapacity comparator:[NUIndexArray comparator]];
+        grayOOPs = [[NUUInt64Queue alloc] initWithCapacity:NUSeekerDefaultGrayOOPCapacity];
         aperture = [[NUMainBranchAperture alloc] initWithNursery:[aGarden nursery] garden:aGarden];
     }
     
@@ -229,7 +229,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 	
 	while (anOOP != NUNotFound64 && [grayOOPs count] < NUSeekerDefaultGrayOOPCapacity / 2)
 	{
-		[grayOOPs addIndex:anOOP];
+		[grayOOPs push:anOOP];
         anOOP = [[[self nursery] objectTable] grayOOPGreaterThanOOP:anOOP gradeLessThanOrEqualTo:[self grade]];
 	}
     
@@ -250,7 +250,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
     {
 		[[[self nursery] objectTable] setGCMark:(aGCMark & NUGCMarkWithoutColorBitsMask) | NUGCMarkGray for:aBellBall];
         if (![grayOOPs isFull])
-            [grayOOPs addIndex:anOOP];
+            [grayOOPs push:anOOP];
         else
             shouldLoadGrayOOPs = YES;
     }
@@ -266,7 +266,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
     {
 		[[[self nursery] objectTable] setGCMark:(aGCMark & NUGCMarkWithoutColorBitsMask) | NUGCMarkGray for:aBellBall];
         if (![grayOOPs isFull])
-            [grayOOPs addIndex:anOOP];
+            [grayOOPs push:anOOP];
         else
             shouldLoadGrayOOPs = YES;
     }
@@ -279,14 +279,13 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 	
 	while (!aGrayOOPFound && [grayOOPs count])
 	{
-		anOOP = [grayOOPs indexAt:[grayOOPs count] - 1];
+		anOOP = [grayOOPs pop];
         NUBellBall aBellBall = [[[self nursery] objectTable] bellBallLessThanOrEqualTo:NUMakeBellBall(anOOP, [self grade])];
         if (aBellBall.oop == anOOP)
         {
             NUUInt8 aGCMark = [[[self nursery] objectTable] gcMarkFor:aBellBall];
             aGrayOOPFound =  (aGCMark & NUGCMarkColorBitsMask) == NUGCMarkGray;
         }
-        [grayOOPs removeAt:[grayOOPs count] - 1];
 	}
 	
 	return aGrayOOPFound ? anOOP : NUNotFound64;

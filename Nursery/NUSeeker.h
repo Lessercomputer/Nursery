@@ -13,11 +13,11 @@ extern const NUUInt8 NUSeekerNonePhase;
 extern const NUUInt8 NUSeekerSeekPhase;
 extern const NUUInt8 NUSeekerCollectPhase;
 
-@class NUIndexArray, NUMainBranchNursery, NUAperture;
+@class NUUInt64Queue, NUMainBranchNursery, NUAperture;
 
 @interface NUSeeker : NUThreadedChildminder
 {
-	NUIndexArray *grayOOPs;
+	NUUInt64Queue *grayOOPs;
 	BOOL shouldLoadGrayOOPs;
 	NUUInt8 currentPhase;
     NUUInt64 grade;

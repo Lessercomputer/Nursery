@@ -1,101 +1,61 @@
 //
-//  NUQueue.m
+//  NUQueue2.m
 //  Nursery
 //
-//  Created by Akifumi Takata on 2017/11/27.
-//  Copyright © 2017年 Nursery-Framework. All rights reserved.
+//  Created by Akifumi Takata on 2018/06/16.
+//  Copyright © 2018年 Nursery-Framework. All rights reserved.
 //
 
 #include <stdlib.h>
 
 #import "NUQueue.h"
 
-const NUUInt64 NUQueueDefaultObjectsSize = 7;
-
 @implementation NUQueue
-
-+ (instancetype)queue
-{
-    return [[self new] autorelease];
-}
-
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        objectsSize = NUQueueDefaultObjectsSize;
-        objects = malloc(sizeof(id) * objectsSize);
-    }
-    return self;
-}
-
-- (void)dealloc
-{
-    free(objects);
-    
-    [super dealloc];
-}
 
 - (void)push:(id)anObject
 {
-    if (count == objectsSize)
-    {
-        id *anObjects = objects;
-        objectsSize = objectsSize * 2;
-        objects = malloc(sizeof(id) * objectsSize);
-        
-        if (topIndex < bottomIndex)
-        {
-            NUUInt64 i = 0;
-            for (NUUInt64 j = topIndex; j < bottomIndex; j++)
-                objects[i++] = anObjects[j];
-        }
-        else
-        {
-            NUUInt64 i = 0;
-            
-            for (NUUInt64 j = topIndex; j < count; j++)
-                objects[i++] = anObjects[j];
-
-            for (NUUInt64 j = 0; j < bottomIndex; j++)
-                objects[i++] = anObjects[j];
-        }
-        
-        topIndex = 0;
-        bottomIndex = count;
-        
-        free(anObjects);
-    }
-    else if (bottomIndex == objectsSize)
-        bottomIndex = 0;
-    
-    objects[bottomIndex] = [anObject retain];
-    
-    bottomIndex++;
-    
-    count++;
+    [super pushValue:(NUUInt8 *)anObject];
 }
 
 - (id)pop
 {
-    if (!count) return nil;
-    
-    id anObject = [objects[topIndex] autorelease];
-    objects[topIndex] = nil;
-    
-    topIndex++;
-    
-    if (topIndex == objectsSize && bottomIndex <= topIndex)
-        topIndex = 0;
-    
-    count--;
-    
-    return anObject;
+    return (id)[super popValue];
 }
 
-- (NUUInt64)count
+- (void)willPushValue:(NUUInt8 *)aValue
 {
-    return count;
+    id anObject = (id)aValue;
+    [anObject retain];
+}
+
+- (void)willPopValue:(NUUInt8 *)aValue
+{
+    id anObject = (id)aValue;
+    [anObject autorelease];
+}
+
+- (NUUInt8 *)allocValuesWithCapacity:(NUUInt64)aCapacity
+{
+    return malloc(aCapacity * sizeof(id));
+}
+
+- (NUUInt8 *)getValueAt:(NUUInt64)anIndex in:(NUUInt8 *)aValues
+{
+    id *anObjects = (id *)aValues;
+    return (NUUInt8 *)anObjects[anIndex];
+}
+
+- (void)setValue:(NUUInt8 *)aValue at:(NUUInt64)anIndex in:(NUUInt8 *)aValues
+{
+    id anObject = (id)aValue;
+    id *anObjects = (id *)aValues;
+    anObjects[anIndex] = anObject;
+}
+
+- (void)clearValueIfNeededAt:(NUUInt64)anIndex in:(NUUInt8 *)aValues
+{
+    id *anObjects = (id *)aValues;
+    anObjects[anIndex] = nil;
 }
 
 @end

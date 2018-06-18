@@ -70,19 +70,19 @@ const int NUThreadedChildminderTerminateCondition   = 2;
 
 - (void)start
 {
-	shouldStop = NO;
+    [self setShouldStop:NO];
 	[conditionLock lockWhenCondition:NUThreadedChildminderDeactiveCondition];
 	[conditionLock unlockWithCondition:NUThreadedChildminderActiveCondition];
 }
 
 - (void)startWithoutWait
 {
-    shouldStop = NO;
+    [self setShouldStop:NO];
 }
 
 - (void)stop
 {
-	shouldStop = YES;
+    [self setShouldStop:YES];
 	[conditionLock lockWhenCondition:NUThreadedChildminderDeactiveCondition];
 	[conditionLock unlockWithCondition:NUThreadedChildminderDeactiveCondition];
 }
@@ -93,12 +93,12 @@ const int NUThreadedChildminderTerminateCondition   = 2;
     NSLog(@"%@: begin #terminate", self);
 #endif
     
-    shouldStop = YES;
-    shouldTerminate = YES;
+    [self setShouldStop:YES];
+    [self setShouldTerminate:YES];
     
     [conditionLock lockWhenCondition:NUThreadedChildminderDeactiveCondition];
     
-    if (!isTerminated)
+    if (![self isTerminated])
     {
         [conditionLock unlockWithCondition:NUThreadedChildminderActiveCondition];
         [conditionLock lockWhenCondition:NUThreadedChildminderDeactiveCondition];
@@ -121,7 +121,7 @@ const int NUThreadedChildminderTerminateCondition   = 2;
     {
         [conditionLock lockWhenCondition:NUThreadedChildminderActiveCondition];
         
-        if (!shouldTerminate)
+        if (![self shouldTerminate])
         {
             @autoreleasepool
             {
@@ -134,7 +134,7 @@ const int NUThreadedChildminderTerminateCondition   = 2;
         [conditionLock unlockWithCondition:NUThreadedChildminderDeactiveCondition];
         
         
-        if (isTerminated) break;
+        if ([self isTerminated]) break;
     }
     
 #ifdef DEBUG
@@ -155,6 +155,26 @@ const int NUThreadedChildminderTerminateCondition   = 2;
 - (void)setShouldStop:(BOOL)aShouldStop
 {
     shouldStop = aShouldStop;
+}
+
+- (BOOL)shouldTerminate
+{
+    return shouldTerminate;
+}
+
+- (void)setShouldTerminate:(BOOL)aShouldTerminate
+{
+    shouldTerminate = aShouldTerminate;
+}
+
+- (BOOL)isTerminated
+{
+    return isTerminated;
+}
+
+- (void)setIsTerminated:(BOOL)aTerminated
+{
+    isTerminated = aTerminated;
 }
 
 @end

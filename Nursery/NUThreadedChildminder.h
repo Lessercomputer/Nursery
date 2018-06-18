@@ -40,4 +40,10 @@
 - (BOOL)shouldStop;
 - (void)setShouldStop:(BOOL)aShouldStop;
 
+- (BOOL)shouldTerminate;
+- (void)setShouldTerminate:(BOOL)aShouldTerminate;
+
+- (BOOL)isTerminated;
+- (void)setIsTerminated:(BOOL)aTerminated;
+
 @end

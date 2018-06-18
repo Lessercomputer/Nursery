@@ -20,11 +20,14 @@
 }
 
 + (instancetype)queue;
+
+- (instancetype)initWithCapacity:(NUUInt64)aCapacity;
                                    
 - (void)pushValue:(NUUInt8 *)aValue;
 - (NUUInt8 *)popValue;
 
 - (NUUInt64)count;
+- (BOOL)isFull;
 
 - (void)willPushValue:(NUUInt8 *)aValue;
 - (void)willPopValue:(NUUInt8 *)aValue;
