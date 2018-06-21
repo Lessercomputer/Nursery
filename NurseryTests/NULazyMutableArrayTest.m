@@ -132,6 +132,31 @@
     XCTAssertEqualObjects([aLazyArray objectAtIndex:2], @(0));
 }
 
+- (void)testRetainCount
+{
+    NULazyMutableArray *aLazyArray = [NULazyMutableArray new];
+    NSMutableString *aString = [@"aString" mutableCopy];
+    XCTAssertEqual([aString retainCount], 1);
+    [aLazyArray addObject:aString];
+    XCTAssertEqual([aString retainCount], 2);
+    [aLazyArray removeLastObject];
+    XCTAssertEqual([aString retainCount], 1);
+    [aString release];
+    [aLazyArray release];
+}
+
+- (void)testRetainCount2
+{
+    NULazyMutableArray *aLazyArray = [NULazyMutableArray new];
+    NSMutableString *aString = [@"aString" mutableCopy];
+    XCTAssertEqual([aString retainCount], 1);
+    [aLazyArray addObject:aString];
+    XCTAssertEqual([aString retainCount], 2);
+    [aLazyArray release];
+    XCTAssertEqual([aString retainCount], 1);
+    [aString release];
+}
+
 - (void)testAddPeformance
 {
     NULazyMutableArray *aLazyArray = [[[NULazyMutableArray alloc] init] autorelease];

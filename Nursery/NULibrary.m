@@ -203,6 +203,20 @@
 
 @end
 
+@implementation NULibrary (MovingUp)
+
+- (void)moveUp
+{
+    [[[self bell] garden] moveUpObject:self];
+}
+
+- (void)moveUpWithAliaser:(NUAliaser *)anAliaser
+{
+    [anAliaser moveUp:[self tree]];
+}
+
+@end
+
 @implementation NULibrary (Private)
 
 - (NUBPlusTree *)tree

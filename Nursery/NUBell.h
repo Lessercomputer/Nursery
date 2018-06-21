@@ -42,6 +42,9 @@
 - (BOOL)isEqualToBell:(NUBell *)anOOP;
 
 - (void)markChanged;
+- (void)unmarkChanged;
+
+- (BOOL)gradeIsUnmatched;
 
 @end
 

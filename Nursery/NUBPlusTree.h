@@ -9,8 +9,16 @@
 #import "NUTypes.h"
 #import "NUComparator.h"
 #import "NUCoding.h"
+#import "NUMovingUp.h"
 
 @class NUBPlusTreeNode, NUBPlusTreeLeaf;
+
+
+typedef enum NUBPlusTreeSetObjectResult
+{
+    NUBPlusTreeSetObjectResultReplace,
+    NUBPlusTreeSetObjectResultAdd
+} NUBPlusTreeSetObjectResult;
 
 @interface NUBPlusTree : NSObject
 {
@@ -27,8 +35,8 @@
 - (id)initWithKeyCapacity:(NUUInt64)aKeyCapacity comparator:(id <NUComparator>)aComparator;
 
 - (id)objectForKey:(id)aKey;
-- (void)setObject:(id)anObject forKey:(id)aKey;
-- (void)removeObjectForKey:(id)aKey;
+- (NUBPlusTreeSetObjectResult)setObject:(id)anObject forKey:(id)aKey;
+- (BOOL)removeObjectForKey:(id)aKey;
 
 - (id)firstKey;
 - (id)lastKey;
@@ -59,6 +67,9 @@
 @end
 
 @interface NUBPlusTree (Coding) <NUCoding>
+@end
+
+@interface NUBPlusTree (MovingUp) <NUMovingUp>
 @end
 
 @interface NUBPlusTree (Private)

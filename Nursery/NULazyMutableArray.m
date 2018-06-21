@@ -66,8 +66,7 @@
 
 - (void)dealloc
 {
-    free(objects);
-    free(oops);
+    [self releaseIvars];
     
     [super dealloc];
 }
@@ -243,19 +242,7 @@
 {
     if (self = [super init])
     {
-        NUUInt64 aSize = [anAliaser indexedIvarsSize];
-        NUUInt64 aCount = aSize / sizeof(NUUInt64);
-        
-        if (aCount)
-        {
-            oops = malloc(sizeof(id) * aCount);
-            
-            [anAliaser decodeUInt64Array:oops count:aCount];
-
-            objects = calloc(aCount, sizeof(id));
-            count = aCount;
-            capacity = aCount;
-        }
+        [self initIvarsWithAliaser:anAliaser];
     }
     
     return self;
@@ -263,7 +250,54 @@
 
 - (void)moveUpWithAliaser:(NUAliaser *)anAliaser
 {
-    ;
+    [self releaseIvars];
+    
+    [self initIvarsWithAliaser:anAliaser];
+    
+    [[self bell] unmarkChanged];
+}
+
+- (void)initIvarsWithAliaser:(NUAliaser *)anAliaser
+{
+    NUUInt64 aSize = [anAliaser indexedIvarsSize];
+    NUUInt64 aCount = aSize / sizeof(NUUInt64);
+    
+    if (aCount)
+    {
+        oops = malloc(sizeof(id) * aCount);
+        
+        [anAliaser decodeUInt64Array:oops count:aCount];
+        
+        objects = calloc(aCount, sizeof(id));
+        count = aCount;
+        capacity = aCount;
+    }
+    else
+    {
+        capacity = 7;
+        objects = malloc(sizeof(id) * capacity);
+    }
+}
+
+- (void)releaseIvars
+{
+    [self releaseObjects];
+    free(objects);
+    free(oops);
+    count = 0;
+    capacity = 0;
+}
+
+- (void)releaseObjects
+{
+    if (objects)
+    {
+        for (NSUInteger i = 0; i < count; i++)
+        {
+            id anObjectOrNil = objects[i];
+            if (anObjectOrNil) [anObjectOrNil release];
+        }
+    }
 }
 
 @end

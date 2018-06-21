@@ -52,9 +52,11 @@
     return [[self root] objectForKey:aKey];
 }
 
-- (void)setObject:(id)anObject forKey:(id)aKey
+- (NUBPlusTreeSetObjectResult)setObject:(id)anObject forKey:(id)aKey
 {
-    if ([[self root] setObject:anObject forKey:aKey] == NUBPlusTreeSetObjectResultAdd)
+    NUBPlusTreeSetObjectResult aSetResult = [[self root] setObject:anObject forKey:aKey];
+    
+    if (aSetResult == NUBPlusTreeSetObjectResultAdd)
     {
         count++;
         [[self bell] markChanged];
@@ -69,11 +71,15 @@
         [self setRoot:aNewRoot];
         depth++;
     }
+    
+    return aSetResult;
 }
 
-- (void)removeObjectForKey:(id)aKey
+- (BOOL)removeObjectForKey:(id)aKey
 {
-    if ([[self root] removeObjectForKey:aKey])
+    BOOL aKeyAndObjectAreRemoved = [[self root] removeObjectForKey:aKey];
+    
+    if (aKeyAndObjectAreRemoved)
     {
         count--;
         [self updateKey:aKey];
@@ -88,6 +94,8 @@
         [anOldRoot removeNodeAt:0];
         depth--;
     }
+    
+    return aKeyAndObjectAreRemoved;
 }
 
 - (id)firstKey
@@ -247,6 +255,15 @@
 - (void)setBell:(NUBell *)aBell
 {
     bell = aBell;
+}
+
+@end
+
+@implementation NUBPlusTree (MovingUp)
+
+- (void)moveUpWithAliaser:(NUAliaser *)anAliaser
+{
+    ;
 }
 
 @end

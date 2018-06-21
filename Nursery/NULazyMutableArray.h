@@ -24,4 +24,8 @@
 - (void)grow;
 - (NULazyMutableArray *)subLazyMutableArrayWithRange:(NSRange)aRange;
 
+- (void)initIvarsWithAliaser:(NUAliaser *)anAliaser;
+- (void)releaseIvars;
+- (void)releaseObjects;
+
 @end

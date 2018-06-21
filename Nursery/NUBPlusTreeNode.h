@@ -9,14 +9,9 @@
 #import "NUTypes.h"
 #import "NUComparator.h"
 #import "NUCoding.h"
+#import "NUBPlusTree.h"
 
-@class NUBPlusTree, NUBPlusTreeLeaf, NUBell, NULazyMutableArray;
-
-typedef enum NUBPlusTreeSetObjectResult
-{
-    NUBPlusTreeSetObjectResultReplace,
-    NUBPlusTreeSetObjectResultAdd
-} NUBPlusTreeSetObjectResult;
+@class NUBPlusTreeLeaf, NUBell, NULazyMutableArray;
 
 @interface NUBPlusTreeNode : NSObject
 {

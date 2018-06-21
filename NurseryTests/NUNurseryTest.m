@@ -605,6 +605,7 @@ static NSString *NUNurseryTestFilePath = nil;
     
     [aGardenB moveUp];
     [aGardenB moveUpObject:[aGardenB root]];
+    XCTAssertEqual([aGardenB bellForObject:[aGardenB root]].grade , [aGardenA bellForObject:[aGardenA root]].grade);
     XCTAssertEqualObjects([aGardenB root], @"A");
     [(NSMutableString *)[aGardenB root] setString:@"B"];
     [aGardenB markChangedObject:[aGardenB root]];
@@ -735,6 +736,36 @@ static NSString *NUNurseryTestFilePath = nil;
     [aGarden moveUpObject:[aGarden root]];
     
     XCTAssertEqualObjects([aGarden root], [aGardenA root]);
+}
+
+- (void)testMoveUpOfNULazyMutableArray
+{
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUGarden *aGardenA = [aNursery makeGarden];
+    NULazyMutableArray *anArrayA = [NULazyMutableArray array];
+    NUGarden *aGardenB = [aNursery makeGarden];
+    NULazyMutableArray *anArrayB = nil;
+    
+    [aGardenA setRoot:anArrayA];
+    [anArrayA addObject:@"A1"];
+    [anArrayA addObject:@"A2"];
+    [anArrayA addObject:@"A3"];
+    XCTAssertEqual([aGardenA farmOut], NUFarmOutStatusSucceeded);
+    
+    anArrayB = [aGardenB root];
+    [anArrayB addObject:@"B1"];
+    
+    [anArrayA addObject:@"A4"];
+    [[anArrayA bell] markChanged];
+    XCTAssertEqual([aGardenA farmOut], NUFarmOutStatusSucceeded);
+    
+    XCTAssertEqual([aGardenB farmOut], NUFarmOutStatusNurseryGradeUnmatched);
+    [aGardenB moveUp];
+    [aGardenB moveUpObject:anArrayB];
+    XCTAssertEqualObjects(anArrayB, anArrayA);
+    [anArrayB addObject:@"B1"];
+    [[anArrayB bell] markChanged];
+    XCTAssertEqual([aGardenB farmOut], NUFarmOutStatusSucceeded);
 }
 
 #pragma clang diagnostic push

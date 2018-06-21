@@ -176,6 +176,16 @@
     [[self garden] markChangedObject:[self object]];
 }
 
+- (void)unmarkChanged
+{
+    [[self garden] unmarkChangedObject:[self object]];
+}
+
+//- (BOOL)gradeIsUnmatched
+//{
+//    ;
+//}
+
 - (void)invalidate
 {
     [[self garden] invalidateBell:self];

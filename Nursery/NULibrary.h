@@ -9,6 +9,7 @@
 #import <Nursery/NUTypes.h>
 #import <Nursery/NUComparator.h>
 #import <Nursery/NUCoding.h>
+#import <Nursery/NUMovingUp.h>
 
 @class NUBPlusTree, NUBell;
 
@@ -53,3 +54,8 @@
 @interface NULibrary (Coding) <NUCoding>
 @end
 
+@interface NULibrary (MovingUp) <NUMovingUp>
+
+- (void)moveUp;
+
+@end
