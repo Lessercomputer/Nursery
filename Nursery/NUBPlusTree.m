@@ -236,13 +236,10 @@
 
 - (id)initWithAliaser:(NUAliaser *)anAliaser
 {
-    [super init];
-    
-    NUSetIvar(&root, [anAliaser decodeObject]);
-    count = [anAliaser decodeUInt64];
-    depth = [anAliaser decodeUInt64];
-    keyCapacity = [anAliaser decodeUInt64];
-    NUSetIvar(&comparator, [anAliaser decodeObject]);
+    if (self = [super init])
+    {
+        [self initIvarsWithAliaser:anAliaser];
+    }
     
     return self;
 }
@@ -263,12 +260,28 @@
 
 - (void)moveUpWithAliaser:(NUAliaser *)anAliaser
 {
-    ;
+    NSMutableArray *anAllLoadedNodes = [self allLoadedNodes];
+    
+    [anAllLoadedNodes enumerateObjectsUsingBlock:^(NUBPlusTreeNode * _Nonnull aNode, NSUInteger anIndex, BOOL * _Nonnull aStop) {
+        [anAliaser moveUp:aNode];
+    }];
+    
+    [self initIvarsWithAliaser:anAliaser];
+    [[self bell] unmarkChanged];
 }
 
 @end
 
 @implementation NUBPlusTree (Private)
+
+- (void)initIvarsWithAliaser:(NUAliaser *)anAliaser
+{
+    NUSetIvar(&root, [anAliaser decodeObject]);
+    count = [anAliaser decodeUInt64];
+    depth = [anAliaser decodeUInt64];
+    keyCapacity = [anAliaser decodeUInt64];
+    NUSetIvar(&comparator, [anAliaser decodeObject]);
+}
 
 - (void)setRoot:(NUBPlusTreeNode *)aRoot
 {
@@ -376,6 +389,15 @@
         *aKeyIndex = [aNode keyCount] - 1;
         return (NUBPlusTreeLeaf *)[aNode leftNode];
     }
+}
+
+- (NSMutableArray *)allLoadedNodes
+{
+    NSMutableArray *anAllLoadedNodes = [NSMutableArray array];
+    
+    [[self root] addLoadedNodesTo:anAllLoadedNodes];
+    
+    return anAllLoadedNodes;
 }
 
 @end

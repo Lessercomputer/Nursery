@@ -768,6 +768,51 @@ static NSString *NUNurseryTestFilePath = nil;
     XCTAssertEqual([aGardenB farmOut], NUFarmOutStatusSucceeded);
 }
 
+- (void)testMoveUpOfNULibrary
+{
+    const NUUInt64 aCount = 10000;
+    NUUInt64 aStartNo = 0;
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUGarden *aGardenA = [aNursery makeGarden];
+    NULibrary *aLibraryA = [NULibrary library];
+    NUGarden *aGardenB = [aNursery makeGarden];
+    NULibrary *aLibraryB = nil;
+    NUGarden *aGardenC = [aNursery makeGarden];
+    NULibrary *aLibraryC = nil;
+    
+    [aGardenA setRoot:aLibraryA];
+    for (NUUInt64 i = aStartNo; i < aCount; i++)
+        [aLibraryA setObject:@(i) forKey:@(i)];
+    XCTAssertEqual([aGardenA farmOut], NUFarmOutStatusSucceeded);
+    
+    aLibraryB = [aGardenB root];
+    XCTAssertEqualObjects(aLibraryB, aLibraryA);
+    aStartNo = [(NSNumber *)[aLibraryB lastKey] unsignedLongLongValue] + 1;
+    for (NUUInt64 i = aStartNo; i < aStartNo + aCount; i++)
+        [aLibraryB setObject:@(i) forKey:@(i)];
+    XCTAssertNotEqualObjects(aLibraryB, aLibraryA);
+    
+    aStartNo = [(NSNumber *)[aLibraryA lastKey] unsignedLongLongValue] + 1;
+    for (NUUInt64 i = aStartNo; i < aStartNo + aCount; i++)
+        [aLibraryA setObject:@(i) forKey:@(i)];
+    XCTAssertEqualObjects(aLibraryA, aLibraryB);
+    XCTAssertEqual([aGardenA farmOut], NUFarmOutStatusSucceeded);
+    
+    XCTAssertEqual([aGardenB farmOut], NUFarmOutStatusNurseryGradeUnmatched);
+    [aGardenB moveUp];
+    [aLibraryB moveUp];
+    XCTAssertEqualObjects(aLibraryB, aLibraryA);
+    
+    aStartNo = [(NSNumber *)[aLibraryB lastKey] unsignedLongLongValue] + 1;
+    for (NUUInt64 i = aStartNo; i < aStartNo + aCount; i++)
+        [aLibraryB setObject:@(i) forKey:@(i)];
+    XCTAssertNotEqualObjects(aLibraryB, aLibraryA);
+    XCTAssertEqual([aGardenB farmOut], NUFarmOutStatusSucceeded);
+    
+    aLibraryC = [aGardenC root];
+    XCTAssertEqualObjects(aLibraryC, aLibraryB);
+}
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-circular-container"
 - (void)testCircularReferenceOfObjectNotConformingToNUCoding

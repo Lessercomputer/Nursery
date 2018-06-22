@@ -55,11 +55,13 @@
 - (void)setObject:(id)anObject forKey:(id)aKey
 {
     [[self tree] setObject:anObject forKey:aKey];
+    [[self bell] markChanged];
 }
 
 - (void)removeObjectForKey:(id)aKey
 {
     [[self tree] removeObjectForKey:aKey];
+    [[self bell] markChanged];
 }
 
 - (id)firstKey
@@ -213,6 +215,7 @@
 - (void)moveUpWithAliaser:(NUAliaser *)anAliaser
 {
     [anAliaser moveUp:[self tree]];
+    [[self bell] unmarkChanged];
 }
 
 @end

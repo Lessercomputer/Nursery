@@ -24,6 +24,9 @@
 - (void)grow;
 - (NULazyMutableArray *)subLazyMutableArrayWithRange:(NSRange)aRange;
 
+- (BOOL)hasOOPs;
+- (NUUInt64)oopAt:(NSUInteger)anIndex;
+
 - (void)initIvarsWithAliaser:(NUAliaser *)anAliaser;
 - (void)releaseIvars;
 - (void)releaseObjects;

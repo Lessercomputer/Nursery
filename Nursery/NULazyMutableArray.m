@@ -123,6 +123,7 @@
     
     objects[index] = [anObject retain];
     count++;
+    [[self bell] markChanged];
 }
 
 - (void)grow
@@ -154,6 +155,7 @@
     }
     
     count--;
+    [[self bell] markChanged];
 }
 
 - (void)loadObjects
@@ -190,6 +192,7 @@
     [anObject retain];
     [objects[index] release];
     objects[index] = anObject;
+    [[self bell] markChanged];
 }
 
 - (NULazyMutableArray *)subLazyMutableArrayWithRange:(NSRange)aRange
@@ -206,6 +209,16 @@
     free(anObjects);
     
     return aSubLazyMutableArray;
+}
+
+- (BOOL)hasOOPs
+{
+    return oops ? YES : NO;
+}
+
+- (NUUInt64)oopAt:(NSUInteger)anIndex
+{
+    return oops[anIndex];
 }
 
 + (BOOL)automaticallyEstablishCharacter

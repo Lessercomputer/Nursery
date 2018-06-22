@@ -9,7 +9,10 @@
 #import "NUTypes.h"
 #import "NUComparator.h"
 #import "NUCoding.h"
+#import "NUMovingUp.h"
 #import "NUBPlusTree.h"
+
+@class NSMutableArray;
 
 @class NUBPlusTreeLeaf, NUBell, NULazyMutableArray;
 
@@ -69,12 +72,19 @@
 - (void)mergeLeftNode;
 - (void)mergeRightNode;
 
+- (void)addLoadedNodesTo:(NSMutableArray *)aLoadedNodes;
+
 @end
 
 @interface NUBPlusTreeNode (Coding) <NUCoding>
 @end
 
+@interface NUBPlusTreeNode (MovingUp) <NUMovingUp>
+@end
+
 @interface NUBPlusTreeNode (Private)
+
+- (void)initIversWithAliaser:(NUAliaser *)anAliaser forMoveUp:(BOOL)aMoveUpFlag;
 
 - (void)setKeys:(NULazyMutableArray *)aKeys;
 - (void)setValues:(NULazyMutableArray *)aValues;

@@ -11,8 +11,9 @@
 #import "NUCoding.h"
 #import "NUMovingUp.h"
 
-@class NUBPlusTreeNode, NUBPlusTreeLeaf;
+@class NSMutableArray;
 
+@class NUBPlusTreeNode, NUBPlusTreeLeaf;
 
 typedef enum NUBPlusTreeSetObjectResult
 {
@@ -74,6 +75,8 @@ typedef enum NUBPlusTreeSetObjectResult
 
 @interface NUBPlusTree (Private)
 
+- (void)initIvarsWithAliaser:(NUAliaser *)anAliaser;
+
 - (void)setRoot:(NUBPlusTreeNode *)aRoot;
 - (void)setComparator:(id <NUComparator>)aComparator;
 - (void)updateKey:(id)aKey;
@@ -88,5 +91,7 @@ typedef enum NUBPlusTreeSetObjectResult
 
 - (NUBPlusTreeLeaf *)getNextKeyIndex:(NUUInt64 *)aKeyIndex node:(NUBPlusTreeLeaf *)aNode;
 - (NUBPlusTreeLeaf *)getPreviousKeyIndex:(NUUInt64 *)aKeyIndex node:(NUBPlusTreeLeaf *)aNode;
+
+- (NSMutableArray *)allLoadedNodes;
 
 @end

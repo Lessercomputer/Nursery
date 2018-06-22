@@ -13,6 +13,7 @@
 #import "NUBPlusTree.h"
 #import "NUBell.h"
 #import "NUGarden.h"
+#import "NUGarden+Project.h"
 #import "NULazyMutableArray.h"
 
 @implementation NUBPlusTreeBranch
@@ -314,6 +315,27 @@
 {
     [[self keys] insertObject:aKey atIndex:anIndex];
     [[[self bell] garden] markChangedObject:[self keys]];
+}
+
+- (void)addLoadedNodesTo:(id)aLoadedNodes
+{
+    [super addLoadedNodesTo:aLoadedNodes];
+    
+    for (NSUInteger i = 0; i < [self valueCount]; i++)
+    {
+        if ([[self values] hasOOPs])
+        {
+            NUUInt64 aNodeOOP = [[self values] oopAt:i];
+            NUBell *aNodeBell = [[[self bell] garden] bellForOOP:aNodeOOP];
+            if ([aNodeBell isLoaded])
+                [(NUBPlusTreeNode *)[aNodeBell object] addLoadedNodesTo:aLoadedNodes];
+        }
+        else
+        {
+            NUBPlusTreeNode *aNode = [self valueAt:i];
+            [aNode addLoadedNodesTo:aLoadedNodes];
+        }
+    }
 }
 
 @end

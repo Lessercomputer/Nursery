@@ -295,6 +295,11 @@
     [[[self bell] garden] markChangedObject:[self values]];
 }
 
+- (void)addLoadedNodesTo:(id)aLoadedNodes
+{
+    [aLoadedNodes addObject:self];
+}
+
 @end
 
 @implementation NUBPlusTreeNode (Coding)
@@ -329,9 +334,47 @@
 
 - (id)initWithAliaser:(NUAliaser *)anAliaser
 {
-    [super init];
+    if (self = [super init])
+    {
+        [self initIversWithAliaser:anAliaser forMoveUp:NO];
+    }
     
+    return self;
+}
+
+- (NUBell *)bell
+{
+    return bell;
+}
+
+- (void)setBell:(NUBell *)aBell
+{
+    bell = aBell;
+}
+
+@end
+
+@implementation NUBPlusTreeNode (MovingUp)
+
+- (void)moveUpWithAliaser:(NUAliaser *)anAliaser
+{
+    [self initIversWithAliaser:anAliaser forMoveUp:YES];
+    [[self bell] unmarkChanged];
+}
+
+@end
+
+@implementation NUBPlusTreeNode (Private)
+
+- (void)initIversWithAliaser:(NUAliaser *)anAliaser forMoveUp:(BOOL)aMoveUpFlag
+{
     NUCharacter *aCharacter = [anAliaser characterForClass:[NUBPlusTreeNode class]];
+
+    if (aMoveUpFlag)
+    {
+        [anAliaser moveUp:keys];
+        [anAliaser moveUp:values];
+    }
     
     if ([aCharacter version] == 0)
     {
@@ -353,23 +396,7 @@
     NUSetIvar(&leftNode, [anAliaser decodeObject]);
     NUSetIvar(&rightNode, [anAliaser decodeObject]);
     NUSetIvar(&parentNode, [anAliaser decodeObject]);
-    
-    return self;
 }
-
-- (NUBell *)bell
-{
-    return bell;
-}
-
-- (void)setBell:(NUBell *)aBell
-{
-    bell = aBell;
-}
-
-@end
-
-@implementation NUBPlusTreeNode (Private)
 
 - (void)setKeys:(NULazyMutableArray *)aKeys
 {
