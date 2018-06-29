@@ -214,4 +214,68 @@ static NSString *NUNurseryTestFilePath2;
     [aNurseryNetService stop];
 }
 
+- (void)testMoveUpOfNULibrary
+{
+    NUMainBranchNursery *aMainBranchNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUNurseryNetService *aNurseryNetService = [NUNurseryNetService netServiceWithNursery:aMainBranchNursery serviceName:@"nursery"];
+    
+    [aNurseryNetService start];
+    
+    @autoreleasepool
+    {
+        const NUUInt64 aCount = 10000;
+        NUUInt64 aStartNo = 0;
+        NUBranchNursery *aNursery = [NUBranchNursery branchNurseryWithServiceName:@"nursery"];
+        NUGarden *aGardenA = [aNursery makeGarden];
+        NULibrary *aLibraryA = [NULibrary library];
+        NUGarden *aGardenB = [aNursery makeGarden];
+        NULibrary *aLibraryB = nil;
+        NUGarden *aGardenC = [aNursery makeGarden];
+        NULibrary *aLibraryC = nil;
+        
+        [aGardenA setRoot:aLibraryA];
+        for (NUUInt64 i = aStartNo; i < aCount; i++)
+            [aLibraryA setObject:@(i) forKey:@(i)];
+        XCTAssertEqual([aGardenA farmOut], NUFarmOutStatusSucceeded);
+        
+        aLibraryB = [aGardenB root];
+        XCTAssertFalse([[aLibraryB bell] gradeIsUnmatched]);
+        XCTAssertEqualObjects(aLibraryB, aLibraryA);
+        aStartNo = [(NSNumber *)[aLibraryB lastKey] unsignedLongLongValue] + 1;
+        for (NUUInt64 i = aStartNo; i < aStartNo + aCount; i++)
+            [aLibraryB setObject:@(i) forKey:@(i)];
+        XCTAssertFalse([[aLibraryB bell] gradeIsUnmatched]);
+        XCTAssertNotEqualObjects(aLibraryB, aLibraryA);
+        
+        aStartNo = [(NSNumber *)[aLibraryA lastKey] unsignedLongLongValue] + 1;
+        for (NUUInt64 i = aStartNo; i < aStartNo + aCount; i++)
+            [aLibraryA setObject:@(i) forKey:@(i)];
+        XCTAssertFalse([[aLibraryA bell] gradeIsUnmatched]);
+        XCTAssertEqualObjects(aLibraryA, aLibraryB);
+        XCTAssertEqual([aGardenA farmOut], NUFarmOutStatusSucceeded);
+        
+        XCTAssertEqual([aGardenB farmOut], NUFarmOutStatusNurseryGradeUnmatched);
+        XCTAssertFalse([[aLibraryB bell] gradeIsUnmatched]);
+        [aGardenB moveUp];
+        XCTAssertTrue([[aLibraryB bell] gradeIsUnmatched]);
+        [aLibraryB moveUp];
+        XCTAssertFalse([[aLibraryB bell] gradeIsUnmatched]);
+        XCTAssertEqualObjects(aLibraryB, aLibraryA);
+        
+        aStartNo = [(NSNumber *)[aLibraryB lastKey] unsignedLongLongValue] + 1;
+        for (NUUInt64 i = aStartNo; i < aStartNo + aCount; i++)
+            [aLibraryB setObject:@(i) forKey:@(i)];
+        XCTAssertFalse([[aLibraryB bell] gradeIsUnmatched]);
+        XCTAssertNotEqualObjects(aLibraryB, aLibraryA);
+        XCTAssertEqual([aGardenB farmOut], NUFarmOutStatusSucceeded);
+        XCTAssertFalse([[aLibraryB bell] gradeIsUnmatched]);
+        
+        aLibraryC = [aGardenC root];
+        XCTAssertFalse([[aLibraryC bell] gradeIsUnmatched]);
+        XCTAssertEqualObjects(aLibraryC, aLibraryB);
+    }
+    
+    [aNurseryNetService stop];
+}
+
 @end

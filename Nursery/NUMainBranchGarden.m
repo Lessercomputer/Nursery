@@ -18,8 +18,10 @@
 #import "NUMainBranchAliaser.h"
 #import "NUNurseryRoot.h"
 #import "NUBell.h"
+#import "NUBellBall.h"
 #import "NUMainBranchGradeSeeker.h"
 #import "NUMainBranchAperture.h"
+#import "NUObjectTable.h"
 
 @implementation NUMainBranchGarden
 
@@ -55,6 +57,20 @@
     farmOutLock = nil;
     
     [super dealloc];
+}
+
+@end
+
+@implementation NUMainBranchGarden (Bell)
+
+- (BOOL)bellGradeIsUnmatched:(NUBell *)aBell
+{
+    NUBellBall aGraterBellBall = [[[self mainBranchNursery] objectTable] bellBallGreaterThanBellBall:aBell.ball];
+    
+    if (NUBellBallEquals(aGraterBellBall, NUNotFoundBellBall))
+        return NO;
+    
+    return aGraterBellBall.oop == aBell.OOP && aGraterBellBall.grade <= [self grade] ? YES : NO;
 }
 
 @end

@@ -67,6 +67,8 @@
 
 - (BOOL)OOPIsProbationary:(NUUInt64)anOOP;
 
+- (BOOL)bellGradeIsUnmatched:(NUBell *)aBell;
+
 @end
 
 @interface NUGarden (ProjectSaveAndLoad)

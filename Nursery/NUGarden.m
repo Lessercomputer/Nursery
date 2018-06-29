@@ -513,10 +513,10 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     return NUDefaultLastProbationaryOOP <= anOOP && anOOP <= NUDefaultFirstProbationayOOP;
 }
 
-//- (BOOL)gradeOfBellIsUnmatched:(NUBell *)aBell
-//{
-//    ;
-//}
+- (BOOL)bellGradeIsUnmatched:(NUBell *)aBell
+{
+    return NO;
+}
 
 @end
 

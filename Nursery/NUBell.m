@@ -181,10 +181,10 @@
     [[self garden] unmarkChangedObject:[self object]];
 }
 
-//- (BOOL)gradeIsUnmatched
-//{
-//    ;
-//}
+- (BOOL)gradeIsUnmatched
+{
+    return [[self garden] bellGradeIsUnmatched:self];
+}
 
 - (void)invalidate
 {

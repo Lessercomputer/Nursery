@@ -18,11 +18,11 @@
 
 static NSString *NUNurseryTestFilePath = nil;
 
-@interface NUNurseryTest : XCTestCase
+@interface NUMainBranchNurseryTest : XCTestCase
 
 @end
 
-@implementation NUNurseryTest
+@implementation NUMainBranchNurseryTest
 
 - (void)setUp
 {
@@ -786,30 +786,39 @@ static NSString *NUNurseryTestFilePath = nil;
     XCTAssertEqual([aGardenA farmOut], NUFarmOutStatusSucceeded);
     
     aLibraryB = [aGardenB root];
+    XCTAssertFalse([[aLibraryB bell] gradeIsUnmatched]);
     XCTAssertEqualObjects(aLibraryB, aLibraryA);
     aStartNo = [(NSNumber *)[aLibraryB lastKey] unsignedLongLongValue] + 1;
     for (NUUInt64 i = aStartNo; i < aStartNo + aCount; i++)
         [aLibraryB setObject:@(i) forKey:@(i)];
+    XCTAssertFalse([[aLibraryB bell] gradeIsUnmatched]);
     XCTAssertNotEqualObjects(aLibraryB, aLibraryA);
     
     aStartNo = [(NSNumber *)[aLibraryA lastKey] unsignedLongLongValue] + 1;
     for (NUUInt64 i = aStartNo; i < aStartNo + aCount; i++)
         [aLibraryA setObject:@(i) forKey:@(i)];
+    XCTAssertFalse([[aLibraryA bell] gradeIsUnmatched]);
     XCTAssertEqualObjects(aLibraryA, aLibraryB);
     XCTAssertEqual([aGardenA farmOut], NUFarmOutStatusSucceeded);
     
     XCTAssertEqual([aGardenB farmOut], NUFarmOutStatusNurseryGradeUnmatched);
+    XCTAssertFalse([[aLibraryB bell] gradeIsUnmatched]);
     [aGardenB moveUp];
+    XCTAssertTrue([[aLibraryB bell] gradeIsUnmatched]);
     [aLibraryB moveUp];
+    XCTAssertFalse([[aLibraryB bell] gradeIsUnmatched]);
     XCTAssertEqualObjects(aLibraryB, aLibraryA);
     
     aStartNo = [(NSNumber *)[aLibraryB lastKey] unsignedLongLongValue] + 1;
     for (NUUInt64 i = aStartNo; i < aStartNo + aCount; i++)
         [aLibraryB setObject:@(i) forKey:@(i)];
+    XCTAssertFalse([[aLibraryB bell] gradeIsUnmatched]);
     XCTAssertNotEqualObjects(aLibraryB, aLibraryA);
     XCTAssertEqual([aGardenB farmOut], NUFarmOutStatusSucceeded);
+    XCTAssertFalse([[aLibraryB bell] gradeIsUnmatched]);
     
     aLibraryC = [aGardenC root];
+    XCTAssertFalse([[aLibraryC bell] gradeIsUnmatched]);
     XCTAssertEqualObjects(aLibraryC, aLibraryB);
 }
 

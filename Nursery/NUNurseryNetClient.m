@@ -396,13 +396,12 @@ const NUUInt64 NUNurseryNetClientDefaultMaximumFellowPupilNotesSizeGrowDownFacto
     @try
     {
         [self sendAndReceiveMessage:aMessage];
+        aPairID = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
     }
     @finally
     {
         [[self lock] unlock];
     }
-
-    aPairID = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
     
     return aPairID;
 }
@@ -438,14 +437,13 @@ const NUUInt64 NUNurseryNetClientDefaultMaximumFellowPupilNotesSizeGrowDownFacto
     @try
     {
         [self sendAndReceiveMessage:aMessage];
+        aRootOOP = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
+
     }
     @finally
     {
         [[self lock] unlock];
     }
-
-    
-    aRootOOP = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
 
     return aRootOOP;
 }
@@ -458,17 +456,15 @@ const NUUInt64 NUNurseryNetClientDefaultMaximumFellowPupilNotesSizeGrowDownFacto
     
     NUNurseryNetMessage *aMessage = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindLatestGrade];
 
-    
     @try
     {
         [self sendAndReceiveMessage:aMessage];
+        aLatestGrade = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
     }
     @finally
     {
         [[self lock] unlock];
     }
-
-    aLatestGrade = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
 
     return aLatestGrade;
 }
@@ -484,13 +480,12 @@ const NUUInt64 NUNurseryNetClientDefaultMaximumFellowPupilNotesSizeGrowDownFacto
     @try
     {
         [self sendAndReceiveMessage:aMessage];
+        anOlderRetainedGrade = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
     }
     @finally
     {
         [[self lock] unlock];
     }
-
-    anOlderRetainedGrade = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
 
     return anOlderRetainedGrade;
 }
@@ -508,13 +503,12 @@ const NUUInt64 NUNurseryNetClientDefaultMaximumFellowPupilNotesSizeGrowDownFacto
     @try
     {
         [self sendAndReceiveMessage:aMessage];
+        aGrade = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
     }
     @finally
     {
         [[self lock] unlock];
     }
-    
-    aGrade = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
     
     return aGrade;
 }
@@ -533,13 +527,12 @@ const NUUInt64 NUNurseryNetClientDefaultMaximumFellowPupilNotesSizeGrowDownFacto
     @try
     {
         [self sendAndReceiveMessage:aMessage];
+        aRetainedGradeOrNilGrade = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
     }
     @finally
     {
         [[self lock] unlock];
     }
-
-    aRetainedGradeOrNilGrade = [[[self receivedMessage] argumentAt:0] UInt64FromValue];
 
     return aRetainedGradeOrNilGrade;
 }
@@ -621,19 +614,18 @@ const NUUInt64 NUNurseryNetClientDefaultMaximumFellowPupilNotesSizeGrowDownFacto
     @try
     {
         [self sendAndReceiveMessage:aMessage];
+        aPupilsData = [[[[self receivedMessage] argumentAt:0] dataFromValue] retain];
     }
     @finally
     {
         [[self lock] unlock];
     }
     
-    aPupilsData = [[[self receivedMessage] argumentAt:0] dataFromValue];
-    
 //    NSLog(@"total call count:%@, max fellow pupil notes size:%@, pupil data size:%@", @([self totalCallCount]), @([self maxFellowPupilNotesSizeInBytes]), @([aPupilsData length]));
 
     [self setPreviousCallEndDate:[NSDate date]];
 
-    return aPupilsData;
+    return [aPupilsData autorelease];
 }
 
 - (NUFarmOutStatus)farmOutPupils:(NSData *)aPupilData rootOOP:(NUUInt64)aRootOOP gardenWithID:(NUUInt64)anID fixedOOPs:(NSData **)aFixedOOPs latestGrade:(NUUInt64 *)aLatestGrade
@@ -651,16 +643,15 @@ const NUUInt64 NUNurseryNetClientDefaultMaximumFellowPupilNotesSizeGrowDownFacto
     @try
     {
         [self sendAndReceiveMessage:aMessage];
+        aStatus = (NUFarmOutStatus)[[[self receivedMessage] argumentAt:0] UInt64FromValue];
+        
+        *aFixedOOPs = [[[[[self receivedMessage] argumentAt:1] dataFromValue] retain] autorelease];
+        *aLatestGrade = [[[self receivedMessage] argumentAt:2] UInt64FromValue];
     }
     @finally
     {
         [[self lock] unlock];
     }
-    
-    aStatus = (NUFarmOutStatus)[[[self receivedMessage] argumentAt:0] UInt64FromValue];
-    
-    *aFixedOOPs = [[[self receivedMessage] argumentAt:1] dataFromValue];
-    *aLatestGrade = [[[self receivedMessage] argumentAt:2] UInt64FromValue];
     
     return aStatus;
 }

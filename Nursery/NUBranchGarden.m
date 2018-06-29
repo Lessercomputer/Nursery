@@ -21,6 +21,7 @@
 #import "NUNurseryRoot.h"
 #import "NUBranchNursery.h"
 #import "NUBranchNursery+Project.h"
+#import "NUPupilNote.h"
 #import "NUPupilNoteCache.h"
 #import "NUU64ODictionary.h"
 #import "NUNurseryNetClient.h"
@@ -86,6 +87,17 @@
 + (Class)apertureClass
 {
     return [NUBranchAperture class];
+}
+
+@end
+
+@implementation NUBranchGarden (Bell)
+
+- (BOOL)bellGradeIsUnmatched:(NUBell *)aBell
+{
+    NUPupilNote *aPupilNote = [[self branchAliaser] callForPupilNoteWithBell:aBell];
+    
+    return aPupilNote && [aPupilNote grade] != [aBell grade];
 }
 
 @end
