@@ -28,6 +28,14 @@
     return self;
 }
 
+- (void)dealloc
+{
+    [_pupilNote release];
+    _pupilNote = nil;
+    
+    [super dealloc];
+}
+
 - (void)peekAt:(NUBellBall)aBellBall
 {
     currentFixedOOPIvarIndex = 0;

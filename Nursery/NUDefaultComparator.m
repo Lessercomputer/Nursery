@@ -39,7 +39,7 @@
 
 - (id)initWithAliaser:(NUAliaser *)anAliaser
 {
-    [super init];
+    self = [super init];
         
     return self;
 }

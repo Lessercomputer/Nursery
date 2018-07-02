@@ -29,12 +29,13 @@
 
 - (id)initWithKeyCapacity:(NUUInt64)aKeyCapacity comparator:(id <NUComparator>)aComparator
 {
-    [super init];
-    
-    keyCapacity = aKeyCapacity;
-    NUSetIvar(&comparator, aComparator);
-    NUSetIvar(&root, [NUBPlusTreeLeaf nodeWithTree:self]);
-    depth = 1;
+    if (self = [super init])
+    {
+        keyCapacity = aKeyCapacity;
+        NUSetIvar(&comparator, aComparator);
+        NUSetIvar(&root, [NUBPlusTreeLeaf nodeWithTree:self]);
+        depth = 1;
+    }
     
     return self;
 }

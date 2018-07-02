@@ -37,12 +37,13 @@
 
 - (id)initWithTree:(NUBPlusTree *)aTree keys:(NULazyMutableArray *)aKeys values:(NULazyMutableArray *)aValues
 {
-    [super init];
-    
-    NUSetIvar(&tree, aTree);
-    
-    NUSetIvar(&keys, aKeys);
-    NUSetIvar(&values, aValues);
+    if (self = [super init])
+    {
+        NUSetIvar(&tree, aTree);
+        
+        NUSetIvar(&keys, aKeys);
+        NUSetIvar(&values, aValues);
+    }
         
     return self;
 }

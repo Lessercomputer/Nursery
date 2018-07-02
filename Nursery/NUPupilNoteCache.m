@@ -106,7 +106,6 @@
             {
                 [aPupilNotesArray addObject:[aLinkedListElement pupilNote]];
                 aCurrentPupilNotesSizeInBytes += [[aLinkedListElement pupilNote] sizeForSerialization];
-//                NSLog(@"oop:%@", @([[aLinkedListElement pupilNote] OOP]));
             }
             else
                 *aStop = YES;
@@ -162,7 +161,7 @@
 {
     NUBellBall aBellBallForPupilNote = [aPupilNote bellBall];
     NUPupilNoteCacheLinkedListElement *anExistingLinkedListElement = [bellBallToLinkedListElementDictionary objectForKey:aBellBallForPupilNote];
-    NUPupilNoteCacheLinkedListElement *anExistingOrNewLinkedListElement = anExistingLinkedListElement;
+    NUPupilNoteCacheLinkedListElement *anExistingOrNewLinkedListElement = nil;
     
     if (!anExistingLinkedListElement)
     {

@@ -2,11 +2,13 @@
 **Nursery** is a persistent object framework (object-oriented database) for Cocoa.
 
 ## Overview
-It is written in Objective-C.  
-It is implemented ONLY with the Foundation framework of Cocoa.  
-It has ACID characteristics.  
-It supports simultaneous use from multiple processes  
-It is **not** ORM(Object-relational mapping).  
+* Written in Objective-C.  
+* Implemented ONLY with the Foundation framework of Cocoa and Core Foundation framework(for creating sockets). 
+* ACID characteristics.  
+* Lazy loading.
+* Garbage Collection and Compaction.
+* Simultaneous use from multiple processes.
+* Not ORM(Object-relational mapping).  
 
 
 ### List of persistable objects

@@ -29,13 +29,14 @@ NSString *NUOpaqueArrayCannotGrowException = @"NUOpaqueArrayCannotGrowException"
 
 - (id)initWithValueLength:(NUUInt32)aValueLength capacity:(NUUInt32)aCapacity comparator:(NUInt (*)(NUUInt8 *, NUUInt8 *))aComparator
 {
-	[super init];
-	
-	valueLength = aValueLength;
-	capacity = aCapacity;
-	values = malloc(valueLength * capacity);
-	[self setComparator:aComparator];
-	
+	if (self = [super init])
+    {
+        valueLength = aValueLength;
+        capacity = aCapacity;
+        values = malloc(valueLength * capacity);
+        [self setComparator:aComparator];
+    }
+    
 	return self;
 }
 

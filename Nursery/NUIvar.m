@@ -68,12 +68,13 @@ NSString *NUIvarInvalidTypeException = @"NUIvarInvalidTypeException";
 
 - (id)initWithName:(NSString *)aName type:(NUIvarType)aType size:(NUUInt64)aSize
 {
-	[super init];
-	
-	[self setName:aName];
-	[self setType:aType];
-	[self setSize:aSize];
-
+	if (self = [super init])
+    {
+        [self setName:aName];
+        [self setType:aType];
+        [self setSize:aSize];
+    }
+    
 	return self;
 }
 

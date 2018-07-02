@@ -694,10 +694,11 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 			anObject = [aCoder new];
 			[[self garden] setObject:anObject forBell:aBell];
 			[aCoder decode:anObject withAliaser:self];
+            [anObject release];
 		}
 		else
 		{
-			anObject = [[aCoder decodeObjectWithAliaser:self] retain];
+			anObject = [aCoder decodeObjectWithAliaser:self];
 			[[self garden] setObject:anObject forBell:aBell];
 		}
 	}
@@ -706,6 +707,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 		anObject = [[aCharacter targetClass] new];
 		[[self garden] setObject:anObject forBell:aBell];
 		[anObject initWithAliaser:self];
+        [anObject release];
 	}
 	
 	[self popContext];
@@ -713,7 +715,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
     [aBell setIsLoaded:YES];
     [[[self garden] gradeSeeker] bellDidLoadIvars:aBell];
     
-	return [anObject autorelease];
+    return anObject;
 }
 
 - (void)ensureCharacterForDecoding:(NUCharacter *)aCharacter
@@ -993,9 +995,6 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 
 - (void)fixProbationaryOOPsInPupil:(NUPupilNote *)aPupilNote
 {
-//#ifdef DEBUG
-//    NSLog(@"#fixProbationaryOOPsInPupil:%@", aPupilNote);
-//#endif
     NUUInt64 aCharacterOOP = [aPupilNote isa];
     NUCharacter *aCharacter = [[self garden] objectForOOP:aCharacterOOP];
     

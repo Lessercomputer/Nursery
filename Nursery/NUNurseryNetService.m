@@ -86,7 +86,6 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
 
 - (void)dealloc
 {
-    NSLog(@"dealloc:%@", self);
     [_netService release];
     _netService = nil;
     
@@ -266,14 +265,11 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
 
 - (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary<NSString *,NSNumber *> *)errorDict
 {
-    NSLog(@"%@", errorDict);
     @throw [NSException exceptionWithName:@"NUNurseryNetServiceDidNotPublish" reason:nil userInfo:errorDict];
 }
 
 - (void)netServiceDidPublish:(NSNetService *)sender
 {
-    NSLog(@"%@", sender);
-    
     [[self statusCondition] lock];
     
     [self setStatus:NUNurseryNetServiceStatusRunning];
@@ -284,8 +280,6 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
 
 - (void)netServiceDidStop:(NSNetService *)sender
 {
-    NSLog(@"netServiceDidStop:%@", sender);
-    
     [[self netRespondersLock] lock];
     
     [[self netResponders] enumerateObjectsUsingBlock:^(NUNurseryNetResponder *  _Nonnull aNetResponder, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -371,6 +365,7 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
     CFRunLoopSourceRef aSocketRunLoopSource6 = CFSocketCreateRunLoopSource(kCFAllocatorDefault, anIPv6CFSocket, 0);
     CFRunLoopAddSource(CFRunLoopGetCurrent(), aSocketRunLoopSource6, kCFRunLoopDefaultMode);
 
+    CFRelease(aSocketAddressData);
     CFRelease(aSockAddrIn6Data);
     CFRelease(anIPv6CFSocket);
     CFRelease(aSocketRunLoopSource6);
@@ -404,7 +399,6 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
 
 - (void)netResponderDidStop:(NUNurseryNetResponder *)sender
 {
-    NSLog(@"netResponderDidStop:%@", sender);
     [[self netRespondersLock] lock];
     
     [[self netResponders] removeObject:sender];

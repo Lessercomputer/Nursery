@@ -286,11 +286,6 @@ const NUUInt64 NUNurseryNetClientDefaultMaximumFellowPupilNotesSizeGrowDownFacto
            didFindService:(NSNetService *)aService
                moreComing:(BOOL)aMoreComing
 {
-    NSLog(@"browser:%@\nservice:%@", aBrowser, aService);
-
-    NSLog(@"name:%@", [aService name]);
-    NSLog(@"host name:%@", [aService hostName]);
-    
     if (!aMoreComing)
     {
         [aBrowser stop];
@@ -305,8 +300,6 @@ const NUUInt64 NUNurseryNetClientDefaultMaximumFellowPupilNotesSizeGrowDownFacto
 
 - (void)netServiceDidResolveAddress:(NSNetService *)sender
 {
-    NSLog(@"%@", [[self netService] hostName]);
-    
     [[self netService] stop];
     [[self netService] setDelegate:nil];
     
@@ -582,9 +575,6 @@ const NUUInt64 NUNurseryNetClientDefaultMaximumFellowPupilNotesSizeGrowDownFacto
     
     [[self lock] lock];
     
-//    [self setCallCount:[self callCount] + 1];
-    [self setTotalCallCount:[self totalCallCount] + 1];
-
     if ([aCallBeginDate timeIntervalSinceDate:[self previousCallEndDate]] < [self maximumTimeIntervalOfContinuation])
     {
         [self setMaximumFellowPupilNotesSizeInBytes:[self maximumFellowPupilNotesSizeInBytes] * [self maximumFellowPupilNotesSizeGrowUpFactor]];
@@ -620,8 +610,6 @@ const NUUInt64 NUNurseryNetClientDefaultMaximumFellowPupilNotesSizeGrowDownFacto
     {
         [[self lock] unlock];
     }
-    
-//    NSLog(@"total call count:%@, max fellow pupil notes size:%@, pupil data size:%@", @([self totalCallCount]), @([self maxFellowPupilNotesSizeInBytes]), @([aPupilsData length]));
 
     [self setPreviousCallEndDate:[NSDate date]];
 

@@ -61,8 +61,14 @@
 
 - (void)dealloc
 {
+    [_pupils release];
+    _pupils = nil;
+    
     [_pupilsDictionary release];
     _pupilsDictionary = nil;
+    
+    [_fixedOOPToProbationaryPupils release];
+    _fixedOOPToProbationaryPupils = nil;
     
     [super dealloc];
 }
@@ -102,12 +108,6 @@
         NUUInt64 aGrade;
         NUUInt64 anObjectLocation = [self objectLocationForOOP:anOOP gradeLessThanOrEqualTo:[self grade] gradeInto:&aGrade];
         
-//#ifdef DEBUG
-//        NSLog(@"callForPupilWithOOP:containsFellowPupils:");
-//        NSLog(@"anOOP: %llu aContainsFellowPupils: %@", anOOP, aContainsFellowPupils ? @"YES" : @"NO");
-//        NSLog(@"aGrade: %llu anObjectLocation: %llu", aGrade, anObjectLocation);
-//#endif
-        
         if (aContainsFellowPupils)
             [self addPupilsDataFromLocation:anObjectLocation toData:aPupilsData maxFellowPupilNotesSizeInBytes:aMaxFellowPupilNotesSizeInBytes];
         else
@@ -125,12 +125,6 @@
     NUUInt64 aPageStartingLocation = [[self pages] pageStatingLocationFor:anObjectLocation];
     NUUInt64 aNextPageStartingLocation = aPageStartingLocation + aMaxFellowPupilNotesSizeInBytes / [[self pages] pageSize] * [[self pages] pageSize];
     NUBellBall aBellBall;
-    
-//#ifdef DEBUG
-//    NSLog(@"addPupilsDataFromLocation:toData:");
-//    NSLog(@"anObjectLocation: %llu", anObjectLocation);
-//    NSLog(@"aPageStartingLocation: %llu aNextPageStartingLocation: %llu", aPageStartingLocation, aNextPageStartingLocation);
-//#endif
 
     for (NUUInt64 aLocation = aPageStartingLocation; aLocation < aNextPageStartingLocation; aLocation += [self sizeOfObjectForBellBall:aBellBall])
     {
@@ -167,8 +161,6 @@
 - (void)addPupilDataWithBellBall:(NUBellBall)aBellBall toData:(NSMutableData *)aData
 {
     NUUInt64 anObjectLocation = [[self objectTable] objectLocationFor:aBellBall];
-    NUUInt64 aCharacterOOP;
-    NUCharacter *aCharacter;
     NUUInt64 anObjectSize;
     NUUInt64 aUInt64Value;
     NUUInt64 anOffset;
@@ -176,8 +168,6 @@
     if (anObjectLocation == NUNotFound64)
         [[NSException exceptionWithName:NUObjectLocationNotFoundException reason:NUObjectLocationNotFoundException userInfo:nil] raise];
     
-    aCharacterOOP = [[self pages] readUInt64At:anObjectLocation];
-    aCharacter = [[self garden] objectForOOP:aCharacterOOP];
     anObjectSize = [self sizeOfObjectForBellBall:aBellBall];
     
     aUInt64Value = NSSwapHostLongLongToBig(aBellBall.oop);
@@ -190,11 +180,6 @@
     anOffset = [aData length];
     [aData increaseLengthBy:anObjectSize];
     [[self pages] read:(NUUInt8 *)[aData mutableBytes] + anOffset length:anObjectSize at:anObjectLocation];
-    
-//#ifdef DEBUG
-//    NSLog(@"addPupilDataWithBellBall:toData:");
-//    NSLog(@"aBellBall: {%llu, %llu}", aBellBall.oop, aBellBall.grade);
-//#endif
 }
 
 - (NSData *)dataFromPupilNotes:(NSArray *)aPupilNotes
@@ -264,11 +249,6 @@
 - (void)fixProbationaryOOPAtOffset:(NUUInt64)anIvarOffset inPupil:(NUPupilNote *)aPupilNote character:(NUCharacter *)aCharacter
 {
     NUUInt64 aReferencedOOP = [aPupilNote readUInt64At:anIvarOffset];
-    
-//#ifdef DEBUG
-//    NSLog(@"fixProbationaryOOPAtOffset:%llu inPupil:%@ character:%@", anIvarOffset, aPupilNote, aCharacter);
-//    NSLog(@"aReferencedOOP:%llu", aReferencedOOP);
-//#endif
     
     if ([[self pairedMainBranchGarden] OOPIsProbationary:aReferencedOOP])
     {

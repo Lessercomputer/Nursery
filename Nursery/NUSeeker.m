@@ -57,7 +57,6 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
 - (void)dealloc
 {
-    NSLog(@"dealloc:%@", self);
 	[grayOOPs release];
 	[aperture release];
     [garden release];
@@ -197,8 +196,6 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
             
 #ifdef DEBUG
             NSLog(@"<%@:%p> #collectObjects (removeObjectFor: %@, removeOOPForObjectLocation: %llu)", [self class], self, NUStringFromBellBall(aBellBall), anObjectLocation);
-            if (aBellBall.oop == 12499)
-                NSLog(@"aBellBall.oop == 12499");
 #endif
             
             [[self nursery] unlockForChange];

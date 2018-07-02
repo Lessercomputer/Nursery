@@ -47,8 +47,6 @@
 
 - (void)dealloc
 {
-    NSLog(@"dealloc:%@", self);
-
     [serviceName release];
     serviceName = nil;
     

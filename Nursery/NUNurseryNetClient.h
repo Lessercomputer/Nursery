@@ -55,8 +55,6 @@ typedef enum : NSUInteger {
 @property (nonatomic) NUUInt64 maximumTimeIntervalOfContinuation;
 @property (nonatomic) NUUInt64 maximumFellowPupilNotesSizeGrowUpFactor;
 @property (nonatomic) NUUInt64 maximumFellowPupilNotesSizeGrowDownFactor;
-@property (nonatomic) NUUInt64 callCount;
-@property (nonatomic) NUUInt64 totalCallCount;
 
 - (instancetype)initWithServiceName:(NSString *)aServiceName;
 

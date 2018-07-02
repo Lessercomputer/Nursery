@@ -75,11 +75,12 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
 
 - (id)initWithRootLocation:(NUUInt64)aRootLocation on:(NUSpaces *)aSpaces
 {
-	[super initWithKeyLength:sizeof(NUBellBall) leafValueLength:sizeof(NUUInt64) + sizeof(NUUInt8) rootLocation:aRootLocation on:aSpaces];
-	
-	nextOOP = NUFirstUserObjectOOP;
-	lock = [NSRecursiveLock new];
-	
+    if (self = [super initWithKeyLength:sizeof(NUBellBall) leafValueLength:sizeof(NUUInt64) + sizeof(NUUInt8) rootLocation:aRootLocation on:aSpaces])
+    {
+        nextOOP = NUFirstUserObjectOOP;
+        lock = [NSRecursiveLock new];
+    }
+    
 	return self;
 }
 

@@ -25,14 +25,15 @@
 
 - (id)initWithKeyLength:(NUUInt32)aKeyLength leafValueLength:(NUUInt32)aLeafValueLength rootLocation:(NUUInt64)aRootLocation on:(NUSpaces *)aSpaces
 {
-	[super init];
-	
-	keyLength = aKeyLength;
-	leafValueLength = aLeafValueLength;
-	spaces = aSpaces;
-	rootLocation = aRootLocation;
-	nodeDictionary = [[NUPageLocationODictionary alloc] initWithPages:[spaces pages]];
-	
+	if (self = [super init])
+    {
+        keyLength = aKeyLength;
+        leafValueLength = aLeafValueLength;
+        spaces = aSpaces;
+        rootLocation = aRootLocation;
+        nodeDictionary = [[NUPageLocationODictionary alloc] initWithPages:[spaces pages]];
+    }
+    
 	return self;
 }
 

@@ -29,21 +29,6 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 @implementation NUOpaqueBPlusTreeNode
 
-- (oneway void)release
-{
-    [super release];
-}
-
-- (id)autorelease
-{
-    return [super autorelease];
-}
-
-- (void)dealloc
-{
-    [super dealloc];
-}
-
 @end
 
 @implementation NUOpaqueBPlusTreeNode (InitializingAndRelease)
@@ -65,34 +50,35 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 - (id)initWithTree:(NUOpaqueBPlusTree *)aTree pageLocation:(NUUInt64)aPageLocation keys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aValues
 {
-	[super init];
-	
-	[self setTree:aTree];
-	[self setPageLocation:aPageLocation];
+	if (self = [super init])
+    {
+        [self setTree:aTree];
+        [self setPageLocation:aPageLocation];
+        
+        minKeyCount = NUUInt32Max;
+        
+        if (aKeys)
+        {
+            [self setKeys:aKeys];
+            [self setValues:aValues];
+            [self setNewExtraValues];
+            [self nodeDidInsertKeys:[aKeys at:0] at:0 count:[aKeys count]];
+            [self nodeDidInsertValues:[aValues at:0] at:0 count:[aValues count]];
+            [self markChanged];
+        }
+        else if ([[self pages] pageIsCreatedFor:aPageLocation])
+        {
+            [self loadKeysAndValuesFrom:aPageLocation];
+        }
+        else
+        {
+            [self setKeys:[self makeKeyArray]];
+            [self setValues:[self makeValueArray]];
+            [self setNewExtraValues];
+            [self markChanged];
+        }
+    }
     
-    minKeyCount = NUUInt32Max;
-	
-	if (aKeys)
-	{
-		[self setKeys:aKeys];
-		[self setValues:aValues];
-        [self setNewExtraValues];
-        [self nodeDidInsertKeys:[aKeys at:0] at:0 count:[aKeys count]];
-        [self nodeDidInsertValues:[aValues at:0] at:0 count:[aValues count]];
-		[self markChanged];
-	}
-	else if ([[self pages] pageIsCreatedFor:aPageLocation])
-	{
-		[self loadKeysAndValuesFrom:aPageLocation];
-	}
-	else
-	{
-		[self setKeys:[self makeKeyArray]];
-		[self setValues:[self makeValueArray]];
-		[self setNewExtraValues];
-		[self markChanged];
-	}
-	
 	return self;
 }
 

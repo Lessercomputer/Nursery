@@ -42,18 +42,19 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 
 - (id)initWithNursery:(NUMainBranchNursery *)aNursery
 {
-	[super init];
-	
-    lock = [NSRecursiveLock new];
-	[self setPages:[NUPages pages]];
-	[self setNursery:aNursery];
-	nextVirtualPageLocation = (NUUInt64)[[self pages] pageSize] * (NUUInt64Max / [[self pages] pageSize] - 1);
-	lengthTree = [[NULengthTree alloc] initWithRootLocation:0 on:self];
-	locationTree = [[NULocationTree alloc] initWithRootLocation:0 on:self];
-	pagesToRelease = [[NSMutableSet set] retain];
-	branchesNeedVirtualPageCheck = [NSMutableSet new];
-	virtualToRealNodePageDictionary = [NSMutableDictionary new];
-
+	if (self = [super init])
+    {
+        lock = [NSRecursiveLock new];
+        [self setPages:[NUPages pages]];
+        [self setNursery:aNursery];
+        nextVirtualPageLocation = (NUUInt64)[[self pages] pageSize] * (NUUInt64Max / [[self pages] pageSize] - 1);
+        lengthTree = [[NULengthTree alloc] initWithRootLocation:0 on:self];
+        locationTree = [[NULocationTree alloc] initWithRootLocation:0 on:self];
+        pagesToRelease = [[NSMutableSet set] retain];
+        branchesNeedVirtualPageCheck = [NSMutableSet new];
+        virtualToRealNodePageDictionary = [NSMutableDictionary new];
+    }
+    
 	return self;
 }
 

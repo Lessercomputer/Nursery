@@ -251,7 +251,7 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
         NUOpaqueArray *aTemporaryKeys = [[[self keys] copyWithCapacity:[self keyCapacity] + 1] autorelease];
         [aTemporaryKeys insert:aKey to:anIndex];
         [[self keys] setOpaqueValues:[aTemporaryKeys at:0] count:[self minKeyCount]];
-        NUOpaqueArray *aNewKeys = [[self keys] copyWithoutValues];
+        NUOpaqueArray *aNewKeys = [[[self keys] copyWithoutValues] autorelease];
         [aNewKeys setOpaqueValues:[aTemporaryKeys at:[self minKeyCount] + 1] count:[aTemporaryKeys count] - 1 - [self minKeyCount]];
         return aNewKeys;
     }

@@ -277,7 +277,7 @@
     
     if (aCount)
     {
-        oops = malloc(sizeof(id) * aCount);
+        oops = malloc(sizeof(NUUInt64) * aCount);
         
         [anAliaser decodeUInt64Array:oops count:aCount];
         

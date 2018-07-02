@@ -325,12 +325,13 @@ NUOpaqueOAssociation *NUOpaqueODictionaryDefaultReallocAssociations(NUOpaqueOAss
 
 - (id)initWithDictionary:(NUOpaqueODictionary *)aDictionary
 {
-    [super init];
-    
-    dictionary = [aDictionary retain];
-    bucketCount = [aDictionary bucketCount];
-    buckets = [aDictionary buckets];
-    getAssociation = [aDictionary getAssociation];
+    if (self = [super init])
+    {
+        dictionary = [aDictionary retain];
+        bucketCount = [aDictionary bucketCount];
+        buckets = [aDictionary buckets];
+        getAssociation = [aDictionary getAssociation];
+    }
     
     return self;
 }

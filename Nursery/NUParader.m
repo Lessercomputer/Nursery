@@ -46,7 +46,6 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 
 - (void)dealloc
 {
-    NSLog(@"dealloc:%@", self);
     [garden release];
     
     [super dealloc];

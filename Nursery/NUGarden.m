@@ -106,11 +106,6 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     return self;
 }
 
-- (instancetype)retain
-{
-    return [super retain];
-}
-
 - (void)dealloc
 {
     [self close];
@@ -524,7 +519,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 - (NSDictionary *)systemCharacterOOPToClassDictionary
 {
-    NSDictionary *aDictionary = [NSMutableDictionary dictionary];
+    NSDictionary *aDictionary = nil;
     
     aDictionary = @{
                     @(NUCharacterOOP) : [NUCharacter class],
@@ -843,7 +838,6 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
             return [aClass automaticallyEstablishCharacter];
         
         aMetaClass = class_getSuperclass(aMetaClass);
-        aClassName = class_getName(aMetaClass);
     }
     while (aMetaClass);
     

@@ -35,11 +35,6 @@ NUUInt64 NUFirstGardenID = 1000;
     return self;
 }
 
-- (instancetype)retain
-{
-    return [super retain];
-}
-
 - (void)dealloc
 {
     [self close];

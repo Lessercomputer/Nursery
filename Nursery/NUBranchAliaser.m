@@ -33,6 +33,17 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 
 @implementation NUBranchAliaser
 
+- (void)dealloc
+{
+    [_reducedEncodedPupils release];
+    _reducedEncodedPupils = nil;
+    
+    [_reducedEncodedPupilsDictionary release];
+    _reducedEncodedPupilsDictionary = nil;
+    
+    [super dealloc];
+}
+
 - (NUUInt64)rootOOP
 {
     return [[[self branchGarden] netClient] rootOOPForGardenWithID:[[self garden] ID]];

@@ -25,11 +25,12 @@
 
 - (id)initWithTree:(NUBPlusTree *)aTree key:(id)aKey leftChildNode:(NUBPlusTreeNode *)aLeftChildNode rightChildNode:(NUBPlusTreeNode *)aRightChildNode
 {
-    [super initWithTree:aTree];
-    
-    [[self keys] addObject:aKey];
-    [self addNode:aLeftChildNode];
-    [self addNode:aRightChildNode];
+    if (self = [super initWithTree:aTree])
+    {
+        [[self keys] addObject:aKey];
+        [self addNode:aLeftChildNode];
+        [self addNode:aRightChildNode];
+    }
     
     return self;
 }

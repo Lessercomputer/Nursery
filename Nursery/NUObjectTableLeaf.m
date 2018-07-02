@@ -87,10 +87,10 @@
     
     if ([self isFull])
     {
-        NUOpaqueArray *aTemporaryGCMarks = [[self gcMarks] copyWithCapacity:[[self gcMarks] capacity] + 1];
+        NUOpaqueArray *aTemporaryGCMarks = [[[self gcMarks] copyWithCapacity:[[self gcMarks] capacity] + 1] autorelease];
         [aTemporaryGCMarks insert:&aGCMark to:anIndex];
         [[self gcMarks] setOpaqueValues:[aTemporaryGCMarks at:0] count:[self minValueCount]];
-        NUOpaqueArray *aNewGCMarks = [[self gcMarks] copyWithoutValues];
+        NUOpaqueArray *aNewGCMarks = [[[self gcMarks] copyWithoutValues] autorelease];
         [aNewGCMarks setOpaqueValues:[aTemporaryGCMarks at:[self minValueCount]] count:[aTemporaryGCMarks count] - [self minValueCount]];
         return [NSArray arrayWithObject:aNewGCMarks];
     }

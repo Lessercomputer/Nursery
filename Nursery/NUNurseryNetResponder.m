@@ -49,8 +49,6 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
 
 - (void)dealloc
 {
-    NSLog(@"dealloc:%@", self);
-
     [_pairedGardens release];
     
     [super dealloc];

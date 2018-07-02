@@ -40,9 +40,10 @@
 
 - (id)initWithComparator:(id <NUComparator>)aComparator
 {
-    [super init];
-    
-    NUSetIvar(&tree, [NUBPlusTree treeWithKeyCapacity:[NUBPlusTree defaultKeyCapacity] comparator:aComparator]);
+    if (self = [super init])
+    {
+        NUSetIvar(&tree, [NUBPlusTree treeWithKeyCapacity:[NUBPlusTree defaultKeyCapacity] comparator:aComparator]);
+    }
     
     return self;
 }
@@ -186,9 +187,10 @@
 
 - (id)initWithAliaser:(NUAliaser *)anAliaser
 {
-    [super init];
-    
-    NUSetIvar(&tree, [anAliaser decodeObject]);
+    if (self = [super init])
+    {
+        NUSetIvar(&tree, [anAliaser decodeObject]);
+    }
     
     return self;
 }

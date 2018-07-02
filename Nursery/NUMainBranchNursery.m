@@ -85,7 +85,6 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 
 - (void)dealloc
 {
-    NSLog(@"beginning of dealloc:%@", self);
     [self close];
     
 	[self setObjectTable:nil];
@@ -98,8 +97,6 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     retainedGrades = nil;
     [lock release];
     lock = nil;
-
-    NSLog(@"ending of dealloc:%@", self);
 
 	[super dealloc];
 }
