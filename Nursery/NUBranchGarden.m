@@ -43,8 +43,17 @@
 {
     [[self gradeSeeker] stop];
     [[self netClient] closeGardenWithID:[self ID]];
+    [[self netClient] stop];
     
     [super close];
+}
+
+- (void)dealloc
+{
+    [netClient release];
+    netClient = nil;
+    
+    [super dealloc];
 }
 
 - (NUBranchAliaser *)branchAliaser
@@ -55,11 +64,6 @@
 - (NUBranchNursery *)branchNursery
 {
     return (NUBranchNursery *)[self nursery];
-}
-
-- (NUNurseryNetClient *)netClient
-{
-    return [[self branchNursery] netClient];
 }
 
 - (NUUInt64)allocProbationaryOOP
@@ -125,7 +129,7 @@
             
             [[self aliaser] encodeObjects];
             NSData *anEncodedObjectsData = [[self branchAliaser] encodedPupilNotesData];
-            aFarmOutStatus = [[[self branchNursery] netClient] farmOutPupils:anEncodedObjectsData rootOOP:[[[self nurseryRoot] bell] OOP] gardenWithID:[self ID] fixedOOPs:&aFixedOOPs latestGrade:&aLatestGrade];
+            aFarmOutStatus = [[self netClient] farmOutPupils:anEncodedObjectsData rootOOP:[[[self nurseryRoot] bell] OOP] gardenWithID:[self ID] fixedOOPs:&aFixedOOPs latestGrade:&aLatestGrade];
                         
             if (aFarmOutStatus == NUFarmOutStatusSucceeded)
             {
@@ -148,10 +152,23 @@
 
 @implementation NUBranchGarden (Private)
 
+- (NUNurseryNetClient *)netClient
+{
+    return netClient;
+}
+
+- (void)setNetClient:(NUNurseryNetClient *)aNetClient
+{
+    [netClient release];
+    netClient = [aNetClient retain];
+}
+
 - (NUNurseryRoot *)loadNurseryRoot
 {
     if ([self ID] == NUNilGardenID)
     {
+        netClient = [[NUNurseryNetClient alloc] initWithServiceName:[[self branchNursery] serviceName]];
+
         [[self netClient] start];
         [self setID:[[self netClient] openGarden]];
     }

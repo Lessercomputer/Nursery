@@ -35,7 +35,7 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
 
 - (NUUInt64)rootOOP
 {
-    return [[[self branchNursery] netClient] rootOOPForGardenWithID:[[self garden] ID]];
+    return [[[self branchGarden] netClient] rootOOPForGardenWithID:[[self garden] ID]];
 }
 
 - (NUBranchGarden *)branchGarden
@@ -87,18 +87,13 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
     
     if (!aPupilNote)
         aPupilNote = [self callForPupilNoteReallyWithOOP:aBellBall.oop gradeLessThanOrEqualTo:[self grade]];
-//    else
-//    {
-//        [self setCacheHitCount:[self cacheHitCount] + 1];
-//        NSLog(@"branch aliaser cache hit count:%@", @([self cacheHitCount]));
-//    }
     
     return aPupilNote;
 }
 
 - (NUPupilNote *)callForPupilNoteReallyWithOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade
 {
-    NUNurseryNetClient *aNetClient = [[self branchNursery] netClient];
+    NUNurseryNetClient *aNetClient = [[self branchGarden] netClient];
     NSData *aPupilNoteData = [aNetClient callForPupilWithOOP:anOOP gradeLessThanOrEqualTo:aGrade gardenWithID:[[self garden] ID] containsFellowPupils:YES];
     NUPupilNote *aPupilNote = nil;
     NSArray *aPupilNotes = [self pupilNotesFromPupilNoteData:aPupilNoteData pupilNoteOOP:anOOP pupilNoteInto:&aPupilNote];

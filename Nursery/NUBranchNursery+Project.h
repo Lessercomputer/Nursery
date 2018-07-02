@@ -10,8 +10,7 @@
 
 @interface NUBranchNursery (Private)
 
-- (NUNurseryNetClient *)netClient;
-- (void)setNetClient:(NUNurseryNetClient *)aNetClient;
+- (void)setServiceName:(NSString *)aServiceName;
 
 - (NUPupilNoteCache *)pupilNoteCache;
 - (void)setPupilNoteCache:(NUPupilNoteCache *)aPupilNoteCache;

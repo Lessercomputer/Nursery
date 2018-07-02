@@ -8,19 +8,19 @@
 
 #import <Nursery/NUNursery.h>
 
-@class NUPupilNoteCache, NUNurseryNetClient;
+@class NUPupilNoteCache;
 
 @interface NUBranchNursery : NUNursery
 {
+    NSString *serviceName;
     NUPupilNoteCache *pupilNoteCache;
-    NUNurseryNetClient *netClient;
 }
 
 + (instancetype)branchNurseryWithServiceName:(NSString *)aServiceName;
 
 - (instancetype)initWithServiceName:(NSString *)aServiceName;
 
-
+- (NSString *)serviceName;
 
 @end
 

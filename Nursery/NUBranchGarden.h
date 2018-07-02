@@ -8,11 +8,12 @@
 
 #import "NUGarden.h"
 
-@class NUBranchAliaser, NUBranchNursery, NUMainBranchNurseryAssociation;
+@class NUBranchAliaser, NUBranchNursery, NUMainBranchNurseryAssociation, NUNurseryNetClient;
 
 @interface NUBranchGarden : NUGarden
 {
     NUUInt64 nextProbationaryOOP;
+    NUNurseryNetClient *netClient;
 }
 
 - (NUBranchAliaser *)branchAliaser;
@@ -23,6 +24,9 @@
 @end
 
 @interface NUBranchGarden (Private)
+
+- (NUNurseryNetClient *)netClient;
+- (void)setNetClient:(NUNurseryNetClient *)aNetClient;
 
 - (void)replaceProbationaryOOPsWithFixedOOPs:(NSData *)aProbationaryOOPsFixedOOPs inPupils:(NUU64ODictionary *)aProbationaryPupils grade:(NUUInt64)aLatestGrade;
 

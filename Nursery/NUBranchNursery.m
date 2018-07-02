@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/NSString.h>
+
 #import "NUNursery+Project.h"
 #import "NUBranchNursery.h"
 #import "NUBranchNursery+Project.h"
@@ -26,11 +28,16 @@
 {
     if (self = [super init])
     {
-        netClient = [[NUNurseryNetClient alloc] initWithServiceName:aServiceName];
+        serviceName = [aServiceName copy];
         pupilNoteCache = [[NUPupilNoteCache alloc] initWithMaxCacheSizeInBytes:1024 * 1024 * 30 cacheablePupilNoteMaxSizeInBytes:1024 * 4];;
     }
     
     return self;
+}
+
+- (NSString *)serviceName
+{
+    return serviceName;
 }
 
 + (Class)gardenClass
@@ -41,9 +48,10 @@
 - (void)dealloc
 {
     NSLog(@"dealloc:%@", self);
-    [netClient stop];
-    [netClient release];
-    netClient = nil;
+
+    [serviceName release];
+    serviceName = nil;
+    
     [pupilNoteCache release];
     pupilNoteCache = nil;
     
@@ -56,22 +64,22 @@
 
 - (NUUInt64)latestGrade:(NUGarden *)sender
 {
-    return [[self netClient] latestGrade];
+    return [[(NUBranchGarden *)sender netClient] latestGrade];
 }
 
 - (NUUInt64)olderRetainedGrade:(NUGarden *)sender
 {
-    return [[self netClient] olderRetainedGrade];
+    return [[(NUBranchGarden *)sender netClient] olderRetainedGrade];
 }
 
 - (NUUInt64)retainLatestGradeByGarden:(NUGarden *)sender
 {
-    return [[self netClient] retainLatestGradeByGardenWithID:[sender ID]];
+    return [[(NUBranchGarden *)sender netClient] retainLatestGradeByGardenWithID:[sender ID]];
 }
 
 - (void)retainGrade:(NUUInt64)aGrade byGarden:(NUGarden *)sender
 {
-    [[self netClient] retainGrade:aGrade byGardenWithID:[sender ID]];
+    [[(NUBranchGarden *)sender netClient] retainGrade:aGrade byGardenWithID:[sender ID]];
 }
 
 @end
@@ -87,15 +95,10 @@
 
 @implementation NUBranchNursery (Private)
 
-- (NUNurseryNetClient *)netClient
+- (void)setServiceName:(NSString *)aServiceName
 {
-    return netClient;
-}
-
-- (void)setNetClient:(NUNurseryNetClient *)aNetClient
-{
-    [netClient release];
-    netClient = [aNetClient retain];
+    [serviceName release];
+    serviceName = [aServiceName copy];
 }
 
 - (NUPupilNoteCache *)pupilNoteCache
