@@ -231,28 +231,40 @@ const NUUInt64 NULogDataLengthOffset = 85;
 {
     NUUInt64 aValue[2];
     [self readUInt64Array:aValue ofCount:2 at:anOffset];
-    return NSMakeRange(aValue[0], aValue[1]);
+    return NSMakeRange((NSUInteger)aValue[0], (NSUInteger)aValue[1]);
 }
 
-- (NSPoint)readPointAt:(NUUInt64)anOffset
+- (NUPoint)readPointAt:(NUUInt64)anOffset
 {
     NUDouble aValue[2];
     [self readDoubleArray:aValue ofCount:2 at:anOffset];
-    return NSMakePoint(aValue[0], aValue[1]);
+    NUPoint aPoint;
+    aPoint.x = aValue[0];
+    aPoint.y = aValue[1];
+    return aPoint;
 }
 
-- (NSSize)readSizeAt:(NUUInt64)anOffset
+- (NUSize)readSizeAt:(NUUInt64)anOffset
 {
     NUDouble aValue[2];
     [self readDoubleArray:aValue ofCount:2 at:anOffset];
-    return NSMakeSize(aValue[0], aValue[1]);
+    NUSize aSize;
+    aSize.width = aValue[0];
+    aSize.height = aValue[1];
+    return aSize;
 }
 
-- (NSRect)readRectAt:(NUUInt64)anOffset
+- (NURect)readRectAt:(NUUInt64)anOffset
 {
     NUDouble aValue[4];
     [self readDoubleArray:aValue ofCount:4 at:anOffset];
-    return NSMakeRect(aValue[0], aValue[1], aValue[2], aValue[3]);
+    NURect aRect;
+    aRect.origin.x = aValue[0];
+    aRect.origin.y = aValue[1];
+    aRect.size.width = aValue[2];
+    aRect.size.height = aValue[3];
+    
+    return aRect;
 }
 
 - (void)writeUInt8:(NUUInt8)aValue at:(NUUInt64)anOffset
@@ -311,7 +323,7 @@ const NUUInt64 NULogDataLengthOffset = 85;
 
 - (void)writeUInt64Array:(NUUInt64 *)aValues ofCount:(NUUInt64)aCount at:(NUUInt64)anOffset
 {
-	NUUInt64 *aValuesToWrite = malloc(sizeof(NUUInt64) * aCount);
+	NUUInt64 *aValuesToWrite = malloc((size_t)(sizeof(NUUInt64) * aCount));
 	NUUInt64 i = 0;
 	
 	for (; i < aCount ; i++)
@@ -340,7 +352,7 @@ const NUUInt64 NULogDataLengthOffset = 85;
 
 - (void)writeDoubleArray:(NUDouble *)aValues ofCount:(NUUInt64)aCount at:(NUUInt64)anOffset
 {
-    NSSwappedDouble *aValuesToWrite = malloc(sizeof(NSSwappedDouble) * aCount);
+    NSSwappedDouble *aValuesToWrite = malloc((size_t)(sizeof(NSSwappedDouble) * aCount));
     
     for (NUUInt64 i = 0; i < aCount; i++)
         aValuesToWrite[i] = NSSwapHostDoubleToBig(aValues[i]);
@@ -365,7 +377,7 @@ const NUUInt64 NULogDataLengthOffset = 85;
     [self writeUInt64Array:aLocationAndLength ofCount:2 at:anOffset];
 }
 
-- (void)writePoint:(NSPoint)aValue at:(NUUInt64)anOffset
+- (void)writePoint:(NUPoint)aValue at:(NUUInt64)anOffset
 {
     NUDouble anXandY[2];
     anXandY[0] = aValue.x;
@@ -373,7 +385,7 @@ const NUUInt64 NULogDataLengthOffset = 85;
     [self writeDoubleArray:anXandY ofCount:2 at:anOffset];
 }
 
-- (void)writeSize:(NSSize)aValue at:(NUUInt64)anOffset
+- (void)writeSize:(NUSize)aValue at:(NUUInt64)anOffset
 {
     NUDouble anWidthAndHeight[2];
     anWidthAndHeight[0] = aValue.width;
@@ -381,7 +393,7 @@ const NUUInt64 NULogDataLengthOffset = 85;
     [self writeDoubleArray:anWidthAndHeight ofCount:2 at:anOffset];
 }
 
-- (void)writeRect:(NSRect)aValue at:(NUUInt64)anOffset
+- (void)writeRect:(NURect)aValue at:(NUUInt64)anOffset
 {
     NUDouble anXAndYAndWidthAndHeight[4];
     anXAndYAndWidthAndHeight[0] = aValue.origin.x;
@@ -714,7 +726,7 @@ const NUUInt64 NULogDataLengthOffset = 85;
             
             i += sizeof(NURegion);
             [[self fileHandle] seekToFileOffset:aRegion.location];
-            [[self fileHandle] writeData:[aData subdataWithRange:NSMakeRange(i, aRegion.length)]];
+            [[self fileHandle] writeData:[aData subdataWithRange:NSMakeRange((NSUInteger)i, (NSUInteger)aRegion.length)]];
             i += aRegion.length;
         }
         else
@@ -745,9 +757,7 @@ const NUUInt64 NULogDataLengthOffset = 85;
                 aWriteLength = availableLength;
             
             i += sizeof(NURegion);
-//            [[self fileHandle] seekToFileOffset:aRegion.location];
-//            [[self fileHandle] writeData:[aData subdataWithRange:NSMakeRange(i, aWriteLength)]];
-            [self writeData:[aData subdataWithRange:NSMakeRange(i, aWriteLength)] at:aRegion.location];
+            [self writeData:[aData subdataWithRange:NSMakeRange((NSUInteger)i, (NSUInteger)aWriteLength)] at:aRegion.location];
             i += aRegion.length;
         }
         else
@@ -767,8 +777,8 @@ const NUUInt64 NULogDataLengthOffset = 85;
 - (NURegion)getRegionFrom:(NSData *)aData at:(NUUInt64)anIndex
 {
     NURegion aRegion;
-    [aData getBytes:&aRegion.location range:NSMakeRange(anIndex, sizeof(NUUInt64))];
-    [aData getBytes:&aRegion.length range:NSMakeRange(anIndex + sizeof(NUUInt64), sizeof(NUUInt64))];
+    [aData getBytes:&aRegion.location range:NSMakeRange((NSUInteger)anIndex, sizeof(NUUInt64))];
+    [aData getBytes:&aRegion.length range:NSMakeRange((NSUInteger)(anIndex + sizeof(NUUInt64)), sizeof(NUUInt64))];
     aRegion = NUSwapBigRegionToHost(aRegion);
     return aRegion;
 }
@@ -778,7 +788,7 @@ const NUUInt64 NULogDataLengthOffset = 85;
     NUUInt64 aLogDataLocation = [self readUInt64At:NULogDataLocationOffset];
     NUUInt64 aLogDataLength = [self readUInt64At:NULogDataLengthOffset];
     [[self fileHandle] seekToFileOffset:aLogDataLocation];
-    return [[self fileHandle] readDataOfLength:aLogDataLength];
+    return [[self fileHandle] readDataOfLength:(NSUInteger)aLogDataLength];
 }
 
 - (void)getFirstChangedRegionWithoutFirstPageRegionInto:(NURegion *)aRegion indexInto:(NUUInt32 *)anIndex
@@ -860,7 +870,7 @@ const NUUInt64 NULogDataLengthOffset = 85;
 
 - (NSData *)dataWithRegion:(NURegion)aRegion
 {
-    NSMutableData *aData = [NSMutableData dataWithCapacity:aRegion.length];
+    NSMutableData *aData = [NSMutableData dataWithCapacity:(NSUInteger)aRegion.length];
     
     [self addDataWithRegion:aRegion toData:aData];
     

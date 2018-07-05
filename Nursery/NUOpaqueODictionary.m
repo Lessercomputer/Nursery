@@ -29,13 +29,13 @@ void NUOpaqueODictionaryDefaultMoveAssociation(NUUInt64 aSourceIndex, NUUInt64 a
 
 NUOpaqueOAssociation *NUOpaqueODictionaryDefaultAllocAssociations(NUUInt64 anAssociationCapacity, NUOpaqueODictionary *aDictionary)
 {
-    return calloc(anAssociationCapacity, sizeof(NUOpaqueOAssociation) + [aDictionary keySize]);
+    return calloc((size_t)anAssociationCapacity, (size_t)(sizeof(NUOpaqueOAssociation) + [aDictionary keySize]));
 }
 
 NUOpaqueOAssociation *NUOpaqueODictionaryDefaultReallocAssociations(NUOpaqueOAssociation *anAssociations, NUUInt64 anAssociationCapacity, NUUInt64 aNewAssociationCapacity, NUOpaqueODictionary *aDictionary)
 {
     NUUInt64 anAssociationSize = sizeof(NUOpaqueOAssociation) + [aDictionary keySize];
-    anAssociations = realloc(anAssociations, anAssociationSize * aNewAssociationCapacity);
+    anAssociations = realloc(anAssociations, (size_t)(anAssociationSize * aNewAssociationCapacity));
     memset((NUUInt8 *)anAssociations + anAssociationSize * anAssociationCapacity, 0, anAssociationSize * aNewAssociationCapacity - anAssociationSize * anAssociationCapacity);
     return anAssociations;
 }
@@ -72,7 +72,7 @@ NUOpaqueOAssociation *NUOpaqueODictionaryDefaultReallocAssociations(NUOpaqueOAss
             bucketCount = NUOpaqueODictionaryInitialBucketCount;
             bucketLoadCount = 0;
             bucketLoadCountLimit = NUOpaqueODictionaryInitialBucketLoadCountLimit;
-            buckets = calloc(bucketCount, sizeof(NUOpaqueOBucket));
+            buckets = calloc((size_t)bucketCount, sizeof(NUOpaqueOBucket));
             keySize = aKeySize;
             keyHash = aKeyHash;
             keyEqual = aKeyEqual;
@@ -232,7 +232,7 @@ NUOpaqueOAssociation *NUOpaqueODictionaryDefaultReallocAssociations(NUOpaqueOAss
 - (void)rehash
 {
     NUUInt64 aNewBucketCount = bucketCount * 2;
-    NUOpaqueOBucket *aNewBuckets = calloc(aNewBucketCount, sizeof(NUOpaqueOBucket));
+    NUOpaqueOBucket *aNewBuckets = calloc((size_t)aNewBucketCount, sizeof(NUOpaqueOBucket));
     NUUInt64 aNewBucketLoadCountLimit = bucketLoadCountLimit * 2;
     NUUInt64 aNewBucketLoadCount = 0;
     

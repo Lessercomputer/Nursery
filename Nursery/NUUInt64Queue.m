@@ -24,7 +24,7 @@
 
 - (NUUInt8 *)allocValuesWithCapacity:(NUUInt64)aCapacity
 {
-    return malloc(aCapacity * sizeof(NUUInt64));
+    return malloc((size_t)(aCapacity * sizeof(NUUInt64)));
 }
 
 - (NUUInt8 *)getValueAt:(NUUInt64)anIndex in:(NUUInt8 *)aValues

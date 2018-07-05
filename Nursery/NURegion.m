@@ -107,7 +107,7 @@ NSString *NUStringFromRegion(NURegion aRegion)
 
 NSRange NURangeFromRegion(NURegion aRegion)
 {
-    return NSMakeRange(aRegion.location, aRegion.length);
+    return NSMakeRange((NSUInteger)aRegion.location, (NSUInteger)aRegion.length);
 }
 
 NURegion NUSwapHostRegionToBig(NURegion aRegion)

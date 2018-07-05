@@ -115,7 +115,7 @@ const NUUInt64 NUNurseryNetMessageKindNetClientWillStopResponse = 24;
 
 - (NUNurseryNetMessageArgument *)argumentAt:(NUUInt64)anIndex;
 {
-    return [[self arguments] objectAtIndex:anIndex];
+    return [[self arguments] objectAtIndex:(NSUInteger)anIndex];
 }
 
 - (NSData *)serialize
@@ -218,7 +218,7 @@ const NUUInt64 NUNurseryNetMessageKindNetClientWillStopResponse = 24;
 
     void (^aReadUInt64ValueFromMessageData)(NUUInt64 *, NUUInt64 *) = ^(NUUInt64 *aBuffer, NUUInt64 *anOffset)
     {
-        [aMessageData getBytes:aBuffer range:NSMakeRange(*anOffset, sizeof(NUUInt64))];
+        [aMessageData getBytes:aBuffer range:NSMakeRange((NSUInteger)*anOffset, sizeof(NUUInt64))];
         *anOffset += sizeof(NUUInt64);
         *aBuffer = NSSwapBigLongLongToHost(*aBuffer);
     };

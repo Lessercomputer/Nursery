@@ -50,9 +50,9 @@
 	
 	if (aLength)
 	{
-		NUUInt8 *aBytes = malloc(aLength);
+		NUUInt8 *aBytes = malloc((size_t)aLength);
 		[anAliaser decodeBytes:aBytes count:aLength];
-		aData = [[NSData alloc] initWithBytesNoCopy:aBytes length:aLength freeWhenDone:YES];
+		aData = [[NSData alloc] initWithBytesNoCopy:aBytes length:(NSUInteger)aLength freeWhenDone:YES];
 	}
 	else
 		aData = [NSData new];

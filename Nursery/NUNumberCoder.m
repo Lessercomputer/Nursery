@@ -112,90 +112,92 @@
         @try
         {
             NUUInt64 aLengthOfObjCType;
+            NUUInt32 aLength32OfObjCType;
             NUUInt64 aValueByteCount;
             NUUInt64 aValueOffset;
             
             [anAliaser decodeBytes:(NUUInt8 *)&aLengthOfObjCType count:sizeof(NUUInt64)];
             aLengthOfObjCType = NSSwapBigLongLongToHost(aLengthOfObjCType);
-            aNumberObjCType = malloc(aLengthOfObjCType);
+            aLength32OfObjCType = (NUUInt32)aLengthOfObjCType;
+            aNumberObjCType = malloc(aLength32OfObjCType);
             [anAliaser decodeBytes:(NUUInt8 *)aNumberObjCType count:aLengthOfObjCType at:sizeof(NUUInt64)];
             
             aValueByteCount = aLength - sizeof(NUUInt64) - aLengthOfObjCType;
             aValueOffset = sizeof(NUUInt64) + aLengthOfObjCType;
             
-            if (strncmp(aNumberObjCType, @encode(unsigned char), aLengthOfObjCType) == 0)
+            if (strncmp(aNumberObjCType, @encode(unsigned char), aLength32OfObjCType) == 0)
             {
                 unsigned char aValue;
                 [anAliaser decodeBytes:(NUUInt8 *)&aValue count:aValueByteCount at:aValueOffset];
                 aNumber = [NSNumber numberWithUnsignedChar:aValue];
             }
-            else if (strncmp(aNumberObjCType, @encode(char), aLengthOfObjCType) == 0)
+            else if (strncmp(aNumberObjCType, @encode(char), aLength32OfObjCType) == 0)
             {
                 unsigned char aValue;
                 [anAliaser decodeBytes:(NUUInt8 *)&aValue count:aValueByteCount at:aValueOffset];
                 aNumber = [NSNumber numberWithChar:aValue];
             }
-            else if (strncmp(aNumberObjCType, @encode(unsigned short), aLengthOfObjCType) == 0)
+            else if (strncmp(aNumberObjCType, @encode(unsigned short), aLength32OfObjCType) == 0)
             {
                 unsigned short aValue;
                 [anAliaser decodeBytes:(NUUInt8 *)&aValue count:aValueByteCount at:aValueOffset];
                 aNumber = [NSNumber numberWithUnsignedShort:NSSwapBigShortToHost(aValue)];
             }
-            else if (strncmp(aNumberObjCType, @encode(short), aLengthOfObjCType) == 0)
+            else if (strncmp(aNumberObjCType, @encode(short), aLength32OfObjCType) == 0)
             {
                 unsigned short aValue;
                 [anAliaser decodeBytes:(NUUInt8 *)&aValue count:aValueByteCount at:aValueOffset];
                 aNumber = [NSNumber numberWithShort:NSSwapBigShortToHost(aValue)];
             }
-            else if (strncmp(aNumberObjCType, @encode(unsigned int), aLengthOfObjCType) == 0)
+            else if (strncmp(aNumberObjCType, @encode(unsigned int), aLength32OfObjCType) == 0)
             {
                 unsigned int aValue;
                 [anAliaser decodeBytes:(NUUInt8 *)&aValue count:aValueByteCount at:aValueOffset];
                 aNumber = [NSNumber numberWithUnsignedInt:NSSwapBigIntToHost(aValue)];
             }
-            else if (strncmp(aNumberObjCType, @encode(int), aLengthOfObjCType) == 0)
+            else if (strncmp(aNumberObjCType, @encode(int), aLength32OfObjCType) == 0)
             {
                 unsigned int aValue;
                 [anAliaser decodeBytes:(NUUInt8 *)&aValue count:aValueByteCount at:aValueOffset];
                 aNumber = [NSNumber numberWithInt:NSSwapBigIntToHost(aValue)];
             }
-            else if (strncmp(aNumberObjCType, @encode(unsigned long), aLengthOfObjCType) == 0)
+            else if (strncmp(aNumberObjCType, @encode(unsigned long), aLength32OfObjCType) == 0)
             {
                 unsigned long aValue;
                 [anAliaser decodeBytes:(NUUInt8 *)&aValue count:aValueByteCount at:aValueOffset];
                 aNumber = [NSNumber numberWithUnsignedLong:NSSwapBigLongToHost(aValue)];
             }
-            else if (strncmp(aNumberObjCType, @encode(long), aLengthOfObjCType) == 0)
+            else if (strncmp(aNumberObjCType, @encode(long), aLength32OfObjCType) == 0)
             {
                 unsigned long aValue;
                 [anAliaser decodeBytes:(NUUInt8 *)&aValue count:aValueByteCount at:aValueOffset];
                 aNumber = [NSNumber numberWithLong:NSSwapBigLongToHost(aValue)];
             }
-            else if (strncmp(aNumberObjCType, @encode(unsigned long long), aLengthOfObjCType) == 0)
+            else if (strncmp(aNumberObjCType, @encode(unsigned long long), aLength32OfObjCType) == 0)
             {
                 unsigned long long aValue;
                 [anAliaser decodeBytes:(NUUInt8 *)&aValue count:aValueByteCount at:aValueOffset];
                 aNumber = [NSNumber numberWithUnsignedLongLong:NSSwapBigLongLongToHost(aValue)];
             }
-            else if (strncmp(aNumberObjCType, @encode(long long), aLengthOfObjCType) == 0)
+            else if (strncmp(aNumberObjCType, @encode(long long), aLength32OfObjCType) == 0)
             {
                 unsigned long long aValue;
                 [anAliaser decodeBytes:(NUUInt8 *)&aValue count:aValueByteCount at:aValueOffset];
                 aNumber = [NSNumber numberWithLongLong:NSSwapBigLongLongToHost(aValue)];
             }
-            else if (strncmp(aNumberObjCType, @encode(float), aLengthOfObjCType) == 0)
+            else if (strncmp(aNumberObjCType, @encode(float), aLength32OfObjCType) == 0)
             {
                 NSSwappedFloat aValue;
                 [anAliaser decodeBytes:(NUUInt8 *)&aValue count:aValueByteCount at:aValueOffset];
                 aNumber = [NSNumber numberWithFloat:NSSwapBigFloatToHost(aValue)];
             }
-            else if (strncmp(aNumberObjCType, @encode(double), aLengthOfObjCType) == 0)
+            else if (strncmp(aNumberObjCType, @encode(double), aLength32OfObjCType) == 0)
             {
                 NSSwappedDouble aValue;
                 [anAliaser decodeBytes:(NUUInt8 *)&aValue count:aValueByteCount at:aValueOffset];
                 aNumber = [NSNumber numberWithDouble:NSSwapBigDoubleToHost(aValue)];
             }
-            else if (strncmp(aNumberObjCType, @encode(BOOL), aLengthOfObjCType) == 0)
+            else if (strncmp(aNumberObjCType, @encode(BOOL), aLength32OfObjCType) == 0)
             {
                 NUUInt8 aValue;
                 [anAliaser decodeBytes:(NUUInt8 *)&aValue count:aValueByteCount at:aValueOffset];

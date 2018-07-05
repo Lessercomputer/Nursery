@@ -32,7 +32,7 @@
 	NUUInt64 aCount = [aSet count];
 	if (aCount)
 	{
-		id *anObjects = malloc(sizeof(id) * aCount);
+		id *anObjects = malloc((size_t)(sizeof(id) * aCount));
         __block NUUInt64 i = 0;
         [aSet enumerateObjectsUsingBlock:^(id obj, BOOL *stop){anObjects[i++] = obj;}];
 		[anAliaser encodeIndexedIvars:anObjects count:aCount];
@@ -59,11 +59,11 @@
 	if (aSize)
 	{
 		NUUInt64 aCount = aSize / sizeof(NUUInt64);
-		id *anObjects = malloc(sizeof(id) * aCount);
+		id *anObjects = malloc((size_t)(sizeof(id) * aCount));
 		
 		[anAliaser decodeIndexedIvar:anObjects count:aCount really:YES];
 		
-        aSet = [[NSSet alloc] initWithObjects:anObjects count:aCount];
+        aSet = [[NSSet alloc] initWithObjects:anObjects count:(NSUInteger)aCount];
         
 		free(anObjects);
 	}

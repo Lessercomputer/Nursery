@@ -32,7 +32,7 @@
 	NUUInt64 aCount = [anArray count];
 	if (aCount)
 	{
-		id *anObjects = malloc(sizeof(id) * aCount);
+		id *anObjects = malloc((size_t)(sizeof(id) * aCount));
 		[anArray getObjects:anObjects];
 		[anAliaser encodeIndexedIvars:anObjects count:aCount];
 		free(anObjects);
@@ -58,11 +58,11 @@
 	if (aSize)
 	{
 		NUUInt64 aCount = aSize / sizeof(NUUInt64);
-		id *anObjects = malloc(sizeof(id) * aCount);
+		id *anObjects = malloc((size_t)(sizeof(id) * aCount));
 		
 		[anAliaser decodeIndexedIvar:anObjects count:aCount really:YES];
 		
-		anArray = [[NSArray alloc] initWithObjects:anObjects count:aCount];
+		anArray = [[NSArray alloc] initWithObjects:anObjects count:(NSUInteger)aCount];
         
 		free(anObjects);
 	}

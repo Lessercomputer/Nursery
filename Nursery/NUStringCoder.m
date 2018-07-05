@@ -52,9 +52,9 @@
 	
 	if (aLength)
 	{
-		NUUInt8 *aBytes = malloc(aLength);
+		NUUInt8 *aBytes = malloc((size_t)aLength);
 		[anAliaser decodeBytes:aBytes count:aLength];
-		aString = [[NSString alloc] initWithBytes:aBytes length:aLength encoding:NSUTF8StringEncoding];
+		aString = [[NSString alloc] initWithBytes:aBytes length:(NSUInteger)aLength encoding:NSUTF8StringEncoding];
 		free(aBytes);
 	}
 	else

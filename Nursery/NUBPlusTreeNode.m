@@ -31,8 +31,8 @@
 - (id)initWithTree:(NUBPlusTree *)aTree
 {   
     return [self initWithTree:aTree
-                         keys:[NULazyMutableArray arrayWithCapacity:[aTree keyCapacity]]
-                       values:[NULazyMutableArray arrayWithCapacity:[self isLeaf] ? [aTree keyCapacity] : [aTree keyCapacity] + 1]];
+                         keys:[NULazyMutableArray arrayWithCapacity:(NSUInteger)[aTree keyCapacity]]
+                       values:[NULazyMutableArray arrayWithCapacity:(NSUInteger)([self isLeaf] ? [aTree keyCapacity] : [aTree keyCapacity] + 1)]];
 }
 
 - (id)initWithTree:(NUBPlusTree *)aTree keys:(NULazyMutableArray *)aKeys values:(NULazyMutableArray *)aValues
@@ -117,7 +117,7 @@
 
 - (id)keyAt:(NUUInt64)anIndex
 {
-    return [[self keys] objectAtIndex:anIndex];
+    return [[self keys] objectAtIndex:(NSUInteger)anIndex];
 }
 
 - (NUUInt64)keyCount
@@ -132,7 +132,7 @@
 
 - (id)valueAt:(NUUInt64)anIndex
 {
-    return [[self values] objectAtIndex:anIndex];
+    return [[self values] objectAtIndex:(NSUInteger)anIndex];
 }
 
 - (NUUInt64)valueCount

@@ -71,7 +71,7 @@ const NUUInt64 NUNurseryNetServiceIODefaultReadBufferSize = 4096;
     
     NSData *aSendingMessageData = [[self sendingMessage] serializedData];
     
-    NUUInt64 aWriteCount = [[self outputStream] write:[aSendingMessageData bytes] + [self writtenBytesCount] maxLength:[aSendingMessageData length] - [self writtenBytesCount]];
+    NUUInt64 aWriteCount = [[self outputStream] write:[aSendingMessageData bytes] + [self writtenBytesCount] maxLength:(NSUInteger)([aSendingMessageData length] - [self writtenBytesCount])];
     
     [self setWrittenBytesCount:[self writtenBytesCount] + aWriteCount];
     
@@ -93,15 +93,15 @@ const NUUInt64 NUNurseryNetServiceIODefaultReadBufferSize = 4096;
     NUUInt8 *aReadBuffer = NULL;
     NUInt64 aReadBytesCount;
     
-    aReadBuffer = malloc([self readBufferSize]);
+    aReadBuffer = malloc((size_t)[self readBufferSize]);
     
-    aReadBytesCount = [[self inputStream] read:aReadBuffer maxLength:[self readBufferSize]];
+    aReadBytesCount = [[self inputStream] read:aReadBuffer maxLength:(NSUInteger)[self readBufferSize]];
     
     if (aReadBytesCount > 0  && ![self inputData])
         [self setInputData:[NSMutableData data]];
     
     if (aReadBytesCount > 0)
-        [[self inputData] appendBytes:aReadBuffer length:aReadBytesCount];
+        [[self inputData] appendBytes:aReadBuffer length:(NSUInteger)aReadBytesCount];
         
     free(aReadBuffer);
     

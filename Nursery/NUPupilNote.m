@@ -33,9 +33,9 @@
         bellBall = NUMakeBellBall(anOOP, aGrade);
         
         if (aBytes)
-            data = [[NSMutableData alloc] initWithBytes:aBytes length:aSize];
+            data = [[NSMutableData alloc] initWithBytes:aBytes length:(NSUInteger)aSize];
         else
-            data = [[NSMutableData alloc] initWithLength:aSize];
+            data = [[NSMutableData alloc] initWithLength:(NSUInteger)aSize];
     }
     
     return self;
@@ -108,7 +108,7 @@
 
 - (void)setDataSize:(NUUInt64)aSize
 {
-    [data setLength:aSize];
+    [data setLength:(NSUInteger)aSize];
 }
 
 - (NUUInt64)size
@@ -133,12 +133,12 @@
 
 - (void)read:(NUUInt8 *)aBytes length:(NUUInt64)aLength at:(NUUInt64)anOffset
 {
-    [data getBytes:aBytes range:NSMakeRange(anOffset, aLength)];
+    [data getBytes:aBytes range:NSMakeRange((NSUInteger)anOffset, (NSUInteger)aLength)];
 }
 
 - (void)write:(const NUUInt8 *)aBytes length:(NUUInt64)aLength at:(NUUInt64)anOffset
 {
-    [data replaceBytesInRange:NSMakeRange(anOffset, aLength) withBytes:aBytes];
+    [data replaceBytesInRange:NSMakeRange((NSUInteger)anOffset, (NSUInteger)aLength) withBytes:aBytes];
 }
 
 - (BOOL)readBOOLAt:(NUUInt64)anOffset
@@ -218,28 +218,40 @@
 {
     NUUInt64 aValue[2];
     [self readUInt64Array:aValue ofCount:2 at:anOffset];
-    return NSMakeRange(aValue[0], aValue[1]);
+    return NSMakeRange((NSUInteger)aValue[0], (NSUInteger)aValue[1]);
 }
 
-- (NSPoint)readPointAt:(NUUInt64)anOffset
+- (NUPoint)readPointAt:(NUUInt64)anOffset
 {
     NUDouble aValue[2];
+    NUPoint aPoint;
     [self readDoubleArray:aValue ofCount:2 at:anOffset];
-    return NSMakePoint(aValue[0], aValue[1]);
+    aPoint.x = aValue[0];
+    aPoint.y = aValue[1];
+    return aPoint;
 }
 
-- (NSSize)readSizeAt:(NUUInt64)anOffset
+- (NUSize)readSizeAt:(NUUInt64)anOffset
 {
     NUDouble aValue[2];
+    NUSize aSize;
     [self readDoubleArray:aValue ofCount:2 at:anOffset];
-    return NSMakeSize(aValue[0], aValue[1]);
+    aSize.width = aValue[0];
+    aSize.height = aValue[1];
+    return aSize;
 }
 
-- (NSRect)readRectAt:(NUUInt64)anOffset
+- (NURect)readRectAt:(NUUInt64)anOffset
 {
     NUDouble aValue[4];
     [self readDoubleArray:aValue ofCount:4 at:anOffset];
-    return NSMakeRect(aValue[0], aValue[1], aValue[2], aValue[3]);
+    NURect aRect;
+    aRect.origin.x = aValue[0];
+    aRect.origin.y = aValue[1];
+    aRect.size.width = aValue[2];
+    aRect.size.height = aValue[3];
+    
+    return aRect;
 }
 
 - (void)writeBOOL:(BOOL)aValue at:(NUUInt64)anOffset
@@ -310,7 +322,7 @@
     [self writeUInt64Array:aLocationAndLength ofCount:2 at:anOffset];
 }
 
-- (void)writePoint:(NSPoint)aValue at:(NUUInt64)anOffset
+- (void)writePoint:(NUPoint)aValue at:(NUUInt64)anOffset
 {
     NUDouble anXAndY[2];
     anXAndY[0] = aValue.x;
@@ -318,7 +330,7 @@
     [self writeDoubleArray:anXAndY ofCount:2 at:anOffset];
 }
 
-- (void)writeSize:(NSSize)aValue at:(NUUInt64)anOffset
+- (void)writeSize:(NUSize)aValue at:(NUUInt64)anOffset
 {
     NUDouble anWidthandHeight[2];
     anWidthandHeight[0] = aValue.width;
@@ -326,7 +338,7 @@
     [self writeDoubleArray:anWidthandHeight ofCount:2 at:anOffset];
 }
 
-- (void)writeRect:(NSRect)aValue at:(NUUInt64)anOffset
+- (void)writeRect:(NURect)aValue at:(NUUInt64)anOffset
 {
     NUDouble anXandYAndWidthAndHeight[4];
     anXandYAndWidthAndHeight[0] = aValue.origin.x;

@@ -111,7 +111,7 @@
     
     if (![self isIndexed])
     {
-        NUIvar *anIvar = [[self character] ivarInAllIvarsAt:[self nextIvarIndex]];
+        NUIvar *anIvar = [[self character] ivarInAllIvarsAt:(NSUInteger)[self nextIvarIndex]];
         anIvarOffset = [anIvar offset];
     }
     else
@@ -233,19 +233,19 @@
     [self incrementNextIvarIndex];
 }
 
-- (void)encodePoint:(NSPoint)aValue
+- (void)encodePoint:(NUPoint)aValue
 {
     [[self codingNote] writePoint:aValue at:[self objectLocation] + [self nextIvarOffset]];
     [self incrementNextIvarIndex];
 }
 
-- (void)encodeSize:(NSSize)aValue
+- (void)encodeSize:(NUSize)aValue
 {
     [[self codingNote] writeSize:aValue at:[self objectLocation] + [self nextIvarOffset]];
     [self incrementNextIvarIndex];
 }
 
-- (void)encodeRect:(NSRect)aValue
+- (void)encodeRect:(NURect)aValue
 {
     [[self codingNote] writeRect:aValue at:[self objectLocation] + [self nextIvarOffset]];
     [self incrementNextIvarIndex];
@@ -296,17 +296,17 @@
     [[self codingNote] writeRange:aValue at:[self objectLocation] + [self ivarOffsetForKey:aKey]];
 }
 
-- (void)encodePoint:(NSPoint)aValue forKey:(NSString *)aKey
+- (void)encodePoint:(NUPoint)aValue forKey:(NSString *)aKey
 {
     [[self codingNote] writePoint:aValue at:[self objectLocation] + [self ivarOffsetForKey:aKey]];
 }
 
-- (void)encodeSize:(NSSize)aValue forKey:(NSString *)aKey
+- (void)encodeSize:(NUSize)aValue forKey:(NSString *)aKey
 {
     [[self codingNote] writeSize:aValue at:[self objectLocation] + [self ivarOffsetForKey:aKey]];
 }
 
-- (void)encodeRect:(NSRect)aValue forKey:(NSString *)aKey
+- (void)encodeRect:(NURect)aValue forKey:(NSString *)aKey
 {
     [[self codingNote] writeRect:aValue at:[self objectLocation] + [self ivarOffsetForKey:aKey]];
 }
@@ -388,23 +388,23 @@
     return aValue;
 }
 
-- (NSPoint)decodePoint
+- (NUPoint)decodePoint
 {
-    NSPoint aValue = [[self codingNote] readPointAt:[self objectLocation] + [self nextIvarOffset]];
+    NUPoint aValue = [[self codingNote] readPointAt:[self objectLocation] + [self nextIvarOffset]];
     [self incrementNextIvarIndex];
     return aValue;
 }
 
-- (NSSize)decodeSize
+- (NUSize)decodeSize
 {
-    NSSize aValue = [[self codingNote] readSizeAt:[self objectLocation] + [self nextIvarOffset]];
+    NUSize aValue = [[self codingNote] readSizeAt:[self objectLocation] + [self nextIvarOffset]];
     [self incrementNextIvarIndex];
     return aValue;
 }
 
-- (NSRect)decodeRect
+- (NURect)decodeRect
 {
-    NSRect aValue = [[self codingNote] readRectAt:[self objectLocation] + [self nextIvarOffset]];
+    NURect aValue = [[self codingNote] readRectAt:[self objectLocation] + [self nextIvarOffset]];
     [self incrementNextIvarIndex];
     return aValue;
 }
@@ -454,17 +454,17 @@
     return [[self codingNote] readRangeAt:[self objectLocation] + [self ivarOffsetForKey:aKey]];
 }
 
-- (NSPoint)decodePointForKey:(NSString *)aKey
+- (NUPoint)decodePointForKey:(NSString *)aKey
 {
     return [[self codingNote] readPointAt:[self objectLocation] + [self ivarOffsetForKey:aKey]];
 }
 
-- (NSSize)decodeSizeForKey:(NSString *)aKey
+- (NUSize)decodeSizeForKey:(NSString *)aKey
 {
     return [[self codingNote] readSizeAt:[self objectLocation] + [self ivarOffsetForKey:aKey]];
 }
 
-- (NSRect)decodeRectForKey:(NSString *)aKey
+- (NURect)decodeRectForKey:(NSString *)aKey
 {
     return [[self codingNote] readRectAt:[self objectLocation] + [self ivarOffsetForKey:aKey]];
 }

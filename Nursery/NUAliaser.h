@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/NSRange.h>
-#import <Foundation/NSGeometry.h>
 #import <Nursery/NUTypes.h>
 
 @class NSMutableArray;
@@ -76,9 +75,9 @@ extern NSString *NUAliaserCannotDecodeObjectException;
 
 - (void)encodeRegion:(NURegion)aValue;
 - (void)encodeRange:(NSRange)aValue;
-- (void)encodePoint:(NSPoint)aValue;
-- (void)encodeSize:(NSSize)aValue;
-- (void)encodeRect:(NSRect)aValue;
+- (void)encodePoint:(NUPoint)aValue;
+- (void)encodeSize:(NUSize)aValue;
+- (void)encodeRect:(NURect)aValue;
 
 - (void)encodeObject:(id)anObject forKey:(NSString *)aKey;
 
@@ -98,9 +97,9 @@ extern NSString *NUAliaserCannotDecodeObjectException;
 
 - (void)encodeRegion:(NURegion)aValue forKey:(NSString *)aKey;
 - (void)encodeRange:(NSRange)aValue forKey:(NSString *)aKey;
-- (void)encodePoint:(NSPoint)aValue forKey:(NSString *)aKey;
-- (void)encodeSize:(NSSize)aValue forKey:(NSString *)aKey;
-- (void)encodeRect:(NSRect)aValue forKey:(NSString *)aKey;
+- (void)encodePoint:(NUPoint)aValue forKey:(NSString *)aKey;
+- (void)encodeSize:(NUSize)aValue forKey:(NSString *)aKey;
+- (void)encodeRect:(NURect)aValue forKey:(NSString *)aKey;
 
 - (void)encodeIndexedIvars:(id *)anIndexedIvars count:(NUUInt64)aCount;
 - (void)encodeIndexedBytes:(const NUUInt8 *)aBytes count:(NUUInt64)aCount;
@@ -130,9 +129,9 @@ extern NSString *NUAliaserCannotDecodeObjectException;
 
 - (NURegion)decodeRegion;
 - (NSRange)decodeRange;
-- (NSPoint)decodePoint;
-- (NSSize)decodeSize;
-- (NSRect)decodeRect;
+- (NUPoint)decodePoint;
+- (NUSize)decodeSize;
+- (NURect)decodeRect;
 
 - (id)decodeObjectForKey:(NSString *)aKey;
 - (id)decodeObjectReallyForKey:(NSString *)aKey;
@@ -153,9 +152,9 @@ extern NSString *NUAliaserCannotDecodeObjectException;
 
 - (NURegion)decodeRegionForKey:(NSString *)aKey;
 - (NSRange)decodeRangeForKey:(NSString *)aKey;
-- (NSPoint)decodePointForKey:(NSString *)aKey;
-- (NSSize)decodeSizeForKey:(NSString *)aKey;
-- (NSRect)decodeRectForKey:(NSString *)aKey;
+- (NUPoint)decodePointForKey:(NSString *)aKey;
+- (NUSize)decodeSizeForKey:(NSString *)aKey;
+- (NURect)decodeRectForKey:(NSString *)aKey;
 
 - (void)decodeIndexedIvar:(id *)anIndexedIvars count:(NUUInt64)aCount really:(BOOL)aReallyDecode;
 - (void)decodeBytes:(NUUInt8 *)aBytes count:(NUUInt64)aCount;

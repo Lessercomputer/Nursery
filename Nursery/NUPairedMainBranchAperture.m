@@ -53,7 +53,7 @@
 
 - (NUUInt64)nextFixedOOP
 {
-    NUIvar *anIvar = [[self character] ivarInAllOOPIvarsAt:currentFixedOOPIvarIndex++];
+    NUIvar *anIvar = [[self character] ivarInAllOOPIvarsAt:(NSUInteger)currentFixedOOPIvarIndex++];
     return [[self pupilNote] readUInt64At:[anIvar offset]];
 }
 

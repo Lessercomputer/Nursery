@@ -24,9 +24,9 @@
     NUDouble doubleValue;
     BOOL boolValue;
     NSRange rangeValue;
-    NSPoint pointValue;
-    NSSize sizeValue;
-    NSRect rectValue;
+    NUPoint pointValue;
+    NUSize sizeValue;
+    NURect rectValue;
     NSString *stringValue;
     NSMutableString *mutableStringValue;
     NSArray *arrayValue;
@@ -74,9 +74,9 @@
 - (BOOL)BOOLValue;
 
 - (NSRange)rangeValue;
-- (NSPoint)pointValue;
-- (NSSize)sizeValue;
-- (NSRect)rectValue;
+- (NUPoint)pointValue;
+- (NUSize)sizeValue;
+- (NURect)rectValue;
 
 - (NSString *)stringValue;
 - (NSMutableString *)mutableStringValue;

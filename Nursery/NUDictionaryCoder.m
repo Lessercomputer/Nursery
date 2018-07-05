@@ -32,7 +32,7 @@
 	NUUInt64 aCount = [aDictionary count];
 	if (aCount)
 	{
-		id *anObjectsAndKeys = malloc(sizeof(id) * aCount * 2);
+		id *anObjectsAndKeys = malloc((size_t)(sizeof(id) * aCount * 2));
         [aDictionary getObjects:anObjectsAndKeys andKeys:&anObjectsAndKeys[aCount]];
 		[anAliaser encodeIndexedIvars:anObjectsAndKeys count:aCount * 2];
 		free(anObjectsAndKeys);
@@ -58,11 +58,11 @@
 	if (aSize)
 	{
 		NUUInt64 aCount = aSize / sizeof(NUUInt64) / 2;
-		id *anObjectsAndKeys = malloc(sizeof(id) * aCount * 2);
+		id *anObjectsAndKeys = malloc((size_t)(sizeof(id) * aCount * 2));
 		
 		[anAliaser decodeIndexedIvar:anObjectsAndKeys count:aCount * 2 really:YES];
 		
-		aDictionary = [[NSDictionary alloc] initWithObjects:anObjectsAndKeys forKeys:&anObjectsAndKeys[aCount] count:aCount];
+		aDictionary = [[NSDictionary alloc] initWithObjects:anObjectsAndKeys forKeys:&anObjectsAndKeys[aCount] count:(NSUInteger)aCount];
         
 		free(anObjectsAndKeys);
 	}

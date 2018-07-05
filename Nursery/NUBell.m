@@ -154,7 +154,7 @@
 
 - (NSUInteger)hash
 {
-    return ball.oop;
+    return (NSUInteger)ball.oop;
 }
 
 - (BOOL)isEqual:(id)anObject

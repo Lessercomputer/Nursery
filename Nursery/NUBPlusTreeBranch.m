@@ -87,7 +87,7 @@
         if (aNodeIndex != 0 && ![[self valueAt:aNodeIndex - 1] isMin])
         {
             [aNode shuffleLeftNode];
-            [[self keys] replaceObjectAtIndex:aNodeIndex - 1 withObject:[aNode firstKey]];
+            [[self keys] replaceObjectAtIndex:(NSUInteger)aNodeIndex - 1 withObject:[aNode firstKey]];
             
 #ifdef DEBUG
             if ([aNode isBranch] && [aNode keyCount] + 1 != [aNode valueCount])
@@ -99,7 +99,7 @@
         else if (aNodeIndex != [self valueCount] - 1 && ![[self valueAt:aNodeIndex + 1] isMin])
         {
             [aNode shuffleRightNode];
-            [[self keys] replaceObjectAtIndex:aNodeIndex withObject:[[aNode rightNode] firstKey]];
+            [[self keys] replaceObjectAtIndex:(NSUInteger)aNodeIndex withObject:[[aNode rightNode] firstKey]];
             
 #ifdef DEBUG
             if ([aNode isBranch] && [aNode keyCount] + 1 != [aNode valueCount])
@@ -117,8 +117,8 @@
                 NSLog(@"error");
 #endif
 
-            [[self keys] removeObjectAtIndex:aNodeIndex - 1];
-            [[self values] removeObjectAtIndex:aNodeIndex];
+            [[self keys] removeObjectAtIndex:(NSUInteger)aNodeIndex - 1];
+            [[self values] removeObjectAtIndex:(NSUInteger)aNodeIndex];
         }
         else if (aNodeIndex != [self valueCount] - 1)
         {
@@ -129,8 +129,8 @@
                 NSLog(@"error");
 #endif
             
-            [[self keys] removeObjectAtIndex:aNodeIndex];
-            [[self values] removeObjectAtIndex:aNodeIndex];
+            [[self keys] removeObjectAtIndex:(NSUInteger)aNodeIndex];
+            [[self values] removeObjectAtIndex:(NSUInteger)aNodeIndex];
         }
         else
         {
@@ -145,7 +145,7 @@
 
 - (NUBPlusTreeNode *)split
 {
-    NSRange aKeyRemoveRange = NSMakeRange([self minKeyCount], [self keyCount] - [self minKeyCount]);
+    NSRange aKeyRemoveRange = NSMakeRange((NSUInteger)[self minKeyCount], (NSUInteger)([self keyCount] - [self minKeyCount]));
     NSRange aNewKeyRange = NSMakeRange(aKeyRemoveRange.location + 1, aKeyRemoveRange.length - 1);
     NSRange aNewValueRange = NSMakeRange(aKeyRemoveRange.location + 1, aKeyRemoveRange.length);
     
@@ -174,7 +174,7 @@
 
 - (void)shuffleLeftNode
 {
-    NSRange aKeyRange = NSMakeRange([[self tree] minKeyCount], [[self leftNode] keyCount] - [[self tree] minKeyCount]);
+    NSRange aKeyRange = NSMakeRange((NSUInteger)[[self tree] minKeyCount], (NSUInteger)([[self leftNode] keyCount] - [[self tree] minKeyCount]));
     NSRange aValueRange = NSMakeRange(aKeyRange.location + 1, aKeyRange.length);
     NULazyMutableArray *aKeys = [[[self leftNode] keys] subLazyMutableArrayWithRange:aKeyRange];
     NULazyMutableArray *aValues = [[[self leftNode] values] subLazyMutableArrayWithRange:aValueRange];
@@ -200,7 +200,7 @@
 
 - (void)shuffleRightNode
 {
-    NSRange aRange = NSMakeRange(0, [[self rightNode] keyCount] - [[self tree] minKeyCount]);
+    NSRange aRange = NSMakeRange(0, (NSUInteger)([[self rightNode] keyCount] - [[self tree] minKeyCount]));
     NULazyMutableArray *aKeys = [[[self rightNode] keys] subLazyMutableArrayWithRange:aRange];
     NULazyMutableArray *aValues = [[[self rightNode] values] subLazyMutableArrayWithRange:aRange];
     
@@ -234,7 +234,7 @@
     [aKeys addObject:[self firstKey]];
     
     [[self keys] insertObjects:(NSArray *)aKeys atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [aKeys count])]];
-    [[self values] insertObjects:(NSArray *)[[self leftNode] values] atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [[self leftNode] valueCount])]];
+    [[self values] insertObjects:(NSArray *)[[self leftNode] values] atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, (NSUInteger)[[self leftNode] valueCount])]];
     
     [[[self leftNode] values] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         [obj setParentNode:self];
@@ -284,20 +284,20 @@
 
 - (void)insertNode:(NUBPlusTreeNode *)aNode at:(NUUInt64)anIndex
 {
-    [[self values] insertObject:aNode atIndex:anIndex];
+    [[self values] insertObject:aNode atIndex:(NSUInteger)anIndex];
     [aNode setParentNode:self];
 }
 
 - (void)removeNodeAt:(NUUInt64)anIndex
 {
     NUBPlusTreeNode *aNode = [self valueAt:anIndex];
-    [[self values] removeObjectAtIndex:anIndex];
+    [[self values] removeObjectAtIndex:(NSUInteger)anIndex];
     [aNode setParentNode:nil];
 }
 
 - (void)insertKey:(id)aKey at:(NUUInt64)anIndex
 {
-    [[self keys] insertObject:aKey atIndex:anIndex];
+    [[self keys] insertObject:aKey atIndex:(NSUInteger)anIndex];
 }
 
 - (void)addLoadedNodesTo:(id)aLoadedNodes
@@ -337,7 +337,7 @@
     
     if ([self getKeyIndexLessThanOrEqualTo:aKey keyIndexInto:&aKeyIndex])
     {
-        [[self keys] replaceObjectAtIndex:aKeyIndex withObject:[[self valueAt:aKeyIndex + 1] firstKey]];
+        [[self keys] replaceObjectAtIndex:(NSUInteger)aKeyIndex withObject:[[self valueAt:aKeyIndex + 1] firstKey]];
     }
     
     [[self valueAt:aKeyIndex != NUNotFound64 ? aKeyIndex + 1 : 0] updateKey:aKey];

@@ -70,7 +70,7 @@
 
 - (NUUInt64)nextFixedOOP
 {
-	NUIvar *anIvar = [[self character] ivarInAllOOPIvarsAt:currentFixedOOPIvarIndex++];
+	NUIvar *anIvar = [[self character] ivarInAllOOPIvarsAt:(NSUInteger)currentFixedOOPIvarIndex++];
 	return [[nursery pages] readUInt64At:objectLocation + [anIvar offset]];
 }
 

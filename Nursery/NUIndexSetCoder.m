@@ -33,7 +33,7 @@
     
 	if (aCount)
 	{
-        NUUInt64 *aValues = malloc([anIndexSet indexedIvarsSize]);
+        NUUInt64 *aValues = malloc((size_t)[anIndexSet indexedIvarsSize]);
         [[self class] getRangesInIndexSet:anIndexSet into:aValues];
         [anAliaser encodeUInt64Array:aValues count:[anIndexSet indexedIvarsSize] / sizeof(NUUInt64)];
         free(aValues);
@@ -79,7 +79,7 @@
     if (aSize)
     {
         NUUInt64 aRangeCount = aSize / sizeof(NUUInt64) / 2;
-        NUUInt64 *aValues = malloc(aSize);
+        NUUInt64 *aValues = malloc((size_t)aSize);
         
         [anAliaser decodeUInt64Array:aValues count:aRangeCount * 2];
         
@@ -87,7 +87,7 @@
             [anIndexSet removeAllIndexes];
         
         for (NUUInt64 i = 0; i < aRangeCount; i++)
-            [anIndexSet addIndexesInRange:NSMakeRange(aValues[i * 2], aValues[i * 2 + 1])];
+            [anIndexSet addIndexesInRange:NSMakeRange((NSUInteger)aValues[i * 2], (NSUInteger)aValues[i * 2 + 1])];
         
         free(aValues);
     }
@@ -118,7 +118,7 @@
     if ([anIndexSet count] == 0) return;
     
     NUUInt64 aLocation = [anIndexSet firstIndex], aLength = 1;
-    NSUInteger anIndex = aLocation;
+    NSUInteger anIndex = (NSUInteger)aLocation;
     NUUInt64 aLocationIndex = 0;
     
     while (YES)

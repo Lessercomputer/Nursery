@@ -7,17 +7,20 @@
  *
  */
 
-typedef unsigned char		NUUInt8;
-typedef unsigned short		NUUInt16;
-typedef unsigned int		NUUInt32;
-typedef unsigned long long  NUUInt64;
+#include <stdint.h>
+#include <CoreGraphics/CGGeometry.h>
 
-typedef char	  NUInt8;
-typedef short	  NUInt16;
-typedef int		  NUInt32;
-typedef long long NUInt64;
-typedef float	  NUFloat;
-typedef double	  NUDouble;
+typedef uint8_t		NUUInt8;
+typedef uint16_t	NUUInt16;
+typedef uint32_t	NUUInt32;
+typedef uint64_t    NUUInt64;
+
+typedef int8_t	    NUInt8;
+typedef int16_t	    NUInt16;
+typedef int32_t		NUInt32;
+typedef int64_t     NUInt64;
+typedef float	    NUFloat;
+typedef double	    NUDouble;
 
 typedef NUInt32 NUInt;
 
@@ -41,6 +44,10 @@ typedef struct _NUBellBall {
 } NUBellBall;
 
 extern const NUBellBall NUNotFoundBellBall;
+
+typedef CGPoint NUPoint;
+typedef CGSize  NUSize;
+typedef CGRect  NURect;
 
 typedef enum _NUComparisonResult {
     NUOrderedAscending = -1L,

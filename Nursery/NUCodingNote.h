@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年 Nursery-Framework. All rights reserved.
 //
 
-#import <Foundation/NSGeometry.h>
+//#import <Foundation/NSGeometry.h>
 #import <Foundation/NSRange.h>
 #import "NUTypes.h"
 
@@ -26,9 +26,9 @@
 - (void)readDoubleArray:(NUDouble *)aValues ofCount:(NUUInt64)aCount at:(NUUInt64)anOffset;
 - (NURegion)readRegionAt:(NUUInt64)anOffset;
 - (NSRange)readRangeAt:(NUUInt64)anOffset;
-- (NSPoint)readPointAt:(NUUInt64)anOffset;
-- (NSSize)readSizeAt:(NUUInt64)anOffset;
-- (NSRect)readRectAt:(NUUInt64)anOffset;
+- (NUPoint)readPointAt:(NUUInt64)anOffset;
+- (NUSize)readSizeAt:(NUUInt64)anOffset;
+- (NURect)readRectAt:(NUUInt64)anOffset;
 
 - (void)writeBOOL:(BOOL)aValue at:(NUUInt64)anOffset;
 - (void)writeUInt8:(NUUInt8)aValue at:(NUUInt64)anOffset;
@@ -41,8 +41,8 @@
 - (void)writeDoubleArray:(NUDouble *)aValues ofCount:(NUUInt64)aCount at:(NUUInt64)anOffset;
 - (void)writeRegion:(NURegion)aValue at:(NUUInt64)anOffset;
 - (void)writeRange:(NSRange)aValue at:(NUUInt64)anOffset;
-- (void)writePoint:(NSPoint)aValue at:(NUUInt64)anOffset;
-- (void)writeSize:(NSSize)aValue at:(NUUInt64)anOffset;
-- (void)writeRect:(NSRect)aValue at:(NUUInt64)anOffset;
+- (void)writePoint:(NUPoint)aValue at:(NUUInt64)anOffset;
+- (void)writeSize:(NUSize)aValue at:(NUUInt64)anOffset;
+- (void)writeRect:(NURect)aValue at:(NUUInt64)anOffset;
 
 @end

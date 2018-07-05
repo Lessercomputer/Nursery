@@ -257,7 +257,7 @@
 
 - (void)addReferencingGrade:(NUUInt64)aGrade
 {
-    [[self referencingGrades] addIndex:aGrade];
+    [[self referencingGrades] addIndex:(NSUInteger)aGrade];
 }
 
 @end

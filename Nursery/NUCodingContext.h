@@ -75,9 +75,9 @@
 - (void)encodeDouble:(NUDouble)aValue;
 - (void)encodeRegion:(NURegion)aValue;
 - (void)encodeRange:(NSRange)aValue;
-- (void)encodePoint:(NSPoint)aValue;
-- (void)encodeSize:(NSSize)aValue;
-- (void)encodeRect:(NSRect)aValue;
+- (void)encodePoint:(NUPoint)aValue;
+- (void)encodeSize:(NUSize)aValue;
+- (void)encodeRect:(NURect)aValue;
 
 - (void)encodeUInt8:(NUUInt8)aValue forKey:(NSString *)aKey;
 - (void)encodeUInt16:(NUUInt16)aValue forKey:(NSString *)aKey;
@@ -88,9 +88,9 @@
 - (void)encodeBOOL:(BOOL)aValue forKey:(NSString *)aKey;
 - (void)encodeRegion:(NURegion)aValue forKey:(NSString *)aKey;
 - (void)encodeRange:(NSRange)aValue forKey:(NSString *)aKey;
-- (void)encodePoint:(NSPoint)aValue forKey:(NSString *)aKey;
-- (void)encodeSize:(NSSize)aValue forKey:(NSString *)aKey;
-- (void)encodeRect:(NSRect)aValue forKey:(NSString *)aKey;
+- (void)encodePoint:(NUPoint)aValue forKey:(NSString *)aKey;
+- (void)encodeSize:(NUSize)aValue forKey:(NSString *)aKey;
+- (void)encodeRect:(NURect)aValue forKey:(NSString *)aKey;
 
 - (void)encodeIndexedBytes:(const NUUInt8 *)aBytes count:(NUUInt64)aCount;
 - (void)encodeIndexedBytes:(const NUUInt8 *)aBytes count:(NUUInt64)aCount at:(NUUInt64)anOffset;
@@ -110,9 +110,9 @@
 - (NUDouble)decodeDouble;
 - (NURegion)decodeRegion;
 - (NSRange)decodeRange;
-- (NSPoint)decodePoint;
-- (NSSize)decodeSize;
-- (NSRect)decodeRect;
+- (NUPoint)decodePoint;
+- (NUSize)decodeSize;
+- (NURect)decodeRect;
 
 - (NUUInt8)decodeUInt8ForKey:(NSString *)aKey;
 - (NUUInt16)decodeUInt16ForKey:(NSString *)aKey;
@@ -123,9 +123,9 @@
 - (BOOL)decodeBOOLForKey:(NSString *)aKey;
 - (NURegion)decodeRegionForKey:(NSString *)aKey;
 - (NSRange)decodeRangeForKey:(NSString *)aKey;
-- (NSPoint)decodePointForKey:(NSString *)aKey;
-- (NSSize)decodeSizeForKey:(NSString *)aKey;
-- (NSRect)decodeRectForKey:(NSString *)aKey;
+- (NUPoint)decodePointForKey:(NSString *)aKey;
+- (NUSize)decodeSizeForKey:(NSString *)aKey;
+- (NURect)decodeRectForKey:(NSString *)aKey;
 
 - (void)decodeBytes:(NUUInt8 *)aBytes count:(NUUInt64)aCount;
 - (void)decodeBytes:(NUUInt8 *)aBytes count:(NUUInt64)aCount at:(NUUInt64)aLocation;

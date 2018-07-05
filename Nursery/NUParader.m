@@ -84,7 +84,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     }
     
     NUUInt64 aBufferSize = [[[self nursery] pages] pageSize];
-    NUUInt8 *aBuffer = malloc(aBufferSize);
+    NUUInt8 *aBuffer = malloc((size_t)aBufferSize);
     
     while (![self shouldStop])
     {

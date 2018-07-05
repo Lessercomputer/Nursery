@@ -260,7 +260,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
         [[self retainedGrades] setObject:aGardenIDs forKey:aGradeNumber];
     }
     
-    [aGardenIDs addIndex:anID];
+    [aGardenIDs addIndex:(NSUInteger)anID];
     
     [lock unlock];
 }
@@ -274,7 +274,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     [[self retainedGrades] enumerateKeysAndObjectsUsingBlock:^(NSNumber *aRetainedGradeNumber, NSMutableIndexSet *aGardenIDs, BOOL *stop) {
         NUUInt64 aRetainedGrade = [aRetainedGradeNumber unsignedLongLongValue];
         if (aRetainedGrade < aGrade)
-            [aRetainedGrades addIndex:aRetainedGrade];
+            [aRetainedGrades addIndex:(NSUInteger)aRetainedGrade];
     }];
     
     [aRetainedGrades enumerateIndexesUsingBlock:^(NSUInteger aRetainedGrade, BOOL *stop) {
@@ -283,7 +283,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
         
         if (aGardenIDs)
         {
-            [aGardenIDs removeIndex:anID];
+            [aGardenIDs removeIndex:(NSUInteger)anID];
             
             if (![aGardenIDs count])
                 [[self retainedGrades] removeObjectForKey:aGradeNumber];

@@ -43,12 +43,12 @@ const NUUInt64 NUNurseryNetMessageArgumentTypeBOOL    = 2;
 
 + (instancetype)argumentWithBytes:(NUUInt8 *)aValue length:(NUUInt64)aLength
 {
-    return [[[self alloc] initWithValue:[NSData dataWithBytes:aValue length:aLength] ofType:NUNurseryNetMessageArgumentTypeBytes] autorelease];
+    return [[[self alloc] initWithValue:[NSData dataWithBytes:aValue length:(NSUInteger)aLength] ofType:NUNurseryNetMessageArgumentTypeBytes] autorelease];
 }
 
 + (instancetype)argumentWithBytesNoCopy:(NUUInt8 *)aValue length:(NUUInt64)aLength
 {
-    return [[[self alloc] initWithValue:[NSData dataWithBytesNoCopy:aValue length:aLength] ofType:NUNurseryNetMessageArgumentTypeBytes] autorelease];
+    return [[[self alloc] initWithValue:[NSData dataWithBytesNoCopy:aValue length:(NSUInteger)aLength] ofType:NUNurseryNetMessageArgumentTypeBytes] autorelease];
 }
 
 + (instancetype)argumentWithBOOL:(BOOL)aValue

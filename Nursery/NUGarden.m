@@ -7,7 +7,7 @@
 //
 
 #import <stdlib.h>
-#import <objc/objc-runtime.h>
+#import <objc/runtime.h>
 #import <Foundation/NSIndexSet.h>
 #import <Foundation/NSException.h>
 
@@ -718,7 +718,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         [self lock];
         
         NUUInt64 aGrade = [[self nursery] retainLatestGradeByGarden:self];
-        [[self retainedGrades] addIndex:aGrade];
+        [[self retainedGrades] addIndex:(NSUInteger)aGrade];
         return aGrade;
     }
     @finally {

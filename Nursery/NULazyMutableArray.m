@@ -277,13 +277,13 @@
     
     if (aCount)
     {
-        oops = malloc(sizeof(NUUInt64) * aCount);
+        oops = malloc((size_t)(sizeof(NUUInt64) * aCount));
         
         [anAliaser decodeUInt64Array:oops count:aCount];
         
-        objects = calloc(aCount, sizeof(id));
-        count = aCount;
-        capacity = aCount;
+        objects = calloc((size_t)aCount, sizeof(id));
+        count = (NSUInteger)aCount;
+        capacity = (NSUInteger)aCount;
     }
     else
     {

@@ -487,17 +487,17 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
     [[self currentContext] encodeRange:aValue];
 }
 
-- (void)encodePoint:(NSPoint)aValue
+- (void)encodePoint:(NUPoint)aValue
 {
     [[self currentContext] encodePoint:aValue];
 }
 
-- (void)encodeSize:(NSSize)aValue
+- (void)encodeSize:(NUSize)aValue
 {
     [[self currentContext] encodeSize:aValue];
 }
 
-- (void)encodeRect:(NSRect)aValue
+- (void)encodeRect:(NURect)aValue
 {
     [[self currentContext] encodeRect:aValue];
 }
@@ -572,17 +572,17 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
     [[self currentContext] encodeRange:aValue forKey:aKey];
 }
 
-- (void)encodePoint:(NSPoint)aValue forKey:(NSString *)aKey
+- (void)encodePoint:(NUPoint)aValue forKey:(NSString *)aKey
 {
     [[self currentContext] encodePoint:aValue forKey:aKey];
 }
 
-- (void)encodeSize:(NSSize)aValue forKey:(NSString *)aKey
+- (void)encodeSize:(NUSize)aValue forKey:(NSString *)aKey
 {
     [[self currentContext] encodeSize:aValue forKey:aKey];
 }
 
-- (void)encodeRect:(NSRect)aValue forKey:(NSString *)aKey
+- (void)encodeRect:(NURect)aValue forKey:(NSString *)aKey
 {
     [[self currentContext] encodeRect:aValue forKey:aKey];
 }
@@ -794,17 +794,17 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
     return [[self currentContext] decodeRange];
 }
 
-- (NSPoint)decodePoint
+- (NUPoint)decodePoint
 {
     return [[self currentContext] decodePoint];
 }
 
-- (NSSize)decodeSize
+- (NUSize)decodeSize
 {
     return [[self currentContext] decodeSize];
 }
 
-- (NSRect)decodeRect
+- (NURect)decodeRect
 {
     return [[self currentContext] decodeRect];
 }
@@ -884,24 +884,24 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
     return [[self currentContext] decodeRangeForKey:aKey];
 }
 
-- (NSPoint)decodePointForKey:(NSString *)aKey
+- (NUPoint)decodePointForKey:(NSString *)aKey
 {
     return [[self currentContext] decodePointForKey:aKey];
 }
 
-- (NSSize)decodeSizeForKey:(NSString *)aKey
+- (NUSize)decodeSizeForKey:(NSString *)aKey
 {
     return [[self currentContext] decodeSizeForKey:aKey];
 }
 
-- (NSRect)decodeRectForKey:(NSString *)aKey
+- (NURect)decodeRectForKey:(NSString *)aKey
 {
     return [[self currentContext] decodeRectForKey:aKey];
 }
 
 - (void)decodeIndexedIvar:(id *)anIndexedIvars count:(NUUInt64)aCount really:(BOOL)aReallyDecode
 {
-	NUUInt64 *aValues = malloc(sizeof(NUUInt64) * aCount);
+	NUUInt64 *aValues = malloc((size_t)(sizeof(NUUInt64) * aCount));
 	NUUInt64 i = 0;
 	
     [[self currentContext] setIsIndexed:YES];

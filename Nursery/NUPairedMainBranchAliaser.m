@@ -178,7 +178,7 @@
     [aData appendBytes:&aUInt64Value length:sizeof(NUUInt64)];
     
     anOffset = [aData length];
-    [aData increaseLengthBy:anObjectSize];
+    [aData increaseLengthBy:(NSUInteger)anObjectSize];
     [[self pages] read:(NUUInt8 *)[aData mutableBytes] + anOffset length:anObjectSize at:anObjectLocation];
 }
 

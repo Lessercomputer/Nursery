@@ -13,7 +13,7 @@
 #import <CFNetwork/CFHost.h>
 #import <CFNetwork/CFSocketStream.h>
 #import <CoreFoundation/CFNumber.h>
-#include <libkern/OSTypes.h>
+//#include <libkern/OSTypes.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
@@ -228,7 +228,7 @@ const NUUInt64 NUNurseryNetClientDefaultMaximumFellowPupilNotesSizeGrowDownFacto
     NSInputStream *anInputStream;
     NSOutputStream *anOutputStream;
     
-    CFStreamCreatePairWithSocketToCFHost(kCFAllocatorDefault, aHost, (SInt)[[self netService] port], &aReadStream, &aWriteStream);
+    CFStreamCreatePairWithSocketToCFHost(kCFAllocatorDefault, aHost, (SInt32)[[self netService] port], &aReadStream, &aWriteStream);
     CFRelease(aHost);
     
     CFReadStreamSetProperty(aReadStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);

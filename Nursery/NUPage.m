@@ -60,27 +60,27 @@
 
 - (void)write:(const NUUInt8 *)aBytes length:(NUUInt64)aWritingLength offset:(NUUInt64)aWritingOffsetInPage
 {
-	[data replaceBytesInRange:NSMakeRange(aWritingOffsetInPage, aWritingLength) withBytes:aBytes];
+	[data replaceBytesInRange:NSMakeRange((NSUInteger)aWritingOffsetInPage, (NSUInteger)aWritingLength) withBytes:aBytes];
 	isChanged = YES;
 	[self setIsRead:YES];
 }
 
 - (void)read:(NUUInt8 *)aBytes length:(NUUInt64)aReadingLength offset:(NUUInt64)aReadingOffsetInPage
 {
-	[data getBytes:aBytes range:NSMakeRange(aReadingOffsetInPage, aReadingLength)];
+	[data getBytes:aBytes range:NSMakeRange((NSUInteger)aReadingOffsetInPage, (NSUInteger)aReadingLength)];
 	[self setIsRead:YES];
 }
 
 - (void)appendDataWithRegion:(NURegion)aRegion toData:(NSMutableData *)aData
 {
     const void *bytes = [data bytes];
-    [aData appendBytes:&bytes[aRegion.location] length:aRegion.length];
+    [aData appendBytes:&bytes[aRegion.location] length:(NSUInteger)aRegion.length];
     [self setIsRead:YES];
 }
 
 - (void)writeDataWithRegion:(NURegion)aRegion toFielHandle:(NSFileHandle *)aFileHandle
 {
-    NSMutableData *aData = [NSMutableData dataWithCapacity:aRegion.length];
+    NSMutableData *aData = [NSMutableData dataWithCapacity:(NSUInteger)aRegion.length];
     [self appendDataWithRegion:aRegion toData:aData];
     [aFileHandle seekToFileOffset:location + aRegion.location];
     [aFileHandle writeData:aData];
