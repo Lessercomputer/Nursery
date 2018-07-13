@@ -31,11 +31,6 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
 
 @implementation NUCharacter
 
-+ (id)character
-{
-	return [[[self alloc] initWithName:nil super:nil] autorelease];
-}
-
 + (id)characterWithName:(NSString *)aName super:(NUCharacter *)aSuper
 {
 	return [[[self alloc] initWithName:aName super:aSuper] autorelease];

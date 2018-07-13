@@ -69,7 +69,6 @@ extern NSString *NUCharacterInvalidObjectFormatException;
     NSRecursiveLock *lock;
 }
 
-+ (id)character;
 + (id)characterWithName:(NSString *)aName super:(NUCharacter *)aSuper;
 
 - (id)initWithName:(NSString *)aName super:(NUCharacter *)aSuper;

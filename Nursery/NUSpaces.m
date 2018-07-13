@@ -348,6 +348,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
     
     if (aLastFreeRegion.location != NUNotFound64 && NUMaxLocation(aLastFreeRegion) == [[self pages] nextPageLocation])
     {
+        NSLog(@"minimizeSpace");
         NUUInt64 aMinimumNextPageLocation = aLastFreeRegion.location;
         NURegion aNewFreeRegion = NUMakeRegion(NUNotFound64, 0);
         

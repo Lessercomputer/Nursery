@@ -19,6 +19,7 @@ extern const NUUInt8 NUSeekerCollectPhase;
 {
 	NUUInt64Queue *grayOOPs;
 	BOOL shouldLoadGrayOOPs;
+    BOOL shouldStopSeek;
 	NUUInt8 currentPhase;
     NUUInt64 grade;
 	NUAperture *aperture;
@@ -50,5 +51,7 @@ extern const NUUInt8 NUSeekerCollectPhase;
 - (void)pushOOPAsGrayIfBlack:(NUUInt64)anOOP;
 - (NUUInt64)popGrayOOP;
 - (void)setGrade:(NUUInt64)aGrade;
+- (BOOL)shouldStopSeek;
+- (void)setShouldSeekStop:(BOOL)aSeekStopFlag;
 
 @end

@@ -10,6 +10,14 @@
 
 @class NUPages, NUCodingContext, NUObjectTable, NUPupilNote, NUU64ODictionary;
 
+@interface NUAliaser (Initializing)
+
++ (id)aliaserWithGarden:(NUGarden *)aGarden;
+
+- (id)initWithGarden:(NUGarden *)aGarden;
+
+@end
+
 @interface NUAliaser (ProjectAccessing)
 
 - (void)setGarden:(NUGarden *)aGarden;

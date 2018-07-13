@@ -109,6 +109,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 		if (shouldLoadGrayOOPs)
             [self loadGrayOOPs];
         [[self garden] moveUpTo:[self grade]];
+        [self setShouldSeekStop:NO];
 	}
 	else if (currentPhase == NUSeekerNonePhase)
 	{
@@ -121,16 +122,18 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 		currentPhase = NUSeekerSeekPhase;
         [[self garden] moveUpTo:[self grade]];
         [self pushRootOOP];
+        [self setShouldSeekStop:NO];
 	}
 	
-	[self seekObjectsUntilStop];
+    if (currentPhase == NUSeekerSeekPhase)
+        [self seekObjectsUntilStop];
 }
 
 - (void)seekObjectsUntilStop
 {
-	if (![grayOOPs count]) [self setShouldStop:YES];
+    if (![grayOOPs count]) [self setShouldSeekStop:YES];
 
-	while (![self shouldStop])
+	while (![self shouldStop] && ![self shouldStopSeek])
 	{
 		NUUInt64 anOOP = NUNotFound64;
 		int i = 0;
@@ -164,7 +167,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
             [[self nursery] unlockForChange];
 		}
         
-        if (anOOP == NUNotFound64) [self setShouldStop:YES];
+        if (anOOP == NUNotFound64) [self setShouldSeekStop:YES];
 	}
 	
 	if (!shouldLoadGrayOOPs && ![grayOOPs count])
@@ -180,8 +183,20 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 	while (![self shouldStop] && !NUBellBallEquals(aBellBall, NUNotFoundBellBall))
 	{
 		NUUInt8 aGCMark = [[[self nursery] objectTable] gcMarkFor:aBellBall];
+        NUUInt8 aGCMarkColor = aGCMark & NUGCMarkColorBitsMask;
         
-		if ((aGCMark & NUGCMarkColorBitsMask) == NUGCMarkWhite && aBellBall.grade <= [self grade])
+        //#ifdef DEBUG
+        if (aGCMarkColor == NUGCMarkNone)
+            NSLog(@"%@, NUGCMarkNone", NUStringFromBellBall(aBellBall));
+        else if (aGCMarkColor == NUGCMarkWhite)
+            NSLog(@"%@, NUGCMarkWhite", NUStringFromBellBall(aBellBall));
+        else if (aGCMarkColor == NUGCMarkGray)
+            NSLog(@"%@, NUGCMarkGray", NUStringFromBellBall(aBellBall));
+        else if (aGCMarkColor == NUGCMarkBlack)
+            NSLog(@"%@, NUGCMarkBlack", NUStringFromBellBall(aBellBall));
+        //#endif
+        
+		if (aGCMarkColor == NUGCMarkWhite && aBellBall.grade <= [self grade])
         {            
             [[self nursery] lockForChange];
             
@@ -216,8 +231,8 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
 - (void)pushRootOOP
 {
-	NUBell *anOOP = [[self garden] bellForObject:[[self garden] nurseryRoot]];
-	if (anOOP) [self pushOOPAsGrayIfWhite:[anOOP OOP]];
+	NUBell *aBell = [[self garden] bellForObject:[[self garden] nurseryRoot]];
+	if (aBell) [self pushOOPAsGrayIfWhite:[aBell OOP]];
 }
 
 - (void)loadGrayOOPs
@@ -243,6 +258,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
     
     NUBellBall aBellBall = NUMakeBellBall(anOOP, aGrade);
 	NUUInt8 aGCMark = [[[self nursery] objectTable] gcMarkFor:aBellBall];
+
 	if ((aGCMark & NUGCMarkColorBitsMask) == NUGCMarkWhite)
     {
 		[[[self nursery] objectTable] setGCMark:(aGCMark & NUGCMarkWithoutColorBitsMask) | NUGCMarkGray for:aBellBall];
@@ -291,6 +307,19 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 - (void)setGrade:(NUUInt64)aGrade
 {
     grade = aGrade;
+#ifdef DEBUG
+    NSLog(@"%@, grade:%@", self, @(aGrade));
+#endif
+}
+
+- (BOOL)shouldStopSeek
+{
+    return shouldStopSeek;
+}
+
+- (void)setShouldSeekStop:(BOOL)aSeekStopFlag
+{
+    shouldStopSeek = aSeekStopFlag;
 }
 
 @end

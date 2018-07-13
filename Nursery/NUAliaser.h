@@ -28,14 +28,6 @@ extern NSString *NUAliaserCannotDecodeObjectException;
 }
 @end
 
-@interface NUAliaser (Initializing)
-
-+ (id)aliaserWithGarden:(NUGarden *)aGarden;
-
-- (id)initWithGarden:(NUGarden *)aGarden;
-
-@end
-
 @interface NUAliaser (Accessing)
 
 - (NUGarden *)garden;

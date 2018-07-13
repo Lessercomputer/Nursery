@@ -729,6 +729,9 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 - (void)setGrade:(NUUInt64)aGrade
 {
     grade = aGrade;
+#ifdef DEBUG
+    NSLog(@"%@, grade:%@", self, @(aGrade));
+#endif
 }
 
 - (void)setID:(NUUInt64)anID
