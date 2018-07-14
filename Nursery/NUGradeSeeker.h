@@ -11,12 +11,12 @@
 #import "NUThreadedChildminder.h"
 #import "NUTypes.h"
 
-@class NSMutableArray, NSRecursiveLock;
-@class NUGarden, NUBell, NUAperture;
+@class NSRecursiveLock;
+@class NUGarden, NUBell, NUAperture, NUQueue;
 
 @interface NUGradeSeeker : NUThreadedChildminder <NSLocking>
 {
-    NSMutableArray *bells;
+    NUQueue *bells;
     NSRecursiveLock *bellsLock;
     NUAperture *aperture;
     NSRecursiveLock *lock;
@@ -30,7 +30,7 @@
 - (void)pushRootBell:(NUBell *)aBell;
 - (void)pushBellIfNeeded:(NUBell *)aBell;
 
-- (NSMutableArray *)bells;
+- (NUQueue *)bells;
 
 - (NUBell *)popBell;
 - (void)pushBell:(NUBell *)aBell;

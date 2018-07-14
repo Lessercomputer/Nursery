@@ -20,6 +20,7 @@
 #import "NUMainBranchGradeSeeker.h"
 #import "NUBranchGradeSeeker.h"
 #import "NUU64ODictionary.h"
+#import "NUQueue.h"
 
 @implementation NUGradeSeeker
 
@@ -33,13 +34,13 @@
     return [[[self alloc] initWithGarden:aGarden aperture:aAperture] autorelease];
 }
 
-- (id)initWithGarden:(NUGarden *)aGarden aperture:(NUAperture *)aAperture
+- (id)initWithGarden:(NUGarden *)aGarden aperture:(NUAperture *)anAperture
 {
     if (self = [super initWithGarden:aGarden])
     {
-        aperture = [aAperture retain];
+        aperture = [anAperture retain];
         bellsLock = [NSRecursiveLock new];
-        bells = [NSMutableArray new];
+        bells = [NUQueue new];
         lock = [NSRecursiveLock new];
     }
     
@@ -70,7 +71,7 @@
 {
     [bellsLock lock];
     
-    [[self bells] removeAllObjects];
+    [[self bells] removeAll];
     [self pushBell:aBell];
     
     [bellsLock unlock];
@@ -82,7 +83,7 @@
         [self pushBell:aBell];
 }
 
-- (NSMutableArray *)bells
+- (NUQueue *)bells
 {
     return bells;
 }
@@ -93,11 +94,7 @@
     
     [bellsLock lock];
     
-    if ([[self bells] count])
-    {
-        aBell = [[self bells] lastObject];
-        [[self bells] removeLastObject];
-    }
+    aBell = [[self bells] pop];
     
     [bellsLock unlock];
     
@@ -108,7 +105,7 @@
 {
     [bellsLock lock];
     
-    [[self bells] addObject:aBell];
+    [[self bells] push:aBell];
     
     [bellsLock unlock];
 }

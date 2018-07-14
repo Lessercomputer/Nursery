@@ -95,29 +95,12 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
             [[self garden] moveUpTo:[[self nursery] gradeForParader]];
             
             NURegion aFreeRegion = [[[self nursery] spaces] nextParaderTargetFreeSpaceForLocation:nextLocation];
-            
+#ifdef DEBUG
+            NSLog(@"aFreeRegion:%@", NUStringFromRegion(aFreeRegion));
+#endif
             if (aFreeRegion.location != NUNotFound64)
             {
-                nextLocation = NUMaxLocation(aFreeRegion);
-                
-                if (nextLocation < [[[self nursery] pages] nextPageLocation])
-                {
-                    NUBellBall aBellBall = [[[self nursery] reversedObjectTable] bellBallForObjectLocation:nextLocation];
-                    
-                    if (!NUBellBallEquals(aBellBall, NUNotFoundBellBall))
-                        [self paradeObjectAtNextLocationWithBellBall:aBellBall freeRegion:aFreeRegion buffer:aBuffer bufferSize:aBufferSize];
-                    else
-                        [self paradeNodeAtNextLocationWithFreeRegion:aFreeRegion buffer:aBuffer bufferSize:aBufferSize];
-                    
-#ifdef DEBUG
-                    BOOL aFreeRegionsIsValid = [[[self nursery] spaces] validateFreeRegions];
-                    
-                    if (aFreeRegionsIsValid)
-                        NSLog(@"aFreeRegionsIsValid = YES");
-                    else
-                        NSLog(@"aFreeRegionsIsValid = NO");
-#endif
-                }
+                [self paradeObjectOrNodeNextTo:aFreeRegion buffer:aBuffer bufferSize:aBufferSize];
             }
             else
             {
@@ -131,7 +114,6 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
                 
                 break;
             }
-
         }
         @finally
         {
@@ -140,6 +122,34 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     }
     
     free(aBuffer);
+}
+
+- (void)paradeObjectOrNodeNextTo:(NURegion)aFreeRegion buffer:(NUUInt8 *)aBuffer bufferSize:(NUUInt64) aBufferSize
+{
+    nextLocation = NUMaxLocation(aFreeRegion);
+    
+    if (nextLocation < [[[self nursery] pages] nextPageLocation])
+    {
+        NUBellBall aBellBall = [[[self nursery] reversedObjectTable] bellBallForObjectLocation:nextLocation];
+        
+        if (!NUBellBallEquals(aBellBall, NUNotFoundBellBall))
+        {
+            [self paradeObjectAtNextLocationWithBellBall:aBellBall freeRegion:aFreeRegion buffer:aBuffer bufferSize:aBufferSize];
+        }
+        else
+        {
+            [self paradeNodeAtNextLocationWithFreeRegion:aFreeRegion buffer:aBuffer bufferSize:aBufferSize];
+        }
+        
+#ifdef DEBUG
+        BOOL aFreeRegionsIsValid = [[[self nursery] spaces] validateFreeRegions];
+        
+        if (aFreeRegionsIsValid)
+            NSLog(@"aFreeRegionsIsValid = YES");
+        else
+            NSLog(@"aFreeRegionsIsValid = NO");
+#endif
+    }
 }
 
 - (void)paradeObjectAtNextLocationWithBellBall:(NUBellBall)aBellBall freeRegion:(NURegion)aFreeRegion buffer:(NUUInt8 *)aBuffer bufferSize:(NUUInt64)aBufferSize
@@ -173,7 +183,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     if (nextLocation % [[[self nursery] pages] pageSize])
         [[NSException exceptionWithName:NUParaderInvalidNodeLocationException reason:NUParaderInvalidNodeLocationException userInfo:nil] raise];
     
-    [self computeMovedNodeReagionInto:&aMovedNodeRegion fromCurrentNodeRegion:aCurrentNodeRegion withFreeRegion:aFreeRegion newFreeRegion1Into:&aNewFreeRegion1 newFreeRegion2Into:&aNewFreeRegion2];
+    [self computeMovedNodeRegionInto:&aMovedNodeRegion fromCurrentNodeRegion:aCurrentNodeRegion withFreeRegion:aFreeRegion newFreeRegion1Into:&aNewFreeRegion1 newFreeRegion2Into:&aNewFreeRegion2];
     
 #ifdef DEBUG
     NSLog(@"aMovedNodeRegion:%@, aCurrentNodeRegion:%@, aFreeRegion:%@, newFreeRegion1:%@, aNewFreeRegion2:%@", NUStringFromRegion(aMovedNodeRegion), NUStringFromRegion(aCurrentNodeRegion), NUStringFromRegion(aFreeRegion), NUStringFromRegion(aNewFreeRegion1), NUStringFromRegion(aNewFreeRegion2));
@@ -212,7 +222,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
         nextLocation = NUMaxLocation(aCurrentNodeRegion);    
 }
 
-- (void)computeMovedNodeReagionInto:(NURegion *)aMovedNodeRegion fromCurrentNodeRegion:(NURegion)aCurrentNodeRegion withFreeRegion:(NURegion)aFreeRegion newFreeRegion1Into:(NURegion *)aNewFreeRegion1 newFreeRegion2Into:(NURegion *)aNewFreeRegion2
+- (void)computeMovedNodeRegionInto:(NURegion *)aMovedNodeRegion fromCurrentNodeRegion:(NURegion)aCurrentNodeRegion withFreeRegion:(NURegion)aFreeRegion newFreeRegion1Into:(NURegion *)aNewFreeRegion1 newFreeRegion2Into:(NURegion *)aNewFreeRegion2
 {
     NUUInt64 aMovedLocation = aCurrentNodeRegion.length * (aFreeRegion.location / aCurrentNodeRegion.length);
     

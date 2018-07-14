@@ -102,6 +102,11 @@ const NUUInt64 NUOpaqueQueueDefaultValuesCapacity = 7;
     return aValue;
 }
 
+- (void)removeAll
+{
+    while ([self count]) [self popValue];
+}
+
 - (NUUInt64)count
 {
     return count;

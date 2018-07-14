@@ -106,26 +106,22 @@
 {
     if (!anElement) return;
     
+    if ([anElement isEqual:first]) first = [anElement next];
+    if ([anElement isEqual:last]) last = [anElement previous];
+
     [[anElement previous] setNext:[anElement next]];
     [[anElement next] setPrevious:[anElement previous]];
-    
-    if ([anElement isEqual:first]) first = nil;
-    if ([anElement isEqual:last]) last = nil;
-    
+
     [anElement setPrevious:nil];
     [anElement setNext:nil];
-    
     [elements removeObject:anElement];
 }
 
 - (void)removeLast
 {
-    NULinkedListElement *aLastElement = last;
+    if (![self count]) return;
     
-    [[last previous] setNext:nil];
-    last = [last previous];
-    
-    [elements removeObject:aLastElement];
+    [self remove:last];
 }
 
 @end

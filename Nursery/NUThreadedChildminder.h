@@ -31,7 +31,7 @@
 
 - (void)prepare;
 - (void)start;
-- (void)startWithoutWait;
+- (void)prepareToStart;
 - (void)stop;
 - (void)terminate;
 - (void)startThread:(id)anArgument;

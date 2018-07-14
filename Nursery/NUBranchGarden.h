@@ -23,6 +23,12 @@
 
 @end
 
+@interface NUBranchGarden (SaveAndLoad)
+
+- (NUFarmOutStatus)farmOut;
+
+@end
+
 @interface NUBranchGarden (Private)
 
 - (NUNurseryNetClient *)netClient;

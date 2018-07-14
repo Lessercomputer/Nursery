@@ -16,6 +16,12 @@
 }
 @end
 
+@interface NUMainBranchGarden (SaveAndLoad)
+
+- (NUFarmOutStatus)farmOut;
+
+@end
+
 @interface NUMainBranchGarden (Private)
 
 - (NUMainBranchNursery *)mainBranchNursery;

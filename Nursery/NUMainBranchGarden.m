@@ -47,7 +47,7 @@
 
 + (Class)apertureClass
 {
-    return [NUAperture class];
+    return [NUMainBranchAperture class];
 }
 
 - (void)dealloc
@@ -130,7 +130,7 @@
     {
         [[self mainBranchNursery] unlockForFarmOut];
         [self unlock];
-        [[self gradeSeeker] startWithoutWait];
+        [[self gradeSeeker] start];
         [farmOutLock unlock];
     }
     

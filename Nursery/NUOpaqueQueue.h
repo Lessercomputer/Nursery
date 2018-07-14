@@ -26,6 +26,8 @@
 - (void)pushValue:(NUUInt8 *)aValue;
 - (NUUInt8 *)popValue;
 
+- (void)removeAll;
+
 - (NUUInt64)count;
 - (BOOL)isFull;
 

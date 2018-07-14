@@ -419,8 +419,8 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     NSLog(@"%@: will start seeker", self);
 #endif
     
-    [[self seeker] startWithoutWait];
-    [[self parader] startWithoutWait];
+    [[self seeker] prepareToStart];
+    [[self parader] prepareToStart];
     
 #ifdef DEBUG
     NSLog(@"%@: did start seeker", self);
