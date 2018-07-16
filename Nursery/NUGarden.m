@@ -556,8 +556,9 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         [self setNurseryRoot:[NUNurseryRoot root]];
         
         [[self systemCharacterOOPToClassDictionary] enumerateKeysAndObjectsUsingBlock:^(NSNumber *anOOP, Class aClass, BOOL *aStop) {
-            [self setObject:[aClass characterOn:self]
-                    forBell:[self allocateBellForBellBall:NUMakeBellBall([anOOP unsignedLongLongValue], NUFirstGrade) isLoaded:YES]];
+            NUCharacter *aSystemCharacter = [aClass characterOn:self];
+            NUBell *aSystemCharacterBell = [self allocateBellForBellBall:NUMakeBellBall([anOOP unsignedLongLongValue], NUFirstGrade) isLoaded:YES];
+            [self setObject:aSystemCharacter forBell:aSystemCharacterBell];
         }];
         
         [self setNurseryRoot:nil];
@@ -755,7 +756,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     if (aNurseryRootOOP == NUNilOOP)
     {
         aNurseryRoot = [NUNurseryRoot root];
-        [self markSystemCharactersChanged];
+        [self registerSystemCharactersTo:aNurseryRoot];
     }
     else
     {
@@ -802,11 +803,15 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     }];
 }
 
-- (void)markSystemCharactersChanged
+- (void)registerSystemCharactersTo:(NUNurseryRoot *)aNurseryRoot
 {
     [[self systemCharacterOOPToClassDictionary] enumerateKeysAndObjectsUsingBlock:^(NSNumber *anOOP, Class aClass, BOOL *aStop) {
+        NUCharacter *aSystemCharacter = [aClass characterOn:self];
+        [[aNurseryRoot characters] setObject:aSystemCharacter forKey:[aSystemCharacter inheritanceNameWithVersion]];
         [self markChangedObject:[self objectForOOP:[anOOP unsignedLongLongValue]]];
     }];
+    
+//    [self markChangedObject:[aNurseryRoot characters]];
 }
 
 - (BOOL)classAutomaticallyEstablishCharacter:(Class)aClass

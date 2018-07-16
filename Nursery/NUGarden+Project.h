@@ -118,7 +118,7 @@
 - (NUNurseryRoot *)loadNurseryRoot;
 - (void)prepareNameWithVersionKeyedCharacters;
 - (void)resolveTargetClassForTargetClassUnresolvedCharacters;
-- (void)markSystemCharactersChanged;
+- (void)registerSystemCharactersTo:(NUNurseryRoot *)aNurseryRoot;
 
 - (NUUInt64)retainLatestGradeOfNursery;
 

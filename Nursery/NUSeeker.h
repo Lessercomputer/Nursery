@@ -19,10 +19,10 @@ extern const NUUInt8 NUSeekerCollectPhase;
 {
 	NUUInt64Queue *grayOOPs;
 	BOOL shouldLoadGrayOOPs;
-    BOOL shouldStopSeek;
 	NUUInt8 currentPhase;
     NUUInt64 grade;
 	NUAperture *aperture;
+    NUBellBall nextBellBallToCollect;
 }
 
 + (id)seekerWithGarden:(NUGarden *)aGarden;
@@ -45,13 +45,13 @@ extern const NUUInt8 NUSeekerCollectPhase;
 - (void)seekObjects;
 - (void)seekObjectsUntilStop;
 - (void)collectObjects;
+- (void)collectObjectIfNeeded:(NUBellBall)aBellBall;
 - (void)pushRootOOP;
+- (void)loadGrayOOPsIfNeeded;
 - (void)loadGrayOOPs;
 - (void)pushOOPAsGrayIfWhite:(NUUInt64)anOOP;
 - (void)pushOOPAsGrayIfBlack:(NUUInt64)anOOP;
 - (NUUInt64)popGrayOOP;
 - (void)setGrade:(NUUInt64)aGrade;
-- (BOOL)shouldStopSeek;
-- (void)setShouldSeekStop:(BOOL)aSeekStopFlag;
 
 @end

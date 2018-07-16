@@ -273,7 +273,10 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
 {
     @try {
         [lock lock];
-        
+#ifdef DEBUG
+        if (anOOP == 19)
+            NSLog(@"anOOP == 19");
+#endif
         NUUInt64 anObjectLocation = NUNotFound64;
         NUBellBall aBellBall = NUMakeBellBall(anOOP, aGrade);
         NUUInt32 aKeyIndex;
@@ -328,6 +331,8 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
 
 #ifdef DEBUG
     NSLog(@"NUObjectTable #removeObjectFor:%@; aRegion:%@", NUStringFromBellBall(aBellBall), NUStringFromRegion(aRegion));
+    if (aBellBall.oop == 1)
+        NSLog(@"aBellBall.oop == 1");
 #endif
     
 	[[self spaces] releaseSpace:aRegion];

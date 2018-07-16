@@ -86,7 +86,7 @@ static NSString *NUNurseryTestFilePath = nil;
 
 - (void)testSaveManyNSNumbersUsingSameGarden
 {
-    [self _testSaveManyNSNumbersUsingSameGardenTimes:10 withCountPerSave:1000000];
+    [self _testSaveManyNSNumbersUsingSameGardenTimes:10 withCountPerSave:10000];
 }
 
 - (void)testSaveFewNSNumbersManyTimesUsingSameGarden
@@ -100,7 +100,7 @@ static NSString *NUNurseryTestFilePath = nil;
     ^{
         NUUInt64 aNumber = 0;
         
-        for (NSUInteger i = 0; i < 1000; i++)
+        for (NSUInteger i = 0; i < 100; i++)
         {
             for (NSUInteger j = 0; j < 3; j++)
             {

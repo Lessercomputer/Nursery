@@ -419,8 +419,8 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     NSLog(@"%@: will start seeker", self);
 #endif
     
-    [[self seeker] prepareToStart];
-    [[self parader] prepareToStart];
+    [[self seeker] start];
+    [[self parader] start];
     
 #ifdef DEBUG
     NSLog(@"%@: did start seeker", self);
@@ -665,7 +665,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 - (void)initializeFileHeader
 {
 	NUUInt8 *aNurseryFileSignature = (NUUInt8 *)"nu\n";
-	NUUInt8 aMajorVersion = 0, aMinorVersion = 1;
+	NUUInt8 aMajorVersion = 0, aMinorVersion = 2;
 	
 	[[self pages] appendPagesBy:1];
 	[[self pages] write:aNurseryFileSignature length:3 at:0 of:0];
@@ -686,7 +686,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 	[[self pages] read:&aMinorVersion length:1 at:4 of:0];
 	
 	if (memcmp(aNurseryFileSignature, "nu\n", 3) != 0) return NO;
-	if (aMajorVersion != 0 || aMinorVersion != 1) return NO;
+	if (!(aMajorVersion == 0 && (aMinorVersion == 1 || aMinorVersion == 2))) return NO;
 	
 	return YES;
 }

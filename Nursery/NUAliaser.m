@@ -413,7 +413,16 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
             [[self garden] markChangedObject:anObject];
         }
     }
-
+#ifdef DEBUG
+    if (anOOP >= 1 && anOOP <= 20)
+    {
+        if (anOOP == 1)
+            NSLog(@"anOOP == 1");
+        if (anOOP == 19)
+            NSLog(@"anOOP == 19");
+        NSLog(@"preEncodeObject:%@, oop:%@", anObject, @(anOOP));
+    }
+#endif
     return anOOP;
 }
 
