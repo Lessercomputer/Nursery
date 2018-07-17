@@ -106,14 +106,14 @@
     gradeAtCallFor = aGrade;
 }
 
-- (NUUInt64)gradeForSeeker
+- (NUUInt64)gradeForGradeSeeker
 {
-    return gradeForSeeker;
+    return gradeForGradeSeeker;
 }
 
-- (void)setGradeForSeeker:(NUUInt64)aGrade
+- (void)setGradeForGradeSeeker:(NUUInt64)aGrade
 {
-    gradeForSeeker = aGrade;
+    gradeForGradeSeeker = aGrade;
 }
 
 - (void)setGarden:(NUGarden *)aGarden

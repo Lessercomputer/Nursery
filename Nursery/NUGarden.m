@@ -900,7 +900,8 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     @try {
         [self lock];
         
-        [[[[self bells] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop){
+        NUU64ODictionary *aCopyOfBells = [[self bells] copy];
+        [aCopyOfBells enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop){
             @autoreleasepool
             {
                 NSInteger aBasicRetainCountOfBellInGarden = [self basicRetainCountOfBellInGarden:aBell];
@@ -909,6 +910,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
                     [self invalidateBell:aBell];
             }
         }];
+        [aCopyOfBells release];
     }
     @finally {
         [self unlock];

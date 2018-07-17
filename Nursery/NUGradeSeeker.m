@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/NSArray.h>
+#import <Foundation/NSThread.h>
 
 #import "NUGradeSeeker.h"
 #import "NUGarden.h"
@@ -79,7 +80,7 @@
 
 - (void)pushBellIfNeeded:(NUBell *)aBell
 {
-    if (aBell && [aBell gradeForSeeker] < [self grade])
+    if (aBell && [aBell gradeForGradeSeeker] < [self grade])
         [self pushBell:aBell];
 }
 
@@ -122,29 +123,41 @@
 
 - (void)process
 {
+    NUUInt64 aNumberOfTimesToCollect = 3;
+    NUUInt64 aNumberOfTimesCollected = 0;
+    NSTimeInterval aSleepTimeInterval = 0.2;
+    
     while (![self shouldStop])
     {
-        [self lock];
-        
-        NUBell *aBell = [self popBell];
-        
-        if (aBell)
-            [self seekObjectFor:aBell];
-        else
+        @autoreleasepool
         {
-            [self collectGrade];
-            [self setShouldStop:YES];
+            [self lock];
+            
+            NUBell *aBell = [self popBell];
+            
+            if (aBell)
+                [self seekObjectFor:aBell];
+            else
+            {
+                BOOL aGradeLessThanCurrentFound = [self collectGrade];
+                aNumberOfTimesCollected++;
+                
+                if (!aGradeLessThanCurrentFound || aNumberOfTimesCollected == aNumberOfTimesToCollect)
+                    [self setShouldStop:YES];
+                else
+                    [NSThread sleepForTimeInterval:aSleepTimeInterval];
+            }
+            
+            [self unlock];
         }
-        
-        [self unlock];
     }
 }
 
 - (void)seekObjectFor:(NUBell *)aBell
 {    
-    if ([aBell gradeForSeeker] == [self grade]) return;
+    if ([aBell gradeForGradeSeeker] == [self grade]) return;
     
-    [aBell setGradeForSeeker:[self grade]];
+    [aBell setGradeForGradeSeeker:[self grade]];
     
     //if (![aBell isLoaded]) return;
     
@@ -156,7 +169,7 @@
     
 }
 
-- (void)collectGrade
+- (BOOL)collectGrade
 {
     __block BOOL aGradeLessThanCurrentFound = NO;
     
@@ -167,7 +180,7 @@
         [[self garden] invalidateNotReferencedBells];
         
         [[[self garden] bells] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop) {
-            if ([aBell gradeForSeeker] < [self grade])
+            if ([aBell gradeForGradeSeeker] < [self grade])
             {
                 aGradeLessThanCurrentFound = YES;
                 *stop = YES;
@@ -179,7 +192,7 @@
         else
         {
 #ifdef DEBUG
-            NSMutableArray *aBells = [self collectBellWithGradeLessThanCurrent];
+            NSMutableArray *aBells = [self selectBellWithGradeLessThanCurrent];
             NSLog(@"aBells: %@", aBells);
 #endif
         }
@@ -187,9 +200,11 @@
     @finally {
         [[self garden] unlock];
     }
+    
+    return aGradeLessThanCurrentFound;
 }
 
-- (NSMutableArray *)collectBellWithGradeLessThanCurrent
+- (NSMutableArray *)selectBellWithGradeLessThanCurrent
 {
     @try {
         [[self garden] lock];
@@ -197,7 +212,7 @@
         NSMutableArray *aBells = [NSMutableArray array];
         
         [[[self garden] bells] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop) {
-            if ([aBell gradeForSeeker] < [self grade])
+            if ([aBell gradeForGradeSeeker] < [self grade])
                 [aBells addObject:aBell];
         }];
         
@@ -219,9 +234,9 @@
 
 - (void)bellDidLoadIvars:(NUBell *)aBell
 {
-    if ([aBell gradeForSeeker] == [self grade])
+    if ([aBell gradeForGradeSeeker] == [self grade])
     {
-        [aBell setGradeForSeeker:NUNilGrade];
+        [aBell setGradeForGradeSeeker:NUNilGrade];
         [self pushBellIfNeeded:aBell];
     }
 }

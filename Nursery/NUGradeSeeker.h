@@ -41,7 +41,7 @@
 - (void)seekObjectFor:(NUBell *)aBell;
 - (void)seekIvarsOfObjectFor:(NUBell *)aBell;
 
-- (void)collectGrade;
+- (BOOL)collectGrade;
 - (void)collectGradeLessThan:(NUUInt64)aGrade;
 
 - (void)bellDidLoadIvars:(NUBell *)aBell;
