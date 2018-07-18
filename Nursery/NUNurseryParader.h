@@ -1,5 +1,5 @@
 //
-//  NUParader.h
+//  NUNurseryParader.h
 //  Nursery
 //
 //  Created by Akifumi Takata on 2013/01/12.
@@ -13,7 +13,7 @@ extern NSString *NUParaderInvalidNodeLocationException;
 
 @class NUMainBranchNursery;
 
-@interface NUParader : NUThreadedChildminder
+@interface NUNurseryParader : NUThreadedChildminder
 {
     NUUInt64 nextLocation;
 }

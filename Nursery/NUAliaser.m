@@ -24,10 +24,10 @@
 #import "NUCoder.h"
 #import "NUCharacter.h"
 #import "NUSpaces.h"
-#import "NUSeeker.h"
+#import "NUNurserySeeker.h"
 #import "NURegion.h"
 #import "NUBellBall.h"
-#import "NUGradeSeeker.h"
+#import "NUGardenSeeker.h"
 #import "NUBranchAliaser.h"
 #import "NUPairedMainBranchGarden.h"
 #import "NUPairedMainBranchAliaser.h"
@@ -722,7 +722,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 	[self popContext];
     
     [aBell setIsLoaded:YES];
-    [[[self garden] gradeSeeker] bellDidLoadIvars:aBell];
+    [[[self garden] gardenSeeker] bellDidLoadIvars:aBell];
     
     return anObject;
 }
@@ -968,7 +968,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
     
     [self popContext];
     
-    [[[self garden] gradeSeeker] bellDidLoadIvars:aBell];
+    [[[self garden] gardenSeeker] bellDidLoadIvars:aBell];
 }
 
 - (void)prepareCodingContextForMoveUp:(NUBell *)aBell

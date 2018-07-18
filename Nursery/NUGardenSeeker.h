@@ -1,5 +1,5 @@
 //
-//  NUGradeSeeker.h
+//  NUGardenSeeker.h
 //  Nursery
 //
 //  Created by Akifumi Takata on 2013/08/31.
@@ -14,7 +14,7 @@
 @class NSRecursiveLock;
 @class NUGarden, NUBell, NUAperture, NUQueue;
 
-@interface NUGradeSeeker : NUThreadedChildminder <NSLocking>
+@interface NUGardenSeeker : NUThreadedChildminder <NSLocking>
 {
     NUQueue *bells;
     NSRecursiveLock *bellsLock;
@@ -22,13 +22,15 @@
     NSRecursiveLock *lock;
 }
 
-+ (id)gradeSeekerWithGarden:(NUGarden *)aGarden;
-+ (id)gradeSeekerWithGarden:(NUGarden *)aGarden aperture:(NUAperture *)aAperture;
++ (id)gardenSeekerWithGarden:(NUGarden *)aGarden;
++ (id)gardenSeekerWithGarden:(NUGarden *)aGarden aperture:(NUAperture *)aAperture;
 
 - (id)initWithGarden:(NUGarden *)aGarden aperture:(NUAperture *)aAperture;
 
 - (void)pushRootBell:(NUBell *)aBell;
 - (void)pushBellIfNeeded:(NUBell *)aBell;
+
+@property (nonatomic) BOOL rootIsChanged;
 
 - (NUQueue *)bells;
 
@@ -41,8 +43,8 @@
 - (void)seekObjectFor:(NUBell *)aBell;
 - (void)seekIvarsOfObjectFor:(NUBell *)aBell;
 
-- (BOOL)collectGrade;
-- (void)collectGradeLessThan:(NUUInt64)aGrade;
+- (void)collectGrade;
+//- (void)collectGradeLessThan:(NUUInt64)aGrade;
 
 - (void)bellDidLoadIvars:(NUBell *)aBell;
 - (void)objectDidLoadIvars:(id)anObject;

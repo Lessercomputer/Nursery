@@ -1,5 +1,5 @@
 //
-//  NUSeeker.h
+//  NUNurserySeeker.h
 //  Nursery
 //
 //  Created by Akifumi Takata on 11/08/17.
@@ -15,7 +15,7 @@ extern const NUUInt8 NUSeekerCollectPhase;
 
 @class NUUInt64Queue, NUMainBranchNursery, NUAperture;
 
-@interface NUSeeker : NUThreadedChildminder
+@interface NUNurserySeeker : NUThreadedChildminder
 {
 	NUUInt64Queue *grayOOPs;
 	BOOL shouldLoadGrayOOPs;
@@ -40,7 +40,7 @@ extern const NUUInt8 NUSeekerCollectPhase;
 
 @end
 
-@interface NUSeeker (Private)
+@interface NUNurserySeeker (Private)
 
 - (void)seekObjects;
 - (void)seekObjectsUntilStop;

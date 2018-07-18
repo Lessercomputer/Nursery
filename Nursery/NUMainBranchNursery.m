@@ -25,8 +25,8 @@
 #import "NUPages.h"
 #import "NUPage.h"
 #import "NURegion.h"
-#import "NUSeeker.h"
-#import "NUParader.h"
+#import "NUNurserySeeker.h"
+#import "NUNurseryParader.h"
 #import "NUIvar.h"
 #import "NUAliaser.h"
 #import "NUBellBall.h"
@@ -69,8 +69,8 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
         [self setReversedObjectTable:[[[NUReversedObjectTable alloc] initWithRootLocation:0 on:[self spaces]] autorelease]];
         [[self spaces] prepareNodeOOPToTreeDictionary];
         retainedGrades = [NSMutableDictionary new];
-        [self setSeeker:[NUSeeker seekerWithGarden:[[[self class] gardenClass] gardenWithNursery:self usesGradeSeeker:NO retainNursery:NO]]];
-        [self setParader:[NUParader paraderWithGarden:[[[self class] gardenClass] gardenWithNursery:self usesGradeSeeker:NO retainNursery:NO]]];
+        [self setSeeker:[NUNurserySeeker seekerWithGarden:[[[self class] gardenClass] gardenWithNursery:self usesGardenSeeker:NO retainNursery:NO]]];
+        [self setParader:[NUNurseryParader paraderWithGarden:[[[self class] gardenClass] gardenWithNursery:self usesGardenSeeker:NO retainNursery:NO]]];
         [[self seeker] prepare];
         [[self parader] prepare];
     }
@@ -159,12 +159,12 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     return retainedGrades;
 }
 
-- (NUSeeker *)seeker
+- (NUNurserySeeker *)seeker
 {
 	return seeker;
 }
 
-- (NUParader *)parader
+- (NUNurseryParader *)parader
 {
     return parader;
 }
@@ -325,13 +325,13 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     reversedObjectTable = [aReversedObjectTable retain];
 }
 
-- (void)setSeeker:(NUSeeker *)aSeeker
+- (void)setSeeker:(NUNurserySeeker *)aSeeker
 {
 	[seeker autorelease];
 	seeker = [aSeeker retain];
 }
 
-- (void)setParader:(NUParader *)aParader
+- (void)setParader:(NUNurseryParader *)aParader
 {
     [parader autorelease];
     parader = [aParader retain];
@@ -350,7 +350,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 
 - (NUPairedMainBranchGarden *)makePairdGarden
 {
-    NUPairedMainBranchGarden *aGarden = [NUPairedMainBranchGarden gardenWithNursery:self usesGradeSeeker:NO];
+    NUPairedMainBranchGarden *aGarden = [NUPairedMainBranchGarden gardenWithNursery:self usesGardenSeeker:NO];
     return aGarden;
 }
 
@@ -532,8 +532,8 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     
     @try
     {
-        [[self seeker] stop];
-        [[self parader] stop];
+//        [[self seeker] stop];
+//        [[self parader] stop];
         
         [self lockForChange];
         

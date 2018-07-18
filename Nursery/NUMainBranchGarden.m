@@ -10,7 +10,7 @@
 
 #import "NUMainBranchGarden.h"
 #import "NUGarden+Project.h"
-#import "NUGradeSeeker.h"
+#import "NUGardenSeeker.h"
 #import "NUNursery+Project.h"
 #import "NUMainBranchNursery.h"
 #import "NUMainBranchNursery+Project.h"
@@ -19,15 +19,15 @@
 #import "NUNurseryRoot.h"
 #import "NUBell.h"
 #import "NUBellBall.h"
-#import "NUMainBranchGradeSeeker.h"
+#import "NUMainBranchGardenSeeker.h"
 #import "NUMainBranchAperture.h"
 #import "NUObjectTable.h"
 
 @implementation NUMainBranchGarden
 
-- (id)initWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
+- (id)initWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGardenSeeker:(BOOL)aUsesGardenSeeker retainNursery:(BOOL)aRetainFlag
 {
-    if (self = [super initWithNursery:aNursery grade:aGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:aRetainFlag])
+    if (self = [super initWithNursery:aNursery grade:aGrade usesGardenSeeker:aUsesGardenSeeker retainNursery:aRetainFlag])
     {
         farmOutLock = [NSLock new];
     }
@@ -40,9 +40,9 @@
     return [NUMainBranchAliaser class];
 }
 
-+ (Class)gradeSeekerClass
++ (Class)gardenSeekerClass
 {
-    return [NUMainBranchGradeSeeker class];
+    return [NUMainBranchGardenSeeker class];
 }
 
 + (Class)apertureClass
@@ -85,7 +85,7 @@
         @autoreleasepool
         {
             [farmOutLock lock];
-            [[self gradeSeeker] stop];
+            [[self gardenSeeker] stop];
             [self lock];
             [[self mainBranchNursery] lockForFarmOut];
             
@@ -116,7 +116,7 @@
                     {
                         [[self mainBranchNursery] retainGrade:aNewGrade byGarden:self];
                         [self setGrade:aNewGrade];
-                        [[self gradeSeeker] pushRootBell:[[self nurseryRoot] bell]];
+                        [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
                     }
                 }
                 else
@@ -130,7 +130,7 @@
     {
         [[self mainBranchNursery] unlockForFarmOut];
         [self unlock];
-        [[self gradeSeeker] start];
+        [[self gardenSeeker] start];
         [farmOutLock unlock];
     }
     

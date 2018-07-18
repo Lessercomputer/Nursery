@@ -12,7 +12,7 @@
 
 #import "NUGarden+Project.h"
 #import "NUBranchGarden.h"
-#import "NUBranchGradeSeeker.h"
+#import "NUBranchGardenSeeker.h"
 #import "NUAliaser+Project.h"
 #import "NUBranchAliaser.h"
 #import "NUBell.h"
@@ -29,9 +29,9 @@
 
 @implementation NUBranchGarden
 
-- (id)initWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
+- (id)initWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGardenSeeker:(BOOL)aUsesGardenSeeker retainNursery:(BOOL)aRetainFlag
 {
-    if (self = [super initWithNursery:aNursery grade:aGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:aRetainFlag])
+    if (self = [super initWithNursery:aNursery grade:aGrade usesGardenSeeker:aUsesGardenSeeker retainNursery:aRetainFlag])
     {
         nextProbationaryOOP = NUNotFound64 - 1;
     }
@@ -41,7 +41,7 @@
 
 - (void)close
 {
-    [[self gradeSeeker] stop];
+    [[self gardenSeeker] stop];
     [[self netClient] closeGardenWithID:[self ID]];
     [[self netClient] stop];
     
@@ -83,9 +83,9 @@
     return [NUBranchAliaser class];
 }
 
-+ (Class)gradeSeekerClass
++ (Class)gardenSeekerClass
 {
-    return [NUBranchGradeSeeker class];
+    return [NUBranchGardenSeeker class];
 }
 
 + (Class)apertureClass
@@ -116,7 +116,7 @@
         NSData *aFixedOOPs = nil;
         NUUInt64 aLatestGrade = NUNilGrade;
         
-        [[self gradeSeeker] stop];
+        [[self gardenSeeker] stop];
         
         if (![self gradeIsEqualToNurseryGrade])
         {
@@ -136,13 +136,13 @@
                 [self replaceProbationaryOOPsWithFixedOOPs:aFixedOOPs inPupils:[[self branchAliaser] reducedEncodedPupilsDictionary] grade:aLatestGrade];
                 [[self branchAliaser] removeAllEncodedPupils];
                 [self setGrade:aLatestGrade];
-                [[self gradeSeeker] pushRootBell:[[self nurseryRoot] bell]];
+                [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
             }
 
         }
     }
     @finally {
-        [[self gradeSeeker] start];
+        [[self gardenSeeker] start];
     }
     
     return aFarmOutStatus;

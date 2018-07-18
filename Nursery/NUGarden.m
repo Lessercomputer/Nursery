@@ -21,7 +21,7 @@
 #import "NUObjectWrapper.h"
 #import "NUAliaser.h"
 #import "NUAliaser+Project.h"
-#import "NUGradeSeeker.h"
+#import "NUGardenSeeker.h"
 #import "NUNursery.h"
 #import "NUNurseryRoot.h"
 #import "NUIvar.h"
@@ -48,35 +48,35 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 + (id)gardenWithNursery:(NUNursery *)aNursery
 {
-    return [self gardenWithNursery:aNursery usesGradeSeeker:YES];
+    return [self gardenWithNursery:aNursery usesGardenSeeker:YES];
 }
 
-+ (id)gardenWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker
++ (id)gardenWithNursery:(NUNursery *)aNursery usesGardenSeeker:(BOOL)aUsesGardenSeeker
 {
-    return [self gardenWithNursery:aNursery usesGradeSeeker:aUsesGradeSeeker retainNursery:YES];
+    return [self gardenWithNursery:aNursery usesGardenSeeker:aUsesGardenSeeker retainNursery:YES];
 }
 
-+ (id)gardenWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker
++ (id)gardenWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGardenSeeker:(BOOL)aUsesGardenSeeker
 {
-    return [self gardenWithNursery:aNursery grade:aGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:YES];
+    return [self gardenWithNursery:aNursery grade:aGrade usesGardenSeeker:aUsesGardenSeeker retainNursery:YES];
 }
 
-+ (id)gardenWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
++ (id)gardenWithNursery:(NUNursery *)aNursery usesGardenSeeker:(BOOL)aUsesGardenSeeker retainNursery:(BOOL)aRetainFlag
 {
-    return [self gardenWithNursery:aNursery grade:NUNilGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:aRetainFlag];
+    return [self gardenWithNursery:aNursery grade:NUNilGrade usesGardenSeeker:aUsesGardenSeeker retainNursery:aRetainFlag];
 }
 
-+ (id)gardenWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
++ (id)gardenWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGardenSeeker:(BOOL)aUsesGardenSeeker retainNursery:(BOOL)aRetainFlag
 {
-    return [[[self alloc] initWithNursery:aNursery grade:aGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:aRetainFlag] autorelease];
+    return [[[self alloc] initWithNursery:aNursery grade:aGrade usesGardenSeeker:aUsesGardenSeeker retainNursery:aRetainFlag] autorelease];
 }
 
-- (id)initWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag
+- (id)initWithNursery:(NUNursery *)aNursery usesGardenSeeker:(BOOL)aUsesGardenSeeker retainNursery:(BOOL)aRetainFlag
 {
-    return [self initWithNursery:aNursery grade:NUNilGrade usesGradeSeeker:aUsesGradeSeeker retainNursery:aRetainFlag];
+    return [self initWithNursery:aNursery grade:NUNilGrade usesGardenSeeker:aUsesGardenSeeker retainNursery:aRetainFlag];
 }
 
-- (id)initWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker  retainNursery:(BOOL)aRetainFlag
+- (id)initWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGardenSeeker:(BOOL)aUsesGardenSeeker  retainNursery:(BOOL)aRetainFlag
 {
     if (self = [super init])
     {
@@ -97,10 +97,10 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         [characterTargetClassResolvers addObject:[[NUDefaultCharacterTargetClassResolver new] autorelease]];
         [self setRetainedGrades:[NSMutableIndexSet indexSet]];
         [self establishSystemCharacters];
-        usesGradeSeeker = aUsesGradeSeeker;
-        if (aUsesGradeSeeker)
-            gradeSeeker = [[[[self class] gradeSeekerClass] gradeSeekerWithGarden:self] retain];
-        [[self gradeSeeker] prepare];
+        usesGardenSeeker = aUsesGardenSeeker;
+        if (aUsesGardenSeeker)
+            gardenSeeker = [[[[self class] gardenSeekerClass] gardenSeekerWithGarden:self] retain];
+        [[self gardenSeeker] prepare];
     }
     
     return self;
@@ -128,7 +128,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 	[self setKeyBell:nil];
 	[self setAliaser:nil];
     [self setRetainedGrades:nil];
-    [self setGradeSeeker:nil];
+    [self setGardenSeeker:nil];
     [lock release];
     lock = nil;
 
@@ -219,6 +219,19 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     bells = [aBells retain];
 }
 
+- (NUU64ODictionary *)copyBells
+{
+    NUU64ODictionary *aCopyOfBells;
+    
+    [self lock];
+    
+    aCopyOfBells = [[self bells] copy];
+    
+    [self unlock];
+    
+    return aCopyOfBells;
+}
+
 - (NUU64ODictionary *)changedObjects
 {
 	return changedObjects;
@@ -257,15 +270,15 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 	aliaser = [anAliaser retain];
 }
 
-- (NUGradeSeeker *)gradeSeeker
+- (NUGardenSeeker *)gardenSeeker
 {
-    return gradeSeeker;
+    return gardenSeeker;
 }
 
-- (void)setGradeSeeker:(NUGradeSeeker *)aGradeSeeker
+- (void)setGardenSeeker:(NUGardenSeeker *)aGardenSeeker
 {
-    [gradeSeeker autorelease];
-    gradeSeeker = [aGradeSeeker retain];
+    [gardenSeeker autorelease];
+    gardenSeeker = [aGardenSeeker retain];
 }
 
 @end
@@ -299,17 +312,17 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 {
     if ([self grade] >= aGrade) return;
     
-    [[self gradeSeeker] stop];
+    [[self gardenSeeker] stop];
     [self lock];
     [self setIsInMoveUp:YES];
     
     [self setGrade:aGrade];
     [self moveUpNurseryRoot];
-    [[self gradeSeeker] pushRootBell:[[self nurseryRoot] bell]];
+    [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
     
     [self setIsInMoveUp:NO];
     [self unlock];
-    [[self gradeSeeker] start];
+    [[self gardenSeeker] start];
 }
 
 - (void)moveUpNurseryRoot
@@ -485,7 +498,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         if ([aBell hasObject])
         {
             if ([[aBell object] conformsToProtocol:@protocol(NUCoding)])
-                [[aBell object] setBell:aBell];
+                [[aBell object] setBell:nil];
             else
             {
                 [[self keyObject] setObject:[aBell object]];
@@ -761,13 +774,13 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     else
     {
         if ([self isInMoveUp] || [self grade] == NUNilGrade)
-            [self setGrade:usesGradeSeeker ? [self retainLatestGradeOfNursery] : [[self nursery] latestGrade:self]];
+            [self setGrade:usesGardenSeeker ? [self retainLatestGradeOfNursery] : [[self nursery] latestGrade:self]];
         else
             [self setGrade:[[self nursery] retainGradeIfValid:[self grade] byGarden:self]];
         
         NUBell *aNurseryRootBell = [self allocateBellForBellBall:NUMakeBellBall(aNurseryRootOOP, NUNilGrade)];
         aNurseryRoot = [self objectForBell:aNurseryRootBell];
-        [[self gradeSeeker] pushRootBell:aNurseryRootBell];
+        [[self gardenSeeker] pushRootBell:aNurseryRootBell];
         aShouldMoveUpSystemCharacters = YES;
     }
     
@@ -864,68 +877,68 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     retainedGrades = [aGrades retain];
 }
 
-- (void)invalidateBellsWithNotReferencedObject
-{
-    @try {
-        [self lock];
-        
-        [[self bells] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop) {
-            [aBell invalidateObjectIfNotReferenced];
-        }];
-    }
-    @finally {
-        [self unlock];
-    }
-}
+//- (void)invalidateBellsWithNotReferencedObject
+//{
+//    @try {
+//        [self lock];
+//
+//        [[self bells] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop) {
+//            [aBell invalidateObjectIfNotReferenced];
+//        }];
+//    }
+//    @finally {
+//        [self unlock];
+//    }
+//}
+//
+//- (void)invalidateObjectIfNotReferencedForBell:(NUBell *)aBell
+//{
+//    @try {
+//        [self lock];
+//
+//        if ([aBell hasObject] && [[aBell object] retainCount] == 1)
+//        {
+//            [[self keyObject] setObject:[aBell object]];
+//            [[self objectToBellDictionary] removeObjectForKey:[self keyObject]];
+//            [aBell setObject:nil];
+//        }
+//    }
+//    @finally {
+//        [self unlock];
+//    }
+//}
+//
+//- (void)invalidateNotReferencedBells
+//{
+//    @try {
+//        [self lock];
+//
+//        NUU64ODictionary *aCopyOfBells = [[self bells] copy];
+//        [aCopyOfBells enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop){
+//            @autoreleasepool
+//            {
+//                NSInteger aBasicRetainCountOfBellInGarden = [self basicRetainCountOfBellInGarden:aBell];
+//
+//                if ([aBell retainCount] == aBasicRetainCountOfBellInGarden + 1 && (![aBell hasObject] || [[aBell object] retainCount] == 1))
+//                    [self invalidateBell:aBell];
+//            }
+//        }];
+//        [aCopyOfBells release];
+//    }
+//    @finally {
+//        [self unlock];
+//    }
+//}
 
-- (void)invalidateObjectIfNotReferencedForBell:(NUBell *)aBell
-{
-    @try {
-        [self lock];
-                
-        if ([aBell hasObject] && [[aBell object] retainCount] == 1)
-        {
-            [[self keyObject] setObject:[aBell object]];
-            [[self objectToBellDictionary] removeObjectForKey:[self keyObject]];
-            [aBell setObject:nil];
-        }
-    }
-    @finally {
-        [self unlock];
-    }
-}
-
-- (void)invalidateNotReferencedBells
-{
-    @try {
-        [self lock];
-        
-        NUU64ODictionary *aCopyOfBells = [[self bells] copy];
-        [aCopyOfBells enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop){
-            @autoreleasepool
-            {
-                NSInteger aBasicRetainCountOfBellInGarden = [self basicRetainCountOfBellInGarden:aBell];
-                
-                if ([aBell retainCount] == aBasicRetainCountOfBellInGarden + 1 && (![aBell hasObject] || [[aBell object] retainCount] == 1))
-                    [self invalidateBell:aBell];
-            }
-        }];
-        [aCopyOfBells release];
-    }
-    @finally {
-        [self unlock];
-    }
-}
-
-- (NSUInteger)basicRetainCountOfBellInGarden:(NUBell *)aBell
-{
-    NSInteger aBasicRetainCountOfBellInGarden = 1;
-    
-    if ([aBell hasObject] && ![[aBell object] conformsToProtocol:@protocol(NUCoding)])
-        aBasicRetainCountOfBellInGarden++;
-    
-    return aBasicRetainCountOfBellInGarden;
-}
+//- (NSUInteger)basicRetainCountOfBellInGarden:(NUBell *)aBell
+//{
+//    NSInteger aBasicRetainCountOfBellInGarden = 1;
+//
+//    if ([aBell hasObject] && ![[aBell object] conformsToProtocol:@protocol(NUCoding)])
+//        aBasicRetainCountOfBellInGarden++;
+//
+//    return aBasicRetainCountOfBellInGarden;
+//}
 
 - (void)invalidateBell:(NUBell *)aBell
 {
@@ -937,37 +950,37 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     @try {
         [self lock];
         
-        [self collectBellsWithGradeLessThan:aGrade];
-        [[self nursery] releaseGradeLessThan:aGrade byGarden:self];            
+//        [self collectBellsWithGradeLessThan:aGrade];
+        [[self nursery] releaseGradeLessThan:aGrade byGarden:self];
     }
     @finally {
         [self unlock];
     }
 }
 
-- (void)collectBellsWithGradeLessThan:(NUUInt64)aGrade
-{
-    @try {
-        [self lock];
-        
-        @autoreleasepool
-        {
-            [[[[self bells] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop) {
-                if ([aBell gradeAtCallFor] < aGrade
-                    && ([aBell retainCount] == 2 && (![aBell hasObject] || [[aBell object] retainCount] == 1)))
-                    [self removeBell:aBell];
-
-            }];
-        }
-    }
-    @finally {
-        [self unlock];
-    }
-}
+//- (void)collectBellsWithGradeLessThan:(NUUInt64)aGrade
+//{
+//    @try {
+//        [self lock];
+//        
+//        @autoreleasepool
+//        {
+//            [[[[self bells] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop) {
+//                if ([aBell gradeAtCallFor] < aGrade
+//                    && ([aBell retainCount] == 2 && (![aBell hasObject] || [[aBell object] retainCount] == 1)))
+//                    [self removeBell:aBell];
+//
+//            }];
+//        }
+//    }
+//    @finally {
+//        [self unlock];
+//    }
+//}
 
 - (void)close
 {
-    [[self gradeSeeker] terminate];
+    [[self gardenSeeker] terminate];
     
     @try {
         [self lock];

@@ -1,5 +1,5 @@
 //
-//  NUSeeker.m
+//  NUNurserySeeker.m
 //  Nursery
 //
 //  Created by Akifumi Takata on 11/08/17.
@@ -8,7 +8,7 @@
 
 #import <Foundation/NSException.h>
 
-#import "NUSeeker.h"
+#import "NUNurserySeeker.h"
 #import "NUUInt64Queue.h"
 #import "NUMainBranchNursery.h"
 #import "NUMainBranchNursery+Project.h"
@@ -36,7 +36,7 @@ const NUUInt32 NUSeekerDefaultSeekCount = 300;
 
 const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
-@implementation NUSeeker
+@implementation NUNurserySeeker
 
 + (id)seekerWithGarden:(NUGarden *)aGarden
 {
@@ -101,7 +101,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
 @end
 
-@implementation NUSeeker (Private)
+@implementation NUNurserySeeker (Private)
 
 - (void)process
 {

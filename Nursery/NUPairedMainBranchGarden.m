@@ -8,7 +8,7 @@
 
 #import "NUGarden+Project.h"
 #import "NUPairedMainBranchGarden.h"
-#import "NUGradeSeeker.h"
+#import "NUGardenSeeker.h"
 #import "NUMainBranchAliaser.h"
 #import "NUPairedMainBranchAliaser.h"
 #import "NUObjectTable.h"
@@ -53,7 +53,7 @@
     {
         
         [farmOutLock lock];
-        [[self gradeSeeker] stop];
+        [[self gardenSeeker] stop];
         [self lock];
         
         if (![[self nursery] open]) return NUFarmOutStatusFailed;
@@ -94,7 +94,7 @@
             {
                 [[self mainBranchNursery] retainGrade:aNewGrade byGarden:self];
                 [self setGrade:aNewGrade];
-                [[self gradeSeeker] pushRootBell:[[self nurseryRoot] bell]];
+                [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
             }
             
             *aLatestGrade = aNewGrade;
@@ -109,7 +109,7 @@
     @finally
     {
         [self unlock];
-        [[self gradeSeeker] start];
+        [[self gardenSeeker] start];
         [farmOutLock unlock];
         
         return aFarmOutStatus;

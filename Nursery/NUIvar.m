@@ -13,7 +13,7 @@
 #import "NUCharacter.h"
 #import "NUBell.h"
 #import "NUGarden.h"
-#import "NUGradeSeeker.h"
+#import "NUGardenSeeker.h"
 
 const NUIvarType NUOOPIvarType			= 0;
 const NUIvarType NUUInt8IvarType		= 2;

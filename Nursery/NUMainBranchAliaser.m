@@ -21,8 +21,8 @@
 #import "NUCodingContextWithPupilNote.h"
 #import "NUPupilNote.h"
 #import "NUObjectTable.h"
-#import "NUSeeker.h"
-#import "NUGradeSeeker.h"
+#import "NUNurserySeeker.h"
+#import "NUGardenSeeker.h"
 #import "NUReversedObjectTable.h"
 #import "NUSpaces.h"
 #import "NUCharacter.h"
@@ -115,11 +115,14 @@
     NUU64ODictionary *aReducedEncodedPupilsDictionary = [self reducedEncodedPupilsDictionary:[self encodedPupils]];
     NSArray *aReducedEncodedPupils = [self reducedEncodedPupilsFor:[self encodedPupils] with:aReducedEncodedPupilsDictionary];
     NUUInt64 anEncodedObjectsSize = [self sizeOfEncodedObjects:aReducedEncodedPupils with:aReducedEncodedPupilsDictionary];
-    
+
     NUUInt64 aSpaceForEncodedObjects = [[[self nursery] spaces] allocateSpace:anEncodedObjectsSize];
     __block NUUInt64 anObjectLocation = aSpaceForEncodedObjects;
     
-    [aReducedEncodedPupils enumerateObjectsUsingBlock:^(NUPupilNote * _Nonnull aPupilNote, NSUInteger idx, BOOL * _Nonnull stop) {
+    [aReducedEncodedPupils enumerateObjectsUsingBlock:^(NUPupilNote * _Nonnull aPupilNote, NSUInteger idx, BOOL * _Nonnull stop)
+    {
+//        NUUInt64 anObjectLocation = [[[self nursery] spaces] allocateSpace:[aPupilNote dataSize]];
+        
         [[self objectTable] setObjectLocation:anObjectLocation for:[aPupilNote bellBall]];
         [[self reversedObjectTable] setBellBall:[aPupilNote bellBall] forObjectLocation:anObjectLocation];
         [[self pages] writeData:[aPupilNote data] at:anObjectLocation];

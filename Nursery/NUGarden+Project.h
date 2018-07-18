@@ -28,6 +28,8 @@
 - (NUU64ODictionary *)bells;
 - (void)setBells:(NUU64ODictionary *)aBells;
 
+- (NUU64ODictionary *)copyBells;
+
 - (NUU64ODictionary *)changedObjects;
 - (void)setChangedObjects:(NUU64ODictionary *)aChangedObjects;
 
@@ -39,12 +41,12 @@
 - (NUAliaser *)aliaser;
 - (void)setAliaser:(NUAliaser *)anAliaser;
 
-- (NUGradeSeeker *)gradeSeeker;
-- (void)setGradeSeeker:(NUGradeSeeker *)aGradeSeeker;
+- (NUGardenSeeker *)gardenSeeker;
+- (void)setGardenSeeker:(NUGardenSeeker *)aGardenSeeker;
 
 + (Class)aliaserClass;
 + (Class)apertureClass;
-+ (Class)gradeSeekerClass;
++ (Class)gardenSeekerClass;
 
 @end
 
@@ -132,14 +134,14 @@
 
 - (void)setRetainedGrades:(NSMutableIndexSet *)aGrades;
 
-- (void)invalidateBellsWithNotReferencedObject;
-- (void)invalidateObjectIfNotReferencedForBell:(NUBell *)aBell;
-- (void)invalidateNotReferencedBells;
-- (NSUInteger)basicRetainCountOfBellInGarden:(NUBell *)aBell;
+//- (void)invalidateBellsWithNotReferencedObject;
+//- (void)invalidateObjectIfNotReferencedForBell:(NUBell *)aBell;
+//- (void)invalidateNotReferencedBells;
+//- (NSUInteger)basicRetainCountOfBellInGarden:(NUBell *)aBell;
 - (void)invalidateBell:(NUBell *)aBell;
 
 - (void)collectGradeLessThan:(NUUInt64)aGrade;
-- (void)collectBellsWithGradeLessThan:(NUUInt64)aGrade;
+//- (void)collectBellsWithGradeLessThan:(NUUInt64)aGrade;
 
 - (void)close;
 

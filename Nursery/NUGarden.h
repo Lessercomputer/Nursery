@@ -18,7 +18,7 @@ typedef enum NUFarmOutStatus {
 } NUFarmOutStatus;
 
 @class NSMutableDictionary, NSMutableIndexSet;
-@class NUNursery, NUNurseryRoot, NUObjectWrapper, NUBell, NUAliaser, NUGradeSeeker, NUMutableDictionary, NUU64ODictionary;
+@class NUNursery, NUNurseryRoot, NUObjectWrapper, NUBell, NUAliaser, NUGardenSeeker, NUMutableDictionary, NUU64ODictionary;
 
 extern NSString * const NUObjectLoadingException;
 
@@ -36,8 +36,8 @@ extern NSString * const NUObjectLoadingException;
     NUU64ODictionary *bells;
 	NUU64ODictionary *changedObjects;
 	NUAliaser *aliaser;
-    BOOL usesGradeSeeker;
-    NUGradeSeeker *gradeSeeker;
+    BOOL usesGardenSeeker;
+    NUGardenSeeker *gardenSeeker;
     NSRecursiveLock *lock;
     NUUInt64 gardenID;
     BOOL isInMoveUp;
@@ -49,13 +49,13 @@ extern NSString * const NUObjectLoadingException;
 @interface NUGarden (InitializingAndRelease)
 
 + (id)gardenWithNursery:(NUNursery *)aNursery;
-+ (id)gardenWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker;
-+ (id)gardenWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker;
-+ (id)gardenWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag;
-+ (id)gardenWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag;
++ (id)gardenWithNursery:(NUNursery *)aNursery usesGardenSeeker:(BOOL)aUsesGardenSeeker;
++ (id)gardenWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGardenSeeker:(BOOL)aUsesGardenSeeker;
++ (id)gardenWithNursery:(NUNursery *)aNursery usesGardenSeeker:(BOOL)aUsesGardenSeeker retainNursery:(BOOL)aRetainFlag;
++ (id)gardenWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGardenSeeker:(BOOL)aUsesGardenSeeker retainNursery:(BOOL)aRetainFlag;
 
-- (id)initWithNursery:(NUNursery *)aNursery usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag;
-- (id)initWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGradeSeeker:(BOOL)aUsesGradeSeeker retainNursery:(BOOL)aRetainFlag;
+- (id)initWithNursery:(NUNursery *)aNursery usesGardenSeeker:(BOOL)aUsesGardenSeeker retainNursery:(BOOL)aRetainFlag;
+- (id)initWithNursery:(NUNursery *)aNursery grade:(NUUInt64)aGrade usesGardenSeeker:(BOOL)aUsesGardenSeeker retainNursery:(BOOL)aRetainFlag;
 
 @end
 

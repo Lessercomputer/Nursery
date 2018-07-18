@@ -23,8 +23,8 @@
 - (NUUInt64)rootOOP;
 - (NSMutableDictionary *)retainedGrades;
 
-- (NUSeeker *)seeker;
-- (NUParader *)parader;
+- (NUNurserySeeker *)seeker;
+- (NUNurseryParader *)parader;
 
 @end
 
@@ -40,8 +40,8 @@
 - (void)setSpaces:(NUSpaces *)aSpaces;
 - (void)setObjectTable:(NUObjectTable *)anObjectTable;
 - (void)setReversedObjectTable:(NUReversedObjectTable *)aReversedObjectTable;
-- (void)setSeeker:(NUSeeker *)aSeeker;
-- (void)setParader:(NUParader *)aParader;
+- (void)setSeeker:(NUNurserySeeker *)aSeeker;
+- (void)setParader:(NUNurseryParader *)aParader;
 - (void)setGrade:(NUUInt64)aGrade;
 - (void)setRetainedGrades:(NSMutableDictionary *)aGrades;
 

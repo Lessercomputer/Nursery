@@ -1,5 +1,5 @@
 //
-//  NUParader.m
+//  NUNurseryParader.m
 //  Nursery
 //
 //  Created by Akifumi Takata on 2013/01/12.
@@ -8,7 +8,7 @@
 
 #include <stdlib.h>
 #import <Foundation/NSException.h>
-#import "NUParader.h"
+#import "NUNurseryParader.h"
 #import "NUTypes.h"
 #import "NUMainBranchNursery.h"
 #import "NUMainBranchNursery+Project.h"
@@ -27,7 +27,7 @@ const NUUInt64 NUParaderNextLocationOffset = 69;
 
 NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocationException";
 
-@implementation NUParader
+@implementation NUNurseryParader
 
 + (id)paraderWithGarden:(NUGarden *)aGarden
 {
@@ -106,7 +106,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
             {
                 [[[self nursery] spaces] minimizeSpace];
                 nextLocation = 0;
-                [self setShouldStop:YES];
+//                [self setShouldStop:YES];
                 
 #ifdef DEBUG
                 NSLog(@"%@ process finished", self);

@@ -10,13 +10,13 @@
 
 @interface NUBell (Private)
 
-- (NUUInt64)gradeForGradeSeeker;
+- (NUUInt64)gradeForGardenSeeker;
 
 - (void)setBall:(NUBellBall)aBall;
 - (void)setOOP:(NUUInt64)anOOP;
 - (void)setGrade:(NUUInt64)aGrade;
 - (void)setGradeAtCallFor:(NUUInt64)aGrade;
-- (void)setGradeForGradeSeeker:(NUUInt64)aGrade;
+- (void)setGradeForGardenSeeker:(NUUInt64)aGrade;
 - (void)setGarden:(NUGarden *)aGarden;
 - (void)setObject:(id)anObject;
 

@@ -106,14 +106,14 @@
     gradeAtCallFor = aGrade;
 }
 
-- (NUUInt64)gradeForGradeSeeker
+- (NUUInt64)gradeForGardenSeeker
 {
-    return gradeForGradeSeeker;
+    return gradeForGardenSeeker;
 }
 
-- (void)setGradeForGradeSeeker:(NUUInt64)aGrade
+- (void)setGradeForGardenSeeker:(NUUInt64)aGrade
 {
-    gradeForGradeSeeker = aGrade;
+    gradeForGardenSeeker = aGrade;
 }
 
 - (void)setGarden:(NUGarden *)aGarden
@@ -191,10 +191,10 @@
     [[self garden] invalidateBell:self];
 }
 
-- (void)invalidateObjectIfNotReferenced
-{
-    [[self garden] invalidateObjectIfNotReferencedForBell:self];
-}
+//- (void)invalidateObjectIfNotReferenced
+//{
+//    [[self garden] invalidateObjectIfNotReferencedForBell:self];
+//}
 
 - (void)setIsLoaded:(BOOL)aLoadedFlag
 {

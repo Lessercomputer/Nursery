@@ -1,12 +1,12 @@
 //
-//  NUMainBranchGradeSeeker.m
+//  NUMainBranchGardenSeeker.m
 //  Nursery
 //
 //  Created by Akifumi Takata on 2013/11/03.
 //
 //
 
-#import "NUMainBranchGradeSeeker.h"
+#import "NUMainBranchGardenSeeker.h"
 #import "NUBellBall.h"
 #import "NUBell.h"
 #import "NUAperture.h"
@@ -16,7 +16,7 @@
 #import "NUMainBranchNursery+Project.h"
 #import "NUObjectTable.h"
 
-@implementation NUMainBranchGradeSeeker
+@implementation NUMainBranchGardenSeeker
 
 - (void)seekIvarsOfObjectFor:(NUBell *)aBell
 {

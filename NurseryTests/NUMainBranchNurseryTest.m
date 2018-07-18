@@ -311,7 +311,7 @@ static NSString *NUNurseryTestFilePath = nil;
     NSMutableArray *anArray = [NSMutableArray array];
     int i = 0;
     for (; i < aMaxCount; i++)
-        [anArray addObject:[NSString stringWithFormat:@"%06d", i]];
+        [anArray addObject:[NSString stringWithFormat:@"%07d", i]];
     [aGarden setRoot:anArray];
     
     XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded, @"[aNursery save] failed");
@@ -563,18 +563,22 @@ static NSString *NUNurseryTestFilePath = nil;
     [aGarden setRoot:@"NextStep"];
     XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded, @"");
     NUGarden *aGardenWithPastGrade1 = [aNursery makeGardenWithGrade:[aGarden grade]];
+    [aGardenWithPastGrade1 root];
     
     [aGarden setRoot:@"NeXTstep"];
     XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded, @"");
     NUGarden *aGardenWithPastGrade2 = [aNursery makeGardenWithGrade:[aGarden grade]];
+    [aGardenWithPastGrade2 root];
     
     [aGarden setRoot:@"NeXTSTEP"];
     XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded, @"");
     NUGarden *aGardenWithPastGrade3 = [aNursery makeGardenWithGrade:[aGarden grade]];
+    [aGardenWithPastGrade3 root];
     
     [aGarden setRoot:@"NEXTSTEP"];
     XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded, @"");
     NUGarden *aGardenWithPastGrade4 = [aNursery makeGardenWithGrade:[aGarden grade]];
+    [aGardenWithPastGrade4 root];
     
     XCTAssertEqualObjects([aGardenWithPastGrade1 root], @"NextStep");
     XCTAssertEqualObjects([aGardenWithPastGrade2 root], @"NeXTstep");
@@ -830,7 +834,7 @@ static NSString *NUNurseryTestFilePath = nil;
     
     [anArray addObject:anArray];
 
-    [self _testCircularReferenceOf:anArray replacedBy:[NSMutableArray array] expectedRetainCountOfBell:2];
+    [self _testCircularReferenceOf:anArray replacedBy:[NSMutableArray array] expectedRetainCountOfObject:2];
     
     [anArray removeAllObjects];
     [anArray release];
@@ -842,14 +846,14 @@ static NSString *NUNurseryTestFilePath = nil;
     SelfReferenceObject *aSelfReferenceObject = [SelfReferenceObject new];
     [aSelfReferenceObject setMyself:aSelfReferenceObject];
     
-    [self _testCircularReferenceOf:aSelfReferenceObject replacedBy:[[SelfReferenceObject new] autorelease] expectedRetainCountOfBell:1];
+    [self _testCircularReferenceOf:aSelfReferenceObject replacedBy:[[SelfReferenceObject new] autorelease] expectedRetainCountOfObject:2];
     
     [aSelfReferenceObject setMyself:nil];
 //    NSLog(@"retainCount of %@ is %@", aSelfReferenceObject, @([aSelfReferenceObject retainCount]));
     [aSelfReferenceObject release];
 }
 
-- (void)_testCircularReferenceOf:(id)anObject replacedBy:(id)aNewObject expectedRetainCountOfBell:(NSInteger)anExpectedRetainCount
+- (void)_testCircularReferenceOf:(id)anObject replacedBy:(id)aNewObject expectedRetainCountOfObject:(NSInteger)anExpectedRetainCount
 {
     NUNursery *aNursery = nil;
     NUGarden *aGarden = nil;
@@ -872,9 +876,7 @@ static NSString *NUNurseryTestFilePath = nil;
         XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded, @"");
         
         [NSThread sleepForTimeInterval:5];
-        NUBell *aBell = [aGarden bellForOOP:aRootOOP];
-        XCTAssertEqual([aBell retainCount], anExpectedRetainCount);
-//        NSLog(@"retainCount of %@ is %@", aBell, @([aBell retainCount]));
+        XCTAssertEqual([anObject retainCount], anExpectedRetainCount);
     }
 }
 

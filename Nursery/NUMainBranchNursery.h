@@ -9,7 +9,7 @@
 #import "NUNursery.h"
 
 @class NSMutableDictionary, NSRecursiveLock;
-@class NUObjectTable, NUReversedObjectTable, NUSpaces, NUSeeker, NUParader;
+@class NUObjectTable, NUReversedObjectTable, NUSpaces, NUNurserySeeker, NUNurseryParader;
 
 @interface NUMainBranchNursery : NUNursery
 {
@@ -19,8 +19,8 @@
 	NUSpaces *spaces;
     NUUInt64 grade;
     NSMutableDictionary *retainedGrades;
-	NUSeeker *seeker;
-    NUParader *parader;
+	NUNurserySeeker *seeker;
+    NUNurseryParader *parader;
     NUUInt64 nextGardenID;
     NSRecursiveLock *lock;
     BOOL backups;

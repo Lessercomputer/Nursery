@@ -17,7 +17,7 @@
 {
 	NUBellBall ball;
     NUUInt64 gradeAtCallFor;
-    NUUInt64 gradeForGradeSeeker;
+    NUUInt64 gradeForGardenSeeker;
 	NUGarden *garden;
     BOOL isLoaded;
 	id object;
