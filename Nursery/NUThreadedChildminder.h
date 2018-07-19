@@ -31,7 +31,6 @@
 
 - (void)prepare;
 - (void)start;
-- (void)prepareToStart;
 - (void)stop;
 - (void)terminate;
 - (void)startThread:(id)anArgument;

@@ -75,11 +75,6 @@ const int NUThreadedChildminderTerminateCondition   = 2;
 	[conditionLock unlockWithCondition:NUThreadedChildminderActiveCondition];
 }
 
-- (void)prepareToStart
-{
-    [self setShouldStop:NO];
-}
-
 - (void)stop
 {
     [self setShouldStop:YES];

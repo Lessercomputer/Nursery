@@ -322,7 +322,6 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     
     [self setIsInMoveUp:NO];
     [self unlock];
-    [[self gardenSeeker] start];
 }
 
 - (void)moveUpNurseryRoot

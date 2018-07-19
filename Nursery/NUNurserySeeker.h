@@ -42,6 +42,8 @@ extern const NUUInt8 NUSeekerCollectPhase;
 
 @interface NUNurserySeeker (Private)
 
+- (void)preprocess;
+- (void)resetAllGCMarkIfNeeded;
 - (void)seekObjects;
 - (void)seekObjectsUntilStop;
 - (void)collectObjects;

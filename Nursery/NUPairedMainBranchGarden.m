@@ -69,7 +69,6 @@
 
             [[self pairedMainBranchAliaser] setGradeForSave:aNewGrade];
 
-            
             aPupils = [[self pairedMainBranchAliaser] pupilNotesFromData:aPupilData];
             [[self pairedMainBranchAliaser] setPupils:aPupils];
             
@@ -109,7 +108,8 @@
     @finally
     {
         [self unlock];
-        [[self gardenSeeker] start];
+        if (aFarmOutStatus == NUFarmOutStatusSucceeded)
+            [[self gardenSeeker] start];
         [farmOutLock unlock];
         
         return aFarmOutStatus;

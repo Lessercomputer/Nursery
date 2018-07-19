@@ -106,7 +106,6 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
             {
                 [[[self nursery] spaces] minimizeSpace];
                 nextLocation = 0;
-//                [self setShouldStop:YES];
                 
 #ifdef DEBUG
                 NSLog(@"%@ process finished", self);
@@ -161,7 +160,6 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     NUUInt64 anObjectSize = [(NUMainBranchAliaser *)[[self garden] aliaser] sizeOfObjectForBellBall:aBellBall];
     NURegion aNewFreeRegion = NUMakeRegion(aFreeRegion.location + anObjectSize, aFreeRegion.length);
     [[[self nursery] pages] moveBytesAt:nextLocation length:anObjectSize to:aFreeRegion.location buffer:aBuffer length:aBufferSize];
-    //[[[self nursery] spaces] moveFreeSpaceAtLocation:aFreeRegion.location toLocation:aNewFreeRegion.location];
     [[[self nursery] spaces] removeRegion:aFreeRegion];
     [[[self nursery] spaces] releaseSpace:aNewFreeRegion];
     [[[self nursery] objectTable] setObjectLocation:aFreeRegion.location for:aBellBall];
@@ -241,11 +239,6 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
         
         if (aMovedNodeRegion)
             *aMovedNodeRegion = aTmpMovedNodeRegion;
-        
-        /*if (aNewFreeRegion2->length == 0)
-            *aNewFreeRegion2 = aCurrentNodeRegion;
-        else
-            aNewFreeRegion2->length += aCurrentNodeRegion.length;*/
     }
     else
     {

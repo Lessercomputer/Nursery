@@ -273,10 +273,7 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
 {
     @try {
         [lock lock];
-#ifdef DEBUG
-        if (anOOP == 19)
-            NSLog(@"anOOP == 19");
-#endif
+
         NUUInt64 anObjectLocation = NUNotFound64;
         NUBellBall aBellBall = NUMakeBellBall(anOOP, aGrade);
         NUUInt32 aKeyIndex;

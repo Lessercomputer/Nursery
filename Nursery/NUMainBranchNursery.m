@@ -532,9 +532,6 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     
     @try
     {
-//        [[self seeker] stop];
-//        [[self parader] stop];
-        
         [self lockForChange];
         
 #ifdef DEBUG
@@ -558,9 +555,6 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     @finally
     {
         [self unlockForChange];
-        
-        [[self seeker] start];
-        [[self parader] start];
     }
     
 	return YES;

@@ -30,8 +30,6 @@
 - (void)pushRootBell:(NUBell *)aBell;
 - (void)pushBellIfNeeded:(NUBell *)aBell;
 
-@property (nonatomic) BOOL rootIsChanged;
-
 - (NUQueue *)bells;
 
 - (NUBell *)popBell;
@@ -44,7 +42,6 @@
 - (void)seekIvarsOfObjectFor:(NUBell *)aBell;
 
 - (void)collectGrade;
-//- (void)collectGradeLessThan:(NUUInt64)aGrade;
 
 - (void)bellDidLoadIvars:(NUBell *)aBell;
 - (void)objectDidLoadIvars:(id)anObject;

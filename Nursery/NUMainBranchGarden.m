@@ -130,7 +130,8 @@
     {
         [[self mainBranchNursery] unlockForFarmOut];
         [self unlock];
-        [[self gardenSeeker] start];
+        if (aFarmOutStatus == NUFarmOutStatusSucceeded)
+            [[self gardenSeeker] start];
         [farmOutLock unlock];
     }
     

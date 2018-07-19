@@ -142,7 +142,8 @@
         }
     }
     @finally {
-        [[self gardenSeeker] start];
+        if (aFarmOutStatus == NUFarmOutStatusSucceeded)
+            [[self gardenSeeker] start];
     }
     
     return aFarmOutStatus;

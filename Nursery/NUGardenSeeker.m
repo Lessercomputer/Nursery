@@ -74,7 +74,6 @@
     
     [[self bells] removeAll];
     [self pushBell:aBell];
-    [self setRootIsChanged:YES];
     
     [bellsLock unlock];
 }
@@ -124,35 +123,6 @@
 
 - (void)process
 {
-//    NUUInt64 aNumberOfTimesToCollect = 0;//3;
-//    NUUInt64 aNumberOfTimesCollected = 0;
-//    NSTimeInterval aSleepTimeInterval = 0.2;
-//
-//    while (![self shouldStop])
-//    {
-//        @autoreleasepool
-//        {
-//            [self lock];
-//
-//            NUBell *aBell = [self popBell];
-//
-//            if (aBell)
-//                [self seekObjectFor:aBell];
-//            else
-//            {
-//                BOOL aGradeLessThanCurrentFound = [self collectGrade];
-//                aNumberOfTimesCollected++;
-//
-//                if (!aGradeLessThanCurrentFound || (aNumberOfTimesToCollect && aNumberOfTimesCollected == aNumberOfTimesToCollect))
-//                    [self setShouldStop:YES];
-//                else
-//                    [NSThread sleepForTimeInterval:aSleepTimeInterval];
-//            }
-//
-//            [self unlock];
-//        }
-//    }
-    
     while (![self shouldStop])
     {
         [self lock];
@@ -185,8 +155,6 @@
 
 - (void)collectGrade
 {
-//    __block BOOL aGradeLessThanCurrentFound = NO;
-    
     @try {
         [[self garden] lock];
         
@@ -209,34 +177,6 @@
         [[self garden] unlock];
     }
 }
-
-- (NSMutableArray *)selectBellWithGradeLessThanCurrent
-{
-    @try {
-        [[self garden] lock];
-        
-        NSMutableArray *aBells = [NSMutableArray array];
-        
-        [[[self garden] bells] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop) {
-            if ([aBell gradeForGardenSeeker] < [self grade])
-                [aBells addObject:aBell];
-        }];
-        
-        return aBells;
-    }
-    @finally {
-        [[self garden] unlock];
-    }
-}
-
-//- (void)collectGradeLessThan:(NUUInt64)aGrade
-//{
-//#ifdef DEBUG
-//    NSLog(@"<%@:%p> #collectGradeLessThan:%llu", [self class], self, aGrade);
-//#endif
-//    
-//    [[self garden] collectGradeLessThan:aGrade];
-//}
 
 - (void)bellDidLoadIvars:(NUBell *)aBell
 {
