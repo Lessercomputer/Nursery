@@ -308,11 +308,25 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     [self moveUpTo:[self retainLatestGradeOfNursery]];
 }
 
+- (void)moveUpWithPreventingReleaseOfCurrentGrade
+{
+    [self moveUpTo:[self retainLatestGradeOfNursery] preventReleaseOfCurrentGrade:YES];
+}
+
 - (void)moveUpTo:(NUUInt64)aGrade
+{
+    [self moveUpTo:aGrade preventReleaseOfCurrentGrade:NO];
+}
+
+- (void)moveUpTo:(NUUInt64)aGrade preventReleaseOfCurrentGrade:(BOOL)aPreventFlag
 {
     if ([self grade] >= aGrade) return;
     
     [[self gardenSeeker] stop];
+    
+    if (aPreventFlag)
+        [[self gardenSeeker] preventReleaseOfGrade:[self grade]];
+    
     [self lock];
     [self setIsInMoveUp:YES];
     

@@ -8,6 +8,7 @@
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSThread.h>
+#import <Foundation/NSIndexSet.h>
 
 #import "NUGardenSeeker.h"
 #import "NUGarden.h"
@@ -42,6 +43,7 @@
         aperture = [anAperture retain];
         bellsLock = [NSRecursiveLock new];
         bells = [NUQueue new];
+        _gradesToPreventRelease = [NSMutableIndexSet new];
         lock = [NSRecursiveLock new];
     }
     
@@ -53,9 +55,28 @@
     [aperture release];
     [bellsLock release];
     [bells release];
+    [_gradesToPreventRelease release];
     [lock release];
     
     [super dealloc];
+}
+
+- (void)preventReleaseOfGrade:(NUUInt64)aGrade
+{
+    [self lock];
+    
+    [[self gradesToPreventRelease] addIndex:aGrade];
+    
+    [self unlock];
+}
+
+- (void)stopPreventationOfReleaseOfPastGrades
+{
+    [self lock];
+    
+    [[self gradesToPreventRelease] removeAllIndexes];
+    
+    [self unlock];
 }
 
 - (void)lock
@@ -118,7 +139,18 @@
 
 - (NUUInt64)grade
 {
-    return [[self garden] grade];
+    NUUInt64 aGrade;
+    
+    [self lock];
+    
+    if ([[self gradesToPreventRelease] count])
+        aGrade = [[self gradesToPreventRelease] firstIndex];
+    else
+        aGrade = [[self garden] grade];
+    
+    [self unlock];
+    
+    return aGrade;
 }
 
 - (void)process

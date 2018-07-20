@@ -79,7 +79,9 @@ extern NSString * const NUObjectLoadingException;
 @interface NUGarden (SaveAndLoad)
 
 - (void)moveUp;
+- (void)moveUpWithPreventingReleaseOfCurrentGrade;
 - (void)moveUpTo:(NUUInt64)aGrade;
+- (void)moveUpTo:(NUUInt64)aGrade preventReleaseOfCurrentGrade:(BOOL)aPreventFlag;
 
 - (void)moveUpObject:(id)anObject;
 

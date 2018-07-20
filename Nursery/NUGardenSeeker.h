@@ -11,7 +11,7 @@
 #import "NUThreadedChildminder.h"
 #import "NUTypes.h"
 
-@class NSRecursiveLock;
+@class NSRecursiveLock, NSMutableIndexSet;
 @class NUGarden, NUBell, NUAperture, NUQueue;
 
 @interface NUGardenSeeker : NUThreadedChildminder <NSLocking>
@@ -26,6 +26,11 @@
 + (id)gardenSeekerWithGarden:(NUGarden *)aGarden aperture:(NUAperture *)aAperture;
 
 - (id)initWithGarden:(NUGarden *)aGarden aperture:(NUAperture *)aAperture;
+
+@property (nonatomic, retain) NSMutableIndexSet *gradesToPreventRelease;
+
+- (void)preventReleaseOfGrade:(NUUInt64)aGrade;
+- (void)stopPreventationOfReleaseOfPastGrades;
 
 - (void)pushRootBell:(NUBell *)aBell;
 - (void)pushBellIfNeeded:(NUBell *)aBell;

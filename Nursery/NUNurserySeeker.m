@@ -167,7 +167,9 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 		int i = 0;
         
 		for (; i < NUSeekerDefaultSeekCount && (anOOP = [self popGrayOOP]) != NUNotFound64; i++)
-		{
+		{            
+            [[self nursery] lockForChange];
+            
             NUUInt64 aGrade;
             if ([[[self nursery] objectTable] objectLocationForOOP:anOOP gradeLessThanOrEqualTo:[self grade] gradeInto:&aGrade] == NUNotFound64)
                 [[NSException exceptionWithName:NUObjectLocationNotFoundException reason:NUObjectLocationNotFoundException userInfo:nil] raise];
@@ -201,6 +203,8 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
                 NSLog(@"seek %@, NUGCMarkBlack", NUStringFromBellBall(aBellBall));
 #endif
             [[[self nursery] objectTable] setGCMark:(aGCMark & NUGCMarkWithoutColorBitsMask) | NUGCMarkBlack for:aBellBall];
+            
+            [[self nursery] unlockForChange];
 		}
 	}
 	

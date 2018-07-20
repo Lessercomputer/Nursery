@@ -143,7 +143,8 @@
     }
     @finally {
         if (aFarmOutStatus == NUFarmOutStatusSucceeded)
-            [[self gardenSeeker] start];
+            [[self gardenSeeker] stopPreventationOfReleaseOfPastGrades];
+        [[self gardenSeeker] start];
     }
     
     return aFarmOutStatus;

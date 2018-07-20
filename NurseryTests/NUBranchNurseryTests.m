@@ -278,4 +278,45 @@ static NSString *NUNurseryTestFilePath2;
     [aNurseryNetService stop];
 }
 
+- (void)testObjectResurrection
+{
+    NUMainBranchNursery *aMainBranchNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUNurseryNetService *aNurseryNetService = [NUNurseryNetService netServiceWithNursery:aMainBranchNursery serviceName:@"nursery"];
+    
+    [aNurseryNetService start];
+    
+    @autoreleasepool
+    {
+        NUBranchNursery *aNursery = [NUBranchNursery branchNurseryWithServiceName:@"nursery"];
+        
+        NUGarden *aGarden = [aNursery makeGarden];
+        [aGarden setRoot:@"resurrection"];
+        XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded);
+
+        NUGarden *aGardenA = [aNursery makeGarden];
+        XCTAssertEqualObjects([aGardenA root], [aGarden root]);
+
+        NUGarden *aGardenB = [aNursery makeGarden];
+        [aGardenB setRoot:nil];
+        XCTAssertEqual([aGardenB farmOut], NUFarmOutStatusSucceeded);
+
+        NSString *aRoot = [aGardenA root];
+        NUBell *aRootBellBeforeMoveUp = [aGardenA bellForObject:aRoot];
+        [aGardenA moveUpWithPreventingReleaseOfCurrentGrade];
+        NUBell *aRootBellAfterMoveUp = [aGardenA bellForObject:aRoot];
+        XCTAssertEqualObjects([aGardenA root], nil);
+        XCTAssertTrue(aRootBellAfterMoveUp == aRootBellBeforeMoveUp);
+
+        [aGardenA setRoot:aRoot];
+        XCTAssertEqual([aGardenA farmOut], NUFarmOutStatusSucceeded);
+        NUBell *aRootBellAfterFarmOut = [aGardenA bellForObject:aRoot];
+        XCTAssertTrue(aRootBellAfterFarmOut == aRootBellBeforeMoveUp);
+
+        NUGarden *aGardenC = [aNursery makeGarden];
+        XCTAssertEqualObjects([aGardenC root], aRoot);
+    }
+    
+    [aNurseryNetService stop];
+}
+
 @end

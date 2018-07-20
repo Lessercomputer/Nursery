@@ -131,7 +131,8 @@
         [[self mainBranchNursery] unlockForFarmOut];
         [self unlock];
         if (aFarmOutStatus == NUFarmOutStatusSucceeded)
-            [[self gardenSeeker] start];
+            [[self gardenSeeker] stopPreventationOfReleaseOfPastGrades];
+        [[self gardenSeeker] start];
         [farmOutLock unlock];
     }
     
