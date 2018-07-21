@@ -30,7 +30,7 @@
 @property (nonatomic, retain) NSMutableIndexSet *gradesToPreventRelease;
 
 - (void)preventReleaseOfGrade:(NUUInt64)aGrade;
-- (void)stopPreventationOfReleaseOfPastGrades;
+- (void)endPreventationOfReleaseOfPastGrades;
 
 - (void)pushRootBell:(NUBell *)aBell;
 - (void)pushBellIfNeeded:(NUBell *)aBell;

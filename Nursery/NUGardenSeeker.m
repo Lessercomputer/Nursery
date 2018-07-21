@@ -65,12 +65,12 @@
 {
     [self lock];
     
-    [[self gradesToPreventRelease] addIndex:aGrade];
+    [[self gradesToPreventRelease] addIndex:(NSUInteger)aGrade];
     
     [self unlock];
 }
 
-- (void)stopPreventationOfReleaseOfPastGrades
+- (void)endPreventationOfReleaseOfPastGrades
 {
     [self lock];
     
@@ -157,8 +157,6 @@
 {
     while (![self shouldStop])
     {
-        [self lock];
-        
         NUBell *aBell = [self popBell];
 
         if (aBell)
@@ -168,8 +166,6 @@
             [self collectGrade];
             [self setShouldStop:YES];
         }
-
-        [self unlock];
     }
 }
 

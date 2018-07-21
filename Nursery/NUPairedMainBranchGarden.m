@@ -109,7 +109,7 @@
     {
         [self unlock];
         if (aFarmOutStatus == NUFarmOutStatusSucceeded)
-            [[self gardenSeeker] stopPreventationOfReleaseOfPastGrades];
+            [[self gardenSeeker] endPreventationOfReleaseOfPastGrades];
         [[self gardenSeeker] start];
         [farmOutLock unlock];
         

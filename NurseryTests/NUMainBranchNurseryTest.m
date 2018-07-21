@@ -906,32 +906,34 @@ static NSString *NUNurseryTestFilePath = nil;
 - (void)testObjectResurrection
 {
     NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
-    
     NUGarden *aGarden = [aNursery makeGarden];
-    [aGarden setRoot:@"resurrection"];
+    NSMutableString *aString = [[@"resurrection" mutableCopy] autorelease];
+    NULibrary *aLibrary = [NULibrary library];
+    [aLibrary setObject:aString forKey:aString];
+    [aGarden setRoot:aLibrary];
     XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded);
-   
+
     NUGarden *aGardenA = [aNursery makeGarden];
-    XCTAssertEqualObjects([aGardenA root], [aGarden root]);
-    
+    NULibrary *aRoot = [aGardenA root];
+
     NUGarden *aGardenB = [aNursery makeGarden];
     [aGardenB setRoot:nil];
     XCTAssertEqual([aGardenB farmOut], NUFarmOutStatusSucceeded);
-    
-    NSString *aRoot = [aGardenA root];
-    NUBell *aRootBellBeforeMoveUp = [aGardenA bellForObject:aRoot];
+
+    NUBell *aRootBellBeforeMoveUp = [aRoot bell];
     [aGardenA moveUpWithPreventingReleaseOfCurrentGrade];
-    NUBell *aRootBellAfterMoveUp = [aGardenA bellForObject:aRoot];
+    NUBell *aRootBellAfterMoveUp = [aRoot bell];
     XCTAssertEqualObjects([aGardenA root], nil);
     XCTAssertTrue(aRootBellAfterMoveUp == aRootBellBeforeMoveUp);
-    
+
     [aGardenA setRoot:aRoot];
     XCTAssertEqual([aGardenA farmOut], NUFarmOutStatusSucceeded);
-    NUBell *aRootBellAfterFarmOut = [aGardenA bellForObject:aRoot];
+    NUBell *aRootBellAfterFarmOut = [aRoot bell];
     XCTAssertTrue(aRootBellAfterFarmOut == aRootBellBeforeMoveUp);
-    
+    XCTAssertEqualObjects(aRoot, aLibrary);
+
     NUGarden *aGardenC = [aNursery makeGarden];
-    XCTAssertEqualObjects([aGardenC root], aRoot);
+    XCTAssertEqualObjects([aGardenC root], aLibrary);
 }
 
 @end
