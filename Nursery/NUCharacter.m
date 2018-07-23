@@ -262,20 +262,22 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
 - (NSArray *)copyAllIvars
 {
     NSMutableArray *aCopiedAllIvars = [NSMutableArray array];
-    [lock lock];
     
     @try
     {
+        [lock lock];
+        
         [[self allIvars] enumerateObjectsUsingBlock:^(NUIvar *anIvar, NSUInteger anIndex, BOOL *aStop) {
             [aCopiedAllIvars addObject:[[anIvar copy] autorelease]];
         }];
         
-        return [aCopiedAllIvars copy];
     }
     @finally
     {
         [lock unlock];
     }
+    
+    return [aCopiedAllIvars copy];
 }
 
 - (NSArray *)allIvars
@@ -289,15 +291,17 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
 
 - (NSDictionary *)allIvarDictionary
 {
-    [lock lock];
     @try {
+        [lock lock];
+        
         if (!allIvarDictionary)
             allIvarDictionary = [[self allIvarDictionaryFrom:[self allIvars]] copy];
-        return allIvarDictionary;
     }
     @finally {
         [lock unlock];
     }
+    
+    return allIvarDictionary;
 }
 
 - (void)setAllIvars:(NSArray *)anIvars
@@ -310,13 +314,16 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
 
 - (NSArray *)getAllIvars
 {
-    [lock lock];
+    NSMutableArray *anAllIvars;
+    
     @try {
+        [lock lock];
+
         NSArray *anAllIvarsOfSuper = [[[self superCharacter] copyAllIvars] autorelease];
         if (!anAllIvarsOfSuper) anAllIvarsOfSuper = [NSMutableArray array];
         NSEnumerator *anEnumerator = [[self ivars] objectEnumerator];
         NUIvar *anIvar = nil;
-        NSMutableArray *anAllIvars = [[anAllIvarsOfSuper mutableCopy] autorelease];
+        anAllIvars = [[anAllIvarsOfSuper mutableCopy] autorelease];
         
         while (anIvar = [anEnumerator nextObject])
             [anAllIvars addObject:[[anIvar copy] autorelease]];
@@ -326,12 +333,12 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
             if ([anAllIvars count] == 1 || ![[[anAllIvars objectAtIndex:1] name] isEqualToString:@"indexedIvarsSize"])
                 [anAllIvars insertObject:[NUIvar ivarWithName:@"indexedIvarsSize" type:NUUInt64IvarType] atIndex:1];
         }
-            
-        return [[anAllIvars copy] autorelease];
     }
     @finally {
         [lock unlock];
     }
+    
+    return [[anAllIvars copy] autorelease];
 }
 
 - (NSDictionary *)allIvarDictionaryFrom:(NSArray *)anIvars
@@ -347,30 +354,38 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
 
 - (NUIvar *)ivarInAllIvarsAt:(NSUInteger)anIndex
 {
+    NUIvar *anIvar;
+    
     @try
     {
         [lock lock];
         
-        return [[self allIvars] objectAtIndex:anIndex];
+        anIvar = [[self allIvars] objectAtIndex:anIndex];
     }
     @finally
     {
         [lock unlock];
     }
+    
+    return anIvar;
 }
 
 - (NUUInt64)ivarOffsetForName:(NSString *)aName
 {
+    NUUInt64 anIvarOffset;
+    
     @try
     {
         [lock lock];
         
-        return [[[self allIvarDictionary] objectForKey:aName] offset];
+        anIvarOffset = [[[self allIvarDictionary] objectForKey:aName] offset];
     }
     @finally
     {
         [lock unlock];
     }
+    
+    return anIvarOffset;
 }
 
 - (NSArray *)ancestors
@@ -678,35 +693,36 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
 
 - (BOOL)containsIvarWithName:(NSString *)aName
 {
+    __block BOOL anIvarNameContained = NO;
+    
     @try
     {
         [lock lock];
         
         if (allIvarDictionary)
         {
-            return [allIvarDictionary objectForKey:aName] ? YES : NO;
+            anIvarNameContained = [allIvarDictionary objectForKey:aName] ? YES : NO;
         }
         else
         {
-            if ([[self superCharacter] containsIvarWithName:aName]) return NO;
-            
-            __block BOOL anIvarNameContained = NO;
-            
-            [[self ivars] enumerateObjectsUsingBlock:^(NUIvar *anIvar, NSUInteger anIndex, BOOL *aStop) {
-                if ([[anIvar name] isEqualToString:aName])
-                {
-                    anIvarNameContained = YES;
-                    *aStop = YES;
-                }
-            }];
-            
-            return anIvarNameContained;
+            if ([[self superCharacter] containsIvarWithName:aName])
+                anIvarNameContained = NO;
+            else
+                [[self ivars] enumerateObjectsUsingBlock:^(NUIvar *anIvar, NSUInteger anIndex, BOOL *aStop) {
+                    if ([[anIvar name] isEqualToString:aName])
+                    {
+                        anIvarNameContained = YES;
+                        *aStop = YES;
+                    }
+                }];
         }
     }
     @finally
     {
         [lock unlock];
     }
+    
+    return anIvarNameContained;
 }
 
 + (void)defineCharacter:(NUCharacter *)aCharacter on:(NUGarden *)aGarden

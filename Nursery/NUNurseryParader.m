@@ -107,10 +107,6 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
                 [[[self nursery] spaces] minimizeSpace];
                 nextLocation = 0;
                 
-#ifdef DEBUG
-                NSLog(@"%@ process finished", self);
-#endif
-                
                 break;
             }
         }
@@ -121,6 +117,10 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     }
     
     free(aBuffer);
+    
+#ifdef DEBUG
+    NSLog(@"%@ process finished", self);
+#endif
 }
 
 - (void)paradeObjectOrNodeNextTo:(NURegion)aFreeRegion buffer:(NUUInt8 *)aBuffer bufferSize:(NUUInt64) aBufferSize
@@ -206,6 +206,9 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 #endif
             [[[self nursery] spaces] movePageToReleaseAtLocation:aCurrentNodeRegion.location toLocation:aMovedNodeRegion.location];
         }
+        
+        if (aMovedNodeRegion.location % [[[self nursery] pages] pageSize])
+            NSLog(@"aMovedNoreRegion.location %@", @(aMovedNodeRegion.location));
         
         [[[self nursery] spaces] removeRegion:aFreeRegion];
         

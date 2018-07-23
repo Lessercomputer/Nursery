@@ -159,14 +159,18 @@
 
 - (id)decodeObjectForBell:(NUBell *)aBell
 {
+    id anObject;
+    
     @try {
         [[self nursery] lockForRead];
         
-        return [super decodeObjectForBell:aBell];
+        anObject = [super decodeObjectForBell:aBell];
     }
     @finally {
         [[self nursery] unlockForRead];
     }
+    
+    return anObject;
 }
 
 - (void)prepareCodingContextForDecode:(NUBell *)aBell

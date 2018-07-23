@@ -52,13 +52,9 @@
     return [elements containsObject:anElement];
 }
 
-- (void)addElementToFirst:(NULinkedListElement *)anElement
+- (void)addElementAtFirst:(NULinkedListElement *)anElement
 {
-    if ([elements containsObject:anElement])
-        return;
-    
-    [elements addObject:anElement];
-    [self moveToFirst:anElement];
+    [self addElement:anElement previousTo:first];
 }
 
 - (void)moveToFirst:(NULinkedListElement *)anElement
@@ -66,39 +62,40 @@
     if (!anElement || ![elements containsObject:anElement])
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:nil userInfo:nil];
     
-    if (first && [first isEqual:anElement])
-        return;
+    [anElement retain];
+    [self remove:anElement];
+    [self addElement:anElement previousTo:first];
+    [anElement release];
+}
+
+- (void)addElement:(NULinkedListElement *)anElementToAdd previousTo:(NULinkedListElement *)anElement
+{
+    if (anElement && ![self contains:anElement])
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:nil userInfo:nil];
     
-    if ([anElement previous] && [anElement next])
+    [elements addObject:anElementToAdd];
+
+    if (!anElement)
     {
-        [[anElement previous] setNext:[anElement next]];
-        [[anElement next] setPrevious:[anElement previous]];
-        
-        [anElement setPrevious:nil];
-        [anElement setNext:first];
-        first = anElement;
+        first = anElementToAdd;
+        last = anElementToAdd;
     }
-    else if ([anElement previous])
+    else if (anElement == first && anElement == last)
     {
-        [[anElement previous] setNext:nil];
+        first = anElementToAdd;
+        [anElementToAdd setNext:anElement];
+        [anElement setPrevious:anElementToAdd];
     }
-    else if ([anElement next])
+    else if (anElement == first)
     {
-        [[anElement next] setPrevious:nil];
+        first = anElementToAdd;
+        [anElementToAdd setNext:anElement];
+        [anElement setPrevious:anElementToAdd];
     }
-    else
+    else if (anElement == last)
     {
-        if (first)
-        {
-            [anElement setNext:first];
-            [first setPrevious:anElement];
-            first = anElement;
-        }
-        else
-        {
-            first = anElement;
-            last = anElement;
-        }
+        [anElement setPrevious:anElementToAdd];
+        [anElementToAdd setNext:anElement];
     }
 }
 
@@ -106,12 +103,27 @@
 {
     if (!anElement) return;
     
-    if ([anElement isEqual:first]) first = [anElement next];
-    if ([anElement isEqual:last]) last = [anElement previous];
-
-    [[anElement previous] setNext:[anElement next]];
-    [[anElement next] setPrevious:[anElement previous]];
-
+    if ([anElement previous] && [anElement next])
+    {
+        [[anElement previous] setNext:[anElement next]];
+        [[anElement next] setPrevious:[anElement previous]];
+    }
+    else if ([anElement previous])
+    {
+        [[anElement previous] setNext:nil];
+        last = [anElement previous];
+    }
+    else if ([anElement next])
+    {
+        [[anElement next] setPrevious:nil];
+        first = [anElement next];
+    }
+    else
+    {
+        first = nil;
+        last = nil;
+    }
+    
     [anElement setPrevious:nil];
     [anElement setNext:nil];
     [elements removeObject:anElement];

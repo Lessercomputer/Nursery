@@ -167,7 +167,7 @@
     {
         anExistingOrNewLinkedListElement = [NUPupilNoteCacheLinkedListElement listElementWithObject:aPupilNote];
         
-        [linkedList addElementToFirst:anExistingOrNewLinkedListElement];
+        [linkedList addElementAtFirst:anExistingOrNewLinkedListElement];
         [bellBallToLinkedListElementDictionary setObject:anExistingOrNewLinkedListElement forKey:aBellBallForPupilNote];
         
         return YES;

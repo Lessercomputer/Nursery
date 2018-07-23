@@ -442,7 +442,6 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 	{
         [[self keyObject] setObject:anObject];
         aBell = [[self objectToBellDictionary] objectForKey:[self keyObject]];
-//        aBell = [[self objectToBellDictionary] objectForKey:(NUUInt64)anObject];
 	}
     
     [self unlock];
@@ -475,11 +474,12 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     @try {
         [self lock];
         [[self bells] setObject:aBell forKey:[aBell OOP]];
-        return aBell;
     }
     @finally {
         [self unlock];
     }
+    
+    return aBell;
 }
 
 - (void)setObject:(id)anObject forBell:(NUBell *)aBell
@@ -741,16 +741,19 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 - (NUUInt64)retainLatestGradeOfNursery
 {
+    NUUInt64 aGrade;
+    
     @try {
         [self lock];
         
-        NUUInt64 aGrade = [[self nursery] retainLatestGradeByGarden:self];
+        aGrade = [[self nursery] retainLatestGradeByGarden:self];
         [[self retainedGrades] addIndex:(NSUInteger)aGrade];
-        return aGrade;
     }
     @finally {
         [self unlock];
     }
+    
+    return aGrade;
 }
 
 - (void)setGrade:(NUUInt64)aGrade
@@ -836,8 +839,6 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         [[aNurseryRoot characters] setObject:aSystemCharacter forKey:[aSystemCharacter inheritanceNameWithVersion]];
         [self markChangedObject:[self objectForOOP:[anOOP unsignedLongLongValue]]];
     }];
-    
-//    [self markChangedObject:[aNurseryRoot characters]];
 }
 
 - (BOOL)classAutomaticallyEstablishCharacter:(Class)aClass

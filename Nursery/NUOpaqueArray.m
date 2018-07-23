@@ -391,7 +391,9 @@ NSString *NUOpaqueArrayCannotGrowException = @"NUOpaqueArrayCannotGrowException"
 	}
 	
 	memcpy(&values[valueLength * anIndex], aValues, valueLength * aCount);
-	count += aCount;	
+	count += aCount;
+//    if (count >= 300)
+//        NSLog(@"count >= %@", @(count));
 }
 
 - (void)growWithNewValuesCount:(NUUInt32)aCount

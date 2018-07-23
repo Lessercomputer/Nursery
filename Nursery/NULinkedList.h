@@ -27,7 +27,7 @@
 - (NUUInt64)count;
 - (BOOL)contains:(NULinkedListElement *)anElement;
 
-- (void)addElementToFirst:(NULinkedListElement *)anElement;
+- (void)addElementAtFirst:(NULinkedListElement *)anElement;
 - (void)moveToFirst:(NULinkedListElement *)anElement;
 - (void)remove:(NULinkedListElement *)anElement;
 - (void)removeLast;

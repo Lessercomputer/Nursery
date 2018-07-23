@@ -45,7 +45,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 	if (self = [super init])
     {
         lock = [NSRecursiveLock new];
-        [self setPages:[NUPages pages]];
+        [self setPages:[NUPages pagesWithSpaces:self]];
         [self setNursery:aNursery];
         nextVirtualPageLocation = (NUUInt64)[[self pages] pageSize] * (NUUInt64Max / [[self pages] pageSize] - 1);
         lengthTree = [[NULengthTree alloc] initWithRootLocation:0 on:self];

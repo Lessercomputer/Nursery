@@ -243,6 +243,8 @@
 - (NUOpaqueBPlusTreeNode *)nodeFor:(NUUInt64)aNodeLocation
 {
 	if (!aNodeLocation) return nil;
+    if (aNodeLocation % [[self pages] pageSize])
+        [NSException exceptionWithName:NUInvalidPageLocationException reason:NUInvalidPageLocationException userInfo:nil];
 	
 	NUOpaqueBPlusTreeNode *aNode = [[self nodeDictionary] objectForKey:aNodeLocation];
 	
@@ -270,6 +272,9 @@
 	else if (aNodeOOP == [[self branchNodeClass] nodeOOP])
 		aNode = [[self branchNodeClass] nodeWithTree:self pageLocation:aPageLocation];
 
+    if (!aNode)
+        NSLog(@"!aNode:%@", @(aPageLocation));
+    
 	return aNode;
 }
 

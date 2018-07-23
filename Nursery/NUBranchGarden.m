@@ -68,14 +68,18 @@
 
 - (NUUInt64)allocProbationaryOOP
 {
+    NUUInt64 aNextProbationaryOOP;
+    
     @try {
         [lock lock];
 
-        return nextProbationaryOOP--;
+        aNextProbationaryOOP = nextProbationaryOOP--;
     }
     @finally {
         [lock unlock];
     }
+    
+    return aNextProbationaryOOP;
 }
 
 + (Class)aliaserClass
@@ -138,7 +142,6 @@
                 [self setGrade:aLatestGrade];
                 [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
             }
-
         }
     }
     @finally {

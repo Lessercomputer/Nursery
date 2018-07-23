@@ -366,33 +366,39 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 
 - (NUUInt64)gradeForSeeker
 {
+    NUUInt64 aGrade;
+    
     @try
     {
         [self lockForChange];
         
-        NUUInt64 aGrade = [self olderRetainedGrade:[self gardenForSeeker]];
-        if (aGrade == NUNotFoundGrade) aGrade = [self grade];
-        return aGrade;
+        aGrade = [self olderRetainedGrade:[self gardenForSeeker]];
+        if (aGrade == NUNilGrade) aGrade = [self grade];
     }
     @finally
     {
         [self unlockForChange];
     }
+    
+    return aGrade;
 }
 
 - (NUUInt64)gradeForParader
 {
+    NUUInt64 aGrade;
+    
     @try
     {
         [self lockForChange];
         
-        NUUInt64 aGrade = [self grade];
-        return aGrade;
+        aGrade = [self grade];
     }
     @finally
     {
         [self unlockForChange];
     }
+    
+    return aGrade;
 }
 
 - (void)lockForFarmOut

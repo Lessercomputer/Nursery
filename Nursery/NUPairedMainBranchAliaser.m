@@ -112,12 +112,12 @@
             [self addPupilsDataFromLocation:anObjectLocation toData:aPupilsData maxFellowPupilNotesSizeInBytes:aMaxFellowPupilNotesSizeInBytes];
         else
             [self addPupilDataAtLocation:anObjectLocation toData:aPupilsData];
-        
-        return aPupilsData;
     }
     @finally {
         [[self nursery] unlockForRead];
     }
+    
+    return aPupilsData;
 }
 
 - (void)addPupilsDataFromLocation:(NUUInt64)anObjectLocation toData:(NSMutableData *)aData maxFellowPupilNotesSizeInBytes:(NUUInt64)aMaxFellowPupilNotesSizeInBytes

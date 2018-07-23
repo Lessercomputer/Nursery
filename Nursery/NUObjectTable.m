@@ -159,21 +159,22 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
 
 - (NUBellBall)bellBallLessThanOrEqualTo:(NUBellBall)aBellBall
 {
+    NUBellBall aFoundBellBall = NUNotFoundBellBall;
+    
     @try {
         [lock lock];
         
-        NUBellBall aFoundBellBall = NUNotFoundBellBall;
         NUUInt32 aKeyIndex = 0;
         NUObjectTableLeaf *aLeaf = [self leafNodeContainingBellBallLessThanOrEqualTo:aBellBall keyIndex:&aKeyIndex];
         
         if (aLeaf)
             aFoundBellBall = *(NUBellBall *)[aLeaf keyAt:aKeyIndex];
-        
-        return aFoundBellBall;
     }
     @finally {
         [lock unlock];
     }
+    
+    return aFoundBellBall;
 }
 
 - (NUBellBall)bellBallGreaterThanBellBall:(NUBellBall)aBellBall
@@ -254,27 +255,30 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
 
 - (NUBellBall)allocateBellBallWithGrade:(NUUInt64)aGrade
 {
+    NUBellBall aNewBellBall;
+    
     @try {
         [lock lock];
         
-        NUBellBall aNewBellBall = NUMakeBellBall(nextOOP, aGrade);
+        aNewBellBall = NUMakeBellBall(nextOOP, aGrade);
 
         [self setObjectLocation:0 for:aNewBellBall];
         nextOOP++;
-
-        return aNewBellBall;
     }
     @finally {
         [lock unlock];
     }
+    
+    return aNewBellBall;
 }
 
 - (NUUInt64)objectLocationForOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade gradeInto:(NUUInt64 *)aFoundGrade
 {
+    NUUInt64 anObjectLocation = NUNotFound64;
+    
     @try {
         [lock lock];
 
-        NUUInt64 anObjectLocation = NUNotFound64;
         NUBellBall aBellBall = NUMakeBellBall(anOOP, aGrade);
         NUUInt32 aKeyIndex;
         NUObjectTableLeaf *aLeaf = (NUObjectTableLeaf *)[self leafNodeContainingKeyLessThanOrEqualTo:(NUUInt8 *)&aBellBall keyIndex:&aKeyIndex];
@@ -288,12 +292,12 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
                 *aFoundGrade = aBellBall->grade;
             }
         }
-        
-        return anObjectLocation;
     }
     @finally {
         [lock unlock];
     }
+    
+    return anObjectLocation;
 }
 
 - (NUUInt64)objectLocationFor:(NUBellBall)aBellBall
@@ -328,8 +332,6 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
 
 #ifdef DEBUG
     NSLog(@"NUObjectTable #removeObjectFor:%@; aRegion:%@", NUStringFromBellBall(aBellBall), NUStringFromRegion(aRegion));
-    if (aBellBall.oop == 1)
-        NSLog(@"aBellBall.oop == 1");
 #endif
     
 	[[self spaces] releaseSpace:aRegion];

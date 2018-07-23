@@ -10,7 +10,7 @@
 #import "NUCodingNote.h"
 
 @class NSFileHandle, NSMutableData, NSRecursiveLock;
-@class NUPage, NUChangedRegionArray, NUPageLocationODictionary, NULinkedList;
+@class NUPage, NUSpaces, NUChangedRegionArray, NUPageLocationODictionary, NULinkedList;
 
 extern NSString *NUPageDataDoesNotExistException;
 extern NSString *NUInvalidPageLocationException;
@@ -21,10 +21,11 @@ extern const NUUInt64 NUNextPageLocationOffset;
 {
 	NUUInt32 pageSize;
 	NUUInt32 capacity;
+    NUSpaces *spaces;
 	NUPageLocationODictionary *pageBuffer;
     NULinkedList *pageLinkedList;
-    NUUInt64 unchangedPageBufferCount;
-    NUUInt64 maximumUnchangedPageBufferCount;
+    NUUInt64 removablePageBufferCount;
+    NUUInt64 maximumRemovablePageBufferCount;
 	NUUInt64 nextPageLocation;
 	NUUInt64 savedNextPageLocation;
 	NUUInt64 fileSize;
@@ -33,7 +34,9 @@ extern const NUUInt64 NUNextPageLocationOffset;
     NSRecursiveLock *lock;
 }
 
-+ (id)pages;
++ (instancetype)pagesWithSpaces:(NUSpaces *)aSpaces;
+
+- (instancetype)initWithSpaces:(NUSpaces *)aSpaces;
 
 - (NUUInt32)pageSize;
 - (NUUInt64)nextPageLocation;
@@ -115,6 +118,6 @@ extern const NUUInt64 NUNextPageLocationOffset;
 - (NURegion)allRegionButFirstPage;
 
 - (void)setChangeStatusOfAllPagesToUnchanged;
-- (void)removeUnchangedPagesFromBufferIfNeeded;
+- (void)removeRemovablePagesFromBufferIfNeeded;
 
 @end

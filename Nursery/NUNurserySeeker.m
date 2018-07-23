@@ -112,10 +112,10 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
 - (void)preprocess
 {
-    [self resetAllGCMarkIfNeeded];
+    [self resetAllGCMarksIfNeeded];
 }
 
-- (void)resetAllGCMarkIfNeeded
+- (void)resetAllGCMarksIfNeeded
 {
     if (nextBellBallToCollect.oop == 0 && nextBellBallToCollect.grade == 0)
     {
@@ -131,6 +131,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
         
         nextBellBallToCollect = NUNotFoundBellBall;
         currentPhase = NUSeekerNonePhase;
+        shouldLoadGrayOOPs = NO;
     }
 }
 
@@ -142,6 +143,11 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
         [[self garden] moveUpTo:[self grade]];
         [self seekObjectsUntilStop];
 	}
+    else if (currentPhase == NUSeekerCollectPhase)
+    {
+//        [self setGrade:[[self nursery] gradeForSeeker]];
+        [[self garden] moveUpTo:[self grade]];
+    }
 	else if (currentPhase == NUSeekerNonePhase)
 	{
         [self setGrade:[[self nursery] gradeForSeeker]];
@@ -190,18 +196,18 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
             
             NUBellBall aBellBall = NUMakeBellBall(anOOP, aGrade);
             NUUInt8 aGCMark = [[[self nursery] objectTable] gcMarkFor:aBellBall];
-#ifdef DEBUG
-            NUUInt8 aGCMarkColor = aGCMark & NUGCMarkColorBitsMask;
-
-            if (aGCMarkColor == NUGCMarkNone)
-                NSLog(@"seek %@, NUGCMarkNone", NUStringFromBellBall(aBellBall));
-            else if (aGCMarkColor == NUGCMarkWhite)
-                NSLog(@"seek %@, NUGCMarkWhite", NUStringFromBellBall(aBellBall));
-            else if (aGCMarkColor == NUGCMarkGray)
-                NSLog(@"seek %@, NUGCMarkGray", NUStringFromBellBall(aBellBall));
-            else if (aGCMarkColor == NUGCMarkBlack)
-                NSLog(@"seek %@, NUGCMarkBlack", NUStringFromBellBall(aBellBall));
-#endif
+//#ifdef DEBUG
+//            NUUInt8 aGCMarkColor = aGCMark & NUGCMarkColorBitsMask;
+//
+//            if (aGCMarkColor == NUGCMarkNone)
+//                NSLog(@"seek %@, NUGCMarkNone", NUStringFromBellBall(aBellBall));
+//            else if (aGCMarkColor == NUGCMarkWhite)
+//                NSLog(@"seek %@, NUGCMarkWhite", NUStringFromBellBall(aBellBall));
+//            else if (aGCMarkColor == NUGCMarkGray)
+//                NSLog(@"seek %@, NUGCMarkGray", NUStringFromBellBall(aBellBall));
+//            else if (aGCMarkColor == NUGCMarkBlack)
+//                NSLog(@"seek %@, NUGCMarkBlack", NUStringFromBellBall(aBellBall));
+//#endif
             [[[self nursery] objectTable] setGCMark:(aGCMark & NUGCMarkWithoutColorBitsMask) | NUGCMarkBlack for:aBellBall];
             
             [[self nursery] unlockForChange];
@@ -235,7 +241,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
     }
         
     nextBellBallToCollect = aBellBall;
-	
+    
     if (NUBellBallEquals(aBellBall, NUNotFoundBellBall))
         currentPhase = NUSeekerNonePhase;
 }
@@ -245,16 +251,16 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
     NUUInt8 aGCMark = [[[self nursery] objectTable] gcMarkFor:aBellBall];
     NUUInt8 aGCMarkColor = aGCMark & NUGCMarkColorBitsMask;
     
-#ifdef DEBUG
-    if (aGCMarkColor == NUGCMarkNone)
-        NSLog(@"#collectObjects:%@, NUGCMarkNone", NUStringFromBellBall(aBellBall));
-    else if (aGCMarkColor == NUGCMarkWhite)
-        NSLog(@"#collectObjects:%@, NUGCMarkWhite", NUStringFromBellBall(aBellBall));
-    else if (aGCMarkColor == NUGCMarkGray)
-        NSLog(@"#collectObjects:%@, NUGCMarkGray", NUStringFromBellBall(aBellBall));
-    else if (aGCMarkColor == NUGCMarkBlack)
-        NSLog(@"#collectObjects:%@, NUGCMarkBlack", NUStringFromBellBall(aBellBall));
-#endif
+//#ifdef DEBUG
+//    if (aGCMarkColor == NUGCMarkNone)
+//        NSLog(@"#collectObjects:%@, NUGCMarkNone", NUStringFromBellBall(aBellBall));
+//    else if (aGCMarkColor == NUGCMarkWhite)
+//        NSLog(@"#collectObjects:%@, NUGCMarkWhite", NUStringFromBellBall(aBellBall));
+//    else if (aGCMarkColor == NUGCMarkGray)
+//        NSLog(@"#collectObjects:%@, NUGCMarkGray", NUStringFromBellBall(aBellBall));
+//    else if (aGCMarkColor == NUGCMarkBlack)
+//        NSLog(@"#collectObjects:%@, NUGCMarkBlack", NUStringFromBellBall(aBellBall));
+//#endif
 
     if (aGCMarkColor == NUGCMarkWhite && aBellBall.grade <= [self grade])
     {
@@ -325,10 +331,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
     if ((aGCMark & NUGCMarkColorBitsMask) == NUGCMarkWhite)
     {
         [[[self nursery] objectTable] setGCMark:(aGCMark & NUGCMarkWithoutColorBitsMask) | NUGCMarkGray for:aBellBall];
-        if (![grayOOPs isFull])
-            [grayOOPs push:anOOP];
-        else
-            shouldLoadGrayOOPs = YES;
+        [grayOOPs push:anOOP];
     }
 }
 
@@ -338,13 +341,11 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
     
     NUBellBall aBellBall = NUMakeBellBall(anOOP, [self grade]);
 	NUUInt8 aGCMark = [[[self nursery] objectTable] gcMarkFor:aBellBall];
+    
 	if ((aGCMark & NUGCMarkColorBitsMask) == NUGCMarkBlack)
     {
 		[[[self nursery] objectTable] setGCMark:(aGCMark & NUGCMarkWithoutColorBitsMask) | NUGCMarkGray for:aBellBall];
-        if (![grayOOPs isFull])
-            [grayOOPs push:anOOP];
-        else
-            shouldLoadGrayOOPs = YES;
+        [grayOOPs push:anOOP];
     }
 }
 

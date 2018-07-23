@@ -495,6 +495,8 @@
 		B86D152D20958C9200D95C4C /* NUBell+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B86D152C20958C9200D95C4C /* NUBell+Project.h */; };
 		B86D152F2095EA9200D95C4C /* NUNurseryNetService+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B86D152E2095EA9200D95C4C /* NUNurseryNetService+Project.h */; };
 		B8727BD320C8FEAA00D92DE6 /* CharacterTargetClassResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = B8727BD220C8FEAA00D92DE6 /* CharacterTargetClassResolver.m */; };
+		B8AF2EB021055ADE00FA72F4 /* NULinkedListTest.m in Sources */ = {isa = PBXBuildFile; fileRef = B8AF2EAF21055ADE00FA72F4 /* NULinkedListTest.m */; };
+		B8AF2EB121055ADE00FA72F4 /* NULinkedListTest.m in Sources */ = {isa = PBXBuildFile; fileRef = B8AF2EAF21055ADE00FA72F4 /* NULinkedListTest.m */; };
 		B8BD5EAC2069058B00091994 /* SelfReferenceObject.m in Sources */ = {isa = PBXBuildFile; fileRef = B8BD5EAB2069058B00091994 /* SelfReferenceObject.m */; };
 		B8BDFF1620B6B96300839DCF /* NULazyMutableArrayTest.m in Sources */ = {isa = PBXBuildFile; fileRef = B8BDFF1520B6B96300839DCF /* NULazyMutableArrayTest.m */; };
 		B8D59EB820AFC415009FC4A9 /* NUPairedMainBranchAperture.h in Headers */ = {isa = PBXBuildFile; fileRef = B8D59EB620AFC415009FC4A9 /* NUPairedMainBranchAperture.h */; };
@@ -790,6 +792,7 @@
 		B86D152E2095EA9200D95C4C /* NUNurseryNetService+Project.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NUNurseryNetService+Project.h"; sourceTree = "<group>"; };
 		B8727BD120C8FEAA00D92DE6 /* CharacterTargetClassResolver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CharacterTargetClassResolver.h; sourceTree = "<group>"; };
 		B8727BD220C8FEAA00D92DE6 /* CharacterTargetClassResolver.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CharacterTargetClassResolver.m; sourceTree = "<group>"; };
+		B8AF2EAF21055ADE00FA72F4 /* NULinkedListTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NULinkedListTest.m; sourceTree = "<group>"; };
 		B8BD5EAA2069058B00091994 /* SelfReferenceObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SelfReferenceObject.h; sourceTree = "<group>"; };
 		B8BD5EAB2069058B00091994 /* SelfReferenceObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SelfReferenceObject.m; sourceTree = "<group>"; };
 		B8BDFF1520B6B96300839DCF /* NULazyMutableArrayTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NULazyMutableArrayTest.m; sourceTree = "<group>"; };
@@ -1243,6 +1246,7 @@
 				B8BD5EAB2069058B00091994 /* SelfReferenceObject.m */,
 				6116644E1FCBDEFC00774707 /* NUQueueTest.m */,
 				B8BDFF1520B6B96300839DCF /* NULazyMutableArrayTest.m */,
+				B8AF2EAF21055ADE00FA72F4 /* NULinkedListTest.m */,
 				619B07B11913ED8D00A4BAA2 /* NurseryTests.m */,
 				619B07AC1913ED8D00A4BAA2 /* Supporting Files */,
 			);
@@ -1841,6 +1845,7 @@
 				B8BD5EAC2069058B00091994 /* SelfReferenceObject.m in Sources */,
 				B8BDFF1620B6B96300839DCF /* NULazyMutableArrayTest.m in Sources */,
 				619B096C1913F2EE00A4BAA2 /* NUBellBallODictionaryTests.m in Sources */,
+				B8AF2EB021055ADE00FA72F4 /* NULinkedListTest.m in Sources */,
 				619B07B21913ED8D00A4BAA2 /* NurseryTests.m in Sources */,
 				619B096F1913F2EE00A4BAA2 /* Person.m in Sources */,
 				619B09701913F2EE00A4BAA2 /* NUMutableDictionaryTests.m in Sources */,
@@ -1976,6 +1981,7 @@
 				B81662EC20ECD4A500B9075E /* NUOpaqueArrayTest.m in Sources */,
 				B81662ED20ECD4A500B9075E /* NURegionArrayTest.m in Sources */,
 				B81662EE20ECD4A500B9075E /* NUU64ODictionaryTests.m in Sources */,
+				B8AF2EB121055ADE00FA72F4 /* NULinkedListTest.m in Sources */,
 				B81662EF20ECD4A500B9075E /* NUBellBallODictionaryTests.m in Sources */,
 				B81662F020ECD4A500B9075E /* NUMutableDictionaryTests.m in Sources */,
 				B81662F120ECD4A500B9075E /* NULibraryTests.m in Sources */,
