@@ -103,7 +103,7 @@
     NSMutableData *aPupilsData = [NSMutableData data];
     
     @try {
-        [[self nursery] lockForRead];
+        [[self nursery] lock];
         
         NUUInt64 aGrade;
         NUUInt64 anObjectLocation = [self objectLocationForOOP:anOOP gradeLessThanOrEqualTo:[self grade] gradeInto:&aGrade];
@@ -114,7 +114,7 @@
             [self addPupilDataAtLocation:anObjectLocation toData:aPupilsData];
     }
     @finally {
-        [[self nursery] unlockForRead];
+        [[self nursery] unlock];
     }
     
     return aPupilsData;

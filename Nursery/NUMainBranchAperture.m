@@ -44,7 +44,7 @@
 	{
         @try
         {
-            [nursery lockForRead];
+            [nursery lock];
             
             objectLocation = [[nursery objectTable] objectLocationFor:aBellBall];
             if (objectLocation == NUNotFound64 || objectLocation == 0)
@@ -58,7 +58,7 @@
         }
         @finally
         {
-            [nursery unlockForRead];
+            [nursery unlock];
         }
 	}
 	else

@@ -162,12 +162,12 @@
     id anObject;
     
     @try {
-        [[self nursery] lockForRead];
+        [[self nursery] lock];
         
         anObject = [super decodeObjectForBell:aBell];
     }
     @finally {
-        [[self nursery] unlockForRead];
+        [[self nursery] unlock];
     }
     
     return anObject;

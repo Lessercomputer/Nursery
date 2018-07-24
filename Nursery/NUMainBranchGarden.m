@@ -87,7 +87,7 @@
             [farmOutLock lock];
             [[self gardenSeeker] stop];
             [self lock];
-            [[self mainBranchNursery] lockForFarmOut];
+            [[self mainBranchNursery] LockAndStopChildminders];
             
             if (![[self nursery] open])
             {
@@ -131,7 +131,7 @@
         if (aFarmOutStatus == NUFarmOutStatusSucceeded)
             [[self gardenSeeker] endPreventationOfReleaseOfPastGrades];
         
-        [[self mainBranchNursery] unlockForFarmOut];
+        [[self mainBranchNursery] unlockAndStartChildminders];
         [self unlock];
         [[self gardenSeeker] start];
         [farmOutLock unlock];

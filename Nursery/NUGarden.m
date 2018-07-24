@@ -336,6 +336,8 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     
     [self setIsInMoveUp:NO];
     [self unlock];
+    
+    [[self gardenSeeker] start];
 }
 
 - (void)moveUpNurseryRoot
@@ -891,69 +893,6 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     retainedGrades = [aGrades retain];
 }
 
-//- (void)invalidateBellsWithNotReferencedObject
-//{
-//    @try {
-//        [self lock];
-//
-//        [[self bells] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop) {
-//            [aBell invalidateObjectIfNotReferenced];
-//        }];
-//    }
-//    @finally {
-//        [self unlock];
-//    }
-//}
-//
-//- (void)invalidateObjectIfNotReferencedForBell:(NUBell *)aBell
-//{
-//    @try {
-//        [self lock];
-//
-//        if ([aBell hasObject] && [[aBell object] retainCount] == 1)
-//        {
-//            [[self keyObject] setObject:[aBell object]];
-//            [[self objectToBellDictionary] removeObjectForKey:[self keyObject]];
-//            [aBell setObject:nil];
-//        }
-//    }
-//    @finally {
-//        [self unlock];
-//    }
-//}
-//
-//- (void)invalidateNotReferencedBells
-//{
-//    @try {
-//        [self lock];
-//
-//        NUU64ODictionary *aCopyOfBells = [[self bells] copy];
-//        [aCopyOfBells enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop){
-//            @autoreleasepool
-//            {
-//                NSInteger aBasicRetainCountOfBellInGarden = [self basicRetainCountOfBellInGarden:aBell];
-//
-//                if ([aBell retainCount] == aBasicRetainCountOfBellInGarden + 1 && (![aBell hasObject] || [[aBell object] retainCount] == 1))
-//                    [self invalidateBell:aBell];
-//            }
-//        }];
-//        [aCopyOfBells release];
-//    }
-//    @finally {
-//        [self unlock];
-//    }
-//}
-
-//- (NSUInteger)basicRetainCountOfBellInGarden:(NUBell *)aBell
-//{
-//    NSInteger aBasicRetainCountOfBellInGarden = 1;
-//
-//    if ([aBell hasObject] && ![[aBell object] conformsToProtocol:@protocol(NUCoding)])
-//        aBasicRetainCountOfBellInGarden++;
-//
-//    return aBasicRetainCountOfBellInGarden;
-//}
-
 - (void)invalidateBell:(NUBell *)aBell
 {
     [self removeBell:aBell];
@@ -964,33 +903,12 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     @try {
         [self lock];
         
-//        [self collectBellsWithGradeLessThan:aGrade];
         [[self nursery] releaseGradeLessThan:aGrade byGarden:self];
     }
     @finally {
         [self unlock];
     }
 }
-
-//- (void)collectBellsWithGradeLessThan:(NUUInt64)aGrade
-//{
-//    @try {
-//        [self lock];
-//        
-//        @autoreleasepool
-//        {
-//            [[[[self bells] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop) {
-//                if ([aBell gradeAtCallFor] < aGrade
-//                    && ([aBell retainCount] == 2 && (![aBell hasObject] || [[aBell object] retainCount] == 1)))
-//                    [self removeBell:aBell];
-//
-//            }];
-//        }
-//    }
-//    @finally {
-//        [self unlock];
-//    }
-//}
 
 - (void)close
 {

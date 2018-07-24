@@ -514,11 +514,7 @@ const NUUInt64 NULogDataLengthOffset = 85;
     aPageIsChangedBeforeWrite = [aPage isChanged];
 	[aPage write:aBytes length:aWritingLength offset:aWritingOffsetInPage];
     if (!aPageIsChangedBeforeWrite)
-    {
-        if (removablePageBufferCount == 0)
-            NSLog(@"removablePageBufferCount == 0");
         removablePageBufferCount--;
-    }
     
     [lock unlock];
 }
@@ -920,7 +916,9 @@ const NUUInt64 NULogDataLengthOffset = 85;
 
 - (void)setChangeStatusOfAllPagesToUnchanged
 {
-    [pageBuffer enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NULinkedListElement *aListElementWithPage, BOOL *stop) {
+    NUPageLocationODictionary *aCopyOfPageBuffer = [pageBuffer copy];
+    
+    [aCopyOfPageBuffer enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NULinkedListElement *aListElementWithPage, BOOL *stop) {
         NUPage *aPage = [aListElementWithPage object];
         
         if ([aPage isChanged])
@@ -931,6 +929,8 @@ const NUUInt64 NULogDataLengthOffset = 85;
         
         [self removeRemovablePagesFromBufferIfNeeded];
     }];
+    
+    [aCopyOfPageBuffer release];
 }
 
 - (void)removeRemovablePagesFromBufferIfNeeded
@@ -946,13 +946,13 @@ const NUUInt64 NULogDataLengthOffset = 85;
         
         if (![aPage isChanged])
         {
-            if ([spaces nodePageLocationIsVirtual:[aPage location]])
-                NSLog(@"node is virtual:%@", aPage);
+#ifdef DEBUG
+            NSLog(@"page:{%@} is removed", @([aPage location]));
+#endif
             [[aListElementWithPage retain] autorelease];
             [pageLinkedList remove:aListElementWithPage];
             [pageBuffer removeObjectForKey:[aPage location]];
-            if (removablePageBufferCount == 0)
-                NSLog(@"removablePageBufferCount == 0");
+
             removablePageBufferCount--;
         }
         

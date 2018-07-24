@@ -33,6 +33,12 @@
 
 @end
 
+@interface NUMainBranchAliaser (Decoding)
+
+- (id)decodeObjectForBell:(NUBell *)aBell;
+
+@end
+
 @interface NUMainBranchAliaser (ObjectSpace)
 
 - (NUUInt64)ensureObjectSpaceFor:(NUBell *)aBell;

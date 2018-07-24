@@ -68,19 +68,10 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 
 - (void)process
 {
-    @try
+    if ([[self nursery] gradeForParader] == NUNilGrade)
     {
-        [[self nursery] lockForChange];
-        
-        if ([[self nursery] gradeForParader] == NUNilGrade)
-        {
-            [self setShouldStop:YES];
-            return;
-        }
-    }
-    @finally
-    {
-        [[self nursery] unlockForChange];
+        [self setShouldStop:YES];
+        return;
     }
     
     NUUInt64 aBufferSize = [[[self nursery] pages] pageSize];
@@ -90,7 +81,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     {
         @try
         {
-            [[self nursery] lockForChange];
+            [[self nursery] lock];
             
             [[self garden] moveUpTo:[[self nursery] gradeForParader]];
             
@@ -112,7 +103,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
         }
         @finally
         {
-            [[self nursery] unlockForChange];
+            [[self nursery] unlock];
         }
     }
     
@@ -206,10 +197,10 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 #endif
             [[[self nursery] spaces] movePageToReleaseAtLocation:aCurrentNodeRegion.location toLocation:aMovedNodeRegion.location];
         }
-        
+#ifdef DEBUG
         if (aMovedNodeRegion.location % [[[self nursery] pages] pageSize])
             NSLog(@"aMovedNoreRegion.location %@", @(aMovedNodeRegion.location));
-        
+#endif
         [[[self nursery] spaces] removeRegion:aFreeRegion];
         
         if (aNewFreeRegion1.length != 0)

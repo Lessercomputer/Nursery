@@ -25,7 +25,7 @@
     @try
     {
         [[self garden] lock];
-        [aNursery lockForRead];
+        [aNursery lock];
         
         NUUInt64 aGrade;
         [[aNursery objectTable] objectLocationForOOP:[aBell ball].oop gradeLessThanOrEqualTo:[self grade] gradeInto:&aGrade];
@@ -40,7 +40,7 @@
     }
     @finally
     {
-        [aNursery unlockForRead];
+        [aNursery unlock];
         [[self garden] unlock];
     }
 }

@@ -370,14 +370,14 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     
     @try
     {
-        [self lockForChange];
+        [self lock];
         
         aGrade = [self olderRetainedGrade:[self gardenForSeeker]];
         if (aGrade == NUNilGrade) aGrade = [self grade];
     }
     @finally
     {
-        [self unlockForChange];
+        [self unlock];
     }
     
     return aGrade;
@@ -389,19 +389,19 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     
     @try
     {
-        [self lockForChange];
+        [self lock];
         
         aGrade = [self grade];
     }
     @finally
     {
-        [self unlockForChange];
+        [self unlock];
     }
     
     return aGrade;
 }
 
-- (void)lockForFarmOut
+- (void)LockAndStopChildminders
 {
 #ifdef DEBUG
     NSLog(@"%@: will stop seeker", self);
@@ -414,12 +414,12 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     NSLog(@"%@: did stop seeker", self);
 #endif
     
-    [self lockForChange];
+    [self lock];
 }
 
-- (void)unlockForFarmOut
+- (void)unlockAndStartChildminders
 {
-    [self unlockForChange];
+    [self unlock];
     
 #ifdef DEBUG
     NSLog(@"%@: will start seeker", self);
@@ -433,22 +433,12 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 #endif
 }
 
-- (void)lockForChange
+- (void)lock
 {
     [lock lock];
 }
 
-- (void)unlockForChange
-{
-    [lock unlock];
-}
-
-- (void)lockForRead
-{
-    [lock lock];
-}
-
-- (void)unlockForRead
+- (void)unlock
 {
     [lock unlock];
 }
@@ -512,7 +502,6 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
                 break;
             case NUNurseryOpenStatusOpenWithoutFile:
                 [self createFileAndOpenIfNeeded];
-//                [self saveChanges];
                 break;
             case NUNurseryOpenStatusOpenWithFile:
                 break;
@@ -538,7 +527,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     
     @try
     {
-        [self lockForChange];
+        [self lock];
         
 #ifdef DEBUG
         [self validateObjectTableAndReversedObjectTable];
@@ -560,7 +549,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     }
     @finally
     {
-        [self unlockForChange];
+        [self unlock];
     }
     
 	return YES;

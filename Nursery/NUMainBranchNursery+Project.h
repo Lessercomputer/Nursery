@@ -53,12 +53,10 @@
 - (NUUInt64)gradeForSeeker;
 - (NUUInt64)gradeForParader;
 
-- (void)lockForFarmOut;
-- (void)unlockForFarmOut;
-- (void)lockForChange;
-- (void)unlockForChange;
-- (void)lockForRead;
-- (void)unlockForRead;
+- (void)LockAndStopChildminders;
+- (void)unlockAndStartChildminders;
+- (void)lock;
+- (void)unlock;
 
 - (BOOL)save;
 - (void)backup;

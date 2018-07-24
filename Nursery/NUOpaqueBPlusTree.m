@@ -271,10 +271,10 @@
 		aNode = [[self leafNodeClass] nodeWithTree:self pageLocation:aPageLocation];
 	else if (aNodeOOP == [[self branchNodeClass] nodeOOP])
 		aNode = [[self branchNodeClass] nodeWithTree:self pageLocation:aPageLocation];
-
+#ifdef DEBUG
     if (!aNode)
         NSLog(@"!aNode:%@", @(aPageLocation));
-    
+#endif
 	return aNode;
 }
 

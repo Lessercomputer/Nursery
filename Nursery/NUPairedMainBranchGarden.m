@@ -51,59 +51,71 @@
     
     @try
     {
-        
         [farmOutLock lock];
         [[self gardenSeeker] stop];
         [self lock];
         
-        if (![[self nursery] open]) return NUFarmOutStatusFailed;
-        if (![self gradeIsEqualToNurseryGrade]) return NUFarmOutStatusNurseryGradeUnmatched;
-        
-        [[self mainBranchNursery] lockForFarmOut];
-        
-        if ([self gradeIsEqualToNurseryGrade])
+        if (![[self nursery] open])
         {
-            NUUInt64 aNewGrade = [[self mainBranchNursery] newGrade];
-            NSArray *aPupils = nil;
-            NUUInt64 aFixedRootOOP;
-
-            [[self pairedMainBranchAliaser] setGradeForSave:aNewGrade];
-
-            aPupils = [[self pairedMainBranchAliaser] pupilNotesFromData:aPupilData];
-            [[self pairedMainBranchAliaser] setPupils:aPupils];
-            
-            if ([[self mainBranchNursery] rootOOP] == NUNilOOP)
-                [self moveUpTo:aNewGrade];
-            
-            [[self pairedMainBranchAliaser] fixProbationaryOOPsInPupils];
-
-            [[self pairedMainBranchAliaser] writeEncodedObjectsToPages];
-            *aFixedOOPs = [[self pairedMainBranchAliaser] dataWithProbationaryOOPAndFixedOOP];
-            
-            aFixedRootOOP = [[self pairedMainBranchAliaser] fixedRootOOPForOOP:aRootOOP];
-            
-            if ([[self pairedMainBranchAliaser] rootOOP] != aFixedRootOOP)
-                [[self mainBranchNursery] saveRootOOP:aFixedRootOOP];
-            
-            [[self pairedMainBranchAliaser] setPupils:nil];
-            
-            aFarmOutStatus = [[self mainBranchNursery] save] ? NUFarmOutStatusSucceeded : NUFarmOutStatusFailed;
-
-            if (aFarmOutStatus == NUFarmOutStatusSucceeded)
-            {
-                [[self mainBranchNursery] retainGrade:aNewGrade byGarden:self];
-                [self setGrade:aNewGrade];
-                [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
-            }
-            
-            *aLatestGrade = aNewGrade;
+            aFarmOutStatus = NUFarmOutStatusFailed;
         }
-        else
+        else if (![self gradeIsEqualToNurseryGrade])
         {
             aFarmOutStatus = NUFarmOutStatusNurseryGradeUnmatched;
         }
-        
-        [[self mainBranchNursery] unlockForFarmOut];
+        else
+        {
+            @try
+            {
+                [[self mainBranchNursery] LockAndStopChildminders];
+                
+                if ([self gradeIsEqualToNurseryGrade])
+                {
+                    NUUInt64 aNewGrade = [[self mainBranchNursery] newGrade];
+                    NSArray *aPupils = nil;
+                    NUUInt64 aFixedRootOOP;
+
+                    [[self pairedMainBranchAliaser] setGradeForSave:aNewGrade];
+
+                    aPupils = [[self pairedMainBranchAliaser] pupilNotesFromData:aPupilData];
+                    [[self pairedMainBranchAliaser] setPupils:aPupils];
+                    
+                    if ([[self mainBranchNursery] rootOOP] == NUNilOOP)
+                        [self moveUpTo:aNewGrade];
+                    
+                    [[self pairedMainBranchAliaser] fixProbationaryOOPsInPupils];
+
+                    [[self pairedMainBranchAliaser] writeEncodedObjectsToPages];
+                    *aFixedOOPs = [[self pairedMainBranchAliaser] dataWithProbationaryOOPAndFixedOOP];
+                    
+                    aFixedRootOOP = [[self pairedMainBranchAliaser] fixedRootOOPForOOP:aRootOOP];
+                    
+                    if ([[self pairedMainBranchAliaser] rootOOP] != aFixedRootOOP)
+                        [[self mainBranchNursery] saveRootOOP:aFixedRootOOP];
+                    
+                    [[self pairedMainBranchAliaser] setPupils:nil];
+                    
+                    aFarmOutStatus = [[self mainBranchNursery] save] ? NUFarmOutStatusSucceeded : NUFarmOutStatusFailed;
+
+                    if (aFarmOutStatus == NUFarmOutStatusSucceeded)
+                    {
+                        [[self mainBranchNursery] retainGrade:aNewGrade byGarden:self];
+                        [self setGrade:aNewGrade];
+                        [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
+                    }
+                    
+                    *aLatestGrade = aNewGrade;
+                }
+                else
+                {
+                    aFarmOutStatus = NUFarmOutStatusNurseryGradeUnmatched;
+                }
+            }
+            @finally
+            {
+                [[self mainBranchNursery] unlockAndStartChildminders];
+            }
+        }
     }
     @finally
     {
@@ -112,9 +124,9 @@
             [[self gardenSeeker] endPreventationOfReleaseOfPastGrades];
         [[self gardenSeeker] start];
         [farmOutLock unlock];
-        
-        return aFarmOutStatus;
     }
+    
+    return aFarmOutStatus;
 }
 
 @end
