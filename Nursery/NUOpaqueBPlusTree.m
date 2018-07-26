@@ -278,7 +278,7 @@
 	return aNode;
 }
 
-- (NUU64ODictionary *)nodeDictionary
+- (NUPageLocationODictionary *)nodeDictionary
 {
 	return nodeDictionary;
 }
@@ -332,6 +332,9 @@
 
 - (void)removeNodeAt:(NUUInt64)aPageLocation
 {
+#ifdef DEBUG
+    NSLog(@"b+tree removeNodeAt:%@", @(aPageLocation));
+#endif
 	[[self nodeDictionary] removeObjectForKey:aPageLocation];
 }
 

@@ -9,7 +9,7 @@
 #import <Foundation/NSObject.h>
 #import "NUTypes.h"
 
-@class NUOpaqueBPlusTreeNode, NUOpaqueBPlusTreeBranch, NUOpaqueBPlusTreeLeaf, NUMainBranchNursery, NUPages, NUPage, NUOpaqueArray, NUSpaces, NUU64ODictionary;
+@class NUOpaqueBPlusTreeNode, NUOpaqueBPlusTreeBranch, NUOpaqueBPlusTreeLeaf, NUMainBranchNursery, NUPages, NUPage, NUOpaqueArray, NUSpaces, NUPageLocationODictionary;
 
 @interface NUOpaqueBPlusTree : NSObject
 {
@@ -19,7 +19,7 @@
 	NUUInt32 leafValueLength;
 	NUSpaces *spaces;
 	NUUInt64 rootLocation;
-	NUU64ODictionary *nodeDictionary;
+	NUPageLocationODictionary *nodeDictionary;
 }
 @end
 
@@ -81,7 +81,7 @@
 - (NUOpaqueBPlusTreeNode *)nodeFor:(NUUInt64)aNodeLocation;
 - (NUOpaqueBPlusTreeNode *)loadNodeFor:(NUUInt64)aNodeLocation;
 - (NUOpaqueBPlusTreeNode *)makeNodeFromPageAt:(NUUInt64)aPageLocation;
-- (NUU64ODictionary *)nodeDictionary;
+- (NUPageLocationODictionary *)nodeDictionary;
 
 - (NUOpaqueBPlusTreeBranch *)makeBranchNode;
 - (NUOpaqueBPlusTreeBranch *)makeBranchNodeWithKeys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aNodes;

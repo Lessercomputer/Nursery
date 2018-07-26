@@ -46,7 +46,7 @@ const NUUInt64 NULogDataLengthOffset = 85;
         spaces = aSpaces;
         pageBuffer = [[NUPageLocationODictionary alloc] initWithPages:self];
         pageLinkedList = [NULinkedList new];
-        maximumRemovablePageBufferCount = NUDefaultMaximumRemovablePageBufferCount;
+        maximumRemovablePageBufferCount = 0;//NUDefaultMaximumRemovablePageBufferCount;
         changedRegions = [[NUChangedRegionArray alloc] initWithCapacity:pageSize];
     }
     
@@ -624,6 +624,21 @@ const NUUInt64 NULogDataLengthOffset = 85;
 	}
 	
 	return aPageData;
+}
+
+- (void)markChangedPageAt:(NUUInt64)aPageLocation
+{
+    [self markChangedPage:[self pageAt:aPageLocation]];
+}
+
+- (void)markChangedPage:(NUPage *)aPage
+{
+    BOOL aPageIsAlreadyChanged = [aPage isChanged];
+    
+    [aPage setIsChanged:YES];
+    
+    if (!aPageIsAlreadyChanged)
+        removablePageBufferCount--;
 }
 
 - (void)save

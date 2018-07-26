@@ -154,7 +154,7 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 - (void)nodeDidRemoveValuesAt:(NUUInt32)anIndex count:(NUUInt32)aCount;
 
 - (void)markChanged;
-- (void)clearChanged;
+- (void)unmarkChanged;
 
 @end
 

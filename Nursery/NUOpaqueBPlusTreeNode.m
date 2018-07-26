@@ -98,7 +98,7 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 	[self readExtraValuesFromPages:[self pages]
 		at:aPageLocation + [[self tree] nodeHeaderLength] + [aKeys size] + [aValues size]
 		count:[self valueCountForKeyCount:[aKeys count]]];
-	[self clearChanged];
+	[self unmarkChanged];
 }
 
 - (void)readExtraValuesFromPages:(NUPages *)aPages at:(NUUInt64)aLocation count:(NUUInt32)aCount
@@ -544,9 +544,12 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 - (void)markChanged
 {
 	isChanged = YES;
+    
+    if ([[self pages] pageIsCreatedFor:[self pageLocation]])
+        [[self pages] markChangedPageAt:[self pageLocation]];
 }
 
-- (void)clearChanged
+- (void)unmarkChanged
 {
 	isChanged = NO;
 }
@@ -666,6 +669,7 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 	[[self leftNode] setRightNodeLocation:pageLocation];
 	[[self rightNode] setLeftNodeLocation:pageLocation];
     [[self tree] updateRootLocationIfNeeded];
+    [self markChanged];
 }
 
 - (void)changeNodePageWith:(NUUInt64)aPageLocation of:(NUOpaqueBPlusTreeNode *)aNode
@@ -684,7 +688,7 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 	[[self values] writeTo:aPages at:[self pageLocation] + NUOpaqueBPlusTreeNodeBodyOffset + [[self keys] size]];
 	[self writeExtraValuesToPages:aPages at:[self pageLocation] + NUOpaqueBPlusTreeNodeBodyOffset + [[self keys] size] + [[self values] size]];
 	
-	[self clearChanged];
+	[self unmarkChanged];
 }
 
 - (void)writeExtraValuesToPages:(NUPages *)aPages at:(NUUInt64)aLocation

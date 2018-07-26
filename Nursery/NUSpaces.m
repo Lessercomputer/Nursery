@@ -256,9 +256,9 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 
 - (void)releaseSpace:(NURegion)aRegion
 {
-#ifdef DEBUG
+//#ifdef DEBUG
     NSLog(@"#releaseSpace:%@", NUStringFromRegion(aRegion));
-#endif
+//#endif
     
 	NUUInt32 aKeyIndex;
 	NULocationTreeLeaf *aNode = [locationTree getNodeContainingSpaceAtLocationLessThanOrEqual:aRegion.location keyIndex:&aKeyIndex];
@@ -516,7 +516,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
     return [[[self nodeOOPToTreeDictionary] objectForKey:aNodeOOP] nodeFor:aNodeLocation];
 }
 
-- (BOOL)nodeIsUsedFor:(NUUInt64)aNodeLocation
+- (BOOL)nodePageIsNotRelesed:(NUUInt64)aNodeLocation
 {
     return ![[self pagesToRelease] containsObject:@(aNodeLocation)];
 }

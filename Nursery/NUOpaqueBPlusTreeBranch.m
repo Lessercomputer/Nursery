@@ -137,11 +137,6 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 	NUOpaqueBPlusTreeNode *aNode = [self nodeAt:aNodeIndex];
     
 	[aNode removeValueFor:aKey];
-    
-//#ifdef DEBUG
-//    if ([self isUnderflow])
-//        [[NSException exceptionWithName:@"underflow" reason:nil userInfo:nil] raise];
-//#endif
 	
     if (![aNode isUnderflow]) return;
         

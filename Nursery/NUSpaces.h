@@ -101,7 +101,7 @@ extern NSString *NUSpaceInvalidOperationException;
 
 - (NUOpaqueBPlusTreeNode *)nodeFor:(NUUInt64)aNodeLocation;
 
-- (BOOL)nodeIsUsedFor:(NUUInt64)aNodeLocation;
+- (BOOL)nodePageIsNotRelesed:(NUUInt64)aNodeLocation;
 - (void)movePageToReleaseAtLocation:(NUUInt64)aNodeLocation toLocation:(NUUInt64)aNewLocation;
 
 @end

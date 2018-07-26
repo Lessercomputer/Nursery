@@ -26,8 +26,8 @@ extern NSString *NUParaderInvalidNodeLocationException;
 - (void)load;
 
 - (void)paradeObjectOrNodeNextTo:(NURegion)aFreeRegion buffer:(NUUInt8 *)aBuffer bufferSize:(NUUInt64) aBufferSize;
-- (void)paradeObjectAtNextLocationWithBellBall:(NUBellBall)aBellBall  freeRegion:(NURegion)aFreeRegion buffer:(NUUInt8 *)aBuffer bufferSize:(NUUInt64)aBufferSize;
-- (void)paradeNodeAtNextLocationWithFreeRegion:(NURegion)aFreeRegion buffer:(NUUInt8 *)aBuffer bufferSize:(NUUInt64)aBufferSize;
+- (void)paradeObjectWithBellBall:(NUBellBall)aBellBall atNextTo:(NURegion)aFreeRegion buffer:(NUUInt8 *)aBuffer bufferSize:(NUUInt64)aBufferSize;
+- (void)paradeNodeAtNextTo:(NURegion)aFreeRegion buffer:(NUUInt8 *)aBuffer bufferSize:(NUUInt64)aBufferSize;
 - (void)computeMovedNodeRegionInto:(NURegion *)aMovedNodeRegion fromCurrentNodeRegion:(NURegion)aCurrentNodeRegion withFreeRegion:(NURegion)aFreeRegion newFreeRegion1Into:(NURegion *)aNewFreeRegion1 newFreeRegion2Into:(NURegion *)aNewFreeRegion2;
 
 @end

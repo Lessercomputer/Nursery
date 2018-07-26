@@ -22,6 +22,7 @@
 #import "NUBellBall.h"
 #import "NUGarden.h"
 #import "NUGarden+Project.h"
+#import "NUPage.h"
 
 const NUUInt64 NUParaderNextLocationOffset = 69;
 
@@ -124,11 +125,11 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
         
         if (!NUBellBallEquals(aBellBall, NUNotFoundBellBall))
         {
-            [self paradeObjectAtNextLocationWithBellBall:aBellBall freeRegion:aFreeRegion buffer:aBuffer bufferSize:aBufferSize];
+            [self paradeObjectWithBellBall:aBellBall atNextTo:aFreeRegion buffer:aBuffer bufferSize:aBufferSize];
         }
         else
         {
-            [self paradeNodeAtNextLocationWithFreeRegion:aFreeRegion buffer:aBuffer bufferSize:aBufferSize];
+            [self paradeNodeAtNextTo:aFreeRegion buffer:aBuffer bufferSize:aBufferSize];
         }
         
 #ifdef DEBUG
@@ -142,7 +143,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     }
 }
 
-- (void)paradeObjectAtNextLocationWithBellBall:(NUBellBall)aBellBall freeRegion:(NURegion)aFreeRegion buffer:(NUUInt8 *)aBuffer bufferSize:(NUUInt64)aBufferSize
+- (void)paradeObjectWithBellBall:(NUBellBall)aBellBall atNextTo:(NURegion)aFreeRegion buffer:(NUUInt8 *)aBuffer bufferSize:(NUUInt64)aBufferSize
 {
 #ifdef DEBUG
     NSLog(@"#paradeObject nextLocation:%llu bellBall:%@ freeRegion:%@", nextLocation, NUStringFromBellBall(aBellBall), NUStringFromRegion(aFreeRegion));
@@ -159,7 +160,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     nextLocation = aNewFreeRegion.location;
 }
 
-- (void)paradeNodeAtNextLocationWithFreeRegion:(NURegion)aFreeRegion buffer:(NUUInt8 *)aBuffer bufferSize:(NUUInt64)aBufferSize
+- (void)paradeNodeAtNextTo:(NURegion)aFreeRegion buffer:(NUUInt8 *)aBuffer bufferSize:(NUUInt64)aBufferSize
 {
 #ifdef DEBUG
     NSLog(@"#paradeNode nextLocation:%llu freeRegion:%@", nextLocation, NUStringFromRegion(aFreeRegion));
@@ -172,6 +173,9 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     if (nextLocation % [[[self nursery] pages] pageSize])
         [[NSException exceptionWithName:NUParaderInvalidNodeLocationException reason:NUParaderInvalidNodeLocationException userInfo:nil] raise];
     
+    if ([[[self nursery] spaces] nodePageLocationIsVirtual:nextLocation])
+        NSLog(@"nextLocationIsVirtualPage:%@", @(nextLocation));
+    
     [self computeMovedNodeRegionInto:&aMovedNodeRegion fromCurrentNodeRegion:aCurrentNodeRegion withFreeRegion:aFreeRegion newFreeRegion1Into:&aNewFreeRegion1 newFreeRegion2Into:&aNewFreeRegion2];
     
 #ifdef DEBUG
@@ -180,20 +184,38 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     
     if (aMovedNodeRegion.location != NUNotFound64)
     {
-        if ([[[self nursery] spaces] nodeIsUsedFor:nextLocation])
+        if ([[[self nursery] spaces] nodePageIsNotRelesed:nextLocation])
         {
 #ifdef DEBUG
-            NSLog(@"[[self nursery] spaces] nodeIsUsedFor:%llu] == YES", nextLocation);
+            NSLog(@"[[self nursery] spaces] nodePageIsNotRelesed:%@] == YES", @(nextLocation));
 #endif
             NUOpaqueBPlusTreeNode *aNode = [[[self nursery] spaces] nodeFor:aCurrentNodeRegion.location];
-            
+//#ifdef DEBUG
+            BOOL aNodeIsNotRoot = [[aNode tree] root] != aNode;
+            NUOpaqueBPlusTreeBranch *aParentNode = [aNode parentNode];
+            NUOpaqueBPlusTreeNode *aLeftNode = [aNode leftNode];
+            NUOpaqueBPlusTreeNode *aRightNode = [aNode rightNode];
+            NUPage *aPageForParentNode = aNodeIsNotRoot && [[[self nursery] spaces] nodePageLocationIsNotVirtual:[aParentNode pageLocation]] ? [[[self nursery] pages] pageAt:[aParentNode pageLocation]] : nil;
+            NUPage *aPageForLeftNode = aNodeIsNotRoot && [[[self nursery] spaces] nodePageLocationIsNotVirtual:[aLeftNode pageLocation]] ? [[[self nursery] pages] pageAt:[aLeftNode pageLocation]] : nil;
+            NUPage *aPageForRightNode = aNodeIsNotRoot && [[[self nursery] spaces] nodePageLocationIsNotVirtual:[aRightNode pageLocation]] ? [[[self nursery] pages] pageAt:[aRightNode pageLocation]] : nil;
+
+            NSLog(@"changeNodePage originalNodePageLocation:%@, newNodePageLocation:%@",  @([aNode pageLocation]), @(aMovedNodeRegion.location));
+//#endif
             [aNode changeNodePageWith:aMovedNodeRegion.location];
+//#ifdef DEBUG
+            if (aPageForParentNode && [[[self nursery] spaces] nodePageLocationIsNotVirtual:[aPageForParentNode location]] && ![aPageForParentNode isChanged])
+                NSLog(@"parent page is not changed");
+            if (aPageForLeftNode && [[[self nursery] spaces] nodePageLocationIsNotVirtual:[aPageForLeftNode location]] && ![aPageForLeftNode isChanged])
+                NSLog(@"left page is not changed");
+            if (aPageForRightNode && [[[self nursery] spaces] nodePageLocationIsNotVirtual:[aPageForRightNode location]] && ![aPageForRightNode isChanged])
+                NSLog(@"right page is not changed");
+//#endif
             [[[self nursery] pages] moveBytesAt:aCurrentNodeRegion.location length:aCurrentNodeRegion.length to:aMovedNodeRegion.location buffer:aBuffer length:aBufferSize];
         }
         else
         {
 #ifdef DEBUG
-            NSLog(@"[[self nursery] spaces] nodeIsUsedFor:%llu] == NO", nextLocation);
+            NSLog(@"[[self nursery] spaces] nodePageIsNotRelesed:%@] == NO", @(nextLocation));
 #endif
             [[[self nursery] spaces] movePageToReleaseAtLocation:aCurrentNodeRegion.location toLocation:aMovedNodeRegion.location];
         }

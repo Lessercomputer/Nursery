@@ -98,6 +98,9 @@ extern const NUUInt64 NUNextPageLocationOffset;
 - (NSData *)pageDataAt:(NUUInt64)aPageLocation;
 - (NSData *)loadPageDataAt:(NUUInt64)aPageLocation;
 
+- (void)markChangedPageAt:(NUUInt64)aPageLocation;
+- (void)markChangedPage:(NUPage *)aPage;
+
 - (void)save;
 - (void)flush;
 - (void)writeLogData;
