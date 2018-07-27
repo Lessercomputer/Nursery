@@ -642,6 +642,26 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
     return ![self isMin];
 }
 
+- (BOOL)isMostLeftNodeInCurrentDepth
+{
+    return [[self tree] nodeIsMostLeftNodeInDepthOf:self];
+}
+
+- (BOOL)nodeIsMostLeftNodeInDepthOf:(NUOpaqueBPlusTreeNode *)aNode
+{
+    return aNode == self;
+}
+
+- (BOOL)isMostRightNodeInCurrentDepth
+{
+    return [[self tree] nodeIsMostRightNodeInDepthOf:self];
+}
+
+- (BOOL)nodeIsMostRightNodeInDepthOf:(NUOpaqueBPlusTreeNode *)aNode
+{
+    return aNode == self;
+}
+
 @end
 
 @implementation NUOpaqueBPlusTreeNode (ManagingPage)

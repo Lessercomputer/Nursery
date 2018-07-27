@@ -185,6 +185,11 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 
 - (BOOL)canPreventNodeReleseWhenValueRemoved;
 
+- (BOOL)isMostLeftNodeInCurrentDepth;
+- (BOOL)nodeIsMostLeftNodeInDepthOf:(NUOpaqueBPlusTreeNode *)aNode;
+- (BOOL)isMostRightNodeInCurrentDepth;
+- (BOOL)nodeIsMostRightNodeInDepthOf:(NUOpaqueBPlusTreeNode *)aNode;
+
 @end
 
 @interface NUOpaqueBPlusTreeNode (ManagingPage)

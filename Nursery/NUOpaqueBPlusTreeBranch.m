@@ -288,9 +288,6 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 	if (aKeyShuffleLocation + 1 != [[self leftNode] keyCount])
 		[self insertKeys:[[self leftNode] keyAt:aKeyShuffleLocation + 1] at:0 count:aKeyShuffleCount - 1];
 	[[self leftBranch] removeKeysAt:aKeyShuffleLocation count:aKeyShuffleCount];
-		
-//	[self insertNodes:[[self leftBranch] nodeLocations] at:0 startAt:aKeyShuffleLocation + 1 count:aKeyShuffleCount + 1];
-//	[[self leftBranch] removeNodesAt:aKeyShuffleLocation + 1 count:aKeyShuffleCount + 1];
     
     [self insertNodes:[[self leftBranch] nodeLocations] at:0 startAt:aKeyShuffleLocation + 1 count:aKeyShuffleCount];
 	[[self leftBranch] removeNodesAt:aKeyShuffleLocation + 1 count:aKeyShuffleCount];
@@ -308,9 +305,6 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 	[self insertKey:[[self rightNode] mostLeftKey] at:[self keyCount]];
 	[self insertKeys:[[self rightNode] keyAt:0] at:[self keyCount] count:aKeyShuffleCount - 1];
 	[[self rightBranch] removeKeysAt:0 count:aKeyShuffleCount];
-		
-//	[self insertNodes:[[self rightBranch] nodeLocations] at:[self valueCount] startAt:0 count:aKeyShuffleCount + 1];
-//	[[self rightBranch] removeNodesAt:0 count:aKeyShuffleCount + 1];
     
     [self insertNodes:[[self rightBranch] nodeLocations] at:[self valueCount] startAt:0 count:aKeyShuffleCount];
 	[[self rightBranch] removeNodesAt:0 count:aKeyShuffleCount];
@@ -358,6 +352,16 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 @implementation NUOpaqueBPlusTreeBranch (Testing)
 
 - (BOOL)isBranch { return YES; }
+
+- (BOOL)nodeIsMostLeftNodeInDepthOf:(NUOpaqueBPlusTreeNode *)aNode
+{
+    return aNode == self || [[self nodeAt:0] nodeIsMostLeftNodeInDepthOf:aNode];
+}
+
+- (BOOL)nodeIsMostRightNodeInDepthOf:(NUOpaqueBPlusTreeNode *)aNode
+{
+    return aNode == self || [[self nodeAt:[self valueCount] - 1] nodeIsMostRightNodeInDepthOf:aNode];
+}
 
 @end
 

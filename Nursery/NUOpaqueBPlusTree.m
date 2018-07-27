@@ -381,6 +381,20 @@
 
 @end
 
+@implementation NUOpaqueBPlusTree (Testing)
+
+- (BOOL)nodeIsMostLeftNodeInDepthOf:(NUOpaqueBPlusTreeNode *)aNode
+{
+    return [[self root] nodeIsMostLeftNodeInDepthOf:aNode];
+}
+
+- (BOOL)nodeIsMostRightNodeInDepthOf:(NUOpaqueBPlusTreeNode *)aNode
+{
+    return [[self root] nodeIsMostRightNodeInDepthOf:aNode];
+}
+
+@end
+
 @implementation NUOpaqueBPlusTree (Debug)
 
 - (void)validateAllNodeLocations

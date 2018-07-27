@@ -110,6 +110,13 @@
 
 @end
 
+@interface NUOpaqueBPlusTree (Testing)
+
+- (BOOL)nodeIsMostLeftNodeInDepthOf:(NUOpaqueBPlusTreeNode *)aNode;
+- (BOOL)nodeIsMostRightNodeInDepthOf:(NUOpaqueBPlusTreeNode *)aNode;
+
+@end
+
 @interface NUOpaqueBPlusTree (Debug)
 
 - (void)validateAllNodeLocations;
