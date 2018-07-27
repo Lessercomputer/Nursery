@@ -25,6 +25,7 @@
 #import "NUPage.h"
 
 const NUUInt64 NUParaderNextLocationOffset = 69;
+const NUUInt64 NUParaderGradeOffset = 133;
 
 NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocationException";
 
@@ -60,20 +61,30 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 - (void)save
 {
     [[[self nursery] pages] writeUInt64:nextLocation at:NUParaderNextLocationOffset];
+    [[[self nursery] pages] writeUInt64:grade at:NUParaderGradeOffset];
 }
 
 - (void)load
 {
     nextLocation = [[[self nursery] pages] readUInt64At:NUParaderNextLocationOffset];
+    [[[self nursery] pages] readUInt64At:NUParaderGradeOffset];
 }
 
 - (void)process
 {
-    if ([[self nursery] gradeForParader] == NUNilGrade)
+    if (grade == NUNilGrade)
     {
-        [self setShouldStop:YES];
-        return;
+        grade = [[self nursery] gradeForParader];
+        
+        if (grade == NUNilGrade)
+        {
+            [self setShouldStop:YES];
+            return;
+        }
     }
+    
+    if (grade != NUNilGrade)
+        [[self garden] moveUpTo:grade];
     
     NUUInt64 aBufferSize = [[[self nursery] pages] pageSize];
     NUUInt8 *aBuffer = malloc((size_t)aBufferSize);
@@ -83,8 +94,6 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
         @try
         {
             [[self nursery] lock];
-            
-            [[self garden] moveUpTo:[[self nursery] gradeForParader]];
             
             NURegion aFreeRegion = [[[self nursery] spaces] nextParaderTargetFreeSpaceForLocation:nextLocation];
 #ifdef DEBUG
@@ -98,6 +107,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
             {
                 [[[self nursery] spaces] minimizeSpace];
                 nextLocation = 0;
+                grade = NUNilGrade;
                 
                 break;
             }
@@ -200,6 +210,8 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 
             NSLog(@"changeNodePage originalNodePageLocation:%@, newNodePageLocation:%@",  @([aNode pageLocation]), @(aMovedNodeRegion.location));
 //#endif
+            if ([aNode pageLocation] == 17838080)
+                NSLog(@"[aNode pageLocation] == 17838080");
             [aNode changeNodePageWith:aMovedNodeRegion.location];
 //#ifdef DEBUG
             if (aPageForParentNode && ![aPageForParentNode isChanged])

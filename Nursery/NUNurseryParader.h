@@ -16,6 +16,7 @@ extern NSString *NUParaderInvalidNodeLocationException;
 @interface NUNurseryParader : NUThreadedChildminder
 {
     NUUInt64 nextLocation;
+    NUUInt64 grade;
 }
 
 + (id)paraderWithGarden:(NUGarden *)aGarden;

@@ -115,6 +115,7 @@
                     if (aFarmOutStatus == NUFarmOutStatusSucceeded)
                     {
                         [[self mainBranchNursery] retainGrade:aNewGrade byGarden:self];
+                        [[self mainBranchNursery] releaseGradeLessThan:aNewGrade byGarden:self];
                         [self setGrade:aNewGrade];
                         [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
                     }

@@ -175,10 +175,12 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
 - (void)seekObjectsUntilStop
 {
-	while (![self shouldStop] && [grayOOPs count])
+	while (![self shouldStop] && ([grayOOPs count] || shouldLoadGrayOOPs))
 	{
 		NUUInt64 anOOP = NUNotFound64;
 		int i = 0;
+        
+        [self loadGrayOOPsIfNeeded];
         
 		for (; i < NUSeekerDefaultSeekCount && (anOOP = [self popGrayOOP]) != NUNotFound64; i++)
 		{
@@ -275,8 +277,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
     nextBellBallToCollect = aBellBall;
     
     if (NUBellBallEquals(aBellBall, NUNotFoundBellBall))
-        currentPhase = NUSeekerNonePhase;
-    
+        currentPhase = NUSeekerNonePhase;    
 }
 
 - (void)collectObjectIfNeeded:(NUBellBall)aBellBall
