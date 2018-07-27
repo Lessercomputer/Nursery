@@ -595,6 +595,8 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 @implementation NUOpaqueBPlusTreeNode (Testing)
 
+- (BOOL)isRoot { return [[self tree] nodeIsRoot:self]; }
+
 - (BOOL)isBranch { return NO; }
 
 - (BOOL)isLeaf { return NO; }
@@ -660,6 +662,11 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 - (BOOL)nodeIsMostRightNodeInDepthOf:(NUOpaqueBPlusTreeNode *)aNode
 {
     return aNode == self;
+}
+
+- (BOOL)pageIsNotVirtual
+{
+    return [[self spaces] nodePageLocationIsNotVirtual:[self pageLocation]];
 }
 
 @end

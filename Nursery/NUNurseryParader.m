@@ -200,27 +200,25 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
             NSLog(@"[[self nursery] spaces] nodePageIsNotRelesed:%@] == YES", @(nextLocation));
 #endif
             NUOpaqueBPlusTreeNode *aNode = [[[self nursery] spaces] nodeFor:aCurrentNodeRegion.location];
-//#ifdef DEBUG
+#ifdef DEBUG
             NUOpaqueBPlusTreeBranch *aParentNode = [aNode parentNode];
             NUOpaqueBPlusTreeNode *aLeftNode = ![aNode isMostLeftNodeInCurrentDepth] ? [[[aNode leftNode] retain] autorelease] : nil;
             NUOpaqueBPlusTreeNode *aRightNode = ![aNode isMostRightNodeInCurrentDepth] ? [[[aNode rightNode] retain] autorelease] : nil;
-            NUPage *aPageForParentNode = [[aNode tree] root] != aNode ? [[[self nursery] pages] pageAt:[aParentNode pageLocation]] : nil;
-            NUPage *aPageForLeftNode = aLeftNode ? [[[self nursery] pages] pageAt:[aLeftNode pageLocation]] : nil;
-            NUPage *aPageForRightNode = aRightNode ? [[[self nursery] pages] pageAt:[aRightNode pageLocation]] : nil;
+            NUPage *aPageForParentNode = ![aNode isRoot] && [aParentNode pageIsNotVirtual] ? [[[self nursery] pages] pageAt:[aParentNode pageLocation]] : nil;
+            NUPage *aPageForLeftNode = aLeftNode && [aLeftNode pageIsNotVirtual] ? [[[self nursery] pages] pageAt:[aLeftNode pageLocation]] : nil;
+            NUPage *aPageForRightNode = aRightNode && [aRightNode pageIsNotVirtual] ? [[[self nursery] pages] pageAt:[aRightNode pageLocation]] : nil;
 
             NSLog(@"changeNodePage originalNodePageLocation:%@, newNodePageLocation:%@",  @([aNode pageLocation]), @(aMovedNodeRegion.location));
-//#endif
-            if ([aNode pageLocation] == 17838080)
-                NSLog(@"[aNode pageLocation] == 17838080");
+#endif
             [aNode changeNodePageWith:aMovedNodeRegion.location];
-//#ifdef DEBUG
+#ifdef DEBUG
             if (aPageForParentNode && ![aPageForParentNode isChanged])
                 NSLog(@"parent page is not changed");
             if (aPageForLeftNode && ![aPageForLeftNode isChanged])
                 NSLog(@"left page is not changed");
             if (aPageForRightNode && ![aPageForRightNode isChanged])
                 NSLog(@"right page is not changed");
-//#endif
+#endif
             [[[self nursery] pages] moveBytesAt:aCurrentNodeRegion.location length:aCurrentNodeRegion.length to:aMovedNodeRegion.location buffer:aBuffer length:aBufferSize];
         }
         else

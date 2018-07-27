@@ -112,6 +112,8 @@
 
 @interface NUOpaqueBPlusTree (Testing)
 
+- (BOOL)nodeIsRoot:(NUOpaqueBPlusTreeNode *)aNode;
+
 - (BOOL)nodeIsMostLeftNodeInDepthOf:(NUOpaqueBPlusTreeNode *)aNode;
 - (BOOL)nodeIsMostRightNodeInDepthOf:(NUOpaqueBPlusTreeNode *)aNode;
 

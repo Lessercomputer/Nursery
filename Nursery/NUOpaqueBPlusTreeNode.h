@@ -170,6 +170,7 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 
 @interface NUOpaqueBPlusTreeNode (Testing)
 
+- (BOOL)isRoot;
 - (BOOL)isBranch;
 - (BOOL)isLeaf;
 - (BOOL)isChanged;
@@ -189,6 +190,8 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 - (BOOL)nodeIsMostLeftNodeInDepthOf:(NUOpaqueBPlusTreeNode *)aNode;
 - (BOOL)isMostRightNodeInCurrentDepth;
 - (BOOL)nodeIsMostRightNodeInDepthOf:(NUOpaqueBPlusTreeNode *)aNode;
+
+- (BOOL)pageIsNotVirtual;
 
 @end
 

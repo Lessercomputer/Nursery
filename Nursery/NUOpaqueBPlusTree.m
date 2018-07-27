@@ -383,6 +383,11 @@
 
 @implementation NUOpaqueBPlusTree (Testing)
 
+- (BOOL)nodeIsRoot:(NUOpaqueBPlusTreeNode *)aNode
+{
+    return [self root] == aNode;
+}
+
 - (BOOL)nodeIsMostLeftNodeInDepthOf:(NUOpaqueBPlusTreeNode *)aNode
 {
     return [[self root] nodeIsMostLeftNodeInDepthOf:aNode];
