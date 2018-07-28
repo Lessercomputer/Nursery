@@ -25,7 +25,6 @@
 #import "NUPage.h"
 
 const NUUInt64 NUParaderNextLocationOffset = 69;
-const NUUInt64 NUParaderGradeOffset = 133;
 
 NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocationException";
 
@@ -61,31 +60,24 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 - (void)save
 {
     [[[self nursery] pages] writeUInt64:nextLocation at:NUParaderNextLocationOffset];
-    [[[self nursery] pages] writeUInt64:grade at:NUParaderGradeOffset];
 }
 
 - (void)load
 {
     nextLocation = [[[self nursery] pages] readUInt64At:NUParaderNextLocationOffset];
-    [[[self nursery] pages] readUInt64At:NUParaderGradeOffset];
 }
 
 - (void)process
 {
+    grade = [[self nursery] gradeForParader];
     if (grade == NUNilGrade)
     {
-        grade = [[self nursery] gradeForParader];
-        
-        if (grade == NUNilGrade)
-        {
-            [self setShouldStop:YES];
-            return;
-        }
+        [self setShouldStop:YES];
+        return;
     }
-    
-    if (grade != NUNilGrade)
+    else
         [[self garden] moveUpTo:grade];
-    
+
     NUUInt64 aBufferSize = [[[self nursery] pages] pageSize];
     NUUInt8 *aBuffer = malloc((size_t)aBufferSize);
     

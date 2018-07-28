@@ -385,8 +385,17 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 
 - (NUUInt64)gradeForParader
 {
-    NUUInt64 aGrade = [self gradeForSeeker];
-    return aGrade == NUNilGrade ? NUNilGrade : aGrade - 1;
+    @try
+    {
+        [self lock];
+        
+        NUUInt64 aGrade = [self grade];
+        return aGrade;
+    }
+    @finally
+    {
+        [self unlock];
+    }
 }
 
 - (void)LockAndStopChildminders
