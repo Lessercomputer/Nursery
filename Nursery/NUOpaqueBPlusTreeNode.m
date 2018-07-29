@@ -739,6 +739,10 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
     if ([self parentNode] && [self isUnderflow])
         [[NSException exceptionWithName:NUUnderflowNodeFoundException reason:NUUnderflowNodeFoundException userInfo:nil] raise];
     
+    [self parentNode];
+    [self leftNode];
+    [self rightNode];
+    
     if ([self isLeaf])
     {
         if ([self values] && [self keyCount] != [self valueCount])

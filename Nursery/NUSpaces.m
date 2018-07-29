@@ -398,6 +398,9 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 {
 	if ([self nodePageLocationIsNotVirtual:aNodePage])
 		[pagesToRelease addObject:[NSNumber numberWithUnsignedLongLong:aNodePage]];
+#ifdef DEBUG
+    NSLog(@"pagesToRelese:%@", pagesToRelease);
+#endif
 }
 
 - (NUUInt64)allocateNodePageWithPreventNodeRelease

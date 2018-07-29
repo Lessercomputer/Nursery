@@ -61,10 +61,16 @@ const int NUThreadedChildminderTerminateCondition   = 2;
     return [NSString stringWithFormat:@"org.nursery-framework.%@", self];
 }
 
+- (double)threadPriority
+{
+    return 0.0;
+}
+
 - (void)prepare
 {
     NSThread *aThread = [[[NSThread alloc] initWithTarget:self selector:@selector(startThread:) object:nil] autorelease];
     [aThread setName:[self threadName]];
+    [aThread setThreadPriority:[self threadPriority]];
     [aThread start];
 }
 

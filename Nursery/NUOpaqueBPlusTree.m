@@ -327,6 +327,9 @@
 
 - (void)addNode:(NUOpaqueBPlusTreeNode *)aNode
 {
+#ifdef DEBUG
+    NSLog(@"b+tree addNode:%@", @([aNode pageLocation]));
+#endif
 	[[self nodeDictionary] setObject:aNode forKey:[aNode pageLocation]];
 }
 

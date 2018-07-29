@@ -116,7 +116,8 @@
 {
     NUFarmOutStatus aFarmOutStatus = NUFarmOutStatusFailed;
     
-    @try {
+    @try
+    {
         NSData *aFixedOOPs = nil;
         NUUInt64 aLatestGrade = NUNilGrade;
         
@@ -140,13 +141,17 @@
                 [self replaceProbationaryOOPsWithFixedOOPs:aFixedOOPs inPupils:[[self branchAliaser] reducedEncodedPupilsDictionary] grade:aLatestGrade];
                 [[self branchAliaser] removeAllEncodedPupils];
                 [self setGrade:aLatestGrade];
-                [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
             }
         }
     }
-    @finally {
+    @finally
+    {
         if (aFarmOutStatus == NUFarmOutStatusSucceeded)
+        {
             [[self gardenSeeker] endPreventationOfReleaseOfPastGrades];
+            [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
+        }
+        
         [[self gardenSeeker] start];
     }
     

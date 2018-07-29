@@ -101,7 +101,6 @@
                     {
                         [[self mainBranchNursery] retainGrade:aNewGrade byGarden:self];
                         [self setGrade:aNewGrade];
-                        [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
                     }
                     
                     *aLatestGrade = aNewGrade;
@@ -120,8 +119,13 @@
     @finally
     {
         [self unlock];
+        
         if (aFarmOutStatus == NUFarmOutStatusSucceeded)
+        {
             [[self gardenSeeker] endPreventationOfReleaseOfPastGrades];
+            [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
+        }
+        
         [[self gardenSeeker] start];
         [farmOutLock unlock];
     }

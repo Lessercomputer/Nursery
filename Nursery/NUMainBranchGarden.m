@@ -76,6 +76,20 @@
 
 @implementation NUMainBranchGarden (SaveAndLoad)
 
+- (void)moveUpTo:(NUUInt64)aGrade preventReleaseOfCurrentGrade:(BOOL)aPreventFlag
+{
+    @try
+    {
+        [[self mainBranchNursery] lock];
+        
+        [super moveUpTo:aGrade preventReleaseOfCurrentGrade:aPreventFlag];
+    }
+    @finally
+    {
+        [[self mainBranchNursery] unlock];
+    }
+}
+
 - (NUFarmOutStatus)farmOut
 {
     NUFarmOutStatus aFarmOutStatus = NUFarmOutStatusFailed;
@@ -116,7 +130,6 @@
                     {
                         [[self mainBranchNursery] retainGrade:aNewGrade byGarden:self];
                         [self setGrade:aNewGrade];
-                        [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
                     }
                 }
                 else
@@ -129,7 +142,10 @@
     @finally
     {
         if (aFarmOutStatus == NUFarmOutStatusSucceeded)
+        {
             [[self gardenSeeker] endPreventationOfReleaseOfPastGrades];
+            [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
+        }
         
         [[self mainBranchNursery] unlockAndStartChildminders];
         [self unlock];
