@@ -682,7 +682,7 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 - (void)changeNodePageWith:(NUUInt64)aPageLocation
 {
 #ifdef DEBUG
-    NSLog(@"%@ #changeNodePageWith:%llu; rootLocation:%llu", [self class], aPageLocation, pageLocation);
+    NSLog(@"%@ #changeNodePageWith:%llu; currentPageLocation:%llu", [self class], aPageLocation, pageLocation);
 #endif
     
     [[self parentNode] changeNodePageWith:aPageLocation of:self];

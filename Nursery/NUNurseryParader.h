@@ -11,7 +11,7 @@
 
 extern NSString *NUParaderInvalidNodeLocationException;
 
-@class NUMainBranchNursery;
+@class NUMainBranchNursery, NUOpaqueBPlusTreeNode;
 
 @interface NUNurseryParader : NUThreadedChildminder
 {
@@ -21,14 +21,16 @@ extern NSString *NUParaderInvalidNodeLocationException;
 
 + (id)paraderWithGarden:(NUGarden *)aGarden;
 
+- (NUUInt64)grade;
 - (NUMainBranchNursery *)nursery;
 
 - (void)save;
 - (void)load;
 
-- (void)paradeObjectOrNodeNextTo:(NURegion)aFreeRegion buffer:(NUUInt8 *)aBuffer bufferSize:(NUUInt64) aBufferSize;
-- (void)paradeObjectWithBellBall:(NUBellBall)aBellBall atNextTo:(NURegion)aFreeRegion buffer:(NUUInt8 *)aBuffer bufferSize:(NUUInt64)aBufferSize;
-- (void)paradeNodeAtNextTo:(NURegion)aFreeRegion buffer:(NUUInt8 *)aBuffer bufferSize:(NUUInt64)aBufferSize;
+- (void)paradeObjectOrNodeNextTo:(NURegion)aFreeRegion;
+- (void)paradeObjectWithBellBall:(NUBellBall)aBellBall at:(NUUInt64)anObjectLocation nextTo:(NURegion)aFreeRegion;
+- (void)paradeNodeAt:(NUUInt64)aNodeLocation nextTo:(NURegion)aFreeRegion;
 - (void)computeMovedNodeRegionInto:(NURegion *)aMovedNodeRegion fromCurrentNodeRegion:(NURegion)aCurrentNodeRegion withFreeRegion:(NURegion)aFreeRegion newFreeRegion1Into:(NURegion *)aNewFreeRegion1 newFreeRegion2Into:(NURegion *)aNewFreeRegion2;
+- (NUOpaqueBPlusTreeNode *)nodeFor:(NUUInt64)aNodeLocation;
 
 @end

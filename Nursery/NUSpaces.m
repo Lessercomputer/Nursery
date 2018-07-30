@@ -108,6 +108,16 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 	[pages setFileHandle:aFileHandle];
 }
 
+- (NULocationTree *)locationTree
+{
+    return locationTree;
+}
+
+- (NULengthTree *)lengthTree
+{
+    return lengthTree;
+}
+
 @end
 
 @implementation NUSpaces (SaveAndLoad)
@@ -519,9 +529,22 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
     return [[[self nodeOOPToTreeDictionary] objectForKey:aNodeOOP] nodeFor:aNodeLocation];
 }
 
-- (BOOL)nodePageIsNotRelesed:(NUUInt64)aNodeLocation
+- (BOOL)nodePageIsReleased:(NUUInt64)aNodeLocation
 {
-    return ![[self pagesToRelease] containsObject:@(aNodeLocation)];
+    BOOL aNodePageIsReleased;
+    
+    [self lock];
+    
+    aNodePageIsReleased = [[self pagesToRelease] containsObject:@(aNodeLocation)];
+    
+    [self unlock];
+    
+    return aNodePageIsReleased;
+}
+
+- (BOOL)nodePageIsNotReleased:(NUUInt64)aNodeLocation
+{
+    return ![self nodePageIsReleased:aNodeLocation];
 }
 
 - (void)movePageToReleaseAtLocation:(NUUInt64)aNodeLocation toLocation:(NUUInt64)aNewLocation
@@ -532,6 +555,19 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
     
     [[self pagesToRelease] removeObject:@(aNodeLocation)];
     [[self pagesToRelease] addObject:@(aNewLocation)];
+}
+
+- (void)removePageToReleaseAtLocation:(NUUInt64)aNodeLocation
+{
+#ifdef DEBUG
+    NSLog(@"removePageToReleaseAtLocation:%@", @(aNodeLocation));
+#endif
+    
+    [self lock];
+    
+    [[self pagesToRelease] removeObject:@(aNodeLocation)];
+    
+    [self unlock];
 }
 
 @end

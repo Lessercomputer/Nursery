@@ -251,7 +251,7 @@
 	if (!aNode && ![[self spaces] nodePageLocationIsVirtual:aNodeLocation])
 	{
 		aNode = [self loadNodeFor:aNodeLocation];
-		[[self nodeDictionary] setObject:aNode forKey:aNodeLocation];
+		if (aNode) [[self nodeDictionary] setObject:aNode forKey:aNodeLocation];
 	}
 	
 	return aNode;

@@ -51,6 +51,9 @@ extern NSString *NUSpaceInvalidOperationException;
 
 - (void)setFileHandle:(NSFileHandle *)aFileHandle;
 
+- (NULocationTree *)locationTree;
+- (NULengthTree *)lengthTree;
+
 @end
 
 @interface NUSpaces (SaveAndLoad)
@@ -101,8 +104,10 @@ extern NSString *NUSpaceInvalidOperationException;
 
 - (NUOpaqueBPlusTreeNode *)nodeFor:(NUUInt64)aNodeLocation;
 
-- (BOOL)nodePageIsNotRelesed:(NUUInt64)aNodeLocation;
+- (BOOL)nodePageIsReleased:(NUUInt64)aNodeLocation;
+- (BOOL)nodePageIsNotReleased:(NUUInt64)aNodeLocation;
 - (void)movePageToReleaseAtLocation:(NUUInt64)aNodeLocation toLocation:(NUUInt64)aNewLocation;
+- (void)removePageToReleaseAtLocation:(NUUInt64)aNodeLocation;
 
 @end
 
