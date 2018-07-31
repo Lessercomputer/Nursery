@@ -102,6 +102,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
                 [[[self nursery] spaces] minimizeSpace];
                 nextLocation = 0;
                 grade = NUNilGrade;
+                [[self nursery] paraderDidFinishParade:self];
                 
                 break;
             }
@@ -127,8 +128,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
         
         if (!NUBellBallEquals(aBellBall, NUNotFoundBellBall))
         {
-            if (aBellBall.grade <= [self grade])
-                [self paradeObjectWithBellBall:aBellBall at:nextLocation nextTo:aFreeRegion];
+            [self paradeObjectWithBellBall:aBellBall at:nextLocation nextTo:aFreeRegion];
         }
         else
         {

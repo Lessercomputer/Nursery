@@ -277,7 +277,10 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
     nextBellBallToCollect = aBellBall;
     
     if (NUBellBallEquals(aBellBall, NUNotFoundBellBall))
-        currentPhase = NUSeekerNonePhase;    
+    {
+        currentPhase = NUSeekerNonePhase;
+        [[self nursery] seekerDidFinishSeek:self];
+    }
 }
 
 - (void)collectObjectIfNeeded:(NUBellBall)aBellBall

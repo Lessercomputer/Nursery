@@ -385,8 +385,26 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 
 - (NUUInt64)gradeForParader
 {
-    NUUInt64 aGrade = [self gradeForSeeker];
-    return aGrade == NUNilGrade ? NUNilGrade : aGrade - 1;
+    @try
+    {
+        [self lock];
+        
+        NUUInt64 aGrade = [self grade];
+        return aGrade;
+    }
+    @finally
+    {
+        [self unlock];
+    }
+}
+
+- (void)seekerDidFinishSeek:(NUNurserySeeker *)sender
+{
+    [[self parader] start];
+}
+
+- (void)paraderDidFinishParade:(NUNurseryParader *)sender
+{
 }
 
 - (void)LockAndStopChildminders
@@ -475,8 +493,6 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 
 - (BOOL)open
 {
-    BOOL aShouldStartChildminders = NO;
-    
     @try
     {
         [lock lock];
@@ -485,8 +501,6 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
         {
             case NUNurseryOpenStatusClose:
                 [self createFileAndOpenIfNeeded];
-                if ([self isOpen] && [self grade] != NUNilGrade)
-                    aShouldStartChildminders = YES;
                 break;
             case NUNurseryOpenStatusOpenWithoutFile:
                 [self createFileAndOpenIfNeeded];
@@ -499,13 +513,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     {
         [lock unlock];
     }
-    
-    if (aShouldStartChildminders)
-    {
-        [[self seeker] start];
-        [[self parader] start];
-    }
-    
+   
     return [self isOpen];
 }
 

@@ -53,6 +53,9 @@
 - (NUUInt64)gradeForSeeker;
 - (NUUInt64)gradeForParader;
 
+- (void)seekerDidFinishSeek:(NUNurserySeeker *)sender;
+- (void)paraderDidFinishParade:(NUNurseryParader *)sender;
+
 - (void)LockAndStopChildminders;
 - (void)unlockAndStartChildminders;
 - (void)lock;
