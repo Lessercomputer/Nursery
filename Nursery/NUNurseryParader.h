@@ -30,7 +30,6 @@ extern NSString *NUParaderInvalidNodeLocationException;
 - (void)paradeObjectOrNodeNextTo:(NURegion)aFreeRegion;
 - (void)paradeObjectWithBellBall:(NUBellBall)aBellBall at:(NUUInt64)anObjectLocation nextTo:(NURegion)aFreeRegion;
 - (void)paradeNodeAt:(NUUInt64)aNodeLocation nextTo:(NURegion)aFreeRegion;
-- (void)computeMovedNodeRegionInto:(NURegion *)aMovedNodeRegion fromCurrentNodeRegion:(NURegion)aCurrentNodeRegion withFreeRegion:(NURegion)aFreeRegion newFreeRegion1Into:(NURegion *)aNewFreeRegion1 newFreeRegion2Into:(NURegion *)aNewFreeRegion2;
 - (NUOpaqueBPlusTreeNode *)nodeFor:(NUUInt64)aNodeLocation;
 
 @end

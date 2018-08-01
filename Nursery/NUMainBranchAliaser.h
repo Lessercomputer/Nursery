@@ -41,9 +41,6 @@
 
 @interface NUMainBranchAliaser (ObjectSpace)
 
-- (NUUInt64)ensureObjectSpaceFor:(NUBell *)aBell;
-- (NUUInt64)allocateObjectSpaceFor:(NUBell *)aBell;
-- (NUUInt64)reallocateObjectSpaceFor:(NUBell *)aBell oldSpace:(NURegion)anOldRegion withNewSize:(NUUInt64)aNewSize;
 - (NUUInt64)sizeOfObject:(id)anObject;
 - (NUUInt64)sizeOfObjectForBellBall:(NUBellBall)aBellBall;
 

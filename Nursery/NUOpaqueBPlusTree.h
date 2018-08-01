@@ -90,8 +90,8 @@
 - (NUOpaqueBPlusTreeNode *)makeNodeOf:(Class)aNodeClass;
 - (NUOpaqueBPlusTreeNode *)makeNodeOf:(Class)aNodeClass keys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aValues;
 
-- (NUUInt64)allocateNodePage;
-- (void)releaseNodePage:(NUUInt64)aNodePage;
+- (NUUInt64)allocateNodePageLocation;
+- (void)releaseNodePageLocation:(NUUInt64)aNodePage;
 
 - (void)addNode:(NUOpaqueBPlusTreeNode *)aNode;
 - (void)removeNodeAt:(NUUInt64)aPageLocation;

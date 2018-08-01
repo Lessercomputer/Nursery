@@ -675,7 +675,7 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 - (void)releaseNodePageAndCache
 {
-	[[self tree] releaseNodePage:[self pageLocation]];
+	[[self tree] releaseNodePageLocation:[self pageLocation]];
     [[self tree] removeNodeAt:[self pageLocation]];
 }
 

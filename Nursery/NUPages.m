@@ -46,7 +46,7 @@ const NUUInt64 NULogDataLengthOffset = 85;
         spaces = aSpaces;
         pageBuffer = [[NUPageLocationODictionary alloc] initWithPages:self];
         pageLinkedList = [NULinkedList new];
-        maximumRemovablePageBufferCount = 0;//NUDefaultMaximumRemovablePageBufferCount;
+        maximumRemovablePageBufferCount = NUDefaultMaximumRemovablePageBufferCount;
         changedRegions = [[NUChangedRegionArray alloc] initWithCapacity:pageSize];
     }
     
@@ -408,6 +408,16 @@ const NUUInt64 NULogDataLengthOffset = 85;
 - (void)writeData:(NSData *)aData at:(NUUInt64)anOffset
 {
     [self write:(const NUUInt8 *)[aData bytes] length:[aData length] at:anOffset];
+}
+
+- (void)copyBytesAt:(NUUInt64)aSourceLocation length:(NUUInt64)aLength to:(NUUInt64)aDestinationLocation
+{
+    NUUInt8 *aBuffer = malloc((size_t)aLength);
+    
+    [self read:aBuffer length:aLength at:aSourceLocation];
+    [self write:aBuffer length:aLength at:aDestinationLocation];
+    
+    free(aBuffer);
 }
 
 - (void)moveBytesAt:(NUUInt64)aSourceLocation length:(NUUInt64)aLength to:(NUUInt64)aDestinationLocation buffer:(NUUInt8 *)aBuffer length:(NUUInt64)aBufferLength

@@ -80,6 +80,7 @@ extern const NUUInt64 NUNextPageLocationOffset;
 - (void)writeRegion:(NURegion)aValue at:(NUUInt64)anOffset;
 - (void)writeData:(NSData *)aData at:(NUUInt64)anOffset;
 
+- (void)copyBytesAt:(NUUInt64)aSourceLocation length:(NUUInt64)aLength to:(NUUInt64)aDestinationLocation;
 - (void)moveBytesAt:(NUUInt64)aSourceLocation length:(NUUInt64)aLength to:(NUUInt64)aDestinationLocation buffer:(NUUInt8 *)aBuffer length:(NUUInt64)aBufferLength;
 
 - (void)write:(const NUUInt8 *)aBytes length:(NUUInt64)aLength at:(NUUInt64)anOffset of:(NUUInt64)aSpace;

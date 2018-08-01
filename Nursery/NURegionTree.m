@@ -15,14 +15,14 @@
 
 @implementation NURegionTree
 
-- (NUUInt64)allocateNodePage
+- (NUUInt64)allocateNodePageLocation
 {
-	return [[self spaces] allocateVirtualNodePage];
+	return [[self spaces] allocateVirtualNodePageLocation];
 }
 
-- (void)releaseNodePage:(NUUInt64)aNodePage
+- (void)releaseNodePageLocation:(NUUInt64)aNodePage
 {
-	[[self spaces] delayedReleaseNodePage:aNodePage];
+	[[self spaces] delayedReleaseNodePageLocation:aNodePage];
 }
 
 - (void)branch:(NUOpaqueBPlusTreeBranch *)aBranch didInsertNodes:(NUUInt8 *)aNodeLocations at:(NUUInt32)anIndex count:(NUUInt32)aCount

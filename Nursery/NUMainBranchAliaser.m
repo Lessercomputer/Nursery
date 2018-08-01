@@ -188,48 +188,6 @@
 
 @implementation NUMainBranchAliaser (ObjectSpace)
 
-- (NUUInt64)ensureObjectSpaceFor:(NUBell *)aBell
-{
-    NUUInt64 anObjectLocation = [[[self nursery] objectTable] objectLocationFor:[aBell ball]];
-    
-    if (anObjectLocation == NUNotFound64 || anObjectLocation == 0)
-        anObjectLocation = [self allocateObjectSpaceFor:aBell];
-    else
-    {
-        NURegion aPreviousRegion = NUMakeRegion(anObjectLocation, [self sizeOfObjectForBellBall:[aBell ball]]);
-        NUUInt64 aCurrentObjectSize = [self computeSizeOfObject:[aBell object]];
-        
-        if (aPreviousRegion.length != aCurrentObjectSize)
-            anObjectLocation = [self reallocateObjectSpaceFor:aBell oldSpace:aPreviousRegion withNewSize:aCurrentObjectSize];
-    }
-    
-	return anObjectLocation;
-}
-
-- (NUUInt64)allocateObjectSpaceFor:(NUBell *)aBell
-{
-    NUUInt64 aSizeOfObject = [self computeSizeOfObject:[aBell object]];
-	NUUInt64 aLocation = [[[self nursery] spaces] allocateSpace:aSizeOfObject];
-    
-    if ([aBell grade] == NUNilGrade) [aBell setGrade:[self gradeForSave]];
-    
-	[[[self nursery] objectTable] setObjectLocation:aLocation for:[aBell ball]];
-    [[[self nursery] reversedObjectTable] setBellBall:[aBell ball] forObjectLocation:aLocation];
-    
-	return aLocation;
-}
-
-- (NUUInt64)reallocateObjectSpaceFor:(NUBell *)aBell oldSpace:(NURegion)anOldRegion withNewSize:(NUUInt64)aNewSize
-{
-    [[[self nursery] spaces] releaseSpace:anOldRegion];
-    [[[self nursery] reversedObjectTable] removeBellBallForObjectLocation:anOldRegion.location];
-    NUUInt64 anObjectLocation = [self allocateObjectSpaceFor:aBell];
-    [[[self nursery] objectTable] setObjectLocation:anObjectLocation for:[aBell ball]];
-    [[[self nursery] reversedObjectTable] setBellBall:[aBell ball] forObjectLocation:anObjectLocation];
-    
-    return anObjectLocation;
-}
-
 - (NUUInt64)sizeOfObject:(id)anObject
 {
 	return [self sizeOfObjectForBellBall:[[[self garden] bellForObject:anObject] ball]];

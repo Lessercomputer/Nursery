@@ -266,10 +266,6 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 
 - (void)releaseSpace:(NURegion)aRegion
 {
-#ifdef DEBUG
-    NSLog(@"#releaseSpace:%@", NUStringFromRegion(aRegion));
-#endif
-    
 	NUUInt32 aKeyIndex;
 	NULocationTreeLeaf *aNode = [locationTree getNodeContainingSpaceAtLocationLessThanOrEqual:aRegion.location keyIndex:&aKeyIndex];
 	NURegion aLeftRegion = NUMakeRegion(0, 0), aRightRegion = NUMakeRegion(0, 0);
@@ -278,7 +274,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 	{
 		aLeftRegion = [aNode regionAt:aKeyIndex];
 		
-		if (NULocationInRegion(aRegion.location, aLeftRegion))
+        if (NUIntersectsRegion(aLeftRegion, aRegion) && NUMaxLocation(aLeftRegion) != aRegion.location)
 			[[NSException exceptionWithName:NURegionAlreadyReleasedException reason:nil userInfo:nil] raise];
 				
 		if (aKeyIndex < [aNode keyCount] - 1) aRightRegion = [aNode regionAt:aKeyIndex + 1];
@@ -286,70 +282,25 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 	}
 	else if (![[locationTree mostLeftNode] isEmpty])
     {
-#ifdef DEBUG
-        NSLog(@"#releaseSpace ![[locationTree mostLeftNode] isEmpty]");
-#endif
 		aRightRegion = [(NULocationTreeLeaf *)[locationTree mostLeftNode] regionAt:0];
-        
-/*#ifdef DEBUG
-        NSLog(@"#releaseSpace ![[locationTree mostRightNode] isEmpty]");
-#endif
-		aRightRegion = [(NULocationTreeLeaf *)[locationTree mostRightNode] regionAt:0];*/
     }
 	
-	if (aRightRegion.length != 0 && NULocationInRegion(aRightRegion.location, aRegion))
+	if (aRightRegion.length != 0 && NUIntersectsRegion(aRegion, aRightRegion) && NUMaxLocation(aRegion) != aRightRegion.location)
 		[[NSException exceptionWithName:NURegionAlreadyReleasedException reason:nil userInfo:nil] raise];
 	
 	if (NUMaxLocation(aLeftRegion) == aRegion.location)
 	{
-#ifdef DEBUG
-        NSLog(@"#releaseSpace removeLeftRegion:%@", NUStringFromRegion(aLeftRegion));
-#endif
-        
 		[self removeRegion:aLeftRegion];
 		aRegion = NUMakeRegion(aLeftRegion.location, aLeftRegion.length + aRegion.length);
 	}
 	
 	if (aRightRegion.length != 0 && NUMaxLocation(aRegion) == aRightRegion.location)
 	{
-#ifdef DEBUG
-        NSLog(@"#releaseSpace removeRightRegion:%@", NUStringFromRegion(aRightRegion));
-#endif
-
 		[self removeRegion:aRightRegion];
 		aRegion = NUMakeRegion(aRegion.location, aRegion.length + aRightRegion.length);
 	}
 	
-#ifdef DEBUG
-    NSLog(@"#releaseSpace setRegion:%@", NUStringFromRegion(aRegion));
-#endif
-    
 	[self setRegion:aRegion];
-}
-
-- (void)moveFreeSpaceAtLocation:(NUUInt64)aSourceLocation toLocation:(NUUInt64)aDestinationLocation
-{
-    if (aSourceLocation >= aDestinationLocation)
-        [[NSException exceptionWithName:NUSpaceInvalidOperationException reason:NUSpaceInvalidOperationException userInfo:nil] raise];
-    
-    NURegion aFreeRegion = [locationTree regionFor:aSourceLocation];
-    
-    if (aFreeRegion.location == NUNotFound64)
-        [[NSException exceptionWithName:NUSpaceInvalidOperationException reason:NUSpaceInvalidOperationException userInfo:nil] raise];
-    
-    NURegion aMovedFreeRegion = NUMakeRegion(aDestinationLocation, aFreeRegion.length);
-    NURegion aFreeRegionToMerge = [locationTree regionFor:NUMaxLocation(aMovedFreeRegion)];
-    
-    [self removeRegion:aFreeRegion];
-    
-    if (aFreeRegionToMerge.location == NUNotFound64)
-        [self setRegion:aMovedFreeRegion];
-    else
-    {
-        [self removeRegion:aFreeRegionToMerge];
-        NURegion aMergedFreeRegion = NUUnionRegion(aMovedFreeRegion, aFreeRegionToMerge);
-        [self setRegion:aMergedFreeRegion];
-    }
 }
 
 - (void)minimizeSpace
@@ -358,9 +309,6 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
     
     if (aLastFreeRegion.location != NUNotFound64 && NUMaxLocation(aLastFreeRegion) == [[self pages] nextPageLocation])
     {
-#ifdef DEBUG
-        NSLog(@"minimizeSpace");
-#endif
         NUUInt64 aMinimumNextPageLocation = aLastFreeRegion.location;
         NURegion aNewFreeRegion = NUMakeRegion(NUNotFound64, 0);
         
@@ -387,30 +335,36 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 
 @implementation NUSpaces (NodeSpace)
 
-- (NUUInt64)allocateNodePage
+- (NUUInt64)allocateNodePageLocation
 {
 	return [self allocateSpace:[[self pages] pageSize] aligned:YES preventsNodeRelease:NO];
 }
 
-- (void)releaseNodePage:(NUUInt64)aNodePage
+- (void)releaseNodePageLocation:(NUUInt64)aNodePage
 {
+    [self lock];
+    
 	[self releaseSpace:NUMakeRegion(aNodePage, [[self pages] pageSize])];
+    [self removePageToBeReleasedAtLocation:aNodePage];
+    
+    [self unlock];
 }
 
-- (NUUInt64)allocateVirtualNodePage
+- (NUUInt64)allocateVirtualNodePageLocation
 {
 	NUUInt64 aNewVirtualNodePage = nextVirtualPageLocation;
 	nextVirtualPageLocation -= [pages pageSize];
 	return aNewVirtualNodePage;
 }
 
-- (void)delayedReleaseNodePage:(NUUInt64)aNodePage
+- (void)delayedReleaseNodePageLocation:(NUUInt64)aNodePage
 {
+    [self lock];
+    
 	if ([self nodePageLocationIsNotVirtual:aNodePage])
 		[pagesToRelease addObject:[NSNumber numberWithUnsignedLongLong:aNodePage]];
-#ifdef DEBUG
-    NSLog(@"pagesToRelese:%@", pagesToRelease);
-#endif
+    
+    [self unlock];
 }
 
 - (NUUInt64)allocateNodePageWithPreventNodeRelease
@@ -462,6 +416,8 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 
 - (void)releasePagesToRelease
 {
+    [self lock];
+    
 	NUUInt64 aVirtualPageLocation = [self firstVirtualPageLocation];
 	
 	while ([pagesToRelease count])
@@ -476,15 +432,17 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 			if (aNode)
 				[aNode changeNodePageWith:[aPageNumber unsignedLongLongValue]];
 			else
-				[self releaseNodePage:[aPageNumber unsignedLongLongValue]];
+				[self releaseNodePageLocation:[aPageNumber unsignedLongLongValue]];
 			
 			aVirtualPageLocation -= [[self pages] pageSize];
 		}
 		else
-			[self releaseNodePage:[aPageNumber unsignedLongLongValue]];
+			[self releaseNodePageLocation:[aPageNumber unsignedLongLongValue]];
 		
 		[pagesToRelease removeObject:aPageNumber];
 	}
+    
+    [self unlock];
 }
 
 - (void)fixVirtualNodePages
@@ -529,7 +487,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
     return [[[self nodeOOPToTreeDictionary] objectForKey:aNodeOOP] nodeFor:aNodeLocation];
 }
 
-- (BOOL)nodePageIsReleased:(NUUInt64)aNodeLocation
+- (BOOL)nodePageIsToBeReleased:(NUUInt64)aNodeLocation
 {
     BOOL aNodePageIsReleased;
     
@@ -542,22 +500,12 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
     return aNodePageIsReleased;
 }
 
-- (BOOL)nodePageIsNotReleased:(NUUInt64)aNodeLocation
+- (BOOL)nodePageIsNotToBeReleased:(NUUInt64)aNodeLocation
 {
-    return ![self nodePageIsReleased:aNodeLocation];
+    return ![self nodePageIsToBeReleased:aNodeLocation];
 }
 
-- (void)movePageToReleaseAtLocation:(NUUInt64)aNodeLocation toLocation:(NUUInt64)aNewLocation
-{
-#ifdef DEBUG
-    NSLog(@"movePageToReleaseAtLocation:%llu toLocation:%llu", aNodeLocation, aNewLocation);
-#endif
-    
-    [[self pagesToRelease] removeObject:@(aNodeLocation)];
-    [[self pagesToRelease] addObject:@(aNewLocation)];
-}
-
-- (void)removePageToReleaseAtLocation:(NUUInt64)aNodeLocation
+- (void)removePageToBeReleasedAtLocation:(NUUInt64)aNodeLocation
 {
 #ifdef DEBUG
     NSLog(@"removePageToReleaseAtLocation:%@", @(aNodeLocation));

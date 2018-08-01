@@ -73,7 +73,6 @@ extern NSString *NUSpaceInvalidOperationException;
 - (NUUInt64)allocateSpaceFrom:(NULengthTreeLeaf *)aLengthTreeLeaf region:(NURegion)aRegion length:(NUUInt64)aLength aligned:(BOOL)anAlignFlag preventsNodeRelease:(BOOL)aPreventsNodeReleaseFlag;
 - (NUUInt64)extendSpaceBy:(NUUInt64)aLength;
 - (void)releaseSpace:(NURegion)aRegion;
-- (void)moveFreeSpaceAtLocation:(NUUInt64)aSourceLocation toLocation:(NUUInt64)aDestinationLocation;
 - (void)minimizeSpace;
 
 - (NUUInt64)pageStatingLocationFor:(NUUInt64)aLocation;
@@ -82,11 +81,11 @@ extern NSString *NUSpaceInvalidOperationException;
 
 @interface NUSpaces (NodeSpace)
 
-- (NUUInt64)allocateNodePage;
-- (void)releaseNodePage:(NUUInt64)aNodePage;
+- (NUUInt64)allocateNodePageLocation;
+- (void)releaseNodePageLocation:(NUUInt64)aNodePage;
 
-- (NUUInt64)allocateVirtualNodePage;
-- (void)delayedReleaseNodePage:(NUUInt64)aNodePage;
+- (NUUInt64)allocateVirtualNodePageLocation;
+- (void)delayedReleaseNodePageLocation:(NUUInt64)aNodePage;
 - (NUUInt64)allocateNodePageWithPreventNodeRelease;
 - (void)initNextVirtualPageLocation;
 - (NUUInt64)firstVirtualPageLocation;
@@ -104,10 +103,9 @@ extern NSString *NUSpaceInvalidOperationException;
 
 - (NUOpaqueBPlusTreeNode *)nodeFor:(NUUInt64)aNodeLocation;
 
-- (BOOL)nodePageIsReleased:(NUUInt64)aNodeLocation;
-- (BOOL)nodePageIsNotReleased:(NUUInt64)aNodeLocation;
-- (void)movePageToReleaseAtLocation:(NUUInt64)aNodeLocation toLocation:(NUUInt64)aNewLocation;
-- (void)removePageToReleaseAtLocation:(NUUInt64)aNodeLocation;
+- (BOOL)nodePageIsToBeReleased:(NUUInt64)aNodeLocation;
+- (BOOL)nodePageIsNotToBeReleased:(NUUInt64)aNodeLocation;
+- (void)removePageToBeReleasedAtLocation:(NUUInt64)aNodeLocation;
 
 @end
 

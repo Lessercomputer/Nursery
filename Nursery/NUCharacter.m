@@ -462,13 +462,12 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
 
 - (NUUInt64)computeBasicSize
 {
-	NUUInt64 aSize = 0;
-	NSEnumerator *enumerator = [[self allIvars] objectEnumerator];
-	NUIvar *anIvar = nil;
-	
-	while (anIvar = [enumerator nextObject])
-		aSize += [anIvar sizeInBytes];
-	
+	__block NUUInt64 aSize = 0;
+    [[self allIvars] enumerateObjectsUsingBlock:^(NUIvar * _Nonnull anIvar, NSUInteger idx, BOOL * _Nonnull stop)
+    {
+        aSize += [anIvar sizeInBytes];
+    }];
+    
 	basicSize = aSize;
 	
 	return aSize;

@@ -310,19 +310,19 @@
 
 - (NUOpaqueBPlusTreeNode *)makeNodeOf:(Class)aNodeClass keys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aValues
 {
-	NUOpaqueBPlusTreeNode *aNode = [aNodeClass nodeWithTree:self pageLocation:[self allocateNodePage] keys:aKeys values:aValues];
+	NUOpaqueBPlusTreeNode *aNode = [aNodeClass nodeWithTree:self pageLocation:[self allocateNodePageLocation] keys:aKeys values:aValues];
 	[self addNode:aNode];
 	return aNode;
 }
 
-- (NUUInt64)allocateNodePage
+- (NUUInt64)allocateNodePageLocation
 {
-	return [[self spaces] allocateNodePage];
+	return [[self spaces] allocateNodePageLocation];
 }
 
-- (void)releaseNodePage:(NUUInt64)aNodePage
+- (void)releaseNodePageLocation:(NUUInt64)aNodePage
 {
-	[[self spaces] releaseNodePage:aNodePage];
+	[[self spaces] releaseNodePageLocation:aNodePage];
 }
 
 - (void)addNode:(NUOpaqueBPlusTreeNode *)aNode
