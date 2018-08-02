@@ -302,7 +302,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 //    else if (aGCMarkColor == NUGCMarkBlack)
 //        NSLog(@"#collectObjects:%@, NUGCMarkBlack", NUStringFromBellBall(aBellBall));
 //#endif
-        
+    
         if (aGCMarkColor == NUGCMarkWhite && aBellBall.grade <= [self grade])
         {
             NUUInt64 anObjectLocation = [[[self nursery] objectTable] objectLocationFor:aBellBall];
@@ -313,7 +313,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
                 [[NSException exceptionWithName:@"error" reason:@"error" userInfo:nil] raise];
             if (!NUBellBallEquals([[[self nursery] reversedObjectTable] bellBallForObjectLocation:anObjectLocation], NUNotFoundBellBall))
                 [[NSException exceptionWithName:@"error" reason:@"error" userInfo:nil] raise];
-            
+        
 #ifdef DEBUG
             NSLog(@"<%@:%p> #collectObjects (removeObjectFor: %@, removeOOPForObjectLocation: %llu)", [self class], self, NUStringFromBellBall(aBellBall), anObjectLocation);
 #endif
@@ -443,10 +443,11 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
 - (void)setGrade:(NUUInt64)aGrade
 {
+//#ifdef DEBUG
+    NSLog(@"%@ currentGrade:%@, aNewGrade:%@", self, @(grade), @(aGrade));
+//#endif
+    
     grade = aGrade;
-#ifdef DEBUG
-    NSLog(@"%@, grade:%@", self, @(aGrade));
-#endif
 }
 
 @end

@@ -22,6 +22,7 @@ extern NSString *NUParaderInvalidNodeLocationException;
 + (id)paraderWithGarden:(NUGarden *)aGarden;
 
 - (NUUInt64)grade;
+- (void)setGrade:(NUUInt64)aGrade;
 - (NUMainBranchNursery *)nursery;
 
 - (void)save;

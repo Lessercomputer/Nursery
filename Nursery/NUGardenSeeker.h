@@ -19,6 +19,7 @@
     NUQueue *bells;
     NSRecursiveLock *bellsLock;
     NUAperture *aperture;
+    NUUInt64 grade;
     NSRecursiveLock *lock;
 }
 
@@ -42,6 +43,7 @@
 
 - (NUAperture *)aperture;
 - (NUUInt64)grade;
+- (void)setGrade:(NUUInt64)aGrade;
 
 - (void)seekObjectFor:(NUBell *)aBell;
 - (void)seekIvarsOfObjectFor:(NUBell *)aBell;

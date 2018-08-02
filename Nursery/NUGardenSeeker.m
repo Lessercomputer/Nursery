@@ -91,12 +91,23 @@
 
 - (void)pushRootBell:(NUBell *)aBell
 {
+    [self lock];
     [bellsLock lock];
     
     [[self bells] removeAll];
     [self pushBell:aBell];
     
+    NUUInt64 aGrade;
+    
+    if ([[self gradesToPreventRelease] count])
+        aGrade = [[self gradesToPreventRelease] firstIndex];
+    else
+        aGrade = [[self garden] grade];
+    
+    [self setGrade:aGrade];
+    
     [bellsLock unlock];
+    [self unlock];
 }
 
 - (void)pushBellIfNeeded:(NUBell *)aBell
@@ -139,18 +150,16 @@
 
 - (NUUInt64)grade
 {
-    NUUInt64 aGrade;
+    return grade;
+}
+
+- (void)setGrade:(NUUInt64)aGrade
+{
+//#ifdef DEBUG
+    NSLog(@"%@ currentGrade:%@, aNewGrade:%@", self, @(grade), @(aGrade));
+//#endif
     
-    [self lock];
-    
-    if ([[self gradesToPreventRelease] count])
-        aGrade = [[self gradesToPreventRelease] firstIndex];
-    else
-        aGrade = [[self garden] grade];
-    
-    [self unlock];
-    
-    return aGrade;
+    grade = aGrade;
 }
 
 - (void)process

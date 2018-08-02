@@ -339,6 +339,10 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 
 - (void)setGrade:(NUUInt64)aGrade
 {
+    //#ifdef DEBUG
+    NSLog(@"%@ currentGrade:%@, aNewGrade:%@", self, @(grade), @(aGrade));
+    //#endif
+    
     grade = aGrade;
 }
 
@@ -569,7 +573,8 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 - (NUUInt64)newGrade
 {
     [lock lock];
-    NUUInt64 aNewGrade = ++grade;
+    [self setGrade:[self grade] + 1];
+    NUUInt64 aNewGrade = [self grade];
     [lock unlock];
     return aNewGrade;
 }

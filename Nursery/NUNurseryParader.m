@@ -64,6 +64,15 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     return grade;
 }
 
+- (void)setGrade:(NUUInt64)aGrade
+{
+    //#ifdef DEBUG
+    NSLog(@"%@ currentGrade:%@, aNewGrade:%@", self, @(grade), @(aGrade));
+    //#endif
+    
+    grade = aGrade;
+}
+
 - (void)save
 {
     [[[self nursery] pages] writeUInt64:nextLocation at:NUParaderNextLocationOffset];
@@ -76,14 +85,15 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 
 - (void)process
 {
-    grade = [[self nursery] gradeForParader];
-    if (grade == NUNilGrade)
+    [self setGrade:[[self nursery] gradeForParader]];
+
+    if ([self grade] == NUNilGrade)
     {
         [self setShouldStop:YES];
         return;
     }
     else
-        [[self garden] moveUpTo:grade];
+        [[self garden] moveUpTo:[self grade]];
     
     while (![self shouldStop])
     {
@@ -101,7 +111,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
             {
                 [[[self nursery] spaces] minimizeSpace];
                 nextLocation = 0;
-                grade = NUNilGrade;
+                [self setGrade:NUNilGrade];
                 [[self nursery] paraderDidFinishParade:self];
                 
                 break;
@@ -112,10 +122,6 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
             [[self nursery] unlock];
         }
     }
-    
-#ifdef DEBUG
-    NSLog(@"%@ process finished", self);
-#endif
 }
 
 - (void)paradeObjectOrNodeNextTo:(NURegion)aFreeRegion
@@ -132,18 +138,17 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
         }
         else
         {
-            NUUInt64 aNodeLocation = NUMaxLocation(aFreeRegion);
-            [self paradeNodeAt:aNodeLocation nextTo:aFreeRegion];
+            [self paradeNodeAt:nextLocation nextTo:aFreeRegion];
         }
         
-//#ifdef DEBUG
+#ifdef DEBUG
         BOOL aFreeRegionsIsValid = [[[self nursery] spaces] validateFreeRegions];
         
         if (aFreeRegionsIsValid)
             NSLog(@"aFreeRegionsIsValid = YES");
         else
             NSLog(@"aFreeRegionsIsValid = NO");
-//#endif
+#endif
     }
 }
 
@@ -167,6 +172,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 - (void)paradeNodeAt:(NUUInt64)aNodeLocation nextTo:(NURegion)aFreeRegion
 {
     NUUInt64 aNodeSize = [[[self nursery] pages] pageSize];
+    
     if (aNodeLocation % aNodeSize)
         [[NSException exceptionWithName:NUParaderInvalidNodeLocationException reason:nil userInfo:nil] raise];
     
@@ -180,13 +186,15 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
         {
             NUOpaqueBPlusTreeNode *aNode = [self nodeFor:aNodeLocation];
 
-            if (aNode)
-                [aNode changeNodePageWith:aNewNodeLocation];
+            if (!aNode)
+                @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+            
+            [aNode changeNodePageWith:aNewNodeLocation];
             
             [[[self nursery] pages] copyBytesAt:aNodeLocation length:aNodeSize to:aNewNodeLocation];
         }
         else
-            nextLocation = NUMaxLocation(aFreeRegion) + aNodeSize;
+            nextLocation = NUMaxLocation(aFreeRegion);
     }
     else
     {
