@@ -362,7 +362,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
     [self lock];
     
 	if ([self nodePageLocationIsNotVirtual:aNodePage])
-		[pagesToRelease addObject:[NSNumber numberWithUnsignedLongLong:aNodePage]];
+		[[self pagesToRelease] addObject:[NSNumber numberWithUnsignedLongLong:aNodePage]];
     
     [self unlock];
 }
@@ -420,9 +420,9 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
     
 	NUUInt64 aVirtualPageLocation = [self firstVirtualPageLocation];
 	
-	while ([pagesToRelease count])
+	while ([[self pagesToRelease] count])
 	{
-		NSNumber *aPageNumber = [pagesToRelease anyObject];
+		NSNumber *aPageNumber = [[self pagesToRelease] anyObject];
 		
 		if (aVirtualPageLocation > nextVirtualPageLocation)
 		{
@@ -439,7 +439,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 		else
 			[self releaseNodePageLocation:[aPageNumber unsignedLongLongValue]];
 		
-		[pagesToRelease removeObject:aPageNumber];
+		[[self pagesToRelease] removeObject:aPageNumber];
 	}
     
     [self unlock];
@@ -507,13 +507,19 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 
 - (void)removePageToBeReleasedAtLocation:(NUUInt64)aNodeLocation
 {
-#ifdef DEBUG
-    NSLog(@"removePageToReleaseAtLocation:%@", @(aNodeLocation));
-#endif
-    
     [self lock];
     
     [[self pagesToRelease] removeObject:@(aNodeLocation)];
+    
+    [self unlock];
+}
+
+- (void)movePageToBeReleasedAtLocation:(NUUInt64)aNodeLocation toLocation:(NUUInt64)aNewLocation
+{
+    [self lock];
+    
+    [[self pagesToRelease] removeObject:@(aNodeLocation)];
+    [[self pagesToRelease] addObject:@(aNewLocation)];
     
     [self unlock];
 }

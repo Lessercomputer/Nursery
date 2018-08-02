@@ -91,7 +91,7 @@ extern NSString *NUSpaceInvalidOperationException;
 - (NUUInt64)firstVirtualPageLocation;
 - (BOOL)nodePageLocationIsVirtual:(NUUInt64)aNodePageLocation;
 - (BOOL)nodePageLocationIsNotVirtual:(NUUInt64)aNodePageLocation;
-- (NSMutableArray *)pagesToRelease;
+- (NSMutableSet *)pagesToRelease;
 - (void)addBranchNeedsVirtualPageCheck:(NUOpaqueBPlusTreeBranch *)aBranch;
 - (void)removeBranchNeedsVirtualPageCheck:(NUOpaqueBPlusTreeBranch *)aBranch;
 
@@ -106,6 +106,7 @@ extern NSString *NUSpaceInvalidOperationException;
 - (BOOL)nodePageIsToBeReleased:(NUUInt64)aNodeLocation;
 - (BOOL)nodePageIsNotToBeReleased:(NUUInt64)aNodeLocation;
 - (void)removePageToBeReleasedAtLocation:(NUUInt64)aNodeLocation;
+- (void)movePageToBeReleasedAtLocation:(NUUInt64)aNodeLocation toLocation:(NUUInt64)aNewLocation;
 
 @end
 

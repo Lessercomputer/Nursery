@@ -13,6 +13,7 @@
 #import <Foundation/NSPathUtilities.h>
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSFileHandle.h>
+#import <Foundation/NSOperation.h>
 
 #import "NUNursery+Project.h"
 #import "NUMainBranchNursery.h"
@@ -404,6 +405,11 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 
 - (void)seekerDidFinishSeek:(NUNurserySeeker *)sender
 {
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        if ([[self seeker] grade] < [self gradeForSeeker])
+            [[self seeker] start];
+    }];
+    
     [[self parader] start];
 }
 
@@ -529,9 +535,12 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     {
         [self lock];
         
-#ifdef DEBUG
+//#ifdef DEBUG
+        [[self spaces] validateAllNodeLocations];
+        [[self objectTable] validateAllNodeLocations];
+        [[self reversedObjectTable] validateAllNodeLocations];
         [self validateObjectTableAndReversedObjectTable];
-#endif
+//#endif
         
         [self saveGrade];
         [[self objectTable] save];
@@ -540,12 +549,12 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
         [[self parader] save];
         [[self spaces] save];
         
-#ifdef DEBUG
+//#ifdef DEBUG
         [[self spaces] validateAllNodeLocations];
         [[self objectTable] validateAllNodeLocations];
         [[self reversedObjectTable] validateAllNodeLocations];
         [self validateObjectTableAndReversedObjectTable];
-#endif
+//#endif
     }
     @finally
     {
@@ -632,12 +641,12 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     
 	[self loadFileHeader];
     
-#ifdef DEBUG
+//#ifdef DEBUG
     [[self spaces] validateAllNodeLocations];
     [[self objectTable] validateAllNodeLocations];
     [[self reversedObjectTable] validateAllNodeLocations];
     [self validateObjectTableAndReversedObjectTable];
-#endif
+//#endif
 
 	return YES;
 }
