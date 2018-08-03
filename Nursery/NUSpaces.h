@@ -21,7 +21,7 @@ extern NSString *NUSpaceInvalidOperationException;
 	NULocationTree *locationTree;
 	NULengthTree *lengthTree;
 	NUUInt64 nextVirtualPageLocation;
-	NSMutableSet *pagesToRelease;
+	NSMutableSet *pagesToBeReleased;
 	NSMutableSet *branchesNeedVirtualPageCheck;
 	NSMutableDictionary *virtualToRealNodePageDictionary;
 	NUPages *pages;
@@ -82,7 +82,7 @@ extern NSString *NUSpaceInvalidOperationException;
 @interface NUSpaces (NodeSpace)
 
 - (NUUInt64)allocateNodePageLocation;
-- (void)releaseNodePageLocation:(NUUInt64)aNodePage;
+- (void)releaseNodePageAt:(NUUInt64)aNodePage;
 
 - (NUUInt64)allocateVirtualNodePageLocation;
 - (void)delayedReleaseNodePageLocation:(NUUInt64)aNodePage;
@@ -91,12 +91,12 @@ extern NSString *NUSpaceInvalidOperationException;
 - (NUUInt64)firstVirtualPageLocation;
 - (BOOL)nodePageLocationIsVirtual:(NUUInt64)aNodePageLocation;
 - (BOOL)nodePageLocationIsNotVirtual:(NUUInt64)aNodePageLocation;
-- (NSMutableSet *)pagesToRelease;
+- (NSMutableSet *)nodePageLocationsToBeReleased;
 - (void)addBranchNeedsVirtualPageCheck:(NUOpaqueBPlusTreeBranch *)aBranch;
 - (void)removeBranchNeedsVirtualPageCheck:(NUOpaqueBPlusTreeBranch *)aBranch;
 
 - (void)fixNodePages;
-- (void)releasePagesToRelease;
+- (void)releaseNodePagesToBeReleased;
 - (void)fixVirtualNodePages;
 - (void)setNodePageLocation:(NUUInt64)aPageLocation forVirtualNodePageLocation:(NUUInt64)aVirtualNodePageLocation;
 - (NUUInt64)nodePageLocationForVirtualNodePageLocation:(NUUInt64)aVirtualNodePageLocation;
@@ -105,7 +105,7 @@ extern NSString *NUSpaceInvalidOperationException;
 
 - (BOOL)nodePageIsToBeReleased:(NUUInt64)aNodeLocation;
 - (BOOL)nodePageIsNotToBeReleased:(NUUInt64)aNodeLocation;
-- (void)removePageToBeReleasedAtLocation:(NUUInt64)aNodeLocation;
+- (void)removeNodePageLocationToBeReleased:(NUUInt64)aNodeLocation;
 - (void)movePageToBeReleasedAtLocation:(NUUInt64)aNodeLocation toLocation:(NUUInt64)aNewLocation;
 
 @end

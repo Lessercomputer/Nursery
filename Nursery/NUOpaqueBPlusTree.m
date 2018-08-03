@@ -157,6 +157,7 @@
 
 - (NUOpaqueBPlusTreeBranch *)parentNodeOf:(NUOpaqueBPlusTreeNode *)aNode
 {
+    if ([self root] == aNode) return nil;
     if ([[self root] isLeaf]) return nil;
     
     return [[self root] parentNodeOf:aNode];
@@ -322,7 +323,7 @@
 
 - (void)releaseNodePageLocation:(NUUInt64)aNodePage
 {
-	[[self spaces] releaseNodePageLocation:aNodePage];
+	[[self spaces] releaseNodePageAt:aNodePage];
 }
 
 - (void)addNode:(NUOpaqueBPlusTreeNode *)aNode

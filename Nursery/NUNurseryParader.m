@@ -141,14 +141,14 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
             [self paradeNodeAt:nextLocation nextTo:aFreeRegion];
         }
         
-//#ifdef DEBUG
+#ifdef DEBUG
         BOOL aFreeRegionsIsValid = [[[self nursery] spaces] validateFreeRegions];
         
         if (aFreeRegionsIsValid)
             NSLog(@"aFreeRegionsIsValid = YES");
         else
             NSLog(@"aFreeRegionsIsValid = NO");
-//#endif
+#endif
     }
 }
 
@@ -172,36 +172,32 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 - (void)paradeNodeAt:(NUUInt64)aNodeLocation nextTo:(NURegion)aFreeRegion
 {
     NUUInt64 aNodeSize = [[[self nursery] pages] pageSize];
-    NUOpaqueBPlusTreeNode *aNode = [self nodeFor:aNodeLocation];
 
     if (aNodeLocation % aNodeSize)
         [[NSException exceptionWithName:NUParaderInvalidNodeLocationException reason:nil userInfo:nil] raise];
     
-    if (!aNode)
-        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
-    
-    if (aNode)
+    if ([[[self nursery] spaces] nodePageIsNotToBeReleased:aNodeLocation])
     {
         NURegion aNodeRegion = NUMakeRegion(aNodeLocation, aNodeSize);
+        
         [[[self nursery] spaces] releaseSpace:aNodeRegion];
         NUUInt64 aNewNodeLocation = [[[self nursery] spaces] allocateSpace:aNodeSize aligned:YES preventsNodeRelease:YES];
-
+        
         if (aNodeLocation != aNewNodeLocation)
         {
-            [aNode changeNodePageWith:aNewNodeLocation];
+            NUOpaqueBPlusTreeNode *aNode = [self nodeFor:aNodeLocation];
             
-            [[[self nursery] pages] copyBytesAt:aNodeLocation length:aNodeSize to:aNewNodeLocation];
-            
-            if ([[[self nursery] spaces] nodePageIsToBeReleased:aNodeLocation])
+            if (aNode)
             {
-                [[[self nursery] spaces] movePageToBeReleasedAtLocation:aNodeLocation toLocation:aNewNodeLocation];
+                [aNode changeNodePageWith:aNewNodeLocation];
+                [[[self nursery] pages] copyBytesAt:aNodeLocation length:aNodeSize to:aNewNodeLocation];
             }
+            
+            nextLocation = aNewNodeLocation;
         }
-        else
-            nextLocation = NUMaxLocation(aFreeRegion);
     }
     else
-        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+        nextLocation = NUMaxLocation(aFreeRegion);
 }
 
 - (NUOpaqueBPlusTreeNode *)nodeFor:(NUUInt64)aNodeLocation
