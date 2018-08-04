@@ -100,6 +100,9 @@ static NUComparisonResult compareIndex(NUUInt8 *anIndex1Pointer, NUUInt8 *anInde
 
 - (void)readFrom:(NUPages *)aPages at:(NUUInt64)anOffset capacity:(NUUInt32)aCapacity count:(NUUInt32)aCount
 {
+    if (aCount > aCapacity)
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+    
 	[aPages readUInt64Array:(NUUInt64 *)[self values] ofCount:aCapacity at:anOffset];
 	count = aCount;
 }

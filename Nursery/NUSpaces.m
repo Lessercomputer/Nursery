@@ -185,10 +185,9 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 			NUUInt64 anAllocatedLocation = [self allocateSpaceFrom:aNode region:aRegion length:aLength aligned:anAlignFlag preventsNodeRelease:aPreventsNodeReleaseFlag];
 			if (anAllocatedLocation != NUUInt64Max)
             {
-#ifdef DEBUG
                 if (anAlignFlag && (anAllocatedLocation % aLength != 0))
-                    NSLog(@"anAllocatedLocation is invalid.");
-#endif
+                    @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+
                 return anAllocatedLocation;
             }
 		}
@@ -205,8 +204,8 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 	NUUInt32 aKeyIndex;
 	NULocationTreeLeaf *aLocationTreeLeaf = [locationTree getNodeContainingSpaceAtLocationLessThanOrEqual:aRegion.location keyIndex:&aKeyIndex];
 	
-	if (![aLengthTreeLeaf canPreventNodeReleseWhenValueRemoved]
-			|| ![aLocationTreeLeaf canPreventNodeReleseWhenValueRemoved])
+	if (![aLengthTreeLeaf canPreventNodeReleseWhenValueRemovedOrAdded]
+			|| ![aLocationTreeLeaf canPreventNodeReleseWhenValueRemovedOrAdded])
 		return NUUInt64Max;
 		
 	if (anAlignFlag && aRegion.location % aLength != 0)

@@ -33,22 +33,12 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 @implementation NUOpaqueBPlusTreeNode (InitializingAndRelease)
 
-+ (id)nodeWithTree:(NUOpaqueBPlusTree *)aTree pageLocation:(NUUInt64)aPageLocation
++ (id)nodeWithTree:(NUOpaqueBPlusTree *)aTree pageLocation:(NUUInt64)aPageLocation loadFromPage:(BOOL)aLoadFlag keys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aValues
 {
-	return [[[self alloc] initWithTree:aTree pageLocation:aPageLocation] autorelease];
+    return [[[self alloc] initWithTree:aTree pageLocation:aPageLocation loadFromPage:aLoadFlag keys:aKeys values:aValues] autorelease];
 }
 
-+ (id)nodeWithTree:(NUOpaqueBPlusTree *)aTree pageLocation:(NUUInt64)aPageLocation keys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aValues
-{
-	return [[[self alloc] initWithTree:aTree pageLocation:aPageLocation keys:aKeys values:aValues] autorelease];
-}
-
-- (id)initWithTree:(NUOpaqueBPlusTree *)aTree pageLocation:(NUUInt64)aPageLocation
-{
-	return [self initWithTree:aTree pageLocation:aPageLocation keys:nil values:nil];
-}
-
-- (id)initWithTree:(NUOpaqueBPlusTree *)aTree pageLocation:(NUUInt64)aPageLocation keys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aValues
+- (id)initWithTree:(NUOpaqueBPlusTree *)aTree pageLocation:(NUUInt64)aPageLocation loadFromPage:(BOOL)aLoadFlag keys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aValues
 {
 	if (self = [super init])
     {
@@ -57,25 +47,28 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
         
         minKeyCount = NUUInt32Max;
         
-        if (aKeys)
+        if (aLoadFlag)
         {
-            [self setKeys:aKeys];
-            [self setValues:aValues];
-            [self setNewExtraValues];
-            [self nodeDidInsertKeys:[aKeys at:0] at:0 count:[aKeys count]];
-            [self nodeDidInsertValues:[aValues at:0] at:0 count:[aValues count]];
-            [self markChanged];
-        }
-        else if ([[self pages] pageIsCreatedFor:aPageLocation])
-        {
-            [self loadKeysAndValuesFrom:aPageLocation];
+          [self loadKeysAndValuesFrom:aPageLocation];
         }
         else
         {
-            [self setKeys:[self makeKeyArray]];
-            [self setValues:[self makeValueArray]];
-            [self setNewExtraValues];
-            [self markChanged];
+            if (aKeys)
+            {
+                [self setKeys:aKeys];
+                [self setValues:aValues];
+                [self setNewExtraValues];
+                [self nodeDidInsertKeys:[aKeys at:0] at:0 count:[aKeys count]];
+                [self nodeDidInsertValues:[aValues at:0] at:0 count:[aValues count]];
+                [self markChanged];
+            }
+            else
+            {
+                [self setKeys:[self makeKeyArray]];
+                [self setValues:[self makeValueArray]];
+                [self setNewExtraValues];
+                [self markChanged];
+            }
         }
     }
     
@@ -638,10 +631,9 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
     return [[self keys] at:anIndex isGreaterThan:aKey];
 }
 
-- (BOOL)canPreventNodeReleseWhenValueRemoved
+- (BOOL)canPreventNodeReleseWhenValueRemovedOrAdded
 {
-//	return ![self isMin] || ![[self leftNode] isMin] || ![[self rightNode] isMin];
-    return ![self isMin];
+    return ![self isMin] && ![self isFull];
 }
 
 - (BOOL)isMostLeftNodeInCurrentDepth

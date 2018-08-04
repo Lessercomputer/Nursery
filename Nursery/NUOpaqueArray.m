@@ -348,6 +348,9 @@ NSString *NUOpaqueArrayCannotGrowException = @"NUOpaqueArrayCannotGrowException"
 
 - (void)readFrom:(NUPages *)aPages at:(NUUInt64)anOffset capacity:(NUUInt32)aCapacity count:(NUUInt32)aCount
 {
+    if (aCount > aCapacity)
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+    
 	[aPages read:[self values] length:aCapacity at:anOffset];
 	count = aCount;
 }

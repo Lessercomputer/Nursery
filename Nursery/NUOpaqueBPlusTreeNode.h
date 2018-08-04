@@ -37,11 +37,9 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 
 @interface NUOpaqueBPlusTreeNode (InitializingAndRelease)
 
-+ (id)nodeWithTree:(NUOpaqueBPlusTree *)aTree pageLocation:(NUUInt64)aPageLocation;
-+ (id)nodeWithTree:(NUOpaqueBPlusTree *)aTree pageLocation:(NUUInt64)aPageLocation keys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aValues;
++ (id)nodeWithTree:(NUOpaqueBPlusTree *)aTree pageLocation:(NUUInt64)aPageLocation loadFromPage:(BOOL)aLoadFlag keys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aValues;
 
-- (id)initWithTree:(NUOpaqueBPlusTree *)aTree pageLocation:(NUUInt64)aPageLocation;
-- (id)initWithTree:(NUOpaqueBPlusTree *)aTree pageLocation:(NUUInt64)aPageLocation keys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aValues;
+- (id)initWithTree:(NUOpaqueBPlusTree *)aTree pageLocation:(NUUInt64)aPageLocation loadFromPage:(BOOL)aLoadFlag keys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aValues;
 
 - (void)loadKeysAndValuesFrom:(NUUInt64)aPageLocation;
 - (void)readExtraValuesFromPages:(NUPages *)aPages at:(NUUInt64)aLocation count:(NUUInt32)aCount;
@@ -184,7 +182,7 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 - (BOOL)keyAt:(NUUInt32)anIndex isLessThan:(NUUInt8 *)aKey;
 - (BOOL)keyAt:(NUUInt32)anIndex isGreaterThan:(NUUInt8 *)aKey;
 
-- (BOOL)canPreventNodeReleseWhenValueRemoved;
+- (BOOL)canPreventNodeReleseWhenValueRemovedOrAdded;
 
 - (BOOL)isMostLeftNodeInCurrentDepth;
 - (BOOL)nodeIsMostLeftNodeInDepthOf:(NUOpaqueBPlusTreeNode *)aNode;

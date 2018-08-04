@@ -269,9 +269,9 @@
 	NUOpaqueBPlusTreeNode *aNode = nil;
 	
 	if (aNodeOOP == [[self leafNodeClass] nodeOOP])
-		aNode = [[self leafNodeClass] nodeWithTree:self pageLocation:aPageLocation];
+        aNode = [[self leafNodeClass] nodeWithTree:self pageLocation:aPageLocation loadFromPage:YES keys:nil values:nil];
 	else if (aNodeOOP == [[self branchNodeClass] nodeOOP])
-		aNode = [[self branchNodeClass] nodeWithTree:self pageLocation:aPageLocation];
+		aNode = [[self branchNodeClass] nodeWithTree:self pageLocation:aPageLocation loadFromPage:YES keys:nil values:nil];
 #ifdef DEBUG
     if (!aNode)
         NSLog(@"!aNode:%@", @(aPageLocation));
@@ -311,7 +311,7 @@
 
 - (NUOpaqueBPlusTreeNode *)makeNodeOf:(Class)aNodeClass keys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aValues
 {
-	NUOpaqueBPlusTreeNode *aNode = [aNodeClass nodeWithTree:self pageLocation:[self allocateNodePageLocation] keys:aKeys values:aValues];
+    NUOpaqueBPlusTreeNode *aNode = [aNodeClass nodeWithTree:self pageLocation:[self allocateNodePageLocation] loadFromPage:NO keys:aKeys values:aValues];
 	[self addNode:aNode];
 	return aNode;
 }
