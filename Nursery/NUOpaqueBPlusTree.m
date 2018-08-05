@@ -406,12 +406,12 @@
 
 @implementation NUOpaqueBPlusTree (Debug)
 
-- (void)validateAllNodeLocations
+- (void)validate
 {
     if (rootLocation % [[self pages] pageSize] != 0)
         [[NSException exceptionWithName:NUInvalidPageLocationException reason:NUInvalidPageLocationException userInfo:nil] raise];
     
-    [[self root] validateAllNodeLocations];
+    [[self root] validate];
 }
 
 @end

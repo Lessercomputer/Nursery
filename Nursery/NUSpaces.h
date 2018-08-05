@@ -128,7 +128,7 @@ extern NSString *NUSpaceInvalidOperationException;
 
 @interface NUSpaces (Debug)
 
-- (void)validateAllNodeLocations;
+- (void)validate;
 - (BOOL)validateFreeRegions;
 
 @end

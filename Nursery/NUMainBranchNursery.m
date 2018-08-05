@@ -536,12 +536,10 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     {
         [self lock];
         
-#ifdef DEBUG
-        [[self spaces] validateAllNodeLocations];
-        [[self objectTable] validateAllNodeLocations];
-        [[self reversedObjectTable] validateAllNodeLocations];
+//#ifdef DEBUG
+        [[self spaces] validate];
         [self validateObjectTableAndReversedObjectTable];
-#endif
+//#endif
         
         [self saveGrade];
         [[self objectTable] save];
@@ -550,12 +548,10 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
         [[self parader] save];
         [[self spaces] save];
         
-#ifdef DEBUG
-        [[self spaces] validateAllNodeLocations];
-        [[self objectTable] validateAllNodeLocations];
-        [[self reversedObjectTable] validateAllNodeLocations];
+//#ifdef DEBUG
+        [[self spaces] validate];
         [self validateObjectTableAndReversedObjectTable];
-#endif
+//#endif
     }
     @finally
     {
@@ -643,10 +639,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 	[self loadFileHeader];
     
 //#ifdef DEBUG
-    [[self spaces] validateAllNodeLocations];
-    [[self spaces] validateFreeRegions];
-    [[self objectTable] validateAllNodeLocations];
-    [[self reversedObjectTable] validateAllNodeLocations];
+    [[self spaces] validate];
     [self validateObjectTableAndReversedObjectTable];
 //#endif
 
@@ -708,6 +701,13 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 }
 
 - (void)validateObjectTableAndReversedObjectTable
+{
+    [[self objectTable] validate];
+    [[self reversedObjectTable] validate];
+    [self validateMappingOfObjectTableToReversedObjectTable];
+}
+
+- (void)validateMappingOfObjectTableToReversedObjectTable
 {
     NUUInt64 aBellBallCount = 0;
     

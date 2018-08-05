@@ -121,6 +121,6 @@
 
 @interface NUOpaqueBPlusTree (Debug)
 
-- (void)validateAllNodeLocations;
+- (void)validate;
 
 @end

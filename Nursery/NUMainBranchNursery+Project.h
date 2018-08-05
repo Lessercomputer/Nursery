@@ -82,6 +82,6 @@
 - (BOOL)applyLogIfNeeded;
 - (void)loadFileHeader;
 
-- (void)validateObjectTableAndReversedObjectTable;
+- (void)validateMappingOfObjectTableToReversedObjectTable;
 
 @end

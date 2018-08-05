@@ -718,7 +718,7 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 @implementation NUOpaqueBPlusTreeNode (Debug)
 
-- (void)validateAllNodeLocations
+- (void)validate
 {
     NUUInt32 aPageSize = [[self pages] pageSize];
     
@@ -731,9 +731,37 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
     if ([self parentNode] && [self isUnderflow])
         [[NSException exceptionWithName:NUUnderflowNodeFoundException reason:NUUnderflowNodeFoundException userInfo:nil] raise];
     
-    [self parentNode];
-    [self leftNode];
-    [self rightNode];
+    if ([self isRoot])
+        if ([self parentNode]) @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+
+    if ([self isMostLeftNodeInCurrentDepth])
+    {
+        if ([self leftNode]) @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+        
+        NUOpaqueBPlusTreeNode *aNode = self;
+        
+        while (aNode)
+        {
+            if ([aNode rightNode] && aNode != [[aNode rightNode] leftNode])
+                @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+            aNode = [aNode rightNode];
+        }
+    }
+    
+    if ([self isMostRightNodeInCurrentDepth])
+    {
+        if ([self rightNode]) @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+        
+        NUOpaqueBPlusTreeNode *aNode = self;
+        
+        while (aNode)
+        {
+            if ([aNode leftNode] && aNode != [[aNode leftNode] rightNode])
+                @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+            aNode = [aNode leftNode];
+        }
+    }
+
     
     if ([self isLeaf])
     {
@@ -753,7 +781,7 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
     {
         if ([aBranchNode nodeLocationAt:i] % aPageSize != 0)
             [[NSException exceptionWithName:NUInvalidPageLocationException reason:NUInvalidPageLocationException userInfo:nil] raise];
-        [[aBranchNode nodeAt:i] validateAllNodeLocations];
+        [[aBranchNode nodeAt:i] validate];
     }
 }
 

@@ -185,7 +185,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
         
         if (aNodeLocation != aNewNodeLocation)
         {
-            NUOpaqueBPlusTreeNode *aNode = [self nodeFor:aNodeLocation];
+            NUOpaqueBPlusTreeNode *aNode = [[[self nursery] spaces] nodeFor:aNodeLocation];
             
             if (aNode)
             {

@@ -206,6 +206,6 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 
 @interface NUOpaqueBPlusTreeNode (Debug)
 
-- (void)validateAllNodeLocations;
+- (void)validate;
 
 @end

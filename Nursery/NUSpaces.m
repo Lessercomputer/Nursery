@@ -572,10 +572,11 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 
 @implementation NUSpaces (Debug)
 
-- (void)validateAllNodeLocations
+- (void)validate
 {
-    [locationTree validateAllNodeLocations];
-    [lengthTree validateAllNodeLocations];
+    [locationTree validate];
+    [lengthTree validate];
+    [self validateFreeRegions];
 }
 
 - (BOOL)validateFreeRegions
