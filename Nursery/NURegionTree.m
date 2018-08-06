@@ -27,11 +27,15 @@
 
 - (void)branch:(NUOpaqueBPlusTreeBranch *)aBranch didInsertNodes:(NUUInt8 *)aNodeLocations at:(NUUInt32)anIndex count:(NUUInt32)aCount
 {
+    [[self spaces] lock];
+    
 	NUUInt64 *aNodes = (NUUInt64 *)aNodeLocations;
 	int i = 0;
 	for (; i < aCount; i++)
 		if ([[self spaces] nodePageLocationIsVirtual:aNodes[i]])
 			[[self spaces] addBranchNeedsVirtualPageCheck:aBranch];
+    
+    [[self spaces] unlock];
 }
 
 @end

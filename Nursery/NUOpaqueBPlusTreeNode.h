@@ -62,7 +62,7 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 - (NUUInt8 *)firstkey;
 - (NUUInt8 *)keyAt:(NUUInt32)anIndex;
 - (NUUInt8 *)valueAt:(NUUInt32)anIndex;
-- (NUUInt8 *)mostLeftKey;
+- (NUUInt8 *)mostLeftKeyInSubTree;
 
 - (NUUInt32)keyIndexEqualTo:(NUUInt8 *)aKey;
 - (NUUInt32)keyIndexGreaterThanOrEqualToKey:(NUUInt8 *)aKey;
@@ -118,7 +118,7 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 
 - (NUUInt8 *)valueFor:(NUUInt8 *)aKey;
 - (NUOpaqueBPlusTreeNode *)setOpaqueValue:(NUUInt8 *)aValue forKey:(NUUInt8 *)aKey;
-- (void)removeValueFor:(NUUInt8 *)aKey;
+- (BOOL)removeValueFor:(NUUInt8 *)aKey;
 
 @end
 
@@ -134,6 +134,7 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 - (void)removeKeyAt:(NUUInt32)anIndex;
 - (void)removeKeysAt:(NUUInt32)anIndex count:(NUUInt32)aCount;
 - (void)removeAllKeys;
+- (void)updateKey:(NUUInt8 *)aKey;
 
 - (void)addValues:(NUOpaqueArray *)aValues;
 - (void)insertValues:(NUOpaqueArray *)aValues at:(NUUInt32)anIndex;

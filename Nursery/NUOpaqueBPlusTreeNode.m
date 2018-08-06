@@ -148,9 +148,9 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 	return [[self values] at:anIndex];
 }
 
-- (NUUInt8 *)mostLeftKey
+- (NUUInt8 *)mostLeftKeyInSubTree
 {
-	return [self firstkey];
+    return [self firstkey];
 }
 
 - (NUUInt32)keyIndexEqualTo:(NUUInt8 *)aKey
@@ -225,7 +225,10 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 - (NUUInt32)minValueCount
 {
-	return floor([self valueCapacity] / 2.0);
+    if ([self isLeaf])
+        return [self minKeyCount];
+    else
+        return [self minKeyCount] + 1;
 }
 
 - (NUUInt32)keyCount
@@ -391,8 +394,9 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 	return NULL;
 }
 
-- (void)removeValueFor:(NUUInt8 *)aKey
+- (BOOL)removeValueFor:(NUUInt8 *)aKey
 {
+    return NO;
 }
 
 @end
@@ -450,6 +454,11 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 {
 	[[self keys] replaceAt:anIndex with:aNewKey];
 	[self markChanged];
+}
+
+- (void)updateKey:(NUUInt8 *)aKey
+{
+    
 }
 
 - (void)addValues:(NUOpaqueArray *)aValues
@@ -676,6 +685,7 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 #ifdef DEBUG
     NSLog(@"%@ #changeNodePageWith:%llu; currentPageLocation:%llu", [self class], aPageLocation, pageLocation);
 #endif
+    [[self spaces] lock];
     
     [[self parentNode] changeNodePageWith:aPageLocation of:self];
     [self retain];
@@ -689,6 +699,8 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 	[[self rightNode] setLeftNodeLocation:pageLocation];
     [[self tree] updateRootLocationIfNeeded];
     [self markChanged];
+    
+    [[self spaces] unlock];
 }
 
 - (void)changeNodePageWith:(NUUInt64)aPageLocation of:(NUOpaqueBPlusTreeNode *)aNode

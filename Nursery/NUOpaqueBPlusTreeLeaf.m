@@ -47,6 +47,9 @@
 		[self insertRightNode:aNewNode];
     }
     
+    if (![self isRoot] && ([aNewNode isUnderflow] || [self isUnderflow]))
+        [self class];
+    
     return aNewNode;
 }
 
@@ -89,19 +92,18 @@
     return nil;
 }
 
-- (void)removeValueFor:(NUUInt8 *)aKey
+- (BOOL)removeValueFor:(NUUInt8 *)aKey
 {
 	NUUInt32 aKeyIndex = [self keyIndexGreaterThanOrEqualToKey:aKey];
 	
 	if (aKeyIndex >= [self keyCount] || ![self keyAt:aKeyIndex isEqual:aKey])
-		return;
+		return NO;
 	
 	[self removeKeyAt:aKeyIndex];
 	[self removeValueAt:aKeyIndex];
     [self removeExtraValueAt:aKeyIndex];
     
-//    if ([self keyCount]  < [self minKeyCount])
-//        [[NSException exceptionWithName:@"underflow" reason:nil userInfo:nil] raise];
+    return YES;
 }
 
 - (void)removeExtraValueAt:(NUUInt32)anIndex

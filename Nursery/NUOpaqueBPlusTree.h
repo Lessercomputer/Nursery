@@ -68,6 +68,7 @@
 - (NUUInt8 *)valueFor:(NUUInt8 *)aKey;
 - (void)setOpaqueValue:(NUUInt8 *)aValue forKey:(NUUInt8 *)aKey;
 - (void)removeValueFor:(NUUInt8 *)aKey;
+- (void)updateKey:(NUUInt8 *)aKey;
 
 - (NUUInt8 *)firstKey;
 - (NUUInt8 *)firstValue;

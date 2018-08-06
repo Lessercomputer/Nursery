@@ -40,7 +40,7 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 {
     if ([self isEqual:aNode]) return nil;
     
-    NUOpaqueBPlusTreeNode *aChildNode = [self nodeAt:[self insertionTargetNodeIndexFor:[aNode mostLeftKey]]];
+    NUOpaqueBPlusTreeNode *aChildNode = [self nodeAt:[self targetNodeIndexFor:[aNode mostLeftKeyInSubTree]]];
     
     if ([aChildNode isEqual:aNode]) return self;
     
@@ -72,29 +72,29 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 	return (NUIndexArray *)[self values];
 }
 
-- (NUUInt32)insertionTargetNodeIndexFor:(NUUInt8 *)aKey
+- (NUUInt32)targetNodeIndexFor:(NUUInt8 *)aKey
 {
 	return [self keyIndexLessThanOrEqualToKey:aKey] + 1;
 }
 
 - (NUOpaqueBPlusTreeLeaf *)leafNodeContainingKey:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
 {
-	return [[self nodeAt:[self insertionTargetNodeIndexFor:aKey]] leafNodeContainingKey:aKey keyIndex:aKeyIndex];
+	return [[self nodeAt:[self targetNodeIndexFor:aKey]] leafNodeContainingKey:aKey keyIndex:aKeyIndex];
 }
 
 - (NUOpaqueBPlusTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
 {
-	return [[self nodeAt:[self insertionTargetNodeIndexFor:aKey]] leafNodeContainingKeyGreaterThanOrEqualTo:aKey keyIndex:aKeyIndex];
+	return [[self nodeAt:[self targetNodeIndexFor:aKey]] leafNodeContainingKeyGreaterThanOrEqualTo:aKey keyIndex:aKeyIndex];
 }
 
 - (NUOpaqueBPlusTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
 {
-	return [[self nodeAt:[self insertionTargetNodeIndexFor:aKey]] leafNodeContainingKeyLessThanOrEqualTo:aKey keyIndex:aKeyIndex];
+	return [[self nodeAt:[self targetNodeIndexFor:aKey]] leafNodeContainingKeyLessThanOrEqualTo:aKey keyIndex:aKeyIndex];
 }
 
-- (NUUInt8 *)mostLeftKey
+- (NUUInt8 *)mostLeftKeyInSubTree
 {
-	return [[self nodeAt:0] mostLeftKey];
+    return [[self nodeAt:0] mostLeftKeyInSubTree];
 }
 
 - (NUOpaqueBPlusTreeLeaf *)mostLeftNode
@@ -114,64 +114,63 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 
 - (NUUInt8 *)valueFor:(NUUInt8 *)aKey
 {
-	NUUInt32 aNodeIndex = [self insertionTargetNodeIndexFor:aKey];
+	NUUInt32 aNodeIndex = [self targetNodeIndexFor:aKey];
 	NUOpaqueBPlusTreeNode *aNode = [self nodeAt:aNodeIndex];
 	return [aNode valueFor:aKey];
 }
 
 - (NUOpaqueBPlusTreeNode *)setOpaqueValue:(NUUInt8 *)aValue forKey:(NUUInt8 *)aKey
 {
-	NUUInt32 aChildNodeIndex = [self insertionTargetNodeIndexFor:aKey];
+	NUUInt32 aChildNodeIndex = [self targetNodeIndexFor:aKey];
 	NUOpaqueBPlusTreeNode *aChildNode = [self nodeAt:aChildNodeIndex];
 	NUOpaqueBPlusTreeNode *aSiblingNodeOfChildNode = [aChildNode setOpaqueValue:aValue forKey:aKey];
 	
+    if ([aChildNode isUnderflow] || [aSiblingNodeOfChildNode isUnderflow])
+        [self class];
+    
 	if (aSiblingNodeOfChildNode)
 		return [self insertChildNode:aSiblingNodeOfChildNode at:aChildNodeIndex + 1];
 	
 	return nil;
 }
 
-- (void)removeValueFor:(NUUInt8 *)aKey
+- (BOOL)removeValueFor:(NUUInt8 *)aKey
 {
-	NUUInt32 aNodeIndex = [self insertionTargetNodeIndexFor:aKey];
+    BOOL aRemoved;
+	NUUInt32 aNodeIndex = [self targetNodeIndexFor:aKey];
 	NUOpaqueBPlusTreeNode *aNode = [self nodeAt:aNodeIndex];
     
-	[aNode removeValueFor:aKey];
+	aRemoved = [aNode removeValueFor:aKey];
 	
-    if (![aNode isUnderflow]) return;
-        
-    if (aNodeIndex != 0 && ![[aNode leftNode] isMin])
+    if ([aNode isUnderflow])
     {
-        [aNode shuffleLeftNode];
-        [self replaceKeyAt:[self leftKeyIndexForNodeAt:aNodeIndex] with:[aNode mostLeftKey]];
+        if (aNodeIndex != 0 && ![[aNode leftNode] isMin])
+        {
+            [aNode shuffleLeftNode];
+            [self replaceKeyAt:[self leftKeyIndexForNodeAt:aNodeIndex] with:[aNode mostLeftKeyInSubTree]];
+        }
+        else if (aNodeIndex != [self valueCount] - 1 && ![[aNode rightNode] isMin])
+        {
+            [aNode shuffleRightNode];
+            [self replaceKeyAt:[self rightKeyIndexForNodeAt:aNodeIndex] with:[[aNode rightNode] mostLeftKeyInSubTree]];
+        }
+        else if (aNodeIndex != 0)
+        {
+            [[aNode leftNode] mergeRightNode];
+            [self removeKeyAt:[self leftKeyIndexForNodeAt:aNodeIndex]];
+            [self removeNodeAt:aNodeIndex];
+        }
+        else if (aNodeIndex != [self valueCount] - 1)
+        {
+            [[aNode rightNode] mergeLeftNode];
+            [self removeKeyAt:[self rightKeyIndexForNodeAt:aNodeIndex]];
+            [self removeNodeAt:aNodeIndex];
+        }
+        else
+            @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
     }
-    else if (aNodeIndex != [self valueCount] - 1 && ![[aNode rightNode] isMin])
-    {
-        [aNode shuffleRightNode];
-        [self replaceKeyAt:[self rightKeyIndexForNodeAt:aNodeIndex] with:[[aNode rightNode] mostLeftKey]];
-    }
-    else if (aNodeIndex != 0 && [aNode leftNode])
-    {
-        [[aNode leftNode] mergeRightNode];
-        [self removeKeyAt:aNodeIndex - 1];
-        [self removeNodeAt:aNodeIndex];
-        
-#ifdef DEBUG
-        if ([self isUnderflow])
-            NSLog(@"[self isUnderflow]");
-#endif
-    }
-    else if (aNodeIndex != [self valueCount] - 1 && [aNode rightNode])
-    {
-        [[aNode rightNode] mergeLeftNode];
-        [self removeKeyAt:aNodeIndex];
-        [self removeNodeAt:aNodeIndex];
-        
-#ifdef DEBUG
-        if ([self isUnderflow])
-            NSLog(@"[self isUnderflow]");
-#endif
-    }
+    
+    return aRemoved;
 }
 
 @end
@@ -220,11 +219,23 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 	[self replaceValueAt:anIndex with:(NUUInt8 *)&aNodeLocation];
 }
 
+- (void)updateKey:(NUUInt8 *)aKey
+{
+    NUInt32 aKeyIndex = [self keyIndexLessThanOrEqualToKey:aKey];
+    NUUInt32 aNodeIndex = [self targetNodeIndexFor:aKey];
+    NUOpaqueBPlusTreeNode *aNode = [self nodeAt:aNodeIndex];
+    
+    if (aKeyIndex >= 0 && [self keyAt:aKeyIndex isEqual:aKey])
+        [self replaceKeyAt:aKeyIndex with:[aNode mostLeftKeyInSubTree]];
+    
+    [aNode updateKey:aKey];
+}
+
 - (NUOpaqueBPlusTreeNode *)insertChildNode:(NUOpaqueBPlusTreeNode *)aChildNode at:(NUUInt32)aChildNodeIndex
 {
     NUUInt64 aChildNodePageLocation = [aChildNode pageLocation];
     NUOpaqueArray *aNewValues = [self insertOpaqueValue:(NUUInt8 *)&aChildNodePageLocation at:aChildNodeIndex];
-    NUOpaqueArray *aNewKeys = [self insertOpaqueKey:[aChildNode mostLeftKey] at:aChildNodeIndex - 1];
+    NUOpaqueArray *aNewKeys = [self insertOpaqueKey:[aChildNode mostLeftKeyInSubTree] at:aChildNodeIndex - 1];
     NUOpaqueBPlusTreeBranch *aNewNode = nil;
     
     if (aChildNodeIndex < [self valueCount]) [self nodeDidInsertValues:[self valueAt:aChildNodeIndex] at:aChildNodeIndex count:1];
@@ -233,6 +244,12 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
     {
         aNewNode = [[self tree] makeBranchNodeWithKeys:aNewKeys values:aNewValues];
         [self insertRightNode:aNewNode];
+        
+        if ([aNewNode isUnderflow])
+            [self class];
+        if ([aNewKeys count] == [aNewValues count])
+            [self class];
+        
         return aNewNode;
     }
     
@@ -284,7 +301,7 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 	NUUInt32 aKeyShuffleCount = [[self leftNode] shufflableKeyCount];
 	NUUInt32 aKeyShuffleLocation = [[self leftNode] keyCount] - aKeyShuffleCount;
 	
-	[self insertKey:[self mostLeftKey] at:0];
+	[self insertKey:[self mostLeftKeyInSubTree] at:0];
 	if (aKeyShuffleLocation + 1 != [[self leftNode] keyCount])
 		[self insertKeys:[[self leftNode] keyAt:aKeyShuffleLocation + 1] at:0 count:aKeyShuffleCount - 1];
 	[[self leftBranch] removeKeysAt:aKeyShuffleLocation count:aKeyShuffleCount];
@@ -302,7 +319,7 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 {
 	NUUInt32 aKeyShuffleCount = [[self rightNode] shufflableKeyCount];
 	
-	[self insertKey:[[self rightNode] mostLeftKey] at:[self keyCount]];
+	[self insertKey:[[self rightNode] mostLeftKeyInSubTree] at:[self keyCount]];
 	[self insertKeys:[[self rightNode] keyAt:0] at:[self keyCount] count:aKeyShuffleCount - 1];
 	[[self rightBranch] removeKeysAt:0 count:aKeyShuffleCount];
     
@@ -318,7 +335,7 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 - (void)mergeRightNode
 {
 	NUOpaqueBPlusTreeBranch *aRightNode = [self rightBranch];
-	[self insertKey:[aRightNode mostLeftKey] at:[self keyCount]];
+	[self insertKey:[aRightNode mostLeftKeyInSubTree] at:[self keyCount]];
 	[self insertKeys:[aRightNode firstkey] at:[self keyCount] count:[aRightNode keyCount]];
 	[aRightNode removeAllKeys];
 	
@@ -334,7 +351,7 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 - (void)mergeLeftNode
 {
 	NUOpaqueBPlusTreeBranch *aLeftNode = [self leftBranch];
-	[self insertKey:[self mostLeftKey] at:0];
+	[self insertKey:[self mostLeftKeyInSubTree] at:0];
 	[self insertKeys:[aLeftNode firstkey] at:0 count:[aLeftNode keyCount]];
 	[aLeftNode removeAllKeys];
 	
@@ -369,7 +386,7 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 
 - (void)changeNodePageWith:(NUUInt64)aPageLocation of:(NUOpaqueBPlusTreeNode *)aNode
 {
-    NUUInt32 aNodeIndex = [self insertionTargetNodeIndexFor:[aNode firstkey]];
+    NUUInt32 aNodeIndex = [self targetNodeIndexFor:[aNode firstkey]];
     NUOpaqueBPlusTreeNode *aChildNode = [self nodeAt:aNodeIndex];
     
     if (![aChildNode isEqual:aNode])
@@ -381,6 +398,8 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 
 - (void)fixVirtualNodes
 {
+    [[self spaces] lock];
+    
 	NUUInt32 i = 0;
 	for (; i < [self valueCount]; i++)
 	{
@@ -391,6 +410,8 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 			[self replaceNodeAt:i with:aRealNodePageLocation];
 		}
 	}
+    
+    [[self spaces] unlock];
 }
 
 @end

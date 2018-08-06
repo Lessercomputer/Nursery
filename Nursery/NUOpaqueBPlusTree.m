@@ -177,23 +177,31 @@
 	NUOpaqueBPlusTreeNode *aSplitNode = [[self root] setOpaqueValue:aValue forKey:aKey];
 	if (!aSplitNode) return;
 	
-    if ([[self root] isUnderflow] || [aSplitNode isUnderflow])
+    if ([aSplitNode isUnderflow])
         [[NSException exceptionWithName:NUUnderflowNodeFoundException reason:NUUnderflowNodeFoundException userInfo:nil] raise];
     
 	NUOpaqueBPlusTreeBranch *aNewRootNode = [self makeBranchNode];
-	[aNewRootNode setFirstNode:[self root] secondNode:aSplitNode key:[aSplitNode mostLeftKey]];
+	[aNewRootNode setFirstNode:[self root] secondNode:aSplitNode key:[aSplitNode mostLeftKeyInSubTree]];
 	[self setRoot:aNewRootNode];
 }
 
 - (void)removeValueFor:(NUUInt8 *)aKey
 {
-	[[self root] removeValueFor:aKey];
+	BOOL aKeyAndValueRemoved = [[self root] removeValueFor:aKey];
+    
+    if (aKeyAndValueRemoved)
+        [self updateKey:aKey];
 	
 	if ([[self root] isBranch] && [[self root] valueCount] == 1)
 	{
 		[[self root] releaseNodePageAndCache];
 		[self setRoot:[(NUOpaqueBPlusTreeBranch *)[self root] nodeAt:0]];
 	}
+}
+
+- (void)updateKey:(NUUInt8 *)aKey
+{
+    [[self root] updateKey:aKey];
 }
 
 - (NUUInt8 *)firstKey

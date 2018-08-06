@@ -300,6 +300,7 @@
 {
     [[self root] updateKey:aKey];
 }
+
 - (NUBPlusTreeLeaf *)firstLeaf
 {
     return [[self root] firstLeaf];
