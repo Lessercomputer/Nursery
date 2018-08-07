@@ -117,12 +117,15 @@
     NUUInt64 anEncodedObjectsSize = [self sizeOfEncodedObjects:aReducedEncodedPupils with:aReducedEncodedPupilsDictionary];
 
     NUUInt64 aSpaceForEncodedObjects = [[[self nursery] spaces] allocateSpace:anEncodedObjectsSize];
+    if (aSpaceForEncodedObjects == 43238216)
+        [self class];
     __block NUUInt64 anObjectLocation = aSpaceForEncodedObjects;
     
     [aReducedEncodedPupils enumerateObjectsUsingBlock:^(NUPupilNote * _Nonnull aPupilNote, NSUInteger idx, BOOL * _Nonnull stop)
     {
 //        NUUInt64 anObjectLocation = [[[self nursery] spaces] allocateSpace:[aPupilNote dataSize]];
-        
+        if (anObjectLocation == 43238216)
+            [self class];
         [[self objectTable] setObjectLocation:anObjectLocation for:[aPupilNote bellBall]];
         [[self reversedObjectTable] setBellBall:[aPupilNote bellBall] forObjectLocation:anObjectLocation];
         [[self pages] writeData:[aPupilNote data] at:anObjectLocation];

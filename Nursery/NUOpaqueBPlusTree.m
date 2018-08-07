@@ -187,10 +187,12 @@
 
 - (void)removeValueFor:(NUUInt8 *)aKey
 {
-	BOOL aKeyAndValueRemoved = [[self root] removeValueFor:aKey];
+//    BOOL aKeyAndValueRemoved = [[self root] removeValueFor:aKey];
     
-    if (aKeyAndValueRemoved)
-        [self updateKey:aKey];
+//    if (aKeyAndValueRemoved)
+//        [self updateKey:aKey];
+    
+    [[self root] removeValueFor:aKey];
 	
 	if ([[self root] isBranch] && [[self root] valueCount] == 1)
 	{

@@ -194,7 +194,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 	
 	while (aNode && anAllocatedLocation == NUUInt64Max)
 	{
-		for (; aKeyIndex < [aNode keyCount]; aKeyIndex++)
+		for (; aKeyIndex < [aNode keyCount] && anAllocatedLocation == NUUInt64Max; aKeyIndex++)
 		{
 			NURegion aRegion = *(NURegion *)[aNode keyAt:aKeyIndex];
             anAllocatedLocation = [self allocateSpaceFrom:aNode region:aRegion length:aLength aligned:anAlignFlag preventsNodeRelease:aPreventsNodeReleaseFlag];
@@ -211,6 +211,9 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
         anAllocatedLocation = [self extendSpaceBy:aLength];
     
     [self unlock];
+    
+    if (anAllocatedLocation == 43238216)
+        [self class];
     
     return anAllocatedLocation;
 }
@@ -233,11 +236,23 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 		{
 			NURegion aRemainRegion1, aRemainRegion2;
 			NURegionSplitWithRegion(aRegion, aRegionToCut, &aRemainRegion1, &aRemainRegion2);
-						
+            
+            if (aRegion.location == 43238216)
+                [self class];
+            if (NUMaxLocation(aRegion) == 43238216)
+                [self class];
+            if (aRemainRegion1.location == 43238216)
+                [self class];
+            if (NUMaxLocation(aRemainRegion1) == 43238216)
+                [self class];
+            
 			[self removeRegion:aRegion];
-			[self setRegion:aRemainRegion1];
+            [self releaseSpace:aRemainRegion1];
 			
-			if (aRemainRegion2.length) [self setRegion:aRemainRegion2];
+            if (aRemainRegion2.location == 43238216 || NUMaxLocation(aRemainRegion2) == 43238216)
+                [self class];
+            
+            if (aRemainRegion2.length) [self releaseSpace:aRemainRegion2];
 			
 			return aRegionToCut.location;
 		}
@@ -247,9 +262,12 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 		NURegion aRemainSpace;
 		NURegion aNewSpace = NURegionSplitWithLength(aRegion, aLength, &aRemainSpace);
 		
+        if (aRegion.location == 43238216 || NUMaxLocation(aRegion) == 43238216 || aRemainSpace.location == 43238216 || NUMaxLocation(aRemainSpace) == 43238216)
+            [self class];
+        
 		[self removeRegion:aRegion];
 		
-		if (aRemainSpace.length) [self setRegion:aRemainSpace];
+        if (aRemainSpace.length) [self releaseSpace:aRemainSpace];
 		
 		return aNewSpace.location;
 	}
@@ -273,7 +291,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 			[[self pages] nextPageLocation] - [[self pages] pageSize] + anOddLength,
 			[[self pages] pageSize] - anOddLength);
 
-		[self setRegion:aFreeRegion];
+        [self releaseSpace:aFreeRegion];
 	}
 	
 	return aNextPageLocation;
@@ -282,6 +300,9 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 - (void)releaseSpace:(NURegion)aRegion
 {
     [self lock];
+    
+    if (NUMaxLocation(aRegion) == 43238216)
+        [self class];
     
 	NUUInt32 aKeyIndex;
 	NULocationTreeLeaf *aNode = [locationTree getNodeContainingSpaceAtLocationLessThanOrEqual:aRegion.location keyIndex:&aKeyIndex];
@@ -317,6 +338,9 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 		aRegion = NUMakeRegion(aRegion.location, aRegion.length + aRightRegion.length);
 	}
 	
+    if (aRegion.location - 1 == 43238216 || NUMaxLocation(aRegion) == 43238216)
+        [self class];
+    
 	[self setRegion:aRegion];
     
     [self unlock];
@@ -343,7 +367,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
         [self removeRegion:aLastFreeRegion];
         
         if (aNewFreeRegion.location != NUNotFound64)
-            [self setRegion:aNewFreeRegion];
+            [self releaseSpace:aNewFreeRegion];
     }
     
     [self unlock];
