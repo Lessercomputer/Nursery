@@ -6,6 +6,8 @@
 //  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
+#import <Foundation/NSException.h>
+
 #import "NUOpaqueBPlusTreeLeaf.h"
 #import "NUOpaqueArray.h"
 #import "NUOpaqueBPlusTree.h"
@@ -48,7 +50,7 @@
     }
     
     if (![self isRoot] && ([aNewNode isUnderflow] || [self isUnderflow]))
-        [self class];
+        @throw [NSException exceptionWithName:NUUnderflowNodeFoundException reason:nil userInfo:nil];
     
     return aNewNode;
 }

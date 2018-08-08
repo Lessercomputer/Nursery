@@ -126,7 +126,7 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 	NUOpaqueBPlusTreeNode *aSiblingNodeOfChildNode = [aChildNode setOpaqueValue:aValue forKey:aKey];
 	
     if ([aChildNode isUnderflow] || [aSiblingNodeOfChildNode isUnderflow])
-        [self class];
+        @throw [NSException exceptionWithName:NUUnderflowNodeFoundException reason:nil userInfo:nil];
     
 	if (aSiblingNodeOfChildNode)
 		return [self insertChildNode:aSiblingNodeOfChildNode at:aChildNodeIndex + 1];
@@ -246,9 +246,9 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
         [self insertRightNode:aNewNode];
         
         if ([aNewNode isUnderflow])
-            [self class];
+            @throw [NSException exceptionWithName:NUUnderflowNodeFoundException reason:nil userInfo:nil];
         if ([aNewKeys count] == [aNewValues count])
-            [self class];
+            @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
         
         return aNewNode;
     }

@@ -212,9 +212,6 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
     
     [self unlock];
     
-    if (anAllocatedLocation == 43238216)
-        [self class];
-    
     return anAllocatedLocation;
 }
 
@@ -237,20 +234,8 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 			NURegion aRemainRegion1, aRemainRegion2;
 			NURegionSplitWithRegion(aRegion, aRegionToCut, &aRemainRegion1, &aRemainRegion2);
             
-            if (aRegion.location == 43238216)
-                [self class];
-            if (NUMaxLocation(aRegion) == 43238216)
-                [self class];
-            if (aRemainRegion1.location == 43238216)
-                [self class];
-            if (NUMaxLocation(aRemainRegion1) == 43238216)
-                [self class];
-            
 			[self removeRegion:aRegion];
             [self releaseSpace:aRemainRegion1];
-			
-            if (aRemainRegion2.location == 43238216 || NUMaxLocation(aRemainRegion2) == 43238216)
-                [self class];
             
             if (aRemainRegion2.length) [self releaseSpace:aRemainRegion2];
 			
@@ -261,9 +246,6 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 	{
 		NURegion aRemainSpace;
 		NURegion aNewSpace = NURegionSplitWithLength(aRegion, aLength, &aRemainSpace);
-		
-        if (aRegion.location == 43238216 || NUMaxLocation(aRegion) == 43238216 || aRemainSpace.location == 43238216 || NUMaxLocation(aRemainSpace) == 43238216)
-            [self class];
         
 		[self removeRegion:aRegion];
 		
@@ -301,9 +283,6 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 {
     [self lock];
     
-    if (NUMaxLocation(aRegion) == 43238216)
-        [self class];
-    
 	NUUInt32 aKeyIndex;
 	NULocationTreeLeaf *aNode = [locationTree getNodeContainingSpaceAtLocationLessThanOrEqual:aRegion.location keyIndex:&aKeyIndex];
 	NURegion aLeftRegion = NUMakeRegion(0, 0), aRightRegion = NUMakeRegion(0, 0);
@@ -337,9 +316,6 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 		[self removeRegion:aRightRegion];
 		aRegion = NUMakeRegion(aRegion.location, aRegion.length + aRightRegion.length);
 	}
-	
-    if (aRegion.location - 1 == 43238216 || NUMaxLocation(aRegion) == 43238216)
-        [self class];
     
 	[self setRegion:aRegion];
     

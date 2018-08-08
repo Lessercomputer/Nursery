@@ -282,18 +282,6 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
     {
         [[self nursery] lock];
         
-        NUBellBall aBellBall2 = NUMakeBellBall(3111, 1);
-        NUBellBall aBellBall3 = NUMakeBellBall(9630, 2);
-
-        if (aBellBall.oop == 3111)
-            [self class];
-        if (aBellBall.oop == 3289 && aBellBall.grade == 2)
-            [self class];
-        if (aBellBall.oop == 3250 && aBellBall.grade == 2)
-            [self class];
-        if (aBellBall.oop == 9630 && aBellBall.grade == 2)
-            [self class];
-        
         NUUInt8 aGCMark = [[[self nursery] objectTable] gcMarkFor:aBellBall];
         NUUInt8 aGCMarkColor = aGCMark & NUGCMarkColorBitsMask;
         
@@ -315,9 +303,9 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
             [[[self nursery] reversedObjectTable] removeBellBallForObjectLocation:anObjectLocation];
             
             if ([[[self nursery] objectTable] objectLocationFor:aBellBall] != NUNotFound64)
-                [[NSException exceptionWithName:@"error" reason:@"error" userInfo:nil] raise];
+                [[NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil] raise];
             if (!NUBellBallEquals([[[self nursery] reversedObjectTable] bellBallForObjectLocation:anObjectLocation], NUNotFoundBellBall))
-                [[NSException exceptionWithName:@"error" reason:@"error" userInfo:nil] raise];
+                [[NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil] raise];
         
 #ifdef DEBUG
             NSLog(@"<%@:%p> #collectObjects (removeObjectFor: %@, removeOOPForObjectLocation: %llu)", [self class], self, NUStringFromBellBall(aBellBall), anObjectLocation);
@@ -327,15 +315,6 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
         {
             [[[self nursery] objectTable] setGCMark:(aGCMark & NUGCMarkWithoutColorBitsMask) | NUGCMarkWhite for:aBellBall];
         }
-        
-        
-        NUUInt64 anObjectLocationForBellBall2 = [[[self nursery] objectTable] objectLocationFor:aBellBall2];
-        if (!NUBellBallEquals([[[self nursery] reversedObjectTable] bellBallForObjectLocation:anObjectLocationForBellBall2], aBellBall2))
-            [self class];
-        
-        NUUInt64 anObjectLocationForBellBall3 = [[[self nursery] objectTable] objectLocationFor:aBellBall3];
-        if (anObjectLocationForBellBall3 == NUNotFound64 || anObjectLocationForBellBall3 == 0)
-            [self class];
     }
     @finally
     {
@@ -457,9 +436,9 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
 - (void)setGrade:(NUUInt64)aGrade
 {
-//#ifdef DEBUG
+#ifdef DEBUG
     NSLog(@"%@ currentGrade:%@, aNewGrade:%@", self, @(grade), @(aGrade));
-//#endif
+#endif
     
     grade = aGrade;
 }

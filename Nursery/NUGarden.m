@@ -322,22 +322,33 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 {
     if ([self grade] >= aGrade) return;
     
-    [[self gardenSeeker] stop];
-    
-    if (aPreventFlag)
-        [[self gardenSeeker] preventReleaseOfGrade:[self grade]];
-    
-    [self lock];
-    [self setIsInMoveUp:YES];
-    
-    [self setGrade:aGrade];
-    [self moveUpNurseryRoot];
-    [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
-    
-    [self setIsInMoveUp:NO];
-    [self unlock];
-    
-    [[self gardenSeeker] start];
+    @try
+    {
+        [[self gardenSeeker] stop];
+
+        if ([self isForMainBranch])
+            [(NUMainBranchNursery *)[self nursery] lock];
+        
+        if (aPreventFlag)
+            [[self gardenSeeker] preventReleaseOfGrade:[self grade]];
+        
+        [self lock];
+        [self setIsInMoveUp:YES];
+        
+        [self setGrade:aGrade];
+        [self moveUpNurseryRoot];
+        [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
+        
+        [self setIsInMoveUp:NO];
+        [self unlock];
+        
+        [[self gardenSeeker] start];
+    }
+    @finally
+    {
+        if ([self isForMainBranch])
+            [(NUMainBranchNursery *)[self nursery] unlock];
+    }
 }
 
 - (void)moveUpNurseryRoot

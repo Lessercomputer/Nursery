@@ -66,9 +66,9 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 
 - (void)setGrade:(NUUInt64)aGrade
 {
-    //#ifdef DEBUG
+    #ifdef DEBUG
     NSLog(@"%@ currentGrade:%@, aNewGrade:%@", self, @(grade), @(aGrade));
-    //#endif
+    #endif
     
     grade = aGrade;
 }
@@ -144,26 +144,16 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
         }
         
 #ifdef DEBUG
-        BOOL aSpacesIsValid = [[[self nursery] spaces] validate];
-        
-        if (aSpacesIsValid)
-            NSLog(@"aSpacesIsValid = YES");
-        else
-            NSLog(@"aSpacesIsValid = NO");
+        [[[self nursery] spaces] validate];
 #endif
     }
 }
 
 - (void)paradeObjectWithBellBall:(NUBellBall)aBellBall at:(NUUInt64)anObjectLocation nextTo:(NURegion)aFreeRegion
 {
-    if (anObjectLocation == 43238216)
-        [self class];
     NUUInt64 anObjectSize = [(NUMainBranchAliaser *)[[self garden] aliaser] sizeOfObjectForBellBall:aBellBall];
     NURegion anObjectRegion = NUMakeRegion(anObjectLocation, anObjectSize);
     NURegion aNewObjectRegion = NUMakeRegion(NUNotFound64, anObjectSize);
-    
-    if (aNewObjectRegion.location == 43238216)
-        [self class];
     
     [[[self nursery] spaces] releaseSpace:anObjectRegion];
     aNewObjectRegion.location = [[[self nursery] spaces] allocateSpace:anObjectSize aligned:NO preventsNodeRelease:YES];

@@ -155,9 +155,9 @@
 
 - (void)setGrade:(NUUInt64)aGrade
 {
-//#ifdef DEBUG
+#ifdef DEBUG
     NSLog(@"%@ currentGrade:%@, aNewGrade:%@", self, @(grade), @(aGrade));
-//#endif
+#endif
     
     grade = aGrade;
 }

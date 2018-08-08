@@ -76,20 +76,6 @@
 
 @implementation NUMainBranchGarden (SaveAndLoad)
 
-- (void)moveUpTo:(NUUInt64)aGrade preventReleaseOfCurrentGrade:(BOOL)aPreventFlag
-{
-    @try
-    {
-        [[self mainBranchNursery] lock];
-        
-        [super moveUpTo:aGrade preventReleaseOfCurrentGrade:aPreventFlag];
-    }
-    @finally
-    {
-        [[self mainBranchNursery] unlock];
-    }
-}
-
 - (NUFarmOutStatus)farmOut
 {
     NUFarmOutStatus aFarmOutStatus = NUFarmOutStatusFailed;
