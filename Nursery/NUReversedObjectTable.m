@@ -21,7 +21,6 @@ const NUUInt64 NUReversedObjectTableRootLocationOffset	= 45;
 {
 	if (self = [super initWithKeyLength:sizeof(NUUInt64) leafValueLength:sizeof(NUBellBall) rootLocation:aRootLocation on:aSpaces])
     {
-        lock = [NSRecursiveLock new];
     }
 	
 	return self;
@@ -29,7 +28,6 @@ const NUUInt64 NUReversedObjectTableRootLocationOffset	= 45;
 
 - (void)dealloc
 {
-    [lock release];
     [super dealloc];
 }
 

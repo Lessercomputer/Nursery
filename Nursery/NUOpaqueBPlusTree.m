@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/NSException.h>
+#import <Foundation/NSLock.h>
 
 #import "NUOpaqueBPlusTree.h"
 #import "NUOpaqueBPlusTreeNode.h"
@@ -32,6 +33,7 @@
         spaces = aSpaces;
         rootLocation = aRootLocation;
         nodeDictionary = [[NUPageLocationODictionary alloc] initWithPages:[spaces pages]];
+        lock = [NSRecursiveLock new];
     }
     
 	return self;
@@ -40,7 +42,8 @@
 - (void)dealloc
 {
 	[nodeDictionary release];
-	
+    [lock release];
+
 	[super dealloc];
 }
 
@@ -50,7 +53,12 @@
 
 - (NUOpaqueBPlusTreeNode *)root
 {
+    [self lock];
+    
 	if (!root) [self setRoot:[self loadRoot]];
+    
+    [self unlock];
+    
 	return root;
 }
 
@@ -126,6 +134,16 @@
 	return 0;
 }
 
+- (void)lock
+{
+    [lock lock];
+}
+
+- (void)unlock
+{
+    [lock unlock];
+}
+
 @end
 
 @implementation NUOpaqueBPlusTree (GettingNode)
@@ -169,20 +187,35 @@
 
 - (NUUInt8 *)valueFor:(NUUInt8 *)aKey
 {
-	return [[self root] valueFor:aKey];
+    [self lock];
+    
+    NUUInt8 *aValue = [[self root] valueFor:aKey];
+    
+    [self unlock];
+    
+    return aValue;
 }
 
 - (void)setOpaqueValue:(NUUInt8 *)aValue forKey:(NUUInt8 *)aKey
 {
-	NUOpaqueBPlusTreeNode *aSplitNode = [[self root] setOpaqueValue:aValue forKey:aKey];
-	if (!aSplitNode) return;
-	
-    if ([aSplitNode isUnderflow])
-        [[NSException exceptionWithName:NUUnderflowNodeFoundException reason:NUUnderflowNodeFoundException userInfo:nil] raise];
-    
-	NUOpaqueBPlusTreeBranch *aNewRootNode = [self makeBranchNode];
-	[aNewRootNode setFirstNode:[self root] secondNode:aSplitNode key:[aSplitNode mostLeftKeyInSubTree]];
-	[self setRoot:aNewRootNode];
+    @try
+    {
+        [self lock];
+        
+        NUOpaqueBPlusTreeNode *aSplitNode = [[self root] setOpaqueValue:aValue forKey:aKey];
+        if (!aSplitNode) return;
+        
+        if ([aSplitNode isUnderflow])
+            [[NSException exceptionWithName:NUUnderflowNodeFoundException reason:NUUnderflowNodeFoundException userInfo:nil] raise];
+        
+        NUOpaqueBPlusTreeBranch *aNewRootNode = [self makeBranchNode];
+        [aNewRootNode setFirstNode:[self root] secondNode:aSplitNode key:[aSplitNode mostLeftKeyInSubTree]];
+        [self setRoot:aNewRootNode];
+    }
+    @finally
+    {
+        [self unlock];
+    }
 }
 
 - (void)removeValueFor:(NUUInt8 *)aKey
@@ -192,13 +225,20 @@
 //    if (aKeyAndValueRemoved)
 //        [self updateKey:aKey];
     
+    [self lock];
+    
     [[self root] removeValueFor:aKey];
 	
 	if ([[self root] isBranch] && [[self root] valueCount] == 1)
 	{
 		[[self root] releaseNodePageAndCache];
-		[self setRoot:[(NUOpaqueBPlusTreeBranch *)[self root] nodeAt:0]];
+        NUOpaqueBPlusTreeNode *aNewRoot = [(NUOpaqueBPlusTreeBranch *)[self root] nodeAt:0];
+        [aNewRoot setLeftNodeLocation:0];
+        [aNewRoot setRightNodeLocation:0];
+		[self setRoot:aNewRoot];
 	}
+    
+    [self unlock];
 }
 
 - (void)updateKey:(NUUInt8 *)aKey
@@ -253,19 +293,32 @@
 
 - (NUOpaqueBPlusTreeNode *)nodeFor:(NUUInt64)aNodeLocation
 {
-	if (!aNodeLocation) return nil;
-    if (aNodeLocation % [[self pages] pageSize])
-        [NSException exceptionWithName:NUInvalidPageLocationException reason:NUInvalidPageLocationException userInfo:nil];
-	
-	NUOpaqueBPlusTreeNode *aNode = [[self nodeDictionary] objectForKey:aNodeLocation];
-	
-	if (!aNode && ![[self spaces] nodePageLocationIsVirtual:aNodeLocation])
-	{
-		aNode = [self loadNodeFor:aNodeLocation];
-		if (aNode) [[self nodeDictionary] setObject:aNode forKey:aNodeLocation];
-	}
-	
-	return aNode;
+    NUOpaqueBPlusTreeNode *aNode = nil;
+    
+    @try
+    {
+        [self lock];
+        
+        if (aNodeLocation)
+        {
+            if (aNodeLocation % [[self pages] pageSize])
+                [NSException exceptionWithName:NUInvalidPageLocationException reason:NUInvalidPageLocationException userInfo:nil];
+            
+            aNode = [[self nodeDictionary] objectForKey:aNodeLocation];
+            
+            if (!aNode && ![[self spaces] nodePageLocationIsVirtual:aNodeLocation])
+            {
+                aNode = [self loadNodeFor:aNodeLocation];
+                if (aNode) [[self nodeDictionary] setObject:aNode forKey:aNodeLocation];
+            }
+        }
+    }
+	@finally
+    {
+        [self unlock];
+    }
+    
+    return aNode;
 }
 
 - (NUOpaqueBPlusTreeNode *)loadNodeFor:(NUUInt64)aNodeLocation
@@ -338,17 +391,11 @@
 
 - (void)addNode:(NUOpaqueBPlusTreeNode *)aNode
 {
-#ifdef DEBUG
-    NSLog(@"b+tree addNode:%@", @([aNode pageLocation]));
-#endif
 	[[self nodeDictionary] setObject:aNode forKey:[aNode pageLocation]];
 }
 
 - (void)removeNodeAt:(NUUInt64)aPageLocation
 {
-#ifdef DEBUG
-    NSLog(@"b+tree removeNodeAt:%@", @(aPageLocation));
-#endif
 	[[self nodeDictionary] removeObjectForKey:aPageLocation];
 }
 
@@ -418,10 +465,14 @@
 
 - (void)validate
 {
+    [self lock];
+    
     if (rootLocation % [[self pages] pageSize] != 0)
         [[NSException exceptionWithName:NUInvalidPageLocationException reason:NUInvalidPageLocationException userInfo:nil] raise];
     
     [[self root] validate];
+    
+    [self unlock];
 }
 
 @end

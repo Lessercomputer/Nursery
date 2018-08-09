@@ -449,7 +449,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
     [self lock];
     
 	[self releaseNodePagesToBeReleased];
-	[self fixVirtualNodePages];
+    [self fixVirtualNodePages];
     
     [self unlock];
 }

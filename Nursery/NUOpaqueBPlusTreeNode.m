@@ -754,8 +754,14 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
         
         while (aNode)
         {
-            if ([aNode rightNode] && aNode != [[aNode rightNode] leftNode])
-                @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+            if (![aNode isMostRightNodeInCurrentDepth])
+            {
+                if (![aNode rightNode])
+                    @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+                else if (aNode != [[aNode rightNode] leftNode])
+                    @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+            }
+            
             aNode = [aNode rightNode];
         }
     }
@@ -768,13 +774,18 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
         
         while (aNode)
         {
-            if ([aNode leftNode] && aNode != [[aNode leftNode] rightNode])
-                @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+            if (![aNode isMostLeftNodeInCurrentDepth])
+            {
+                if (![aNode leftNode])
+                    @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+                else if (aNode != [[aNode leftNode] rightNode])
+                    @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+            }
+            
             aNode = [aNode leftNode];
         }
     }
 
-    
     if ([self isLeaf])
     {
         if ([self values] && [self keyCount] != [self valueCount])

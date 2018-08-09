@@ -9,6 +9,8 @@
 #import <Foundation/NSObject.h>
 #import "NUTypes.h"
 
+@class NSRecursiveLock;
+
 @class NUOpaqueBPlusTreeNode, NUOpaqueBPlusTreeBranch, NUOpaqueBPlusTreeLeaf, NUMainBranchNursery, NUPages, NUPage, NUOpaqueArray, NUSpaces, NUPageLocationODictionary;
 
 @interface NUOpaqueBPlusTree : NSObject
@@ -20,6 +22,7 @@
 	NUSpaces *spaces;
 	NUUInt64 rootLocation;
 	NUPageLocationODictionary *nodeDictionary;
+    NSRecursiveLock *lock;
 }
 @end
 
@@ -48,6 +51,9 @@
 - (Class)branchNodeClass;
 - (Class)leafNodeClass;
 + (NUUInt64)rootLocationOffset;
+
+- (void)lock;
+- (void)unlock;
 
 @end
 

@@ -78,17 +78,9 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
     if (self = [super initWithKeyLength:sizeof(NUBellBall) leafValueLength:sizeof(NUUInt64) + sizeof(NUUInt8) rootLocation:aRootLocation on:aSpaces])
     {
         nextOOP = NUFirstUserObjectOOP;
-        lock = [NSRecursiveLock new];
     }
     
 	return self;
-}
-
-- (void)dealloc
-{
-	[lock release];
-	
-	[super dealloc];
 }
 
 - (Class)branchNodeClass

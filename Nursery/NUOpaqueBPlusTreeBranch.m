@@ -290,6 +290,8 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 	[self addKey:aKey];
 	[self addNode:[aFirstNode pageLocation]];
 	[self addNode:[aSecondNode pageLocation]];
+    [aFirstNode setRightNodeLocation:[aSecondNode pageLocation]];
+    [aSecondNode setLeftNodeLocation:[aFirstNode pageLocation]];
 }
 
 @end

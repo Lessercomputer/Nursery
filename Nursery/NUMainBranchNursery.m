@@ -638,10 +638,10 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     
 	[self loadFileHeader];
     
-#ifdef DEBUG
+//#ifdef DEBUG
     [[self spaces] validate];
     [self validateObjectTableAndReversedObjectTable];
-#endif
+//#endif
 
 	return YES;
 }
@@ -718,9 +718,6 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     for (NUBellBall aBellBall = [[self objectTable] firstBellBall]; !NUBellBallEquals(aBellBall, NUNotFoundBellBall); aBellBall = [[self objectTable] bellBallGreaterThanBellBall:aBellBall])
     {
         NUUInt64 anObjectLocation = [[self objectTable] objectLocationFor:aBellBall];
-        
-        if (aBellBall.oop == 3111)
-            [NSThread sleepForTimeInterval:0];
         
         if (anObjectLocation == NUNotFound64 || !anObjectLocation)
             [[NSException exceptionWithName:NUObjectLocationNotFoundException reason:NUObjectLocationNotFoundException userInfo:nil] raise];

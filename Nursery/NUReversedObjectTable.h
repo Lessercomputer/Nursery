@@ -8,11 +8,8 @@
 
 #import "NUOpaqueBPlusTree.h"
 
-@class NSRecursiveLock;
-
 @interface NUReversedObjectTable : NUOpaqueBPlusTree
 {
-    NSRecursiveLock *lock;
 }
 
 - (id)initWithRootLocation:(NUUInt64)aRootLocation on:(NUSpaces *)aSpaces;

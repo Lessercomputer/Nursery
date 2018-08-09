@@ -8,7 +8,6 @@
 
 #import "NUOpaqueBPlusTree.h"
 
-@class NSRecursiveLock;
 @class NUGarden, NUObjectTableLeaf;
 
 extern const NUUInt64 NUNilOOP;
@@ -59,7 +58,6 @@ extern const NUUInt8 NUGCMarkColorBitsMask;
 @interface NUObjectTable : NUOpaqueBPlusTree
 {
 	NUUInt64 nextOOP;
-	NSRecursiveLock *lock;
 }
 
 - (id)initWithRootLocation:(NUUInt64)aRootLocation on:(NUSpaces *)aSpaces;
