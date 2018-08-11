@@ -56,12 +56,6 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 {
 	if (self = [super init])
     {
-//        if (!aFilePath)
-//        {
-//            [self release];
-//            return nil;
-//        }
-        
         nextGardenID = NUFirstGardenID;
         lock = [NSRecursiveLock new];
         [self setFilePath:aFilePath];
@@ -72,8 +66,8 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
         retainedGrades = [NSMutableDictionary new];
         [self setSeeker:[NUNurserySeeker seekerWithGarden:[[[self class] gardenClass] gardenWithNursery:self usesGardenSeeker:NO retainNursery:NO]]];
         [self setParader:[NUNurseryParader paraderWithGarden:[[[self class] gardenClass] gardenWithNursery:self usesGardenSeeker:NO retainNursery:NO]]];
-        [[self seeker] prepare];
-        [[self parader] prepare];
+        [[self seeker] start];
+        [[self parader] start];
     }
     
 	return self;
@@ -403,15 +397,15 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     }
 }
 
-- (void)seekerDidFinishSeek:(NUNurserySeeker *)sender
+- (void)seekerDidFinishCollect:(NUNurserySeeker *)sender
 {
-    [NSThread detachNewThreadWithBlock:
-    ^{
-        if ([[self seeker] grade] < [self gradeForSeeker])
-            [[self seeker] start];
-        
-        [[self parader] start];
-    }];
+//    [NSThread detachNewThreadWithBlock:
+//    ^{
+//        if ([[self seeker] grade] < [self gradeForSeeker])
+//            [[self seeker] start];
+//
+//        [[self parader] start];
+//    }];
 }
 
 - (void)paraderDidFinishParade:(NUNurseryParader *)sender
@@ -427,21 +421,21 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     [[self seeker] stop];
     [[self parader] stop];
     
+    [self lock];
+
 #ifdef DEBUG
     NSLog(@"%@: did stop seeker", self);
 #endif
-    
-    [self lock];
 }
 
 - (void)unlockAndStartChildminders
 {
-    [self unlock];
-    
 #ifdef DEBUG
     NSLog(@"%@: will start seeker", self);
 #endif
-    
+ 
+    [self unlock];
+
     [[self seeker] start];
     [[self parader] start];
     
@@ -453,10 +447,16 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 - (void)lock
 {
     [lock lock];
+    [[self objectTable] lock];
+    [[self reversedObjectTable] lock];
+    [[self spaces] lock];
 }
 
 - (void)unlock
 {
+    [[self spaces] unlock];
+    [[self reversedObjectTable] unlock];
+    [[self objectTable] unlock];
     [lock unlock];
 }
 
@@ -495,8 +495,8 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 {
     if (![self isOpen]) return;
     
-	[[self seeker] terminate];
-    [[self parader] terminate];
+	[[self seeker] stop];
+    [[self parader] stop];
     [[self fileHandle] closeFile];
     
     [super close];
@@ -524,6 +524,9 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     {
         [lock unlock];
     }
+    
+//    [[self seeker] start];
+//    [[self parader] start];
    
     return [self isOpen];
 }
@@ -715,6 +718,9 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 {
     NUUInt64 aBellBallCount = 0;
     
+    [[self objectTable] lock];
+    [[self reversedObjectTable] lock];
+    
     for (NUBellBall aBellBall = [[self objectTable] firstBellBall]; !NUBellBallEquals(aBellBall, NUNotFoundBellBall); aBellBall = [[self objectTable] bellBallGreaterThanBellBall:aBellBall])
     {
         NUUInt64 anObjectLocation = [[self objectTable] objectLocationFor:aBellBall];
@@ -729,6 +735,9 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
         
         aBellBallCount++;
     }
+    
+    [[self reversedObjectTable] unlock];
+    [[self objectTable] unlock];
 }
 
 @end

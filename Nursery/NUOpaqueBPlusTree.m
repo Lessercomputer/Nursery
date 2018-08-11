@@ -70,8 +70,14 @@
 
 - (NUOpaqueBPlusTreeNode *)loadRoot
 {
+    [self lock];
+    
 	NUOpaqueBPlusTreeNode *aRoot = [self nodeFor:rootLocation];
-	return aRoot ? aRoot : [self makeLeafNode];
+	if (!aRoot) aRoot = [self makeLeafNode];
+    
+    [self unlock];
+    
+    return aRoot;
 }
 
 - (NUMainBranchNursery *)nursery
@@ -150,35 +156,81 @@
 
 - (NUOpaqueBPlusTreeLeaf *)leafNodeContainingKey:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
 {
-	return [[self root] leafNodeContainingKey:aKey keyIndex:aKeyIndex];
+    NUOpaqueBPlusTreeLeaf *aLeafNode;
+    
+    [self lock];
+    
+	aLeafNode = [[self root] leafNodeContainingKey:aKey keyIndex:aKeyIndex];
+    
+    [self unlock];
+    
+    return aLeafNode;
 }
 
 - (NUOpaqueBPlusTreeLeaf *)leafNodeContainingKeyGreaterThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
 {
-	return [[self root] leafNodeContainingKeyGreaterThanOrEqualTo:aKey keyIndex:aKeyIndex];
+    NUOpaqueBPlusTreeLeaf *aLeafNode;
+    
+    [self lock];
+    
+	aLeafNode = [[self root] leafNodeContainingKeyGreaterThanOrEqualTo:aKey keyIndex:aKeyIndex];
+    
+    [self unlock];
+    
+    return aLeafNode;
 }
 
 - (NUOpaqueBPlusTreeLeaf *)leafNodeContainingKeyLessThanOrEqualTo:(NUUInt8 *)aKey keyIndex:(NUUInt32 *)aKeyIndex
 {
-	return [[self root] leafNodeContainingKeyLessThanOrEqualTo:aKey keyIndex:aKeyIndex];
+    NUOpaqueBPlusTreeLeaf *aLeafNode;
+    
+    [self lock];
+    
+	aLeafNode = [[self root] leafNodeContainingKeyLessThanOrEqualTo:aKey keyIndex:aKeyIndex];
+    
+    [self unlock];
+    
+    return aLeafNode;
 }
 
 - (NUOpaqueBPlusTreeLeaf *)mostLeftNode
 {
-	return [[self root] mostLeftNode];
+    NUOpaqueBPlusTreeLeaf *aLeafNode;
+    
+    [self lock];
+    
+	aLeafNode = [[self root] mostLeftNode];
+    
+    [self unlock];
+    
+    return aLeafNode;
 }
 
 - (NUOpaqueBPlusTreeLeaf *)mostRightNode
 {
-	return [[self root] mostRightNode];
+    NUOpaqueBPlusTreeLeaf *aLeafNode;
+    
+    [self lock];
+    
+	aLeafNode = [[self root] mostRightNode];
+    
+    [self unlock];
+    
+    return aLeafNode;
 }
 
 - (NUOpaqueBPlusTreeBranch *)parentNodeOf:(NUOpaqueBPlusTreeNode *)aNode
 {
-    if ([self root] == aNode) return nil;
-    if ([[self root] isLeaf]) return nil;
+    NUOpaqueBPlusTreeBranch *aParentNode = nil;
     
-    return [[self root] parentNodeOf:aNode];
+    [self lock];
+    
+    if (!([[self root] isRoot] || [[self root] isLeaf]))
+        aParentNode = [[self root] parentNodeOf:aNode];
+    
+    [self unlock];
+    
+    return aParentNode;
 }
 
 @end
@@ -220,11 +272,6 @@
 
 - (void)removeValueFor:(NUUInt8 *)aKey
 {
-//    BOOL aKeyAndValueRemoved = [[self root] removeValueFor:aKey];
-    
-//    if (aKeyAndValueRemoved)
-//        [self updateKey:aKey];
-    
     [self lock];
     
     [[self root] removeValueFor:aKey];
@@ -248,12 +295,28 @@
 
 - (NUUInt8 *)firstKey
 {
-	return [[self mostLeftNode] firstkey];
+    NUUInt8 *aFirstKey;
+    
+    [self lock];
+    
+	aFirstKey = [[self mostLeftNode] firstkey];
+    
+    [self unlock];
+    
+    return aFirstKey;
 }
 
 - (NUUInt8 *)firstValue
 {
-	return [[self mostLeftNode] firstValue];
+    NUUInt8 *aFirstValue;
+    
+    [self lock];
+    
+    aFirstValue = [[self mostLeftNode] firstValue];
+    
+    [self unlock];
+    
+    return aFirstValue;
 }
 
 - (NUOpaqueBPlusTreeLeaf *)getNextKeyIndex:(NUUInt32 *)aKeyIndex node:(NUOpaqueBPlusTreeLeaf *)aNode
@@ -263,28 +326,34 @@
     
     if (!aNode)
         return nil;
+   
+    NUOpaqueBPlusTreeLeaf *aLeafNode = nil;
+    
+    [self lock];
     
     if (*aKeyIndex == NUNotFound32)
     {
-        if ([aNode isEmpty])
-            return nil;
-        else
+        if (![aNode isEmpty])
         {
             *aKeyIndex = 0;
-            return (NUOpaqueBPlusTreeLeaf *)aNode;
+            aLeafNode = (NUOpaqueBPlusTreeLeaf *)aNode;
         }
     }
     
     if (*aKeyIndex + 1 < [aNode keyCount])
     {
         (*aKeyIndex)++;
-        return (NUOpaqueBPlusTreeLeaf *)aNode;
+        aLeafNode = (NUOpaqueBPlusTreeLeaf *)aNode;
     }
     else
     {
         *aKeyIndex = 0;
-        return (NUOpaqueBPlusTreeLeaf *)[aNode rightNode];
+        aLeafNode = (NUOpaqueBPlusTreeLeaf *)[aNode rightNode];
     }
+    
+    [self unlock];
+    
+    return aLeafNode;
 }
 
 @end
@@ -328,6 +397,9 @@
 
 - (NUOpaqueBPlusTreeNode *)makeNodeFromPageAt:(NUUInt64)aPageLocation
 {
+    [self lock];
+    [[self pages] lock];
+    
 	NUUInt64 aNodeOOP = [[self pages] readUInt64At:0 of:aPageLocation];
 	NUOpaqueBPlusTreeNode *aNode = nil;
 	
@@ -335,10 +407,10 @@
         aNode = [[self leafNodeClass] nodeWithTree:self pageLocation:aPageLocation loadFromPage:YES keys:nil values:nil];
 	else if (aNodeOOP == [[self branchNodeClass] nodeOOP])
 		aNode = [[self branchNodeClass] nodeWithTree:self pageLocation:aPageLocation loadFromPage:YES keys:nil values:nil];
-#ifdef DEBUG
-    if (!aNode)
-        NSLog(@"!aNode:%@", @(aPageLocation));
-#endif
+
+    [[self pages] unlock];
+    [self unlock];
+    
 	return aNode;
 }
 
@@ -374,8 +446,13 @@
 
 - (NUOpaqueBPlusTreeNode *)makeNodeOf:(Class)aNodeClass keys:(NUOpaqueArray *)aKeys values:(NUOpaqueArray *)aValues
 {
+    [self lock];
+    
     NUOpaqueBPlusTreeNode *aNode = [aNodeClass nodeWithTree:self pageLocation:[self allocateNodePageLocation] loadFromPage:NO keys:aKeys values:aValues];
 	[self addNode:aNode];
+    
+    [self unlock];
+    
 	return aNode;
 }
 
@@ -391,27 +468,43 @@
 
 - (void)addNode:(NUOpaqueBPlusTreeNode *)aNode
 {
+    [self lock];
+    
 	[[self nodeDictionary] setObject:aNode forKey:[aNode pageLocation]];
+    
+    [self unlock];
 }
 
 - (void)removeNodeAt:(NUUInt64)aPageLocation
 {
+    [self lock];
+    
 	[[self nodeDictionary] removeObjectForKey:aPageLocation];
+    
+    [self unlock];
 }
 
 - (void)updateRootLocationIfNeeded
 {
+    [self lock];
+    
     NUUInt64 aRootLocation = [[self root] pageLocation];
     
     if (rootLocation != aRootLocation)
         rootLocation = aRootLocation;
+    
+    [self unlock];
 }
 
 - (void)save
 {
+    [self lock];
+    
 	if (root) rootLocation = [[self root] pageLocation];
 	[[self pages] writeUInt64:rootLocation at:[[self class] rootLocationOffset]];
 	[self saveNodes];
+    
+    [self unlock];
     
 #ifdef DEBUG
     NSLog(@"%@ #save rootLocation:%llu", [self class], rootLocation);
@@ -425,11 +518,15 @@
 
 - (void)saveNodes
 {
+    [self lock];
+    
 	NSEnumerator *anEnumerator = [[self nodeDictionary] objectEnumerator];
 	NUOpaqueBPlusTreeNode *aNode;
 	
 	while (aNode = [anEnumerator nextObject])
 		if ([aNode isChanged]) [aNode save];
+    
+    [self unlock];
 }
 
 @end
@@ -451,12 +548,28 @@
 
 - (BOOL)nodeIsMostLeftNodeInDepthOf:(NUOpaqueBPlusTreeNode *)aNode
 {
-    return [[self root] nodeIsMostLeftNodeInDepthOf:aNode];
+    BOOL aNodeIsMostLeft;
+    
+    [self lock];
+    
+    aNodeIsMostLeft = [[self root] nodeIsMostLeftNodeInDepthOf:aNode];
+    
+    [self unlock];
+    
+    return aNodeIsMostLeft;
 }
 
 - (BOOL)nodeIsMostRightNodeInDepthOf:(NUOpaqueBPlusTreeNode *)aNode
 {
-    return [[self root] nodeIsMostRightNodeInDepthOf:aNode];
+    BOOL aNodeIsMostRight;
+    
+    [self lock];
+    
+    aNodeIsMostRight = [[self root] nodeIsMostRightNodeInDepthOf:aNode];
+    
+    [self unlock];
+    
+    return aNodeIsMostRight;
 }
 
 @end

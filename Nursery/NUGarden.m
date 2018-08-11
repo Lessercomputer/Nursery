@@ -100,7 +100,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         usesGardenSeeker = aUsesGardenSeeker;
         if (aUsesGardenSeeker)
             gardenSeeker = [[[[self class] gardenSeekerClass] gardenSeekerWithGarden:self] retain];
-        [[self gardenSeeker] prepare];
+        [[self gardenSeeker] start];
     }
     
     return self;
@@ -160,12 +160,12 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 }
 
 - (NUNurseryRoot *)nurseryRoot
-{    
-    [lock lock];
+{
+    [self lock];
     
     if (!root) [self loadNurseryRoot];
 
-    [lock unlock];
+    [self unlock];
     
 	return root;
 }
@@ -735,11 +735,15 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 - (void)lock
 {
+    if ([[self nursery] isMainBranch])
+        [(NUMainBranchNursery *)[self nursery] lock];
     [lock lock];
 }
 
 - (void)unlock
 {
+    if ([[self nursery] isMainBranch])
+        [(NUMainBranchNursery *)[self nursery] unlock];
     [lock unlock];
 }
 
@@ -923,7 +927,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 - (void)close
 {
-    [[self gardenSeeker] terminate];
+    [[self gardenSeeker] stop];
     
     @try {
         [self lock];

@@ -638,7 +638,11 @@ const NUUInt64 NULogDataLengthOffset = 85;
 
 - (void)markChangedPageAt:(NUUInt64)aPageLocation
 {
+    [self lock];
+    
     [self markChangedPage:[self pageAt:aPageLocation]];
+    
+    [self unlock];
 }
 
 - (void)markChangedPage:(NUPage *)aPage
@@ -983,6 +987,16 @@ const NUUInt64 NULogDataLengthOffset = 85;
         
         aListElementWithPage = [aListElementWithPage previous];
     }
+}
+
+- (void)lock
+{
+    [lock lock];
+}
+
+- (void)unlock
+{
+    [lock unlock];
 }
 
 @end

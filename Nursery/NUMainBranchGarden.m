@@ -29,7 +29,7 @@
 {
     if (self = [super initWithNursery:aNursery grade:aGrade usesGardenSeeker:aUsesGardenSeeker retainNursery:aRetainFlag])
     {
-        farmOutLock = [NSLock new];
+//        farmOutLock = [NSLock new];
     }
     
     return self;
@@ -52,8 +52,8 @@
 
 - (void)dealloc
 {
-    [farmOutLock release];
-    farmOutLock = nil;
+//    [farmOutLock release];
+//    farmOutLock = nil;
     
     [super dealloc];
 }
@@ -84,10 +84,11 @@
     {
         @autoreleasepool
         {
-            [farmOutLock lock];
-            [[self gardenSeeker] stop];
+//            [farmOutLock lock];
+//            [[self gardenSeeker] stop];
+//            [[self mainBranchNursery] LockAndStopChildminders];
+            
             [self lock];
-            [[self mainBranchNursery] LockAndStopChildminders];
             
             if (![[self nursery] open])
             {
@@ -132,11 +133,11 @@
             [[self gardenSeeker] endPreventationOfReleaseOfPastGrades];
             [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
         }
-        
-        [[self mainBranchNursery] unlockAndStartChildminders];
+
         [self unlock];
-        [[self gardenSeeker] start];
-        [farmOutLock unlock];
+//        [[self mainBranchNursery] unlockAndStartChildminders];
+//        [[self gardenSeeker] start];
+//        [farmOutLock unlock];
     }
     
     return aFarmOutStatus;

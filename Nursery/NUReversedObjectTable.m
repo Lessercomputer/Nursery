@@ -26,11 +26,6 @@ const NUUInt64 NUReversedObjectTableRootLocationOffset	= 45;
 	return self;
 }
 
-- (void)dealloc
-{
-    [super dealloc];
-}
-
 - (Class)branchNodeClass
 {
 	return [NUReversedObjectTableBranch class];
@@ -76,7 +71,7 @@ const NUUInt64 NUReversedObjectTableRootLocationOffset	= 45;
     NUBellBall aBellBall;
     
     @try {
-        [lock lock];
+        [self lock];
         
         NUUInt32 aKeyIndex;
         NUReversedObjectTableLeaf *aLeaf = (NUReversedObjectTableLeaf *)[self leafNodeContainingKeyGreaterThanOrEqualTo:(NUUInt8 *)&aLocation keyIndex:&aKeyIndex];
@@ -87,7 +82,7 @@ const NUUInt64 NUReversedObjectTableRootLocationOffset	= 45;
             aBellBall = NUNotFoundBellBall;
     }
     @finally {
-        [lock unlock];
+        [self unlock];
     }
     
     return aBellBall;

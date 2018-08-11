@@ -8,16 +8,14 @@
 
 #import <Foundation/NSObject.h>
 
-@class NSConditionLock;
+@class NSThread;
+
 @class NUGarden;
 
 @interface NUThreadedChildminder : NSObject
 {
     NUGarden *garden;
-	NSConditionLock *conditionLock;
-	BOOL shouldStop;
-	BOOL shouldTerminate;
-    BOOL isTerminated;
+    NSThread *thread;
 }
 
 + (id)threadedChildminderWithGarden:(NUGarden *)aGarden;
@@ -30,20 +28,10 @@
 - (NSString *)threadName;
 - (double)threadPriority;
 
-- (void)prepare;
 - (void)start;
 - (void)stop;
-- (void)terminate;
+
 - (void)startThread:(id)anArgument;
-- (void)process;
-
-- (BOOL)shouldStop;
-- (void)setShouldStop:(BOOL)aShouldStop;
-
-- (BOOL)shouldTerminate;
-- (void)setShouldTerminate:(BOOL)aShouldTerminate;
-
-- (BOOL)isTerminated;
-- (void)setIsTerminated:(BOOL)aTerminated;
+- (void)processOneUnit;
 
 @end

@@ -9,9 +9,12 @@
 #import "NUTypes.h"
 #import "NUThreadedChildminder.h"
 
-extern const NUUInt8 NUSeekerNonePhase;
-extern const NUUInt8 NUSeekerSeekPhase;
-extern const NUUInt8 NUSeekerCollectPhase;
+typedef enum : NUUInt8 {
+    NUSeekerNonePhase,
+    NUSeekerSeekPhase,
+    NUSeekerCollectPhase,
+} NUSeekerPhase;
+
 
 @class NUUInt64Queue, NUMainBranchNursery, NUAperture;
 
@@ -44,9 +47,8 @@ extern const NUUInt8 NUSeekerCollectPhase;
 
 - (void)preprocess;
 - (void)resetAllGCMarksIfNeeded;
-- (void)seekObjects;
-- (void)seekObjectsUntilStop;
-- (void)collectObjects;
+- (void)seekObjectsOneUnit;
+- (void)collectObjectsOneUnit;
 - (void)collectObjectIfNeeded:(NUBellBall)aBellBall;
 - (void)pushRootOOP;
 - (void)loadGrayOOPsIfNeeded;

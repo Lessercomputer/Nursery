@@ -41,7 +41,6 @@
     if (self = [super initWithGarden:aGarden])
     {
         aperture = [anAperture retain];
-        bellsLock = [NSRecursiveLock new];
         bells = [NUQueue new];
         _gradesToPreventRelease = [NSMutableIndexSet new];
         lock = [NSRecursiveLock new];
@@ -53,7 +52,6 @@
 - (void)dealloc
 {
     [aperture release];
-    [bellsLock release];
     [bells release];
     [_gradesToPreventRelease release];
     [lock release];
@@ -91,8 +89,9 @@
 
 - (void)pushRootBell:(NUBell *)aBell
 {
+    [[self garden] lock];
+    
     [self lock];
-    [bellsLock lock];
     
     [[self bells] removeAll];
     [self pushBell:aBell];
@@ -106,8 +105,11 @@
     
     [self setGrade:aGrade];
     
-    [bellsLock unlock];
+    phase = NUGardenSeekerSeekPhase;
+    
     [self unlock];
+    
+    [[self garden] unlock];
 }
 
 - (void)pushBellIfNeeded:(NUBell *)aBell
@@ -125,22 +127,22 @@
 {
     NUBell *aBell = nil;
     
-    [bellsLock lock];
+    [self lock];
     
     aBell = [[self bells] pop];
     
-    [bellsLock unlock];
+    [self unlock];
     
     return aBell;
 }
 
 - (void)pushBell:(NUBell *)aBell
 {
-    [bellsLock lock];
+    [self lock];
     
     [[self bells] push:aBell];
     
-    [bellsLock unlock];
+    [self unlock];
 }
 
 - (NUAperture *)aperture
@@ -162,20 +164,33 @@
     grade = aGrade;
 }
 
-- (void)process
+- (void)processOneUnit
 {
-    while (![self shouldStop])
+    NUBell *aBell;
+    
+    [[self garden] lock];
+    
+    switch (phase)
     {
-        NUBell *aBell = [self popBell];
-
-        if (aBell)
-            [self seekObjectFor:aBell];
-        else
-        {
+        case NUGardenSeekerSeekPhase:
+            aBell = [self popBell];
+            
+            if (aBell)
+                [self seekObjectFor:aBell];
+            else
+                phase = NUGardenSeekerCollectPhase;
+            
+            break;
+        case NUGardenSeekerCollectPhase:
             [self collectGrade];
-            [self setShouldStop:YES];
-        }
+            phase = NUGardenSeekerNonePhase;
+            
+            break;
+        case NUGardenSeekerNonePhase:
+            break;
     }
+    
+    [[self garden] unlock];
 }
 
 - (void)seekObjectFor:(NUBell *)aBell
@@ -200,7 +215,9 @@
         
         [aCopyOfBells enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop)
         {
-            if ([aBell gradeForGardenSeeker] < [self grade])
+            NUUInt64 aGradeForSeekerOfBell = [aBell gradeForGardenSeeker];
+            
+            if (aGradeForSeekerOfBell && aGradeForSeekerOfBell < [self grade])
                 [[self garden] invalidateBell:aBell];
             else
                 [aBells addObject:aBell];
@@ -210,23 +227,32 @@
 
         [[self garden] collectGradeLessThan:[self grade]];
     }
-    @finally {
+    @finally
+    {
         [[self garden] unlock];
     }
 }
 
 - (void)bellDidLoadIvars:(NUBell *)aBell
 {
+    [[self garden] lock];
+    
     if ([aBell gradeForGardenSeeker] == [self grade])
     {
         [aBell setGradeForGardenSeeker:NUNilGrade];
         [self pushBellIfNeeded:aBell];
     }
+    
+    [[self garden] unlock];
 }
 
 - (void)objectDidLoadIvars:(id)anObject
 {
+    [[self garden] lock];
+    
     [self bellDidLoadIvars:[[self garden] bellForObject:anObject]];
+    
+    [[self garden] unlock];
 }
 
 @end

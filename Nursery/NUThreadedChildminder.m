@@ -29,9 +29,7 @@ const int NUThreadedChildminderTerminateCondition   = 2;
 	if (self = [super init])
     {
         garden = aGarden;
-        shouldTerminate = NO;
-        shouldStop = NO;
-        conditionLock = [[NSConditionLock alloc] initWithCondition:NUThreadedChildminderDeactiveCondition];
+        thread = [[NSThread alloc] initWithTarget:self selector:@selector(startThread:) object:nil];
     }
     
 	return self;
@@ -41,7 +39,7 @@ const int NUThreadedChildminderTerminateCondition   = 2;
 {
     [self setGarden:nil];
 
-	[conditionLock release];
+	[thread release];
 	
 	[super dealloc];
 }
@@ -66,116 +64,31 @@ const int NUThreadedChildminderTerminateCondition   = 2;
     return 0.0;
 }
 
-- (void)prepare
-{
-    NSThread *aThread = [[[NSThread alloc] initWithTarget:self selector:@selector(startThread:) object:nil] autorelease];
-    [aThread setName:[self threadName]];
-    [aThread setThreadPriority:[self threadPriority]];
-    [aThread start];
-}
-
 - (void)start
 {
-    [self setShouldStop:NO];
-	[conditionLock lockWhenCondition:NUThreadedChildminderDeactiveCondition];
-	[conditionLock unlockWithCondition:NUThreadedChildminderActiveCondition];
+    [thread setName:[self threadName]];
+    [thread setThreadPriority:[self threadPriority]];
+    [thread start];
 }
 
 - (void)stop
 {
-    [self setShouldStop:YES];
-	[conditionLock lockWhenCondition:NUThreadedChildminderDeactiveCondition];
-	[conditionLock unlockWithCondition:NUThreadedChildminderDeactiveCondition];
-}
-
-- (void)terminate
-{
-#ifdef DEBUG
-    NSLog(@"%@: begin #terminate", self);
-#endif
-    
-    [self setShouldStop:YES];
-    [self setShouldTerminate:YES];
-    
-    [conditionLock lockWhenCondition:NUThreadedChildminderDeactiveCondition];
-    
-    if (![self isTerminated])
-    {
-        [conditionLock unlockWithCondition:NUThreadedChildminderActiveCondition];
-        [conditionLock lockWhenCondition:NUThreadedChildminderDeactiveCondition];
-    }
-    
-    [conditionLock unlockWithCondition:NUThreadedChildminderDeactiveCondition];
-    
-#ifdef DEBUG
-    NSLog(@"%@: end #terminate", self);
-#endif
+    [thread cancel];
 }
 
 - (void)startThread:(id)anArgument
 {
-#ifdef DEBUG
-    NSLog(@"%@: begin #startThread:", self);
-#endif
-    
-    while (YES)
+    while (![thread isCancelled])
     {
-        [conditionLock lockWhenCondition:NUThreadedChildminderActiveCondition];
-        
-        if (![self shouldTerminate])
+        @autoreleasepool
         {
-            @autoreleasepool
-            {
-                [self process];
-            }
+            [self processOneUnit];
         }
-        else
-            isTerminated = YES;
-        
-        [conditionLock unlockWithCondition:NUThreadedChildminderDeactiveCondition];
-        
-        
-        if ([self isTerminated]) break;
     }
-    
-#ifdef DEBUG
-    NSLog(@"%@: end #startThread:", self);
-#endif
 }
 
-- (void)process
+- (void)processOneUnit
 {
-    
-}
-
-- (BOOL)shouldStop
-{
-    return shouldStop;
-}
-
-- (void)setShouldStop:(BOOL)aShouldStop
-{
-    shouldStop = aShouldStop;
-}
-
-- (BOOL)shouldTerminate
-{
-    return shouldTerminate;
-}
-
-- (void)setShouldTerminate:(BOOL)aShouldTerminate
-{
-    shouldTerminate = aShouldTerminate;
-}
-
-- (BOOL)isTerminated
-{
-    return isTerminated;
-}
-
-- (void)setIsTerminated:(BOOL)aTerminated
-{
-    isTerminated = aTerminated;
 }
 
 @end

@@ -235,9 +235,9 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 			NURegionSplitWithRegion(aRegion, aRegionToCut, &aRemainRegion1, &aRemainRegion2);
             
 			[self removeRegion:aRegion];
-            [self releaseSpace:aRemainRegion1];
+            [self setRegion:aRemainRegion1];
             
-            if (aRemainRegion2.length) [self releaseSpace:aRemainRegion2];
+            if (aRemainRegion2.length) [self setRegion:aRemainRegion2];
 			
 			return aRegionToCut.location;
 		}
@@ -249,7 +249,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
         
 		[self removeRegion:aRegion];
 		
-        if (aRemainSpace.length) [self releaseSpace:aRemainSpace];
+        if (aRemainSpace.length) [self setRegion:aRemainSpace];
 		
 		return aNewSpace.location;
 	}
@@ -273,7 +273,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 			[[self pages] nextPageLocation] - [[self pages] pageSize] + anOddLength,
 			[[self pages] pageSize] - anOddLength);
 
-        [self releaseSpace:aFreeRegion];
+        [self setRegion:aFreeRegion];
 	}
 	
 	return aNextPageLocation;
@@ -343,7 +343,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
         [self removeRegion:aLastFreeRegion];
         
         if (aNewFreeRegion.location != NUNotFound64)
-            [self releaseSpace:aNewFreeRegion];
+            [self setRegion:aNewFreeRegion];
     }
     
     [self unlock];
@@ -589,10 +589,16 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 - (void)lock
 {
     [lock lock];
+    [[self locationTree] lock];
+    [[self lengthTree] lock];
+    [[self pages] lock];
 }
 
 - (void)unlock
 {
+    [[self pages] unlock];
+    [[self lengthTree] unlock];
+    [[self locationTree] unlock];
     [lock unlock];
 }
 

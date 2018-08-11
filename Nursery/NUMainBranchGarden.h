@@ -12,7 +12,7 @@
 
 @interface NUMainBranchGarden : NUGarden
 {
-    NSLock *farmOutLock;
+//    NSLock *farmOutLock;
 }
 @end
 

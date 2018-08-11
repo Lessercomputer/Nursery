@@ -105,20 +105,20 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
 
 - (NUBellBall)firstBellBall
 {
-	[lock lock];
+	[self lock];
 	
 	NUObjectTableLeaf *aLeafNode = (NUObjectTableLeaf *)[self mostLeftNode];
 	NUBellBall aFirstBellBall = NUNotFoundBellBall;
 	if (![aLeafNode isEmpty]) aFirstBellBall = *(NUBellBall *)[aLeafNode firstkey];
 	
-	[lock unlock];
+	[self unlock];
 	
 	return aFirstBellBall;
 }
 
 - (NUUInt64)firstGrayOOPGradeLessThanOrEqualTo:(NUUInt64)aGrade
 {
-    [lock lock];
+    [self lock];
     
     NUUInt64 anOOP = NUNotFound64;
 	NUObjectTableLeaf *aLeafNode = (NUObjectTableLeaf *)[self mostLeftNode];
@@ -144,9 +144,16 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
             aLeafNode = (NUObjectTableLeaf *)[aLeafNode rightNode];
     }
     
-    [lock unlock];
+    [self unlock];
     
     return anOOP;
+}
+
+- (BOOL)containsBellBall:(NUBellBall)aBellBall
+{
+    NUBellBall aFoundBellBall = [self bellBallLessThanOrEqualTo:aBellBall];
+    
+    return NUBellBallEquals(aFoundBellBall, aBellBall);
 }
 
 - (NUBellBall)bellBallLessThanOrEqualTo:(NUBellBall)aBellBall
@@ -154,7 +161,7 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
     NUBellBall aFoundBellBall = NUNotFoundBellBall;
     
     @try {
-        [lock lock];
+        [self lock];
         
         NUUInt32 aKeyIndex = 0;
         NUObjectTableLeaf *aLeaf = [self leafNodeContainingBellBallLessThanOrEqualTo:aBellBall keyIndex:&aKeyIndex];
@@ -163,7 +170,7 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
             aFoundBellBall = *(NUBellBall *)[aLeaf keyAt:aKeyIndex];
     }
     @finally {
-        [lock unlock];
+        [self unlock];
     }
     
     return aFoundBellBall;
@@ -171,7 +178,7 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
 
 - (NUBellBall)bellBallGreaterThanBellBall:(NUBellBall)aBellBall
 {	
-	[lock lock];
+	[self lock];
 	    
     NUBellBall aKeyGreaterThanBellBall = NUNotFoundBellBall;
 	NUBellBall aKey = NUNotFoundBellBall;
@@ -196,14 +203,14 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
 		}
 	}
 	
-	[lock unlock];
+	[self unlock];
 	
 	return aKeyGreaterThanBellBall;
 }
 
 - (NUUInt64)grayOOPGreaterThanOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade
 {
-    [lock lock];
+    [self lock];
     
     NUUInt32 aKeyIndex;
     NUBellBall aKeyBellBall = NUMakeBellBall(anOOP, aGrade);
@@ -230,7 +237,7 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
         }
     }
     
-    [lock unlock];
+    [self unlock];
     
     return aLeaf ? aBellBall.oop : NUNotFound64;
 }
@@ -250,7 +257,7 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
     NUBellBall aNewBellBall;
     
     @try {
-        [lock lock];
+        [self lock];
         
         aNewBellBall = NUMakeBellBall(nextOOP, aGrade);
 
@@ -258,7 +265,7 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
         nextOOP++;
     }
     @finally {
-        [lock unlock];
+        [self unlock];
     }
     
     return aNewBellBall;
@@ -269,7 +276,7 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
     NUUInt64 anObjectLocation = NUNotFound64;
     
     @try {
-        [lock lock];
+        [self lock];
 
         NUBellBall aBellBall = NUMakeBellBall(anOOP, aGrade);
         NUUInt32 aKeyIndex;
@@ -286,7 +293,7 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
         }
     }
     @finally {
-        [lock unlock];
+        [self unlock];
     }
     
     return anObjectLocation;
@@ -294,42 +301,38 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
 
 - (NUUInt64)objectLocationFor:(NUBellBall)aBellBall
 {
-    [lock lock];
+    [self lock];
     
 	NUUInt8 *value = [self valueFor:(NUUInt8 *)&aBellBall];
     NUUInt64 objectLocation = NUNotFound64;
 	
 	if (value) objectLocation = *(NUUInt64 *)value;
     
-    [lock unlock];
+    [self unlock];
     
     return objectLocation;
 }
 
 - (void)setObjectLocation:(NUUInt64)aLocation for:(NUBellBall)aBellBall
 {
-    [lock lock];
+    [self lock];
     
 	[self setOpaqueValue:(NUUInt8 *)&aLocation forKey:(NUUInt8 *)&aBellBall];
     
-    [lock unlock];
+    [self unlock];
 }
 
 - (void)removeObjectFor:(NUBellBall)aBellBall
 {	
-    [lock lock];
+    [self lock];
         
 	NURegion aRegion = NUMakeRegion([self objectLocationFor:aBellBall]
-										, [(NUMainBranchAliaser *)[[[self nursery] gardenForSeeker] aliaser]  sizeOfObjectForBellBall:aBellBall]);
-
-#ifdef DEBUG
-    NSLog(@"NUObjectTable #removeObjectFor:%@; aRegion:%@", NUStringFromBellBall(aBellBall), NUStringFromRegion(aRegion));
-#endif
+										, [(NUMainBranchAliaser *)[[[self nursery] gardenForSeeker] aliaser] sizeOfObjectForBellBall:aBellBall]);
     
 	[[self spaces] releaseSpace:aRegion];
 	[self removeValueFor:(NUUInt8 *)&aBellBall];
     
-    [lock unlock];
+    [self unlock];
 }
 
 - (NUUInt8)newGCMark
@@ -339,41 +342,49 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
 
 - (NUUInt8)gcMarkFor:(NUBellBall)aBellBall
 {
-	[lock lock];
+	[self lock];
 	
 	NUUInt32 anOOPIndex;
 	NUObjectTableLeaf *aLeaf = [self leafNodeContainingBellBall:aBellBall keyIndex:&anOOPIndex];
-	NUUInt8 aGCMark = NUGCMarkWhite;
+	NUUInt8 aGCMark = NUGCMarkNone;
 	if (aLeaf) aGCMark = [aLeaf gcMarkAt:anOOPIndex];
 	
-	[lock unlock];
+	[self unlock];
 	
 	return aGCMark;
 }
 
 - (void)setGCMark:(NUUInt8)aMark for:(NUBellBall)aBellBall
 {
-	[lock lock];
+	[self lock];
 	
 	NUUInt32 anOOPIndex;
 	NUObjectTableLeaf *aLeaf = [self leafNodeContainingBellBall:aBellBall keyIndex:&anOOPIndex];
 	if (aLeaf) [aLeaf setGCMark:aMark at:anOOPIndex];
 	
-	[lock unlock];
+	[self unlock];
 }
 
 - (void)load
 {
+    [self lock];
+    
 	if (rootLocation == 0)
 		nextOOP = [[self pages] readUInt64At:NUNextOOPOffset];
     
 	[super load];
+    
+    [self unlock];
 }
 
 - (void)save
 {
+    [self lock];
+    
 	[[self pages] writeUInt64:nextOOP at:NUNextOOPOffset of:0];
 	[super save];
+    
+    [self unlock];
 }
 
 @end

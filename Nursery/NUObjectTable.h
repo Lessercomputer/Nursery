@@ -64,6 +64,7 @@ extern const NUUInt8 NUGCMarkColorBitsMask;
 
 - (NUBellBall)firstBellBall;
 - (NUUInt64)firstGrayOOPGradeLessThanOrEqualTo:(NUUInt64)aGrade;
+- (BOOL)containsBellBall:(NUBellBall)aBellBall;
 - (NUBellBall)bellBallLessThanOrEqualTo:(NUBellBall)aBellBall;;
 - (NUBellBall)bellBallGreaterThanBellBall:(NUBellBall)aBellBall;
 - (NUUInt64)grayOOPGreaterThanOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade;

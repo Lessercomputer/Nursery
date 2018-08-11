@@ -124,4 +124,7 @@ extern const NUUInt64 NUNextPageLocationOffset;
 - (void)setChangeStatusOfAllPagesToUnchanged;
 - (void)removeRemovablePagesFromBufferIfNeeded;
 
+- (void)lock;
+- (void)unlock;
+
 @end

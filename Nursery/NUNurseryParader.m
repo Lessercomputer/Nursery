@@ -8,6 +8,8 @@
 
 #include <stdlib.h>
 #import <Foundation/NSException.h>
+#import <Foundation/NSThread.h>
+
 #import "NUNurseryParader.h"
 #import "NUTypes.h"
 #import "NUMainBranchNursery.h"
@@ -83,27 +85,24 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     nextLocation = [[[self nursery] pages] readUInt64At:NUParaderNextLocationOffset];
 }
 
-- (void)process
+- (void)processOneUnit
 {
-    [self setGrade:[[self nursery] gradeForParader]];
-
-    if ([self grade] == NUNilGrade)
-    {
-        [self setShouldStop:YES];
-        return;
-    }
-    else
-        [[self garden] moveUpTo:[self grade]];
+    NSDate *aStopDate = [NSDate dateWithTimeIntervalSinceNow:0.001];
     
-    while (![self shouldStop])
+    @try
     {
-        @try
+        [[self nursery] lock];
+        
+        if ([self grade] != [[self nursery] gradeForParader])
         {
-            [[self nursery] lock];
-            [[[self nursery] spaces] lock];
-            
+            [self setGrade:[[self nursery] gradeForParader]];
+            [[self garden] moveUpTo:[self grade]];
+        }
+        
+        while ([aStopDate timeIntervalSinceNow] > 0)
+        {
             NURegion aFreeRegion = [[[self nursery] spaces] nextParaderTargetFreeSpaceForLocation:nextLocation];
-
+            
             if (aFreeRegion.location != NUNotFound64)
             {
                 [self paradeObjectOrNodeNextTo:aFreeRegion];
@@ -118,11 +117,10 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
                 break;
             }
         }
-        @finally
-        {
-            [[[self nursery] spaces] unlock];
-            [[self nursery] unlock];
-        }
+    }
+    @finally
+    {
+        [[self nursery] unlock];
     }
 }
 
@@ -142,10 +140,6 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
         {
             [self paradeNodeAt:nextLocation nextTo:aFreeRegion];
         }
-        
-#ifdef DEBUG
-        [[[self nursery] spaces] validate];
-#endif
     }
 }
 
@@ -157,6 +151,9 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     
     [[[self nursery] spaces] releaseSpace:anObjectRegion];
     aNewObjectRegion.location = [[[self nursery] spaces] allocateSpace:anObjectSize aligned:NO preventsNodeRelease:YES];
+    
+    if (aNewObjectRegion.location == NUNotFound64 || !aNewObjectRegion.location)
+        @throw [NSException exceptionWithName:NSGenericException reason:nil userInfo:nil];
     
     [[[self nursery] pages] copyBytesAt:anObjectRegion.location length:anObjectRegion.length to:aNewObjectRegion.location];
     [[[self nursery] objectTable] setObjectLocation:aNewObjectRegion.location for:aBellBall];
@@ -189,24 +186,14 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
                 [aNode changeNodePageWith:aNewNodeLocation];
                 [[[self nursery] pages] copyBytesAt:aNodeLocation length:aNodeSize to:aNewNodeLocation];
             }
+            else
+                @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
             
             nextLocation = aNewNodeLocation;
         }
     }
     else
         nextLocation = NUMaxLocation(aFreeRegion);
-}
-
-- (NUOpaqueBPlusTreeNode *)nodeFor:(NUUInt64)aNodeLocation
-{
-    NUOpaqueBPlusTreeNode *aNode = [[[self nursery] spaces] nodeFor:aNodeLocation];
-    
-    if (!aNode) aNode = [[[self nursery] objectTable] nodeFor:aNodeLocation];
-    if (!aNode) aNode = [[[self nursery] reversedObjectTable] nodeFor:aNodeLocation];
-    if (!aNode) aNode = [[[[self nursery] spaces] locationTree] nodeFor:aNodeLocation];
-    if (!aNode) aNode = [[[[self nursery] spaces] lengthTree] nodeFor:aNodeLocation];
-    
-    return aNode;
 }
 
 @end

@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/NSException.h>
+#import <Foundation/NSThread.h>
+#import <Foundation/NSDate.h>
 
 #import "NUNurserySeeker.h"
 #import "NUUInt64Queue.h"
@@ -23,16 +25,10 @@
 #import "NUMainBranchAperture.h"
 #import "NUAliaser.h"
 
-const NUUInt8 NUSeekerNonePhase		= 0;
-const NUUInt8 NUSeekerSeekPhase		= 1;
-const NUUInt8 NUSeekerCollectPhase	= 2;
-
 const NUUInt64 NUSeekerPhaseOffset	= 101;
 const NUUInt64 NUSeekerCurrentGradeOffset = 109;
 const NUUInt64 NUSeekerNextOOPOfBellBallToCollectOffset = 117;
 const NUUInt64 NUSeekerNextGradeOfBellBallToCollectOffset = 125;
-
-const NUUInt32 NUSeekerDefaultSeekCount = 300;
 
 const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
@@ -103,11 +99,34 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
 @implementation NUNurserySeeker (Private)
 
-- (void)process
+- (void)processOneUnit
 {
     [self preprocess];
-    [self seekObjects];
-    [self collectObjects];
+
+    [[self nursery] lock];
+
+    switch (currentPhase)
+    {
+        case NUSeekerSeekPhase:
+            [self loadGrayOOPsIfNeeded];
+            [[self garden] moveUpTo:[self grade]];
+            [self seekObjectsOneUnit];
+            break;
+        case NUSeekerCollectPhase:
+            [[self garden] moveUpTo:[self grade]];
+            [self collectObjectsOneUnit];
+            break;
+        case NUSeekerNonePhase:
+            if ([self grade] != [[self nursery] gradeForSeeker])
+            {
+                currentPhase = NUSeekerSeekPhase;
+                [self setGrade:[[self nursery] gradeForSeeker]];
+                [[self garden] moveUpTo:[self grade]];
+                [self pushRootOOP];
+            }
+    }
+
+    [[self nursery] unlock];
 }
 
 - (void)preprocess
@@ -144,45 +163,20 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
     }
 }
 
-- (void)seekObjects
+- (void)seekObjectsOneUnit
 {
-    if (currentPhase == NUSeekerSeekPhase)
-    {
-        [self loadGrayOOPsIfNeeded];
-        [[self garden] moveUpTo:[self grade]];
-        [self seekObjectsUntilStop];
-    }
-    else if (currentPhase == NUSeekerCollectPhase)
-    {
-        [[self garden] moveUpTo:[self grade]];
-    }
-    else if (currentPhase == NUSeekerNonePhase)
-    {
-        [self setGrade:[[self nursery] gradeForSeeker]];
-        
-        if ([self grade] == NUNilGrade)
-        {
-            [self setShouldStop:YES];
-            return;
-        }
-        
-        currentPhase = NUSeekerSeekPhase;
-        [[self garden] moveUpTo:[self grade]];
-        [self pushRootOOP];
-        [self seekObjectsUntilStop];
-    }
-}
-
-- (void)seekObjectsUntilStop
-{
-	while (![self shouldStop] && ([grayOOPs count] || shouldLoadGrayOOPs))
+    if (currentPhase != NUSeekerSeekPhase)
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+    
+    NSDate *aStopDate = [NSDate dateWithTimeIntervalSinceNow:0.001];
+    
+	while ([aStopDate timeIntervalSinceNow] > 0 && ([grayOOPs count] || shouldLoadGrayOOPs))
 	{
-		NUUInt64 anOOP = NUNotFound64;
-		int i = 0;
-        
         [self loadGrayOOPsIfNeeded];
+
+		NUUInt64 anOOP = [self popGrayOOP];
         
-		for (; i < NUSeekerDefaultSeekCount && (anOOP = [self popGrayOOP]) != NUNotFound64; i++)
+		if (anOOP != NUNotFound64)
 		{
             @try
             {
@@ -208,18 +202,6 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
                 
                 NUBellBall aBellBall = NUMakeBellBall(anOOP, aGrade);
                 NUUInt8 aGCMark = [[[self nursery] objectTable] gcMarkFor:aBellBall];
-//#ifdef DEBUG
-//            NUUInt8 aGCMarkColor = aGCMark & NUGCMarkColorBitsMask;
-//
-//            if (aGCMarkColor == NUGCMarkNone)
-//                NSLog(@"seek %@, NUGCMarkNone", NUStringFromBellBall(aBellBall));
-//            else if (aGCMarkColor == NUGCMarkWhite)
-//                NSLog(@"seek %@, NUGCMarkWhite", NUStringFromBellBall(aBellBall));
-//            else if (aGCMarkColor == NUGCMarkGray)
-//                NSLog(@"seek %@, NUGCMarkGray", NUStringFromBellBall(aBellBall));
-//            else if (aGCMarkColor == NUGCMarkBlack)
-//                NSLog(@"seek %@, NUGCMarkBlack", NUStringFromBellBall(aBellBall));
-//#endif
                 [[[self nursery] objectTable] setGCMark:(aGCMark & NUGCMarkWithoutColorBitsMask) | NUGCMarkBlack for:aBellBall];
             }
             @finally
@@ -233,13 +215,15 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
         currentPhase = NUSeekerCollectPhase;
 }
 
-- (void)collectObjects
+- (void)collectObjectsOneUnit
 {
-    if (currentPhase != NUSeekerCollectPhase) return;
+    if (currentPhase != NUSeekerCollectPhase)
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
     
+    NSDate *aStopDate = [NSDate dateWithTimeIntervalSinceNow:0.001];
     NUBellBall aBellBall = NUMakeBellBall(0, 0);
     
-    while (![self shouldStop] && !NUBellBallEquals(aBellBall, NUNotFoundBellBall))
+    while ([aStopDate timeIntervalSinceNow] > 0 && !NUBellBallEquals(aBellBall, NUNotFoundBellBall))
     {
         @try
         {
@@ -255,11 +239,6 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
             
             [self collectObjectIfNeeded:aBellBall];
             aBellBall = [[[self nursery] objectTable] bellBallGreaterThanBellBall:aBellBall];
-            
-#ifdef DEBUG
-            if (NUBellBallEquals(aBellBall, NUNotFoundBellBall))
-                NSLog(@"<%@:%p> #collectObjects (aBellBall == NUNotFoundBellBall)", [self class], self);
-#endif
         }
         @finally
         {
@@ -272,60 +251,45 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
     if (NUBellBallEquals(aBellBall, NUNotFoundBellBall))
     {
         currentPhase = NUSeekerNonePhase;
-        [[self nursery] seekerDidFinishSeek:self];
+        [[self nursery] seekerDidFinishCollect:self];
     }
 }
 
 - (void)collectObjectIfNeeded:(NUBellBall)aBellBall
 {
-    @try
-    {
-        [[self nursery] lock];
-        
-        NUUInt8 aGCMark = [[[self nursery] objectTable] gcMarkFor:aBellBall];
-        NUUInt8 aGCMarkColor = aGCMark & NUGCMarkColorBitsMask;
-        
-//#ifdef DEBUG
-//    if (aGCMarkColor == NUGCMarkNone)
-//        NSLog(@"#collectObjects:%@, NUGCMarkNone", NUStringFromBellBall(aBellBall));
-//    else if (aGCMarkColor == NUGCMarkWhite)
-//        NSLog(@"#collectObjects:%@, NUGCMarkWhite", NUStringFromBellBall(aBellBall));
-//    else if (aGCMarkColor == NUGCMarkGray)
-//        NSLog(@"#collectObjects:%@, NUGCMarkGray", NUStringFromBellBall(aBellBall));
-//    else if (aGCMarkColor == NUGCMarkBlack)
-//        NSLog(@"#collectObjects:%@, NUGCMarkBlack", NUStringFromBellBall(aBellBall));
-//#endif
+    BOOL aBellBallFound = [[[self nursery] objectTable] containsBellBall:aBellBall];
     
-        if (aGCMarkColor == NUGCMarkWhite && aBellBall.grade <= [self grade])
-        {
-            NUUInt64 anObjectLocation = [[[self nursery] objectTable] objectLocationFor:aBellBall];
-            [[[self nursery] objectTable] removeObjectFor:aBellBall];
-            [[[self nursery] reversedObjectTable] removeBellBallForObjectLocation:anObjectLocation];
-            
-            if ([[[self nursery] objectTable] objectLocationFor:aBellBall] != NUNotFound64)
-                [[NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil] raise];
-            if (!NUBellBallEquals([[[self nursery] reversedObjectTable] bellBallForObjectLocation:anObjectLocation], NUNotFoundBellBall))
-                [[NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil] raise];
-        
-#ifdef DEBUG
-            NSLog(@"<%@:%p> #collectObjects (removeObjectFor: %@, removeOOPForObjectLocation: %llu)", [self class], self, NUStringFromBellBall(aBellBall), anObjectLocation);
-#endif
-        }
-        else
-        {
-            [[[self nursery] objectTable] setGCMark:(aGCMark & NUGCMarkWithoutColorBitsMask) | NUGCMarkWhite for:aBellBall];
-        }
-    }
-    @finally
+    if (!aBellBallFound)
+        return;
+    
+    NUUInt8 aGCMark = [[[self nursery] objectTable] gcMarkFor:aBellBall];
+    NUUInt8 aGCMarkColor = aGCMark & NUGCMarkColorBitsMask;
+    
+    if (aGCMarkColor == NUGCMarkWhite && aBellBall.grade <= [self grade])
     {
-        [[self nursery] unlock];
+        NUUInt64 anObjectLocation = [[[self nursery] objectTable] objectLocationFor:aBellBall];
+        [[[self nursery] objectTable] removeObjectFor:aBellBall];
+        [[[self nursery] reversedObjectTable] removeBellBallForObjectLocation:anObjectLocation];
+        
+        if ([[[self nursery] objectTable] objectLocationFor:aBellBall] != NUNotFound64)
+            [[NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil] raise];
+        if (!NUBellBallEquals([[[self nursery] reversedObjectTable] bellBallForObjectLocation:anObjectLocation], NUNotFoundBellBall))
+            [[NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil] raise];
+    }
+    else
+    {
+        [[[self nursery] objectTable] setGCMark:(aGCMark & NUGCMarkWithoutColorBitsMask) | NUGCMarkWhite for:aBellBall];
     }
 }
 
 - (void)pushRootOOP
 {
+    [[self nursery] lock];
+    
 	NUBell *aBell = [[self garden] bellForObject:[[self garden] nurseryRoot]];
 	if (aBell) [self pushOOPAsGrayIfWhite:[aBell OOP]];
+    
+    [[self nursery] unlock];
 }
 
 - (void)loadGrayOOPsIfNeeded
@@ -342,7 +306,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
         
         NUUInt64 anOOP = [[[self nursery] objectTable] firstGrayOOPGradeLessThanOrEqualTo:[self grade]];
         
-        while (anOOP != NUNotFound64 && [grayOOPs count] < NUSeekerDefaultGrayOOPCapacity / 2)
+        while (anOOP != NUNotFound64)
         {
             [grayOOPs push:anOOP];
             anOOP = [[[self nursery] objectTable] grayOOPGreaterThanOOP:anOOP gradeLessThanOrEqualTo:[self grade]];

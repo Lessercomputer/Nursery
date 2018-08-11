@@ -14,10 +14,16 @@
 @class NSRecursiveLock, NSMutableIndexSet;
 @class NUGarden, NUBell, NUAperture, NUQueue;
 
+typedef enum : NUUInt64 {
+    NUGardenSeekerNonePhase,
+    NUGardenSeekerSeekPhase,
+    NUGardenSeekerCollectPhase
+} NUGardenSeekerPhase;
+
 @interface NUGardenSeeker : NUThreadedChildminder <NSLocking>
 {
+    NUGardenSeekerPhase phase;
     NUQueue *bells;
-    NSRecursiveLock *bellsLock;
     NUAperture *aperture;
     NUUInt64 grade;
     NSRecursiveLock *lock;

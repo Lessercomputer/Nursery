@@ -51,7 +51,7 @@
     
     @try
     {
-        [farmOutLock lock];
+//        [farmOutLock lock];
         [[self gardenSeeker] stop];
         [self lock];
         
@@ -127,7 +127,7 @@
         }
         
         [[self gardenSeeker] start];
-        [farmOutLock unlock];
+//        [farmOutLock unlock];
     }
     
     return aFarmOutStatus;

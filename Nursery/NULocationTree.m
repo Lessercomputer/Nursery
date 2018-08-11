@@ -37,8 +37,17 @@ const NUUInt64 NULocationTreeRootLocationOffset = 29;
 
 - (NURegion)regionFor:(NUUInt64)aLocation
 {
+    NURegion aRegion;
+    
+    [self lock];
+    
     NUUInt64 *aLengthPointer = (NUUInt64 *)[self valueFor:(NUUInt8 *)&aLocation];
-    return aLengthPointer ? NUMakeRegion(aLocation, *aLengthPointer) : NUMakeRegion(NUNotFound64, 0);
+    
+    aRegion = aLengthPointer ? NUMakeRegion(aLocation, *aLengthPointer) : NUMakeRegion(NUNotFound64, 0);
+    
+    [self unlock];
+    
+    return aRegion;
 }
 
 - (void)setRegion:(NURegion)aRegion
