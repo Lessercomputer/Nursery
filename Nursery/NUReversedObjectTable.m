@@ -7,11 +7,14 @@
 //
 
 #import <Foundation/NSLock.h>
+#import <Foundation/NSSet.h>
+#import <Foundation/NSValue.h>
 
 #import "NUReversedObjectTable.h"
 #import "NUIndexArray.h"
 #import "NUReversedObjectTableBranch.h"
 #import "NUReversedObjectTableLeaf.h"
+#import "NUBellBall.h"
 
 const NUUInt64 NUReversedObjectTableRootLocationOffset	= 45;
 
@@ -21,6 +24,7 @@ const NUUInt64 NUReversedObjectTableRootLocationOffset	= 45;
 {
 	if (self = [super initWithKeyLength:sizeof(NUUInt64) leafValueLength:sizeof(NUBellBall) rootLocation:aRootLocation on:aSpaces])
     {
+        removedObjectLocations = [NSCountedSet new];
     }
 	
 	return self;
@@ -63,7 +67,12 @@ const NUUInt64 NUReversedObjectTableRootLocationOffset	= 45;
 
 - (void)removeBellBallForObjectLocation:(NUUInt64)anObjectLocation
 {
+    [self lock];
+    
     [self removeValueFor:(NUUInt8 *)&anObjectLocation];
+    [removedObjectLocations addObject:@(anObjectLocation)];
+    
+    [self unlock];
 }
 
 - (NUBellBall)bellBallForObjectLocationGreaterThanOrEqualTo:(NUUInt64)aLocation
@@ -88,4 +97,28 @@ const NUUInt64 NUReversedObjectTableRootLocationOffset	= 45;
     return aBellBall;
 }
 
+- (NUBellBall)scanBellBallForObjectLocation:(NUUInt64)anObjectLocation
+{
+    NUBellBall aBellBall = NUNotFoundBellBall;
+    
+    [self lock];
+    
+    NUOpaqueBPlusTreeLeaf *aLeaf = [self mostLeftNode];
+    
+    while (aLeaf && NUBellBallEquals(aBellBall, NUNotFoundBellBall))
+    {
+        for (NUUInt32 i = 0; i < [aLeaf valueCount] && NUBellBallEquals(aBellBall, NUNotFoundBellBall); i++)
+        {
+            if ([aLeaf keyAt:i isEqual:(NUUInt8 *)&anObjectLocation])
+                aBellBall = *(NUBellBall *)[aLeaf valueAt:i];
+        }
+        
+        if (NUBellBallEquals(aBellBall, NUNotFoundBellBall))
+            aLeaf = (NUOpaqueBPlusTreeLeaf *)[aLeaf rightNode];
+    }
+    
+    [self unlock];
+    
+    return aBellBall;
+}
 @end

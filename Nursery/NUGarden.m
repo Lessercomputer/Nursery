@@ -108,12 +108,12 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 - (void)dealloc
 {
-    [self close];
-    
     if (retainNursery)
         [nursery release];
     
     nursery = nil;
+    
+    [self close];
     
 	[self setNurseryRoot:nil];
     [characterTargetClassResolvers release];
@@ -324,8 +324,6 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     
     @try
     {
-        [[self gardenSeeker] stop];
-
         if ([self isForMainBranch])
             [(NUMainBranchNursery *)[self nursery] lock];
         
@@ -340,9 +338,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
         
         [self setIsInMoveUp:NO];
-        [self unlock];
-        
-        [[self gardenSeeker] start];
+        [self unlock];        
     }
     @finally
     {
@@ -929,16 +925,9 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 {
     [[self gardenSeeker] stop];
     
-    @try {
-        [self lock];
-        
-        [[[[self bells] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop){
-            [aBell invalidate];
-        }];
-    }
-    @finally {
-        [self unlock];
-    }
+    [[[[self bells] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop){
+        [aBell invalidate];
+    }];
 }
 
 @end

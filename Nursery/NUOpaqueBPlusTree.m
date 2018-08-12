@@ -273,7 +273,7 @@
 - (void)removeValueFor:(NUUInt8 *)aKey
 {
     [self lock];
-    
+
     [[self root] removeValueFor:aKey];
 	
 	if ([[self root] isBranch] && [[self root] valueCount] == 1)

@@ -84,10 +84,6 @@
     {
         @autoreleasepool
         {
-//            [farmOutLock lock];
-//            [[self gardenSeeker] stop];
-//            [[self mainBranchNursery] LockAndStopChildminders];
-            
             [self lock];
             
             if (![[self nursery] open])
@@ -135,9 +131,6 @@
         }
 
         [self unlock];
-//        [[self mainBranchNursery] unlockAndStartChildminders];
-//        [[self gardenSeeker] start];
-//        [farmOutLock unlock];
     }
     
     return aFarmOutStatus;

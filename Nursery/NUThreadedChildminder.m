@@ -74,6 +74,8 @@ const int NUThreadedChildminderTerminateCondition   = 2;
 - (void)stop
 {
     [thread cancel];
+    while ([thread isExecuting])
+        [NSThread sleepForTimeInterval:0.1];
 }
 
 - (void)startThread:(id)anArgument

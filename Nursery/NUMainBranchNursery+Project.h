@@ -56,8 +56,6 @@
 - (void)seekerDidFinishCollect:(NUNurserySeeker *)sender;
 - (void)paraderDidFinishParade:(NUNurseryParader *)sender;
 
-- (void)LockAndStopChildminders;
-- (void)unlockAndStartChildminders;
 - (void)lock;
 - (void)unlock;
 

@@ -171,7 +171,7 @@
 {
     NUBell *aBell;
     
-    [[self garden] lock];
+    [(NUMainBranchNursery *)[[self garden] nursery] lock];
     
     switch (phase)
     {
@@ -195,7 +195,7 @@
             break;
     }
     
-    [[self garden] unlock];
+    [(NUMainBranchNursery *)[[self garden] nursery] unlock];
 }
 
 - (void)seekObjectFor:(NUBell *)aBell

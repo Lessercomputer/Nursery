@@ -8,8 +8,11 @@
 
 #import "NUOpaqueBPlusTree.h"
 
+@class NSCountedSet;
+
 @interface NUReversedObjectTable : NUOpaqueBPlusTree
 {
+    NSCountedSet *removedObjectLocations;
 }
 
 - (id)initWithRootLocation:(NUUInt64)aRootLocation on:(NUSpaces *)aSpaces;
@@ -19,5 +22,7 @@
 - (void)removeBellBallForObjectLocation:(NUUInt64)anObjectLocation;
 
 - (NUBellBall)bellBallForObjectLocationGreaterThanOrEqualTo:(NUUInt64)aLocation;
+
+- (NUBellBall)scanBellBallForObjectLocation:(NUUInt64)anObjectLocation;
 
 @end

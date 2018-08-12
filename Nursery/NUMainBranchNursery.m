@@ -412,38 +412,6 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 {
 }
 
-- (void)LockAndStopChildminders
-{
-#ifdef DEBUG
-    NSLog(@"%@: will stop seeker", self);
-#endif
-    
-    [[self seeker] stop];
-    [[self parader] stop];
-    
-    [self lock];
-
-#ifdef DEBUG
-    NSLog(@"%@: did stop seeker", self);
-#endif
-}
-
-- (void)unlockAndStartChildminders
-{
-#ifdef DEBUG
-    NSLog(@"%@: will start seeker", self);
-#endif
- 
-    [self unlock];
-
-    [[self seeker] start];
-    [[self parader] start];
-    
-#ifdef DEBUG
-    NSLog(@"%@: did start seeker", self);
-#endif
-}
-
 - (void)lock
 {
     [lock lock];
@@ -710,6 +678,8 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     [[self objectTable] validate];
     [[self reversedObjectTable] validate];
     [self validateMappingOfObjectTableToReversedObjectTable];
+    
+    NUBellBall aBellBall = [[self reversedObjectTable] bellBallForObjectLocation:20735];
     
     [self unlock];
 }

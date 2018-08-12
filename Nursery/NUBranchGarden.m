@@ -121,8 +121,6 @@
         NSData *aFixedOOPs = nil;
         NUUInt64 aLatestGrade = NUNilGrade;
         
-        [[self gardenSeeker] stop];
-        
         if (![self gradeIsEqualToNurseryGrade])
         {
             aFarmOutStatus = NUFarmOutStatusNurseryGradeUnmatched;
@@ -151,8 +149,6 @@
             [[self gardenSeeker] endPreventationOfReleaseOfPastGrades];
             [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
         }
-        
-        [[self gardenSeeker] start];
     }
     
     return aFarmOutStatus;

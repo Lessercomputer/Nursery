@@ -51,8 +51,6 @@
     
     @try
     {
-//        [farmOutLock lock];
-        [[self gardenSeeker] stop];
         [self lock];
         
         if (![[self nursery] open])
@@ -67,7 +65,7 @@
         {
             @try
             {
-                [[self mainBranchNursery] LockAndStopChildminders];
+                [[self mainBranchNursery] lock];
                 
                 if ([self gradeIsEqualToNurseryGrade])
                 {
@@ -112,7 +110,7 @@
             }
             @finally
             {
-                [[self mainBranchNursery] unlockAndStartChildminders];
+                [[self mainBranchNursery] unlock];
             }
         }
     }
@@ -125,9 +123,6 @@
             [[self gardenSeeker] endPreventationOfReleaseOfPastGrades];
             [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
         }
-        
-        [[self gardenSeeker] start];
-//        [farmOutLock unlock];
     }
     
     return aFarmOutStatus;

@@ -14,6 +14,7 @@
 #import "NUPages.h"
 #import "NUCharacter.h"
 #import "NUObjectTable.h"
+#import "NUReversedObjectTable.h"
 #import "NUIvar.h"
 #import "NUBellBall.h"
 #import "NUAliaser.h"

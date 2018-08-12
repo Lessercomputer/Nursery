@@ -263,7 +263,9 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
     BOOL aBellBallFound = [[[self nursery] objectTable] containsBellBall:aBellBall];
     
     if (!aBellBallFound)
-        return;
+        [self class];
+    if (aBellBall.oop == 15)
+        [self class];
     
     NUUInt8 aGCMark = [[[self nursery] objectTable] gcMarkFor:aBellBall];
     NUUInt8 aGCMarkColor = aGCMark & NUGCMarkColorBitsMask;
@@ -274,6 +276,9 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
         [[[self nursery] objectTable] removeObjectFor:aBellBall];
         [[[self nursery] reversedObjectTable] removeBellBallForObjectLocation:anObjectLocation];
         
+        NUUInt64 anObjectLocationForOOP15 = [[[self nursery] objectTable] objectLocationFor:NUMakeBellBall(15, 1)];
+        if (anObjectLocationForOOP15 == NUNotFound64 || anObjectLocationForOOP15 == 0)
+            [self class];
         if ([[[self nursery] objectTable] objectLocationFor:aBellBall] != NUNotFound64)
             [[NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil] raise];
         if (!NUBellBallEquals([[[self nursery] reversedObjectTable] bellBallForObjectLocation:anObjectLocation], NUNotFoundBellBall))
@@ -282,6 +287,9 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
     else
     {
         [[[self nursery] objectTable] setGCMark:(aGCMark & NUGCMarkWithoutColorBitsMask) | NUGCMarkWhite for:aBellBall];
+        NUUInt64 anObjectLocationForOOP15 = [[[self nursery] objectTable] objectLocationFor:NUMakeBellBall(15, 1)];
+        if (anObjectLocationForOOP15 == NUNotFound64 || anObjectLocationForOOP15 == 0)
+            [self class];
     }
 }
 

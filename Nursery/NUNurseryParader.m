@@ -97,25 +97,26 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
         {
             [self setGrade:[[self nursery] gradeForParader]];
             [[self garden] moveUpTo:[self grade]];
+            nextLocation = 0;
+        }
+        
+        while ([aStopDate timeIntervalSinceNow] > 0)
+        {
+            NURegion aFreeRegion = [[[self nursery] spaces] nextParaderTargetFreeSpaceForLocation:nextLocation];
             
-            while ([aStopDate timeIntervalSinceNow] > 0)
+            if (aFreeRegion.location != NUNotFound64)
             {
-                NURegion aFreeRegion = [[[self nursery] spaces] nextParaderTargetFreeSpaceForLocation:nextLocation];
+                [self paradeObjectOrNodeNextTo:aFreeRegion];
+            }
+            else if (nextLocation)
+            {
+                nextLocation = 0;
+                [[[self nursery] spaces] minimizeSpace];
+                [[self nursery] paraderDidFinishParade:self];
+                //                [[[self nursery] spaces] validate];
+                //                [[self nursery] validateMappingOfObjectTableToReversedObjectTable];
                 
-                if (aFreeRegion.location != NUNotFound64)
-                {
-                    [self paradeObjectOrNodeNextTo:aFreeRegion];
-                }
-                else
-                {
-                    [[[self nursery] spaces] minimizeSpace];
-                    nextLocation = 0;
-                    [[self nursery] paraderDidFinishParade:self];
-                    //                [[[self nursery] spaces] validate];
-                    //                [[self nursery] validateMappingOfObjectTableToReversedObjectTable];
-                    
-                    break;
-                }
+                break;
             }
         }
     }
@@ -139,7 +140,15 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
         }
         else
         {
-            [self paradeNodeAt:nextLocation nextTo:aFreeRegion];
+            NUUInt64 aNodeSize = [[[self nursery] pages] pageSize];
+            
+            if (nextLocation % aNodeSize == 0)
+                [self paradeNodeAt:nextLocation nextTo:aFreeRegion];
+            else
+            {
+                NUBellBall aScannedBellBall = [[[self nursery] reversedObjectTable] scanBellBallForObjectLocation:nextLocation];
+                [[NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil] raise];
+            }
         }
     }
 }
@@ -167,9 +176,6 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 - (void)paradeNodeAt:(NUUInt64)aNodeLocation nextTo:(NURegion)aFreeRegion
 {
     NUUInt64 aNodeSize = [[[self nursery] pages] pageSize];
-
-    if (aNodeLocation % aNodeSize)
-        [[NSException exceptionWithName:NUParaderInvalidNodeLocationException reason:nil userInfo:nil] raise];
 
     if ([[[self nursery] spaces] nodePageIsNotToBeReleased:aNodeLocation])
     {
