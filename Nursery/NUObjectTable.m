@@ -109,7 +109,7 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
 	
 	NUObjectTableLeaf *aLeafNode = (NUObjectTableLeaf *)[self mostLeftNode];
 	NUBellBall aFirstBellBall = NUNotFoundBellBall;
-	if (![aLeafNode isEmpty]) aFirstBellBall = *(NUBellBall *)[aLeafNode firstkey];
+	if (aLeafNode && ![aLeafNode isEmpty]) aFirstBellBall = *(NUBellBall *)[aLeafNode firstkey];
 	
 	[self unlock];
 	

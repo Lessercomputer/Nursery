@@ -14,6 +14,9 @@
 #import "NUGarden.h"
 #import "NUGarden+Project.h"
 #import "NUNurseryRoot.h"
+#import "NUMainBranchNursery.h"
+#import "NUMainBranchNursery+Project.h"
+#import "NUSpaces.h"
 #import "NUBell.h"
 #import "NUBell+Project.h"
 #import "NUBellBall.h"
@@ -157,9 +160,9 @@
 
 - (void)setGrade:(NUUInt64)aGrade
 {
-#ifdef DEBUG
+//#ifdef DEBUG
     NSLog(@"%@ currentGrade:%@, aNewGrade:%@", self, @(grade), @(aGrade));
-#endif
+//#endif
     
     grade = aGrade;
 }
@@ -187,6 +190,8 @@
             
             break;
         case NUGardenSeekerNonePhase:
+//            [[(NUMainBranchNursery *)[[self garden] nursery] spaces] validate];
+//            [(NUMainBranchNursery *)[[self garden] nursery] validateMappingOfObjectTableToReversedObjectTable];
             break;
     }
     

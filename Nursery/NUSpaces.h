@@ -10,7 +10,7 @@
 
 #import "NUTypes.h"
 
-@class NSString, NSMutableSet, NSMutableArray, NSMutableDictionary, NSFileHandle, NSRecursiveLock;
+@class NSString, NSMutableSet, NSCountedSet, NSMutableArray, NSMutableDictionary, NSFileHandle, NSRecursiveLock;
 @class NULocationTree, NULengthTree, NULengthTreeLeaf, NUOpaqueBPlusTreeNode, NUOpaqueBPlusTreeBranch, NUPages, NUMainBranchNursery, NUCharacter, NUU64ODictionary;
 
 extern NSString *NURegionAlreadyReleasedException;
@@ -28,6 +28,11 @@ extern NSString *NUSpaceInvalidOperationException;
 	NUMainBranchNursery *nursery;
     NSRecursiveLock *lock;
     NUU64ODictionary *nodeOOPToTreeDictionary;
+    NSMutableSet *releasedNodePageLocations;
+    NUUInt64 inRelese;
+    NUUInt64 inAlloc;
+    NSCountedSet *releasedRegion;
+    NSCountedSet *allocatedRegion;
 }
 @end
 
@@ -86,7 +91,7 @@ extern NSString *NUSpaceInvalidOperationException;
 
 - (NUUInt64)allocateVirtualNodePageLocation;
 - (void)delayedReleaseNodePageLocation:(NUUInt64)aNodePage;
-- (NUUInt64)allocateNodePageWithPreventNodeRelease;
+- (NUUInt64)allocateNodePageLocationWithPreventNodeRelease;
 - (void)initNextVirtualPageLocation;
 - (NUUInt64)firstVirtualPageLocation;
 - (BOOL)nodePageLocationIsVirtual:(NUUInt64)aNodePageLocation;

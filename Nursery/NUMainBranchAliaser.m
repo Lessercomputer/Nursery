@@ -194,7 +194,7 @@
 - (NUUInt64)sizeOfObjectForBellBall:(NUBellBall)aBellBall
 {
 	NUUInt64 aLocation = [[[self nursery] objectTable] objectLocationFor:aBellBall];
-    if (aLocation == NUNotFound64) [[NSException exceptionWithName:NUObjectLocationNotFoundException reason:NUObjectLocationNotFoundException userInfo:nil] raise];
+    if (aLocation == NUNotFound64) [[NSException exceptionWithName:NUObjectLocationNotFoundException reason:nil userInfo:nil] raise];
 	NUCharacter *aCharacter = [[self garden] objectForOOP:[[self pages] readUInt64At:aLocation]];
 	NUUInt64 aSize = [aCharacter basicSize];
 	
@@ -204,8 +204,8 @@
 	{
 		aSize += [[self pages] readUInt64At:sizeof(NUUInt64) of:aLocation];
 	}
-	
-	return aSize;
+
+    return aSize;
 }
 
 - (NUUInt64)objectLocationForBell:(NUBell *)aBell gradeInto:(NUUInt64 *)aGrade

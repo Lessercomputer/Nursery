@@ -68,9 +68,9 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 
 - (void)setGrade:(NUUInt64)aGrade
 {
-    #ifdef DEBUG
+//    #ifdef DEBUG
     NSLog(@"%@ currentGrade:%@, aNewGrade:%@", self, @(grade), @(aGrade));
-    #endif
+//    #endif
     
     grade = aGrade;
 }
@@ -87,34 +87,35 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 
 - (void)processOneUnit
 {
-    NSDate *aStopDate = [NSDate dateWithTimeIntervalSinceNow:0.001];
-    
     @try
     {
         [[self nursery] lock];
-        
+ 
+        NSDate *aStopDate = [NSDate dateWithTimeIntervalSinceNow:0.001];
+
         if ([self grade] != [[self nursery] gradeForParader])
         {
             [self setGrade:[[self nursery] gradeForParader]];
             [[self garden] moveUpTo:[self grade]];
-        }
-        
-        while ([aStopDate timeIntervalSinceNow] > 0)
-        {
-            NURegion aFreeRegion = [[[self nursery] spaces] nextParaderTargetFreeSpaceForLocation:nextLocation];
             
-            if (aFreeRegion.location != NUNotFound64)
+            while ([aStopDate timeIntervalSinceNow] > 0)
             {
-                [self paradeObjectOrNodeNextTo:aFreeRegion];
-            }
-            else
-            {
-                [[[self nursery] spaces] minimizeSpace];
-                nextLocation = 0;
-                [self setGrade:NUNilGrade];
-                [[self nursery] paraderDidFinishParade:self];
+                NURegion aFreeRegion = [[[self nursery] spaces] nextParaderTargetFreeSpaceForLocation:nextLocation];
                 
-                break;
+                if (aFreeRegion.location != NUNotFound64)
+                {
+                    [self paradeObjectOrNodeNextTo:aFreeRegion];
+                }
+                else
+                {
+                    [[[self nursery] spaces] minimizeSpace];
+                    nextLocation = 0;
+                    [[self nursery] paraderDidFinishParade:self];
+                    //                [[[self nursery] spaces] validate];
+                    //                [[self nursery] validateMappingOfObjectTableToReversedObjectTable];
+                    
+                    break;
+                }
             }
         }
     }
@@ -148,13 +149,13 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     NUUInt64 anObjectSize = [(NUMainBranchAliaser *)[[self garden] aliaser] sizeOfObjectForBellBall:aBellBall];
     NURegion anObjectRegion = NUMakeRegion(anObjectLocation, anObjectSize);
     NURegion aNewObjectRegion = NUMakeRegion(NUNotFound64, anObjectSize);
-    
+
     [[[self nursery] spaces] releaseSpace:anObjectRegion];
     aNewObjectRegion.location = [[[self nursery] spaces] allocateSpace:anObjectSize aligned:NO preventsNodeRelease:YES];
-    
+
     if (aNewObjectRegion.location == NUNotFound64 || !aNewObjectRegion.location)
         @throw [NSException exceptionWithName:NSGenericException reason:nil userInfo:nil];
-    
+
     [[[self nursery] pages] copyBytesAt:anObjectRegion.location length:anObjectRegion.length to:aNewObjectRegion.location];
     [[[self nursery] objectTable] setObjectLocation:aNewObjectRegion.location for:aBellBall];
     [[[self nursery] reversedObjectTable] removeBellBallForObjectLocation:anObjectLocation];
@@ -169,18 +170,18 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 
     if (aNodeLocation % aNodeSize)
         [[NSException exceptionWithName:NUParaderInvalidNodeLocationException reason:nil userInfo:nil] raise];
-    
+
     if ([[[self nursery] spaces] nodePageIsNotToBeReleased:aNodeLocation])
     {
         NURegion aNodeRegion = NUMakeRegion(aNodeLocation, aNodeSize);
-        
+
         [[[self nursery] spaces] releaseSpace:aNodeRegion];
-        NUUInt64 aNewNodeLocation = [[[self nursery] spaces] allocateSpace:aNodeSize aligned:YES preventsNodeRelease:YES];
-        
+        NUUInt64 aNewNodeLocation = [[[self nursery] spaces] allocateNodePageLocationWithPreventNodeRelease];
+
         if (aNodeLocation != aNewNodeLocation)
         {
             NUOpaqueBPlusTreeNode *aNode = [[[self nursery] spaces] nodeFor:aNodeLocation];
-            
+
             if (aNode)
             {
                 [aNode changeNodePageWith:aNewNodeLocation];
@@ -188,7 +189,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
             }
             else
                 @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
-            
+
             nextLocation = aNewNodeLocation;
         }
     }

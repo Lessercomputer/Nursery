@@ -14,6 +14,7 @@
 #import "NUUInt64Queue.h"
 #import "NUMainBranchNursery.h"
 #import "NUMainBranchNursery+Project.h"
+#import "NUSpaces.h"
 #import "NUPages.h"
 #import "NUObjectTable.h"
 #import "NUReversedObjectTable.h"
@@ -117,6 +118,8 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
             [self collectObjectsOneUnit];
             break;
         case NUSeekerNonePhase:
+//            [[[self nursery] spaces] validate];
+//            [[self nursery] validateMappingOfObjectTableToReversedObjectTable];
             if ([self grade] != [[self nursery] gradeForSeeker])
             {
                 currentPhase = NUSeekerSeekPhase;
@@ -400,9 +403,9 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
 - (void)setGrade:(NUUInt64)aGrade
 {
-#ifdef DEBUG
+//#ifdef DEBUG
     NSLog(@"%@ currentGrade:%@, aNewGrade:%@", self, @(grade), @(aGrade));
-#endif
+//#endif
     
     grade = aGrade;
 }

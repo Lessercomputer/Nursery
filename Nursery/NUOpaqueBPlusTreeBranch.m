@@ -312,9 +312,11 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 	[[self leftBranch] removeNodesAt:aKeyShuffleLocation + 1 count:aKeyShuffleCount];
     
     if ([[self leftBranch] isUnderflow])
-        [[NSException exceptionWithName:NUUnderflowNodeFoundException reason:NUUnderflowNodeFoundException userInfo:nil] raise];
+        [[NSException exceptionWithName:NUUnderflowNodeFoundException reason:nil userInfo:nil] raise];
     if ([self isUnderflow])
-        [[NSException exceptionWithName:NUUnderflowNodeFoundException reason:NUUnderflowNodeFoundException userInfo:nil] raise];
+        [[NSException exceptionWithName:NUUnderflowNodeFoundException reason:nil userInfo:nil] raise];
+    [[self leftBranch] shufflableKeyCount];
+    [self shufflableKeyCount];
 }
 
 - (void)shuffleRightNode
@@ -329,9 +331,11 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 	[[self rightBranch] removeNodesAt:0 count:aKeyShuffleCount];
     
     if ([[self rightBranch] isUnderflow])
-        [[NSException exceptionWithName:NUUnderflowNodeFoundException reason:NUUnderflowNodeFoundException userInfo:nil] raise];
+        [[NSException exceptionWithName:NUUnderflowNodeFoundException reason:nil userInfo:nil] raise];
     if ([self isUnderflow])
-        [[NSException exceptionWithName:NUUnderflowNodeFoundException reason:NUUnderflowNodeFoundException userInfo:nil] raise];
+        [[NSException exceptionWithName:NUUnderflowNodeFoundException reason:nil userInfo:nil] raise];
+    [[self rightBranch] shufflableKeyCount];
+    [self shufflableKeyCount];
 }
 
 - (void)mergeRightNode

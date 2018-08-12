@@ -294,6 +294,9 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 - (NUUInt32)shufflableKeyCount
 {
+    if ([self keyCount] < [self minKeyCount])
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+    
     return ceil(([self keyCount] - [self minKeyCount]) / 2.0);
 }
 
