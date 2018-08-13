@@ -225,10 +225,7 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 - (NUUInt32)minValueCount
 {
-    if ([self isLeaf])
-        return [self minKeyCount];
-    else
-        return [self minKeyCount] + 1;
+	return floor([self valueCapacity] / 2.0);
 }
 
 - (NUUInt32)keyCount

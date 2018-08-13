@@ -11,12 +11,16 @@
 
 extern NSString *NUParaderInvalidNodeLocationException;
 
+@class NSMutableArray;
+
 @class NUMainBranchNursery, NUOpaqueBPlusTreeNode;
 
 @interface NUNurseryParader : NUThreadedChildminder
 {
     NUUInt64 nextLocation;
     NUUInt64 grade;
+    NSMutableArray *movedObjectLocations;
+    NSMutableArray *movedNodeLocations;
 }
 
 + (id)paraderWithGarden:(NUGarden *)aGarden;

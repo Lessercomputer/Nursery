@@ -306,14 +306,14 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
 {
     [self lock];
     
-	NUUInt8 *value = [self valueFor:(NUUInt8 *)&aBellBall];
-    NUUInt64 objectLocation = NUNotFound64;
+	NUUInt8 *aValue = [self valueFor:(NUUInt8 *)&aBellBall];
+    NUUInt64 anObjectLocation = NUNotFound64;
 	
-	if (value) objectLocation = *(NUUInt64 *)value;
+	if (aValue) anObjectLocation = *(NUUInt64 *)aValue;
     
     [self unlock];
     
-    return objectLocation;
+    return anObjectLocation;
 }
 
 - (void)setObjectLocation:(NUUInt64)aLocation for:(NUBellBall)aBellBall

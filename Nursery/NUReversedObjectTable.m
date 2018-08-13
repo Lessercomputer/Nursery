@@ -9,6 +9,7 @@
 #import <Foundation/NSLock.h>
 #import <Foundation/NSSet.h>
 #import <Foundation/NSValue.h>
+#import <Foundation/NSString.h>
 
 #import "NUReversedObjectTable.h"
 #import "NUIndexArray.h"
@@ -25,6 +26,7 @@ const NUUInt64 NUReversedObjectTableRootLocationOffset	= 45;
 	if (self = [super initWithKeyLength:sizeof(NUUInt64) leafValueLength:sizeof(NUBellBall) rootLocation:aRootLocation on:aSpaces])
     {
         removedObjectLocations = [NSCountedSet new];
+        setKeyAndValues = [NSCountedSet new];
     }
 	
 	return self;
@@ -62,7 +64,14 @@ const NUUInt64 NUReversedObjectTableRootLocationOffset	= 45;
 
 - (void)setBellBall:(NUBellBall)aBellBall forObjectLocation:(NUUInt64)anObjectLocation
 {
+    [self lock];
+    
+    
     [self setOpaqueValue:(NUUInt8 *)&aBellBall forKey:(NUUInt8 *)&anObjectLocation];
+    
+    [setKeyAndValues addObject:[NSString stringWithFormat:@"%@, %@", NUStringFromBellBall(aBellBall), @(anObjectLocation)]];
+    
+    [self unlock];
 }
 
 - (void)removeBellBallForObjectLocation:(NUUInt64)anObjectLocation
