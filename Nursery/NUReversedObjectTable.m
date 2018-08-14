@@ -78,8 +78,18 @@ const NUUInt64 NUReversedObjectTableRootLocationOffset	= 45;
 {
     [self lock];
     
+    if (anObjectLocation == 28358)
+        [self class];
+    
     [self removeValueFor:(NUUInt8 *)&anObjectLocation];
     [removedObjectLocations addObject:@(anObjectLocation)];
+    
+    if (anObjectLocation != 28390)
+    {
+        NUBellBall aBellBall2 = [self bellBallForObjectLocation:28390];
+        if (!NUBellBallEquals(aBellBall2, NUNotFoundBellBall))
+            [self class];
+    }
     
     [self unlock];
 }

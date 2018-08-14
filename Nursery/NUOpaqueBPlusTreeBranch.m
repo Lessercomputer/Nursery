@@ -357,8 +357,8 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 - (void)mergeLeftNode
 {
 	NUOpaqueBPlusTreeBranch *aLeftNode = [self leftBranch];
-	[self insertKey:[self mostLeftKeyInSubTree] at:0];
 	[self insertKeys:[aLeftNode firstkey] at:0 count:[aLeftNode keyCount]];
+    [self insertKey:[self mostLeftKeyInSubTree] at:[aLeftNode keyCount]];
 	[aLeftNode removeAllKeys];
 	
 	[self insertNodes:[aLeftNode nodeLocations] at:0 startAt:0 count:[aLeftNode valueCount]];

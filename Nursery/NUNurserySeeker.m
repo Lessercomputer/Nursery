@@ -255,6 +255,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
     {
         currentPhase = NUSeekerNonePhase;
         [[self nursery] seekerDidFinishCollect:self];
+        NSLog(@"%@:didFinishCollect", self);
     }
 }
 
@@ -274,7 +275,16 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
     {
         NUUInt64 anObjectLocation = [[[self nursery] objectTable] objectLocationFor:aBellBall];
         [[[self nursery] objectTable] removeObjectFor:aBellBall];
+        
+//        NUBellBall aBellBall2 = [[[self nursery] reversedObjectTable] bellBallForObjectLocation:28390];
+//        if (NUBellBallEquals(aBellBall2, NUNotFoundBellBall))
+//            [self class];
+        
         [[[self nursery] reversedObjectTable] removeBellBallForObjectLocation:anObjectLocation];
+        
+//        NUBellBall aBellBall3 = [[[self nursery] reversedObjectTable] bellBallForObjectLocation:28390];
+//        if (anObjectLocation != 28390 && NUBellBallEquals(aBellBall3, NUNotFoundBellBall))
+//            [self class];
         
         NUUInt64 anObjectLocationForOOP15 = [[[self nursery] objectTable] objectLocationFor:NUMakeBellBall(15, 1)];
         if (anObjectLocationForOOP15 == NUNotFound64 || anObjectLocationForOOP15 == 0)

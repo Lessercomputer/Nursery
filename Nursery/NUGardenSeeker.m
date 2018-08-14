@@ -187,6 +187,7 @@
         case NUGardenSeekerCollectPhase:
             [self collectGrade];
             phase = NUGardenSeekerNonePhase;
+            NSLog(@"%@:didFinishCollection", self);
             
             break;
         case NUGardenSeekerNonePhase:
