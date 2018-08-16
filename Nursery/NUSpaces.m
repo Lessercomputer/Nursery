@@ -377,8 +377,11 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 - (void)releaseNodePageAt:(NUUInt64)aNodePageLocation
 {
     [self lock];
-        
-	[self releaseSpace:NUMakeRegion(aNodePageLocation, [[self pages] pageSize])];
+    
+    if (aNodePageLocation == 36864)
+        [self class];
+    
+    [self releaseSpace:NUMakeRegion(aNodePageLocation, [[self pages] pageSize])];
     if ([releasedNodePageLocations containsObject:@(aNodePageLocation)])
         [self class];
     [releasedNodePageLocations addObject:@(aNodePageLocation)];

@@ -320,6 +320,9 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
 {
     [self lock];
     
+    if (aBellBall.oop == 1 || aBellBall.oop == 3006)
+        [self class];
+    
 	[self setOpaqueValue:(NUUInt8 *)&aLocation forKey:(NUUInt8 *)&aBellBall];
     
     [self unlock];

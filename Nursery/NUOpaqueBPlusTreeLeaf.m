@@ -29,6 +29,9 @@
 
 - (NUOpaqueBPlusTreeNode *)setOpaqueValue:(NUUInt8 *)aValue forKey:(NUUInt8 *)aKey
 {
+    if ([self pageLocation] == 36864)
+        [self class];
+    
 	NUUInt32 anIndexToInsert = [[self keys] indexToInsert:aKey];
 	
 	if (anIndexToInsert < [self keyCount] && [self keyAt:anIndexToInsert isEqual:aKey])
@@ -96,6 +99,9 @@
 
 - (BOOL)removeValueFor:(NUUInt8 *)aKey
 {
+    if ([self pageLocation] == 36864)
+        [self class];
+    
 	NUUInt32 aKeyIndex = [self keyIndexGreaterThanOrEqualToKey:aKey];
 	
 	if (aKeyIndex >= [self keyCount] || ![self keyAt:aKeyIndex isEqual:aKey])
@@ -205,7 +211,9 @@
 }
 
 - (void)mergeRightNode
-{	
+{
+    if ([self pageLocation] == 36864)
+        [self class];
     NUOpaqueBPlusTreeLeaf *aRightNode = (NUOpaqueBPlusTreeLeaf *)[self rightNode];
     [self addKeys:[aRightNode keys]];
 	[self addValues:[aRightNode values]];
@@ -217,7 +225,10 @@
 }
 
 - (void)mergeLeftNode
-{	
+{
+    if ([self pageLocation] == 36864)
+        [self class];
+    
     NUOpaqueBPlusTreeLeaf *aLeftNode = (NUOpaqueBPlusTreeLeaf *)[self leftNode];
     [self insertKeys:[aLeftNode keys] at:0];
 	[self insertValues:[aLeftNode values] at:0];

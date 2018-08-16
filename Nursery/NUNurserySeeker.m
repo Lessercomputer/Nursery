@@ -280,11 +280,16 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 //        if (NUBellBallEquals(aBellBall2, NUNotFoundBellBall))
 //            [self class];
         
+        if (anObjectLocation == 20550)
+            [self class];
         [[[self nursery] reversedObjectTable] removeBellBallForObjectLocation:anObjectLocation];
         
 //        NUBellBall aBellBall3 = [[[self nursery] reversedObjectTable] bellBallForObjectLocation:28390];
 //        if (anObjectLocation != 28390 && NUBellBallEquals(aBellBall3, NUNotFoundBellBall))
 //            [self class];
+        
+        if (NUBellBallEquals([[[self nursery] reversedObjectTable] bellBallForObjectLocation:28390], NUNotFoundBellBall))
+            [self class];
         
         NUUInt64 anObjectLocationForOOP15 = [[[self nursery] objectTable] objectLocationFor:NUMakeBellBall(15, 1)];
         if (anObjectLocationForOOP15 == NUNotFound64 || anObjectLocationForOOP15 == 0)

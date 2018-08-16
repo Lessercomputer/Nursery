@@ -142,26 +142,43 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
         
         if (!NUBellBallEquals(aBellBall, NUNotFoundBellBall))
         {
+//            [[self nursery] validateMappingOfObjectTableToReversedObjectTable];
+//            if (NUBellBallEquals([[[self nursery] reversedObjectTable] bellBallForObjectLocation:28390], NUNotFoundBellBall))
+//                [self class];
             [self paradeObjectWithBellBall:aBellBall at:nextLocation nextTo:aFreeRegion];
+//            [[self nursery] validateMappingOfObjectTableToReversedObjectTable];
+//            if (NUBellBallEquals([[[self nursery] reversedObjectTable] bellBallForObjectLocation:28390], NUNotFoundBellBall))
+//                [self class];
         }
         else
         {
             NUUInt64 aNodeSize = [[[self nursery] pages] pageSize];
             
             if (nextLocation % aNodeSize == 0)
+            {
+//                if (NUBellBallEquals([[[self nursery] reversedObjectTable] bellBallForObjectLocation:28390], NUNotFoundBellBall))
+//                    [self class];
+//                [[self nursery] validateMappingOfObjectTableToReversedObjectTable];
                 [self paradeNodeAt:nextLocation nextTo:aFreeRegion];
+//                [[self nursery] validateMappingOfObjectTableToReversedObjectTable];
+//                if (NUBellBallEquals([[[self nursery] reversedObjectTable] bellBallForObjectLocation:28390], NUNotFoundBellBall))
+//                    [self class];
+            }
             else
             {
-//                NUBellBall aScannedBellBall = [[[self nursery] reversedObjectTable] scanBellBallForObjectLocation:nextLocation];
-//                NUBellBall aBellBall2 = [[[self nursery] reversedObjectTable] bellBallForObjectLocation:nextLocation];
-//                if (!NUBellBallEquals(aBellBall2, aBellBall) || !NUBellBallEquals(aScannedBellBall, aBellBall))
-//                {
-////                    [self class];
-//                    NUBellBall aBellBall3 = [[[self nursery] reversedObjectTable] bellBallForObjectLocation:nextLocation];
-//                }
+                NUBellBall aScannedBellBall = [[[self nursery] reversedObjectTable] scanBellBallForObjectLocation:nextLocation];
+                NUBellBall aBellBall2 = [[[self nursery] reversedObjectTable] bellBallForObjectLocation:nextLocation];
+                if (!NUBellBallEquals(aBellBall2, aBellBall) || !NUBellBallEquals(aScannedBellBall, aBellBall))
+                {
+//                    [self class];
+                    NUBellBall aBellBall3 = [[[self nursery] reversedObjectTable] bellBallForObjectLocation:nextLocation];
+                }
+//                [[self nursery] validateMappingOfObjectTableToReversedObjectTable];
                 [[NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil] raise];
             }
         }
+//        [[self nursery] validateMappingOfObjectTableToReversedObjectTable];
+//        [[[self nursery] spaces] validate];
     }
 }
 

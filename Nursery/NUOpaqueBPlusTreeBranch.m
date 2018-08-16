@@ -392,6 +392,8 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 
 - (void)changeNodePageWith:(NUUInt64)aPageLocation of:(NUOpaqueBPlusTreeNode *)aNode
 {
+    if ([aNode pageLocation] == 45056 || aPageLocation == 43241472)
+        [self class];
     NUUInt32 aNodeIndex = [self targetNodeIndexFor:[aNode firstkey]];
     NUOpaqueBPlusTreeNode *aChildNode = [self nodeAt:aNodeIndex];
     

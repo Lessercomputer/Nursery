@@ -80,6 +80,8 @@ const NUUInt64 NUReversedObjectTableRootLocationOffset	= 45;
     
     if (anObjectLocation == 28358)
         [self class];
+    if (anObjectLocation == 26173456 || anObjectLocation == 26173440)
+        [self class];
     
     [self removeValueFor:(NUUInt8 *)&anObjectLocation];
     [removedObjectLocations addObject:@(anObjectLocation)];

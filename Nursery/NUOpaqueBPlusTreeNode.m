@@ -77,6 +77,9 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 - (void)loadKeysAndValuesFrom:(NUUInt64)aPageLocation
 {
+    if (aPageLocation == 36864)
+        [self class];
+    
 	NUOpaqueArray *aKeys = [self makeKeyArray];
 	NUOpaqueArray *aValues = [self makeValueArray];
 	
@@ -129,7 +132,9 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 }
 
 - (void)setPageLocation:(NUUInt64)aPageLocation
-{    
+{
+    if (aPageLocation == 36864)
+        [self class];
 	pageLocation = aPageLocation;
 }
 
@@ -270,6 +275,8 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 - (void)setLeftNodeLocation:(NUUInt64)aLocation
 {
+    if (aLocation == 36864)
+        [self class];
 	if (leftNodeLocation == aLocation) return;
 	
 	leftNodeLocation = aLocation;
@@ -283,6 +290,9 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 - (void)setRightNodeLocation:(NUUInt64)aLocation
 {
+    if (aLocation == 36864)
+        [self class];
+
 	if (rightNodeLocation == aLocation) return;
 	
 	rightNodeLocation = aLocation;
@@ -676,6 +686,9 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 - (void)releaseNodePageAndCache
 {
+    if ([self pageLocation] == 36864)
+        [self class];
+    [[self pages] writeUInt64:NUNilOOP at:NUOpaqueBPlusTreeNodeOOPOffset of:[self pageLocation]];
 	[[self tree] releaseNodePageLocation:[self pageLocation]];
     [[self tree] removeNodeAt:[self pageLocation]];
 }
