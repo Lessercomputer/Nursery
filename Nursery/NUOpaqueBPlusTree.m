@@ -498,7 +498,7 @@
 {
     [self lock];
     
-    NSLog(@"removeNodeAt:%@", @(aPageLocation));
+//    NSLog(@"removeNodeAt:%@", @(aPageLocation));
 	[[self nodeDictionary] removeObjectForKey:aPageLocation];
     
     [self unlock];

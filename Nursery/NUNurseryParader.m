@@ -105,7 +105,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
         
         while ([aStopDate timeIntervalSinceNow] > 0)
         {
-            NURegion aFreeRegion = [[[self nursery] spaces] nextParaderTargetFreeSpaceForLocation:nextLocation];
+            NURegion aFreeRegion = [[[self nursery] spaces] freeSpaceBeginningAtLocationGreaterThanOrEqual:nextLocation];
             
             if (aFreeRegion.location != NUNotFound64)
             {
@@ -114,9 +114,9 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
             else if (nextLocation)
             {
                 nextLocation = 0;
-//                NSLog(@"%@:didFinishParade", self);
-//                [[[self nursery] spaces] minimizeSpace];
-//                [[self nursery] paraderDidFinishParade:self];
+                NSLog(@"%@:didFinishParade", self);
+                [[[self nursery] spaces] minimizeSpace];
+                [[self nursery] paraderDidFinishParade:self];
                 //                [[[self nursery] spaces] validate];
                 //                [[self nursery] validateMappingOfObjectTableToReversedObjectTable];
 

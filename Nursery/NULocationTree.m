@@ -20,17 +20,17 @@ const NUUInt64 NULocationTreeRootLocationOffset = 29;
 	return [super initWithKeyLength:sizeof(NUUInt64) leafValueLength:sizeof(NUUInt64) rootLocation:aRootLocation on:aSpaces];
 }
 
-- (NULocationTreeLeaf *)getNodeContainingSpaceAtLocation:(NUUInt64)aLocation keyIndex:(NUUInt32 *)aKeyIndex
+- (NULocationTreeLeaf *)getNodeContainingSpaceBeginningAtLocation:(NUUInt64)aLocation keyIndex:(NUUInt32 *)aKeyIndex
 {
     return (NULocationTreeLeaf *)[self leafNodeContainingKey:(NUUInt8 *)&aLocation keyIndex:aKeyIndex];
 }
 
-- (NULocationTreeLeaf *)getNodeContainingSpaceAtLocationGreaterThanOrEqual:(NUUInt64)aLocation keyIndex:(NUUInt32 *)aKeyIndex
+- (NULocationTreeLeaf *)getNodeContainingSpaceBeginningAtLocationGreaterThanOrEqual:(NUUInt64)aLocation keyIndex:(NUUInt32 *)aKeyIndex
 {
     return (NULocationTreeLeaf *)[self leafNodeContainingKeyGreaterThanOrEqualTo:(NUUInt8 *)&aLocation keyIndex:aKeyIndex];
 }
 
-- (NULocationTreeLeaf *)getNodeContainingSpaceAtLocationLessThanOrEqual:(NUUInt64)aLocation keyIndex:(NUUInt32 *)aKeyIndex
+- (NULocationTreeLeaf *)getNodeContainingSpaceBeginningAtLocationLessThanOrEqual:(NUUInt64)aLocation keyIndex:(NUUInt32 *)aKeyIndex
 {
 	return (NULocationTreeLeaf *)[self leafNodeContainingKeyLessThanOrEqualTo:(NUUInt8 *)&aLocation keyIndex:aKeyIndex];
 }

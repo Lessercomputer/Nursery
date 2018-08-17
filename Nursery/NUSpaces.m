@@ -145,18 +145,13 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 
 @implementation NUSpaces (RegionSpace)
 
-- (NURegion)nextParaderTargetFreeSpaceForLocation:(NUUInt64)aLocation
-{
-    return [self freeSpaceContainingSpaceAtLocationGreaterThanOrEqual:aLocation];
-}
-
-- (NURegion)freeSpaceContainingSpaceAtLocationGreaterThanOrEqual:(NUUInt64)aLocation
+- (NURegion)freeSpaceBeginningAtLocationGreaterThanOrEqual:(NUUInt64)aLocation
 {
     [self lock];
     
     NURegion aRegion;
     NUUInt32 aKeyIndex;
-    NULocationTreeLeaf *aLeaf = [locationTree getNodeContainingSpaceAtLocationGreaterThanOrEqual:aLocation keyIndex:&aKeyIndex];
+    NULocationTreeLeaf *aLeaf = [locationTree getNodeContainingSpaceBeginningAtLocationGreaterThanOrEqual:aLocation keyIndex:&aKeyIndex];
     
     if (!aLeaf) aRegion = NUMakeRegion(NUNotFound64, 0);
     else aRegion = [aLeaf regionAt:aKeyIndex];
@@ -166,13 +161,13 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
     return aRegion;
 }
 
-- (NURegion)freeSpaceContainingSpaceAtLocationLessThanOrEqual:(NUUInt64)aLocation
+- (NURegion)freeSpaceBeginningAtLocationLessThanOrEqual:(NUUInt64)aLocation
 {
     [self lock];
     
     NURegion aRegion;
     NUUInt32 aKeyIndex;
-    NULocationTreeLeaf *aLeaf = [locationTree getNodeContainingSpaceAtLocationLessThanOrEqual:aLocation keyIndex:&aKeyIndex];
+    NULocationTreeLeaf *aLeaf = [locationTree getNodeContainingSpaceBeginningAtLocationLessThanOrEqual:aLocation keyIndex:&aKeyIndex];
     
     if (!aLeaf) aRegion = NUMakeRegion(NUNotFound64, 0);
     else aRegion = [aLeaf regionAt:aKeyIndex];
@@ -225,7 +220,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 - (NUUInt64)allocateSpaceFrom:(NULengthTreeLeaf *)aLengthTreeLeaf region:(NURegion)aRegion length:(NUUInt64)aLength aligned:(BOOL)anAlignFlag preventsNodeRelease:(BOOL)aPreventsNodeReleaseFlag
 {
 	NUUInt32 aKeyIndex;
-	NULocationTreeLeaf *aLocationTreeLeaf = [locationTree getNodeContainingSpaceAtLocationLessThanOrEqual:aRegion.location keyIndex:&aKeyIndex];
+	NULocationTreeLeaf *aLocationTreeLeaf = [locationTree getNodeContainingSpaceBeginningAtLocationLessThanOrEqual:aRegion.location keyIndex:&aKeyIndex];
 	
 	if (![aLengthTreeLeaf canPreventNodeReleseWhenValueRemovedOrAdded]
 			|| ![aLocationTreeLeaf canPreventNodeReleseWhenValueRemovedOrAdded])
@@ -294,7 +289,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
     if (inRelese > 1)
         [self class];
 	NUUInt32 aKeyIndex;
-	NULocationTreeLeaf *aNode = [locationTree getNodeContainingSpaceAtLocationLessThanOrEqual:aRegion.location keyIndex:&aKeyIndex];
+	NULocationTreeLeaf *aNode = [locationTree getNodeContainingSpaceBeginningAtLocationLessThanOrEqual:aRegion.location keyIndex:&aKeyIndex];
 	NURegion aLeftRegion = NUMakeRegion(0, 0), aRightRegion = NUMakeRegion(0, 0);
 	
 	if (aNode)
@@ -337,7 +332,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 {
     [self lock];
     
-    NURegion aLastFreeRegion = [self freeSpaceContainingSpaceAtLocationLessThanOrEqual:[[self pages] nextPageLocation]];
+    NURegion aLastFreeRegion = [self freeSpaceBeginningAtLocationLessThanOrEqual:[[self pages] nextPageLocation]];
     
     if (aLastFreeRegion.location != NUNotFound64 && NUMaxLocation(aLastFreeRegion) == [[self pages] nextPageLocation])
     {

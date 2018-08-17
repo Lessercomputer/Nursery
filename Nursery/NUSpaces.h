@@ -70,9 +70,8 @@ extern NSString *NUSpaceInvalidOperationException;
 
 @interface NUSpaces (RegionSpace)
 
-- (NURegion)nextParaderTargetFreeSpaceForLocation:(NUUInt64)aLocation;
-- (NURegion)freeSpaceContainingSpaceAtLocationGreaterThanOrEqual:(NUUInt64)aLocation;
-- (NURegion)freeSpaceContainingSpaceAtLocationLessThanOrEqual:(NUUInt64)aLocation;
+- (NURegion)freeSpaceBeginningAtLocationGreaterThanOrEqual:(NUUInt64)aLocation;
+- (NURegion)freeSpaceBeginningAtLocationLessThanOrEqual:(NUUInt64)aLocation;
 - (NUUInt64)allocateSpace:(NUUInt64)aLength;
 - (NUUInt64)allocateSpace:(NUUInt64)aLength aligned:(BOOL)anAlignFlag preventsNodeRelease:(BOOL)aPreventsNodeReleaseFlag;
 - (NUUInt64)allocateSpaceFrom:(NULengthTreeLeaf *)aLengthTreeLeaf region:(NURegion)aRegion length:(NUUInt64)aLength aligned:(BOOL)anAlignFlag preventsNodeRelease:(BOOL)aPreventsNodeReleaseFlag;
