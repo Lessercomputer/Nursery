@@ -25,4 +25,6 @@
 - (void)setRegion:(NURegion)aRegion;
 - (void)removeRegionFor:(NUUInt64)aLocation;
 
+- (NURegion)scanSpaceContainningLocation:(NUUInt64)aLocation;
+
 @end

@@ -80,4 +80,22 @@ const NUUInt64 NULocationTreeRootLocationOffset = 29;
 	return compareRegionLocation;
 }
 
+- (NURegion)scanSpaceContainningLocation:(NUUInt64)aLocation
+{
+    __block NURegion aFoundRegion = NUMakeRegion(NUNotFound64, 0);
+    
+    [self enumerateKeysAndObjectsWithOptions:0 usingBlock:^(NUUInt8 *aKey, NUUInt8 *aValue, BOOL *aStop)
+    {
+        NURegion aRegionInTree = NUMakeRegion(*(NUUInt64 *)aKey, *(NUUInt64 *)aValue);
+        
+        if (NULocationInRegion(aLocation, aRegionInTree))
+        {
+            aFoundRegion = aRegionInTree;
+            *aStop = YES;
+        }
+    }];
+    
+    return aFoundRegion;
+}
+
 @end

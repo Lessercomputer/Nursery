@@ -81,6 +81,8 @@
 
 - (NUOpaqueBPlusTreeLeaf *)getNextKeyIndex:(NUUInt32 *)aKeyIndex node:(NUOpaqueBPlusTreeLeaf *)aNode;
 
+-(void)enumerateKeysAndObjectsWithOptions:(NSEnumerationOptions)anOpts usingBlock:(void (^)(NUUInt8 *, NUUInt8 *, BOOL *))aBlock;
+
 @end
 
 @interface NUOpaqueBPlusTree (ManagingNodes)

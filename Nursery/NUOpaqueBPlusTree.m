@@ -364,6 +364,26 @@
     return aLeafNode;
 }
 
+- (void)enumerateKeysAndObjectsWithOptions:(NSEnumerationOptions)anOpts usingBlock:(void (^)(NUUInt8 *, NUUInt8 *, BOOL *))aBlock
+{
+    BOOL aStop = NO;
+    
+    [self lock];
+    
+    NUOpaqueBPlusTreeLeaf *aLeaf = [self mostLeftNode];
+    
+    while (aLeaf && !aStop)
+    {
+        for (NUUInt32 i = 0; i < [aLeaf valueCount] && !aStop; i++)
+            aBlock([aLeaf keyAt:i], [aLeaf valueAt:i], &aStop);
+        
+        if (!aStop)
+            aLeaf = (NUOpaqueBPlusTreeLeaf *)[aLeaf rightNode];
+    }
+    
+    [self unlock];
+}
+
 @end
 
 @implementation NUOpaqueBPlusTree (ManagingNodes)
