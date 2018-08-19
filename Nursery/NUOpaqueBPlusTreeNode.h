@@ -60,6 +60,7 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 - (void)setPageLocation:(NUUInt64)aPageLocation;
 
 - (NUUInt8 *)firstkey;
+- (NUUInt8 *)lastkey;
 - (NUUInt8 *)keyAt:(NUUInt32)anIndex;
 - (NUUInt8 *)valueAt:(NUUInt32)anIndex;
 - (NUUInt8 *)mostLeftKeyInSubTree;
@@ -84,6 +85,7 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 - (NUUInt32)valueCount;
 
 - (NUUInt8 *)firstValue;
+- (NUUInt8 *)lastValue;
 
 - (NUUInt32)shufflableKeyCount;
 
@@ -119,6 +121,8 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 - (NUUInt8 *)valueFor:(NUUInt8 *)aKey;
 - (NUOpaqueBPlusTreeNode *)setOpaqueValue:(NUUInt8 *)aValue forKey:(NUUInt8 *)aKey;
 - (BOOL)removeValueFor:(NUUInt8 *)aKey;
+
+- (void)enumerateNodesUsingBlock:(void (^)(NUOpaqueBPlusTreeNode *aNode, BOOL *aStop))aBlock stopFlag:(BOOL *)aStop;
 
 @end
 
@@ -190,6 +194,7 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 - (BOOL)isMostRightNodeInCurrentDepth;
 - (BOOL)nodeIsMostRightNodeInDepthOf:(NUOpaqueBPlusTreeNode *)aNode;
 
+- (BOOL)pageIsVirtual;
 - (BOOL)pageIsNotVirtual;
 
 @end

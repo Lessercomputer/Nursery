@@ -138,6 +138,11 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 	return [[self keys] first];
 }
 
+- (NUUInt8 *)lastkey
+{
+    return [[self keys] last];
+}
+
 - (NUUInt8 *)keyAt:(NUUInt32)anIndex
 {
 	return [[self keys] at:anIndex];
@@ -241,6 +246,11 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 - (NUUInt8 *)firstValue
 {
 	return [[self values] first];
+}
+
+- (NUUInt8 *)lastValue
+{
+    return [[self values] last];
 }
 
 - (NUOpaqueBPlusTreeNode *)leftNode
@@ -397,6 +407,11 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 - (BOOL)removeValueFor:(NUUInt8 *)aKey
 {
     return NO;
+}
+
+- (void)enumerateNodesUsingBlock:(void (^)(NUOpaqueBPlusTreeNode *aNode, BOOL *aStop))aBlock stopFlag:(BOOL *)aStop
+{
+    aBlock(self, aStop);
 }
 
 @end
@@ -663,6 +678,11 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 - (BOOL)nodeIsMostRightNodeInDepthOf:(NUOpaqueBPlusTreeNode *)aNode
 {
     return aNode == self;
+}
+
+- (BOOL)pageIsVirtual
+{
+    return [[self spaces] nodePageLocationIsVirtual:[self pageLocation]];
 }
 
 - (BOOL)pageIsNotVirtual

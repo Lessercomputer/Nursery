@@ -130,4 +130,10 @@ const NUUInt64 NUReversedObjectTableRootLocationOffset	= 45;
     
     return aBellBall;
 }
+
+- (NUUInt64)lastLocation
+{
+    return *(NUUInt64 *)[self lastKey];
+}
+
 @end

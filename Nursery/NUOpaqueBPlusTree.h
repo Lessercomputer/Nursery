@@ -56,6 +56,8 @@
 - (void)lock;
 - (void)unlock;
 
+- (NUUInt64)greaterNodePageLocation;
+
 @end
 
 @interface NUOpaqueBPlusTree (GettingNode)
@@ -78,11 +80,14 @@
 - (void)updateKey:(NUUInt8 *)aKey;
 
 - (NUUInt8 *)firstKey;
+- (NUUInt8 *)lastKey;
 - (NUUInt8 *)firstValue;
+- (NUUInt8 *)lastValue;
 
 - (NUOpaqueBPlusTreeLeaf *)getNextKeyIndex:(NUUInt32 *)aKeyIndex node:(NUOpaqueBPlusTreeLeaf *)aNode;
 
--(void)enumerateKeysAndObjectsWithOptions:(NSEnumerationOptions)anOpts usingBlock:(void (^)(NUUInt8 *, NUUInt8 *, BOOL *))aBlock;
+- (void)enumerateNodesUsingBlock:(void (^)(NUOpaqueBPlusTreeNode *aNode, BOOL *aStop))aBlock;
+- (void)enumerateKeysAndObjectsWithOptions:(NSEnumerationOptions)anOpts usingBlock:(void (^)(NUUInt8 *, NUUInt8 *, BOOL *))aBlock;
 
 @end
 

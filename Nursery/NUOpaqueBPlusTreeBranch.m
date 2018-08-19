@@ -173,6 +173,14 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
     return aRemoved;
 }
 
+- (void)enumerateNodesUsingBlock:(void (^)(NUOpaqueBPlusTreeNode *aNode, BOOL *aStop))aBlock stopFlag:(BOOL *)aStop
+{
+    [super enumerateNodesUsingBlock:aBlock stopFlag:aStop];
+    
+    for (NUUInt32 i = 0; i < [self valueCount]; i++)
+        [[self nodeAt:i] enumerateNodesUsingBlock:aBlock stopFlag:aStop];
+}
+
 @end
 
 @implementation NUOpaqueBPlusTreeBranch (Modifying)

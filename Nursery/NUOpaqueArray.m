@@ -69,6 +69,11 @@ NSString *NUOpaqueArrayCannotGrowException = @"NUOpaqueArrayCannotGrowException"
 	return [self at:0];
 }
 
+- (NUUInt8 *)last
+{
+    return [self count] ? [self at:[self count] - 1] : NULL;
+}
+
 - (NUUInt8 *)at:(NUUInt32)anIndex
 {
 	if (anIndex >= count)

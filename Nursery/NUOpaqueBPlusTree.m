@@ -152,6 +152,28 @@
     [lock unlock];
 }
 
+- (NUUInt64)greaterNodePageLocation
+{
+    __block NUUInt64 aGraterNodePageLocation = 0;
+    
+    [self lock];
+    
+    [self enumerateNodesUsingBlock:^(NUOpaqueBPlusTreeNode *aNode, BOOL *aStop)
+     {
+         if ([aNode pageIsVirtual])
+         {
+             *aStop = YES;
+             aGraterNodePageLocation = NUNotFound64;
+         }
+         else if ([aNode pageLocation] > aGraterNodePageLocation)
+             aGraterNodePageLocation = [aNode pageLocation];
+     }];
+    
+    [self unlock];
+    
+    return aGraterNodePageLocation;
+}
+
 @end
 
 @implementation NUOpaqueBPlusTree (GettingNode)
@@ -310,6 +332,19 @@
     return aFirstKey;
 }
 
+- (NUUInt8 *)lastKey
+{
+    NUUInt8 *aLastKey;
+    
+    [self lock];
+    
+    aLastKey = [[self mostRightNode] lastValue];
+    
+    [self unlock];
+    
+    return aLastKey;
+}
+
 - (NUUInt8 *)firstValue
 {
     NUUInt8 *aFirstValue;
@@ -321,6 +356,19 @@
     [self unlock];
     
     return aFirstValue;
+}
+
+- (NUUInt8 *)lastValue
+{
+    NUUInt8 *aLastValue;
+    
+    [self lock];
+    
+    aLastValue = [[self mostRightNode] lastValue];
+    
+    [self unlock];
+    
+    return aLastValue;
 }
 
 - (NUOpaqueBPlusTreeLeaf *)getNextKeyIndex:(NUUInt32 *)aKeyIndex node:(NUOpaqueBPlusTreeLeaf *)aNode
@@ -358,6 +406,12 @@
     [self unlock];
     
     return aLeafNode;
+}
+
+- (void)enumerateNodesUsingBlock:(void (^)(NUOpaqueBPlusTreeNode *aNode, BOOL *aStop))aBlock
+{
+    BOOL aStop = NO;
+    [[self root] enumerateNodesUsingBlock:aBlock stopFlag:&aStop];
 }
 
 - (void)enumerateKeysAndObjectsWithOptions:(NSEnumerationOptions)anOpts usingBlock:(void (^)(NUUInt8 *, NUUInt8 *, BOOL *))aBlock

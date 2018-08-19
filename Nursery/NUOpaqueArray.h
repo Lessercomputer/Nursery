@@ -39,6 +39,7 @@ extern NSString *NUOpaqueArrayCannotGrowException;
 @interface NUOpaqueArray (Accessing)
 
 - (NUUInt8 *)first;
+- (NUUInt8 *)last;
 - (NUUInt8 *)at:(NUUInt32)anIndex;
 
 - (NUUInt32)valueLength;

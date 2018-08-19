@@ -179,7 +179,64 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 
 - (NUUInt64)lastLocationInUse
 {
-    return NUUInt64Max;
+    NUUInt64 aLastLocationInUse = 0;
+    NUUInt64 aLastLocationInUseOfObjects = 0;
+    NUUInt64 aLastLocationInUseOfTrees = 0;
+    
+    [[self nursery] lock];
+    
+    aLastLocationInUseOfObjects = [[[self nursery] reversedObjectTable] lastLocation];
+    aLastLocationInUseOfTrees = [self lastLocationInUseOfTrees];
+    
+    if (aLastLocationInUseOfTrees != NUNotFound64)
+    {
+        if (aLastLocationInUseOfTrees > aLastLocationInUseOfObjects)
+        {
+            aLastLocationInUseOfTrees = aLastLocationInUseOfTrees + [[self pages] pageSize] - 1;
+            aLastLocationInUse = aLastLocationInUseOfTrees;
+        }
+        else
+        {
+//            NUBellBall aBellBall = [[[self nursery] reversedObjectTable] bellBallForObjectLocation:aLastLocationInUseOfObjects];
+//            aLastLocationInUseOfObjects = aLastLocationInUseOfObjects + [[[self nursery] parader] sizeOfObjectForBellBall:aBellBall] - 1;
+//            aLastLocationInUse = aLastLocationInUseOfObjects;
+            aLastLocationInUse = NUNotFound64;
+        }
+    }
+    
+    [[self nursery] unlock];
+    
+    return aLastLocationInUse;
+}
+
+- (NUUInt64)lastLocationInUseOfTrees
+{
+    NUUInt64 aLastLocationInUse;
+    NUUInt64 aGreaterNodePageLocation;
+    
+    [[self nursery] lock];
+    
+    aGreaterNodePageLocation = [[[self nursery] objectTable] greaterNodePageLocation];
+    aLastLocationInUse = aGreaterNodePageLocation;
+    
+    aGreaterNodePageLocation = [[[self nursery] reversedObjectTable] greaterNodePageLocation];
+    if (aGreaterNodePageLocation > aLastLocationInUse)
+        aLastLocationInUse = aGreaterNodePageLocation;
+    
+    aGreaterNodePageLocation = [[self locationTree] greaterNodePageLocation];
+    if (aGreaterNodePageLocation > aLastLocationInUse)
+        aLastLocationInUse = aGreaterNodePageLocation;
+    
+    if (aLastLocationInUse != NUNotFound64)
+    {
+        aGreaterNodePageLocation = [[self lengthTree] greaterNodePageLocation];
+        if (aGreaterNodePageLocation > aLastLocationInUse)
+            aLastLocationInUse = aGreaterNodePageLocation;
+    }
+    
+    [[self nursery] unlock];
+    
+    return aLastLocationInUse;
 }
 
 - (NUUInt64)allocateSpace:(NUUInt64)aLength
@@ -335,23 +392,29 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
     
     NUUInt64 aLastLocationInUse = [self lastLocationInUse];
     
-    if (aLastLocationInUse == [[self pages] nextPageLocation] - 1)
+    if (aLastLocationInUse < [[self pages] nextPageLocation] - 1)
     {
         NURegion aFreeRegionNextToLastLocationInUse = [self freeSpaceBeginningAtLocationGreaterThanOrEqual:aLastLocationInUse];
-        NUUInt64 aMinimumNextPageLocation = aFreeRegionNextToLastLocationInUse.location;
-        NURegion aNewFreeRegion = NUMakeRegion(NUNotFound64, 0);
         
-        if (aMinimumNextPageLocation % [[self pages] pageSize])
+        if (aFreeRegionNextToLastLocationInUse.location != NUNotFound64)
         {
-            aMinimumNextPageLocation = [[self pages] pageSize] * (aFreeRegionNextToLastLocationInUse.location / [[self pages] pageSize]  + 1);
-            aNewFreeRegion = NUMakeRegion(aFreeRegionNextToLastLocationInUse.location, aMinimumNextPageLocation - aFreeRegionNextToLastLocationInUse.location);
+            NUUInt64 aMinimumNextPageLocation;
+            NURegion aNewFreeRegion = NUMakeRegion(NUNotFound64, 0);
+            
+            if (aFreeRegionNextToLastLocationInUse.location % [[self pages] pageSize])
+            {
+                aMinimumNextPageLocation = [[self pages] pageSize] * (aFreeRegionNextToLastLocationInUse.location / [[self pages] pageSize]  + 1);
+                aNewFreeRegion = NUMakeRegion(aFreeRegionNextToLastLocationInUse.location, aMinimumNextPageLocation - aFreeRegionNextToLastLocationInUse.location);
+            }
+            else
+                aMinimumNextPageLocation = aFreeRegionNextToLastLocationInUse.location;
+            
+            [[self pages] setNextPageLocation:aMinimumNextPageLocation];
+            [self removeRegion:aFreeRegionNextToLastLocationInUse];
+            
+            if (aNewFreeRegion.location != NUNotFound64)
+                [self setRegion:aNewFreeRegion];
         }
-        
-        [[self pages] setNextPageLocation:aMinimumNextPageLocation];
-        [self removeRegion:aFreeRegionNextToLastLocationInUse];
-        
-        if (aNewFreeRegion.location != NUNotFound64)
-            [self setRegion:aNewFreeRegion];
     }
     
     [self unlock];

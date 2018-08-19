@@ -26,4 +26,6 @@
 
 - (NUBellBall)scanBellBallForObjectLocation:(NUUInt64)anObjectLocation;
 
+- (NUUInt64)lastLocation;
+
 @end
