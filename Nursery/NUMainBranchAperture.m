@@ -47,9 +47,6 @@
         {
             [nursery lock];
             
-            if (aBellBall.oop == 3243)
-                [self class];
-            
             objectLocation = [[nursery objectTable] objectLocationFor:aBellBall];
             if (objectLocation == NUNotFound64 || objectLocation == 0)
                 [[NSException exceptionWithName:NUObjectLocationNotFoundException reason:NUObjectLocationNotFoundException userInfo:nil] raise];

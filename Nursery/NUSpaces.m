@@ -177,6 +177,11 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
     return aRegion;
 }
 
+- (NUUInt64)lastLocationInUse
+{
+    return NUUInt64Max;
+}
+
 - (NUUInt64)allocateSpace:(NUUInt64)aLength
 {
 	return [self allocateSpace:aLength aligned:NO preventsNodeRelease:NO];
@@ -186,8 +191,6 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 {
     [self lock];
     inAlloc++;
-    if (inAlloc > 1)
-        [self class];
     NUUInt64 anAllocatedLocation = NUUInt64Max;
 	NUUInt32 aKeyIndex;
 	NULengthTreeLeaf *aNode = [lengthTree getNodeContainingSpaceOfLengthGreaterThanOrEqual:aLength keyIndex:&aKeyIndex];
@@ -286,8 +289,6 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
     [self lock];
     [releasedRegion addObject:NUStringFromRegion(aRegion)];
     inRelese++;
-    if (inRelese > 1)
-        [self class];
 	NUUInt32 aKeyIndex;
 	NULocationTreeLeaf *aNode = [locationTree getNodeContainingSpaceBeginningAtLocationLessThanOrEqual:aRegion.location keyIndex:&aKeyIndex];
 	NURegion aLeftRegion = NUMakeRegion(0, 0), aRightRegion = NUMakeRegion(0, 0);
@@ -328,25 +329,26 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
     [self unlock];
 }
 
-- (void)minimizeSpace
+- (void)minimizeSpaceIfPossible
 {
     [self lock];
     
-    NURegion aLastFreeRegion = [self freeSpaceBeginningAtLocationLessThanOrEqual:[[self pages] nextPageLocation]];
+    NUUInt64 aLastLocationInUse = [self lastLocationInUse];
     
-    if (aLastFreeRegion.location != NUNotFound64 && NUMaxLocation(aLastFreeRegion) == [[self pages] nextPageLocation])
+    if (aLastLocationInUse == [[self pages] nextPageLocation] - 1)
     {
-        NUUInt64 aMinimumNextPageLocation = aLastFreeRegion.location;
+        NURegion aFreeRegionNextToLastLocationInUse = [self freeSpaceBeginningAtLocationGreaterThanOrEqual:aLastLocationInUse];
+        NUUInt64 aMinimumNextPageLocation = aFreeRegionNextToLastLocationInUse.location;
         NURegion aNewFreeRegion = NUMakeRegion(NUNotFound64, 0);
         
-        if (aLastFreeRegion.location % [[self pages] pageSize])
+        if (aMinimumNextPageLocation % [[self pages] pageSize])
         {
-            aMinimumNextPageLocation = [[self pages] pageSize] * (aLastFreeRegion.location / [[self pages] pageSize]  + 1);
-            aNewFreeRegion = NUMakeRegion(aLastFreeRegion.location, aMinimumNextPageLocation - aLastFreeRegion.location);
+            aMinimumNextPageLocation = [[self pages] pageSize] * (aFreeRegionNextToLastLocationInUse.location / [[self pages] pageSize]  + 1);
+            aNewFreeRegion = NUMakeRegion(aFreeRegionNextToLastLocationInUse.location, aMinimumNextPageLocation - aFreeRegionNextToLastLocationInUse.location);
         }
         
         [[self pages] setNextPageLocation:aMinimumNextPageLocation];
-        [self removeRegion:aLastFreeRegion];
+        [self removeRegion:aFreeRegionNextToLastLocationInUse];
         
         if (aNewFreeRegion.location != NUNotFound64)
             [self setRegion:aNewFreeRegion];
@@ -373,12 +375,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 {
     [self lock];
     
-    if (aNodePageLocation == 36864)
-        [self class];
-    
     [self releaseSpace:NUMakeRegion(aNodePageLocation, [[self pages] pageSize])];
-    if ([releasedNodePageLocations containsObject:@(aNodePageLocation)])
-        [self class];
     [releasedNodePageLocations addObject:@(aNodePageLocation)];
     [self removeNodePageLocationToBeReleased:aNodePageLocation];
     

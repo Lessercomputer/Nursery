@@ -27,8 +27,6 @@
 
 - (void)releaseNodePageAndCache
 {
-    if ([self pageLocation] == 36864)
-        [self class];
 	[[tree spaces] removeBranchNeedsVirtualPageCheck:self];
 	[super releaseNodePageAndCache];
 }

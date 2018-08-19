@@ -16,7 +16,9 @@
 @implementation NUBranchGardenSeeker
 
 - (void)seekIvarsOfObjectFor:(NUBell *)aBell
-{    
+{
+    [[self garden] lock];
+    
     [[self aperture] peekAt:aBell.ball];
     
     while ([[self aperture] hasNextFixedOOP])
@@ -24,6 +26,8 @@
     
     while ([[self aperture] hasNextIndexedOOP])
         [self pushBellIfNeeded:[[self garden] bellForOOP:[[self aperture] nextIndexedOOP]]];
+    
+    [[self garden] unlock];
 }
 
 @end

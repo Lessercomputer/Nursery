@@ -28,50 +28,50 @@
 
 - (void)validate
 {
-    NUUInt64 aKey = 29106;
-    NUUInt32 aKeyIndexInSelf = [self keyIndexEqualTo:(NUUInt8 *)&aKey];
-    if (aKeyIndexInSelf != NUUInt32Max)
-        [self class];
+//    NUUInt64 aKey = 29106;
+//    NUUInt32 aKeyIndexInSelf = [self keyIndexEqualTo:(NUUInt8 *)&aKey];
+//    if (aKeyIndexInSelf != NUUInt32Max)
+//        [self class];
     [super validate];
 }
 
 - (void)shuffleLeftNode
 {
-    NUUInt64 aKey = 29106;
-    NUUInt32 aKeyIndexInSelf = [self keyIndexEqualTo:(NUUInt8 *)&aKey];
-    NUUInt32 aKeyIndexInLeftNode = [[self leftNode] keyIndexEqualTo:(NUUInt8 *)&aKey];
-    if (aKeyIndexInSelf != NUUInt32Max || aKeyIndexInLeftNode != NUUInt32Max)
-        [self class];
+//    NUUInt64 aKey = 29106;
+//    NUUInt32 aKeyIndexInSelf = [self keyIndexEqualTo:(NUUInt8 *)&aKey];
+//    NUUInt32 aKeyIndexInLeftNode = [[self leftNode] keyIndexEqualTo:(NUUInt8 *)&aKey];
+//    if (aKeyIndexInSelf != NUUInt32Max || aKeyIndexInLeftNode != NUUInt32Max)
+//        [self class];
     [super shuffleLeftNode];
 }
 
 - (void)shuffleRightNode
 {
-    NUUInt64 aKey = 29106;
-    NUUInt32 aKeyIndexInSelf = [self keyIndexEqualTo:(NUUInt8 *)&aKey];
-    NUUInt32 aKeyIndexInRightNode = [[self rightNode] keyIndexEqualTo:(NUUInt8 *)&aKey];
-    if (aKeyIndexInSelf != NUUInt32Max || aKeyIndexInRightNode != NUUInt32Max)
-        [self class];
+//    NUUInt64 aKey = 29106;
+//    NUUInt32 aKeyIndexInSelf = [self keyIndexEqualTo:(NUUInt8 *)&aKey];
+//    NUUInt32 aKeyIndexInRightNode = [[self rightNode] keyIndexEqualTo:(NUUInt8 *)&aKey];
+//    if (aKeyIndexInSelf != NUUInt32Max || aKeyIndexInRightNode != NUUInt32Max)
+//        [self class];
     [super shuffleRightNode];
 }
 
 - (void)mergeLeftNode
 {
-    NUUInt64 aKey = 29106;
-    NUUInt32 aKeyIndexInSelf = [self keyIndexEqualTo:(NUUInt8 *)&aKey];
-    NUUInt32 aKeyIndexInLeftNode = [[self leftNode] keyIndexEqualTo:(NUUInt8 *)&aKey];
-    if (aKeyIndexInSelf != NUUInt32Max || aKeyIndexInLeftNode != NUUInt32Max)
-        [self class];
+//    NUUInt64 aKey = 29106;
+//    NUUInt32 aKeyIndexInSelf = [self keyIndexEqualTo:(NUUInt8 *)&aKey];
+//    NUUInt32 aKeyIndexInLeftNode = [[self leftNode] keyIndexEqualTo:(NUUInt8 *)&aKey];
+//    if (aKeyIndexInSelf != NUUInt32Max || aKeyIndexInLeftNode != NUUInt32Max)
+//        [self class];
     [super mergeLeftNode];
 }
 
 - (void)mergeRightNode
 {
-    NUUInt64 aKey = 29106;
-    NUUInt32 aKeyIndexInSelf = [self keyIndexEqualTo:(NUUInt8 *)&aKey];
-    NUUInt32 aKeyIndexInRightNode = [[self rightNode] keyIndexEqualTo:(NUUInt8 *)&aKey];
-    if (aKeyIndexInSelf != NUUInt32Max || aKeyIndexInRightNode != NUUInt32Max)
-        [self class];
+//    NUUInt64 aKey = 29106;
+//    NUUInt32 aKeyIndexInSelf = [self keyIndexEqualTo:(NUUInt8 *)&aKey];
+//    NUUInt32 aKeyIndexInRightNode = [[self rightNode] keyIndexEqualTo:(NUUInt8 *)&aKey];
+//    if (aKeyIndexInSelf != NUUInt32Max || aKeyIndexInRightNode != NUUInt32Max)
+//        [self class];
     [super mergeRightNode];
 }
 

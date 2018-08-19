@@ -678,9 +678,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     [[self objectTable] validate];
     [[self reversedObjectTable] validate];
     [self validateMappingOfObjectTableToReversedObjectTable];
-    
-    NUBellBall aBellBall = [[self reversedObjectTable] bellBallForObjectLocation:20735];
-    
+        
     [self unlock];
 }
 

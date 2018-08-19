@@ -85,6 +85,8 @@
         @autoreleasepool
         {
             [self lock];
+            if ([self isForMainBranch])
+                [(NUMainBranchNursery *)[self nursery] lock];
             
             if (![[self nursery] open])
             {
@@ -130,6 +132,8 @@
             [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
         }
 
+        if ([self isForMainBranch])
+            [(NUMainBranchNursery *)[self nursery] unlock];
         [self unlock];
     }
     

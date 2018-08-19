@@ -23,6 +23,7 @@
 	NUUInt64 rootLocation;
 	NUPageLocationODictionary *nodeDictionary;
     NSRecursiveLock *lock;
+    NUUInt64 lockCount;
 }
 @end
 

@@ -148,7 +148,6 @@
 
 - (void)objectDidEncode:(NUBell *)aBell
 {
-    [[[self nursery] seeker] objectDidEncode:[aBell OOP]];
 }
 
 @end

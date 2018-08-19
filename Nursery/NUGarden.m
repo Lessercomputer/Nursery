@@ -324,13 +324,13 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     
     @try
     {
+        [self lock];
         if ([self isForMainBranch])
             [(NUMainBranchNursery *)[self nursery] lock];
         
         if (aPreventFlag)
             [[self gardenSeeker] preventReleaseOfGrade:[self grade]];
         
-        [self lock];
         [self setIsInMoveUp:YES];
         
         [self setGrade:aGrade];
@@ -338,12 +338,12 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
         
         [self setIsInMoveUp:NO];
-        [self unlock];        
     }
     @finally
     {
         if ([self isForMainBranch])
             [(NUMainBranchNursery *)[self nursery] unlock];
+        [self unlock];
     }
 }
 
@@ -731,15 +731,11 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 - (void)lock
 {
-    if ([[self nursery] isMainBranch])
-        [(NUMainBranchNursery *)[self nursery] lock];
     [lock lock];
 }
 
 - (void)unlock
 {
-    if ([[self nursery] isMainBranch])
-        [(NUMainBranchNursery *)[self nursery] unlock];
     [lock unlock];
 }
 
@@ -790,6 +786,10 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 - (NUNurseryRoot *)loadNurseryRoot
 {
     if (![[self nursery] open]) return nil;
+
+    [self lock];
+    if ([self isForMainBranch])
+        [(NUMainBranchNursery *)[self nursery] lock];
     
 	NUUInt64 aNurseryRootOOP = [[self aliaser] rootOOP];
     NUNurseryRoot *aNurseryRoot;
@@ -822,6 +822,10 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     
     [self resolveTargetClassForTargetClassUnresolvedCharacters];
 
+    if ([self isForMainBranch])
+        [(NUMainBranchNursery *)[self nursery] unlock];
+    [self unlock];
+    
 	return aNurseryRoot;
 }
 

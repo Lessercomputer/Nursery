@@ -92,6 +92,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 {
     @try
     {
+        [[self garden] lock];
         [[self nursery] lock];
  
         NSDate *aStopDate = [NSDate dateWithTimeIntervalSinceNow:0.001];
@@ -114,11 +115,9 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
             else if (nextLocation)
             {
                 nextLocation = 0;
-                NSLog(@"%@:didFinishParade", self);
-                [[[self nursery] spaces] minimizeSpace];
+//                NSLog(@"%@:didFinishParade", self);
+                [[[self nursery] spaces] minimizeSpaceIfPossible];
                 [[self nursery] paraderDidFinishParade:self];
-                //                [[[self nursery] spaces] validate];
-                //                [[self nursery] validateMappingOfObjectTableToReversedObjectTable];
 
                 break;
             }
@@ -126,6 +125,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     }
     @finally
     {
+        [[self garden] unlock];
         [[self nursery] unlock];
     }
 }
@@ -133,22 +133,15 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 - (void)paradeObjectOrNodeNextTo:(NURegion)aFreeRegion
 {
     nextLocation = NUMaxLocation(aFreeRegion);
-    if (nextLocation == 20735)
-        [self class];
-    
+
     if (nextLocation < [[[self nursery] pages] nextPageLocation])
     {
         NUBellBall aBellBall = [[[self nursery] reversedObjectTable] bellBallForObjectLocation:nextLocation];
         
         if (!NUBellBallEquals(aBellBall, NUNotFoundBellBall))
         {
-//            [[self nursery] validateMappingOfObjectTableToReversedObjectTable];
-//            if (NUBellBallEquals([[[self nursery] reversedObjectTable] bellBallForObjectLocation:28390], NUNotFoundBellBall))
-//                [self class];
             [self paradeObjectWithBellBall:aBellBall at:nextLocation nextTo:aFreeRegion];
-//            [[self nursery] validateMappingOfObjectTableToReversedObjectTable];
-//            if (NUBellBallEquals([[[self nursery] reversedObjectTable] bellBallForObjectLocation:28390], NUNotFoundBellBall))
-//                [self class];
+
             NURegion aScannedRegion = [[[[self nursery] spaces] locationTree] scanSpaceContainningLocation:29106];
             if (aScannedRegion.location != NUNotFound64)
                 [self class];
@@ -159,35 +152,20 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
             
             if (nextLocation % aNodeSize == 0)
             {
-//                if (NUBellBallEquals([[[self nursery] reversedObjectTable] bellBallForObjectLocation:28390], NUNotFoundBellBall))
-//                    [self class];
-//                [[self nursery] validateMappingOfObjectTableToReversedObjectTable];
                 [self paradeNodeAt:nextLocation nextTo:aFreeRegion];
-//                [[self nursery] validateMappingOfObjectTableToReversedObjectTable];
-//                if (NUBellBallEquals([[[self nursery] reversedObjectTable] bellBallForObjectLocation:28390], NUNotFoundBellBall))
-//                    [self class];
+
                 NURegion aScannedRegion = [[[[self nursery] spaces] locationTree] scanSpaceContainningLocation:29106];
                 if (aScannedRegion.location != NUNotFound64)
                     [self class];
             }
             else
             {
-                NUBellBall aScannedBellBall = [[[self nursery] reversedObjectTable] scanBellBallForObjectLocation:nextLocation];
-                NUBellBall aBellBall2 = [[[self nursery] reversedObjectTable] bellBallForObjectLocation:nextLocation];
-                if (!NUBellBallEquals(aBellBall2, aBellBall) || !NUBellBallEquals(aScannedBellBall, aBellBall))
-                {
-//                    [self class];
-//                    NUBellBall aBellBall3 = [[[self nursery] reversedObjectTable] bellBallForObjectLocation:nextLocation];
-                }
-//                [[self nursery] validateMappingOfObjectTableToReversedObjectTable];
                 NURegion aScannedRegion = [[[[self nursery] spaces] locationTree] scanSpaceContainningLocation:29106];
                 if (aScannedRegion.location != NUNotFound64)
                     [self class];
                 [[NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil] raise];
             }
         }
-//        [[self nursery] validateMappingOfObjectTableToReversedObjectTable];
-//        [[[self nursery] spaces] validate];
     }
 }
 
@@ -197,8 +175,6 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     NURegion anObjectRegion = NUMakeRegion(anObjectLocation, anObjectSize);
     NURegion aNewObjectRegion = NUMakeRegion(NUNotFound64, anObjectSize);
 
-    if (anObjectLocation == 20719)
-        [self class];
     [[[self nursery] spaces] releaseSpace:anObjectRegion];
     aNewObjectRegion.location = [[[self nursery] spaces] allocateSpace:anObjectSize aligned:NO preventsNodeRelease:NO];
 
@@ -208,22 +184,12 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     [[[self nursery] pages] copyBytesAt:anObjectRegion.location length:anObjectRegion.length to:aNewObjectRegion.location];
     [[[self nursery] objectTable] setObjectLocation:aNewObjectRegion.location for:aBellBall];
     
-    NUBellBall aBellBall2 = [[[self nursery] reversedObjectTable] bellBallForObjectLocation:28390];
-    if (NUBellBallEquals(aBellBall2, NUNotFoundBellBall))
-        [self class];
-    
     [[[self nursery] reversedObjectTable] removeBellBallForObjectLocation:anObjectLocation];
-    
-    NUBellBall aBellBall3 = [[[self nursery] reversedObjectTable] bellBallForObjectLocation:28390];
-    if (NUBellBallEquals(aBellBall3, NUNotFoundBellBall))
-        [self class];
-    
     [[[self nursery] reversedObjectTable] setBellBall:aBellBall forObjectLocation:aNewObjectRegion.location];
+    
     [movedObjectLocations addObject:[NSString stringWithFormat:@"old location:%@, new location:%@, size:%@, bellball:%@", @(anObjectLocation), @(aNewObjectRegion.location), @(anObjectSize), NUStringFromBellBall(aBellBall), nil]];
 
     nextLocation = NUMaxLocation(anObjectRegion);
-    if (nextLocation == 20735)
-        [self class];
 }
 
 - (void)paradeNodeAt:(NUUInt64)aNodeLocation nextTo:(NURegion)aFreeRegion
@@ -253,9 +219,6 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     }
 
     nextLocation = NUMaxLocation(aFreeRegion);
-
-    if (nextLocation == 20735)
-        [self class];
 }
 
 @end

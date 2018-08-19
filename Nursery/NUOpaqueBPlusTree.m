@@ -143,10 +143,12 @@
 - (void)lock
 {
     [lock lock];
+    lockCount++;
 }
 
 - (void)unlock
 {
+    lockCount--;
     [lock unlock];
 }
 
@@ -264,9 +266,6 @@
             NUOpaqueBPlusTreeBranch *aNewRootNode = [self makeBranchNode];
             [aNewRootNode setFirstNode:[self root] secondNode:aSplitNode key:[aSplitNode mostLeftKeyInSubTree]];
             [self setRoot:aNewRootNode];
-            
-            if ([[self mostLeftNode] leftNode])
-                [self class];
         }
     }
     @finally
@@ -289,9 +288,6 @@
         [aNewRoot setRightNodeLocation:0];
 		[self setRoot:aNewRoot];
 	}
-    
-//    if ([[self mostLeftNode] leftNode])
-//        [self class];
     
     [self unlock];
 }
@@ -339,15 +335,6 @@
     
     [self lock];
     
-    if (*aKeyIndex == NUNotFound32)
-    {
-        if (![aNode isEmpty])
-        {
-            *aKeyIndex = 0;
-            aLeafNode = (NUOpaqueBPlusTreeLeaf *)aNode;
-        }
-    }
-    
     if (*aKeyIndex + 1 < [aNode keyCount])
     {
         (*aKeyIndex)++;
@@ -357,6 +344,15 @@
     {
         *aKeyIndex = 0;
         aLeafNode = (NUOpaqueBPlusTreeLeaf *)[aNode rightNode];
+    }
+    
+    if (*aKeyIndex == NUNotFound32)
+    {
+        if (![aNode isEmpty])
+        {
+            *aKeyIndex = 0;
+            aLeafNode = (NUOpaqueBPlusTreeLeaf *)aNode;
+        }
     }
     
     [self unlock];
@@ -401,19 +397,12 @@
             if (aNodeLocation % [[self pages] pageSize])
                 [NSException exceptionWithName:NUInvalidPageLocationException reason:NUInvalidPageLocationException userInfo:nil];
             
-            if (aNodeLocation == 36864)
-                [self class];
-            
             aNode = [[self nodeDictionary] objectForKey:aNodeLocation];
             
             if (!aNode && ![[self spaces] nodePageLocationIsVirtual:aNodeLocation])
             {
-                if (aNodeLocation == 36864)
-                    [self class];
                 aNode = [self loadNodeFor:aNodeLocation];
                 if (aNode) [[self nodeDictionary] setObject:aNode forKey:aNodeLocation];
-                else
-                    [self class];
             }
         }
     }
@@ -427,8 +416,6 @@
 
 - (NUOpaqueBPlusTreeNode *)loadNodeFor:(NUUInt64)aNodeLocation
 {
-    if (aNodeLocation == 36864)
-        [self class];
 	return [self makeNodeFromPageAt:aNodeLocation];
 }
 
@@ -500,8 +487,6 @@
 
 - (void)releaseNodePageLocation:(NUUInt64)aNodePage
 {
-    if (aNodePage == 36864)
-        [self class];
 	[[self spaces] releaseNodePageAt:aNodePage];
 }
 

@@ -16,7 +16,7 @@ typedef enum : NUUInt8 {
 } NUSeekerPhase;
 
 
-@class NUUInt64Queue, NUMainBranchNursery, NUAperture;
+@class NUUInt64Queue, NUMainBranchNursery, NUAperture, NUBell;
 
 @interface NUNurserySeeker : NUThreadedChildminder
 {
@@ -31,8 +31,6 @@ typedef enum : NUUInt8 {
 + (id)seekerWithGarden:(NUGarden *)aGarden;
 
 - (id)initWithGarden:(NUGarden *)aGarden;
-
-- (void)objectDidEncode:(NUUInt64)anOOP;
 
 - (void)save;
 - (void)load;
