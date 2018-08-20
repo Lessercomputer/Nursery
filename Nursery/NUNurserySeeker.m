@@ -97,10 +97,10 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
 - (void)processOneUnit
 {
-    [self preprocess];
-
     [[self garden] lock];
     [[self nursery] lock];
+
+    [self preprocess];
 
     switch (currentPhase)
     {
@@ -134,7 +134,8 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
 - (void)resetAllGCMarksIfNeeded
 {
-    if (nextBellBallToCollect.oop == 0 && nextBellBallToCollect.grade == 0)
+    if (currentPhase == NUSeekerCollectPhase && [self grade] != [[self nursery] gradeForSeeker]
+        && nextBellBallToCollect.oop == 0 && nextBellBallToCollect.grade == 0)
     {
         NUBellBall aBellBall = [[[self nursery] objectTable] firstBellBall];
         

@@ -388,16 +388,19 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 
 - (void)minimizeSpaceIfPossible
 {
-    [self lock];
-    
-    NUUInt64 aLastLocationInUse = [self lastLocationInUse];
-    
-    if (aLastLocationInUse < [[self pages] nextPageLocation] - 1)
+    @try
     {
-        NURegion aFreeRegionNextToLastLocationInUse = [self freeSpaceBeginningAtLocationGreaterThanOrEqual:aLastLocationInUse];
+        [self lock];
         
-        if (aFreeRegionNextToLastLocationInUse.location != NUNotFound64)
+        NUUInt64 aLastLocationInUse = [self lastLocationInUse];
+        
+        if (aLastLocationInUse < [[self pages] nextPageLocation] - 1)
         {
+            NURegion aFreeRegionNextToLastLocationInUse = [self freeSpaceBeginningAtLocationGreaterThanOrEqual:aLastLocationInUse];
+            
+            if (aFreeRegionNextToLastLocationInUse.location == NUNotFound64)
+                @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+            
             NUUInt64 aMinimumNextPageLocation;
             NURegion aNewFreeRegion = NUMakeRegion(NUNotFound64, 0);
             
@@ -416,8 +419,10 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
                 [self setRegion:aNewFreeRegion];
         }
     }
-    
-    [self unlock];
+    @finally
+    {
+        [self unlock];
+    }
 }
 
 - (NUUInt64)pageStatingLocationFor:(NUUInt64)aLocation

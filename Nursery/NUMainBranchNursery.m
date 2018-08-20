@@ -492,9 +492,6 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     {
         [lock unlock];
     }
-    
-//    [[self seeker] start];
-//    [[self parader] start];
    
     return [self isOpen];
 }
@@ -507,10 +504,10 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     {
         [self lock];
         
-//#ifdef DEBUG
+#ifdef DEBUG
         [[self spaces] validate];
         [self validateObjectTableAndReversedObjectTable];
-//#endif
+#endif
         
         [self saveGrade];
         [[self objectTable] save];
@@ -519,10 +516,10 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
         [[self parader] save];
         [[self spaces] save];
         
-//#ifdef DEBUG
+#ifdef DEBUG
         [[self spaces] validate];
         [self validateObjectTableAndReversedObjectTable];
-//#endif
+#endif
     }
     @finally
     {
@@ -609,10 +606,10 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     
 	[self loadFileHeader];
     
-//#ifdef DEBUG
+#ifdef DEBUG
     [[self spaces] validate];
     [self validateObjectTableAndReversedObjectTable];
-//#endif
+#endif
 
 	return YES;
 }
