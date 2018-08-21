@@ -179,7 +179,7 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 
 - (NUUInt64)lastLocationInUse
 {
-    NUUInt64 aLastLocationInUse = 0;
+    NUUInt64 aLastLocationInUse = NUNotFound64;
     NUUInt64 aLastLocationInUseOfObjects = 0;
     NUUInt64 aLastLocationInUseOfTrees = 0;
     

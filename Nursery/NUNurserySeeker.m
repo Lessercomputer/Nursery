@@ -134,8 +134,8 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
 - (void)resetAllGCMarksIfNeeded
 {
-    if (currentPhase == NUSeekerCollectPhase && [self grade] != [[self nursery] gradeForSeeker]
-        && nextBellBallToCollect.oop == 0 && nextBellBallToCollect.grade == 0)
+    if ((currentPhase == NUSeekerCollectPhase && [self grade] != [[self nursery] gradeForSeeker])
+        || (nextBellBallToCollect.oop == 0 && nextBellBallToCollect.grade == 0))
     {
         NUBellBall aBellBall = [[[self nursery] objectTable] firstBellBall];
         
