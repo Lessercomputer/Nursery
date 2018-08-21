@@ -64,6 +64,16 @@ const int NUThreadedChildminderTerminateCondition   = 2;
     return 0.0;
 }
 
+- (NSTimeInterval)lowerTimeInterval
+{
+    return 0.1;
+}
+
+- (double)timeRatio
+{
+    return 0.01;
+}
+
 - (void)start
 {
     [thread setName:[self threadName]];
@@ -84,13 +94,36 @@ const int NUThreadedChildminderTerminateCondition   = 2;
     {
         @autoreleasepool
         {
-            [self processOneUnit];
+            NSDate *aBaseDate = [NSDate date];
+            NSDate *aStopDate = [aBaseDate dateByAddingTimeInterval:[self lowerTimeInterval] * [self timeRatio]];
+            BOOL aProcessed = YES;
+
+            while ([self isLoaded] && [aStopDate timeIntervalSinceNow] > 0 && aProcessed)
+            {
+                aProcessed = [self processOneUnit];
+                if (!aProcessed)
+                    [NSThread sleepUntilDate:aStopDate];
+            }
+            
+            aStopDate = [aBaseDate dateByAddingTimeInterval:[self lowerTimeInterval] * (1 - [self timeRatio])];
+            [NSThread sleepUntilDate:aStopDate];
         }
     }
 }
 
-- (void)processOneUnit
+- (BOOL)processOneUnit
 {
+    return NO;
+}
+
+- (BOOL)isLoaded
+{
+    return isLoaded;
+}
+
+- (void)setIsLoaded:(BOOL)aLoadedFlag
+{
+    isLoaded = aLoadedFlag;
 }
 
 @end

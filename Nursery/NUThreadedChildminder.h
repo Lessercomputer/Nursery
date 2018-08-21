@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/NSObject.h>
+#import <Foundation/NSDate.h>
 
 @class NSThread;
 
@@ -14,6 +15,7 @@
 
 @interface NUThreadedChildminder : NSObject
 {
+    BOOL isLoaded;
     NUGarden *garden;
     NSThread *thread;
 }
@@ -28,10 +30,16 @@
 - (NSString *)threadName;
 - (double)threadPriority;
 
+- (NSTimeInterval)lowerTimeInterval;
+- (double)timeRatio;
+
 - (void)start;
 - (void)stop;
 
 - (void)startThread:(id)anArgument;
-- (void)processOneUnit;
+- (BOOL)processOneUnit;
+
+- (BOOL)isLoaded;
+- (void)setIsLoaded:(BOOL)aLoadedFlag;
 
 @end

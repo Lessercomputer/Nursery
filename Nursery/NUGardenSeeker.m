@@ -62,6 +62,12 @@
     [super dealloc];
 }
 
+- (void)start
+{
+    [self setIsLoaded:YES];
+    [super start];
+}
+
 - (void)preventReleaseOfGrade:(NUUInt64)aGrade
 {
     [self lock];
@@ -167,8 +173,9 @@
     grade = aGrade;
 }
 
-- (void)processOneUnit
+- (BOOL)processOneUnit
 {
+    BOOL aProcessed = NO;
     NUBell *aBell;
     
     [[self garden] lock];
@@ -184,21 +191,25 @@
             else
                 phase = NUGardenSeekerCollectPhase;
             
+            aProcessed = YES;
             break;
         case NUGardenSeekerCollectPhase:
             [self collectGrade];
             phase = NUGardenSeekerNonePhase;
             NSLog(@"%@:didFinishCollection", self);
             
+            aProcessed = YES;
             break;
         case NUGardenSeekerNonePhase:
 //            [[(NUMainBranchNursery *)[[self garden] nursery] spaces] validate];
 //            [(NUMainBranchNursery *)[[self garden] nursery] validateMappingOfObjectTableToReversedObjectTable];
             break;
     }
-    
-    [[self garden] unlock];
+
     [(NUMainBranchNursery *)[[self garden] nursery] unlock];
+    [[self garden] unlock];
+    
+    return aProcessed;
 }
 
 - (void)seekObjectFor:(NUBell *)aBell

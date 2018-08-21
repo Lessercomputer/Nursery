@@ -8,7 +8,6 @@
 
 #import <Foundation/NSException.h>
 #import <Foundation/NSThread.h>
-#import <Foundation/NSDate.h>
 
 #import "NUNurserySeeker.h"
 #import "NUUInt64Queue.h"
@@ -66,19 +65,28 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
 - (void)save
 {
+    [[self nursery] lock];
+    
 	[[[self nursery] pages] writeUInt8:currentPhase at:NUSeekerPhaseOffset];
     [[[self nursery] pages] writeUInt64:[self grade] at:NUSeekerCurrentGradeOffset];
     [[[self nursery] pages] writeUInt64:nextBellBallToCollect.oop at:NUSeekerNextOOPOfBellBallToCollectOffset];
     [[[self nursery] pages] writeUInt64:nextBellBallToCollect.grade at:NUSeekerNextGradeOfBellBallToCollectOffset];
+    
+    [[self nursery] unlock];
 }
 
 - (void)load
 {
+    [[self nursery] lock];
+    
 	currentPhase = [[[self nursery] pages] readUInt8At:NUSeekerPhaseOffset];
 	if (currentPhase == NUSeekerSeekPhase) shouldLoadGrayOOPs = YES;
     [self setGrade:[[[self nursery] pages] readUInt64At:NUSeekerCurrentGradeOffset]];
     nextBellBallToCollect.oop = [[[self nursery] pages] readUInt64At:NUSeekerNextOOPOfBellBallToCollectOffset];
     nextBellBallToCollect.grade = [[[self nursery] pages] readUInt64At:NUSeekerNextGradeOfBellBallToCollectOffset];
+    [self setIsLoaded:YES];
+    
+    [[self nursery] unlock];
 }
 
 - (NUMainBranchNursery *)nursery
@@ -95,8 +103,10 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
 @implementation NUNurserySeeker (Private)
 
-- (void)processOneUnit
+- (BOOL)processOneUnit
 {
+    BOOL aProcessed = NO;
+
     [[self garden] lock];
     [[self nursery] lock];
 
@@ -108,10 +118,12 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
             [self loadGrayOOPsIfNeeded];
             [[self garden] moveUpTo:[self grade]];
             [self seekObjectsOneUnit];
+            aProcessed = YES;
             break;
         case NUSeekerCollectPhase:
             [[self garden] moveUpTo:[self grade]];
             [self collectObjectsOneUnit];
+            aProcessed = YES;
             break;
         case NUSeekerNonePhase:
             if ([self grade] != [[self nursery] gradeForSeeker])
@@ -120,11 +132,14 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
                 [self setGrade:[[self nursery] gradeForSeeker]];
                 [[self garden] moveUpTo:[self grade]];
                 [self pushRootOOP];
+                aProcessed = YES;
             }
     }
 
-    [[self garden] unlock];
     [[self nursery] unlock];
+    [[self garden] unlock];
+
+    return aProcessed;
 }
 
 - (void)preprocess
@@ -134,8 +149,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
 - (void)resetAllGCMarksIfNeeded
 {
-    if ((currentPhase == NUSeekerCollectPhase && [self grade] != [[self nursery] gradeForSeeker])
-        || (nextBellBallToCollect.oop == 0 && nextBellBallToCollect.grade == 0))
+    if (nextBellBallToCollect.oop == 0 && nextBellBallToCollect.grade == 0)
     {
         NUBellBall aBellBall = [[[self nursery] objectTable] firstBellBall];
         
@@ -158,9 +172,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
     if (currentPhase != NUSeekerSeekPhase)
         @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
     
-    NSDate *aStopDate = [NSDate dateWithTimeIntervalSinceNow:0.001];
-    
-	while ([aStopDate timeIntervalSinceNow] > 0 && ([grayOOPs count] || shouldLoadGrayOOPs))
+	if ([grayOOPs count] || shouldLoadGrayOOPs)
 	{
         [self loadGrayOOPsIfNeeded];
 
@@ -201,26 +213,17 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
     if (currentPhase != NUSeekerCollectPhase)
         @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
     
-    NSDate *aStopDate = [NSDate dateWithTimeIntervalSinceNow:0.001];
-    NUBellBall aBellBall = NUMakeBellBall(0, 0);
+    NUBellBall aBellBall;
     
-    while ([aStopDate timeIntervalSinceNow] > 0 && !NUBellBallEquals(aBellBall, NUNotFoundBellBall))
-    {
-        if (NUBellBallEquals(aBellBall, NUMakeBellBall(0, 0)))
-        {
-            if (NUBellBallEquals(nextBellBallToCollect, NUNotFoundBellBall))
-                aBellBall = [[[self nursery] objectTable] firstBellBall];
-            else
-                aBellBall = nextBellBallToCollect;
-        }
-        
-        [self collectObjectIfNeeded:aBellBall];
-        aBellBall = [[[self nursery] objectTable] bellBallGreaterThanBellBall:aBellBall];
-    }
-        
-    nextBellBallToCollect = aBellBall;
+    if (NUBellBallEquals(nextBellBallToCollect, NUNotFoundBellBall))
+        aBellBall = [[[self nursery] objectTable] firstBellBall];
+    else
+        aBellBall = nextBellBallToCollect;
     
-    if (NUBellBallEquals(aBellBall, NUNotFoundBellBall))
+    [self collectObjectIfNeeded:aBellBall];
+    nextBellBallToCollect = [[[self nursery] objectTable] bellBallGreaterThanBellBall:aBellBall];
+    
+    if (NUBellBallEquals(nextBellBallToCollect, NUNotFoundBellBall))
     {
         currentPhase = NUSeekerNonePhase;
         [[self nursery] seekerDidFinishCollect:self];

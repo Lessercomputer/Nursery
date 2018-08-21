@@ -80,23 +80,32 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 
 - (void)save
 {
+    [[self nursery] lock];
+    
     [[[self nursery] pages] writeUInt64:nextLocation at:NUParaderNextLocationOffset];
+    
+    [[self nursery] unlock];
 }
 
 - (void)load
 {
+    [[self nursery] lock];
+    
     nextLocation = [[[self nursery] pages] readUInt64At:NUParaderNextLocationOffset];
+    [self setIsLoaded:YES];
+    
+    [[self nursery] unlock];
 }
 
-- (void)processOneUnit
+- (BOOL)processOneUnit
 {
+    BOOL aProcessed = YES;
+
     @try
     {
         [[self garden] lock];
         [[self nursery] lock];
  
-        NSDate *aStopDate = [NSDate dateWithTimeIntervalSinceNow:0.001];
-
         if ([self grade] != [[self nursery] gradeForParader])
         {
             [self setGrade:[[self nursery] gradeForParader]];
@@ -104,30 +113,27 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
             nextLocation = 0;
         }
         
-        while ([aStopDate timeIntervalSinceNow] > 0)
+        NURegion aFreeRegion = [[[self nursery] spaces] freeSpaceBeginningAtLocationGreaterThanOrEqual:nextLocation];
+        
+        if (aFreeRegion.location != NUNotFound64)
         {
-            NURegion aFreeRegion = [[[self nursery] spaces] freeSpaceBeginningAtLocationGreaterThanOrEqual:nextLocation];
-            
-            if (aFreeRegion.location != NUNotFound64)
-            {
-                [self paradeObjectOrNodeNextTo:aFreeRegion];
-            }
-            else if (nextLocation)
-            {
-                nextLocation = 0;
-//                NSLog(@"%@:didFinishParade", self);
-                [[[self nursery] spaces] minimizeSpaceIfPossible];
-                [[self nursery] paraderDidFinishParade:self];
-
-                break;
-            }
+            [self paradeObjectOrNodeNextTo:aFreeRegion];
+        }
+        else if (nextLocation)
+        {
+            nextLocation = 0;
+            //                NSLog(@"%@:didFinishParade", self);
+            [[[self nursery] spaces] minimizeSpaceIfPossible];
+            [[self nursery] paraderDidFinishParade:self];
         }
     }
     @finally
     {
-        [[self garden] unlock];
         [[self nursery] unlock];
+        [[self garden] unlock];
     }
+    
+    return aProcessed;
 }
 
 - (void)paradeObjectOrNodeNextTo:(NURegion)aFreeRegion
@@ -141,10 +147,6 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
         if (!NUBellBallEquals(aBellBall, NUNotFoundBellBall))
         {
             [self paradeObjectWithBellBall:aBellBall at:nextLocation nextTo:aFreeRegion];
-
-            NURegion aScannedRegion = [[[[self nursery] spaces] locationTree] scanSpaceContainningLocation:29106];
-            if (aScannedRegion.location != NUNotFound64)
-                [self class];
         }
         else
         {
@@ -160,9 +162,6 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
             }
             else
             {
-                NURegion aScannedRegion = [[[[self nursery] spaces] locationTree] scanSpaceContainningLocation:29106];
-                if (aScannedRegion.location != NUNotFound64)
-                    [self class];
                 [[NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil] raise];
             }
         }
