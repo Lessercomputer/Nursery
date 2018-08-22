@@ -53,7 +53,7 @@
 - (NUUInt64)gradeForSeeker;
 - (NUUInt64)gradeForParader;
 
-- (void)seekerDidFinishCollect:(NUNurserySeeker *)sender;
+- (void)seekerDidFinishCollection:(NUNurserySeeker *)sender;
 - (void)paraderDidFinishParade:(NUNurseryParader *)sender;
 
 - (void)lock;

@@ -80,7 +80,6 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
     if (self = [super initWithKeyLength:sizeof(NUBellBall) leafValueLength:sizeof(NUUInt64) + sizeof(NUUInt8) rootLocation:aRootLocation on:aSpaces])
     {
         nextOOP = NUFirstUserObjectOOP;
-        removedBellBalls = [NSCountedSet new];
     }
     
 	return self;
@@ -318,11 +317,7 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
 
 - (void)setObjectLocation:(NUUInt64)aLocation for:(NUBellBall)aBellBall
 {
-    [self lock];
-    
-	[self setOpaqueValue:(NUUInt8 *)&aLocation forKey:(NUUInt8 *)&aBellBall];
-    
-    [self unlock];
+	[self setOpaqueValue:(NUUInt8 *)&aLocation forKey:(NUUInt8 *)&aBellBall];    
 }
 
 - (void)removeObjectFor:(NUBellBall)aBellBall
@@ -334,7 +329,6 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
     
 	[[self spaces] releaseSpace:aRegion];
 	[self removeValueFor:(NUUInt8 *)&aBellBall];
-    [removedBellBalls addObject:NUStringFromBellBall(aBellBall)];
     
     [self unlock];
 }

@@ -179,7 +179,8 @@
     NUBell *aBell;
     
     [[self garden] lock];
-    [(NUMainBranchNursery *)[[self garden] nursery] lock];
+    if ([[self garden] isForMainBranch])
+        [(NUMainBranchNursery *)[[self garden] nursery] lock];
     
     switch (phase)
     {
@@ -201,12 +202,11 @@
             aProcessed = YES;
             break;
         case NUGardenSeekerNonePhase:
-//            [[(NUMainBranchNursery *)[[self garden] nursery] spaces] validate];
-//            [(NUMainBranchNursery *)[[self garden] nursery] validateMappingOfObjectTableToReversedObjectTable];
             break;
     }
 
-    [(NUMainBranchNursery *)[[self garden] nursery] unlock];
+    if ([[self garden] isForMainBranch])
+        [(NUMainBranchNursery *)[[self garden] nursery] unlock];
     [[self garden] unlock];
     
     return aProcessed;

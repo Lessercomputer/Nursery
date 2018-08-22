@@ -1,5 +1,5 @@
 //
-//  NUThreadedChildminder.m
+//  NUChildminder.m
 //  Nursery
 //
 //  Created by Akifumi Takata on 2013/03/16.
@@ -10,16 +10,16 @@
 #import <Foundation/NSThread.h>
 #import <Foundation/NSString.h>
 
-#import "NUThreadedChildminder.h"
+#import "NUChildminder.h"
 #import "NUMainBranchNursery.h"
 
 const int NUThreadedChildminderActiveCondition      = 0;
 const int NUThreadedChildminderDeactiveCondition    = 1;
 const int NUThreadedChildminderTerminateCondition   = 2;
 
-@implementation NUThreadedChildminder
+@implementation NUChildminder
 
-+ (id)threadedChildminderWithGarden:(NUGarden *)aGarden
++ (id)childminderWithGarden:(NUGarden *)aGarden
 {
 	return [[[self alloc] initWithGarden:aGarden] autorelease];
 }

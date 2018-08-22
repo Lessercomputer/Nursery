@@ -108,12 +108,12 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 - (void)dealloc
 {
+    [self close];
+    
     if (retainNursery)
         [nursery release];
     
     nursery = nil;
-    
-    [self close];
     
 	[self setNurseryRoot:nil];
     [characterTargetClassResolvers release];

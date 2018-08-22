@@ -397,7 +397,7 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     }
 }
 
-- (void)seekerDidFinishCollect:(NUNurserySeeker *)sender
+- (void)seekerDidFinishCollection:(NUNurserySeeker *)sender
 {
 //    [NSThread detachNewThreadWithBlock:
 //    ^{

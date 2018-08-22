@@ -138,7 +138,6 @@ extern NSString *NUNodeKeyCountOrValueCountIsInvalidException;
 - (void)removeKeyAt:(NUUInt32)anIndex;
 - (void)removeKeysAt:(NUUInt32)anIndex count:(NUUInt32)aCount;
 - (void)removeAllKeys;
-- (void)updateKey:(NUUInt8 *)aKey;
 
 - (void)addValues:(NUOpaqueArray *)aValues;
 - (void)insertValues:(NUOpaqueArray *)aValues at:(NUUInt32)anIndex;

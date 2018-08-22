@@ -14,7 +14,6 @@ extern NSString *NUBPlusTreeNodeIsNotChildNodeException;
 
 @interface NUOpaqueBPlusTreeBranch : NUOpaqueBPlusTreeNode
 {
-
 }
 @end
 

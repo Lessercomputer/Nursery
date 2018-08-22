@@ -11,7 +11,6 @@
 
 @interface NUOpaqueBPlusTreeLeaf : NUOpaqueBPlusTreeNode
 {
-
 }
 @end
 

@@ -45,8 +45,6 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     if (self = [super initWithGarden:aGarden])
     {
         garden = [aGarden retain];
-        movedObjectLocations = [NSMutableArray new];
-        movedNodeLocations = [NSMutableArray new];
     }
     
     return self;
@@ -186,8 +184,6 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     [[[self nursery] reversedObjectTable] removeBellBallForObjectLocation:anObjectLocation];
     [[[self nursery] reversedObjectTable] setBellBall:aBellBall forObjectLocation:aNewObjectRegion.location];
     
-    [movedObjectLocations addObject:[NSString stringWithFormat:@"old location:%@, new location:%@, size:%@, bellball:%@", @(anObjectLocation), @(aNewObjectRegion.location), @(anObjectSize), NUStringFromBellBall(aBellBall), nil]];
-
     nextLocation = NUMaxLocation(anObjectRegion);
 }
 
@@ -210,7 +206,6 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
             {
                 [aNode changeNodePageWith:aNewNodeLocation];
                 [[[self nursery] pages] copyBytesAt:aNodeLocation length:aNodeSize to:aNewNodeLocation];
-                [movedNodeLocations addObject:[NSString stringWithFormat:@"old node location:%@, new node location:%@", @(aNodeLocation), @(aNewNodeLocation), nil]];
             }
             else
                 @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];

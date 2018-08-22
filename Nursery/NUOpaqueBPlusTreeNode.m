@@ -230,7 +230,7 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 
 - (NUUInt32)minValueCount
 {
-	return floor([self valueCapacity] / 2.0);
+    return [self isLeaf] ? [self minKeyCount] : [self minKeyCount] + 1;
 }
 
 - (NUUInt32)keyCount
@@ -469,11 +469,6 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 {
 	[[self keys] replaceAt:anIndex with:aNewKey];
 	[self markChanged];
-}
-
-- (void)updateKey:(NUUInt8 *)aKey
-{
-    
 }
 
 - (void)addValues:(NUOpaqueArray *)aValues

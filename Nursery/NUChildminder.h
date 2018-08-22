@@ -1,5 +1,5 @@
 //
-//  NUThreadedChildminder.h
+//  NUChildminder.h
 //  Nursery
 //
 //  Created by Akifumi Takata on 2013/03/16.
@@ -13,14 +13,14 @@
 
 @class NUGarden;
 
-@interface NUThreadedChildminder : NSObject
+@interface NUChildminder : NSObject
 {
     BOOL isLoaded;
     NUGarden *garden;
     NSThread *thread;
 }
 
-+ (id)threadedChildminderWithGarden:(NUGarden *)aGarden;
++ (id)childminderWithGarden:(NUGarden *)aGarden;
 
 - (id)initWithGarden:(NUGarden *)aGarden;
 

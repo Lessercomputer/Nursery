@@ -7,7 +7,7 @@
 //
 
 #import "NUTypes.h"
-#import "NUThreadedChildminder.h"
+#import "NUChildminder.h"
 
 extern NSString *NUParaderInvalidNodeLocationException;
 
@@ -15,12 +15,10 @@ extern NSString *NUParaderInvalidNodeLocationException;
 
 @class NUMainBranchNursery, NUOpaqueBPlusTreeNode;
 
-@interface NUNurseryParader : NUThreadedChildminder
+@interface NUNurseryParader : NUChildminder
 {
     NUUInt64 nextLocation;
     NUUInt64 grade;
-    NSMutableArray *movedObjectLocations;
-    NSMutableArray *movedNodeLocations;
 }
 
 + (id)paraderWithGarden:(NUGarden *)aGarden;

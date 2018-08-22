@@ -8,7 +8,7 @@
 
 #import <Foundation/NSLock.h>
 
-#import "NUThreadedChildminder.h"
+#import "NUChildminder.h"
 #import "NUTypes.h"
 
 @class NSRecursiveLock, NSMutableIndexSet;
@@ -20,7 +20,7 @@ typedef enum : NUUInt64 {
     NUGardenSeekerCollectPhase
 } NUGardenSeekerPhase;
 
-@interface NUGardenSeeker : NUThreadedChildminder <NSLocking>
+@interface NUGardenSeeker : NUChildminder <NSLocking>
 {
     NUGardenSeekerPhase phase;
     NUQueue *bells;

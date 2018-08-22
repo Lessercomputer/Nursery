@@ -163,8 +163,8 @@
 		619B09211913EEC000A4BAA2 /* NUSpaces.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08541913EEBF00A4BAA2 /* NUSpaces.h */; };
 		619B09221913EEC000A4BAA2 /* NUSpaces.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08551913EEBF00A4BAA2 /* NUSpaces.m */; };
 		619B09231913EEC000A4BAA2 /* NUStringCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08561913EEBF00A4BAA2 /* NUStringCoder.h */; };
-		619B09241913EEC000A4BAA2 /* NUThreadedChildminder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08571913EEBF00A4BAA2 /* NUThreadedChildminder.h */; };
-		619B09251913EEC000A4BAA2 /* NUThreadedChildminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08581913EEBF00A4BAA2 /* NUThreadedChildminder.m */; };
+		619B09241913EEC000A4BAA2 /* NUChildminder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08571913EEBF00A4BAA2 /* NUChildminder.h */; };
+		619B09251913EEC000A4BAA2 /* NUChildminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08581913EEBF00A4BAA2 /* NUChildminder.m */; };
 		619B09261913EEC000A4BAA2 /* NUTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08591913EEBF00A4BAA2 /* NUTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		619B09271913EEC000A4BAA2 /* NUTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B085A1913EEBF00A4BAA2 /* NUTypes.m */; };
 		619B092A1913EEC000A4BAA2 /* NUU64ODictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B085D1913EEBF00A4BAA2 /* NUU64ODictionary.h */; };
@@ -276,7 +276,7 @@
 		B816622920ECC28500B9075E /* NUDictionaryCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07C61913EEBF00A4BAA2 /* NUDictionaryCoder.m */; };
 		B816622A20ECC28500B9075E /* NUSetCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08531913EEBF00A4BAA2 /* NUSetCoder.m */; };
 		B816622B20ECC28500B9075E /* NUIndexSetCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08101913EEBF00A4BAA2 /* NUIndexSetCoder.m */; };
-		B816622C20ECC28500B9075E /* NUThreadedChildminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08581913EEBF00A4BAA2 /* NUThreadedChildminder.m */; };
+		B816622C20ECC28500B9075E /* NUChildminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08581913EEBF00A4BAA2 /* NUChildminder.m */; };
 		B816622D20ECC28500B9075E /* NUNurserySeeker.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07C91913EEBF00A4BAA2 /* NUNurserySeeker.m */; };
 		B816622E20ECC28500B9075E /* NUNurseryParader.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08461913EEBF00A4BAA2 /* NUNurseryParader.m */; };
 		B816622F20ECC28500B9075E /* NUGardenSeeker.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07C81913EEBF00A4BAA2 /* NUGardenSeeker.m */; };
@@ -380,7 +380,7 @@
 		B816629A20ECC2DF00B9075E /* NUDictionaryCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B080C1913EEBF00A4BAA2 /* NUDictionaryCoder.h */; };
 		B816629B20ECC2DF00B9075E /* NUSetCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08521913EEBF00A4BAA2 /* NUSetCoder.h */; };
 		B816629C20ECC2DF00B9075E /* NUIndexSetCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B080F1913EEBF00A4BAA2 /* NUIndexSetCoder.h */; };
-		B816629D20ECC2DF00B9075E /* NUThreadedChildminder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08571913EEBF00A4BAA2 /* NUThreadedChildminder.h */; };
+		B816629D20ECC2DF00B9075E /* NUChildminder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08571913EEBF00A4BAA2 /* NUChildminder.h */; };
 		B816629E20ECC2DF00B9075E /* NUNurserySeeker.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08131913EEBF00A4BAA2 /* NUNurserySeeker.h */; };
 		B816629F20ECC2DF00B9075E /* NUNurseryParader.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08451913EEBF00A4BAA2 /* NUNurseryParader.h */; };
 		B81662A020ECC2DF00B9075E /* NUGardenSeeker.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07C71913EEBF00A4BAA2 /* NUGardenSeeker.h */; };
@@ -697,8 +697,8 @@
 		619B08541913EEBF00A4BAA2 /* NUSpaces.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUSpaces.h; sourceTree = "<group>"; };
 		619B08551913EEBF00A4BAA2 /* NUSpaces.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUSpaces.m; sourceTree = "<group>"; };
 		619B08561913EEBF00A4BAA2 /* NUStringCoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUStringCoder.h; sourceTree = "<group>"; };
-		619B08571913EEBF00A4BAA2 /* NUThreadedChildminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUThreadedChildminder.h; sourceTree = "<group>"; };
-		619B08581913EEBF00A4BAA2 /* NUThreadedChildminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUThreadedChildminder.m; sourceTree = "<group>"; };
+		619B08571913EEBF00A4BAA2 /* NUChildminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUChildminder.h; sourceTree = "<group>"; };
+		619B08581913EEBF00A4BAA2 /* NUChildminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUChildminder.m; sourceTree = "<group>"; };
 		619B08591913EEBF00A4BAA2 /* NUTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUTypes.h; sourceTree = "<group>"; };
 		619B085A1913EEBF00A4BAA2 /* NUTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUTypes.m; sourceTree = "<group>"; };
 		619B085D1913EEBF00A4BAA2 /* NUU64ODictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUU64ODictionary.h; sourceTree = "<group>"; };
@@ -949,12 +949,12 @@
 				619B08341913EEBF00A4BAA2 /* NUObjectTableBranch.m */,
 				619B086E1913EEC000A4BAA2 /* NUObjectTableLeaf.h */,
 				619B08351913EEBF00A4BAA2 /* NUObjectTableLeaf.m */,
+				619B084F1913EEBF00A4BAA2 /* NUReversedObjectTable.h */,
+				619B08501913EEBF00A4BAA2 /* NUReversedObjectTable.m */,
 				619B08741913EEC000A4BAA2 /* NUReversedObjectTableBranch.h */,
 				619B08761913EEC000A4BAA2 /* NUReversedObjectTableBranch.m */,
 				619B08751913EEC000A4BAA2 /* NUReversedObjectTableLeaf.h */,
 				619B08511913EEBF00A4BAA2 /* NUReversedObjectTableLeaf.m */,
-				619B084F1913EEBF00A4BAA2 /* NUReversedObjectTable.h */,
-				619B08501913EEBF00A4BAA2 /* NUReversedObjectTable.m */,
 			);
 			name = ObjectTable;
 			sourceTree = "<group>";
@@ -1265,8 +1265,8 @@
 		B80E85C020FF1C1A00FA8DC1 /* Childminders */ = {
 			isa = PBXGroup;
 			children = (
-				619B08571913EEBF00A4BAA2 /* NUThreadedChildminder.h */,
-				619B08581913EEBF00A4BAA2 /* NUThreadedChildminder.m */,
+				619B08571913EEBF00A4BAA2 /* NUChildminder.h */,
+				619B08581913EEBF00A4BAA2 /* NUChildminder.m */,
 				619B08131913EEBF00A4BAA2 /* NUNurserySeeker.h */,
 				619B07C91913EEBF00A4BAA2 /* NUNurserySeeker.m */,
 				619B08451913EEBF00A4BAA2 /* NUNurseryParader.h */,
@@ -1379,7 +1379,7 @@
 				619B09351913EEC000A4BAA2 /* NUComparator.h in Headers */,
 				619B08B11913EEC000A4BAA2 /* NUBranchGarden.h in Headers */,
 				619B08FA1913EEC000A4BAA2 /* NUNSURL.h in Headers */,
-				619B09241913EEC000A4BAA2 /* NUThreadedChildminder.h in Headers */,
+				619B09241913EEC000A4BAA2 /* NUChildminder.h in Headers */,
 				619B09031913EEC000A4BAA2 /* NUObjectWrapper.h in Headers */,
 				619B08F11913EEC000A4BAA2 /* NUNSData.h in Headers */,
 				61FD7A761FFA48E9009ED9D5 /* NUNurseryNetMessageArgument.h in Headers */,
@@ -1507,7 +1507,7 @@
 				B816629A20ECC2DF00B9075E /* NUDictionaryCoder.h in Headers */,
 				B816629B20ECC2DF00B9075E /* NUSetCoder.h in Headers */,
 				B816629C20ECC2DF00B9075E /* NUIndexSetCoder.h in Headers */,
-				B816629D20ECC2DF00B9075E /* NUThreadedChildminder.h in Headers */,
+				B816629D20ECC2DF00B9075E /* NUChildminder.h in Headers */,
 				B816629E20ECC2DF00B9075E /* NUNurserySeeker.h in Headers */,
 				B816629F20ECC2DF00B9075E /* NUNurseryParader.h in Headers */,
 				B81662A020ECC2DF00B9075E /* NUGardenSeeker.h in Headers */,
@@ -1824,7 +1824,7 @@
 				619B089E1913EEC000A4BAA2 /* NUNSDictionary.m in Sources */,
 				B837365A20D5DE96006AE915 /* NUUInt64Queue.m in Sources */,
 				619B08EB1913EEC000A4BAA2 /* NUMainBranchAperture.m in Sources */,
-				619B09251913EEC000A4BAA2 /* NUThreadedChildminder.m in Sources */,
+				619B09251913EEC000A4BAA2 /* NUChildminder.m in Sources */,
 				619B08911913EEC000A4BAA2 /* NUCodingContext.m in Sources */,
 				619B08CB1913EEC000A4BAA2 /* NUBPlusTreeBranch.m in Sources */,
 				619B08CA1913EEC000A4BAA2 /* NUBPlusTree.m in Sources */,
@@ -1914,7 +1914,7 @@
 				B816622920ECC28500B9075E /* NUDictionaryCoder.m in Sources */,
 				B816622A20ECC28500B9075E /* NUSetCoder.m in Sources */,
 				B816622B20ECC28500B9075E /* NUIndexSetCoder.m in Sources */,
-				B816622C20ECC28500B9075E /* NUThreadedChildminder.m in Sources */,
+				B816622C20ECC28500B9075E /* NUChildminder.m in Sources */,
 				B816622D20ECC28500B9075E /* NUNurserySeeker.m in Sources */,
 				B816622E20ECC28500B9075E /* NUNurseryParader.m in Sources */,
 				B816622F20ECC28500B9075E /* NUGardenSeeker.m in Sources */,

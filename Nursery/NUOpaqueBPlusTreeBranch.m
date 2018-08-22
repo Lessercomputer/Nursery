@@ -227,18 +227,6 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 	[self replaceValueAt:anIndex with:(NUUInt8 *)&aNodeLocation];
 }
 
-- (void)updateKey:(NUUInt8 *)aKey
-{
-    NUInt32 aKeyIndex = [self keyIndexLessThanOrEqualToKey:aKey];
-    NUUInt32 aNodeIndex = [self targetNodeIndexFor:aKey];
-    NUOpaqueBPlusTreeNode *aNode = [self nodeAt:aNodeIndex];
-    
-    if (aKeyIndex >= 0 && [self keyAt:aKeyIndex isEqual:aKey])
-        [self replaceKeyAt:aKeyIndex with:[aNode mostLeftKeyInSubTree]];
-    
-    [aNode updateKey:aKey];
-}
-
 - (NUOpaqueBPlusTreeNode *)insertChildNode:(NUOpaqueBPlusTreeNode *)aChildNode at:(NUUInt32)aChildNodeIndex
 {
     NUUInt64 aChildNodePageLocation = [aChildNode pageLocation];
@@ -323,8 +311,6 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
         [[NSException exceptionWithName:NUUnderflowNodeFoundException reason:nil userInfo:nil] raise];
     if ([self isUnderflow])
         [[NSException exceptionWithName:NUUnderflowNodeFoundException reason:nil userInfo:nil] raise];
-    [[self leftBranch] shufflableKeyCount];
-    [self shufflableKeyCount];
 }
 
 - (void)shuffleRightNode
@@ -342,8 +328,6 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
         [[NSException exceptionWithName:NUUnderflowNodeFoundException reason:nil userInfo:nil] raise];
     if ([self isUnderflow])
         [[NSException exceptionWithName:NUUnderflowNodeFoundException reason:nil userInfo:nil] raise];
-    [[self rightBranch] shufflableKeyCount];
-    [self shufflableKeyCount];
 }
 
 - (void)mergeRightNode
@@ -404,7 +388,7 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
     NUOpaqueBPlusTreeNode *aChildNode = [self nodeAt:aNodeIndex];
     
     if (![aChildNode isEqual:aNode])
-        [[NSException exceptionWithName:@"NUBPlusTreeNodeIsNotChildNodeException" reason:nil userInfo:nil] raise];
+        [[NSException exceptionWithName:NUBPlusTreeNodeIsNotChildNodeException reason:nil userInfo:nil] raise];
     
     [self replaceNodeAt:aNodeIndex with:aPageLocation];
 }

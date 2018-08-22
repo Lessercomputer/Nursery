@@ -25,8 +25,6 @@ const NUUInt64 NUReversedObjectTableRootLocationOffset	= 45;
 {
 	if (self = [super initWithKeyLength:sizeof(NUUInt64) leafValueLength:sizeof(NUBellBall) rootLocation:aRootLocation on:aSpaces])
     {
-        removedObjectLocations = [NSCountedSet new];
-        setKeyAndValues = [NSCountedSet new];
     }
 	
 	return self;
@@ -64,24 +62,12 @@ const NUUInt64 NUReversedObjectTableRootLocationOffset	= 45;
 
 - (void)setBellBall:(NUBellBall)aBellBall forObjectLocation:(NUUInt64)anObjectLocation
 {
-    [self lock];
-    
-    
     [self setOpaqueValue:(NUUInt8 *)&aBellBall forKey:(NUUInt8 *)&anObjectLocation];
-    
-    [setKeyAndValues addObject:[NSString stringWithFormat:@"%@, %@", NUStringFromBellBall(aBellBall), @(anObjectLocation)]];
-    
-    [self unlock];
 }
 
 - (void)removeBellBallForObjectLocation:(NUUInt64)anObjectLocation
 {
-    [self lock];
-    
-    [self removeValueFor:(NUUInt8 *)&anObjectLocation];
-    [removedObjectLocations addObject:@(anObjectLocation)];
-    
-    [self unlock];
+    [self removeValueFor:(NUUInt8 *)&anObjectLocation];    
 }
 
 - (NUBellBall)bellBallForObjectLocationGreaterThanOrEqualTo:(NUUInt64)aLocation

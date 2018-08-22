@@ -143,12 +143,10 @@
 - (void)lock
 {
     [lock lock];
-    lockCount++;
 }
 
 - (void)unlock
 {
-    lockCount--;
     [lock unlock];
 }
 
@@ -312,11 +310,6 @@
 	}
     
     [self unlock];
-}
-
-- (void)updateKey:(NUUInt8 *)aKey
-{
-    [[self root] updateKey:aKey];
 }
 
 - (NUUInt8 *)firstKey

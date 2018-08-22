@@ -60,7 +60,6 @@ extern const NUUInt8 NUGCMarkColorBitsMask;
 @interface NUObjectTable : NUOpaqueBPlusTree
 {
 	NUUInt64 nextOOP;
-    NSCountedSet *removedBellBalls;
 }
 
 - (id)initWithRootLocation:(NUUInt64)aRootLocation on:(NUSpaces *)aSpaces;

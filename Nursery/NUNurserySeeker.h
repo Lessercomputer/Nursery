@@ -7,7 +7,7 @@
 //
 
 #import "NUTypes.h"
-#import "NUThreadedChildminder.h"
+#import "NUChildminder.h"
 
 typedef enum : NUUInt8 {
     NUSeekerNonePhase,
@@ -18,7 +18,7 @@ typedef enum : NUUInt8 {
 
 @class NUUInt64Queue, NUMainBranchNursery, NUAperture, NUBell;
 
-@interface NUNurserySeeker : NUThreadedChildminder
+@interface NUNurserySeeker : NUChildminder
 {
 	NUUInt64Queue *grayOOPs;
 	BOOL shouldLoadGrayOOPs;

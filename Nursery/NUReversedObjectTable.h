@@ -12,8 +12,6 @@
 
 @interface NUReversedObjectTable : NUOpaqueBPlusTree
 {
-    NSCountedSet *removedObjectLocations;
-    NSCountedSet *setKeyAndValues;
 }
 
 - (id)initWithRootLocation:(NUUInt64)aRootLocation on:(NUSpaces *)aSpaces;

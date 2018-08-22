@@ -876,8 +876,9 @@ static NSString *NUNurseryTestFilePath = nil;
         XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded, @"");
         
         [NSThread sleepForTimeInterval:5];
-        XCTAssertEqual([anObject retainCount], anExpectedRetainCount);
     }
+    
+    XCTAssertEqual([anObject retainCount], anExpectedRetainCount);
 }
 
 - (void)testSaveEmptyLazyMutableArray
