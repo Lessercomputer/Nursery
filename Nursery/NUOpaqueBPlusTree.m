@@ -331,7 +331,7 @@
     
     [self lock];
     
-    aLastKey = [[self mostRightNode] lastValue];
+    aLastKey = [[self mostRightNode] lastkey];
     
     [self unlock];
     
@@ -550,7 +550,6 @@
 {
     [self lock];
     
-//    NSLog(@"removeNodeAt:%@", @(aPageLocation));
 	[[self nodeDictionary] removeObjectForKey:aPageLocation];
     
     [self unlock];

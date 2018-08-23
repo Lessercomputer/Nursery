@@ -71,6 +71,7 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
     [[[self nursery] pages] writeUInt64:[self grade] at:NUSeekerCurrentGradeOffset];
     [[[self nursery] pages] writeUInt64:nextBellBallToCollect.oop at:NUSeekerNextOOPOfBellBallToCollectOffset];
     [[[self nursery] pages] writeUInt64:nextBellBallToCollect.grade at:NUSeekerNextGradeOfBellBallToCollectOffset];
+    [self setIsLoaded:YES];
     
     [[self nursery] unlock];
 }

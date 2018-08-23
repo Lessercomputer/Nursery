@@ -660,12 +660,16 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 
 - (void)loadFileHeader
 {
+    [self lock];
+    
     [self loadGrade];
 	[[self spaces] load];
 	[[self objectTable] load];
     [[self reversedObjectTable] load];
 	[[self seeker] load];
     [[self parader] load];
+    
+    [self unlock];
 }
 
 - (void)validateObjectTableAndReversedObjectTable

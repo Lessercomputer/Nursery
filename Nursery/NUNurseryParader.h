@@ -30,8 +30,10 @@ extern NSString *NUParaderInvalidNodeLocationException;
 - (void)save;
 - (void)load;
 
-- (void)paradeObjectOrNodeNextTo:(NURegion)aFreeRegion;
-- (void)paradeObjectWithBellBall:(NUBellBall)aBellBall at:(NUUInt64)anObjectLocation nextTo:(NURegion)aFreeRegion;
-- (void)paradeNodeAt:(NUUInt64)aNodeLocation nextTo:(NURegion)aFreeRegion;
+- (BOOL)paradeObjectOrNodeNextTo:(NURegion)aFreeRegion;
+- (BOOL)paradeObjectWithBellBall:(NUBellBall)aBellBall at:(NUUInt64)anObjectLocation nextTo:(NURegion)aFreeRegion;
+- (BOOL)paradeNodeAt:(NUUInt64)aNodeLocation nextTo:(NURegion)aFreeRegion;
+
+- (NUUInt64)sizeOfObjectForBellBall:(NUBellBall)aBellBall;
 
 @end

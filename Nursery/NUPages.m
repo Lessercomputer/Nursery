@@ -46,7 +46,7 @@ const NUUInt64 NULogDataLengthOffset = 85;
         spaces = aSpaces;
         pageBuffer = [[NUPageLocationODictionary alloc] initWithPages:self];
         pageLinkedList = [NULinkedList new];
-        maximumRemovablePageBufferCount = 0;//NUDefaultMaximumRemovablePageBufferCount;
+        maximumRemovablePageBufferCount = NUDefaultMaximumRemovablePageBufferCount;
         changedRegions = [[NUChangedRegionArray alloc] initWithCapacity:pageSize];
     }
     

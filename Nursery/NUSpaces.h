@@ -28,11 +28,6 @@ extern NSString *NUSpaceInvalidOperationException;
 	NUMainBranchNursery *nursery;
     NSRecursiveLock *lock;
     NUU64ODictionary *nodeOOPToTreeDictionary;
-    NSMutableSet *releasedNodePageLocations;
-    NUUInt64 inRelese;
-    NUUInt64 inAlloc;
-    NSCountedSet *releasedRegion;
-    NSCountedSet *allocatedRegion;
 }
 @end
 
