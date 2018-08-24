@@ -115,7 +115,7 @@ static NSString *NUNurseryTestFilePath = nil;
 
 - (void)testSaveManyNSNumbersUsingDifferentGardens
 {
-    [self _testSaveManyNSNumbersUsingDifferentGardensTimes:10 withCountPerSave:100];
+    [self _testSaveManyNSNumbersUsingDifferentGardensTimes:100 withCountPerSave:100];
 }
 
 - (void)_testSaveManyNSNumbersUsingSameGardenTimes:(NUUInt64)aTimes withCountPerSave:(NUUInt64)anObjectCountPerSave

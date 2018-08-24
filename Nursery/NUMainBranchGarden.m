@@ -29,7 +29,6 @@
 {
     if (self = [super initWithNursery:aNursery grade:aGrade usesGardenSeeker:aUsesGardenSeeker retainNursery:aRetainFlag])
     {
-//        farmOutLock = [NSLock new];
     }
     
     return self;
@@ -48,14 +47,6 @@
 + (Class)apertureClass
 {
     return [NUMainBranchAperture class];
-}
-
-- (void)dealloc
-{
-//    [farmOutLock release];
-//    farmOutLock = nil;
-    
-    [super dealloc];
 }
 
 @end

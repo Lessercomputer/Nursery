@@ -334,9 +334,9 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 
 - (void)setGrade:(NUUInt64)aGrade
 {
-    #ifdef DEBUG
+#ifdef DEBUG
     NSLog(@"%@ currentGrade:%@, aNewGrade:%@", self, @(grade), @(aGrade));
-    #endif
+#endif
     
     grade = aGrade;
 }
@@ -571,18 +571,6 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 	if (![self openFileHandle]) return NO;
 	
 	[self initializeFileHeader];
-	[self setOpenStatus:NUNurseryOpenStatusOpenWithFile];
-	return [self isOpen];
-}
-
-- (BOOL)createFileAndInitialize
-{
-	if ([[NSFileManager defaultManager] fileExistsAtPath:[self filePath]]) return NO;
-	if (![[NSFileManager defaultManager] createFileAtPath:[self filePath] contents:nil attributes:nil]) return NO;
-	if (![self openFileHandle]) return NO;
-	if (![self writeFileHeader]) return NO;
-    
-	[self loadFileHeader];
 	[self setOpenStatus:NUNurseryOpenStatusOpenWithFile];
 	return [self isOpen];
 }

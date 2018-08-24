@@ -228,9 +228,9 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
     {
         currentPhase = NUSeekerNonePhase;
         [[self nursery] seekerDidFinishCollection:self];
-//#ifdef DEBUG
+#ifdef DEBUG
         NSLog(@"%@:didFinishCollecttion", self);
-//#endif
+#endif
     }
 }
 
@@ -343,9 +343,9 @@ const NUUInt32 NUSeekerDefaultGrayOOPCapacity = 50000;
 
 - (void)setGrade:(NUUInt64)aGrade
 {
-//#ifdef DEBUG
+#ifdef DEBUG
     NSLog(@"%@ currentGrade:%@, aNewGrade:%@", self, @(grade), @(aGrade));
-//#endif
+#endif
     
     grade = aGrade;
 }

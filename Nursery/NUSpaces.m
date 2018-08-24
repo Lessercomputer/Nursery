@@ -24,6 +24,7 @@
 #import "NUMainBranchNursery+Project.h"
 #import "NUObjectTable.h"
 #import "NUReversedObjectTable.h"
+#import "NUBellBall.h"
 #import "NUBell.h"
 #import "NUU64ODictionary.h"
 #import "NUNurseryParader.h"
@@ -204,6 +205,8 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
         else
         {
             NUBellBall aBellBall = [[[self nursery] reversedObjectTable] bellBallForObjectLocation:aLastLocationInUseOfObjects];
+            if (NUBellBallEquals(aBellBall, NUNotFoundBellBall))
+                @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
             aLastLocationInUseOfObjects = aLastLocationInUseOfObjects + [[[self nursery] parader] sizeOfObjectForBellBall:aBellBall] - 1;
             aLastLocationInUse = aLastLocationInUseOfObjects;
         }
@@ -396,8 +399,10 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
     [self unlock];
 }
 
-- (void)minimizeSpaceIfPossible
+- (BOOL)minimizeSpaceIfPossible
 {
+    BOOL aSpaceMinimized = NO;
+    
     @try
     {
         [self lock];
@@ -427,12 +432,16 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
             
             if (aNewFreeRegion.location != NUNotFound64)
                 [self setRegion:aNewFreeRegion];
+            
+            aSpaceMinimized = YES;
         }
     }
     @finally
     {
         [self unlock];
     }
+    
+    return aSpaceMinimized;
 }
 
 - (NUUInt64)pageStatingLocationFor:(NUUInt64)aLocation

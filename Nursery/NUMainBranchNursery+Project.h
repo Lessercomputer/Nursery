@@ -71,7 +71,6 @@
 - (NUUInt64)newGrade;
 - (BOOL)createFileAndOpenIfNeeded;
 - (BOOL)createFileAndOpen;
-- (BOOL)createFileAndInitialize;
 - (BOOL)openFileHandle;
 - (BOOL)verifyFile;
 - (BOOL)writeFileHeader;

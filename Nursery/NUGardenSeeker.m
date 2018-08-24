@@ -166,9 +166,9 @@
 
 - (void)setGrade:(NUUInt64)aGrade
 {
-//#ifdef DEBUG
+#ifdef DEBUG
     NSLog(@"%@ currentGrade:%@, aNewGrade:%@", self, @(grade), @(aGrade));
-//#endif
+#endif
     
     grade = aGrade;
 }
@@ -197,8 +197,9 @@
         case NUGardenSeekerCollectPhase:
             [self collectGrade];
             phase = NUGardenSeekerNonePhase;
+#ifdef DEBUG
             NSLog(@"%@:didFinishCollection", self);
-            
+#endif
             aProcessed = YES;
             break;
         case NUGardenSeekerNonePhase:

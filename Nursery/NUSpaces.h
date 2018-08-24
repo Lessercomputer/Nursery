@@ -74,7 +74,7 @@ extern NSString *NUSpaceInvalidOperationException;
 - (NUUInt64)allocateSpaceFrom:(NULengthTreeLeaf *)aLengthTreeLeaf region:(NURegion)aRegion length:(NUUInt64)aLength aligned:(BOOL)anAlignFlag preventsNodeRelease:(BOOL)aPreventsNodeReleaseFlag;
 - (NUUInt64)extendSpaceBy:(NUUInt64)aLength;
 - (void)releaseSpace:(NURegion)aRegion;
-- (void)minimizeSpaceIfPossible;
+- (BOOL)minimizeSpaceIfPossible;
 
 - (NUUInt64)pageStatingLocationFor:(NUUInt64)aLocation;
 

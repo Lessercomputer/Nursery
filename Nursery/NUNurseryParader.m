@@ -69,9 +69,9 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 
 - (void)setGrade:(NUUInt64)aGrade
 {
-//    #ifdef DEBUG
+#ifdef DEBUG
     NSLog(@"%@ currentGrade:%@, aNewGrade:%@", self, @(grade), @(aGrade));
-//    #endif
+#endif
     
     grade = aGrade;
 }
@@ -121,9 +121,8 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
         else if (nextLocation)
         {
             nextLocation = 0;
-            [[[self nursery] spaces] minimizeSpaceIfPossible];
+            aProcessed = [[[self nursery] spaces] minimizeSpaceIfPossible];
             [[self nursery] paraderDidFinishParade:self];
-            aProcessed = YES;
 #ifdef DEBUG
             NSLog(@"%@:didFinishParade", self);
 #endif
