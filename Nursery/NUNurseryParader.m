@@ -177,7 +177,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 {
     BOOL anObjectMoved = NO;
     
-    NUUInt64 anObjectSize = [(NUMainBranchAliaser *)[[self garden] aliaser] sizeOfObjectForBellBall:aBellBall];
+    NUUInt64 anObjectSize = [self sizeOfObjectForBellBall:aBellBall];
     NURegion anObjectRegion = NUMakeRegion(anObjectLocation, anObjectSize);
     NURegion aNewObjectRegion = NUMakeRegion(NUNotFound64, anObjectSize);
 

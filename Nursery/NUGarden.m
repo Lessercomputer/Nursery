@@ -592,7 +592,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         
         [[self systemCharacterOOPToClassDictionary] enumerateKeysAndObjectsUsingBlock:^(NSNumber *anOOP, Class aClass, BOOL *aStop) {
             NUCharacter *aSystemCharacter = [aClass characterOn:self];
-            NUBell *aSystemCharacterBell = [self allocateBellForBellBall:NUMakeBellBall([anOOP unsignedLongLongValue], NUFirstGrade) isLoaded:YES];
+            NUBell *aSystemCharacterBell = [self allocateBellForBellBall:NUMakeBellBall([anOOP unsignedLongLongValue], NUNilGrade) isLoaded:YES];
             [self setObject:aSystemCharacter forBell:aSystemCharacterBell];
         }];
         
@@ -680,7 +680,11 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     
 	NUBell *aBell = [self bellForObject:anObject];
 	if (aBell)
-        [[self changedObjects] setObject:[aBell object] forKey:[aBell OOP]];
+    {
+        if (!([anObject isKindOfClass:[NUCharacter class]] || [anObject isKindOfClass:[NUIvar class]])
+                || [aBell grade] == NUNilGrade || [aBell grade] == [[self aliaser] gradeForSave])
+            [[self changedObjects] setObject:[aBell object] forKey:[aBell OOP]];
+    }
     
     [self unlock];
 }
