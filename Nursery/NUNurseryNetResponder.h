@@ -16,6 +16,7 @@
 @property (nonatomic, retain) NSMutableDictionary *pairedGardens;
 @property (nonatomic, assign) NUNurseryNetService *netService;
 @property (nonatomic) NUUInt64 maxFellowPupilNotesSizeInBytes;
+@property (nonatomic) BOOL stopsAfterMessegeSend;
 
 - (instancetype)initWithNetService:(NUNurseryNetService *)aNetService inputStream:(NSInputStream *)anInputStream outputStream:(NSOutputStream *)anOutputStream;
 

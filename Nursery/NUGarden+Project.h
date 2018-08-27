@@ -143,6 +143,4 @@
 - (void)collectGradeLessThan:(NUUInt64)aGrade;
 //- (void)collectBellsWithGradeLessThan:(NUUInt64)aGrade;
 
-- (void)close;
-
 @end

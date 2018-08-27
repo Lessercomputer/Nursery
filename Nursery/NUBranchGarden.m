@@ -39,17 +39,11 @@
     return self;
 }
 
-- (void)close
+- (void)dealloc
 {
     [[self gardenSeeker] stop];
     [[self netClient] closeGardenWithID:[self ID]];
     [[self netClient] stop];
-    
-    [super close];
-}
-
-- (void)dealloc
-{
     [netClient release];
     netClient = nil;
     

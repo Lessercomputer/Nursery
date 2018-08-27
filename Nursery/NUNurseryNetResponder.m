@@ -159,6 +159,14 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
     return [[self pairedGardens] objectForKey:@(aPairID)];
 }
 
+- (void)messageDidSend
+{
+    if ([self stopsAfterMessegeSend])
+        [self stop];
+    
+    [super messageDidSend];
+}
+
 @end
 
 @implementation NUNurseryNetResponder (Private)
@@ -436,7 +444,7 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
 
 - (NUNurseryNetMessage *)responseForNetClientWillStop
 {
-    [self stop];
+    [self setStopsAfterMessegeSend:YES];
     
     return [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindNetClientWillStopResponse];;
 }

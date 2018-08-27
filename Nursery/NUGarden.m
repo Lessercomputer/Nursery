@@ -108,7 +108,11 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 
 - (void)dealloc
 {
-    [self close];
+    [[self gardenSeeker] stop];
+    
+    [[[[self bells] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop){
+        [aBell invalidate];
+    }];
     
     if (retainNursery)
         [nursery release];
@@ -927,15 +931,6 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     @finally {
         [self unlock];
     }
-}
-
-- (void)close
-{
-    [[self gardenSeeker] stop];
-    
-    [[[[self bells] copy] autorelease] enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop){
-        [aBell invalidate];
-    }];
 }
 
 @end
