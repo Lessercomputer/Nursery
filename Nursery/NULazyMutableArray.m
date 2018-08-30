@@ -149,7 +149,7 @@
     
     [objects[index] release];
     
-    for (NSUInteger i = index; i < count; i++)
+    for (NSUInteger i = index; i < count - 1; i++)
     {
         objects[i] = objects[i + 1];
     }
