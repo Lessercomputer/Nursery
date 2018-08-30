@@ -318,7 +318,7 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 	NUUInt32 aKeyShuffleCount = [[self rightNode] shufflableKeyCount];
 	
 	[self insertKey:[[self rightNode] mostLeftKeyInSubTree] at:[self keyCount]];
-	[self insertKeys:[[self rightNode] keyAt:0] at:[self keyCount] count:aKeyShuffleCount - 1];
+	[self insertKeys:[[self rightNode] firstkey] at:[self keyCount] count:aKeyShuffleCount - 1];
 	[[self rightBranch] removeKeysAt:0 count:aKeyShuffleCount];
     
     [self insertNodes:[[self rightBranch] nodeLocations] at:[self valueCount] startAt:0 count:aKeyShuffleCount];

@@ -371,7 +371,7 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
     NUUInt32 aPageSizeWithoutHeader = [[self pages] pageSize] - [self nodeHeaderLength];
     NUUInt32 aCapacity = aPageSizeWithoutHeader / ([self keyLength] + [self valueLengthIncludingExtra]);
     NUUInt32 aRemainingLength = aPageSizeWithoutHeader - ([self keyLength] + [self valueLengthIncludingExtra]) * aCapacity;
-    
+
     if ([self isLeaf])
     {
         if (aKeyCapacity) *aKeyCapacity = aCapacity;

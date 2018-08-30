@@ -210,23 +210,21 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
 
     if ([[[self nursery] spaces] nodePageIsNotToBeReleased:aNodeLocation])
     {
-        NURegion aNodeRegion = NUMakeRegion(aNodeLocation, aNodeSize);
-
-        [[[self nursery] spaces] releaseSpace:aNodeRegion];
-        NUUInt64 aNewNodeLocation = [[[self nursery] spaces] allocateNodePageLocation];
-
-        if (aNodeLocation != aNewNodeLocation)
+        NUOpaqueBPlusTreeNode *aNode = [[[self nursery] spaces] nodeFor:aNodeLocation];
+        
+        if (aNode)
         {
-            NUOpaqueBPlusTreeNode *aNode = [[[self nursery] spaces] nodeFor:aNodeLocation];
+            NURegion aNodeRegion = NUMakeRegion(aNodeLocation, aNodeSize);
+            
+            [[[self nursery] spaces] releaseSpace:aNodeRegion];
+            NUUInt64 aNewNodeLocation = [[[self nursery] spaces] allocateNodePageLocation];
 
-            if (aNode)
+            if (aNodeLocation != aNewNodeLocation)
             {
                 [aNode changeNodePageWith:aNewNodeLocation];
                 [[[self nursery] pages] copyBytesAt:aNodeLocation length:aNodeSize to:aNewNodeLocation];
                 aNodeMoved = YES;
             }
-            else
-                @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
         }
     }
 
