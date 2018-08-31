@@ -296,8 +296,8 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 	NUUInt32 aKeyIndex;
 	NULocationTreeLeaf *aLocationTreeLeaf = [locationTree getNodeContainingSpaceBeginningAtLocationLessThanOrEqual:aRegion.location keyIndex:&aKeyIndex];
 	
-	if (![aLengthTreeLeaf canPreventNodeReleseWhenValueRemovedOrAdded]
-			|| ![aLocationTreeLeaf canPreventNodeReleseWhenValueRemovedOrAdded])
+	if (aPreventsNodeReleaseFlag
+        && !([aLengthTreeLeaf canPreventNodeReleseWhenValueRemovedOrAdded] && [aLocationTreeLeaf canPreventNodeReleseWhenValueRemovedOrAdded]))
 		return NUUInt64Max;
 		
 	if (anAlignFlag && aRegion.location % aLength != 0)
@@ -585,12 +585,21 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 	NUUInt64 aVirtualPageLocation = [self firstVirtualPageLocation];
     NUUInt64 aPageSize = [[self pages] pageSize];
 	
+    [locationTree validateForLeafNodesNotLoop];
+    [lengthTree validateForLeafNodesNotLoop];
+    
 	for (; aVirtualPageLocation >= nextVirtualPageLocation + aPageSize; aVirtualPageLocation -= aPageSize)
 	{
 		NUOpaqueBPlusTreeNode *aNode = [locationTree nodeFor:aVirtualPageLocation];
 		if (!aNode) aNode = [lengthTree nodeFor:aVirtualPageLocation];
-		
+
+        [locationTree validateForLeafNodesNotLoop];
+        [lengthTree validateForLeafNodesNotLoop];
+        
 		if (aNode) [aNode changeNodePageWith:[self allocateNodePageLocationWithPreventNodeRelease]];
+        
+        [locationTree validateForLeafNodesNotLoop];
+        [lengthTree validateForLeafNodesNotLoop];
 	}
 	
 	NSEnumerator *anEnumerator = [branchesNeedVirtualPageCheck objectEnumerator];

@@ -8,6 +8,7 @@
 
 #import <Foundation/NSException.h>
 #import <Foundation/NSLock.h>
+#import <Foundation/NSSet.h>
 
 #import "NUOpaqueBPlusTree.h"
 #import "NUOpaqueBPlusTreeNode.h"
@@ -657,6 +658,26 @@
     [[self root] validate];
     
     [self unlock];
+}
+
+- (void)validateForLeafNodesNotLoop
+{
+    NSMutableSet *aNodePageLocations = [NSMutableSet set];
+    NUOpaqueBPlusTreeNode *aLeaf = (NUOpaqueBPlusTreeNode *)[self mostLeftNode];
+    
+    if ([aLeaf leftNodeLocation])
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+    
+    while (aLeaf)
+    {
+        NSNumber *aNodePageLocation = @([aLeaf pageLocation]);
+        if (![aNodePageLocations containsObject:aNodePageLocation])
+            [aNodePageLocations addObject:aNodePageLocation];
+        else
+            @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+        
+        aLeaf = [aLeaf rightNode];
+    }
 }
 
 @end

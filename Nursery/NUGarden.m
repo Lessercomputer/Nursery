@@ -686,8 +686,10 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 	if (aBell)
     {
         if (!([anObject isKindOfClass:[NUCharacter class]] || [anObject isKindOfClass:[NUIvar class]])
-                || [aBell grade] == NUNilGrade || [aBell grade] == [[self aliaser] gradeForSave])
-            [[self changedObjects] setObject:[aBell object] forKey:[aBell OOP]];
+            || ([aBell grade] == NUNilGrade || [aBell grade] == [[self aliaser] gradeForSave]))
+        {
+                [[self changedObjects] setObject:[aBell object] forKey:[aBell OOP]];
+        }
     }
     
     [self unlock];

@@ -709,7 +709,7 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 	[[self tree] removeNodeAt:pageLocation];
     if ([[self spaces] nodePageLocationIsVirtual:pageLocation])
         [[self spaces] setNodePageLocation:aPageLocation forVirtualNodePageLocation:pageLocation];
-	pageLocation = aPageLocation;
+	[self setPageLocation:aPageLocation];
 	[[self tree] addNode:self];
     [self release];
 	[[self leftNode] setRightNodeLocation:pageLocation];

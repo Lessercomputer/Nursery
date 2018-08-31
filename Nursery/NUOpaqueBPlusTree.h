@@ -135,5 +135,6 @@
 @interface NUOpaqueBPlusTree (Debug)
 
 - (void)validate;
+- (void)validateForLeafNodesNotLoop;
 
 @end
