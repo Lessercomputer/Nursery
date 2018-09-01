@@ -384,7 +384,7 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 
 - (void)changeNodePageWith:(NUUInt64)aPageLocation of:(NUOpaqueBPlusTreeNode *)aNode
 {
-    NUUInt32 aNodeIndex = [self targetNodeIndexFor:[aNode firstkey]];
+    NUUInt32 aNodeIndex = [self targetNodeIndexFor:[aNode mostLeftKeyInSubTree]];
     NUOpaqueBPlusTreeNode *aChildNode = [self nodeAt:aNodeIndex];
     
     if (![aChildNode isEqual:aNode])
@@ -394,22 +394,22 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
 }
 
 
-- (void)fixVirtualNodes
-{
-    [[self spaces] lock];
-    
-	NUUInt32 i = 0;
-	for (; i < [self valueCount]; i++)
-	{
-		NUUInt64 aNodePageLocation = [self nodeLocationAt:i];
-		if ([[self spaces] nodePageLocationIsVirtual:aNodePageLocation])
-		{
-			NUUInt64 aRealNodePageLocation = [[self spaces] nodePageLocationForVirtualNodePageLocation:aNodePageLocation];
-			[self replaceNodeAt:i with:aRealNodePageLocation];
-		}
-	}
-    
-    [[self spaces] unlock];
-}
+//- (void)fixVirtualNodes
+//{
+//    [[self spaces] lock];
+//    
+//    NUUInt32 i = 0;
+//    for (; i < [self valueCount]; i++)
+//    {
+//        NUUInt64 aNodePageLocation = [self nodeLocationAt:i];
+//        if ([[self spaces] nodePageLocationIsVirtual:aNodePageLocation])
+//        {
+//            NUUInt64 aRealNodePageLocation = [[self spaces] nodePageLocationForVirtualNodePageLocation:aNodePageLocation];
+//            [self replaceNodeAt:i with:aRealNodePageLocation];
+//        }
+//    }
+//    
+//    [[self spaces] unlock];
+//}
 
 @end

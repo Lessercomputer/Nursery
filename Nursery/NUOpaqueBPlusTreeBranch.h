@@ -55,6 +55,6 @@ extern NSString *NUBPlusTreeNodeIsNotChildNodeException;
 
 @interface NUOpaqueBPlusTreeBranch (ManagingPage)
 
-- (void)fixVirtualNodes;
+//- (void)fixVirtualNodes;
 
 @end

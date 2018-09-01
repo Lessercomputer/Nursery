@@ -214,10 +214,9 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
         
         if (aNode)
         {
-//            NURegion aNodeRegion = NUMakeRegion(aNodeLocation, aNodeSize);
+            NURegion aNodeRegion = NUMakeRegion(aNodeLocation, aNodeSize);
             
-//            [[[self nursery] spaces] releaseSpace:aNodeRegion];
-            [[[self nursery] spaces] releaseNodePageAt:aNodeLocation];
+            [[[self nursery] spaces] releaseSpace:aNodeRegion];
             NUUInt64 aNewNodeLocation = [[[self nursery] spaces] allocateNodePageLocation];
 
             if (aNodeLocation != aNewNodeLocation)

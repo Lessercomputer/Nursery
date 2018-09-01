@@ -704,11 +704,17 @@ NSString *NUNodeKeyCountOrValueCountIsInvalidException = @"NUNodeKeyCountOrValue
 #endif
     [[self spaces] lock];
     
-    [[self parentNode] changeNodePageWith:aPageLocation of:self];
+    NUOpaqueBPlusTreeNode *aParentNode = [self parentNode];
+    if (![self isRoot] && !aParentNode)
+    {
+        [self parentNode];
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
+    }
+    [aParentNode changeNodePageWith:aPageLocation of:self];
     [self retain];
 	[[self tree] removeNodeAt:pageLocation];
-    if ([[self spaces] nodePageLocationIsVirtual:pageLocation])
-        [[self spaces] setNodePageLocation:aPageLocation forVirtualNodePageLocation:pageLocation];
+//    if ([[self spaces] nodePageLocationIsVirtual:pageLocation])
+//        [[self spaces] setNodePageLocation:aPageLocation forVirtualNodePageLocation:pageLocation];
 	[self setPageLocation:aPageLocation];
 	[[self tree] addNode:self];
     [self release];
