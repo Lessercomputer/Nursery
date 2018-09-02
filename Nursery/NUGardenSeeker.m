@@ -99,7 +99,8 @@
 - (void)pushRootBell:(NUBell *)aBell
 {
     [[self garden] lock];
-    
+    if ([[self garden] isForMainBranch])
+        [(NUMainBranchNursery *)[[self garden] nursery] lock];
     [self lock];
     
     [[self bells] removeAll];
@@ -117,7 +118,8 @@
     phase = NUGardenSeekerSeekPhase;
     
     [self unlock];
-    
+    if ([[self garden] isForMainBranch])
+        [(NUMainBranchNursery *)[[self garden] nursery] unlock];
     [[self garden] unlock];
 }
 
@@ -237,7 +239,7 @@
         {
             NUUInt64 aGradeForSeekerOfBell = [aBell gradeForGardenSeeker];
             
-            if (aGradeForSeekerOfBell && aGradeForSeekerOfBell < [self grade])
+            if (aGradeForSeekerOfBell < [self grade])
                 [[self garden] invalidateBell:aBell];
             else
                 [aBells addObject:aBell];

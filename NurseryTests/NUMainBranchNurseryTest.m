@@ -876,6 +876,7 @@ static NSString *NUNurseryTestFilePath = nil;
         XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded, @"");
         
         [NSThread sleepForTimeInterval:5];
+        XCTAssertNil([aGarden bellForObject:anObject]);
     }
     
     XCTAssertEqual([anObject retainCount], anExpectedRetainCount);
