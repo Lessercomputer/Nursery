@@ -20,10 +20,4 @@
 	return NULocationTreeBranchNodeOOP;
 }
 
-//- (void)releaseNodePageAndCache
-//{
-//    [[tree spaces] removeBranchNeedsVirtualPageCheck:self];
-//    [super releaseNodePageAndCache];
-//}
-
 @end

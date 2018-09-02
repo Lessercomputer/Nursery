@@ -134,13 +134,8 @@
 
 - (void)setRetainedGrades:(NSMutableIndexSet *)aGrades;
 
-//- (void)invalidateBellsWithNotReferencedObject;
-//- (void)invalidateObjectIfNotReferencedForBell:(NUBell *)aBell;
-//- (void)invalidateNotReferencedBells;
-//- (NSUInteger)basicRetainCountOfBellInGarden:(NUBell *)aBell;
 - (void)invalidateBell:(NUBell *)aBell;
 
 - (void)collectGradeLessThan:(NUUInt64)aGrade;
-//- (void)collectBellsWithGradeLessThan:(NUUInt64)aGrade;
 
 @end

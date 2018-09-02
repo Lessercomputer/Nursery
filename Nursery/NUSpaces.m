@@ -53,9 +53,6 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
         lengthTree = [[NULengthTree alloc] initWithRootLocation:0 on:self];
         locationTree = [[NULocationTree alloc] initWithRootLocation:0 on:self];
         pagesToBeReleased = [[NSMutableSet set] retain];
-//        branchesNeedVirtualPageCheck = [NSMutableSet new];
-//        virtualToRealNodePageDictionary = [NSMutableDictionary new];
-//        realToVirtualNodePageDictionary = [NSMutableDictionary new];
     }
     
 	return self;
@@ -68,8 +65,6 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 	[self setNursery:nil];
 	[self setPages:nil];
 	[pagesToBeReleased release];
-//    [branchesNeedVirtualPageCheck release];
-//    [virtualToRealNodePageDictionary release];
     [nodeOOPToTreeDictionary release];
     [lock release];
 
@@ -524,25 +519,6 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 	return pagesToBeReleased;
 }
 
-//- (void)addBranchNeedsVirtualPageCheck:(NUOpaqueBPlusTreeBranch *)aBranch
-//{
-//    [self lock];
-//
-//    if (aBranch)
-//        [branchesNeedVirtualPageCheck addObject:aBranch];
-//
-//    [self unlock];
-//}
-//
-//- (void)removeBranchNeedsVirtualPageCheck:(NUOpaqueBPlusTreeBranch *)aBranch
-//{
-//    [self lock];
-//
-//    [branchesNeedVirtualPageCheck removeObject:aBranch];
-//
-//    [self unlock];
-//}
-
 - (void)fixNodePages
 {
     [self lock];
@@ -598,51 +574,11 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 		if (!aNode) aNode = [lengthTree nodeFor:aVirtualPageLocation];
 		if (aNode) [aNode changeNodePageWith:[self allocateNodePageLocationWithPreventNodeRelease]];
 	}
-	
-//    NSEnumerator *anEnumerator = [branchesNeedVirtualPageCheck objectEnumerator];
-//    NUOpaqueBPlusTreeBranch *aBranch = nil;
-//    while (aBranch = [anEnumerator nextObject])
-//        [aBranch fixVirtualNodes];
-	
+
 	[self initNextVirtualPageLocation];
-//    [branchesNeedVirtualPageCheck removeAllObjects];
-//    [virtualToRealNodePageDictionary removeAllObjects];
-//    [realToVirtualNodePageDictionary removeAllObjects];
-    
+
     [self unlock];
 }
-
-//- (void)setNodePageLocation:(NUUInt64)aPageLocation forVirtualNodePageLocation:(NUUInt64)aVirtualNodePageLocation
-//{
-//    [self lock];
-//
-//    NSNumber *aPageLocationNumber = @(aPageLocation);
-//    NSNumber *aVirtualNodePageLocationNumber = @(aVirtualNodePageLocation);
-//
-//    if ([virtualToRealNodePageDictionary objectForKey:aVirtualNodePageLocationNumber])
-//        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
-//
-//    [virtualToRealNodePageDictionary setObject:aPageLocationNumber forKey:aVirtualNodePageLocationNumber];
-//
-//    if ([realToVirtualNodePageDictionary objectForKey:aPageLocationNumber])
-//        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:nil userInfo:nil];
-//
-//    [realToVirtualNodePageDictionary setObject:aVirtualNodePageLocationNumber forKey:aPageLocationNumber];
-//
-//    [self unlock];
-//}
-
-//- (NUUInt64)nodePageLocationForVirtualNodePageLocation:(NUUInt64)aVirtualNodePageLocation
-//{
-//    [self lock];
-//    
-//    NUUInt64 aNodePageLocation =  [[virtualToRealNodePageDictionary
-//                objectForKey:[NSNumber numberWithUnsignedLongLong:aVirtualNodePageLocation]] unsignedLongLongValue];
-//    
-//    [self unlock];
-//    
-//    return aNodePageLocation;
-//}
 
 - (NUOpaqueBPlusTreeNode *)nodeFor:(NUUInt64)aNodeLocation
 {

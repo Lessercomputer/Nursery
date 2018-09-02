@@ -393,23 +393,4 @@ NSString *NUBPlusTreeNodeIsNotChildNodeException = @"NUBPlusTreeNodeIsNotChildNo
     [self replaceNodeAt:aNodeIndex with:aPageLocation];
 }
 
-
-//- (void)fixVirtualNodes
-//{
-//    [[self spaces] lock];
-//    
-//    NUUInt32 i = 0;
-//    for (; i < [self valueCount]; i++)
-//    {
-//        NUUInt64 aNodePageLocation = [self nodeLocationAt:i];
-//        if ([[self spaces] nodePageLocationIsVirtual:aNodePageLocation])
-//        {
-//            NUUInt64 aRealNodePageLocation = [[self spaces] nodePageLocationForVirtualNodePageLocation:aNodePageLocation];
-//            [self replaceNodeAt:i with:aRealNodePageLocation];
-//        }
-//    }
-//    
-//    [[self spaces] unlock];
-//}
-
 @end

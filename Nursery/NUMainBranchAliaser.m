@@ -223,20 +223,3 @@
 }
 
 @end
-
-@implementation NUMainBranchAliaser (QueryingObjectLocation)
-
-- (NUUInt64)locationForObject:(id)anObject
-{
-	NUBell *anOOP = [[self garden] bellForObject:anObject];
-	if (anOOP) return [self locationForOOP:anOOP];
-	return NUNotFound64;
-}
-
-- (NUUInt64)locationForOOP:(NUBell *)aBell
-{
-	return [[self objectTable] objectLocationFor:[aBell ball]];
-}
-
-@end
-

@@ -399,13 +399,6 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 
 - (void)seekerDidFinishCollection:(NUNurserySeeker *)sender
 {
-//    [NSThread detachNewThreadWithBlock:
-//    ^{
-//        if ([[self seeker] grade] < [self gradeForSeeker])
-//            [[self seeker] start];
-//
-//        [[self parader] start];
-//    }];
 }
 
 - (void)paraderDidFinishParade:(NUNurseryParader *)sender

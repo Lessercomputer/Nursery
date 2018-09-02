@@ -47,11 +47,3 @@
 - (NUUInt64)objectLocationForOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade gradeInto:(NUUInt64 *)aFoundGrade;
 
 @end
-
-@interface NUMainBranchAliaser (QueryingObjectLocation)
-
-- (NUUInt64)locationForObject:(id)anObject;
-- (NUUInt64)locationForOOP:(NUBell *)aBell;
-
-@end
-

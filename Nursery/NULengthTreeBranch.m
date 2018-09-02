@@ -25,10 +25,4 @@
 	return [[[NURegionArray alloc] initWithCapacity:[self keyCapacity] comparator:[tree comparator]] autorelease];
 }
 
-//- (void)releaseNodePageAndCache
-//{
-//    [[tree spaces] removeBranchNeedsVirtualPageCheck:self];
-//    [super releaseNodePageAndCache];
-//}
-
 @end
