@@ -233,7 +233,6 @@
         [[self garden] lock];
         
         NUU64ODictionary *aCopyOfBells = [[self garden] copyBells];
-        NSMutableArray *aBells = [NSMutableArray array];
         
         [aCopyOfBells enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NUBell *aBell, BOOL *stop)
         {
@@ -241,8 +240,6 @@
             
             if (aGradeForSeekerOfBell < [self grade])
                 [[self garden] invalidateBell:aBell];
-            else
-                [aBells addObject:aBell];
         }];
         
         [aCopyOfBells release];

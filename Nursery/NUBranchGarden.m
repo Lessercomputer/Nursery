@@ -112,27 +112,32 @@
     
     @try
     {
-        NSData *aFixedOOPs = nil;
-        NUUInt64 aLatestGrade = NUNilGrade;
-        
-        if (![self gradeIsEqualToNurseryGrade])
+        @autoreleasepool
         {
-            aFarmOutStatus = NUFarmOutStatusNurseryGradeUnmatched;
-        }
-        else
-        {
-            if (![self contains:[self nurseryRoot]])
-                [[self aliaser] setRoots:[NSMutableArray arrayWithObject:[self nurseryRoot]]];
+            [self lock];
             
-            [[self aliaser] encodeObjects];
-            NSData *anEncodedObjectsData = [[self branchAliaser] encodedPupilNotesData];
-            aFarmOutStatus = [[self netClient] farmOutPupils:anEncodedObjectsData rootOOP:[[[self nurseryRoot] bell] OOP] gardenWithID:[self ID] fixedOOPs:&aFixedOOPs latestGrade:&aLatestGrade];
-                        
-            if (aFarmOutStatus == NUFarmOutStatusSucceeded)
+            NSData *aFixedOOPs = nil;
+            NUUInt64 aLatestGrade = NUNilGrade;
+            
+            if (![self gradeIsEqualToNurseryGrade])
             {
-                [self replaceProbationaryOOPsWithFixedOOPs:aFixedOOPs inPupils:[[self branchAliaser] reducedEncodedPupilsDictionary] grade:aLatestGrade];
-                [[self branchAliaser] removeAllEncodedPupils];
-                [self setGrade:aLatestGrade];
+                aFarmOutStatus = NUFarmOutStatusNurseryGradeUnmatched;
+            }
+            else
+            {
+                if (![self contains:[self nurseryRoot]])
+                    [[self aliaser] setRoots:[NSMutableArray arrayWithObject:[self nurseryRoot]]];
+                
+                [[self aliaser] encodeObjects];
+                NSData *anEncodedObjectsData = [[self branchAliaser] encodedPupilNotesData];
+                aFarmOutStatus = [[self netClient] farmOutPupils:anEncodedObjectsData rootOOP:[[[self nurseryRoot] bell] OOP] gardenWithID:[self ID] fixedOOPs:&aFixedOOPs latestGrade:&aLatestGrade];
+                
+                if (aFarmOutStatus == NUFarmOutStatusSucceeded)
+                {
+                    [self replaceProbationaryOOPsWithFixedOOPs:aFixedOOPs inPupils:[[self branchAliaser] reducedEncodedPupilsDictionary] grade:aLatestGrade];
+                    [[self branchAliaser] removeAllEncodedPupils];
+                    [self setGrade:aLatestGrade];
+                }
             }
         }
     }
@@ -143,6 +148,8 @@
             [[self gardenSeeker] endPreventationOfReleaseOfPastGrades];
             [[self gardenSeeker] pushRootBell:[[self nurseryRoot] bell]];
         }
+        
+        [self unlock];
     }
     
     return aFarmOutStatus;
