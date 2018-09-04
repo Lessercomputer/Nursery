@@ -182,7 +182,7 @@ NSString *NUParaderInvalidNodeLocationException = @"NUParaderInvalidNodeLocation
     NURegion aNewObjectRegion = NUMakeRegion(NUNotFound64, anObjectSize);
 
     [[[self nursery] spaces] releaseSpace:anObjectRegion];
-    aNewObjectRegion.location = [[[self nursery] spaces] allocateSpace:anObjectSize aligned:NO preventsNodeRelease:NO];
+    aNewObjectRegion.location = [[[self nursery] spaces] allocateSpace:anObjectSize aligned:NO preventsNodeReleaseAsMuchAsPossible:NO];
 
     if (aNewObjectRegion.location == NUNotFound64 || !aNewObjectRegion.location)
         @throw [NSException exceptionWithName:NSGenericException reason:nil userInfo:nil];
