@@ -71,7 +71,7 @@ const int NUThreadedChildminderTerminateCondition   = 2;
 
 - (double)timeRatio
 {
-    return 1;//0.05;
+    return 0.25;
 }
 
 - (void)start

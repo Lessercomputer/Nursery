@@ -106,7 +106,7 @@
 - (void)shuffleLeftNode
 {
     NUBPlusTreeLeaf *aLeftNode = (NUBPlusTreeLeaf *)[self leftNode];
-    NSRange aRange = NSMakeRange((NSUInteger)[[self tree] minKeyCount], (NSUInteger)([aLeftNode keyCount] - [aLeftNode minKeyCount]));
+    NSRange aRange = NSMakeRange((NSUInteger)[aLeftNode minKeyCount], (NSUInteger)([aLeftNode keyCount] - [aLeftNode minKeyCount]));
     NSArray *aKeys = [[aLeftNode keys] subarrayWithRange:aRange];
     NSArray *aValues = [[aLeftNode values] subarrayWithRange:aRange];
     NSIndexSet *anIndexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, aRange.length)];

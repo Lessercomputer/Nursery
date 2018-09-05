@@ -91,6 +91,8 @@
     {
         NUBPlusTreeBranch *anOldRoot = (NUBPlusTreeBranch *)[self root];
         NUBPlusTreeNode *aNewRoot = [anOldRoot valueAt:0];
+        [aNewRoot setLeftNode:nil];
+        [aNewRoot setRightNode:nil];
         [self setRoot:aNewRoot];
         [anOldRoot removeNodeAt:0];
         depth--;
@@ -163,7 +165,7 @@
 
 - (NUUInt64)minKeyCount
 {
-    return ceil([self keyCapacity] / 2.0);
+    return floor([self keyCapacity] / 2.0);
 }
 
 - (id <NUComparator>)comparator
