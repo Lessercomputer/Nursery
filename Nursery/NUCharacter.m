@@ -16,6 +16,7 @@
 #import "NUCharacter+Project.h"
 #import "NUBell.h"
 #import "NUIvar.h"
+#import "NUIvar+Project.h"
 #import "NUGarden.h"
 #import "NUGarden+Project.h"
 #import "NUAliaser.h"
@@ -259,6 +260,17 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
 	return [[anIvars copy] autorelease];
 }
 
+- (NSArray *)copyIvars
+{
+    [lock lock];
+    
+    NSArray *aCopyOfIvars = [[[self copyIvars] copy] autorelease];
+    
+    [lock unlock];
+    
+    return aCopyOfIvars;
+}
+
 - (NSArray *)copyAllIvars
 {
     NSMutableArray *aCopiedAllIvars = [NSMutableArray array];
@@ -388,7 +400,7 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
     return anIvarOffset;
 }
 
-- (NSArray *)ancestors
+- (NSArray *)copyAncestors
 {
 	NSMutableArray *aCharacters = [NSMutableArray array];
 	NUCharacter *aCharacter = nil;
@@ -397,6 +409,17 @@ NSString *NUCharacterInvalidObjectFormatException = @"NUCharacterInvalidObjectFo
 		[aCharacters addObject:aCharacter];
 
 	return [[aCharacters reverseObjectEnumerator] allObjects];
+}
+
+- (NSSet *)copySubCharacters
+{
+    [lock lock];
+    
+    NSSet *aCopyOfSubCharacters = [[[self subCharacters] copy] autorelease];
+    
+    [lock unlock];
+    
+    return aCopyOfSubCharacters;
 }
 
 - (NSMutableSet *)subCharacters

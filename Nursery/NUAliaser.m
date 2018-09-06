@@ -23,6 +23,7 @@
 #import "NUCoding.h"
 #import "NUCoder.h"
 #import "NUCharacter.h"
+#import "NUCharacter+Project.h"
 #import "NUSpaces.h"
 #import "NUNurserySeeker.h"
 #import "NURegion.h"

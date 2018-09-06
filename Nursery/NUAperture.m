@@ -10,6 +10,7 @@
 #import "NUMainBranchNursery.h"
 #import "NUPages.h"
 #import "NUCharacter.h"
+#import "NUCharacter+Project.h"
 #import "NUObjectTable.h"
 #import "NUIvar.h"
 #import "NUBellBall.h"

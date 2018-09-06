@@ -26,6 +26,7 @@
 #import "NUReversedObjectTable.h"
 #import "NUSpaces.h"
 #import "NUCharacter.h"
+#import "NUCharacter+Project.h"
 #import "NUBell.h"
 #import "NUBell+Project.h"
 #import "NUBellBall.h"

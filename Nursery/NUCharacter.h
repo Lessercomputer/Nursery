@@ -13,7 +13,7 @@
 #import <Nursery/NUCoding.h>
 #import <Nursery/NUMovingUp.h>
 
-@class NSString, NSMutableArray, NSMutableSet, NSRecursiveLock;
+@class NSString, NSMutableArray, NSSet, NSMutableSet, NSRecursiveLock;
 @class NUBell, NUIvar, NUCharacter, NUGarden, NUCoder;
 
 extern const NUObjectFormat NUFixedIvars;
@@ -69,10 +69,6 @@ extern NSString *NUCharacterInvalidObjectFormatException;
     NSRecursiveLock *lock;
 }
 
-+ (id)characterWithName:(NSString *)aName super:(NUCharacter *)aSuper;
-
-- (id)initWithName:(NSString *)aName super:(NUCharacter *)aSuper;
-
 - (NUCharacter *)superCharacter;
 
 - (NUObjectFormat)format;
@@ -82,8 +78,13 @@ extern NSString *NUCharacterInvalidObjectFormatException;
 - (void)setVersion:(NUUInt32)aVersion;
 
 - (NSString *)name;
+- (NSString *)nameWithVersion;
+- (NSString *)inheritanceNameWithVersion;
 
-- (NSMutableArray *)ivars;
+- (NSArray *)copyIvars;
+- (NSArray *)copyAllIvars;
+- (NSArray *)copyAncestors;
+- (NSSet *)copySubCharacters;
 
 - (void)addOOPIvarWithName:(NSString *)aName;
 - (void)addInt8IvarWithName:(NSString *)aName;
@@ -104,40 +105,6 @@ extern NSString *NUCharacterInvalidObjectFormatException;
 
 - (void)addIvarWithName:(NSString *)aName type:(NUIvarType)aType;
 - (void)addIvar:(NUIvar *)anIvar;
-
-- (NSArray *)allOOPIvars;
-- (NSUInteger)allOOPIvarsCount;
-- (NUIvar *)ivarInAllOOPIvarsAt:(NSUInteger)anIndex;
-- (NSArray *)getAllOOPIvars;
-
-- (NSArray *)copyAllIvars;
-- (NSArray *)allIvars;
-- (NSDictionary *)allIvarDictionary;
-- (NSArray *)getAllIvars;
-- (NSDictionary *)allIvarDictionaryFrom:(NSArray *)anIvars;
-
-- (NUIvar *)ivarInAllIvarsAt:(NSUInteger)anIndex;
-
-- (NUUInt64)ivarOffsetForName:(NSString *)aName;
-
-- (NSArray *)ancestors;
-
-- (NSMutableSet *)subCharacters;
-
-- (void)addSubCharacter:(NUCharacter *)aCharacter;
-- (void)removeSubCharacter:(NUCharacter *)aCharacter;
-
-- (void)addToSuperCharacter;
-- (void)removeFromSuperCharacter;
-
-- (NUUInt64)basicSize;
-- (NUUInt64)computeBasicSize;
-- (void)computeIvarOffset;
-- (NUUInt64)indexedIvarOffset;
-
-- (NSString *)nameWithVersion;
-- (NSString *)inheritanceNameWithVersion;
-- (NSString *)getInheritanceNameWithVersion;
 
 - (Class)targetClass;
 - (void)setTargetClass:(Class)aClass;
@@ -165,8 +132,6 @@ extern NSString *NUCharacterInvalidObjectFormatException;
 - (BOOL)isIndexedBytes;
 
 - (BOOL)containsIvarWithName:(NSString *)aName;
-
-- (void)moveUp;
 
 @end
 

@@ -12,6 +12,7 @@
 #import "NUNurseryNetResponder.h"
 #import "NUPupilNoteCache.h"
 #import "NUCharacter.h"
+#import "NUCharacter+Project.h"
 #import "NUPupilNote.h"
 #import "NUIvar.h"
 

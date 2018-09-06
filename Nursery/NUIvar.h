@@ -64,7 +64,6 @@ extern NSString *NUIvarInvalidTypeException;
 - (NUUInt64)sizeInBytes;
 
 - (NUUInt64)offset;
-- (void)setOffset:(NUUInt64)anOffset;
 
 - (BOOL)isEqualToIvar:(NUIvar *)anIvar;
 

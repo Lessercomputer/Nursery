@@ -474,6 +474,8 @@
 		B81B14A520CF71520034AC0E /* NUDefaultCharacterTargetClassResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = B81B14A320CF71520034AC0E /* NUDefaultCharacterTargetClassResolver.m */; };
 		B837365920D5DE96006AE915 /* NUUInt64Queue.h in Headers */ = {isa = PBXBuildFile; fileRef = B837365720D5DE96006AE915 /* NUUInt64Queue.h */; };
 		B837365A20D5DE96006AE915 /* NUUInt64Queue.m in Sources */ = {isa = PBXBuildFile; fileRef = B837365820D5DE96006AE915 /* NUUInt64Queue.m */; };
+		B83E43682141272E000A5DD0 /* NUIvar+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B83E43672141272E000A5DD0 /* NUIvar+Project.h */; };
+		B83E43692141272E000A5DD0 /* NUIvar+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B83E43672141272E000A5DD0 /* NUIvar+Project.h */; };
 		B83F010320C10D990010048B /* NULinkedList.h in Headers */ = {isa = PBXBuildFile; fileRef = B83F010120C10D990010048B /* NULinkedList.h */; };
 		B83F010420C10D990010048B /* NULinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = B83F010220C10D990010048B /* NULinkedList.m */; };
 		B83F010720C10DC60010048B /* NULinkedListElement.h in Headers */ = {isa = PBXBuildFile; fileRef = B83F010520C10DC60010048B /* NULinkedListElement.h */; };
@@ -770,6 +772,7 @@
 		B81B14A320CF71520034AC0E /* NUDefaultCharacterTargetClassResolver.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUDefaultCharacterTargetClassResolver.m; sourceTree = "<group>"; };
 		B837365720D5DE96006AE915 /* NUUInt64Queue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUUInt64Queue.h; sourceTree = "<group>"; };
 		B837365820D5DE96006AE915 /* NUUInt64Queue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUUInt64Queue.m; sourceTree = "<group>"; };
+		B83E43672141272E000A5DD0 /* NUIvar+Project.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NUIvar+Project.h"; sourceTree = "<group>"; };
 		B83F010120C10D990010048B /* NULinkedList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NULinkedList.h; sourceTree = "<group>"; };
 		B83F010220C10D990010048B /* NULinkedList.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NULinkedList.m; sourceTree = "<group>"; };
 		B83F010520C10DC60010048B /* NULinkedListElement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NULinkedListElement.h; sourceTree = "<group>"; };
@@ -1041,11 +1044,12 @@
 			isa = PBXGroup;
 			children = (
 				619B07C01913EEBF00A4BAA2 /* NUCharacter.h */,
-				619B07C11913EEBF00A4BAA2 /* NUCharacter.m */,
 				B86D152A209589E100D95C4C /* NUCharacter+Project.h */,
+				619B07C11913EEBF00A4BAA2 /* NUCharacter.m */,
 				B81B14A220CF71520034AC0E /* NUDefaultCharacterTargetClassResolver.h */,
 				B81B14A320CF71520034AC0E /* NUDefaultCharacterTargetClassResolver.m */,
 				619B08111913EEBF00A4BAA2 /* NUIvar.h */,
+				B83E43672141272E000A5DD0 /* NUIvar+Project.h */,
 				619B08121913EEBF00A4BAA2 /* NUIvar.m */,
 				619B08291913EEBF00A4BAA2 /* NUNSObject.h */,
 				619B07D41913EEBF00A4BAA2 /* NUNSObject.m */,
@@ -1320,6 +1324,7 @@
 				61DC96341FA104D900AABC9E /* Nursery.h in Headers */,
 				619B08E71913EEC000A4BAA2 /* NUMainBranchGardenSeeker.h in Headers */,
 				619B08ED1913EEC000A4BAA2 /* NUMutableDictionary.h in Headers */,
+				B83E43682141272E000A5DD0 /* NUIvar+Project.h in Headers */,
 				619B08F71913EEC000A4BAA2 /* NUNSSet.h in Headers */,
 				619B09371913EEC000A4BAA2 /* NULengthTreeLeaf.h in Headers */,
 				619B08F21913EEC000A4BAA2 /* NUNSDate.h in Headers */,
@@ -1478,6 +1483,7 @@
 				B816627720ECC2DF00B9075E /* NUDefaultCharacterTargetClassResolver.h in Headers */,
 				B816627920ECC2DF00B9075E /* NUNSObject.h in Headers */,
 				B816627A20ECC2DF00B9075E /* NUNSString.h in Headers */,
+				B83E43692141272E000A5DD0 /* NUIvar+Project.h in Headers */,
 				B816627B20ECC2DF00B9075E /* NUNSNumber.h in Headers */,
 				B816627C20ECC2DF00B9075E /* NUNSDate.h in Headers */,
 				B816627D20ECC2DF00B9075E /* NUNSURL.h in Headers */,

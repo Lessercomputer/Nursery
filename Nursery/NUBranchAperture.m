@@ -14,6 +14,7 @@
 #import "NUPupilNote.h"
 #import "NUObjectTable.h"
 #import "NUCharacter.h"
+#import "NUCharacter+Project.h"
 #import "NUIvar.h"
 
 @implementation NUBranchAperture

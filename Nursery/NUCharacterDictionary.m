@@ -9,6 +9,7 @@
 #import "NUCharacterDictionary.h"
 #import "NUMutableDictionary.h"
 #import "NUCharacter.h"
+#import "NUCharacter+Project.h"
 #import "NUIvar.h"
 #import "NUAliaser.h"
 #import "NUBell.h"

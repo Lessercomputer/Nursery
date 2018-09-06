@@ -11,6 +11,7 @@
 #import "NUCodingContext.h"
 #import "NURegion.h"
 #import "NUCharacter.h"
+#import "NUCharacter+Project.h"
 #import "NUIvar.h"
 
 @implementation NUCodingContext

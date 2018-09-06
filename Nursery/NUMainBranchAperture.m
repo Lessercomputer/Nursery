@@ -13,6 +13,7 @@
 #import "NUMainBranchNursery+Project.h"
 #import "NUPages.h"
 #import "NUCharacter.h"
+#import "NUCharacter+Project.h"
 #import "NUObjectTable.h"
 #import "NUReversedObjectTable.h"
 #import "NUIvar.h"
