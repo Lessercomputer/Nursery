@@ -103,9 +103,6 @@
         [(NUMainBranchNursery *)[[self garden] nursery] lock];
     [self lock];
     
-    [[self bells] removeAll];
-    [self pushBell:aBell];
-    
     NUUInt64 aGrade;
     
     if ([[self gradesToPreventRelease] count])
@@ -113,9 +110,15 @@
     else
         aGrade = [[self garden] grade];
     
-    [self setGrade:aGrade];
-    
-    phase = NUGardenSeekerSeekPhase;
+    if (aGrade > [self grade])
+    {
+        [[self bells] removeAll];
+        [self pushBell:aBell];
+
+        [self setGrade:aGrade];
+        
+        phase = NUGardenSeekerSeekPhase;
+    }
     
     [self unlock];
     if ([[self garden] isForMainBranch])
