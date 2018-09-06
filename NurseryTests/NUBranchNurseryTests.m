@@ -305,6 +305,7 @@ static NSString *NUNurseryTestFilePath2;
         
         NUBell *aRootBellBeforeMoveUp = [aRoot bell];
         [aGardenA moveUpWithPreventingReleaseOfCurrentGrade];
+        [NSThread sleepForTimeInterval:5];
         NUBell *aRootBellAfterMoveUp = [aRoot bell];
         XCTAssertEqualObjects([aGardenA root], nil);
         XCTAssertTrue(aRootBellAfterMoveUp == aRootBellBeforeMoveUp);

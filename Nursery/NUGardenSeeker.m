@@ -109,7 +109,7 @@
     NUUInt64 aGrade;
     
     if ([[self gradesToPreventRelease] count])
-        aGrade = [[self gradesToPreventRelease] firstIndex];
+        aGrade = [[self garden] retainedGradeLessThan:[[self gradesToPreventRelease] firstIndex]];
     else
         aGrade = [[self garden] grade];
     

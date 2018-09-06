@@ -163,6 +163,19 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     return retainedGrades;
 }
 
+- (NUUInt64)retainedGradeLessThan:(NUUInt64)aGrade
+{
+    NUUInt64 aRetainedGrade;;
+    
+    [self lock];
+    
+    aRetainedGrade = [[self retainedGrades] indexLessThanIndex:aGrade];
+    
+    [self unlock];
+    
+    return aRetainedGrade == NSNotFound ? NUNilGrade : aRetainedGrade;
+}
+
 - (NUNurseryRoot *)nurseryRoot
 {
     [self lock];

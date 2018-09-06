@@ -16,6 +16,8 @@
 
 - (NSMutableIndexSet *)retainedGrades;
 
+- (NUUInt64)retainedGradeLessThan:(NUUInt64)aGrade;
+
 - (NUNurseryRoot *)nurseryRoot;
 - (void)setNurseryRoot:(NUNurseryRoot *)aRoot;
 
