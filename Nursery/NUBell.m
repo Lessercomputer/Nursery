@@ -191,11 +191,6 @@
     [[self garden] invalidateBell:self];
 }
 
-//- (void)invalidateObjectIfNotReferenced
-//{
-//    [[self garden] invalidateObjectIfNotReferencedForBell:self];
-//}
-
 - (void)setIsLoaded:(BOOL)aLoadedFlag
 {
     isLoaded = aLoadedFlag;

@@ -426,12 +426,16 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     [self lock];
     
 	if ([aBell hasObject]) anObject = [aBell object];
-	else if ([aBell OOP] != NUNilOOP) anObject = [self loadObjectForBell:aBell];
+	else if ([aBell OOP] != NUNilOOP)
+    {
+        if ([aBell garden])
+            anObject = [self loadObjectForBell:aBell];
+    }
 	    
     [self unlock];
     
     if ([aBell OOP] != NUNilOOP && !anObject)
-        [[NSException exceptionWithName:NUObjectLoadingException reason:NUObjectLoadingException userInfo:nil] raise];
+        [[NSException exceptionWithName:NUObjectLoadingException reason:nil userInfo:nil] raise];
     
     return anObject;
 }
@@ -440,13 +444,18 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 {
     id anObject;
     
-    [self lock];
-    
-	NUBell *aBell = [self bellForOOP:anOOP];
-	if (!aBell) aBell = [self allocateBellForBellBall:NUMakeBellBall(anOOP, NUNilGrade)];
-	anObject = [self objectForBell:aBell];
-    
-    [self unlock];
+    @try
+    {
+        [self lock];
+        
+        NUBell *aBell = [self bellForOOP:anOOP];
+        if (!aBell) aBell = [self allocateBellForBellBall:NUMakeBellBall(anOOP, NUNilGrade)];
+        anObject = [self objectForBell:aBell];
+    }
+    @finally
+    {
+        [self unlock];
+    }
     
     return anObject;
 }
@@ -547,6 +556,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
             [aBell setObject:nil];
         }
 
+        [[self changedObjects] removeObjectForKey:[aBell OOP]];
         [aBell setGarden:nil];
         [[self bells] removeObjectForKey:[aBell OOP]];
     }
