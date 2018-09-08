@@ -546,7 +546,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
         if ([aBell hasObject])
         {
             if ([[aBell object] conformsToProtocol:@protocol(NUCoding)])
-                [[aBell object] setBell:nil];
+                [[aBell object] setBell:[NUBell invalidatedBell]];
             else
             {
                 [[self keyObject] setObject:[aBell object]];

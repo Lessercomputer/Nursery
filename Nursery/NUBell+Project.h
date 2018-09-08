@@ -10,6 +10,8 @@
 
 @interface NUBell (Private)
 
++ (NUBell *)invalidatedBell;
+
 - (NUUInt64)gradeForGardenSeeker;
 
 - (void)setBall:(NUBellBall)aBall;
@@ -23,8 +25,11 @@
 - (id)loadObject;
 
 - (void)invalidate;
-- (void)invalidateObjectIfNotReferenced;
 
 - (void)setIsLoaded:(BOOL)aLoadedFlag;
+
+@end
+
+@interface NUInvalidatedBell : NUBell
 
 @end

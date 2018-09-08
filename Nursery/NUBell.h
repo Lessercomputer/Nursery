@@ -46,6 +46,8 @@
 
 - (BOOL)gradeIsUnmatched;
 
+- (BOOL)isInvalidated;
+
 @end
 
 @interface NSObject (NUBell)

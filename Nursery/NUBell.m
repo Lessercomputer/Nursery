@@ -14,9 +14,24 @@
 #import "NUGarden+Project.h"
 #import "NUCoding.h"
 #import "NUBellBall.h"
+#import "NUObjectTable.h"
 
+static NUInvalidatedBell *invalidatedBell = nil;
 
 @implementation NUBell
+
++ (void)initialize
+{
+    if (!invalidatedBell)
+    {
+        invalidatedBell = [[NUInvalidatedBell alloc] initWithBall:NUMakeBellBall(NUNilOOP, NUNilGrade) isLoaded:NO garden:nil];
+    }
+}
+
++ (NUBell *)invalidatedBell
+{
+    return invalidatedBell;
+}
 
 + (id)bellWithBall:(NUBellBall)aBall
 {
@@ -196,10 +211,33 @@
     isLoaded = aLoadedFlag;
 }
 
+- (BOOL)isInvalidated
+{
+    return NO;
+}
+
 - (NSString *)description
 {
 	return [NSString stringWithFormat:
 				@"<%@:%p>rawOOP: %llu", NSStringFromClass([self class]), self, [self OOP]];
+}
+
+@end
+
+@implementation NUInvalidatedBell
+
+- (instancetype)retain
+{
+    return self;
+}
+
+- (oneway void)release
+{
+}
+
+- (BOOL)isInvalidated
+{
+    return YES;
 }
 
 @end
