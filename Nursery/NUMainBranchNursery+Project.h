@@ -64,6 +64,8 @@
 - (void)close;
 
 - (BOOL)open;
+- (BOOL)isSavingForbidden;
+- (void)setIsSavingForbidden:(BOOL)aFlag;
 - (BOOL)saveChanges;
 - (void)saveRootOOP:(NUUInt64)aRootOOP;
 - (void)saveGrade;

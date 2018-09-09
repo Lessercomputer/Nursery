@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/NSArray.h>
+#import <Foundation/NSException.h>
 
 #import "NUMainBranchGarden.h"
 #import "NUGarden+Project.h"
@@ -79,7 +80,11 @@
             if ([self isForMainBranch])
                 [(NUMainBranchNursery *)[self nursery] lock];
             
-            if (![[self nursery] open])
+            if ([self isFarmingOutForbidden])
+            {
+                @throw [NSException exceptionWithName:NUGardenFarmingOutForbiddenException reason:nil userInfo:nil];
+            }
+            else if (![[self nursery] open])
             {
                 aFarmOutStatus = NUFarmOutStatusFailed;
             }
@@ -89,31 +94,31 @@
             }
             else
             {
-                if ([self gradeIsEqualToNurseryGrade])
+                NUUInt64 aNewGrade = [[self mainBranchNursery] newGrade];
+                
+                [[self mainBranchAliaser] setGradeForSave:aNewGrade];
+                
+                if (![self contains:[self nurseryRoot]])
+                    [[self aliaser] setRoots:[NSMutableArray arrayWithObject:[self nurseryRoot]]];
+                
+                [[self aliaser] encodeObjects];
+                [self setNurseryRootOOP];
+                aFarmOutStatus = [[self mainBranchNursery] save] ? NUFarmOutStatusSucceeded : NUFarmOutStatusFailed;
+                
+                if (aFarmOutStatus == NUFarmOutStatusSucceeded)
                 {
-                    NUUInt64 aNewGrade = [[self mainBranchNursery] newGrade];
-                    
-                    [[self mainBranchAliaser] setGradeForSave:aNewGrade];
-                    
-                    if (![self contains:[self nurseryRoot]])
-                        [[self aliaser] setRoots:[NSMutableArray arrayWithObject:[self nurseryRoot]]];
-                    
-                    [[self aliaser] encodeObjects];
-                    [self setNurseryRootOOP];
-                    aFarmOutStatus = [[self mainBranchNursery] save] ? NUFarmOutStatusSucceeded : NUFarmOutStatusFailed;
-                    
-                    if (aFarmOutStatus == NUFarmOutStatusSucceeded)
-                    {
-                        [[self mainBranchNursery] retainGrade:aNewGrade byGarden:self];
-                        [self setGrade:aNewGrade];
-                    }
-                }
-                else
-                {
-                    aFarmOutStatus = NUFarmOutStatusNurseryGradeUnmatched;
+                    [[self mainBranchNursery] retainGrade:aNewGrade byGarden:self];
+                    [self setGrade:aNewGrade];
                 }
             }
         }
+    }
+    @catch (NSException *anException)
+    {
+        [self setIsFarmingOutForbidden:YES];
+        [[self gardenSeeker] stop];
+        
+        @throw anException;
     }
     @finally
     {

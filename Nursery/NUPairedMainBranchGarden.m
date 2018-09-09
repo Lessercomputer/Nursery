@@ -6,6 +6,8 @@
 //
 //
 
+#import <Foundation/NSException.h>
+
 #import "NUGarden+Project.h"
 #import "NUPairedMainBranchGarden.h"
 #import "NUGardenSeeker.h"
@@ -54,7 +56,11 @@
         [self lock];
         [[self mainBranchNursery] lock];
 
-        if (![[self nursery] open])
+        if ([self isFarmingOutForbidden])
+        {
+            @throw [NSException exceptionWithName:NUGardenFarmingOutForbiddenException reason:nil userInfo:nil];
+        }
+        else if (![[self nursery] open])
         {
             aFarmOutStatus = NUFarmOutStatusFailed;
         }
@@ -64,47 +70,46 @@
         }
         else
         {
-            if ([self gradeIsEqualToNurseryGrade])
+            NUUInt64 aNewGrade = [[self mainBranchNursery] newGrade];
+            NSArray *aPupils = nil;
+            NUUInt64 aFixedRootOOP;
+            
+            [[self pairedMainBranchAliaser] setGradeForSave:aNewGrade];
+            
+            aPupils = [[self pairedMainBranchAliaser] pupilNotesFromData:aPupilData];
+            [[self pairedMainBranchAliaser] setPupils:aPupils];
+            
+            if ([[self mainBranchNursery] rootOOP] == NUNilOOP)
+                [self moveUpTo:aNewGrade];
+            
+            [[self pairedMainBranchAliaser] fixProbationaryOOPsInPupils];
+            
+            [[self pairedMainBranchAliaser] writeEncodedObjectsToPages];
+            *aFixedOOPs = [[self pairedMainBranchAliaser] dataWithProbationaryOOPAndFixedOOP];
+            
+            aFixedRootOOP = [[self pairedMainBranchAliaser] fixedRootOOPForOOP:aRootOOP];
+            
+            if ([[self pairedMainBranchAliaser] rootOOP] != aFixedRootOOP)
+                [[self mainBranchNursery] saveRootOOP:aFixedRootOOP];
+            
+            [[self pairedMainBranchAliaser] setPupils:nil];
+            
+            aFarmOutStatus = [[self mainBranchNursery] save] ? NUFarmOutStatusSucceeded : NUFarmOutStatusFailed;
+            
+            if (aFarmOutStatus == NUFarmOutStatusSucceeded)
             {
-                NUUInt64 aNewGrade = [[self mainBranchNursery] newGrade];
-                NSArray *aPupils = nil;
-                NUUInt64 aFixedRootOOP;
-                
-                [[self pairedMainBranchAliaser] setGradeForSave:aNewGrade];
-                
-                aPupils = [[self pairedMainBranchAliaser] pupilNotesFromData:aPupilData];
-                [[self pairedMainBranchAliaser] setPupils:aPupils];
-                
-                if ([[self mainBranchNursery] rootOOP] == NUNilOOP)
-                    [self moveUpTo:aNewGrade];
-                
-                [[self pairedMainBranchAliaser] fixProbationaryOOPsInPupils];
-                
-                [[self pairedMainBranchAliaser] writeEncodedObjectsToPages];
-                *aFixedOOPs = [[self pairedMainBranchAliaser] dataWithProbationaryOOPAndFixedOOP];
-                
-                aFixedRootOOP = [[self pairedMainBranchAliaser] fixedRootOOPForOOP:aRootOOP];
-                
-                if ([[self pairedMainBranchAliaser] rootOOP] != aFixedRootOOP)
-                    [[self mainBranchNursery] saveRootOOP:aFixedRootOOP];
-                
-                [[self pairedMainBranchAliaser] setPupils:nil];
-                
-                aFarmOutStatus = [[self mainBranchNursery] save] ? NUFarmOutStatusSucceeded : NUFarmOutStatusFailed;
-                
-                if (aFarmOutStatus == NUFarmOutStatusSucceeded)
-                {
-                    [[self mainBranchNursery] retainGrade:aNewGrade byGarden:self];
-                    [self setGrade:aNewGrade];
-                }
-                
-                *aLatestGrade = aNewGrade;
+                [[self mainBranchNursery] retainGrade:aNewGrade byGarden:self];
+                [self setGrade:aNewGrade];
             }
-            else
-            {
-                aFarmOutStatus = NUFarmOutStatusNurseryGradeUnmatched;
-            }
+            
+            *aLatestGrade = aNewGrade;
         }
+    }
+    @catch (NSException *anException)
+    {
+        [self setIsFarmingOutForbidden:YES];
+        
+        @throw anException;
     }
     @finally
     {

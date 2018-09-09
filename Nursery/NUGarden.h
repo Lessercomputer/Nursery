@@ -21,6 +21,7 @@ typedef enum NUFarmOutStatus {
 @class NUNursery, NUNurseryRoot, NUObjectWrapper, NUBell, NUAliaser, NUGardenSeeker, NUMutableDictionary, NUU64ODictionary;
 
 extern NSString * const NUObjectLoadingException;
+extern NSString * const NUGardenFarmingOutForbiddenException;
 
 @interface NUGarden : NSObject
 {
@@ -43,6 +44,7 @@ extern NSString * const NUObjectLoadingException;
     BOOL isInMoveUp;
     BOOL retainNursery;
     NSMutableArray *characterTargetClassResolvers;
+    BOOL isFarmingOutForbidden;
 }
 @end
 

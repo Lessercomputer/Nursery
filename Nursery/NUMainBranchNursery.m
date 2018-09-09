@@ -36,6 +36,8 @@
 const NUUInt64 NURootObjectOOPOffset = 13;
 const NUUInt64 NUNurseryCurrentGradeOffset = 93;
 
+NSString *NUNurseryFarmingOutForbiddenException = @"NUNurseryFarmingOutForbiddenException";
+
 @implementation NUMainBranchNursery
 
 @end
@@ -489,6 +491,16 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
     return [self isOpen];
 }
 
+- (BOOL)isSavingForbidden
+{
+    return isSavingForbidden;
+}
+
+- (void)setIsSavingForbidden:(BOOL)aFlag
+{
+    isSavingForbidden = aFlag;
+}
+
 - (BOOL)saveChanges
 {
     if (![self isOpen]) return NO;
@@ -502,6 +514,9 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
         [self validateObjectTableAndReversedObjectTable];
 #endif
         
+        if ([self isSavingForbidden])
+            @throw [NSException exceptionWithName:NUNurseryFarmingOutForbiddenException reason:nil userInfo:nil];
+        
         [self saveGrade];
         [[self objectTable] save];
         [[self reversedObjectTable] save];
@@ -513,6 +528,14 @@ const NUUInt64 NUNurseryCurrentGradeOffset = 93;
         [[self spaces] validate];
         [self validateObjectTableAndReversedObjectTable];
 #endif
+    }
+    @catch (NSException *anExceiption)
+    {
+        [self setIsSavingForbidden:YES];
+        [[self seeker] stop];
+        [[self parader] stop];
+        
+        @throw anExceiption;
     }
     @finally
     {

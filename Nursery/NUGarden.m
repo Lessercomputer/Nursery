@@ -40,6 +40,7 @@
 #import "NUU64ODictionary.h"
 
 NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
+NSString * const NUGardenFarmingOutForbiddenException = @"NUGardenFarmingOutForbiddenException";
 
 @implementation NUGarden
 @end
@@ -767,6 +768,11 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     return [self grade] == [[self nursery] latestGrade:self];
 }
 
+- (BOOL)isFarmingOutForbidden
+{
+    return isFarmingOutForbidden;
+}
+
 - (BOOL)isInMoveUp
 {
     return isInMoveUp;
@@ -823,6 +829,11 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 - (void)setID:(NUUInt64)anID
 {
     gardenID = anID;
+}
+
+- (void)setIsFarmingOutForbidden:(BOOL)aFlag
+{
+    isFarmingOutForbidden = aFlag;
 }
 
 - (void)setIsInMoveUp:(BOOL)aFlag

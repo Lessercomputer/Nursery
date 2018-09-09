@@ -24,6 +24,7 @@
     NUUInt64 nextGardenID;
     NSRecursiveLock *lock;
     BOOL backups;
+    BOOL isSavingForbidden;
 }
 @end
 

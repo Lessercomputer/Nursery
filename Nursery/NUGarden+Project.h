@@ -110,6 +110,8 @@
 - (BOOL)isForMainBranch;
 - (BOOL)gradeIsEqualToNurseryGrade;
 
+- (BOOL)isFarmingOutForbidden;
+
 - (BOOL)isInMoveUp;
 
 @end
@@ -128,6 +130,7 @@
 
 - (void)setGrade:(NUUInt64)aGrade;
 - (void)setID:(NUUInt64)anID;
+- (void)setIsFarmingOutForbidden:(BOOL)aFlag;
 - (void)setIsInMoveUp:(BOOL)aFlag;
 
 - (BOOL)classAutomaticallyEstablishCharacter:(Class)aClass;

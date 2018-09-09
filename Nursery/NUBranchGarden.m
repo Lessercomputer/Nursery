@@ -9,6 +9,7 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSData.h>
 #import <Foundation/NSByteOrder.h>
+#import <Foundation/NSException.h>
 
 #import "NUGarden+Project.h"
 #import "NUBranchGarden.h"
@@ -119,7 +120,11 @@
             NSData *aFixedOOPs = nil;
             NUUInt64 aLatestGrade = NUNilGrade;
             
-            if (![self gradeIsEqualToNurseryGrade])
+            if ([self isFarmingOutForbidden])
+            {
+                @throw [NSException exceptionWithName:NUGardenFarmingOutForbiddenException reason:nil userInfo:nil];
+            }
+            else if (![self gradeIsEqualToNurseryGrade])
             {
                 aFarmOutStatus = NUFarmOutStatusNurseryGradeUnmatched;
             }
@@ -140,6 +145,13 @@
                 }
             }
         }
+    }
+    @catch (NSException *anException)
+    {
+        [self setIsFarmingOutForbidden:YES];
+        [[self gardenSeeker] stop];
+        
+        @throw anException;
     }
     @finally
     {
