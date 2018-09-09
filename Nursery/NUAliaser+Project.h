@@ -79,6 +79,7 @@
 - (void)objectDidEncode:(NUBell *)aBell;
 - (id)nextObjectToEncode;
 
+- (void)validateObjectForEncoding:(id)anObject;
 - (void)validateGardenOfEncodingObject:(id)anObject;
 
 - (NUUInt64)preEncodeObject:(id)anObject;

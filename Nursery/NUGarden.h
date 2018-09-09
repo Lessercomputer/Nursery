@@ -91,6 +91,8 @@ extern NSString * const NUObjectLoadingException;
 
 @interface NUGarden (ObjectState)
 
+- (BOOL)objectIsChanged:(id)anObject;
+
 - (void)markChangedObject:(id)anObject;
 - (void)unmarkChangedObject:(id)anObject;
 

@@ -369,6 +369,19 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 	return nil;
 }
 
+- (void)validateObjectForEncoding:(id)anObject
+{
+    if ([anObject isBell])
+    {
+        if ([(NUBell *)anObject isInvalidated])
+            @throw [NSException exceptionWithName:NUInvalidatedObjectException reason:nil userInfo:nil];
+    }
+    else if ([anObject conformsToProtocol:@protocol(NUCoding)] && [[anObject bell] isInvalidated])
+        @throw [NSException exceptionWithName:NUInvalidatedObjectException reason:nil userInfo:nil];
+    
+    [self validateGardenOfEncodingObject:anObject];
+}
+
 - (void)validateGardenOfEncodingObject:(id)anObject
 {
     NUGarden *aGardenOfAnObject = nil;
@@ -379,7 +392,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
         aGardenOfAnObject = [[(id <NUCoding>)anObject bell] garden];
     
     if (aGardenOfAnObject && ![aGardenOfAnObject isEqual:[self garden]])
-        @throw [NSException exceptionWithName:NUAliaserCannotEncodeObjectException reason:NUAliaserCannotEncodeObjectException userInfo:nil];
+        @throw [NSException exceptionWithName:NUAliaserCannotEncodeObjectException reason:nil userInfo:nil];
 }
 
 - (void)encodeObject:(id)anObject
@@ -391,7 +404,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 {
     NUUInt64 anOOP = NUNilOOP;
     
-    [self validateGardenOfEncodingObject:anObject];
+    [self validateObjectForEncoding:anObject];
     
     if ([anObject isBell])
         anOOP = [anObject OOP];
@@ -932,7 +945,13 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
 {
     if ([anObject isBell]) return;
     NUBell *aBell = [[self garden] bellForObject:anObject];
-    if (!aBell) return;
+    if (!aBell)
+    {
+        if ([anObject conformsToProtocol:@protocol(NUCoding)] && [[anObject bell] isInvalidated])
+            @throw [NSException exceptionWithName:NUInvalidatedObjectException reason:nil userInfo:nil];
+        else
+            return;
+    }
     if (!anIgnoreFlag && [aBell gradeAtCallFor] == [self grade]) return;
     
     [aBell setGrade:NUNilGrade];

@@ -472,7 +472,7 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
     [self lock];
     
 	if ([anObject conformsToProtocol:@protocol(NUCoding)])
-		aBell = [anObject bell];
+        aBell = ![[anObject bell] isInvalidated] ? [anObject bell] : nil;
 	else
 	{
         [[self keyObject] setObject:anObject];
@@ -700,6 +700,20 @@ NSString * const NUObjectLoadingException = @"NUObjectLoadingException";
 @end
 
 @implementation NUGarden (ObjectState)
+
+- (BOOL)objectIsChanged:(id)anObject
+{
+    BOOL anObjectIsChanged;
+    
+    [self lock];
+    
+    NUBell *aBell = [self bellForObject:anObject];
+    anObjectIsChanged = aBell && [[self changedObjects] objectForKey:[aBell OOP]];
+    
+    [self unlock];
+    
+    return anObjectIsChanged;
+}
 
 - (void)markChangedObject:(id)anObject
 {

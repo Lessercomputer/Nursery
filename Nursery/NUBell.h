@@ -10,6 +10,8 @@
 
 #import "NUTypes.h"
 
+extern NSString *NUInvalidatedObjectException;
+
 @class NUGarden;
 
 

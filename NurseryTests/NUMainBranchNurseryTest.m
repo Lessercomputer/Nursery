@@ -939,4 +939,47 @@ static NSString *NUNurseryTestFilePath = nil;
     XCTAssertEqualObjects([aGardenC root], aLibrary);
 }
 
+- (void)testSaveInvalidatedObject
+{
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUGarden *aGarden = [aNursery makeGarden];
+    NULibrary *aLibrary = [NULibrary library];
+    
+    [aLibrary setObject:@"value" forKey:@"key"];
+    
+    [aGarden setRoot:aLibrary];
+    XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded);
+    
+    [aGarden setRoot:nil];
+    XCTAssertEqual([aGarden farmOut], NUFarmOutStatusSucceeded);
+    
+    [NSThread sleepForTimeInterval:5];
+    
+    [aGarden setRoot:aLibrary];
+    XCTAssertThrows([aGarden farmOut]);
+}
+
+- (void)testMoveUpInvalidaedObject
+{
+    NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
+    NUGarden *aGardenA = [aNursery makeGarden];
+    NUGarden *aGardenB = [aNursery makeGarden];
+    NULibrary *aLibrary = [NULibrary library];
+    
+    [aLibrary setObject:@"value" forKey:@"key"];
+    
+    [aGardenA setRoot:aLibrary];
+    XCTAssertEqual([aGardenA farmOut], NUFarmOutStatusSucceeded);
+    
+    [aGardenB setRoot:nil];
+    XCTAssertEqual([aGardenB farmOut], NUFarmOutStatusSucceeded);
+    
+    [aGardenA moveUp];
+    [NSThread sleepForTimeInterval:5];
+    
+    [aGardenA setRoot:aLibrary];
+    
+    XCTAssertThrows([aGardenA moveUpObject:aLibrary]);
+}
+
 @end

@@ -16,6 +16,8 @@
 #import "NUBellBall.h"
 #import "NUObjectTable.h"
 
+NSString *NUInvalidatedObjectException = @"NUInvalidatedObjectException";
+
 static NUInvalidatedBell *invalidatedBell = nil;
 
 @implementation NUBell
