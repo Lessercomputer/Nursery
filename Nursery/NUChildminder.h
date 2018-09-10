@@ -35,6 +35,7 @@
 
 - (void)start;
 - (void)stop;
+- (void)cancel;
 
 - (void)startThread:(id)anArgument;
 - (BOOL)processOneUnit;

@@ -149,7 +149,7 @@
     @catch (NSException *anException)
     {
         [self setIsFarmingOutForbidden:YES];
-        [[self gardenSeeker] stop];
+        [[self gardenSeeker] cancel];
         
         @throw anException;
     }

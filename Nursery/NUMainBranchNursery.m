@@ -532,8 +532,8 @@ NSString *NUNurseryFarmingOutForbiddenException = @"NUNurseryFarmingOutForbidden
     @catch (NSException *anExceiption)
     {
         [self setIsSavingForbidden:YES];
-        [[self seeker] stop];
-        [[self parader] stop];
+        [[self seeker] cancel];
+        [[self parader] cancel];
         
         @throw anExceiption;
     }

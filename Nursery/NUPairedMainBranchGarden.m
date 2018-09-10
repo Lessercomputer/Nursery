@@ -107,9 +107,7 @@
     }
     @catch (NSException *anException)
     {
-        [self setIsFarmingOutForbidden:YES];
-        
-        @throw anException;
+        [self setIsFarmingOutForbidden:YES];        
     }
     @finally
     {

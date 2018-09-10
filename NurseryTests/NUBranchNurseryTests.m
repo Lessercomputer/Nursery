@@ -183,22 +183,23 @@ static NSString *NUNurseryTestFilePath2;
     
     @autoreleasepool
     {
-        NUBranchNursery *aBranchNursery = [NUBranchNursery branchNurseryWithServiceName:@"nursery"];
-        NUGarden *aBranchGarden = [aBranchNursery makeGarden];
+        NUBranchNursery *aBranchNurseryA = [NUBranchNursery branchNurseryWithServiceName:@"nursery"];
+        NUBranchNursery *aBranchNurseryB = [NUBranchNursery branchNurseryWithServiceName:@"nursery"];
+        NUGarden *aGardenA1 = [aBranchNurseryA makeGarden];
 
-        [aBranchGarden setRoot:[[@"first" mutableCopy] autorelease]];
-        XCTAssertEqual([aBranchGarden farmOut], NUFarmOutStatusSucceeded, @"");
+        [aGardenA1 setRoot:[[@"first" mutableCopy] autorelease]];
+        XCTAssertEqual([aGardenA1 farmOut], NUFarmOutStatusSucceeded, @"");
         
-        NUGarden *aGardenA = [aBranchNursery makeGarden];
-        NUGarden *aGardenB = [aBranchNursery makeGarden];
+        NUGarden *aGardenA2 = [aBranchNurseryA makeGarden];
+        NUGarden *aGardenB = [aBranchNurseryB makeGarden];
         
-        [(NSMutableString *)[aGardenA root] setString:@"A"];
-        [aGardenA markChangedObject:[aGardenA root]];
+        [(NSMutableString *)[aGardenA2 root] setString:@"A"];
+        [aGardenA2 markChangedObject:[aGardenA2 root]];
         
         [(NSMutableString *)[aGardenB root] setString:@"B"];
         [aGardenB markChangedObject:[aGardenB root]];
         
-        XCTAssertEqual([aGardenA farmOut], NUFarmOutStatusSucceeded, @"");
+        XCTAssertEqual([aGardenA2 farmOut], NUFarmOutStatusSucceeded, @"");
         
         XCTAssertEqual([aGardenB farmOut], NUFarmOutStatusNurseryGradeUnmatched, @"");
         
