@@ -616,7 +616,7 @@ const NUUInt64 NUNurseryNetClientDefaultMaximumFellowPupilNotesSizeGrowDownFacto
     return [aPupilsData autorelease];
 }
 
-- (NUFarmOutStatus)farmOutPupils:(NSData *)aPupilData rootOOP:(NUUInt64)aRootOOP gardenWithID:(NUUInt64)anID fixedOOPs:(NSData **)aFixedOOPs latestGrade:(NUUInt64 *)aLatestGrade
+- (NUFarmOutStatus)farmOutPupils:(NSData *)aPupilData rootOOP:(NUUInt64)aRootOOP grade:(NUUInt64)aGrade gardenWithID:(NUUInt64)anID fixedOOPs:(NSData **)aFixedOOPs latestGrade:(NUUInt64 *)aLatestGrade
 {
     NUFarmOutStatus aStatus = NUFarmOutStatusFailed;
     
@@ -626,6 +626,7 @@ const NUUInt64 NUNurseryNetClientDefaultMaximumFellowPupilNotesSizeGrowDownFacto
     
     [aMessage addArgumentOfTypeBytesWithValue:(void *)[aPupilData bytes] length:[aPupilData length]];
     [aMessage addArgumentOfTypeUInt64WithValue:aRootOOP];
+    [aMessage addArgumentOfTypeUInt64WithValue:aGrade];
     [aMessage addArgumentOfTypeUInt64WithValue:anID];
     
     @try

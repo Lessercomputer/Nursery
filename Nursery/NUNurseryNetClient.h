@@ -86,7 +86,7 @@ typedef enum : NSUInteger {
 - (void)releaseGradeLessThan:(NUUInt64)aGrade byGardenWithID:(NUUInt64)anID;
 
 - (NSData *)callForPupilWithOOP:(NUUInt64)anOOP gradeLessThanOrEqualTo:(NUUInt64)aGrade gardenWithID:(NUUInt64)anID containsFellowPupils:(BOOL)aContainsFellowPupils;
-- (NUFarmOutStatus)farmOutPupils:(NSData *)aPupilData rootOOP:(NUUInt64)aRootOOP gardenWithID:(NUUInt64)anID fixedOOPs:(NSData **)aFixedOOPs latestGrade:(NUUInt64 *)aLatestGrade;
+- (NUFarmOutStatus)farmOutPupils:(NSData *)aPupilData rootOOP:(NUUInt64)aRootOOP grade:(NUUInt64)aGrade gardenWithID:(NUUInt64)anID fixedOOPs:(NSData **)aFixedOOPs latestGrade:(NUUInt64 *)aLatestGrade;
 
 - (void)netClientWillStop;
 

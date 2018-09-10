@@ -427,12 +427,13 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
 {
     NSData *aPupilData = [[[self receivedMessage] argumentAt:0] dataFromValue];
     NUUInt64 aRootOOP = [[[self receivedMessage] argumentAt:1] UInt64FromValue];
-    NUUInt64 aPairID = [[[self receivedMessage] argumentAt:2] UInt64FromValue];
+    NUUInt64 aGrade = [[[self receivedMessage] argumentAt:2] UInt64FromValue];
+    NUUInt64 aPairID = [[[self receivedMessage] argumentAt:3] UInt64FromValue];
     NUPairedMainBranchGarden *aPairedMainBranchGarden = [self pairedMainBranchGardenFor:aPairID];
     NSData *aFixedOOPs = nil;
     NUUInt64 aLatestGrade;
     
-    NUFarmOutStatus aFarmOutStatus = [aPairedMainBranchGarden farmOutPupils:aPupilData rootOOP:aRootOOP fixedOOPs:&aFixedOOPs latestGrade:&aLatestGrade];
+    NUFarmOutStatus aFarmOutStatus = [aPairedMainBranchGarden farmOutPupils:aPupilData rootOOP:aRootOOP grade:aGrade fixedOOPs:&aFixedOOPs latestGrade:&aLatestGrade];
     
     NUNurseryNetMessage *aResponse = [NUNurseryNetMessage messageOfKind:NUNurseryNetMessageKindFarmOutPupilsResponse];
     [aResponse addArgumentOfTypeUInt64WithValue:aFarmOutStatus];

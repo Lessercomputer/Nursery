@@ -42,11 +42,8 @@
     return [[self pairedMainBranchAliaser] callForPupilWithOOP:anOOP containsFellowPupils:aContainsFellowPupils maxFellowPupilNotesSizeInBytes:aMaxFellowPupilNotesSizeInBytes];
 }
 
-- (NUFarmOutStatus)farmOutPupils:(NSData *)aPupilData rootOOP:(NUUInt64)aRootOOP fixedOOPs:(NSData **)aFixedOOPs latestGrade:(NUUInt64 *)aLatestGrade
+- (NUFarmOutStatus)farmOutPupils:(NSData *)aPupilData rootOOP:(NUUInt64)aRootOOP grade:(NUUInt64)aGrade fixedOOPs:(NSData **)aFixedOOPs latestGrade:(NUUInt64 *)aLatestGrade
 {
-    if (![self gradeIsEqualToNurseryGrade])
-        [self moveUpTo:[[self nursery] latestGrade:self]];
-    
     NUFarmOutStatus aFarmOutStatus = NUFarmOutStatusFailed;
     
     *aFixedOOPs = nil;
@@ -55,6 +52,8 @@
     {
         [self lock];
         [[self mainBranchNursery] lock];
+
+        [self moveUpTo:aGrade];
 
         if ([self isFarmingOutForbidden])
         {
