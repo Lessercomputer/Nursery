@@ -170,7 +170,7 @@ NSString * const NUGardenFarmingOutForbiddenException = @"NUGardenFarmingOutForb
     
     [self lock];
     
-    aRetainedGrade = [[self retainedGrades] indexLessThanIndex:aGrade];
+    aRetainedGrade = [[self retainedGrades] indexLessThanIndex:(NSUInteger)aGrade];
     
     [self unlock];
     
