@@ -15,6 +15,8 @@ extern NSString *NUPupilNoteNotFoundException;
 
 @interface NUBranchAliaser : NUAliaser
 
+@property (nonatomic, retain) NSMutableArray *storedRoots;
+@property (nonatomic, retain) NUU64ODictionary *storedChangedObjects;
 @property (nonatomic, retain) NSArray *reducedEncodedPupils;
 @property (nonatomic, retain) NUU64ODictionary *reducedEncodedPupilsDictionary;
 
@@ -41,6 +43,10 @@ extern NSString *NUPupilNoteNotFoundException;
 @end
 
 @interface NUBranchAliaser (Encoding)
+
+- (void)storeObjectsToEncode;
+- (void)restoreObjectsToEncode;
+- (void)removeStoredObjectsToEncode;
 
 + (NSData *)encodedPupilNotesDataFromPupilNotes:(NSArray *)aPupilNotes;
 - (NSData *)encodedPupilNotesData;

@@ -171,6 +171,26 @@ NSString *NUPupilNoteNotFoundException = @"NUPupilNoteNotFoundException";
     [self setReducedEncodedPupils:[self reducedEncodedPupilsFor:[self encodedPupils] with:[self reducedEncodedPupilsDictionary]]];
 }
 
+- (void)storeObjectsToEncode
+{
+    [self setStoredRoots:[[[self roots] mutableCopy] autorelease]];
+    [self setStoredChangedObjects:[[[[self garden] changedObjects] copy] autorelease]];
+}
+
+- (void)restoreObjectsToEncode
+{
+    [self setRoots:[self storedRoots]];
+    [[self garden] setChangedObjects:[self storedChangedObjects]];
+    
+    [self removeStoredObjectsToEncode];
+}
+
+- (void)removeStoredObjectsToEncode
+{
+    [self setStoredRoots:nil];
+    [self setStoredChangedObjects:nil];
+}
+
 - (void)prepareCodingContextForEncode:(id)anObject
 {
 	NUBell *aBell = [[self garden] bellForObject:anObject];

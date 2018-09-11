@@ -130,6 +130,8 @@
             }
             else
             {
+                [[self branchAliaser] storeObjectsToEncode];
+                
                 if (![self contains:[self nurseryRoot]])
                     [[self aliaser] setRoots:[NSMutableArray arrayWithObject:[self nurseryRoot]]];
                 
@@ -141,7 +143,13 @@
                 {
                     [self replaceProbationaryOOPsWithFixedOOPs:aFixedOOPs inPupils:[[self branchAliaser] reducedEncodedPupilsDictionary] grade:aLatestGrade];
                     [[self branchAliaser] removeAllEncodedPupils];
+                    [[self branchAliaser] removeStoredObjectsToEncode];
                     [self setGrade:aLatestGrade];
+                }
+                else
+                {
+                    [[self branchAliaser] removeAllEncodedPupils];
+                    [[self branchAliaser] restoreObjectsToEncode];
                 }
             }
         }

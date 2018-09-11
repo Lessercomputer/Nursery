@@ -202,9 +202,11 @@ static NSString *NUNurseryTestFilePath2;
         XCTAssertEqual([aGardenA2 farmOut], NUFarmOutStatusSucceeded, @"");
         
         XCTAssertEqual([aGardenB farmOut], NUFarmOutStatusNurseryGradeUnmatched, @"");
+        XCTAssertTrue([aGardenB objectIsChanged:[aGardenB root]]);
         
         [aGardenB moveUp];
         [aGardenB moveUpObject:[aGardenB root]];
+        XCTAssertFalse([aGardenB objectIsChanged:[aGardenB root]]);
         XCTAssertEqualObjects([aGardenB root], @"A");
         [(NSMutableString *)[aGardenB root] setString:@"B"];
         [aGardenB markChangedObject:[aGardenB root]];
