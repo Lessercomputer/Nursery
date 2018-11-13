@@ -1,9 +1,9 @@
 # Nursery  
-**Nursery** is a persistent object framework (object-oriented database) for Cocoa.
+**Nursery** is an embeddable object-oriented database framework for Cocoa.
 
 ## Overview
 * Written in Objective-C.  
-* Implemented ONLY with the Foundation framework of Cocoa and Core Foundation framework(for creating sockets). 
+* Implemented ONLY with the Foundation framework of Cocoa and Core Foundation framework (for creating sockets). 
 * ACID characteristics.  
 * Lazy loading.
 * Garbage Collection and Compaction.
@@ -51,6 +51,92 @@ Objects that can not be traced from the root object of **Nursery** are automatic
 GC can handle circular references correctly.  
 GC implements garbage collection with Tri-color marking.  
 The released area is compacted.  
+
+###Example
+```
+NUMainBranchNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:@"path/to/file"];
+NUGarden *aGarden = [aNursery makeGarden];
+    
+Person *aPerson = [Person new];
+
+[aPerson setFirstName:@"Akifumi"];
+[aPerson setLastName:@"Takata"];
+
+[aGarden setRoot:aPerson];
+    
+[aGarden farmOut];
+
+// Person Class
+@interface Person : NSObject <NUCoding>
+{
+    NSString *firstName;
+    NSString *lastName;
+}
+
+@property (weak) NUBell *bell;
+
+- (NSString *)firstName;
+- (void)setFirstName:(NSString *)aFirstName;
+
+- (NSString *)lastName;
+- (void)setLastName:(NSString *)aLastName;
+
+@end
+
+@implementation Person
+
++ (BOOL)automaticallyEstablishCharacter
+{
+    return YES;
+}
+
++ (void)defineCharacter:(NUCharacter *)aCharacter on:(NUGarden *)aGarden
+{
+    [aCharacter addOOPIvarWithName:@"firstName"];
+    [aCharacter addOOPIvarWithName:@"lastName"];
+}
+
+- (void)encodeWithAliaser:(NUAliaser *)anAliaser
+{
+    [anAliaser encodeObject:firstName forKey:@"firstName"];
+    [anAliaser encodeObject:lastName forKey:@"lastName"];
+}
+
+- (instancetype)initWithAliaser:(NUAliaser *)anAliaser
+{
+    self = [super init];
+    if (self)
+    {
+        firstName = [anAliaser decodeObjectForKey:@"firstName"];
+        lastName = [anAliaser decodeObjectForKey:@"lastName"];
+    }
+    return self;
+}
+
+- (NSString *)firstName
+{
+    return NUGetIvar(&firstName);
+}
+
+- (void)setFirstName:(NSString *)aFirstName
+{
+    NUSetIvar(&firstName, aFirstName);
+    [[self bell] markChanged];
+}
+
+- (NSString *)lastName
+{
+    return NUGetIvar(&lastName);
+}
+
+- (void)setLastName:(NSString *)aLastName
+{
+    NUSetIvar(&lastName, aLastName);
+    [[self bell] markChanged];
+}
+
+@end
+```
 
 ## macOS support
 macOS(10.8 or higher)
