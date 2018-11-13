@@ -52,7 +52,7 @@ GC can handle circular references correctly.
 GC implements garbage collection with Tri-color marking.  
 The released area is compacted.  
 
-###Example
+### Example
 ```
 NUMainBranchNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:@"path/to/file"];
 NUGarden *aGarden = [aNursery makeGarden];
