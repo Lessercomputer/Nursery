@@ -144,3 +144,5 @@ macOS(10.8 or higher)
 ## Licence
 **Nursery** is published under the zlib license.
 
+## Donation
+[Donate with PayPal (paypal.me/AkifumiTakata)](https://paypal.me/AkifumiTakata)
