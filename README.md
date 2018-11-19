@@ -54,6 +54,8 @@ The released area is compacted.
 
 ### Example
 ```
+#import <Nursery/Nursery.h>
+
 NUMainBranchNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:@"path/to/file"];
 NUGarden *aGarden = [aNursery makeGarden];
     
