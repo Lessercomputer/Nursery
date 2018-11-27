@@ -145,6 +145,13 @@ Person *aPerson = [Person new];
 ## macOS support
 macOS(10.8 or higher)
 
+## How to buld
+1. Click "Open in Xcode" on project page and clone to (For Example) your Desktop 
+2. Select "Edit Scheme..." < "Scheme" < "Product" in menubar
+3. Select "Run" in left pane and change "Build Configuration" to "Release" then click "Close" button
+4. Select "Build" < "Product" in menubar
+
+
 ## Licence
 **Nursery** is published under the zlib license.
 
