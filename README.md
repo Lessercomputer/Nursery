@@ -55,7 +55,7 @@ GC implements garbage collection with Tri-color marking.
 The released area is compacted.  
 
 ### Example
-```
+```objc
 #import <Nursery/Nursery.h>
 
 NUMainBranchNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:@"path/to/file"];
