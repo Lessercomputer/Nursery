@@ -1,6 +1,8 @@
 # Nursery  
 **Nursery** is an embeddable object-oriented database framework for Cocoa.
 
+Bug fixes are welcome
+
 ## Overview
 * Written in Objective-C.  
 * Implemented ONLY with the Foundation framework of Cocoa and Core Foundation framework (for creating sockets). 
@@ -46,7 +48,7 @@ However, there is no guarantee that other processing is thread-safe.
 ### Durability
 **Nursery** implements write-ahead logging (WAL).
 
-### Garbage collection
+### Garbage collection in database file
 Objects that can not be traced from the root object of **Nursery** are automatically released by GC.  
 GC can handle circular references correctly.  
 GC implements garbage collection with Tri-color marking.  
