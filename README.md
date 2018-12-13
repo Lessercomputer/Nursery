@@ -1,19 +1,28 @@
 # Nursery  
-**Nursery** is an embeddable object-oriented database framework for Cocoa.
+**Nursery** is an embeddable object-oriented database (OODB) framework for Cocoa
 
-Bug fixes are welcome
+## Licence
+**Nursery** is published under the zlib license
+
+## Donation
+[Donate with PayPal (paypal.me/AkifumiTakata)](https://paypal.me/AkifumiTakata)
 
 ## Overview
-* Written in Objective-C.  
-* Implemented ONLY with the Foundation framework of Cocoa and Core Foundation framework (for creating sockets). 
-* ACID characteristics.  
-* Lazy loading.
-* Garbage Collection and Compaction.
-* Simultaneous use from multiple processes.
-* Not ORM(Object-relational mapping).  
+* Simple & Powerful
+* Written in Objective-C
+* Implemented ONLY with the Foundation framework of Cocoa and Core Foundation Framework (for creating sockets)
+* ACID-compliant
+* Lazy Loading
+* Garbage Collection and Compaction in Database File
+* Simultaneous Use from Multiple Processes
+* Not ORM(Object-relational mapping)
 
 
-### List of persistable objects
+### List of Persistable Objects
+* NULibrary  
+	A collection class that implements **B+ tree**.
+* A class that implements the **NUCoding** protocol.
+* A class that implements persistence processing by subclass of **NUCoder**
 * NSObject
 * NSString
 * NSMutableString
@@ -30,31 +39,20 @@ Bug fixes are welcome
 * NSMutableData
 * NSIndexSet
 * NSMutableIndexSet
-* NULibrary  
-	A collection class that implements **B+ tree**.
-* A class that implements the **NUCoding** protocol.
-* A class that implements persistence processing by subclass of **NUCoder**
-		
-### Endian independent
-Instance variables are converted to big endian at the time of encoding and converted to host endian at the time of decoding.
 
-### Thread safety
-Loading and saving objects is thread-safe.  
-However, there is no guarantee that other processing is thread-safe.
+### Very Simple Example 
+```objc
+#import <Nursery/Nursery.h>
 
-### Simultaneous use from multiple processes
-**Nursery** supports simultaneous use with multiple processes.
+NUMainBranchNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:@"path/to/file"];
+NUGarden *aGarden = [aNursery makeGarden];
 
-### Durability
-**Nursery** implements write-ahead logging (WAL).
+[aGarden setRoot:@"Hi, I'm Nursery"];
+    
+[aGarden farmOut];
+```
 
-### Garbage collection in database file
-Objects that can not be traced from the root object of **Nursery** are automatically released by GC.  
-GC can handle circular references correctly.  
-GC implements garbage collection with Tri-color marking.  
-The released area is compacted.  
-
-### Example
+### Example Using NUCoding Protocol
 ```objc
 #import <Nursery/Nursery.h>
 
@@ -143,7 +141,7 @@ Person *aPerson = [Person new];
 ```
 
 ## macOS support
-macOS(10.8 or higher)
+macOS (10.8 or higher)
 
 ## How to buld
 1. Click "Open in Xcode" on project page and clone to (For Example) your Desktop 
@@ -151,9 +149,31 @@ macOS(10.8 or higher)
 3. Select "Run" in left pane and change "Build Configuration" to "Release" then click "Close" button
 4. Select "Build" < "Product" in menubar
 
+## A bit more detailed information
+### Endian Independent
+Instance variables are converted to big endian at the time of encoding and converted to host endian at the time of decoding
 
-## Licence
-**Nursery** is published under the zlib license.
+### Thread Safety
+Loading and saving objects is thread-safe.  
+However, there is no guarantee that other processing is thread-safe
 
-## Donation
-[Donate with PayPal (paypal.me/AkifumiTakata)](https://paypal.me/AkifumiTakata)
+### Simultaneous Use from Multiple Processes
+**Nursery** supports simultaneous use with multiple processes
+
+### Durability
+**Nursery** implements write-ahead logging (WAL)
+
+### Garbage Collection in Database File
+Objects that can not be traced from the root object of **Nursery** are automatically released by GC.  
+GC can handle circular references correctly.  
+GC implements garbage collection with Tri-color marking.  
+The released area is compacted 
+
+## See also
+* [API Documentation](https://gitlab.com/AkifumiTakata/documentation-for-nursery)  
+* [Examples](https://gitlab.com/AkifumiTakata/examples-of-nursery)  
+* [Nursery Net Service App for macOS] (https://gitlab.com/AkifumiTakata/nursery-net-service-app)
+* [Bookmarks App for macOS](https://gitlab.com/AkifumiTakata/bookmarks)
+
+## Contribution
+Bug fixes are welcome
