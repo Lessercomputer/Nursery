@@ -172,7 +172,7 @@ The released area is compacted
 ## See also
 * [API Documentation](https://gitlab.com/AkifumiTakata/documentation-for-nursery)  
 * [Examples](https://gitlab.com/AkifumiTakata/examples-of-nursery)  
-* [Nursery Net Service App for macOS] (https://gitlab.com/AkifumiTakata/nursery-net-service-app)
+* [Nursery Net Service App for macOS](https://gitlab.com/AkifumiTakata/nursery-net-service-app)
 * [Bookmarks App for macOS](https://gitlab.com/AkifumiTakata/bookmarks)
 
 ## Contribution
