@@ -497,6 +497,12 @@
 		B86D152D20958C9200D95C4C /* NUBell+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B86D152C20958C9200D95C4C /* NUBell+Project.h */; };
 		B86D152F2095EA9200D95C4C /* NUNurseryNetService+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B86D152E2095EA9200D95C4C /* NUNurseryNetService+Project.h */; };
 		B8727BD320C8FEAA00D92DE6 /* CharacterTargetClassResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = B8727BD220C8FEAA00D92DE6 /* CharacterTargetClassResolver.m */; };
+		B875325721EECD11009C2E36 /* NUFruit.h in Headers */ = {isa = PBXBuildFile; fileRef = B875325521EECD11009C2E36 /* NUFruit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B875325821EECD11009C2E36 /* NUFruit.h in Headers */ = {isa = PBXBuildFile; fileRef = B875325521EECD11009C2E36 /* NUFruit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B875325921EECD11009C2E36 /* NUFruit.m in Sources */ = {isa = PBXBuildFile; fileRef = B875325621EECD11009C2E36 /* NUFruit.m */; };
+		B875325A21EECD11009C2E36 /* NUFruit.m in Sources */ = {isa = PBXBuildFile; fileRef = B875325621EECD11009C2E36 /* NUFruit.m */; };
+		B875325C21EECF15009C2E36 /* NUFruitTest.m in Sources */ = {isa = PBXBuildFile; fileRef = B875325B21EECF15009C2E36 /* NUFruitTest.m */; };
+		B875325D21EECF15009C2E36 /* NUFruitTest.m in Sources */ = {isa = PBXBuildFile; fileRef = B875325B21EECF15009C2E36 /* NUFruitTest.m */; };
 		B8AF2EB021055ADE00FA72F4 /* NULinkedListTest.m in Sources */ = {isa = PBXBuildFile; fileRef = B8AF2EAF21055ADE00FA72F4 /* NULinkedListTest.m */; };
 		B8AF2EB121055ADE00FA72F4 /* NULinkedListTest.m in Sources */ = {isa = PBXBuildFile; fileRef = B8AF2EAF21055ADE00FA72F4 /* NULinkedListTest.m */; };
 		B8BD5EAC2069058B00091994 /* SelfReferenceObject.m in Sources */ = {isa = PBXBuildFile; fileRef = B8BD5EAB2069058B00091994 /* SelfReferenceObject.m */; };
@@ -795,6 +801,9 @@
 		B86D152E2095EA9200D95C4C /* NUNurseryNetService+Project.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NUNurseryNetService+Project.h"; sourceTree = "<group>"; };
 		B8727BD120C8FEAA00D92DE6 /* CharacterTargetClassResolver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CharacterTargetClassResolver.h; sourceTree = "<group>"; };
 		B8727BD220C8FEAA00D92DE6 /* CharacterTargetClassResolver.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CharacterTargetClassResolver.m; sourceTree = "<group>"; };
+		B875325521EECD11009C2E36 /* NUFruit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUFruit.h; sourceTree = "<group>"; };
+		B875325621EECD11009C2E36 /* NUFruit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUFruit.m; sourceTree = "<group>"; };
+		B875325B21EECF15009C2E36 /* NUFruitTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUFruitTest.m; sourceTree = "<group>"; };
 		B8AF2EAF21055ADE00FA72F4 /* NULinkedListTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NULinkedListTest.m; sourceTree = "<group>"; };
 		B8BD5EAA2069058B00091994 /* SelfReferenceObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SelfReferenceObject.h; sourceTree = "<group>"; };
 		B8BD5EAB2069058B00091994 /* SelfReferenceObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SelfReferenceObject.m; sourceTree = "<group>"; };
@@ -1213,6 +1222,7 @@
 				61DC96331FA104D900AABC9E /* Nursery.h */,
 				610E4BD8191519D3000D5247 /* Garden */,
 				610E4BD51915060F000D5247 /* Nursery */,
+				B875325421EECCCA009C2E36 /* Fruit */,
 				6172CCA31FF8F5730037EE37 /* NetService */,
 				619B07971913ED8D00A4BAA2 /* Supporting Files */,
 			);
@@ -1251,6 +1261,7 @@
 				6116644E1FCBDEFC00774707 /* NUQueueTest.m */,
 				B8BDFF1520B6B96300839DCF /* NULazyMutableArrayTest.m */,
 				B8AF2EAF21055ADE00FA72F4 /* NULinkedListTest.m */,
+				B875325B21EECF15009C2E36 /* NUFruitTest.m */,
 				619B07B11913ED8D00A4BAA2 /* NurseryTests.m */,
 				619B07AC1913ED8D00A4BAA2 /* Supporting Files */,
 			);
@@ -1310,6 +1321,15 @@
 				B8D59EB720AFC415009FC4A9 /* NUPairedMainBranchAperture.m */,
 			);
 			name = Apertures;
+			sourceTree = "<group>";
+		};
+		B875325421EECCCA009C2E36 /* Fruit */ = {
+			isa = PBXGroup;
+			children = (
+				B875325521EECD11009C2E36 /* NUFruit.h */,
+				B875325621EECD11009C2E36 /* NUFruit.m */,
+			);
+			name = Fruit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1380,6 +1400,7 @@
 				B8D59EB820AFC415009FC4A9 /* NUPairedMainBranchAperture.h in Headers */,
 				619B08991913EEC000A4BAA2 /* NUMainBranchNursery.h in Headers */,
 				619B09411913EEC000A4BAA2 /* NUReversedObjectTableBranch.h in Headers */,
+				B875325721EECD11009C2E36 /* NUFruit.h in Headers */,
 				619B09211913EEC000A4BAA2 /* NUSpaces.h in Headers */,
 				619B09351913EEC000A4BAA2 /* NUComparator.h in Headers */,
 				619B08B11913EEC000A4BAA2 /* NUBranchGarden.h in Headers */,
@@ -1527,6 +1548,7 @@
 				B81662AA20ECC2DF00B9075E /* NUMainBranchNursery+Project.h in Headers */,
 				B81662AC20ECC2DF00B9075E /* NUBranchNursery+Project.h in Headers */,
 				B81662B020ECC2DF00B9075E /* NUOpaqueArray.h in Headers */,
+				B875325821EECD11009C2E36 /* NUFruit.h in Headers */,
 				B81662B120ECC2DF00B9075E /* NUBellBallArray.h in Headers */,
 				B81662B220ECC2DF00B9075E /* NUIndexArray.h in Headers */,
 				B81662B320ECC2DF00B9075E /* NURegionArray.h in Headers */,
@@ -1772,6 +1794,7 @@
 				619B08CC1913EEC000A4BAA2 /* NUBPlusTreeLeaf.m in Sources */,
 				619B088F1913EEC000A4BAA2 /* NUCharacterDictionary.m in Sources */,
 				619B09221913EEC000A4BAA2 /* NUSpaces.m in Sources */,
+				B875325921EECD11009C2E36 /* NUFruit.m in Sources */,
 				619B08C81913EEC000A4BAA2 /* NUBranchAperture.m in Sources */,
 				61FD7A771FFA48E9009ED9D5 /* NUNurseryNetMessageArgument.m in Sources */,
 				619B08951913EEC000A4BAA2 /* NUGardenSeeker.m in Sources */,
@@ -1863,6 +1886,7 @@
 				619B09721913F2EE00A4BAA2 /* NURegionArrayTest.m in Sources */,
 				619B096D1913F2EE00A4BAA2 /* NUU64ODictionaryTests.m in Sources */,
 				61DCED6419DCEEC8009E4E9E /* AllTypesObject.m in Sources */,
+				B875325C21EECF15009C2E36 /* NUFruitTest.m in Sources */,
 				B8727BD320C8FEAA00D92DE6 /* CharacterTargetClassResolver.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1908,6 +1932,7 @@
 				B816621D20ECC28500B9075E /* NUPupilNote.m in Sources */,
 				B816621E20ECC28500B9075E /* NUPupilNoteCache.m in Sources */,
 				B816621F20ECC28500B9075E /* NUCodingContext.m in Sources */,
+				B875325A21EECD11009C2E36 /* NUFruit.m in Sources */,
 				B816622020ECC28500B9075E /* NUMainBranchCodingContext.m in Sources */,
 				B816622120ECC28500B9075E /* NUCodingContextWithPupilNote.m in Sources */,
 				B816622220ECC28500B9075E /* NUCoder.m in Sources */,
@@ -1999,6 +2024,7 @@
 				B81662FB20ECD4A500B9075E /* SelfReferenceObject.m in Sources */,
 				B81662FC20ECD4A500B9075E /* NUQueueTest.m in Sources */,
 				B81662FD20ECD4A500B9075E /* NULazyMutableArrayTest.m in Sources */,
+				B875325D21EECF15009C2E36 /* NUFruitTest.m in Sources */,
 				B81661F020ECC07000B9075E /* Nursery__iOS_Tests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
