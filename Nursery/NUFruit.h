@@ -17,7 +17,7 @@
 
 @end
 
-@interface NUFruit (A)
+@interface NUA : NUFruit
 
 + (id)A;
 + (id)a;
@@ -26,7 +26,7 @@
 
 @end
 
-@interface NUFruit (Is)
+@interface NUIs : NUFruit
 
 + (id)Is;
 + (id)is;
@@ -35,7 +35,7 @@
 
 @end
 
-@interface NUFruit (Then)
+@interface NUThen : NUFruit
 
 + (id)Then;
 + (id)then;

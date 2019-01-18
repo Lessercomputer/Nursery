@@ -20,10 +20,10 @@
     return [[self alloc] init];
 }
 
-//- (id)Fruit
-//{
-//    return self;
-//}
+- (id)Fruit
+{
+    return self;
+}
 
 - (id)fruit
 {
@@ -32,16 +32,16 @@
 
 @end
 
-@implementation NUFruit (Is)
+@implementation NUIs
 
 + (id)Is
 {
-    return [self class];
+    return [self is];
 }
 
 + (id)is
 {
-    return [self class];
+    return [[self new] autorelease];
 }
 
 - (id)Is
@@ -56,7 +56,7 @@
 
 @end
 
-@implementation NUFruit (A)
+@implementation NUA
 
 + (id)A
 {
@@ -65,7 +65,7 @@
 
 + (id)a
 {
-    return [self class];
+    return [[self new] autorelease];
 }
 
 - (id)A
@@ -80,16 +80,16 @@
 
 @end
 
-@implementation NUFruit (Then)
+@implementation NUThen
 
 + (id)Then
 {
-    return [self class];
+    return [self then];
 }
 
 + (id)then
 {
-    return [self class];
+    return [[self new] autorelease];
 }
 
 - (id)Then
