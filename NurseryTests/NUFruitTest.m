@@ -23,31 +23,24 @@
     // Put teardown code here. This method is called after the invocation of each test method in the class.
 }
 
-- (void)testFruit
-{
+- (void)testFruit {
+    
     XCTAssertNotNil([NUFruit Fruit]);
-
 }
 
-- (void)testFruitIs {
-    
-    XCTAssertNotNil([NUFruit Is]);
-    XCTAssertNotNil([NUFruit is]);
+- (void)testFruitIsAFruit {
 
-    XCTAssertNotNil([[NUFruit Fruit] A]);
-//    XCTAssertNotNil([[NUFruit Fruit] Fruit]);
-    
-//    XCTAssertNotNil([[[[NUFruit Fruit] Is] A] Fruit]);
+    XCTAssertNotNil([[[[NUFruit Fruit] is] a] fruit]);
 }
 
 - (void)testFruitThen {
     
-    XCTAssertNotNil([[NUFruit fruit] then]);
+    XCTAssertNotNil([NUThen then]);
 }
 
 - (void)testFruitNo
 {
-    XCTAssertNotNil([NUFruit No]);
+    XCTAssertNotNil([NUNo No]);
 }
 
 - (void)testFruitDo

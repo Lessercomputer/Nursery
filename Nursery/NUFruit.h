@@ -35,6 +35,27 @@
 
 @end
 
+@interface NUDo : NUFruit
+
++ (id)Do;
++ (id)do;
+- (id)Do;
+- (id)do;
+
+@end
+
+@interface NUSerially : NUFruit
+
++ (id)serially;
+- (id)Serially;
+- (id)serially;
+
+@end
+
+@interface NUParalelly : NUFruit
+
+@end
+
 @interface NUThen : NUFruit
 
 + (id)Then;
@@ -44,7 +65,7 @@
 
 @end
 
-@interface NUFruit (No)
+@interface NUNo : NUFruit
 
 + (id)No;
 + (id)no;
@@ -53,45 +74,15 @@
 
 @end
 
-@interface NUFruit (Do)
+@interface NUDescription : NUFruit
 
-- (id)do;
-
-@end
-
-@interface NUFruit (Serially)
-
-- (id)serially;
-
-@end
-
-@interface NUFruit (DoInSerial)
-
-//+ (id)DoInSerial;
-- (id)doInSerial;
-
-@end
-
-@interface NUFruit (DoInParallel)
-
-- (id)doInParallel;
-
-@end
-
-@interface NUFruit (Foundation_init)
-
-+ (id)FruitWithDescription:(NSString *)aString;
++ (id)Description:(NSString *)aString;
 
 //+ (id)fruitWithString:(NSString *)aString;
 
-- (id)initWithDescription:(NSString *)aString;
+- (id)init:(NSString *)aString;
 
 //- (id)description;
-
-@end
-
-@interface NUFruit (Foundation_description)
-
 //+ (NSString *)description;
 //- (NSString *)Description;
 + (NSString *)Description;

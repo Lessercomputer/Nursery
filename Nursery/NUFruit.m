@@ -17,7 +17,7 @@
 
 + (id)fruit
 {
-    return [[self alloc] init];
+    return [[self new] autorelease];
 }
 
 - (id)Fruit
@@ -28,6 +28,26 @@
 - (id)fruit
 {
     return self;
+}
+
+- (id)is
+{
+    return [NUIs is];
+}
+
+- (id)a
+{
+    return [NUA a];
+}
+
+- (id)do
+{
+    return [NUDo do];
+}
+
+- (id)serially
+{
+    return [NUSerially serially];
 }
 
 @end
@@ -60,7 +80,7 @@
 
 + (id)A
 {
-    return [self class];
+    return [self a];
 }
 
 + (id)a
@@ -104,16 +124,16 @@
 
 @end
 
-@implementation NUFruit (No)
+@implementation NUNo
 
 + (id)No
 {
-    return [self class];
+    return [self no];
 }
 
 + (id)no
 {
-    return [self class];
+    return [[self new] autorelease];
 }
 
 - (id)No
@@ -128,7 +148,22 @@
 
 @end
 
-@implementation NUFruit (Do)
+@implementation NUDo
+
++ (id)Do
+{
+    return [self do];
+}
+
++ (id)do
+{
+    return [[self new] autorelease];
+}
+
+- (id)Do
+{
+    return self;
+}
 
 - (id)do
 {
@@ -137,7 +172,17 @@
 
 @end
 
-@implementation NUFruit (Serially)
+@implementation NUSerially
+
++ (id)serially
+{
+    return [[self new] autorelease];
+}
+
+- (id)Serially
+{
+    return self;
+}
 
 - (id)serially
 {
@@ -146,12 +191,3 @@
 
 @end
 
-@implementation NUFruit (DoInSerial)
-
-//+ (id)DoInSerial;
-- (id)doInSerial
-{
-    return self;
-}
-
-@end
