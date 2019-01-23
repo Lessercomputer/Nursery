@@ -10,18 +10,17 @@
 
 @protocol NUFruit <NSObject>
 
-+ (instancetype)fruit;
 + (instancetype)fruitWithDescription:(NSString *)aString;
-
 - (instancetype)initWithDescription:(NSString *)aString;
 
-- (instancetype)do;
-- (instancetype)parallelly;
-- (instancetype)serially;
++ (Class)par;
+- (instancetype)par;
+
++ (Class)ser;
+- (instancetype)ser;
 
 @end
 
 @interface NUFruit : NSObject <NUFruit>
 
 @end
-

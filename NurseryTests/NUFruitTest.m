@@ -25,8 +25,16 @@
 
 - (void)testFruit
 {
-    XCTAssertNotNil([[[NUFruit fruit] do] serially]);
-    XCTAssertNotNil([[[NUFruit fruit] do] parallelly]);
+    XCTAssertNotNil([[NUFruit par] ser]);
+    XCTAssertNotNil([[NUFruit ser] par]);
+}
+
+- (void)testFruits
+{
+    id aFruitParser = [[NUFruit par] ser];
+    id aFruitSerper = [[NUFruit ser] par];
+    
+    XCTAssertEqual(aFruitParser, aFruitSerper);
 }
 
 - (void)testPerformanceExample {

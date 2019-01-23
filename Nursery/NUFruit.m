@@ -10,14 +10,9 @@
 
 @implementation NUFruit
 
-+ (instancetype)fruit
-{
-    return [[self alloc] autorelease];
-}
-
 + (instancetype)fruitWithDescription:(NSString *)aString
 {
-    return [[self alloc] initWithDescription:aString];
+    return nil;
 }
 
 - (instancetype)initWithDescription:(NSString *)aString
@@ -25,19 +20,27 @@
     return nil;
 }
 
-- (instancetype)do
++ (Class)par
 {
     return self;
 }
 
-- (instancetype)serially
+- (instancetype)par
 {
     return self;
 }
 
-- (instancetype)parallelly
++ (Class)ser
 {
     return self;
 }
+
+- (instancetype)ser
+{
+    return self;
+}
+
+
+
 
 @end
