@@ -8,7 +8,7 @@
 [Donate with PayPal (paypal.me/AkifumiTakata)](https://paypal.me/AkifumiTakata)
 
 ## Overview
-* Simple & Power
+* Simple & Powerful
 * Written in Objective-C
 * Implemented ONLY with the Foundation framework of Cocoa and Core Foundation Framework (for creating sockets)
 * ACID-compliant
