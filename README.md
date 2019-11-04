@@ -170,10 +170,10 @@ GC implements garbage collection with Tri-color marking.
 The released area is compacted 
 
 ## See also
-* [API Documentation](https://gitlab.com/AkifumiTakata/documentation-for-nursery)  
-* [Examples](https://gitlab.com/AkifumiTakata/examples-of-nursery)  
-* [Nursery Net Service App for macOS](https://gitlab.com/AkifumiTakata/nursery-net-service-app)
-* [Bookmarks App for macOS](https://gitlab.com/AkifumiTakata/bookmarks)
+* [API Documentation](https://github.com/AkifumiTakata/DocumentationForNursery)  
+* [Examples](https://github.com/AkifumiTakata/ExamplesOfNursery)  
+* [Nursery Net Service App for macOS](https://github.com/AkifumiTakata/nursery-net-service-app)
+* [Bookmarks App for macOS](https://github.com/AkifumiTakata/Bookmarks)
 
 ## Contribution
 Bug fixes are welcome
