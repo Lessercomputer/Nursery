@@ -29,7 +29,5 @@
 #import <Nursery/NULibrary.h>
 #import <Nursery/NUComparator.h>
 
-#import <Nursery/NUFruit.h>
-
 #import <Nursery/NUNurseryNetService.h>
 
