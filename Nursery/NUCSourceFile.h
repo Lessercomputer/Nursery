@@ -8,14 +8,17 @@
 
 #import <Foundation/NSObject.h>
 
-@class NSURL, NSString, NSMutableString, NSMutableArray;
+@class NSURL, NSString, NSMutableString, NSMutableArray, NULibrary;
 
 @interface NUCSourceFile : NSObject
 {
     NSURL *url;
     NSString *physicalSourceString;
+    NSString *logicalSourcePhase1String;
+    NSString *logicalSourcePhase2String;
     NSMutableString *logicalSourceString;
-    NSMutableArray *logicalSourceLines;
+    NULibrary *rangeMappingForPhase1StringToPhysicalString;
+    NULibrary *rangeMappingForPhase2StringToPhase1String;
 }
 
 - (instancetype)initWithSourceURL:(NSURL *)aURL;

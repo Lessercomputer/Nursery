@@ -8,10 +8,15 @@
 
 #import "NUCLexicalElement.h"
 
+#import <Foundation/NSCharacterSet.h>
+
 NSString * const NUCLF = @"\n";
 NSString * const NUCCRLF = @"\r\n";
 NSString * const NUCCR = @"\r";
 NSString * const NUCBackslash = @"\\";
+NSString * const NUCLessThanSign = @"<";
+NSString * const NUCGreaterThanSign = @">";
+NSString * const NUCDoubleQuotationMark = @"\"";
 
 NSString * const NUCTrigraphSequenceBeginning = @"??";
 
@@ -83,6 +88,21 @@ NSString * const NUCKeywordThreadLocal = @"_Thread_local";
 NSString * const NUCIdentifierNondigit = @"_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 NSString * const NUCIdentifierDigit = @"0123456789";
 
+static NSCharacterSet *NUCHCharCharacterSet;
+
 @implementation NUCLexicalElement
+
++ (void)initialize
+{
+    if (self == [NUCLexicalElement class])
+    {
+        NUCHCharCharacterSet = [[[NSCharacterSet characterSetWithCharactersInString:@"\r\n>"] invertedSet] copy];
+    }
+}
+
++ (NSCharacterSet *)NUCHCharCharacterSet
+{
+    return NUCHCharCharacterSet;
+}
 
 @end

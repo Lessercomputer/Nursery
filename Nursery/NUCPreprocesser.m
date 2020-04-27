@@ -9,6 +9,9 @@
 #import "NUCPreprocesser.h"
 #import "NUCSourceFile.h"
 #import "NUCLexicalElement.h"
+#import "NURegion.h"
+#import "NUCRangePair.h"
+#import "NULibrary.h"
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSScanner.h>
@@ -35,13 +38,15 @@
 
 - (void)preprocessSourceFile:(NUCSourceFile *)aSourceFile
 {
-    NSString *aLogicalSourceStringInPhase1 = [self preprocessPhase1:[aSourceFile physicalSourceString]];
-    NSString *aLogicalSourceStringInPhase2 = [self preprocessPhase2:aLogicalSourceStringInPhase1];
+    NULibrary *aSourceStringRangeMappingPhase1toPhysicalSource = [NULibrary libraryWithComparator:[NUCRangePairFromComparator comparator]];
+    NULibrary *aSourceStringRangeMappingPhase2ToPhase1 = [NULibrary libraryWithComparator:[NUCRangePairFromComparator comparator]];
+    NSString *aLogicalSourceStringInPhase1 = [self preprocessPhase1:[aSourceFile physicalSourceString] forSourceFile:aSourceFile rangeMappingFromPhase1ToPhysicalSourceString:aSourceStringRangeMappingPhase1toPhysicalSource];
+    NSString *aLogicalSourceStringInPhase2 = [self preprocessPhase2:aLogicalSourceStringInPhase1 forSourceFile:aSourceFile rangeMappingFromPhase2StringToPhase1String:aSourceStringRangeMappingPhase2ToPhase1];
     
     [aSourceFile setLogicalSourceString:aLogicalSourceStringInPhase2];
 }
 
-- (NSString *)preprocessPhase1:(NSString *)aPhysicalSourceString
+- (NSString *)preprocessPhase1:(NSString *)aPhysicalSourceString forSourceFile:(NUCSourceFile *)aSourceFile rangeMappingFromPhase1ToPhysicalSourceString:(NULibrary *)aRangeMappingFromPhase1ToPhysicalSourceString
 {
     NSMutableString *aLogicalSourceStringInPhase1 = [NSMutableString string];
     NSScanner *aScanner = [NSScanner scannerWithString:aPhysicalSourceString];
@@ -50,6 +55,8 @@
     
     while (![aScanner isAtEnd])
     {
+        NSUInteger aScanLocation = [aScanner scanLocation];
+        
         if ([aScanner scanString:NUCTrigraphSequenceBeginning intoString:NULL])
         {
             if ([aScanner scanString:NUCTrigraphSequenceEqual intoString:NULL])
@@ -72,6 +79,13 @@
                 [aLogicalSourceStringInPhase1 appendString:NUCTrigraphSequenceTilde];
             else
                 [aLogicalSourceStringInPhase1 appendString:NUCTrigraphSequenceBeginning];
+            
+            if (aScanLocation != [aScanner scanLocation])
+            {
+                NUCRangePair *aRangePair = [NUCRangePair rangePairWithRangeFrom:NUMakeRegion([aLogicalSourceStringInPhase1 length], 1) rangeTo:NUMakeRegion(aScanLocation, 3)];
+                
+                [aRangeMappingFromPhase1ToPhysicalSourceString setObject:aRangePair forKey:aRangePair];
+            }
         }
         else if ([aScanner scanUpToString:NUCTrigraphSequenceBeginning intoString:&aScannedString])
         {
@@ -82,7 +96,7 @@
     return aLogicalSourceStringInPhase1;
 }
 
-- (NSString *)preprocessPhase2:(NSString *)aLogicalSourceStringInPhase1
+- (NSString *)preprocessPhase2:(NSString *)aLogicalSourceStringInPhase1 forSourceFile:(NUCSourceFile *)aSourceFile rangeMappingFromPhase2StringToPhase1String:(NULibrary *)aRangeMappingFromPhase2StringToPhase1String
 {
     NSMutableString *aLogicalSourceStringInPhase2 = [NSMutableString string];
     NSScanner *aScanner = [NSScanner scannerWithString:aLogicalSourceStringInPhase1];
@@ -91,14 +105,24 @@
     
     while (![aScanner isAtEnd])
     {
+        NSUInteger aScanLocation = [aScanner scanLocation];
+        
         if ([aScanner scanString:NUCBackslash intoString:NULL])
         {
             NSString *aNewLineString = nil;
             
-            if (!([aScanner scanString:NUCCRLF intoString:&aNewLineString]
+            if ([aScanner scanString:NUCCRLF intoString:&aNewLineString]
                   || [aScanner scanString:NUCLF intoString:&aNewLineString]
-                  || [aScanner scanString:NUCCR intoString:&aNewLineString]))
+                  || [aScanner scanString:NUCCR intoString:&aNewLineString])
+            {
+                NUCRangePair *aRangePair = [NUCRangePair rangePairWithRangeFrom:NUMakeRegion([aLogicalSourceStringInPhase2 length], 0) rangeTo:NUMakeRegion(aScanLocation, 1 + [aNewLineString length])];
+                [aRangeMappingFromPhase2StringToPhase1String setObject:aRangePair forKey:aRangePair];
+                
+            }
+            else
+            {
                 [aLogicalSourceStringInPhase2 appendString:NUCBackslash];
+            }
         }
         else if ([aScanner scanUpToString:NUCBackslash intoString:&aScannedString])
         {
@@ -107,6 +131,46 @@
     }
     
     return aLogicalSourceStringInPhase2;
+}
+
+- (void)preprocessToPreprocessingTokens:(NSString *)aLogicalSourceStringInPhase2
+{
+    NSScanner *aScanner = [NSScanner scannerWithString:aLogicalSourceStringInPhase2];
+    [aScanner setCharactersToBeSkipped:nil];
+     
+     
+}
+
+- (BOOL)scanHeaderName:(NSScanner *)aScanner intoString:(NSString **)aHeaderName withHChar:(BOOL *)aHeaderNameIsHChar
+{
+    if ([self scanHeaderNameBeginWith:NUCLessThanSign endWith:NUCGreaterThanSign scanner:aScanner intoString:aHeaderName])
+    {
+        if (aHeaderNameIsHChar) *aHeaderNameIsHChar = YES;
+    }
+    else if ([self scanHeaderNameBeginWith:NUCDoubleQuotationMark endWith:NUCDoubleQuotationMark scanner:aScanner intoString:aHeaderName])
+    {
+        if (aHeaderNameIsHChar) *aHeaderNameIsHChar = NO;
+    }
+    
+    return NO;
+}
+
+- (BOOL)scanHeaderNameBeginWith:(NSString *)aBeginChar endWith:(NSString *)anEndChar scanner:(NSScanner *)aScanner intoString:(NSString **)aHeaderName
+{
+    NSUInteger aScanlocation = [aScanner scanLocation];
+    
+    if ([aScanner scanString:aBeginChar intoString:NULL])
+    {
+        if ([aScanner scanCharactersFromSet:[NUCLexicalElement NUCHCharCharacterSet] intoString:aHeaderName])
+        {
+            if ([aScanner scanString:anEndChar intoString:aHeaderName])
+                return YES;
+        }
+    }
+    
+    [aScanner setScanLocation:aScanlocation];
+    
+    return NO;
 }
 
 @end

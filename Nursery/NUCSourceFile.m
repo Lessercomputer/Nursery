@@ -7,9 +7,11 @@
 //
 
 #import "NUCSourceFile.h"
+#import "NULibrary.h"
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSURL.h>
+
 
 @implementation NUCSourceFile
 

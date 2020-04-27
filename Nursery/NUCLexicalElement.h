@@ -14,6 +14,9 @@ extern NSString * const NUCLF;
 extern NSString * const NUCCRLF;
 extern NSString * const NUCCR;
 extern NSString * const NUCBackslash;
+extern NSString * const NUCLessThanSign;
+extern NSString * const NUCGreaterThanSign;
+extern NSString * const NUCDoubleQuotationMark;
 
 extern NSString * const NUCTrigraphSequenceEqual;
 extern NSString * const NUCTrigraphSequenceLeftBlacket;
@@ -38,6 +41,8 @@ extern NSString * const NUCTrigraphSequenceRightCurlyBracket;
 extern NSString * const NUCTrigraphSequenceTilde;
 
 @interface NUCLexicalElement : NSObject
+
++ (NSCharacterSet *)NUCHCharCharacterSet;
 
 @end
 
