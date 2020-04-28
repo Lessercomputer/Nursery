@@ -89,6 +89,7 @@ NSString * const NUCIdentifierNondigit = @"_abcdefghijklmnopqrstuvwxyzABCDEFGHIJ
 NSString * const NUCIdentifierDigit = @"0123456789";
 
 static NSCharacterSet *NUCHCharCharacterSet;
+static NSCharacterSet *NUCQCharCharacterSet;
 
 @implementation NUCLexicalElement
 
@@ -97,12 +98,76 @@ static NSCharacterSet *NUCHCharCharacterSet;
     if (self == [NUCLexicalElement class])
     {
         NUCHCharCharacterSet = [[[NSCharacterSet characterSetWithCharactersInString:@"\r\n>"] invertedSet] copy];
+        NUCQCharCharacterSet = [[[NSCharacterSet characterSetWithCharactersInString:@"\r\n'"] invertedSet] copy];
     }
+}
+
++ (instancetype)lexicalElementWithContent:(NSString *)aContent type:(NUCLexicalElementType)anElementType
+{
+    return [[[self alloc] initWithContent:aContent type:anElementType] autorelease];
 }
 
 + (NSCharacterSet *)NUCHCharCharacterSet
 {
     return NUCHCharCharacterSet;
+}
+
++ (NSCharacterSet *)NUCQCharCharacterSet
+{
+    return NUCQCharCharacterSet;
+}
+
+- (instancetype)initWithContent:(NSString *)aContent type:(NUCLexicalElementType)anElementType
+{
+    if (self = [super init])
+    {
+        content = [aContent copy];
+        type = anElementType;
+    }
+    
+    return self;
+}
+
+- (void)dealloc
+{
+    [content release];
+    content = nil;
+    
+    [super dealloc];
+}
+
+- (NSString *)content
+{
+    return content;
+}
+
+@end
+
+@implementation NUCHeaderName
+
++ (instancetype)lexicalElementWithContent:(NSString *)aContent isHChar:(BOOL)anIsHChar
+{
+    return [[[self alloc] initWithContent:aContent isHChar:anIsHChar] autorelease];
+}
+
+- (instancetype)initWithContent:(NSString *)aContent isHChar:(BOOL)anIsHChar
+{
+    if (self = [super initWithContent:aContent type:NUCLexicalElementHeaderNameType])
+    {
+        isHChar = anIsHChar;
+    }
+    
+    return self;
+}
+
+- (BOOL)isHChar
+{
+    return isHChar;
+}
+
+- (BOOL)isQChar
+{
+    return !isHChar;
 }
 
 @end

@@ -40,9 +40,39 @@ extern NSString * const NUCTrigraphSequenceVerticalbar;
 extern NSString * const NUCTrigraphSequenceRightCurlyBracket;
 extern NSString * const NUCTrigraphSequenceTilde;
 
+typedef enum : NSUInteger {
+    NUCLexicalElementGroupType,
+    NUCLexicalElementGroupPartType,
+    NUCLexicalElementHeaderNameType
+} NUCLexicalElementType;
+
 @interface NUCLexicalElement : NSObject
+{
+    NUCLexicalElementType type;
+    NSString *content;
+}
+
++ (instancetype)lexicalElementWithContent:(NSString *)aContent type:(NUCLexicalElementType)anElementType;
+
+- (instancetype)initWithContent:(NSString *)aContent type:(NUCLexicalElementType)anElementType;
 
 + (NSCharacterSet *)NUCHCharCharacterSet;
++ (NSCharacterSet *)NUCQCharCharacterSet;
+
+- (NSString *)content;
 
 @end
 
+@interface NUCHeaderName : NUCLexicalElement
+{
+    BOOL isHChar;
+}
+
++ (instancetype)lexicalElementWithContent:(NSString *)aContent isHChar:(BOOL)anIsHChar;
+
+- (instancetype)initWithContent:(NSString *)aContent isHChar:(BOOL)anIsHChar;
+
+- (BOOL)isHChar;
+- (BOOL)isQChar;
+
+@end

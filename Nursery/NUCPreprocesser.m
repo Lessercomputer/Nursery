@@ -15,6 +15,7 @@
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSScanner.h>
+#import <Foundation/NSArray.h>
 
 @implementation NUCPreprocesser
 
@@ -44,6 +45,94 @@
     NSString *aLogicalSourceStringInPhase2 = [self preprocessPhase2:aLogicalSourceStringInPhase1 forSourceFile:aSourceFile rangeMappingFromPhase2StringToPhase1String:aSourceStringRangeMappingPhase2ToPhase1];
     
     [aSourceFile setLogicalSourceString:aLogicalSourceStringInPhase2];
+    
+    [self scanPreprocessingFile:aSourceFile];
+}
+
+- (void)scanPreprocessingFile:(NUCSourceFile *)aSourceFile
+{
+    NSMutableArray *anElements = [NSMutableArray array];
+    NSScanner *aScanner = [NSScanner scannerWithString:[aSourceFile logicalSourceString]];
+    [aScanner setCharactersToBeSkipped:nil];
+    
+    [self scanGroupFrom:aScanner addTo:anElements];
+}
+
+- (BOOL)scanGroupFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    BOOL anElementWasScanned = NO;
+    
+    while (YES)
+    {
+        if ([self scanGroupPartFrom:aScanner addTo:anElements])
+            anElementWasScanned = YES;
+        else
+            break;
+    }
+    
+    return anElementWasScanned;
+}
+
+- (BOOL)scanGroupPartFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    if ([self scanIfSectionFrom:aScanner addTo:anElements])
+        return YES;
+    else if ([self scanControlLineFrom:aScanner addTo:anElements])
+        return YES;
+    else if ([self scanTextLineFrom:aScanner addTo:anElements])
+        return YES;
+    else if ([self scanHashAndNonDirectiveFrom:aScanner addTo:anElements])
+        return YES;
+    else
+        return NO;
+}
+
+- (BOOL)scanIfSectionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    if ([self scanIfGroupFrom:aScanner addTo:anElements])
+    {
+        [self scanElifGroupsFrom:aScanner addTo:anElements];
+        [self scanElseGroupFrom:aScanner addTo:anElements];
+        if ([self scanEndifLineFrom:aScanner addTo:anElements])
+            return YES;
+    }
+    
+    return NO;
+}
+
+- (BOOL)scanControlLineFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanTextLineFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanHashAndNonDirectiveFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanIfGroupFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanElifGroupsFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanElseGroupFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanEndifLineFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
 }
 
 - (NSString *)preprocessPhase1:(NSString *)aPhysicalSourceString forSourceFile:(NUCSourceFile *)aSourceFile rangeMappingFromPhase1ToPhysicalSourceString:(NULibrary *)aRangeMappingFromPhase1ToPhysicalSourceString
@@ -141,30 +230,30 @@
      
 }
 
-- (BOOL)scanHeaderName:(NSScanner *)aScanner intoString:(NSString **)aHeaderName withHChar:(BOOL *)aHeaderNameIsHChar
+- (BOOL)scanHeaderNameFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
 {
-    if ([self scanHeaderNameBeginWith:NUCLessThanSign endWith:NUCGreaterThanSign scanner:aScanner intoString:aHeaderName])
-    {
-        if (aHeaderNameIsHChar) *aHeaderNameIsHChar = YES;
-    }
-    else if ([self scanHeaderNameBeginWith:NUCDoubleQuotationMark endWith:NUCDoubleQuotationMark scanner:aScanner intoString:aHeaderName])
-    {
-        if (aHeaderNameIsHChar) *aHeaderNameIsHChar = NO;
-    }
-    
-    return NO;
+    if ([self scanHeaderNameFrom:aScanner beginWith:NUCLessThanSign endWith:NUCGreaterThanSign characterSet:[NUCLexicalElement NUCHCharCharacterSet] isHChar:YES addTo:anElements])
+        return YES;
+    else if ([self scanHeaderNameFrom:aScanner beginWith:NUCDoubleQuotationMark endWith:NUCDoubleQuotationMark characterSet:[NUCLexicalElement NUCQCharCharacterSet] isHChar:NO addTo:anElements])
+        return YES;
+    else
+        return NO;
 }
 
-- (BOOL)scanHeaderNameBeginWith:(NSString *)aBeginChar endWith:(NSString *)anEndChar scanner:(NSScanner *)aScanner intoString:(NSString **)aHeaderName
+- (BOOL)scanHeaderNameFrom:(NSScanner *)aScanner beginWith:(NSString *)aBeginChar endWith:(NSString *)anEndChar characterSet:(NSCharacterSet *)aCharacterSet isHChar:(BOOL)anIsHChar addTo:(NSMutableArray *)anElements
 {
     NSUInteger aScanlocation = [aScanner scanLocation];
+    NSString *aCharSequence = nil;
     
     if ([aScanner scanString:aBeginChar intoString:NULL])
     {
-        if ([aScanner scanCharactersFromSet:[NUCLexicalElement NUCHCharCharacterSet] intoString:aHeaderName])
+        if ([aScanner scanCharactersFromSet:aCharacterSet intoString:&aCharSequence])
         {
-            if ([aScanner scanString:anEndChar intoString:aHeaderName])
+            if ([aScanner scanString:anEndChar intoString:NULL])
+            {
+                [anElements addObject:[NUCHeaderName lexicalElementWithContent:aCharSequence isHChar:anIsHChar]];
                 return YES;
+            }
         }
     }
     
