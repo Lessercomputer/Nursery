@@ -117,7 +117,139 @@
 
 - (BOOL)scanIfGroupFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
 {
+    NSUInteger aScanLocation = [aScanner scanLocation];
+    
+    if ([aScanner scanString:NUCHashIf intoString:NULL])
+    {
+        
+    }
+    
     return NO;
+}
+
+- (BOOL)scanConstantExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    
+    return NO;
+}
+
+- (BOOL)scanConditionalExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanLogicalOrExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanLogicalAndExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanInclusiveOrExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanExclusiveOrExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanAndExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanEqualityExpresionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanEqualityExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanRelationalExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanShiftExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanAdditiveExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    
+    return NO;
+}
+
+- (BOOL)scanMultiplicativeExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanCastExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanUnaryExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanPostfixExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanPrimaryExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    
+    return NO;
+}
+
+- (BOOL)scanIdentifierFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    NSUInteger aScanLocation = [aScanner scanLocation];
+    
+    if ([self scanNondigitFrom:aScanner])
+    {
+        while ([self scanDigitFrom:aScanner] || [self scanNondigitFrom:aScanner]);
+    }
+    
+    if (aScanLocation != [aScanner scanLocation])
+    {
+        NSRange anIdentifierRange = NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation);
+        NSString *anIdentifierStrng = [[aScanner string] substringWithRange:anIdentifierRange];
+        
+        [anElements addObject:[NUCLexicalElement lexicalElementWithContent:anIdentifierStrng range:NURegionFromRange(anIdentifierRange) type:NUCLexicalElementIdentifierType]];
+        
+        return YES;
+    }
+    else
+        return NO;
+}
+
+- (BOOL)scanConstantFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanNondigitFrom:(NSScanner *)aScanner
+{
+    return [aScanner scanString:NUCIdentifierNondigit intoString:NULL];
+}
+
+- (BOOL)scanDigitFrom:(NSScanner *)aScanner
+{
+    return [aScanner scanString:NUCIdentifierDigit intoString:NULL];
 }
 
 - (BOOL)scanElifGroupsFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
@@ -247,11 +379,28 @@
     
     if ([aScanner scanString:aBeginChar intoString:NULL])
     {
+        NUCLexicalElementType anElementType;
+        
+        if (anIsHChar)
+            anElementType = NUCLexicalElementGreaterThanSign;
+        else
+            anElementType = NUCLexicalElementDoubleQuotationMark;
+        
+        [anElements addObject:[NUCLexicalElement lexicalElementWithContent:aBeginChar range:NUMakeRegion(aScanlocation, 1) type:anElementType]];
+        
         if ([aScanner scanCharactersFromSet:aCharacterSet intoString:&aCharSequence])
         {
             if ([aScanner scanString:anEndChar intoString:NULL])
             {
-                [anElements addObject:[NUCHeaderName lexicalElementWithContent:aCharSequence isHChar:anIsHChar]];
+                [anElements addObject:[NUCHeaderName lexicalElementWithContent:aCharSequence range:NUMakeRegion(aScanlocation + 1, [aCharSequence length]) isHChar:anIsHChar]];
+                
+                if (anIsHChar)
+                    anElementType = NUCLexicalElementLessThanSignType;
+                else
+                    anElementType = NUCLexicalElementDoubleQuotationMark;
+                
+                [anElements addObject:[NUCLexicalElement lexicalElementWithContent:anEndChar range:NUMakeRegion([aScanner scanLocation] - 1, 1) type:anElementType]];
+                
                 return YES;
             }
         }

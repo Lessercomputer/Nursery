@@ -17,6 +17,10 @@ NSString * const NUCBackslash = @"\\";
 NSString * const NUCLessThanSign = @"<";
 NSString * const NUCGreaterThanSign = @">";
 NSString * const NUCDoubleQuotationMark = @"\"";
+NSString * const NUCHash = @"#";
+NSString * const NUCHashIf = @"#if";
+NSString * const NUCHashIfdef = @"#ifdef";
+NSString * const NUCHashIfndef = @"#ifndef";
 
 NSString * const NUCTrigraphSequenceBeginning = @"??";
 
@@ -102,9 +106,9 @@ static NSCharacterSet *NUCQCharCharacterSet;
     }
 }
 
-+ (instancetype)lexicalElementWithContent:(NSString *)aContent type:(NUCLexicalElementType)anElementType
++ (instancetype)lexicalElementWithContent:(NSString *)aContent range:(NURegion)aRange type:(NUCLexicalElementType)anElementType
 {
-    return [[[self alloc] initWithContent:aContent type:anElementType] autorelease];
+    return [[[self alloc] initWithContent:aContent range:aRange type:anElementType] autorelease];
 }
 
 + (NSCharacterSet *)NUCHCharCharacterSet
@@ -117,7 +121,7 @@ static NSCharacterSet *NUCQCharCharacterSet;
     return NUCQCharCharacterSet;
 }
 
-- (instancetype)initWithContent:(NSString *)aContent type:(NUCLexicalElementType)anElementType
+- (instancetype)initWithContent:(NSString *)aContent range:(NURegion)aRange type:(NUCLexicalElementType)anElementType
 {
     if (self = [super init])
     {
@@ -145,14 +149,14 @@ static NSCharacterSet *NUCQCharCharacterSet;
 
 @implementation NUCHeaderName
 
-+ (instancetype)lexicalElementWithContent:(NSString *)aContent isHChar:(BOOL)anIsHChar
++ (instancetype)lexicalElementWithContent:(NSString *)aContent range:(NURegion)aRange isHChar:(BOOL)anIsHChar
 {
-    return [[[self alloc] initWithContent:aContent isHChar:anIsHChar] autorelease];
+    return [[[self alloc] initWithContent:aContent range:aRange isHChar:anIsHChar] autorelease];
 }
 
-- (instancetype)initWithContent:(NSString *)aContent isHChar:(BOOL)anIsHChar
+- (instancetype)initWithContent:(NSString *)aContent range:(NURegion)aRange isHChar:(BOOL)anIsHChar
 {
-    if (self = [super initWithContent:aContent type:NUCLexicalElementHeaderNameType])
+    if (self = [super initWithContent:aContent range:aRange type:NUCLexicalElementHeaderNameType])
     {
         isHChar = anIsHChar;
     }

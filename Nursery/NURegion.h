@@ -26,5 +26,6 @@ NURegion NUUnionRegions(NURegion aRegion, NURegion *aRegions, NUUInt64 aCount);
 NUComparisonResult compareRegionLocation(NUUInt8 *aRegion1, NUUInt8 *aRegion2);
 NSString *NUStringFromRegion(NURegion aRegion);
 NSRange NURangeFromRegion(NURegion aRegion);
+NURegion NURegionFromRange(NSRange aRange);
 NURegion NUSwapHostRegionToBig(NURegion aRegion);
 NURegion NUSwapBigRegionToHost(NURegion aRegion);

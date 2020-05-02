@@ -8,6 +8,8 @@
 
 #import <Foundation/NSObject.h>
 
+#import <Nursery/NURegion.h>
+
 @class NSString;
 
 extern NSString * const NUCLF;
@@ -17,6 +19,10 @@ extern NSString * const NUCBackslash;
 extern NSString * const NUCLessThanSign;
 extern NSString * const NUCGreaterThanSign;
 extern NSString * const NUCDoubleQuotationMark;
+extern NSString * const NUCHash;
+extern NSString * const NUCHashIf;
+extern NSString * const NUCHashIfdef;
+extern NSString * const NUCHashIfndef;
 
 extern NSString * const NUCTrigraphSequenceEqual;
 extern NSString * const NUCTrigraphSequenceLeftBlacket;
@@ -40,21 +46,29 @@ extern NSString * const NUCTrigraphSequenceVerticalbar;
 extern NSString * const NUCTrigraphSequenceRightCurlyBracket;
 extern NSString * const NUCTrigraphSequenceTilde;
 
+extern NSString * const NUCIdentifierNondigit;
+extern NSString * const NUCIdentifierDigit;
+
 typedef enum : NSUInteger {
     NUCLexicalElementGroupType,
     NUCLexicalElementGroupPartType,
-    NUCLexicalElementHeaderNameType
+    NUCLexicalElementHeaderNameType,
+    NUCLexicalElementLessThanSignType,
+    NUCLexicalElementGreaterThanSign,
+    NUCLexicalElementDoubleQuotationMark,
+    NUCLexicalElementIdentifierType
 } NUCLexicalElementType;
 
 @interface NUCLexicalElement : NSObject
 {
     NUCLexicalElementType type;
     NSString *content;
+    NURegion range;
 }
 
-+ (instancetype)lexicalElementWithContent:(NSString *)aContent type:(NUCLexicalElementType)anElementType;
++ (instancetype)lexicalElementWithContent:(NSString *)aContent range:(NURegion)aRange type:(NUCLexicalElementType)anElementType;
 
-- (instancetype)initWithContent:(NSString *)aContent type:(NUCLexicalElementType)anElementType;
+- (instancetype)initWithContent:(NSString *)aContent range:(NURegion)aRange type:(NUCLexicalElementType)anElementType;
 
 + (NSCharacterSet *)NUCHCharCharacterSet;
 + (NSCharacterSet *)NUCQCharCharacterSet;
@@ -68,9 +82,9 @@ typedef enum : NSUInteger {
     BOOL isHChar;
 }
 
-+ (instancetype)lexicalElementWithContent:(NSString *)aContent isHChar:(BOOL)anIsHChar;
++ (instancetype)lexicalElementWithContent:(NSString *)aContent range:(NURegion)aRange isHChar:(BOOL)anIsHChar;
 
-- (instancetype)initWithContent:(NSString *)aContent isHChar:(BOOL)anIsHChar;
+- (instancetype)initWithContent:(NSString *)aContent range:(NURegion)aRange isHChar:(BOOL)anIsHChar;
 
 - (BOOL)isHChar;
 - (BOOL)isQChar;

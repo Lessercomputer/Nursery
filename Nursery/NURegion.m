@@ -110,6 +110,11 @@ NSRange NURangeFromRegion(NURegion aRegion)
     return NSMakeRange((NSUInteger)aRegion.location, (NSUInteger)aRegion.length);
 }
 
+NURegion NURegionFromRange(NSRange aRange)
+{
+    return NUMakeRegion(aRange.location, aRange.length);
+}
+
 NURegion NUSwapHostRegionToBig(NURegion aRegion)
 {
     aRegion.location = NSSwapHostLongLongToBig(aRegion.location);
