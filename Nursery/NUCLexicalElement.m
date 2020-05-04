@@ -92,8 +92,13 @@ NSString * const NUCKeywordThreadLocal = @"_Thread_local";
 NSString * const NUCIdentifierNondigit = @"_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 NSString * const NUCIdentifierDigit = @"0123456789";
 
+NSString * const NUCNonzeroDigits = @"123456789";
+NSString * const NUCDigits = @"0123456789";
+
 static NSCharacterSet *NUCHCharCharacterSet;
 static NSCharacterSet *NUCQCharCharacterSet;
+static NSCharacterSet *NUCNonzeroDigitCharacterSet;
+static NSCharacterSet *NUCDigitCharacterSet;
 
 @implementation NUCLexicalElement
 
@@ -103,12 +108,24 @@ static NSCharacterSet *NUCQCharCharacterSet;
     {
         NUCHCharCharacterSet = [[[NSCharacterSet characterSetWithCharactersInString:@"\r\n>"] invertedSet] copy];
         NUCQCharCharacterSet = [[[NSCharacterSet characterSetWithCharactersInString:@"\r\n'"] invertedSet] copy];
+        NUCNonzeroDigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCNonzeroDigits] copy];
+        NUCDigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCDigits] copy];
     }
 }
 
-+ (instancetype)lexicalElementWithContent:(NSString *)aContent range:(NURegion)aRange type:(NUCLexicalElementType)anElementType
++ (instancetype)lexicalElementWithRange:(NSRange)aRange type:(NUCLexicalElementType)anElementType
 {
-    return [[[self alloc] initWithContent:aContent range:aRange type:anElementType] autorelease];
+    return [self lexicalElementWithContent:nil range:aRange type:anElementType];
+}
+
++ (instancetype)lexicalElementWithContent:(NSString *)aContent range:(NSRange)aRange type:(NUCLexicalElementType)anElementType
+{
+    return [self lexicalElementWithContent:aContent region:NURegionFromRange(aRange) type:anElementType];
+}
+
++ (instancetype)lexicalElementWithContent:(NSString *)aContent region:(NURegion)aRange type:(NUCLexicalElementType)anElementType
+{
+    return [[[self alloc] initWithContent:aContent region:aRange type:anElementType] autorelease];
 }
 
 + (NSCharacterSet *)NUCHCharCharacterSet
@@ -121,7 +138,27 @@ static NSCharacterSet *NUCQCharCharacterSet;
     return NUCQCharCharacterSet;
 }
 
-- (instancetype)initWithContent:(NSString *)aContent range:(NURegion)aRange type:(NUCLexicalElementType)anElementType
++ (NSCharacterSet *)NUCNonzeroDigitCharacterSet
+{
+    return NUCNonzeroDigitCharacterSet;
+}
+
++ (NSCharacterSet *)NUCDigitCharacterSet
+{
+    return NUCDigitCharacterSet;
+}
+
+- (instancetype)initWithRange:(NSRange)aRange type:(NUCLexicalElementType)anElementType
+{
+    return [self initWithContent:nil range:aRange type:anElementType];
+}
+
+- (instancetype)initWithContent:(NSString *)aContent range:(NSRange)aRange type:(NUCLexicalElementType)anElementType
+{
+    return [self initWithContent:aContent region:NURegionFromRange(aRange) type:anElementType];
+}
+
+- (instancetype)initWithContent:(NSString *)aContent region:(NURegion)aRange type:(NUCLexicalElementType)anElementType
 {
     if (self = [super init])
     {
@@ -149,14 +186,24 @@ static NSCharacterSet *NUCQCharCharacterSet;
 
 @implementation NUCHeaderName
 
-+ (instancetype)lexicalElementWithContent:(NSString *)aContent range:(NURegion)aRange isHChar:(BOOL)anIsHChar
++ (instancetype)lexicalElementWithRange:(NSRange)aRange isHChar:(BOOL)anIsHChar;
+{
+    return [self lexicalElementWithContent:nil range:aRange isHChar:anIsHChar];
+}
+
++ (instancetype)lexicalElementWithContent:(NSString *)aContent range:(NSRange)aRange isHChar:(BOOL)anIsHChar
 {
     return [[[self alloc] initWithContent:aContent range:aRange isHChar:anIsHChar] autorelease];
 }
 
-- (instancetype)initWithContent:(NSString *)aContent range:(NURegion)aRange isHChar:(BOOL)anIsHChar
+- (instancetype)initWithRange:(NSRange)aRange isHChar:(BOOL)anIsHChar;
 {
-    if (self = [super initWithContent:aContent range:aRange type:NUCLexicalElementHeaderNameType])
+    return [self initWithContent:nil range:aRange isHChar:anIsHChar];
+}
+
+- (instancetype)initWithContent:(NSString *)aContent range:(NSRange)aRange isHChar:(BOOL)anIsHChar
+{
+    if (self = [super initWithContent:aContent region:NURegionFromRange(aRange) type:NUCLexicalElementHeaderNameType])
     {
         isHChar = anIsHChar;
     }

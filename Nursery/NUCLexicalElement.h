@@ -49,14 +49,18 @@ extern NSString * const NUCTrigraphSequenceTilde;
 extern NSString * const NUCIdentifierNondigit;
 extern NSString * const NUCIdentifierDigit;
 
+extern NSString * const NUCNonzeroDigits;
+extern NSString * const NUCDigits;
+
 typedef enum : NSUInteger {
     NUCLexicalElementGroupType,
     NUCLexicalElementGroupPartType,
     NUCLexicalElementHeaderNameType,
     NUCLexicalElementLessThanSignType,
-    NUCLexicalElementGreaterThanSign,
-    NUCLexicalElementDoubleQuotationMark,
-    NUCLexicalElementIdentifierType
+    NUCLexicalElementGreaterThanSignType,
+    NUCLexicalElementDoubleQuotationMarkType,
+    NUCLexicalElementIdentifierType,
+    NUCLexicalElementIntegerConstantType
 } NUCLexicalElementType;
 
 @interface NUCLexicalElement : NSObject
@@ -66,12 +70,22 @@ typedef enum : NSUInteger {
     NURegion range;
 }
 
-+ (instancetype)lexicalElementWithContent:(NSString *)aContent range:(NURegion)aRange type:(NUCLexicalElementType)anElementType;
++ (instancetype)lexicalElementWithContent:(NSString *)aContent range:(NSRange)aRange type:(NUCLexicalElementType)anElementType;
 
-- (instancetype)initWithContent:(NSString *)aContent range:(NURegion)aRange type:(NUCLexicalElementType)anElementType;
++ (instancetype)lexicalElementWithRange:(NSRange)aRange type:(NUCLexicalElementType)anElementType;
+
++ (instancetype)lexicalElementWithContent:(NSString *)aContent region:(NURegion)aRange type:(NUCLexicalElementType)anElementType;
+
+- (instancetype)initWithRange:(NSRange)aRange type:(NUCLexicalElementType)anElementType;
+
+- (instancetype)initWithContent:(NSString *)aContent range:(NSRange)aRange type:(NUCLexicalElementType)anElementType;
+
+- (instancetype)initWithContent:(NSString *)aContent region:(NURegion)aRange type:(NUCLexicalElementType)anElementType;
 
 + (NSCharacterSet *)NUCHCharCharacterSet;
 + (NSCharacterSet *)NUCQCharCharacterSet;
++ (NSCharacterSet *)NUCNonzeroDigitCharacterSet;
++ (NSCharacterSet *)NUCDigitCharacterSet;
 
 - (NSString *)content;
 
@@ -82,9 +96,13 @@ typedef enum : NSUInteger {
     BOOL isHChar;
 }
 
-+ (instancetype)lexicalElementWithContent:(NSString *)aContent range:(NURegion)aRange isHChar:(BOOL)anIsHChar;
++ (instancetype)lexicalElementWithRange:(NSRange)aRange isHChar:(BOOL)anIsHChar;
 
-- (instancetype)initWithContent:(NSString *)aContent range:(NURegion)aRange isHChar:(BOOL)anIsHChar;
++ (instancetype)lexicalElementWithContent:(NSString *)aContent range:(NSRange)aRange isHChar:(BOOL)anIsHChar;
+
+- (instancetype)initWithRange:(NSRange)aRange isHChar:(BOOL)anIsHChar;
+
+- (instancetype)initWithContent:(NSString *)aContent range:(NSRange)aRange isHChar:(BOOL)anIsHChar;
 
 - (BOOL)isHChar;
 - (BOOL)isQChar;
