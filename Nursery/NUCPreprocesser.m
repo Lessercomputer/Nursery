@@ -239,22 +239,22 @@
 
 - (BOOL)scanConstantFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
 {
-    return NO;
+    if ([self scanIntegerConstantFrom:aScanner addTo:anElements]
+        || [self scanFloatingConstantFrom:aScanner addTo:anElements]
+        || [self scanEnumerationConstantFrom:aScanner addTo:anElements]
+        || [self scanCharacterConstantFrom:aScanner addTo:anElements])
+        return YES;
+    else
+        return NO;
 }
 
 - (BOOL)scanIntegerConstantFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
 {
-    NSUInteger aScanLocation = [aScanner scanLocation];
-    
-    if ([self scanNonzeroDigitFrom:aScanner])
+    if ([self scanDecimalConstantFrom:aScanner addTo:anElements]
+        || [self scanOctalConstantFrom:aScanner addTo:anElements]
+        || [self scanHexadecimalConstantFrom:aScanner addTo:anElements])
     {
-        NSRange aRange;
-        
-        [self scanDigitFrom:aScanner];
-        
-        aRange = NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation);
-        [anElements addObject:[NUCLexicalElement lexicalElementWithContent:[[aScanner string] substringWithRange:aRange] range:aRange type:NUCLexicalElementIntegerConstantType]];
-        
+        [self scanIntegerSuffixFrom:aScanner addTo:anElements];
         return YES;
     }
     else
@@ -278,12 +278,92 @@
 
 - (BOOL)scanDecimalConstantFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
 {
-    return NO;
+    NSUInteger aScanLocation = [aScanner scanLocation];
+    
+    if ([self scanNonzeroDigitFrom:aScanner])
+    {
+        NSRange aRange;
+        
+        [self scanDigitFrom:aScanner];
+        
+        aRange = NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation);
+        [anElements addObject:[NUCLexicalElement lexicalElementWithRange:aRange type:NUCLexicalElementIntegerConstantType]];
+        
+        return YES;
+    }
+    else
+        return NO;
 }
 
 - (BOOL)scanIntegerSuffixFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
 {
-    return NO;
+    if ([self scanUnsignedSuffixFrom:aScanner addTo:anElements])
+    {
+        if ([self scanLongLongSuffixFrom:aScanner addTo:anElements])
+            return YES;
+        else
+        {
+            [self scanLongSuffixFrom:aScanner addTo:anElements];
+            return YES;
+        }
+    }
+    else if ([self scanLongLongSuffixFrom:aScanner addTo:anElements])
+    {
+        [self scanUnsignedSuffixFrom:aScanner addTo:anElements];
+        return YES;
+    }
+    else if ([self scanLongSuffixFrom:aScanner addTo:anElements])
+    {
+        [self scanUnsignedSuffixFrom:aScanner addTo:anElements];
+        return YES;
+    }
+    else
+        return NO;
+}
+
+- (BOOL)scanUnsignedSuffixFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    NSUInteger aScanLocation = [aScanner scanLocation];
+    
+    if ([aScanner scanString:NUCUnsignedSuffixSmall intoString:NULL]
+            || [aScanner scanString:NUCUnsignedSuffixLarge intoString:NULL])
+    {
+        [anElements addObject:[NUCLexicalElement lexicalElementWithRange:NSMakeRange(aScanLocation, 1) type:NUCLexicalElementUnsignedSuffixType]];
+        
+        return YES;
+    }
+    else
+        return NO;
+}
+
+- (BOOL)scanLongSuffixFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    NSUInteger aScanLocation = [aScanner scanLocation];
+    
+    if ([aScanner scanString:NUCLongSuffixSmall intoString:NULL]
+            || [aScanner scanString:NUCLongSuffixLarge intoString:NULL])
+    {
+        [anElements addObject:[NUCLexicalElement lexicalElementWithRange:NSMakeRange(aScanLocation, 1) type:NUCLexicalElementLongSuffixType]];
+        
+        return YES;
+    }
+    else
+        return NO;
+}
+
+- (BOOL)scanLongLongSuffixFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    NSUInteger aScanLocation = [aScanner scanLocation];
+    
+    if ([aScanner scanString:NUCLongLongSuffixSmall intoString:NULL]
+            || [aScanner scanString:NUCLongLongSuffixLarge intoString:NULL])
+    {
+        [anElements addObject:[NUCLexicalElement lexicalElementWithRange:NSMakeRange(aScanLocation, 2) type:NUCLexicalElementLongLongSuffixType]];
+        
+        return YES;
+    }
+    else
+        return NO;
 }
 
 - (BOOL)scanOctalConstantFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements

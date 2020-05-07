@@ -94,6 +94,12 @@ NSString * const NUCIdentifierDigit = @"0123456789";
 
 NSString * const NUCNonzeroDigits = @"123456789";
 NSString * const NUCDigits = @"0123456789";
+NSString * const NUCUnsignedSuffixSmall = @"u";
+NSString * const NUCUnsignedSuffixLarge = @"U";
+NSString * const NUCLongSuffixSmall = @"l";
+NSString * const NUCLongSuffixLarge = @"L";
+NSString * const NUCLongLongSuffixSmall = @"ll";
+NSString * const NUCLongLongSuffixLarge = @"LL";
 
 static NSCharacterSet *NUCHCharCharacterSet;
 static NSCharacterSet *NUCQCharCharacterSet;
