@@ -242,11 +242,6 @@
     return NO;
 }
 
-- (BOOL)scanCharacterConstantFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
-{
-    return NO;
-}
-
 - (BOOL)scanStringLiteralFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
 {
     return NO;
