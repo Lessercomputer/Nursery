@@ -94,6 +94,9 @@ NSString * const NUCIdentifierDigit = @"0123456789";
 
 NSString * const NUCNonzeroDigits = @"123456789";
 NSString * const NUCDigits = @"0123456789";
+NSString * const NUCOctalDigitZero = @"0";
+NSString * const NUCOctalDigits = @"01234567";
+NSString * const NUCHexadecimalDigits = @"0123456789abcdefABCDEF";
 NSString * const NUCUnsignedSuffixSmall = @"u";
 NSString * const NUCUnsignedSuffixLarge = @"U";
 NSString * const NUCLongSuffixSmall = @"l";
@@ -105,6 +108,8 @@ static NSCharacterSet *NUCHCharCharacterSet;
 static NSCharacterSet *NUCQCharCharacterSet;
 static NSCharacterSet *NUCNonzeroDigitCharacterSet;
 static NSCharacterSet *NUCDigitCharacterSet;
+static NSCharacterSet *NUCOctalDigitCharacterSet;
+static NSCharacterSet *NUCHexadecimalDigitCharacterSet;
 
 @implementation NUCLexicalElement
 
@@ -116,6 +121,8 @@ static NSCharacterSet *NUCDigitCharacterSet;
         NUCQCharCharacterSet = [[[NSCharacterSet characterSetWithCharactersInString:@"\r\n'"] invertedSet] copy];
         NUCNonzeroDigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCNonzeroDigits] copy];
         NUCDigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCDigits] copy];
+        NUCOctalDigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCOctalDigits] copy];
+        NUCHexadecimalDigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCHexadecimalDigits] copy];
     }
 }
 
@@ -152,6 +159,16 @@ static NSCharacterSet *NUCDigitCharacterSet;
 + (NSCharacterSet *)NUCDigitCharacterSet
 {
     return NUCDigitCharacterSet;
+}
+
++ (NSCharacterSet *)NUCOctalDigitCharacterSet
+{
+    return NUCOctalDigitCharacterSet;
+}
+
++ (NSCharacterSet *)NUCHexadecimalDigitCharacterSet
+{
+    return NUCHexadecimalDigitCharacterSet;
 }
 
 - (instancetype)initWithRange:(NSRange)aRange type:(NUCLexicalElementType)anElementType

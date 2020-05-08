@@ -237,6 +237,26 @@
         return NO;
 }
 
+- (BOOL)scanPpNumberFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanCharacterConstantFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanStringLiteralFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanPunctuatorFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
 - (BOOL)scanConstantFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
 {
     if ([self scanIntegerConstantFrom:aScanner addTo:anElements]
@@ -368,6 +388,18 @@
 
 - (BOOL)scanOctalConstantFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
 {
+    NSUInteger aScanLocation = [aScanner scanLocation];
+    
+    if ([aScanner scanString:NUCOctalDigitZero intoString:NULL])
+    {
+        if ([aScanner scanCharactersFromSet:[NUCLexicalElement NUCOctalDigitCharacterSet] intoString:NULL])
+        {
+            [anElements addObject:[NUCLexicalElement lexicalElementWithRange:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementOctalConstantType]];
+            
+            return YES;
+        }
+    }
+    
     return NO;
 }
 
