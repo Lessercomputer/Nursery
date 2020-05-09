@@ -219,17 +219,16 @@
 {
     NSUInteger aScanLocation = [aScanner scanLocation];
     
-    if ([self scanNondigitFrom:aScanner])
+    if ([self scanIdentifierNondigitFrom:aScanner])
     {
-        while ([self scanDigitFrom:aScanner] || [self scanNondigitFrom:aScanner]);
+        while ([self scanDigitFrom:aScanner] || [self scanIdentifierNondigitFrom:aScanner]);
     }
     
     if (aScanLocation != [aScanner scanLocation])
     {
         NSRange anIdentifierRange = NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation);
-        NSString *anIdentifierStrng = [[aScanner string] substringWithRange:anIdentifierRange];
         
-        [anElements addObject:[NUCLexicalElement lexicalElementWithContent:anIdentifierStrng range:anIdentifierRange type:NUCLexicalElementIdentifierType]];
+        [anElements addObject:[NUCLexicalElement lexicalElementWithRange:anIdentifierRange type:NUCLexicalElementIdentifierType]];
         
         return YES;
     }
@@ -237,9 +236,69 @@
         return NO;
 }
 
+- (BOOL)scanIdentifierNondigitFrom:(NSScanner *)aScanner
+{
+    return [self scanNondigitFrom:aScanner];
+}
+
+- (BOOL)scanSmallEFrom:(NSScanner *)aScanner
+{
+    return [aScanner scanString:NUCSmallE intoString:NULL];
+}
+
+- (BOOL)scanLargeEFrom:(NSScanner *)aScanner
+{
+    return [aScanner scanString:NUCLargeE intoString:NULL];
+}
+
+- (BOOL)scanSmallPFrom:(NSScanner *)aScanner
+{
+    return [aScanner scanString:NUCSmallP intoString:NULL];
+}
+
+- (BOOL)scanLargePFrom:(NSScanner *)aScanner
+{
+    return [aScanner scanString:NUCLargeP intoString:NULL];
+}
+
 - (BOOL)scanPpNumberFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
 {
-    return NO;
+    NSUInteger aScanLocation = [aScanner scanLocation];
+    BOOL aCharacterWasScanned = NO;
+    
+    do
+    {
+        if ([self scanDigitFrom:aScanner]) aCharacterWasScanned = YES;
+        if ([self scanPeriodFrom:aScanner]) aCharacterWasScanned = YES;
+        if ([self scanIdentifierNondigitFrom:aScanner]) aCharacterWasScanned = YES;
+        
+        if ([self scanSmallEFrom:aScanner] || [self scanLargeEFrom:aScanner])
+        {
+            [self scanSignFrom:aScanner];
+            aCharacterWasScanned = YES;
+        }
+        else if ([self scanSmallPFrom:aScanner] || [self scanLargePFrom:aScanner])
+        {
+            [self scanSignFrom:aScanner];
+            aCharacterWasScanned = YES;
+        }
+    }
+    while (aCharacterWasScanned);
+    
+    if ([aScanner scanLocation] != aScanLocation)
+    {
+        [anElements addObject:[NUCLexicalElement lexicalElementWithRange:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementPpNumberType]];
+        
+        return YES;
+    }
+    else
+        return NO;
+}
+
+- (BOOL)scanSignFrom:(NSScanner *)aScanner
+{
+    return [aScanner scanString:NUCPlusSign intoString:NULL]
+            || [aScanner scanString:NUCMinusSign intoString:NULL];
 }
 
 - (BOOL)scanStringLiteralFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
@@ -278,7 +337,40 @@
 
 - (BOOL)scanFloatingConstantFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
 {
+    return [self scanDecimalFloatingConstantFrom:aScanner addTo:anElements]
+            || [self scanHexadecimalFloatingConstantFrom:aScanner addTo:anElements];
+}
+
+- (BOOL)scanDecimalFloatingConstantFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    
     return NO;
+}
+
+- (BOOL)scanHexadecimalFloatingConstantFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    
+    return NO;
+}
+
+- (BOOL)scanFractionalConstantFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    
+    return NO;
+}
+
+- (BOOL)scanDigitSequenceFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    NSUInteger aScanLocation = [aScanner scanLocation];
+    
+    if ([aScanner scanCharactersFromSet:[NUCLexicalElement NUCDigitCharacterSet] intoString:NULL])
+    {
+        [anElements addObject:[NUCLexicalElement lexicalElementWithRange:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementDigitSequenceType]];
+        
+        return YES;
+    }
+    else
+        return NO;
 }
 
 - (BOOL)scanEnumerationConstantFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
@@ -415,7 +507,12 @@
 
 - (BOOL)scanDigitFrom:(NSScanner *)aScanner
 {
-    return [aScanner scanString:NUCIdentifierDigit intoString:NULL];
+    return [aScanner scanCharactersFromSet:[NUCLexicalElement NUCDigitCharacterSet] intoString:NULL];
+}
+
+- (BOOL)scanPeriodFrom:(NSScanner *)aScanner
+{
+    return [aScanner scanString:NUCPeriod intoString:NULL];
 }
 
 - (BOOL)scanElifGroupsFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements

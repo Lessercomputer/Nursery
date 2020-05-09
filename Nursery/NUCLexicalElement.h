@@ -51,6 +51,13 @@ extern NSString * const NUCIdentifierDigit;
 
 extern NSString * const NUCNonzeroDigits;
 extern NSString * const NUCDigits;
+extern NSString * const NUCPeriod;
+extern NSString * const NUCSmallE;
+extern NSString * const NUCLargeE;
+extern NSString * const NUCSmallP;
+extern NSString * const NUCLargeP;
+extern NSString * const NUCPlusSign;
+extern NSString * const NUCMinusSign;
 extern NSString * const NUCOctalDigitZero;
 extern NSString * const NUCOctalDigits;
 extern NSString * const NUCHexadecimalDigits;
@@ -73,7 +80,9 @@ typedef enum : NSUInteger {
     NUCLexicalElementUnsignedSuffixType,
     NUCLexicalElementLongSuffixType,
     NUCLexicalElementLongLongSuffixType,
-    NUCLexicalElementOctalConstantType
+    NUCLexicalElementOctalConstantType,
+    NUCLexicalElementPpNumberType,
+    NUCLexicalElementDigitSequenceType
 } NUCLexicalElementType;
 
 @interface NUCLexicalElement : NSObject

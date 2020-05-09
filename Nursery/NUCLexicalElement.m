@@ -94,6 +94,13 @@ NSString * const NUCIdentifierDigit = @"0123456789";
 
 NSString * const NUCNonzeroDigits = @"123456789";
 NSString * const NUCDigits = @"0123456789";
+NSString * const NUCPeriod = @".";
+NSString * const NUCSmallE = @"e";
+NSString * const NUCLargeE = @"E";
+NSString * const NUCSmallP = @"p";
+NSString * const NUCLargeP = @"P";
+NSString * const NUCPlusSign = @"+";
+NSString * const NUCMinusSign = @"-";
 NSString * const NUCOctalDigitZero = @"0";
 NSString * const NUCOctalDigits = @"01234567";
 NSString * const NUCHexadecimalDigits = @"0123456789abcdefABCDEF";
