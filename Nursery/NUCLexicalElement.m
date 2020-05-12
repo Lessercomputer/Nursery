@@ -10,6 +10,8 @@
 
 #import <Foundation/NSCharacterSet.h>
 
+NSString * const NUCBasicSourceCharacters = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#%&'()*+,-./:;<=>?[\\]^_{|}~";
+NSString * const NUCBasicSourceCharactersExceptSingleQuoteAndBackslash = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#%&()*+,-./:;<=>?[]^_{|}~";
 NSString * const NUCLF = @"\n";
 NSString * const NUCCRLF = @"\r\n";
 NSString * const NUCCR = @"\r";
@@ -110,7 +112,12 @@ NSString * const NUCLongSuffixSmall = @"l";
 NSString * const NUCLongSuffixLarge = @"L";
 NSString * const NUCLongLongSuffixSmall = @"ll";
 NSString * const NUCLongLongSuffixLarge = @"LL";
+NSString * const NUCSingleQuote = @"'";
+NSString * const NUCLargeL = @"L";
+NSString * const NUCSmallU = @"u";
+NSString * const NUCLargeU = @"U";
 
+static NSCharacterSet *NUCBasicSourceCharacterSetExceptSingleQuoteAndBackslash;
 static NSCharacterSet *NUCHCharCharacterSet;
 static NSCharacterSet *NUCQCharCharacterSet;
 static NSCharacterSet *NUCNonzeroDigitCharacterSet;
@@ -124,6 +131,7 @@ static NSCharacterSet *NUCHexadecimalDigitCharacterSet;
 {
     if (self == [NUCLexicalElement class])
     {
+        NUCBasicSourceCharacterSetExceptSingleQuoteAndBackslash = [[NSCharacterSet characterSetWithCharactersInString:NUCBasicSourceCharactersExceptSingleQuoteAndBackslash] copy];
         NUCHCharCharacterSet = [[[NSCharacterSet characterSetWithCharactersInString:@"\r\n>"] invertedSet] copy];
         NUCQCharCharacterSet = [[[NSCharacterSet characterSetWithCharactersInString:@"\r\n'"] invertedSet] copy];
         NUCNonzeroDigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCNonzeroDigits] copy];
@@ -146,6 +154,11 @@ static NSCharacterSet *NUCHexadecimalDigitCharacterSet;
 + (instancetype)lexicalElementWithContent:(NSString *)aContent region:(NURegion)aRange type:(NUCLexicalElementType)anElementType
 {
     return [[[self alloc] initWithContent:aContent region:aRange type:anElementType] autorelease];
+}
+
++ (NSCharacterSet *)NUCBasicSourceCharacterSetExceptSingleQuoteAndBackslash
+{
+    return NUCBasicSourceCharacterSetExceptSingleQuoteAndBackslash;
 }
 
 + (NSCharacterSet *)NUCHCharCharacterSet

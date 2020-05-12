@@ -380,6 +380,85 @@
 
 - (BOOL)scanCharacterConstantFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
 {
+    NSUInteger aScanLocation = [aScanner scanLocation];
+    
+    [aScanner scanString:NUCLargeL intoString:NULL]
+        || [aScanner scanString:NUCSmallU intoString:NULL]
+        || [aScanner scanString:NUCLargeU intoString:NULL];
+    
+    if ([aScanner scanString:NUCSingleQuote intoString:NULL]
+        && [self scanCCharSequenceFrom:aScanner]
+        && [aScanner scanString:NUCSingleQuote intoString:NULL])
+    {
+        [anElements addObject:[NUCLexicalElement lexicalElementWithRange:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementCharacterConstantType]];
+        
+        return YES;
+    }
+    else
+        return NO;
+}
+
+- (BOOL)scanCCharSequenceFrom:(NSScanner *)aScanner
+{
+    return [aScanner scanCharactersFromSet:[NUCLexicalElement NUCBasicSourceCharacterSetExceptSingleQuoteAndBackslash] intoString:NULL]
+            || [self scanEscapeSequenceFrom:aScanner];
+}
+
+- (BOOL)scanEscapeSequenceFrom:(NSScanner *)aScanner
+{
+    return [self scanSimpleEscapeSequenceFrom:aScanner]
+            || [self scanOctalEscapeSequenceFrom:aScanner]
+            || [self scanHexadecimalEscapeSequenceFrom:aScanner]
+            || [self scanUniversalCharacterNameFrom:aScanner];
+}
+
+- (BOOL)scanSimpleEscapeSequenceFrom:(NSScanner *)aScanner
+{
+    return [aScanner scanString:@"\'" intoString:NULL]
+            || [aScanner scanString:@"\"" intoString:NULL]
+            || [aScanner scanString:@"\?" intoString:NULL]
+            || [aScanner scanString:@"\\" intoString:NULL]
+            || [aScanner scanString:@"\a" intoString:NULL]
+            || [aScanner scanString:@"\b" intoString:NULL]
+            || [aScanner scanString:@"\f" intoString:NULL]
+            || [aScanner scanString:@"\n" intoString:NULL]
+            || [aScanner scanString:@"\r" intoString:NULL]
+            || [aScanner scanString:@"\t" intoString:NULL]
+            || [aScanner scanString:@"\v" intoString:NULL];
+}
+
+- (BOOL)scanOctalEscapeSequenceFrom:(NSScanner *)aScanner
+{
+    if ([aScanner scanString:NUCBackslash intoString:NULL])
+    {
+        NSString *aString = [aScanner string];
+        NSUInteger aLength = [aString length] - [aScanner scanLocation];
+        
+        if (aLength > 0)
+        {
+            if (aLength > 3) aLength = 3;
+            
+            NSRange aRange = [aString rangeOfCharacterFromSet:[NUCLexicalElement NUCOctalDigitCharacterSet] options:0 range:NSMakeRange([aScanner scanLocation], aLength)];
+            
+            if (aRange.location != NSNotFound)
+            {
+                [aScanner setScanLocation:[aScanner scanLocation] + aRange.length];
+                
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
+}
+
+- (BOOL)scanHexadecimalEscapeSequenceFrom:(NSScanner *)aScanner
+{
+    return NO;
+}
+
+- (BOOL)scanUniversalCharacterNameFrom:(NSScanner *)aScanner
+{
     return NO;
 }
 

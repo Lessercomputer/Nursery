@@ -12,6 +12,8 @@
 
 @class NSString;
 
+extern NSString * const NUCBasicSourceCharacters;
+extern NSString * const NUCBasicSourceCharactersExceptSingleQuoteAndBackslash;
 extern NSString * const NUCLF;
 extern NSString * const NUCCRLF;
 extern NSString * const NUCCR;
@@ -67,6 +69,10 @@ extern NSString * const NUCLongSuffixSmall;
 extern NSString * const NUCLongSuffixLarge;
 extern NSString * const NUCLongLongSuffixSmall;
 extern NSString * const NUCLongLongSuffixLarge;
+extern NSString * const NUCSingleQuote;
+extern NSString * const NUCLargeL;
+extern NSString * const NUCSmallU;
+extern NSString * const NUCLargeU;
 
 typedef enum : NSUInteger {
     NUCLexicalElementGroupType,
@@ -82,7 +88,8 @@ typedef enum : NSUInteger {
     NUCLexicalElementLongLongSuffixType,
     NUCLexicalElementOctalConstantType,
     NUCLexicalElementPpNumberType,
-    NUCLexicalElementDigitSequenceType
+    NUCLexicalElementDigitSequenceType,
+    NUCLexicalElementCharacterConstantType
 } NUCLexicalElementType;
 
 @interface NUCLexicalElement : NSObject
@@ -104,6 +111,7 @@ typedef enum : NSUInteger {
 
 - (instancetype)initWithContent:(NSString *)aContent region:(NURegion)aRange type:(NUCLexicalElementType)anElementType;
 
++ (NSCharacterSet *)NUCBasicSourceCharacterSetExceptSingleQuoteAndBackslash;
 + (NSCharacterSet *)NUCHCharCharacterSet;
 + (NSCharacterSet *)NUCQCharCharacterSet;
 + (NSCharacterSet *)NUCNonzeroDigitCharacterSet;
