@@ -268,11 +268,13 @@
     
     do
     {
-        if ([self scanDigitFrom:aScanner]) aCharacterWasScanned = YES;
-        if ([self scanPeriodFrom:aScanner]) aCharacterWasScanned = YES;
-        if ([self scanIdentifierNondigitFrom:aScanner]) aCharacterWasScanned = YES;
-        
-        if ([self scanSmallEFrom:aScanner] || [self scanLargeEFrom:aScanner])
+        if ([self scanDigitFrom:aScanner])
+            aCharacterWasScanned = YES;
+        else if ([self scanPeriodFrom:aScanner])
+            aCharacterWasScanned = YES;
+        else if ([self scanIdentifierNondigitFrom:aScanner])
+            aCharacterWasScanned = YES;
+        else if ([self scanSmallEFrom:aScanner] || [self scanLargeEFrom:aScanner])
         {
             [self scanSignFrom:aScanner];
             aCharacterWasScanned = YES;
@@ -454,10 +456,44 @@
 
 - (BOOL)scanHexadecimalEscapeSequenceFrom:(NSScanner *)aScanner
 {
+    if ([aScanner scanString:@"\\x" intoString:NULL])
+    {
+        if ([aScanner scanCharactersFromSet:[NUCLexicalElement NUCHexadecimalDigitCharacterSet] intoString:NULL])
+            return YES;
+    }
+    
     return NO;
 }
 
 - (BOOL)scanUniversalCharacterNameFrom:(NSScanner *)aScanner
+{
+    NSUInteger aScanLocation = [aScanner scanLocation];
+    
+    if ([aScanner scanString:@"\\u" intoString:NULL])
+    {
+        if ([self scanHexQuadFrom:aScanner])
+            return YES;
+        else
+        {
+            [aScanner setScanLocation:aScanLocation];
+            return NO;
+        }
+    }
+    else if ([aScanner scanString:@"\\U" intoString:NULL])
+    {
+        if ([self scanHexQuadFrom:aScanner] && [self scanHexQuadFrom:aScanner])
+            return YES;
+        else
+        {
+            [aScanner setScanLocation:aScanLocation];
+            return NO;
+        }
+    }
+    else
+        return NO;
+}
+
+- (BOOL)scanHexQuadFrom:(NSScanner *)aScanner
 {
     return NO;
 }
