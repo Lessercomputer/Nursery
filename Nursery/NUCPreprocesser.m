@@ -46,16 +46,25 @@
     
     [aSourceFile setLogicalSourceString:aLogicalSourceStringInPhase2];
     
-    [self scanPreprocessingFile:aSourceFile];
+    [self decomposePreprocessingFile:aSourceFile];
 }
 
-- (void)scanPreprocessingFile:(NUCSourceFile *)aSourceFile
+- (void)decomposePreprocessingFile:(NUCSourceFile *)aSourceFile
 {
-    NSMutableArray *anElements = [NSMutableArray array];
+    NSMutableArray *aPreprocessingTokens = [NSMutableArray array];
     NSScanner *aScanner = [NSScanner scannerWithString:[aSourceFile logicalSourceString]];
     [aScanner setCharactersToBeSkipped:nil];
     
-    [self scanGroupFrom:aScanner addTo:anElements];
+    while (![aScanner isAtEnd])
+    {
+        [self decomposeHeaderNameFrom:aScanner into:aPreprocessingTokens];
+        [self scanPpNumberFrom:aScanner addTo:aPreprocessingTokens];
+        [self scanCharacterConstantFrom:aScanner addTo:aPreprocessingTokens];
+        [self scanStringLiteralFrom:aScanner addTo:aPreprocessingTokens];
+        [self scanPunctuatorFrom:aScanner addTo:aPreprocessingTokens];
+        [self scanCommentFrom:aScanner];
+        [aScanner scanCharactersFromSet:[NUCLexicalElement NUCBasicSourceCharacterSetExceptSingleQuoteAndBackslash] intoString:NULL];
+    }
 }
 
 - (BOOL)scanGroupFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
@@ -305,10 +314,37 @@
 
 - (BOOL)scanStringLiteralFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
 {
+    NSUInteger aScanLocation = [aScanner scanLocation];
+    
+    [aScanner scanString:NUCStringLiteralEncodingPrefixSmallU8 intoString:NULL]
+        || [aScanner scanString:NUCStringLiteralEncodingPrefixSmallU intoString:NULL]
+        || [aScanner scanString:NUCStringLiteralEncodingPrefixLargeU intoString:NULL]
+        || [aScanner scanString:NUCStringLiteralEncodingPrefixLargeL intoString:NULL];
+    
+    if ([aScanner scanString:NUCDoubleQuotationMark intoString:NULL])
+    {
+        [self scanSCharSequenceFrom:aScanner addTo:anElements];
+        
+        if ([aScanner scanString:NUCDoubleQuotationMark intoString:NULL])
+            return YES;
+        else
+            [aScanner setScanLocation:aScanLocation];
+    }
+    
+    return NO;
+}
+
+- (BOOL)scanSCharSequenceFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)aTokens
+{
     return NO;
 }
 
 - (BOOL)scanPunctuatorFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+{
+    return NO;
+}
+
+- (BOOL)scanCommentFrom:(NSScanner *)aScanner
 {
     return NO;
 }
@@ -495,6 +531,14 @@
 
 - (BOOL)scanHexQuadFrom:(NSScanner *)aScanner
 {
+    if ([[aScanner string] length] - [aScanner scanLocation] >= 4)
+    {
+        NSRange aHexdecimalDigitRange = [[aScanner string] rangeOfCharacterFromSet:[NUCLexicalElement NUCHexadecimalDigitCharacterSet] options:0 range:NSMakeRange([aScanner scanLocation], 4)];
+        
+        if (aHexdecimalDigitRange.length == 4)
+            return YES;
+    }
+    
     return NO;
 }
 
@@ -732,25 +776,17 @@
     return aLogicalSourceStringInPhase2;
 }
 
-- (void)preprocessToPreprocessingTokens:(NSString *)aLogicalSourceStringInPhase2
+- (BOOL)decomposeHeaderNameFrom:(NSScanner *)aScanner into:(NSMutableArray *)anElements
 {
-    NSScanner *aScanner = [NSScanner scannerWithString:aLogicalSourceStringInPhase2];
-    [aScanner setCharactersToBeSkipped:nil];
-     
-     
-}
-
-- (BOOL)scanHeaderNameFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
-{
-    if ([self scanHeaderNameFrom:aScanner beginWith:NUCLessThanSign endWith:NUCGreaterThanSign characterSet:[NUCLexicalElement NUCHCharCharacterSet] isHChar:YES addTo:anElements])
+    if ([self decomposeHeaderNameFrom:aScanner beginWith:NUCLessThanSign endWith:NUCGreaterThanSign characterSet:[NUCLexicalElement NUCHCharCharacterSet] isHChar:YES into:anElements])
         return YES;
-    else if ([self scanHeaderNameFrom:aScanner beginWith:NUCDoubleQuotationMark endWith:NUCDoubleQuotationMark characterSet:[NUCLexicalElement NUCQCharCharacterSet] isHChar:NO addTo:anElements])
+    else if ([self decomposeHeaderNameFrom:aScanner beginWith:NUCDoubleQuotationMark endWith:NUCDoubleQuotationMark characterSet:[NUCLexicalElement NUCQCharCharacterSet] isHChar:NO into:anElements])
         return YES;
     else
         return NO;
 }
 
-- (BOOL)scanHeaderNameFrom:(NSScanner *)aScanner beginWith:(NSString *)aBeginChar endWith:(NSString *)anEndChar characterSet:(NSCharacterSet *)aCharacterSet isHChar:(BOOL)anIsHChar addTo:(NSMutableArray *)anElements
+- (BOOL)decomposeHeaderNameFrom:(NSScanner *)aScanner beginWith:(NSString *)aBeginChar endWith:(NSString *)anEndChar characterSet:(NSCharacterSet *)aCharacterSet isHChar:(BOOL)anIsHChar into:(NSMutableArray *)anElements
 {
     NSUInteger aScanlocation = [aScanner scanLocation];
     

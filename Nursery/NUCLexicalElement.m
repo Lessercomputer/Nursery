@@ -116,6 +116,10 @@ NSString * const NUCSingleQuote = @"'";
 NSString * const NUCLargeL = @"L";
 NSString * const NUCSmallU = @"u";
 NSString * const NUCLargeU = @"U";
+NSString * const NUCStringLiteralEncodingPrefixSmallU8 = @"u8";
+NSString * const NUCStringLiteralEncodingPrefixSmallU = @"u";
+NSString * const NUCStringLiteralEncodingPrefixLargeU = @"U";
+NSString * const NUCStringLiteralEncodingPrefixLargeL = @"L";
 
 static NSCharacterSet *NUCBasicSourceCharacterSetExceptSingleQuoteAndBackslash;
 static NSCharacterSet *NUCHCharCharacterSet;

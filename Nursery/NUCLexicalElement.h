@@ -74,6 +74,11 @@ extern NSString * const NUCLargeL;
 extern NSString * const NUCSmallU;
 extern NSString * const NUCLargeU;
 
+extern NSString * const NUCStringLiteralEncodingPrefixSmallU8;
+extern NSString * const NUCStringLiteralEncodingPrefixSmallU;
+extern NSString * const NUCStringLiteralEncodingPrefixLargeU;
+extern NSString * const NUCStringLiteralEncodingPrefixLargeL;
+
 typedef enum : NSUInteger {
     NUCLexicalElementGroupType,
     NUCLexicalElementGroupPartType,
