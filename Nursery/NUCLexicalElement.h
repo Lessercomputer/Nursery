@@ -94,7 +94,8 @@ typedef enum : NSUInteger {
     NUCLexicalElementOctalConstantType,
     NUCLexicalElementPpNumberType,
     NUCLexicalElementDigitSequenceType,
-    NUCLexicalElementCharacterConstantType
+    NUCLexicalElementCharacterConstantType,
+    NUCLexicalElementCommentType
 } NUCLexicalElementType;
 
 @interface NUCLexicalElement : NSObject
@@ -117,12 +118,14 @@ typedef enum : NSUInteger {
 - (instancetype)initWithContent:(NSString *)aContent region:(NURegion)aRange type:(NUCLexicalElementType)anElementType;
 
 + (NSCharacterSet *)NUCBasicSourceCharacterSetExceptSingleQuoteAndBackslash;
++ (NSCharacterSet *)NUCSourceCharacterSetExceptDoubleQuoteAndBackslashAndNewline;
 + (NSCharacterSet *)NUCHCharCharacterSet;
 + (NSCharacterSet *)NUCQCharCharacterSet;
 + (NSCharacterSet *)NUCNonzeroDigitCharacterSet;
 + (NSCharacterSet *)NUCDigitCharacterSet;
 + (NSCharacterSet *)NUCOctalDigitCharacterSet;
 + (NSCharacterSet *)NUCHexadecimalDigitCharacterSet;
++ (NSCharacterSet *)NUCNewlineCharacterSet;
 
 - (NSString *)content;
 

@@ -12,6 +12,7 @@
 
 NSString * const NUCBasicSourceCharacters = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#%&'()*+,-./:;<=>?[\\]^_{|}~";
 NSString * const NUCBasicSourceCharactersExceptSingleQuoteAndBackslash = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#%&()*+,-./:;<=>?[]^_{|}~";
+//NSString * const NUCSourceCharactersExceptDoubleQuoteAndBackslashAndNewline = nil;
 NSString * const NUCLF = @"\n";
 NSString * const NUCCRLF = @"\r\n";
 NSString * const NUCCR = @"\r";
@@ -122,12 +123,14 @@ NSString * const NUCStringLiteralEncodingPrefixLargeU = @"U";
 NSString * const NUCStringLiteralEncodingPrefixLargeL = @"L";
 
 static NSCharacterSet *NUCBasicSourceCharacterSetExceptSingleQuoteAndBackslash;
+static NSCharacterSet *NUCSourceCharacterSetExceptDoubleQuoteAndBackslashAndNewline;
 static NSCharacterSet *NUCHCharCharacterSet;
 static NSCharacterSet *NUCQCharCharacterSet;
 static NSCharacterSet *NUCNonzeroDigitCharacterSet;
 static NSCharacterSet *NUCDigitCharacterSet;
 static NSCharacterSet *NUCOctalDigitCharacterSet;
 static NSCharacterSet *NUCHexadecimalDigitCharacterSet;
+static NSCharacterSet *NUCNewlineCharacterSet;
 
 @implementation NUCLexicalElement
 
@@ -135,13 +138,21 @@ static NSCharacterSet *NUCHexadecimalDigitCharacterSet;
 {
     if (self == [NUCLexicalElement class])
     {
+        NSCharacterSet *aBasicSourceCharacterSet = [NSCharacterSet characterSetWithCharactersInString:NUCBasicSourceCharacters];
+        NSMutableCharacterSet *aBasicSourceMutableCharacterSet = [[aBasicSourceCharacterSet mutableCopy] autorelease];
+        
         NUCBasicSourceCharacterSetExceptSingleQuoteAndBackslash = [[NSCharacterSet characterSetWithCharactersInString:NUCBasicSourceCharactersExceptSingleQuoteAndBackslash] copy];
+        
+        [aBasicSourceMutableCharacterSet removeCharactersInString:@"\"\\\r\n"];
+        NUCSourceCharacterSetExceptDoubleQuoteAndBackslashAndNewline = [aBasicSourceMutableCharacterSet copy];
+
         NUCHCharCharacterSet = [[[NSCharacterSet characterSetWithCharactersInString:@"\r\n>"] invertedSet] copy];
         NUCQCharCharacterSet = [[[NSCharacterSet characterSetWithCharactersInString:@"\r\n'"] invertedSet] copy];
         NUCNonzeroDigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCNonzeroDigits] copy];
         NUCDigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCDigits] copy];
         NUCOctalDigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCOctalDigits] copy];
         NUCHexadecimalDigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCHexadecimalDigits] copy];
+        NUCNewlineCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCCRLF] copy];
     }
 }
 
@@ -163,6 +174,11 @@ static NSCharacterSet *NUCHexadecimalDigitCharacterSet;
 + (NSCharacterSet *)NUCBasicSourceCharacterSetExceptSingleQuoteAndBackslash
 {
     return NUCBasicSourceCharacterSetExceptSingleQuoteAndBackslash;
+}
+
++ (NSCharacterSet *)NUCSourceCharacterSetExceptDoubleQuoteAndBackslashAndNewline
+{
+    return NUCSourceCharacterSetExceptDoubleQuoteAndBackslashAndNewline;
 }
 
 + (NSCharacterSet *)NUCHCharCharacterSet
@@ -193,6 +209,11 @@ static NSCharacterSet *NUCHexadecimalDigitCharacterSet;
 + (NSCharacterSet *)NUCHexadecimalDigitCharacterSet
 {
     return NUCHexadecimalDigitCharacterSet;
+}
+
++ (NSCharacterSet *)NUCNewlineCharacterSet
+{
+    return NUCNewlineCharacterSet;
 }
 
 - (instancetype)initWithRange:(NSRange)aRange type:(NUCLexicalElementType)anElementType

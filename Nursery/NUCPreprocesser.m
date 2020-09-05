@@ -41,6 +41,7 @@
 {
     NULibrary *aSourceStringRangeMappingPhase1toPhysicalSource = [NULibrary libraryWithComparator:[NUCRangePairFromComparator comparator]];
     NULibrary *aSourceStringRangeMappingPhase2ToPhase1 = [NULibrary libraryWithComparator:[NUCRangePairFromComparator comparator]];
+    
     NSString *aLogicalSourceStringInPhase1 = [self preprocessPhase1:[aSourceFile physicalSourceString] forSourceFile:aSourceFile rangeMappingFromPhase1ToPhysicalSourceString:aSourceStringRangeMappingPhase1toPhysicalSource];
     NSString *aLogicalSourceStringInPhase2 = [self preprocessPhase2:aLogicalSourceStringInPhase1 forSourceFile:aSourceFile rangeMappingFromPhase2StringToPhase1String:aSourceStringRangeMappingPhase2ToPhase1];
     
@@ -58,11 +59,11 @@
     while (![aScanner isAtEnd])
     {
         [self decomposeHeaderNameFrom:aScanner into:aPreprocessingTokens];
-        [self scanPpNumberFrom:aScanner addTo:aPreprocessingTokens];
-        [self scanCharacterConstantFrom:aScanner addTo:aPreprocessingTokens];
-        [self scanStringLiteralFrom:aScanner addTo:aPreprocessingTokens];
-        [self scanPunctuatorFrom:aScanner addTo:aPreprocessingTokens];
-        [self scanCommentFrom:aScanner];
+        [self decomposePpNumberFrom:aScanner into:aPreprocessingTokens];
+        [self decomposeCharacterConstantFrom:aScanner into:aPreprocessingTokens];
+        [self decomposeStringLiteralFrom:aScanner into:aPreprocessingTokens];
+        [self decomposePunctuatorFrom:aScanner into:aPreprocessingTokens];
+        [self decomposeCommentFrom:aScanner into:aPreprocessingTokens];
         [aScanner scanCharactersFromSet:[NUCLexicalElement NUCBasicSourceCharacterSetExceptSingleQuoteAndBackslash] intoString:NULL];
     }
 }
@@ -270,7 +271,7 @@
     return [aScanner scanString:NUCLargeP intoString:NULL];
 }
 
-- (BOOL)scanPpNumberFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+- (BOOL)decomposePpNumberFrom:(NSScanner *)aScanner into:(NSMutableArray *)anElements
 {
     NSUInteger aScanLocation = [aScanner scanLocation];
     BOOL aCharacterWasScanned = NO;
@@ -312,7 +313,7 @@
             || [aScanner scanString:NUCMinusSign intoString:NULL];
 }
 
-- (BOOL)scanStringLiteralFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+- (BOOL)decomposeStringLiteralFrom:(NSScanner *)aScanner into:(NSMutableArray *)anElements
 {
     NSUInteger aScanLocation = [aScanner scanLocation];
     
@@ -323,7 +324,8 @@
     
     if ([aScanner scanString:NUCDoubleQuotationMark intoString:NULL])
     {
-        [self scanSCharSequenceFrom:aScanner addTo:anElements];
+        NSString *aStringLiteral = nil;
+        [self scanSCharSequenceFrom:aScanner into:&aStringLiteral];
         
         if ([aScanner scanString:NUCDoubleQuotationMark intoString:NULL])
             return YES;
@@ -334,19 +336,72 @@
     return NO;
 }
 
-- (BOOL)scanSCharSequenceFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)aTokens
+- (BOOL)scanSCharSequenceFrom:(NSScanner *)aScanner into:(NSString **)aString
+{
+    NSUInteger aLocation = [aScanner scanLocation];
+    NSMutableString *anSCharSequence = [NSMutableString string];
+    NSString *anSChars = nil, *anUnescapedSequence = nil;
+    
+    BOOL aShouldContinueToScan = YES;
+    
+    while (aShouldContinueToScan)
+    {
+        if ([aScanner scanCharactersFromSet:[NUCLexicalElement NUCSourceCharacterSetExceptDoubleQuoteAndBackslashAndNewline] intoString:&anSChars])
+        {
+            [anSCharSequence appendString:anSChars];
+        }
+        else if ([self scanEscapeSequenceFrom:aScanner into:&anUnescapedSequence])
+        {
+            [anSCharSequence appendString:anUnescapedSequence];
+        }
+        else
+            aShouldContinueToScan = NO;
+    }
+    
+    if (aLocation != [aScanner scanLocation])
+    {
+        if (*aString)
+            *aString = [[anSCharSequence copy] autorelease];
+        
+        return YES;
+    }
+    else
+        return NO;
+}
+
+- (BOOL)decomposePunctuatorFrom:(NSScanner *)aScanner into:aPreprocessingTokens
 {
     return NO;
 }
 
-- (BOOL)scanPunctuatorFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+- (BOOL)decomposeCommentFrom:(NSScanner *)aScanner into:aPreprocessingTokens
 {
-    return NO;
-}
+    NSString *aComment = nil;
+    NSUInteger aCommentLocation = NSNotFound;
+    
+    if ([aScanner scanString:@"/*" intoString:NULL])
+    {
+        aCommentLocation = [aScanner scanLocation];
+        
+        [aScanner scanUpToString:@"*/" intoString:&aComment];
+        [aScanner scanString:@"*/" intoString:NULL];
+    
+    }
+    else if ([aScanner scanString:@"//" intoString:NULL])
+    {
+        aCommentLocation = [aScanner scanLocation];
+        
+        [aScanner scanUpToCharactersFromSet:[NUCLexicalElement NUCNewlineCharacterSet] intoString:&aComment];
+    }
 
-- (BOOL)scanCommentFrom:(NSScanner *)aScanner
-{
-    return NO;
+    if (aCommentLocation != NSNotFound)
+    {
+        [aPreprocessingTokens addObject:[NUCLexicalElement lexicalElementWithContent:aComment range:NSMakeRange(aCommentLocation, [aComment length]) type:NUCLexicalElementCommentType]];
+        
+        return YES;
+    }
+    else
+        return NO;
 }
 
 - (BOOL)scanConstantFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
@@ -354,7 +409,7 @@
     if ([self scanIntegerConstantFrom:aScanner addTo:anElements]
         || [self scanFloatingConstantFrom:aScanner addTo:anElements]
         || [self scanEnumerationConstantFrom:aScanner addTo:anElements]
-        || [self scanCharacterConstantFrom:aScanner addTo:anElements])
+        || [self decomposeCharacterConstantFrom:aScanner into:anElements])
         return YES;
     else
         return NO;
@@ -416,7 +471,7 @@
     return NO;
 }
 
-- (BOOL)scanCharacterConstantFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+- (BOOL)decomposeCharacterConstantFrom:(NSScanner *)aScanner into:(NSMutableArray *)anElements
 {
     NSUInteger aScanLocation = [aScanner scanLocation];
     
@@ -439,10 +494,10 @@
 - (BOOL)scanCCharSequenceFrom:(NSScanner *)aScanner
 {
     return [aScanner scanCharactersFromSet:[NUCLexicalElement NUCBasicSourceCharacterSetExceptSingleQuoteAndBackslash] intoString:NULL]
-            || [self scanEscapeSequenceFrom:aScanner];
+            || [self scanEscapeSequenceFrom:aScanner into:NULL];
 }
 
-- (BOOL)scanEscapeSequenceFrom:(NSScanner *)aScanner
+- (BOOL)scanEscapeSequenceFrom:(NSScanner *)aScanner into:(NSString **)anEscapeSequence
 {
     return [self scanSimpleEscapeSequenceFrom:aScanner]
             || [self scanOctalEscapeSequenceFrom:aScanner]
