@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		240352CC25035B37009F4659 /* CommentExample in Resources */ = {isa = PBXBuildFile; fileRef = 240352CB25035B37009F4659 /* CommentExample */; };
+		240352CD25035B37009F4659 /* CommentExample in Resources */ = {isa = PBXBuildFile; fileRef = 240352CB25035B37009F4659 /* CommentExample */; };
 		2447C64E244C2909006E9AC7 /* NUCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2447C64D244C2909006E9AC7 /* NUCTests.m */; };
 		2447C64F244C2909006E9AC7 /* NUCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2447C64D244C2909006E9AC7 /* NUCTests.m */; };
 		2447C651244C3269006E9AC7 /* CTranslationPhase1to2Example in Resources */ = {isa = PBXBuildFile; fileRef = 2447C650244C3269006E9AC7 /* CTranslationPhase1to2Example */; };
@@ -562,6 +564,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		240352CB25035B37009F4659 /* CommentExample */ = {isa = PBXFileReference; lastKnownFileType = text; path = CommentExample; sourceTree = "<group>"; };
 		2447C64D244C2909006E9AC7 /* NUCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCTests.m; sourceTree = "<group>"; };
 		2447C650244C3269006E9AC7 /* CTranslationPhase1to2Example */ = {isa = PBXFileReference; lastKnownFileType = text; lineEnding = 0; path = CTranslationPhase1to2Example; sourceTree = "<group>"; };
 		2447C653244C3359006E9AC7 /* ExpectedCTranslationPhase1to2Example */ = {isa = PBXFileReference; lastKnownFileType = text; lineEnding = 0; path = ExpectedCTranslationPhase1to2Example; sourceTree = "<group>"; };
@@ -886,6 +889,7 @@
 				2447C64D244C2909006E9AC7 /* NUCTests.m */,
 				2447C650244C3269006E9AC7 /* CTranslationPhase1to2Example */,
 				2447C653244C3359006E9AC7 /* ExpectedCTranslationPhase1to2Example */,
+				240352CB25035B37009F4659 /* CommentExample */,
 			);
 			name = CTests;
 			sourceTree = "<group>";
@@ -1789,6 +1793,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				619B07B01913ED8D00A4BAA2 /* InfoPlist.strings in Resources */,
+				240352CC25035B37009F4659 /* CommentExample in Resources */,
 				2447C651244C3269006E9AC7 /* CTranslationPhase1to2Example in Resources */,
 				2447C654244C3359006E9AC7 /* ExpectedCTranslationPhase1to2Example in Resources */,
 			);
@@ -1807,6 +1812,7 @@
 			files = (
 				2447C655244C3359006E9AC7 /* ExpectedCTranslationPhase1to2Example in Resources */,
 				2447C652244C3269006E9AC7 /* CTranslationPhase1to2Example in Resources */,
+				240352CD25035B37009F4659 /* CommentExample in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -41,6 +41,19 @@
     XCTAssertEqualObjects([aSourceFile logicalSourceString], anExpectedLogicalSourceString);
 }
 
+- (void)testTranslationPhase1to3
+{
+    NSBundle *aBundle = [NSBundle bundleForClass:[self class]];
+    NSURL *aPhysicalSourceFileURL = [aBundle URLForResource:@"CommentExample" withExtension:NULL subdirectory:NULL];
+//    NSURL *anExpectedLogicalSourceFileURL = [aBundle URLForResource:@"ExpectedCTranslationPhase1to2Example" withExtension:NULL subdirectory:NULL];
+    
+    NUCTranslationEnvironment *aCTranslationEnvironment = [[[NUCTranslationEnvironment alloc] initWithSourceFileURLs:[NSArray arrayWithObject:aPhysicalSourceFileURL]] autorelease];
+    NUCSourceFile *aSourceFile = nil;
+//    NSString *anExpectedLogicalSourceString = [NSString stringWithContentsOfURL:anExpectedLogicalSourceFileURL usedEncoding:NULL error:NULL];
+    
+    [aCTranslationEnvironment translate];
+}
+
 - (void)testPerformanceExample {
     // This is an example of a performance test case.
     [self measureBlock:^{

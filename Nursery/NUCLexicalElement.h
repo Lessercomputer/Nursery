@@ -80,6 +80,7 @@ extern NSString * const NUCStringLiteralEncodingPrefixLargeU;
 extern NSString * const NUCStringLiteralEncodingPrefixLargeL;
 
 typedef enum : NSUInteger {
+    NUCLexicalElementStringLiteralType,
     NUCLexicalElementGroupType,
     NUCLexicalElementGroupPartType,
     NUCLexicalElementHeaderNameType,

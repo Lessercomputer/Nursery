@@ -328,7 +328,11 @@
         [self scanSCharSequenceFrom:aScanner into:&aStringLiteral];
         
         if ([aScanner scanString:NUCDoubleQuotationMark intoString:NULL])
+        {
+            [anElements addObject:[NUCLexicalElement lexicalElementWithContent:aStringLiteral range:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementStringLiteralType]];
+            
             return YES;
+        }
         else
             [aScanner setScanLocation:aScanLocation];
     }
@@ -360,7 +364,7 @@
     
     if (aLocation != [aScanner scanLocation])
     {
-        if (*aString)
+        if (aString)
             *aString = [[anSCharSequence copy] autorelease];
         
         return YES;
@@ -499,25 +503,37 @@
 
 - (BOOL)scanEscapeSequenceFrom:(NSScanner *)aScanner into:(NSString **)anEscapeSequence
 {
-    return [self scanSimpleEscapeSequenceFrom:aScanner]
+    return [self scanSimpleEscapeSequenceFrom:aScanner into:anEscapeSequence]
             || [self scanOctalEscapeSequenceFrom:aScanner]
             || [self scanHexadecimalEscapeSequenceFrom:aScanner]
             || [self scanUniversalCharacterNameFrom:aScanner];
 }
 
-- (BOOL)scanSimpleEscapeSequenceFrom:(NSScanner *)aScanner
+- (BOOL)scanSimpleEscapeSequenceFrom:(NSScanner *)aScanner into:(NSString **)anEscapedSequence
 {
-    return [aScanner scanString:@"\'" intoString:NULL]
-            || [aScanner scanString:@"\"" intoString:NULL]
-            || [aScanner scanString:@"\?" intoString:NULL]
-            || [aScanner scanString:@"\\" intoString:NULL]
-            || [aScanner scanString:@"\a" intoString:NULL]
-            || [aScanner scanString:@"\b" intoString:NULL]
-            || [aScanner scanString:@"\f" intoString:NULL]
-            || [aScanner scanString:@"\n" intoString:NULL]
-            || [aScanner scanString:@"\r" intoString:NULL]
-            || [aScanner scanString:@"\t" intoString:NULL]
-            || [aScanner scanString:@"\v" intoString:NULL];
+    NSString *aString = nil;
+    
+    [aScanner scanString:@"\\\'" intoString:&aString]
+        || [aScanner scanString:@"\\\"" intoString:&aString]
+        || [aScanner scanString:@"\\\?" intoString:&aString]
+        || [aScanner scanString:@"\\\\" intoString:&aString]
+        || [aScanner scanString:@"\\\a" intoString:&aString]
+        || [aScanner scanString:@"\\\b" intoString:&aString]
+        || [aScanner scanString:@"\\\f" intoString:&aString]
+        || [aScanner scanString:@"\\\n" intoString:&aString]
+        || [aScanner scanString:@"\\\r" intoString:&aString]
+        || [aScanner scanString:@"\\\t" intoString:&aString]
+        || [aScanner scanString:@"\\\v" intoString:&aString];
+
+    if (aString)
+    {
+        if (anEscapedSequence)
+            *anEscapedSequence = aString;
+    
+        return YES;
+    }
+    else
+        return NO;
 }
 
 - (BOOL)scanOctalEscapeSequenceFrom:(NSScanner *)aScanner
@@ -847,19 +863,12 @@
     
     if ([aScanner scanString:aBeginChar intoString:NULL])
     {
-        NUCLexicalElementType anElementType;
-        
-        if (anIsHChar)
-            anElementType = NUCLexicalElementGreaterThanSignType;
-        else
-            anElementType = NUCLexicalElementDoubleQuotationMarkType;
-        
-        [anElements addObject:[NUCLexicalElement lexicalElementWithRange:NSMakeRange(aScanlocation, [aBeginChar length]) type:anElementType]];
-        
         if ([aScanner scanCharactersFromSet:aCharacterSet intoString:NULL])
         {
             if ([aScanner scanString:anEndChar intoString:NULL])
             {
+                NUCLexicalElementType anElementType;
+
                 [anElements addObject:[NUCHeaderName lexicalElementWithRange:NSMakeRange(aScanlocation + [aBeginChar length], [aScanner scanLocation] - [anEndChar length]) isHChar:anIsHChar]];
                 
                 if (anIsHChar)
