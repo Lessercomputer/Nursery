@@ -324,12 +324,13 @@
     
     if ([aScanner scanString:NUCDoubleQuotationMark intoString:NULL])
     {
-        NSString *aStringLiteral = nil;
-        [self scanSCharSequenceFrom:aScanner into:&aStringLiteral];
+        [self scanSCharSequenceFrom:aScanner into:NULL];
         
         if ([aScanner scanString:NUCDoubleQuotationMark intoString:NULL])
         {
-            [anElements addObject:[NUCLexicalElement lexicalElementWithContent:aStringLiteral range:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementStringLiteralType]];
+            NSRange aRange = NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation);
+            
+            [anElements addObject:[NUCLexicalElement lexicalElementWithContent:[[aScanner string] substringWithRange:aRange] range:aRange type:NUCLexicalElementStringLiteralType]];
             
             return YES;
         }
@@ -375,7 +376,17 @@
 
 - (BOOL)decomposePunctuatorFrom:(NSScanner *)aScanner into:aPreprocessingTokens
 {
-    return NO;
+    __block BOOL aPunctuatorScand = NO;
+    
+    [[NUCLexicalElement NUCPunctuators] enumerateObjectsUsingBlock:^(NSString *  _Nonnull aPunctuator, NSUInteger idx, BOOL * _Nonnull aStop) {
+        if ([aScanner scanString:aPunctuator intoString:NULL])
+        {
+            
+            *aStop = aPunctuatorScand = YES;
+        }
+    }];
+    
+    return aPunctuatorScand;
 }
 
 - (BOOL)decomposeCommentFrom:(NSScanner *)aScanner into:aPreprocessingTokens

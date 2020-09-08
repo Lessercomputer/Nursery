@@ -132,6 +132,8 @@ static NSCharacterSet *NUCOctalDigitCharacterSet;
 static NSCharacterSet *NUCHexadecimalDigitCharacterSet;
 static NSCharacterSet *NUCNewlineCharacterSet;
 
+static NSArray *NUCPunctuators;
+
 @implementation NUCLexicalElement
 
 + (void)initialize
@@ -153,6 +155,14 @@ static NSCharacterSet *NUCNewlineCharacterSet;
         NUCOctalDigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCOctalDigits] copy];
         NUCHexadecimalDigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCHexadecimalDigits] copy];
         NUCNewlineCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCCRLF] copy];
+        
+        NUCPunctuators = [[NSArray arrayWithObjects:@"[", @"]", @"(", @")", @"{", @"}", @".", @"->",
+                           @"++", @"--", @"&&", @"*=", @"+=", @"-=", @"~", @"!",
+                           @"/=", @"%=", @"<<=", @">>=", @"<:", @":>", @"<<", @">>", @"==", @"!=", @"^=", @"||", @"&=", @"|=",
+                           @"?", @":", @";", @"...",
+                           @"=", @"*", @"/", @"%", @"+", @"-", @"<=", @">=", @"&", @"^", @"|",
+                           @",", @"##", @"#",
+                           @"<%", @"%>", @"<", @">", @"%:%:", @"%:", nil] copy];
     }
 }
 
@@ -214,6 +224,11 @@ static NSCharacterSet *NUCNewlineCharacterSet;
 + (NSCharacterSet *)NUCNewlineCharacterSet
 {
     return NUCNewlineCharacterSet;
+}
+
++ (NSArray *)NUCPunctuators
+{
+    return NUCPunctuators;
 }
 
 - (instancetype)initWithRange:(NSRange)aRange type:(NUCLexicalElementType)anElementType

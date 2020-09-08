@@ -128,6 +128,8 @@ typedef enum : NSUInteger {
 + (NSCharacterSet *)NUCHexadecimalDigitCharacterSet;
 + (NSCharacterSet *)NUCNewlineCharacterSet;
 
++ (NSArray *)NUCPunctuators;
+
 - (NSString *)content;
 
 @end
