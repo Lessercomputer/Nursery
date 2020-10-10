@@ -221,6 +221,11 @@ static NSArray *NUCPunctuators;
     return NUCHexadecimalDigitCharacterSet;
 }
 
++ (NSCharacterSet *)NUCWhiteSpaceCharacterSet
+{
+    return [NSCharacterSet whitespaceCharacterSet];
+}
+
 + (NSCharacterSet *)NUCNewlineCharacterSet
 {
     return NUCNewlineCharacterSet;
@@ -247,6 +252,7 @@ static NSArray *NUCPunctuators;
     {
         content = [aContent copy];
         type = anElementType;
+        range = aRange;
     }
     
     return self;

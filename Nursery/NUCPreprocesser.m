@@ -58,16 +58,17 @@
     
     while (![aScanner isAtEnd])
     {
+        [self decomposeWhiteSpaceCharacterFrom:aScanner into:aPreprocessingTokens];
         [self decomposeHeaderNameFrom:aScanner into:aPreprocessingTokens];
         [self decomposePpNumberFrom:aScanner into:aPreprocessingTokens];
         [self decomposeCharacterConstantFrom:aScanner into:aPreprocessingTokens];
         [self decomposeStringLiteralFrom:aScanner into:aPreprocessingTokens];
         [self decomposePunctuatorFrom:aScanner into:aPreprocessingTokens];
-        [self decomposeCommentFrom:aScanner into:aPreprocessingTokens];
-        [aScanner scanCharactersFromSet:[NUCLexicalElement NUCBasicSourceCharacterSetExceptSingleQuoteAndBackslash] intoString:NULL];
+        [self decomposeNonWhiteSpaceCharacterFrom:aScanner into:aPreprocessingTokens];
     }
 }
 
+    
 - (BOOL)scanGroupFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
 {
     BOOL anElementWasScanned = NO;
@@ -274,28 +275,24 @@
 - (BOOL)decomposePpNumberFrom:(NSScanner *)aScanner into:(NSMutableArray *)anElements
 {
     NSUInteger aScanLocation = [aScanner scanLocation];
-    BOOL aCharacterWasScanned = NO;
+    BOOL aLoopShouldContinue = YES;
     
-    do
+    while (aLoopShouldContinue)
     {
+        BOOL aDigitScand = NO;
+        
         if ([self scanDigitFrom:aScanner])
-            aCharacterWasScanned = YES;
+            aDigitScand = YES;
         else if ([self scanPeriodFrom:aScanner])
-            aCharacterWasScanned = YES;
-        else if ([self scanIdentifierNondigitFrom:aScanner])
-            aCharacterWasScanned = YES;
-        else if ([self scanSmallEFrom:aScanner] || [self scanLargeEFrom:aScanner])
-        {
-            [self scanSignFrom:aScanner];
-            aCharacterWasScanned = YES;
-        }
-        else if ([self scanSmallPFrom:aScanner] || [self scanLargePFrom:aScanner])
-        {
-            [self scanSignFrom:aScanner];
-            aCharacterWasScanned = YES;
-        }
+            aDigitScand = [self scanDigitFrom:aScanner];
+        
+        if (aDigitScand)
+            aLoopShouldContinue = (([self scanSmallEFrom:aScanner] || [self scanLargeEFrom:aScanner]) && [self scanSignFrom:aScanner])
+            || (([self scanSmallPFrom:aScanner] || [self scanLargePFrom:aScanner]) && [self scanSignFrom:aScanner])
+            || [self scanIdentifierNondigitFrom:aScanner];
+        else
+            aLoopShouldContinue = NO;
     }
-    while (aCharacterWasScanned);
     
     if ([aScanner scanLocation] != aScanLocation)
     {
@@ -374,13 +371,17 @@
         return NO;
 }
 
-- (BOOL)decomposePunctuatorFrom:(NSScanner *)aScanner into:aPreprocessingTokens
+- (BOOL)decomposePunctuatorFrom:(NSScanner *)aScanner into:(NSMutableArray *)aPreprocessingTokens
 {
     __block BOOL aPunctuatorScand = NO;
     
     [[NUCLexicalElement NUCPunctuators] enumerateObjectsUsingBlock:^(NSString *  _Nonnull aPunctuator, NSUInteger idx, BOOL * _Nonnull aStop) {
+        
+        NSUInteger aScanLocation = [aScanner scanLocation];
+        
         if ([aScanner scanString:aPunctuator intoString:NULL])
         {
+            [aPreprocessingTokens addObject:[NUCLexicalElement lexicalElementWithContent:aPunctuator range:NSMakeRange(aScanLocation, [aPunctuator length]) type:NUCLexicalElementPunctuatorType]];
             
             *aStop = aPunctuatorScand = YES;
         }
@@ -389,7 +390,21 @@
     return aPunctuatorScand;
 }
 
-- (BOOL)decomposeCommentFrom:(NSScanner *)aScanner into:aPreprocessingTokens
+- (BOOL)decomposeWhiteSpaceCharacterFrom:(NSScanner *)aScanner into:(NSMutableArray *)aPreprocessingTokens
+{
+    NSUInteger aLocation = [aScanner scanLocation];
+    
+    [aScanner scanCharactersFromSet:[NUCLexicalElement NUCWhiteSpaceCharacterSet] intoString:NULL];
+    
+    if ([aScanner scanLocation] != aLocation)
+        [aPreprocessingTokens addObject:[NUCLexicalElement lexicalElementWithRange:NSMakeRange(aLocation, [aScanner scanLocation] - aLocation) type:NUCLexicalElementWhiteSpaceCharacterType]];
+    
+    [self decomposeCommentFrom:aScanner into:aPreprocessingTokens];
+    
+    return [aScanner scanLocation] != aLocation;
+}
+
+- (BOOL)decomposeCommentFrom:(NSScanner *)aScanner into:(NSMutableArray *)aPreprocessingTokens
 {
     NSString *aComment = nil;
     NSUInteger aCommentLocation = NSNotFound;
@@ -417,6 +432,21 @@
     }
     else
         return NO;
+}
+
+- (BOOL)decomposeNonWhiteSpaceCharacterFrom:(NSScanner *)aScanner into:(NSMutableArray *)aPreprocessingTokens
+{
+    NSRange aRange = [[aScanner string] rangeOfComposedCharacterSequenceAtIndex:[aScanner scanLocation]];
+    
+    if (aRange.location != NSNotFound)
+    {
+        [aPreprocessingTokens addObject:[NUCLexicalElement lexicalElementWithRange:aRange type:NUCLexicalElementNonWhiteSpaceCharacterType]];
+        [aScanner setScanLocation:aRange.location + aRange.length];
+
+        return YES;
+    }
+    
+    return NO;
 }
 
 - (BOOL)scanConstantFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
