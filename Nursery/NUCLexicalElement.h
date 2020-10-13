@@ -126,6 +126,7 @@ typedef enum : NSUInteger {
 + (NSCharacterSet *)NUCHCharCharacterSet;
 + (NSCharacterSet *)NUCQCharCharacterSet;
 + (NSCharacterSet *)NUCNonzeroDigitCharacterSet;
++ (NSCharacterSet *)NUCNondigitCharacterSet;
 + (NSCharacterSet *)NUCDigitCharacterSet;
 + (NSCharacterSet *)NUCOctalDigitCharacterSet;
 + (NSCharacterSet *)NUCHexadecimalDigitCharacterSet;

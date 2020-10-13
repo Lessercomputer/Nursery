@@ -58,13 +58,22 @@
     
     while (![aScanner isAtEnd])
     {
-        [self decomposeWhiteSpaceCharacterFrom:aScanner into:aPreprocessingTokens];
-        [self decomposeHeaderNameFrom:aScanner into:aPreprocessingTokens];
-        [self decomposePpNumberFrom:aScanner into:aPreprocessingTokens];
-        [self decomposeCharacterConstantFrom:aScanner into:aPreprocessingTokens];
-        [self decomposeStringLiteralFrom:aScanner into:aPreprocessingTokens];
-        [self decomposePunctuatorFrom:aScanner into:aPreprocessingTokens];
-        [self decomposeNonWhiteSpaceCharacterFrom:aScanner into:aPreprocessingTokens];
+        if ([self decomposeWhiteSpaceCharacterFrom:aScanner into:aPreprocessingTokens])
+            continue;
+        if ([self decomposeHeaderNameFrom:aScanner into:aPreprocessingTokens])
+            continue;
+        if ([self decomposeIdentifierFrom:aScanner into:aPreprocessingTokens])
+            continue;
+        if ([self decomposePpNumberFrom:aScanner into:aPreprocessingTokens])
+            continue;
+        if ([self decomposeCharacterConstantFrom:aScanner into:aPreprocessingTokens])
+            continue;
+        if ([self decomposeStringLiteralFrom:aScanner into:aPreprocessingTokens])
+            continue;
+        if ([self decomposePunctuatorFrom:aScanner into:aPreprocessingTokens])
+            continue;
+        if ([self decomposeNonWhiteSpaceCharacterFrom:aScanner into:aPreprocessingTokens])
+            continue;
     }
 }
 
@@ -226,7 +235,7 @@
     return NO;
 }
 
-- (BOOL)scanIdentifierFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+- (BOOL)decomposeIdentifierFrom:(NSScanner *)aScanner into:(NSMutableArray *)anElements
 {
     NSUInteger aScanLocation = [aScanner scanLocation];
     
@@ -773,7 +782,7 @@
 
 - (BOOL)scanNondigitFrom:(NSScanner *)aScanner
 {
-    return [aScanner scanCharactersFromSet:[NUCLexicalElement NUCDigitCharacterSet] intoString:NULL];
+    return [aScanner scanCharactersFromSet:[NUCLexicalElement NUCNondigitCharacterSet] intoString:NULL];
 }
 
 - (BOOL)scanDigitFrom:(NSScanner *)aScanner

@@ -127,6 +127,7 @@ static NSCharacterSet *NUCSourceCharacterSetExceptDoubleQuoteAndBackslashAndNewl
 static NSCharacterSet *NUCHCharCharacterSet;
 static NSCharacterSet *NUCQCharCharacterSet;
 static NSCharacterSet *NUCNonzeroDigitCharacterSet;
+static NSCharacterSet *NUCNondigitCharacterSet;
 static NSCharacterSet *NUCDigitCharacterSet;
 static NSCharacterSet *NUCOctalDigitCharacterSet;
 static NSCharacterSet *NUCHexadecimalDigitCharacterSet;
@@ -151,6 +152,7 @@ static NSArray *NUCPunctuators;
         NUCHCharCharacterSet = [[[NSCharacterSet characterSetWithCharactersInString:@"\r\n>"] invertedSet] copy];
         NUCQCharCharacterSet = [[[NSCharacterSet characterSetWithCharactersInString:@"\r\n'"] invertedSet] copy];
         NUCNonzeroDigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCNonzeroDigits] copy];
+        NUCNondigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:@"_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"] copy];
         NUCDigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCDigits] copy];
         NUCOctalDigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCOctalDigits] copy];
         NUCHexadecimalDigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCHexadecimalDigits] copy];
@@ -204,6 +206,11 @@ static NSArray *NUCPunctuators;
 + (NSCharacterSet *)NUCNonzeroDigitCharacterSet
 {
     return NUCNonzeroDigitCharacterSet;
+}
+
++ (NSCharacterSet *)NUCNondigitCharacterSet
+{
+    return NUCNondigitCharacterSet;
 }
 
 + (NSCharacterSet *)NUCDigitCharacterSet
