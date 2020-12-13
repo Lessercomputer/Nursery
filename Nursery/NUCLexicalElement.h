@@ -109,6 +109,8 @@ typedef enum : NSUInteger {
     NURegion range;
 }
 
++ (instancetype)lexicalElementWithContentFromString:(NSString *)aString range:(NSRange)aRange type:(NUCLexicalElementType)anElementType;
+
 + (instancetype)lexicalElementWithContent:(NSString *)aContent range:(NSRange)aRange type:(NUCLexicalElementType)anElementType;
 
 + (instancetype)lexicalElementWithRange:(NSRange)aRange type:(NUCLexicalElementType)anElementType;
@@ -116,6 +118,8 @@ typedef enum : NSUInteger {
 + (instancetype)lexicalElementWithContent:(NSString *)aContent region:(NURegion)aRange type:(NUCLexicalElementType)anElementType;
 
 - (instancetype)initWithRange:(NSRange)aRange type:(NUCLexicalElementType)anElementType;
+
+- (instancetype)initWithContentFromString:(NSString *)aString range:(NSRange)aRange type:(NUCLexicalElementType)anElementType;
 
 - (instancetype)initWithContent:(NSString *)aContent range:(NSRange)aRange type:(NUCLexicalElementType)anElementType;
 
@@ -145,6 +149,8 @@ typedef enum : NSUInteger {
 }
 
 + (instancetype)lexicalElementWithRange:(NSRange)aRange isHChar:(BOOL)anIsHChar;
+
++ (instancetype)lexicalElementWithContentFromString:(NSString *)aString range:(NSRange)aRange isHChar:(BOOL)anIsHChar;
 
 + (instancetype)lexicalElementWithContent:(NSString *)aContent range:(NSRange)aRange isHChar:(BOOL)anIsHChar;
 

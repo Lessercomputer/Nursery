@@ -168,6 +168,11 @@ static NSArray *NUCPunctuators;
     }
 }
 
++ (instancetype)lexicalElementWithContentFromString:(NSString *)aString range:(NSRange)aRange type:(NUCLexicalElementType)anElementType
+{
+    return [self lexicalElementWithContent:[aString substringWithRange:aRange] range:aRange type:anElementType];
+}
+
 + (instancetype)lexicalElementWithRange:(NSRange)aRange type:(NUCLexicalElementType)anElementType
 {
     return [self lexicalElementWithContent:nil range:aRange type:anElementType];
@@ -248,6 +253,11 @@ static NSArray *NUCPunctuators;
     return [self initWithContent:nil range:aRange type:anElementType];
 }
 
+- (instancetype)initWithContentFromString:(NSString *)aString range:(NSRange)aRange type:(NUCLexicalElementType)anElementType
+{
+    return [self initWithContent:[aString substringWithRange:aRange] range:aRange type:anElementType];
+}
+
 - (instancetype)initWithContent:(NSString *)aContent range:(NSRange)aRange type:(NUCLexicalElementType)anElementType
 {
     return [self initWithContent:aContent region:NURegionFromRange(aRange) type:anElementType];
@@ -278,6 +288,12 @@ static NSArray *NUCPunctuators;
     return content;
 }
 
+- (NSString *)description
+{
+    return content;
+//    return [NSString stringWithFormat:@"<%@: %p> content:%@, type:%lu", [self class], self, [self content], type];
+}
+
 @end
 
 @implementation NUCHeaderName
@@ -285,6 +301,11 @@ static NSArray *NUCPunctuators;
 + (instancetype)lexicalElementWithRange:(NSRange)aRange isHChar:(BOOL)anIsHChar;
 {
     return [self lexicalElementWithContent:nil range:aRange isHChar:anIsHChar];
+}
+
++ (instancetype)lexicalElementWithContentFromString:(NSString *)aString range:(NSRange)aRange isHChar:(BOOL)anIsHChar
+{
+    return [self lexicalElementWithContent:[aString substringWithRange:aRange] range:aRange isHChar:anIsHChar];
 }
 
 + (instancetype)lexicalElementWithContent:(NSString *)aContent range:(NSRange)aRange isHChar:(BOOL)anIsHChar

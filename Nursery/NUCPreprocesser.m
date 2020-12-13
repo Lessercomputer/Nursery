@@ -248,7 +248,7 @@
     {
         NSRange anIdentifierRange = NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation);
         
-        [anElements addObject:[NUCLexicalElement lexicalElementWithRange:anIdentifierRange type:NUCLexicalElementIdentifierType]];
+        [anElements addObject:[NUCLexicalElement lexicalElementWithContentFromString:[aScanner string] range:anIdentifierRange type:NUCLexicalElementIdentifierType]];
         
         return YES;
     }
@@ -305,7 +305,7 @@
     
     if ([aScanner scanLocation] != aScanLocation)
     {
-        [anElements addObject:[NUCLexicalElement lexicalElementWithRange:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementPpNumberType]];
+        [anElements addObject:[NUCLexicalElement lexicalElementWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementPpNumberType]];
         
         return YES;
     }
@@ -406,7 +406,7 @@
     [aScanner scanCharactersFromSet:[NUCLexicalElement NUCWhiteSpaceCharacterSet] intoString:NULL];
     
     if ([aScanner scanLocation] != aLocation)
-        [aPreprocessingTokens addObject:[NUCLexicalElement lexicalElementWithRange:NSMakeRange(aLocation, [aScanner scanLocation] - aLocation) type:NUCLexicalElementWhiteSpaceCharacterType]];
+        [aPreprocessingTokens addObject:[NUCLexicalElement lexicalElementWithContentFromString:[aScanner string] range:NSMakeRange(aLocation, [aScanner scanLocation] - aLocation) type:NUCLexicalElementWhiteSpaceCharacterType]];
     
     [self decomposeCommentFrom:aScanner into:aPreprocessingTokens];
     
@@ -449,7 +449,7 @@
     
     if (aRange.location != NSNotFound)
     {
-        [aPreprocessingTokens addObject:[NUCLexicalElement lexicalElementWithRange:aRange type:NUCLexicalElementNonWhiteSpaceCharacterType]];
+        [aPreprocessingTokens addObject:[NUCLexicalElement lexicalElementWithContentFromString:[aScanner string] range:aRange type:NUCLexicalElementNonWhiteSpaceCharacterType]];
         [aScanner setScanLocation:aRange.location + aRange.length];
 
         return YES;
@@ -512,7 +512,7 @@
     
     if ([aScanner scanCharactersFromSet:[NUCLexicalElement NUCDigitCharacterSet] intoString:NULL])
     {
-        [anElements addObject:[NUCLexicalElement lexicalElementWithRange:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementDigitSequenceType]];
+        [anElements addObject:[NUCLexicalElement lexicalElementWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementDigitSequenceType]];
         
         return YES;
     }
@@ -537,7 +537,7 @@
         && [self scanCCharSequenceFrom:aScanner]
         && [aScanner scanString:NUCSingleQuote intoString:NULL])
     {
-        [anElements addObject:[NUCLexicalElement lexicalElementWithRange:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementCharacterConstantType]];
+        [anElements addObject:[NUCLexicalElement lexicalElementWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementCharacterConstantType]];
         
         return YES;
     }
@@ -674,7 +674,7 @@
         [self scanDigitFrom:aScanner];
         
         aRange = NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation);
-        [anElements addObject:[NUCLexicalElement lexicalElementWithRange:aRange type:NUCLexicalElementIntegerConstantType]];
+        [anElements addObject:[NUCLexicalElement lexicalElementWithContentFromString:[aScanner string] range:aRange type:NUCLexicalElementIntegerConstantType]];
         
         return YES;
     }
@@ -715,7 +715,7 @@
     if ([aScanner scanString:NUCUnsignedSuffixSmall intoString:NULL]
             || [aScanner scanString:NUCUnsignedSuffixLarge intoString:NULL])
     {
-        [anElements addObject:[NUCLexicalElement lexicalElementWithRange:NSMakeRange(aScanLocation, 1) type:NUCLexicalElementUnsignedSuffixType]];
+        [anElements addObject:[NUCLexicalElement lexicalElementWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, 1) type:NUCLexicalElementUnsignedSuffixType]];
         
         return YES;
     }
@@ -730,7 +730,7 @@
     if ([aScanner scanString:NUCLongSuffixSmall intoString:NULL]
             || [aScanner scanString:NUCLongSuffixLarge intoString:NULL])
     {
-        [anElements addObject:[NUCLexicalElement lexicalElementWithRange:NSMakeRange(aScanLocation, 1) type:NUCLexicalElementLongSuffixType]];
+        [anElements addObject:[NUCLexicalElement lexicalElementWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, 1) type:NUCLexicalElementLongSuffixType]];
         
         return YES;
     }
@@ -745,7 +745,7 @@
     if ([aScanner scanString:NUCLongLongSuffixSmall intoString:NULL]
             || [aScanner scanString:NUCLongLongSuffixLarge intoString:NULL])
     {
-        [anElements addObject:[NUCLexicalElement lexicalElementWithRange:NSMakeRange(aScanLocation, 2) type:NUCLexicalElementLongLongSuffixType]];
+        [anElements addObject:[NUCLexicalElement lexicalElementWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, 2) type:NUCLexicalElementLongLongSuffixType]];
         
         return YES;
     }
@@ -761,7 +761,7 @@
     {
         if ([aScanner scanCharactersFromSet:[NUCLexicalElement NUCOctalDigitCharacterSet] intoString:NULL])
         {
-            [anElements addObject:[NUCLexicalElement lexicalElementWithRange:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementOctalConstantType]];
+            [anElements addObject:[NUCLexicalElement lexicalElementWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementOctalConstantType]];
             
             return YES;
         }
@@ -919,14 +919,14 @@
             {
                 NUCLexicalElementType anElementType;
 
-                [anElements addObject:[NUCHeaderName lexicalElementWithRange:NSMakeRange(aScanlocation + [aBeginChar length], [aScanner scanLocation] - [anEndChar length]) isHChar:anIsHChar]];
+                [anElements addObject:[NUCHeaderName lexicalElementWithContentFromString:[aScanner string] range:NSMakeRange(aScanlocation + [aBeginChar length], [aScanner scanLocation] - [anEndChar length]) isHChar:anIsHChar]];
                 
                 if (anIsHChar)
                     anElementType = NUCLexicalElementLessThanSignType;
                 else
                     anElementType = NUCLexicalElementDoubleQuotationMarkType;
                 
-                [anElements addObject:[NUCLexicalElement lexicalElementWithRange:NSMakeRange([aScanner scanLocation] - [anEndChar length], [anEndChar length]) type:anElementType]];
+                [anElements addObject:[NUCLexicalElement lexicalElementWithContentFromString:[aScanner string] range:NSMakeRange([aScanner scanLocation] - [anEndChar length], [anEndChar length]) type:anElementType]];
                 
                 return YES;
             }
