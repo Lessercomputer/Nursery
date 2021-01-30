@@ -21,9 +21,9 @@ NSString * const NUCLessThanSign = @"<";
 NSString * const NUCGreaterThanSign = @">";
 NSString * const NUCDoubleQuotationMark = @"\"";
 NSString * const NUCHash = @"#";
-NSString * const NUCHashIf = @"#if";
-NSString * const NUCHashIfdef = @"#ifdef";
-NSString * const NUCHashIfndef = @"#ifndef";
+NSString * const NUCPreprocessingDirectiveIf = @"if";
+NSString * const NUCPreprocessingDirectiveIfdef = @"ifdef";
+NSString * const NUCPreprocessingDirectiveIfndef = @"ifndef";
 
 NSString * const NUCTrigraphSequenceBeginning = @"??";
 
@@ -137,9 +137,33 @@ static NSArray *NUCPunctuators;
 
 @implementation NUCLexicalElement
 
++ (instancetype)lexicalElementWithType:(NUCLexicalElementType)aType
+{
+    return [[[self alloc] initWithType:aType] autorelease];
+}
+
+- (instancetype)initWithType:(NUCLexicalElementType)aType
+{
+    if (self = [super init])
+    {
+        type = aType;
+    }
+    
+    return self;
+}
+
+- (NUCLexicalElementType)type
+{
+    return type;
+}
+
+@end
+
+@implementation NUCPreprocessingToken
+
 + (void)initialize
 {
-    if (self == [NUCLexicalElement class])
+    if (self == [NUCPreprocessingToken class])
     {
         NSCharacterSet *aBasicSourceCharacterSet = [NSCharacterSet characterSetWithCharactersInString:NUCBasicSourceCharacters];
         NSMutableCharacterSet *aBasicSourceMutableCharacterSet = [[aBasicSourceCharacterSet mutableCopy] autorelease];
@@ -168,22 +192,22 @@ static NSArray *NUCPunctuators;
     }
 }
 
-+ (instancetype)lexicalElementWithContentFromString:(NSString *)aString range:(NSRange)aRange type:(NUCLexicalElementType)anElementType
++ (instancetype)preprocessingTokenWithContentFromString:(NSString *)aString range:(NSRange)aRange type:(NUCLexicalElementType)anElementType
 {
-    return [self lexicalElementWithContent:[aString substringWithRange:aRange] range:aRange type:anElementType];
+    return [self preprocessingTokenWithContent:[aString substringWithRange:aRange] range:aRange type:anElementType];
 }
 
-+ (instancetype)lexicalElementWithRange:(NSRange)aRange type:(NUCLexicalElementType)anElementType
++ (instancetype)preprocessingTokenWithRange:(NSRange)aRange type:(NUCLexicalElementType)anElementType
 {
-    return [self lexicalElementWithContent:nil range:aRange type:anElementType];
+    return [self preprocessingTokenWithContent:nil range:aRange type:anElementType];
 }
 
-+ (instancetype)lexicalElementWithContent:(NSString *)aContent range:(NSRange)aRange type:(NUCLexicalElementType)anElementType
++ (instancetype)preprocessingTokenWithContent:(NSString *)aContent range:(NSRange)aRange type:(NUCLexicalElementType)anElementType
 {
-    return [self lexicalElementWithContent:aContent region:NURegionFromRange(aRange) type:anElementType];
+    return [self preprocessingTokenWithContent:aContent region:NURegionFromRange(aRange) type:anElementType];
 }
 
-+ (instancetype)lexicalElementWithContent:(NSString *)aContent region:(NURegion)aRange type:(NUCLexicalElementType)anElementType
++ (instancetype)preprocessingTokenWithContent:(NSString *)aContent region:(NURegion)aRange type:(NUCLexicalElementType)anElementType
 {
     return [[[self alloc] initWithContent:aContent region:aRange type:anElementType] autorelease];
 }
@@ -298,17 +322,17 @@ static NSArray *NUCPunctuators;
 
 @implementation NUCHeaderName
 
-+ (instancetype)lexicalElementWithRange:(NSRange)aRange isHChar:(BOOL)anIsHChar;
++ (instancetype)preprocessingTokenWithRange:(NSRange)aRange isHChar:(BOOL)anIsHChar;
 {
-    return [self lexicalElementWithContent:nil range:aRange isHChar:anIsHChar];
+    return [self preprocessingTokenWithContent:nil range:aRange isHChar:anIsHChar];
 }
 
-+ (instancetype)lexicalElementWithContentFromString:(NSString *)aString range:(NSRange)aRange isHChar:(BOOL)anIsHChar
++ (instancetype)preprocessingTokenWithContentFromString:(NSString *)aString range:(NSRange)aRange isHChar:(BOOL)anIsHChar
 {
-    return [self lexicalElementWithContent:[aString substringWithRange:aRange] range:aRange isHChar:anIsHChar];
+    return [self preprocessingTokenWithContent:[aString substringWithRange:aRange] range:aRange isHChar:anIsHChar];
 }
 
-+ (instancetype)lexicalElementWithContent:(NSString *)aContent range:(NSRange)aRange isHChar:(BOOL)anIsHChar
++ (instancetype)preprocessingTokenWithContent:(NSString *)aContent range:(NSRange)aRange isHChar:(BOOL)anIsHChar
 {
     return [[[self alloc] initWithContent:aContent range:aRange isHChar:anIsHChar] autorelease];
 }
@@ -336,6 +360,198 @@ static NSArray *NUCPunctuators;
 - (BOOL)isQChar
 {
     return !isHChar;
+}
+
+@end
+
+@implementation NUCPreprocessingDirective
+
++ (instancetype)preprocessingDirective
+{
+    return [[self new] autorelease];
+}
+
+@end
+
+@implementation NUCGroup
+
++ (instancetype)group
+{
+    return [[[self alloc] initWithType:NUCLexicalElementGroupType] autorelease];
+}
+
+- (instancetype)initWithType:(NUCLexicalElementType)aType
+{
+    if (self = [super initWithType:aType])
+    {
+        groupParts = [NSMutableArray new];
+    }
+    
+    return self;
+}
+
+- (void)dealloc
+{
+    [groupParts release];
+    
+    [super dealloc];
+}
+
+- (NSMutableArray *)groupParts
+{
+    return groupParts;
+}
+
+- (NSUInteger)count
+{
+    return [[self groupParts] count];
+}
+
+- (void)add:(NUCPreprocessingDirective *)aGroupPart
+{
+    [[self groupParts] addObject:aGroupPart];
+}
+
+@end
+
+@implementation NUCIfGroup
+
++ (instancetype)ifGroupWithType:(NUCLexicalElementType)aType hash:(NUCPreprocessingToken *)aHash expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup
+{
+    return [[[self alloc] initWithType:aType hash:aHash expressionOrIdentifier:anExpressionOrIdentifier newline:aNewline group:aGroup] autorelease];
+}
+
+- (instancetype)initWithType:(NUCLexicalElementType)aType hash:(NUCPreprocessingToken *)aHash expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup
+{
+    if (self = [super initWithType:aType])
+    {
+        hash = [aHash retain];
+        expressionOrIdentifier = [anExpressionOrIdentifier retain];
+        newline = [aNewline retain];
+        group = [aGroup retain];
+    }
+    
+    return self;
+}
+
+- (void)dealloc
+{
+    [hash release];
+    [expressionOrIdentifier release];
+    [newline release];
+    [group release];
+    
+    [super dealloc];
+}
+
+- (BOOL)isIf
+{
+    return [self type] == NUCLexicalElementIfType;
+}
+
+- (BOOL)isIfdef
+{
+    return [self type] == NUCLexicalElementIfdefType;
+}
+
+- (BOOL)isIfndef
+{
+    return [self type] == NUCLexicalElementIfndefType;
+}
+
+- (NUCPreprocessingToken *)hash
+{
+    return hash;
+}
+
+- (NUCLexicalElement *)expression
+{
+    return [self isIf] ? expressionOrIdentifier : nil;
+}
+
+- (NUCLexicalElement *)identifier
+{
+    return ![self isIf] ? expressionOrIdentifier : nil;
+}
+
+- (NUCPreprocessingDirective *)newline
+{
+    return newline;
+}
+
+- (NUCGroup *)group
+{
+    return group;
+}
+
+@end
+
+@implementation NUCElifGroups
+
+//+ (instancetype)elifGroups;
+
+@end
+
+@implementation NUCElifGroup
+
+//+ (instancetype)elifGroup;
+
+@end
+
+@implementation NUCElseGroup
+
+//+ (instancetype)elseGroup;
+
+@end
+
+@implementation NUCIfSection
+
++ (instancetype)ifSectionWithIfGroup:(NUCIfGroup *)anIfGroup elifGroups:(NUCElifGroups *)anElifGroups elseGroup:(NUCElseGroup *)anElseGroup endifLine:(NUCEndifLine *)anEndifLine
+{
+    return [[[self alloc] initWithIfGroup:anIfGroup elifGroups:anElifGroups elseGroup:anElseGroup endifLine:anEndifLine] autorelease];
+}
+
+- (instancetype)initWithIfGroup:(NUCIfGroup *)anIfGroup elifGroups:(NUCElifGroups *)anElifGroups elseGroup:(NUCElseGroup *)anElseGroup endifLine:(NUCEndifLine *)anEndifLine
+{
+    if (self = [super initWithType:NUCLexicalElementIfSectionType])
+    {
+        ifGroup = [anIfGroup retain];
+        elifGroups = [anElifGroups retain];
+        elseGroup = [anElseGroup retain];
+        endifLine = [anEndifLine retain];
+    }
+    
+    return self;
+}
+
+- (void)dealloc
+{
+    [ifGroup release];
+    [elifGroups release];
+    [elseGroup release];
+    [endifLine release];
+    
+    [super dealloc];
+}
+
+- (NUCIfGroup *)ifGroup
+{
+    return ifGroup;
+}
+
+- (NUCElifGroups *)elifGroups
+{
+    return elifGroups;
+}
+
+- (NUCElseGroup *)elseGroup
+{
+    return elseGroup;
+}
+
+- (NUCEndifLine *)endifLine
+{
+    return endifLine;
 }
 
 @end

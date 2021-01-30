@@ -10,7 +10,7 @@
 
 #import <Nursery/NURegion.h>
 
-@class NSString;
+@class NSString, NSMutableArray;
 
 extern NSString * const NUCBasicSourceCharacters;
 extern NSString * const NUCBasicSourceCharactersExceptSingleQuoteAndBackslash;
@@ -22,9 +22,9 @@ extern NSString * const NUCLessThanSign;
 extern NSString * const NUCGreaterThanSign;
 extern NSString * const NUCDoubleQuotationMark;
 extern NSString * const NUCHash;
-extern NSString * const NUCHashIf;
-extern NSString * const NUCHashIfdef;
-extern NSString * const NUCHashIfndef;
+extern NSString * const NUCPreprocessingDirectiveIf;
+extern NSString * const NUCPreprocessingDirectiveIfdef;
+extern NSString * const NUCPreprocessingDirectiveIfndef;
 
 extern NSString * const NUCTrigraphSequenceEqual;
 extern NSString * const NUCTrigraphSequenceLeftBlacket;
@@ -80,9 +80,8 @@ extern NSString * const NUCStringLiteralEncodingPrefixLargeU;
 extern NSString * const NUCStringLiteralEncodingPrefixLargeL;
 
 typedef enum : NSUInteger {
+    NUCLexicalElementNone,
     NUCLexicalElementStringLiteralType,
-    NUCLexicalElementGroupType,
-    NUCLexicalElementGroupPartType,
     NUCLexicalElementHeaderNameType,
     NUCLexicalElementLessThanSignType,
     NUCLexicalElementGreaterThanSignType,
@@ -99,23 +98,41 @@ typedef enum : NSUInteger {
     NUCLexicalElementCommentType,
     NUCLexicalElementPunctuatorType,
     NUCLexicalElementNonWhiteSpaceCharacterType,
-    NUCLexicalElementWhiteSpaceCharacterType
+    NUCLexicalElementWhiteSpaceCharacterType,
+    NUCLexicalElementIfSectionType,
+    NUCLexicalElementGroupType,
+    NUCLexicalElementGroupPartType,
+    NUCLexicalElementIfType,
+    NUCLexicalElementIfdefType,
+    NUCLexicalElementIfndefType
 } NUCLexicalElementType;
 
 @interface NUCLexicalElement : NSObject
 {
     NUCLexicalElementType type;
+}
+
++ (instancetype)lexicalElementWithType:(NUCLexicalElementType)aType;
+
+- (instancetype)initWithType:(NUCLexicalElementType)aType;
+
+- (NUCLexicalElementType)type;
+
+@end
+
+@interface NUCPreprocessingToken : NUCLexicalElement
+{
     NSString *content;
     NURegion range;
 }
 
-+ (instancetype)lexicalElementWithContentFromString:(NSString *)aString range:(NSRange)aRange type:(NUCLexicalElementType)anElementType;
++ (instancetype)preprocessingTokenWithContentFromString:(NSString *)aString range:(NSRange)aRange type:(NUCLexicalElementType)anElementType;
 
-+ (instancetype)lexicalElementWithContent:(NSString *)aContent range:(NSRange)aRange type:(NUCLexicalElementType)anElementType;
++ (instancetype)preprocessingTokenWithContent:(NSString *)aString range:(NSRange)aRange type:(NUCLexicalElementType)anElementType;
 
-+ (instancetype)lexicalElementWithRange:(NSRange)aRange type:(NUCLexicalElementType)anElementType;
++ (instancetype)preprocessingTokenWithRange:(NSRange)aRange type:(NUCLexicalElementType)anElementType;
 
-+ (instancetype)lexicalElementWithContent:(NSString *)aContent region:(NURegion)aRange type:(NUCLexicalElementType)anElementType;
++ (instancetype)preprocessingTokenWithContent:(NSString *)aContent region:(NURegion)aRange type:(NUCLexicalElementType)anElementType;
 
 - (instancetype)initWithRange:(NSRange)aRange type:(NUCLexicalElementType)anElementType;
 
@@ -143,16 +160,16 @@ typedef enum : NSUInteger {
 
 @end
 
-@interface NUCHeaderName : NUCLexicalElement
+@interface NUCHeaderName : NUCPreprocessingToken
 {
     BOOL isHChar;
 }
 
-+ (instancetype)lexicalElementWithRange:(NSRange)aRange isHChar:(BOOL)anIsHChar;
++ (instancetype)preprocessingTokenWithRange:(NSRange)aRange isHChar:(BOOL)anIsHChar;
 
-+ (instancetype)lexicalElementWithContentFromString:(NSString *)aString range:(NSRange)aRange isHChar:(BOOL)anIsHChar;
++ (instancetype)preprocessingTokenWithContentFromString:(NSString *)aString range:(NSRange)aRange isHChar:(BOOL)anIsHChar;
 
-+ (instancetype)lexicalElementWithContent:(NSString *)aContent range:(NSRange)aRange isHChar:(BOOL)anIsHChar;
++ (instancetype)preprocessingTokenWithContent:(NSString *)aContent range:(NSRange)aRange isHChar:(BOOL)anIsHChar;
 
 - (instancetype)initWithRange:(NSRange)aRange isHChar:(BOOL)anIsHChar;
 
@@ -162,3 +179,103 @@ typedef enum : NSUInteger {
 - (BOOL)isQChar;
 
 @end
+
+@interface NUCPreprocessingDirective : NUCLexicalElement
+
++ (instancetype)preprocessingDirective;
+
+@end
+
+@interface NUCGroup : NUCPreprocessingDirective
+{
+    NSMutableArray *groupParts;
+}
+
++ (instancetype)group;
+
+- (NSMutableArray *)groupParts;
+- (NSUInteger)count;
+
+- (void)add:(NUCPreprocessingDirective *)aGroupPart;
+
+@end
+
+@interface NUCIfGroup : NUCPreprocessingDirective
+{
+    NUCPreprocessingToken *hash;
+    NUCLexicalElement *expressionOrIdentifier;
+    NUCPreprocessingDirective *newline;
+    NUCGroup *group;
+}
+
++ (instancetype)ifGroupWithType:(NUCLexicalElementType)aType hash:(NUCPreprocessingToken *)aHash expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup;
+
+- (instancetype)initWithType:(NUCLexicalElementType)aType hash:(NUCPreprocessingToken *)aHash expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup;
+
+- (BOOL)isIf;
+- (BOOL)isIfdef;
+- (BOOL)isIfndef;
+
+- (NUCPreprocessingToken *)hash;
+- (NUCLexicalElement *)expression;
+- (NUCLexicalElement *)identifier;
+- (NUCPreprocessingDirective *)newline;
+- (NUCGroup *)group;
+
+@end
+
+@interface NUCElifGroups : NUCPreprocessingDirective
+{
+    
+}
+
++ (instancetype)elifGroups;
+
+@end
+
+@interface NUCElifGroup : NUCPreprocessingDirective
+{
+    
+}
+
++ (instancetype)elifGroup;
+
+@end
+
+@interface NUCElseGroup : NUCPreprocessingDirective
+{
+    
+}
+
++ (instancetype)elseGroup;
+
+@end
+
+@interface NUCEndifLine : NUCPreprocessingDirective
+{
+    
+}
+
++ (instancetype)endifLine;
+
+@end
+
+@interface NUCIfSection : NUCPreprocessingDirective
+{
+    NUCIfGroup *ifGroup;
+    NUCElifGroups *elifGroups;
+    NUCElseGroup *elseGroup;
+    NUCEndifLine *endifLine;
+}
+
++ (instancetype)ifSectionWithIfGroup:(NUCIfGroup *)anIfGroup elifGroups:(NUCElifGroups *)anElifGroups elseGroup:(NUCElseGroup *)anElseGroup endifLine:(NUCEndifLine *)anEndifLine;
+
+- (instancetype)initWithIfGroup:(NUCIfGroup *)anIfGroup elifGroups:(NUCElifGroups *)anElifGroups elseGroup:(NUCElseGroup *)anElseGroup endifLine:(NUCEndifLine *)anEndifLine;
+
+- (NUCIfGroup *)ifGroup;
+- (NUCElifGroups *)elifGroups;
+- (NUCElseGroup *)elseGroup;
+- (NUCEndifLine *)endifLine;
+
+@end
+
