@@ -9,7 +9,14 @@
 #import "NUCPreprocesser.h"
 #import "NUCSourceFile.h"
 #import "NUCLexicalElement.h"
+#import "NUCHeaderName.h"
 #import "NUCPreprocessingTokenStream.h"
+#import "NUCGroup.h"
+#import "NUCIfGroup.h"
+#import "NUCElifGroups.h"
+#import "NUCElseGroup.h"
+#import "NUCEndifLine.h"
+#import "NUCIfSection.h"
 #import "NURegion.h"
 #import "NUCRangePair.h"
 #import "NULibrary.h"
@@ -174,8 +181,7 @@
     if (!aToken)
         return NO;
     
-    if ([aToken type] == NUCLexicalElementPunctuatorType
-        && [[aToken content] isEqualToString:NUCHash])
+    if ([aToken isHash])
     {
         NUCPreprocessingToken *aHash = aToken;
 
@@ -217,7 +223,7 @@
     return NO;
 }
 
-- (BOOL)scanNewlineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCLexicalElement **)aNewline
+- (BOOL)scanNewlineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCNewline **)aNewline
 {
     return NO;
 }
@@ -880,8 +886,31 @@
     return NO;
 }
 
-- (BOOL)scanEndifLineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)aToken
+- (BOOL)scanEndifLineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)anEndifLine
 {
+    NUCPreprocessingToken *aToken = [aPreprocessingTokenStream next];
+    
+    if (!aToken)
+        return NO;
+    
+    if ([aToken isHash])
+    {
+        NUCPreprocessingToken *aHash = aToken;
+        NUCPreprocessingToken *anEndif = [aPreprocessingTokenStream next];
+        
+        if (anEndif && [[anEndif content] isEqualToString:NUCPreprocessingDirectiveEndif])
+        {
+            NUCNewline *aNewline = nil;
+            if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
+            {
+                if (anEndif)
+                    *anEndifLine = [NUCEndifLine endifLineWithHash:aHash endif:anEndif newline:aNewline];
+                
+                return YES;
+            }
+        }
+    }
+    
     return NO;
 }
 

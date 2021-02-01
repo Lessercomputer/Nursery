@@ -24,6 +24,7 @@ NSString * const NUCHash = @"#";
 NSString * const NUCPreprocessingDirectiveIf = @"if";
 NSString * const NUCPreprocessingDirectiveIfdef = @"ifdef";
 NSString * const NUCPreprocessingDirectiveIfndef = @"ifndef";
+NSString * const NUCPreprocessingDirectiveEndif = @"endif";
 
 NSString * const NUCTrigraphSequenceBeginning = @"??";
 
@@ -137,33 +138,9 @@ static NSArray *NUCPunctuators;
 
 @implementation NUCLexicalElement
 
-+ (instancetype)lexicalElementWithType:(NUCLexicalElementType)aType
-{
-    return [[[self alloc] initWithType:aType] autorelease];
-}
-
-- (instancetype)initWithType:(NUCLexicalElementType)aType
-{
-    if (self = [super init])
-    {
-        type = aType;
-    }
-    
-    return self;
-}
-
-- (NUCLexicalElementType)type
-{
-    return type;
-}
-
-@end
-
-@implementation NUCPreprocessingToken
-
 + (void)initialize
 {
-    if (self == [NUCPreprocessingToken class])
+    if (self == [NUCLexicalElement class])
     {
         NSCharacterSet *aBasicSourceCharacterSet = [NSCharacterSet characterSetWithCharactersInString:NUCBasicSourceCharacters];
         NSMutableCharacterSet *aBasicSourceMutableCharacterSet = [[aBasicSourceCharacterSet mutableCopy] autorelease];
@@ -172,7 +149,7 @@ static NSArray *NUCPunctuators;
         
         [aBasicSourceMutableCharacterSet removeCharactersInString:@"\"\\\r\n"];
         NUCSourceCharacterSetExceptDoubleQuoteAndBackslashAndNewline = [aBasicSourceMutableCharacterSet copy];
-
+        
         NUCHCharCharacterSet = [[[NSCharacterSet characterSetWithCharactersInString:@"\r\n>"] invertedSet] copy];
         NUCQCharCharacterSet = [[[NSCharacterSet characterSetWithCharactersInString:@"\r\n'"] invertedSet] copy];
         NUCNonzeroDigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCNonzeroDigits] copy];
@@ -190,26 +167,6 @@ static NSArray *NUCPunctuators;
                            @",", @"##", @"#",
                            @"<%", @"%>", @"<", @">", @"%:%:", @"%:", nil] copy];
     }
-}
-
-+ (instancetype)preprocessingTokenWithContentFromString:(NSString *)aString range:(NSRange)aRange type:(NUCLexicalElementType)anElementType
-{
-    return [self preprocessingTokenWithContent:[aString substringWithRange:aRange] range:aRange type:anElementType];
-}
-
-+ (instancetype)preprocessingTokenWithRange:(NSRange)aRange type:(NUCLexicalElementType)anElementType
-{
-    return [self preprocessingTokenWithContent:nil range:aRange type:anElementType];
-}
-
-+ (instancetype)preprocessingTokenWithContent:(NSString *)aContent range:(NSRange)aRange type:(NUCLexicalElementType)anElementType
-{
-    return [self preprocessingTokenWithContent:aContent region:NURegionFromRange(aRange) type:anElementType];
-}
-
-+ (instancetype)preprocessingTokenWithContent:(NSString *)aContent region:(NURegion)aRange type:(NUCLexicalElementType)anElementType
-{
-    return [[[self alloc] initWithContent:aContent region:aRange type:anElementType] autorelease];
 }
 
 + (NSCharacterSet *)NUCBasicSourceCharacterSetExceptSingleQuoteAndBackslash
@@ -272,286 +229,24 @@ static NSArray *NUCPunctuators;
     return NUCPunctuators;
 }
 
-- (instancetype)initWithRange:(NSRange)aRange type:(NUCLexicalElementType)anElementType
++ (instancetype)lexicalElementWithType:(NUCLexicalElementType)aType
 {
-    return [self initWithContent:nil range:aRange type:anElementType];
-}
-
-- (instancetype)initWithContentFromString:(NSString *)aString range:(NSRange)aRange type:(NUCLexicalElementType)anElementType
-{
-    return [self initWithContent:[aString substringWithRange:aRange] range:aRange type:anElementType];
-}
-
-- (instancetype)initWithContent:(NSString *)aContent range:(NSRange)aRange type:(NUCLexicalElementType)anElementType
-{
-    return [self initWithContent:aContent region:NURegionFromRange(aRange) type:anElementType];
-}
-
-- (instancetype)initWithContent:(NSString *)aContent region:(NURegion)aRange type:(NUCLexicalElementType)anElementType
-{
-    if (self = [super init])
-    {
-        content = [aContent copy];
-        type = anElementType;
-        range = aRange;
-    }
-    
-    return self;
-}
-
-- (void)dealloc
-{
-    [content release];
-    content = nil;
-    
-    [super dealloc];
-}
-
-- (NSString *)content
-{
-    return content;
-}
-
-- (NSString *)description
-{
-    return content;
-//    return [NSString stringWithFormat:@"<%@: %p> content:%@, type:%lu", [self class], self, [self content], type];
-}
-
-@end
-
-@implementation NUCHeaderName
-
-+ (instancetype)preprocessingTokenWithRange:(NSRange)aRange isHChar:(BOOL)anIsHChar;
-{
-    return [self preprocessingTokenWithContent:nil range:aRange isHChar:anIsHChar];
-}
-
-+ (instancetype)preprocessingTokenWithContentFromString:(NSString *)aString range:(NSRange)aRange isHChar:(BOOL)anIsHChar
-{
-    return [self preprocessingTokenWithContent:[aString substringWithRange:aRange] range:aRange isHChar:anIsHChar];
-}
-
-+ (instancetype)preprocessingTokenWithContent:(NSString *)aContent range:(NSRange)aRange isHChar:(BOOL)anIsHChar
-{
-    return [[[self alloc] initWithContent:aContent range:aRange isHChar:anIsHChar] autorelease];
-}
-
-- (instancetype)initWithRange:(NSRange)aRange isHChar:(BOOL)anIsHChar;
-{
-    return [self initWithContent:nil range:aRange isHChar:anIsHChar];
-}
-
-- (instancetype)initWithContent:(NSString *)aContent range:(NSRange)aRange isHChar:(BOOL)anIsHChar
-{
-    if (self = [super initWithContent:aContent region:NURegionFromRange(aRange) type:NUCLexicalElementHeaderNameType])
-    {
-        isHChar = anIsHChar;
-    }
-    
-    return self;
-}
-
-- (BOOL)isHChar
-{
-    return isHChar;
-}
-
-- (BOOL)isQChar
-{
-    return !isHChar;
-}
-
-@end
-
-@implementation NUCPreprocessingDirective
-
-+ (instancetype)preprocessingDirective
-{
-    return [[self new] autorelease];
-}
-
-@end
-
-@implementation NUCGroup
-
-+ (instancetype)group
-{
-    return [[[self alloc] initWithType:NUCLexicalElementGroupType] autorelease];
+    return [[[self alloc] initWithType:aType] autorelease];
 }
 
 - (instancetype)initWithType:(NUCLexicalElementType)aType
 {
-    if (self = [super initWithType:aType])
+    if (self = [super init])
     {
-        groupParts = [NSMutableArray new];
+        type = aType;
     }
     
     return self;
 }
 
-- (void)dealloc
+- (NUCLexicalElementType)type
 {
-    [groupParts release];
-    
-    [super dealloc];
-}
-
-- (NSMutableArray *)groupParts
-{
-    return groupParts;
-}
-
-- (NSUInteger)count
-{
-    return [[self groupParts] count];
-}
-
-- (void)add:(NUCPreprocessingDirective *)aGroupPart
-{
-    [[self groupParts] addObject:aGroupPart];
-}
-
-@end
-
-@implementation NUCIfGroup
-
-+ (instancetype)ifGroupWithType:(NUCLexicalElementType)aType hash:(NUCPreprocessingToken *)aHash expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup
-{
-    return [[[self alloc] initWithType:aType hash:aHash expressionOrIdentifier:anExpressionOrIdentifier newline:aNewline group:aGroup] autorelease];
-}
-
-- (instancetype)initWithType:(NUCLexicalElementType)aType hash:(NUCPreprocessingToken *)aHash expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup
-{
-    if (self = [super initWithType:aType])
-    {
-        hash = [aHash retain];
-        expressionOrIdentifier = [anExpressionOrIdentifier retain];
-        newline = [aNewline retain];
-        group = [aGroup retain];
-    }
-    
-    return self;
-}
-
-- (void)dealloc
-{
-    [hash release];
-    [expressionOrIdentifier release];
-    [newline release];
-    [group release];
-    
-    [super dealloc];
-}
-
-- (BOOL)isIf
-{
-    return [self type] == NUCLexicalElementIfType;
-}
-
-- (BOOL)isIfdef
-{
-    return [self type] == NUCLexicalElementIfdefType;
-}
-
-- (BOOL)isIfndef
-{
-    return [self type] == NUCLexicalElementIfndefType;
-}
-
-- (NUCPreprocessingToken *)hash
-{
-    return hash;
-}
-
-- (NUCLexicalElement *)expression
-{
-    return [self isIf] ? expressionOrIdentifier : nil;
-}
-
-- (NUCLexicalElement *)identifier
-{
-    return ![self isIf] ? expressionOrIdentifier : nil;
-}
-
-- (NUCPreprocessingDirective *)newline
-{
-    return newline;
-}
-
-- (NUCGroup *)group
-{
-    return group;
-}
-
-@end
-
-@implementation NUCElifGroups
-
-//+ (instancetype)elifGroups;
-
-@end
-
-@implementation NUCElifGroup
-
-//+ (instancetype)elifGroup;
-
-@end
-
-@implementation NUCElseGroup
-
-//+ (instancetype)elseGroup;
-
-@end
-
-@implementation NUCIfSection
-
-+ (instancetype)ifSectionWithIfGroup:(NUCIfGroup *)anIfGroup elifGroups:(NUCElifGroups *)anElifGroups elseGroup:(NUCElseGroup *)anElseGroup endifLine:(NUCEndifLine *)anEndifLine
-{
-    return [[[self alloc] initWithIfGroup:anIfGroup elifGroups:anElifGroups elseGroup:anElseGroup endifLine:anEndifLine] autorelease];
-}
-
-- (instancetype)initWithIfGroup:(NUCIfGroup *)anIfGroup elifGroups:(NUCElifGroups *)anElifGroups elseGroup:(NUCElseGroup *)anElseGroup endifLine:(NUCEndifLine *)anEndifLine
-{
-    if (self = [super initWithType:NUCLexicalElementIfSectionType])
-    {
-        ifGroup = [anIfGroup retain];
-        elifGroups = [anElifGroups retain];
-        elseGroup = [anElseGroup retain];
-        endifLine = [anEndifLine retain];
-    }
-    
-    return self;
-}
-
-- (void)dealloc
-{
-    [ifGroup release];
-    [elifGroups release];
-    [elseGroup release];
-    [endifLine release];
-    
-    [super dealloc];
-}
-
-- (NUCIfGroup *)ifGroup
-{
-    return ifGroup;
-}
-
-- (NUCElifGroups *)elifGroups
-{
-    return elifGroups;
-}
-
-- (NUCElseGroup *)elseGroup
-{
-    return elseGroup;
-}
-
-- (NUCEndifLine *)endifLine
-{
-    return endifLine;
+    return type;
 }
 
 @end
