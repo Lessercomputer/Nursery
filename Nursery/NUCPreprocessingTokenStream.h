@@ -15,6 +15,7 @@
 {
     NSArray *preprocessingTokens;
     NSUInteger position;
+    NSUInteger storedPosition;
 }
 
 + (instancetype)preprecessingTokenStreamWithPreprocessingTokens:(NSArray *)aPreprocessingTokens;
@@ -22,6 +23,9 @@
 - (instancetype)initWithPreprocessingTokens:(NSArray *)aPreprocessingTokens;
 
 - (NUCPreprocessingToken *)next;
+- (NSUInteger)position;
+- (void)storePosition;
+- (void)restorePosition;
 - (BOOL)hasNext;
 - (NSArray *)preprocessingTokens;
 

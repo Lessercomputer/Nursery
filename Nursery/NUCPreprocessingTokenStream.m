@@ -46,9 +46,24 @@
     return aToken;
 }
 
+- (NSUInteger)position
+{
+    return [self position];
+}
+
+- (void)storePosition
+{
+    storedPosition = [self position];
+}
+
+- (void)restorePosition
+{
+    position = storedPosition;
+}
+
 - (BOOL)hasNext
 {
-    return position < [[self preprocessingTokens] count];
+    return [self position] < [[self preprocessingTokens] count];
 }
 
 - (NSArray *)preprocessingTokens

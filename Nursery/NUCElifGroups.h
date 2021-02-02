@@ -8,11 +8,18 @@
 
 #import "NUCPreprocessingDirective.h"
 
+@class NUCElifGroup;
+
 @interface NUCElifGroups : NUCPreprocessingDirective
 {
-    
+    NSMutableArray *groups;
 }
 
 + (instancetype)elifGroups;
+
+- (void)add:(NUCElifGroup *)anElifGroup;
+
+- (NSMutableArray *)groups;
+- (NSUInteger)count;
 
 @end

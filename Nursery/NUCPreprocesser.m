@@ -14,9 +14,12 @@
 #import "NUCGroup.h"
 #import "NUCIfGroup.h"
 #import "NUCElifGroups.h"
+#import "NUCElifGroup.h"
 #import "NUCElseGroup.h"
 #import "NUCEndifLine.h"
 #import "NUCIfSection.h"
+#import "NUCPreprocessingDirective.h"
+#import "NUCNewline.h"
 #import "NURegion.h"
 #import "NUCRangePair.h"
 #import "NULibrary.h"
@@ -133,8 +136,10 @@
         return NO;
 }
 
-- (BOOL)scanIfSectionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)aToken
+- (BOOL)scanIfSectionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)anIfSection
 {
+    [aPreprocessingTokenStream storePosition];
+    
     NUCIfGroup *anIfGroup = nil;
     NUCElifGroups *anElifGroups = nil;
     NUCElseGroup *anElseGroup = nil;
@@ -147,13 +152,15 @@
         
         if ([self scanEndifLineFrom:aPreprocessingTokenStream into:&anEndifLine])
         {
-            if (aToken)
+            if (anIfSection)
             {
-                *aToken = [NUCIfSection ifSectionWithIfGroup:anIfGroup elifGroups:anElifGroups elseGroup:anElseGroup endifLine:anEndifLine];
+                *anIfSection = [NUCIfSection ifSectionWithIfGroup:anIfGroup elifGroups:anElifGroups elseGroup:anElseGroup endifLine:anEndifLine];
             }
             
             return YES;
         }
+        else
+            [aPreprocessingTokenStream restorePosition];
     }
     
     return NO;
@@ -181,6 +188,8 @@
     if (!aToken)
         return NO;
     
+    [aPreprocessingTokenStream storePosition];
+
     if ([aToken isHash])
     {
         NUCPreprocessingToken *aHash = aToken;
@@ -217,6 +226,8 @@
                 
                 return YES;
             }
+            else
+                [aPreprocessingTokenStream restorePosition];
         }
     }
 
@@ -225,6 +236,40 @@
 
 - (BOOL)scanNewlineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCNewline **)aNewline
 {
+    [aPreprocessingTokenStream storePosition];
+    NUCPreprocessingToken *aToken = [aPreprocessingTokenStream next];
+    NUCPreprocessingToken *aCr = nil;
+    NUCPreprocessingToken *anLf = nil;
+    
+    if (aToken)
+    {
+        if ([[aToken content] isEqualToString:NUCCR])
+        {
+            aCr = aToken;
+            aToken = [aPreprocessingTokenStream next];
+            
+            if (aToken && [[aToken content] isEqualToString:NUCLF])
+                anLf = aToken;
+            else
+                [aPreprocessingTokenStream restorePosition];
+        }
+        else if ([[aToken content] isEqualToString:NUCLF])
+        {
+            anLf = aToken;
+        }
+        else
+        {
+            [aPreprocessingTokenStream restorePosition];
+            
+            return NO;
+        }
+        
+        if (aNewline)
+            *aNewline = [NUCNewline newlineWithCr:aCr lf:anLf];
+        
+        return YES;
+    }
+    
     return NO;
 }
 
@@ -876,8 +921,52 @@
     return [aScanner scanString:NUCPeriod intoString:NULL];
 }
 
-- (BOOL)scanElifGroupsFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)aToken
+- (BOOL)scanElifGroupsFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCElifGroups **)aToken
 {
+    NUCElifGroups *anElifGroups = [NUCElifGroups elifGroups];
+    NUCElifGroup *anElifGroup = nil;
+    
+    while ([self scanElifGroupFrom:aPreprocessingTokenStream into:&anElifGroup])
+        [anElifGroups add:anElifGroup];
+
+    if (aToken && [anElifGroups count])
+        *aToken = anElifGroups;
+    
+    return [anElifGroups count] ? YES : NO;
+}
+
+- (BOOL)scanElifGroupFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCElifGroup **)anElifGroup
+{
+    [aPreprocessingTokenStream storePosition];
+    
+    NUCPreprocessingToken *aToken = [aPreprocessingTokenStream next];
+    
+    if (![aToken isHash])
+    {
+        [aPreprocessingTokenStream restorePosition];
+        return NO;
+    }
+    
+    NUCLexicalElement *aConstantExpression = nil;
+    
+    if ([self scanConstantExpressionFrom:aPreprocessingTokenStream into:&aConstantExpression])
+    {
+        NUCNewline *aNewline = nil;
+        
+        if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
+        {
+            NUCGroup *aGroup = nil;
+            [self scanGroupFrom:aPreprocessingTokenStream into:&aGroup];
+            
+            if (anElifGroup)
+                *anElifGroup = nil;
+        }
+        else
+            [aPreprocessingTokenStream restorePosition];
+        
+        return YES;
+    }
+    
     return NO;
 }
 
