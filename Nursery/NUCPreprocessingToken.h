@@ -33,5 +33,7 @@
 - (NSString *)content;
 
 - (BOOL)isHash;
+- (BOOL)isWhitespace;
+- (BOOL)isWhitespacesWithoutNewline;
 
 @end

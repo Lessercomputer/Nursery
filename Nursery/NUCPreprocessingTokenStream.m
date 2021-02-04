@@ -7,6 +7,7 @@
 //
 
 #import "NUCPreprocessingTokenStream.h"
+#import "NUCPreprocessingToken.h"
 
 #import <Foundation/NSArray.h>
 
@@ -48,17 +49,12 @@
 
 - (NSUInteger)position
 {
-    return [self position];
+    return position;
 }
 
-- (void)storePosition
+- (void)setPosition:(NSUInteger)aPosition
 {
-    storedPosition = [self position];
-}
-
-- (void)restorePosition
-{
-    position = storedPosition;
+    position = aPosition;
 }
 
 - (BOOL)hasNext
@@ -69,6 +65,31 @@
 - (NSArray *)preprocessingTokens
 {
     return preprocessingTokens;
+}
+
+- (BOOL)skipWhitespaces
+{
+    NSUInteger aPosition = [self position];
+    
+    while ([[self peekNext] isWhitespace])
+        [self next];
+    
+    return [self position] != aPosition;
+}
+
+- (BOOL)skipWhitespacesWithoutNewline
+{
+    NSUInteger aPosition = [self position];
+    
+    while ([[self peekNext] isWhitespace])
+        [self next];
+    
+    return [self position] != aPosition;
+}
+
+- (NUCPreprocessingToken *)peekNext
+{
+    return [self hasNext] ? [[self preprocessingTokens] objectAtIndex:[self position]] : nil;
 }
 
 @end

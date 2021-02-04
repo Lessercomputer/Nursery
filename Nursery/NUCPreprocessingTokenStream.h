@@ -24,9 +24,11 @@
 
 - (NUCPreprocessingToken *)next;
 - (NSUInteger)position;
-- (void)storePosition;
-- (void)restorePosition;
+- (void)setPosition:(NSUInteger)aPosition;
 - (BOOL)hasNext;
 - (NSArray *)preprocessingTokens;
+- (BOOL)skipWhitespaces;
+- (BOOL)skipWhitespacesWithoutNewline;
+- (NUCPreprocessingToken *)peekNext;
 
 @end

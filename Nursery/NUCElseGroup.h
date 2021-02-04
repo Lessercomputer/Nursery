@@ -8,11 +8,23 @@
 
 #import "NUCPreprocessingDirective.h"
 
+@class NUCPreprocessingToken, NUCNewline, NUCGroup;
+
 @interface NUCElseGroup : NUCPreprocessingDirective
 {
-    
+    NUCPreprocessingToken *hash;
+    NUCPreprocessingToken *ppElse;
+    NUCNewline *newline;
+    NUCGroup *group;
 }
 
-+ (instancetype)elseGroup;
++ (instancetype)elseGroupWithHash:(NUCPreprocessingToken *)aHash else:(NUCPreprocessingToken *)anElse newline:(NUCNewline *)aNewline group:(NUCGroup *)aGroup;
+
+- (instancetype)initWithHash:(NUCPreprocessingToken *)aHash else:(NUCPreprocessingToken *)anElse newline:(NUCNewline *)aNewline group:(NUCGroup *)aGroup;
+
+- (NUCPreprocessingToken *)hash;
+- (NUCPreprocessingToken *)else;
+- (NUCNewline *)newline;
+- (NUCGroup *)group;
 
 @end

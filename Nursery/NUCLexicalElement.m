@@ -25,6 +25,7 @@ NSString * const NUCPreprocessingDirectiveIf = @"if";
 NSString * const NUCPreprocessingDirectiveIfdef = @"ifdef";
 NSString * const NUCPreprocessingDirectiveIfndef = @"ifndef";
 NSString * const NUCPreprocessingDirectiveEndif = @"endif";
+NSString * const NUCPreprocessingDirectiveElse = @"else";
 
 NSString * const NUCTrigraphSequenceBeginning = @"??";
 

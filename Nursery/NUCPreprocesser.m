@@ -138,8 +138,7 @@
 
 - (BOOL)scanIfSectionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)anIfSection
 {
-    [aPreprocessingTokenStream storePosition];
-    
+    NSUInteger aPosition = [aPreprocessingTokenStream position];
     NUCIfGroup *anIfGroup = nil;
     NUCElifGroups *anElifGroups = nil;
     NUCElseGroup *anElseGroup = nil;
@@ -160,7 +159,7 @@
             return YES;
         }
         else
-            [aPreprocessingTokenStream restorePosition];
+            [aPreprocessingTokenStream setPosition:aPosition];
     }
     
     return NO;
@@ -183,40 +182,53 @@
 
 - (BOOL)scanIfGroupFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCIfGroup **)anIfGroup
 {
+    NSUInteger aPosition = [aPreprocessingTokenStream position];
+    [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+
     NUCPreprocessingToken *aToken = [aPreprocessingTokenStream next];
     
     if (!aToken)
+    {
+        [aPreprocessingTokenStream setPosition:aPosition];
         return NO;
+    }
     
-    [aPreprocessingTokenStream storePosition];
-
     if ([aToken isHash])
     {
         NUCPreprocessingToken *aHash = aToken;
-
+        [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+        
         if ((aToken = [aPreprocessingTokenStream next]))
         {
             NSString *anIfGroupTypeString = [aToken content];
             NUCLexicalElementType anIfGroupType = NUCLexicalElementNone;
             NUCLexicalElement *anExpressionOrIdentifier = nil;
-            NUCPreprocessingDirective *aNewline = nil;
+            NUCNewline *aNewline = nil;
             NUCGroup *aGroup = nil;
             
             if ([anIfGroupTypeString isEqualToString:NUCPreprocessingDirectiveIf])
             {
                 anIfGroupType = NUCLexicalElementIfType;
-                [self scanConstantExpressionFrom:aPreprocessingTokenStream into:&anExpressionOrIdentifier];
+                [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+                
+                if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
+                    [self scanConstantExpressionFrom:aPreprocessingTokenStream into:&anExpressionOrIdentifier];
             }
             else if ([anIfGroupTypeString isEqualToString:NUCPreprocessingDirectiveIfdef])
             {
                 anIfGroupType = NUCLexicalElementIfdefType;
-                anExpressionOrIdentifier = [aPreprocessingTokenStream next];
+                [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
                 
+                if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
+                    anExpressionOrIdentifier = [aPreprocessingTokenStream next];
             }
             else if ([anIfGroupTypeString isEqualToString:NUCPreprocessingDirectiveIfndef])
             {
                 anIfGroupType = NUCLexicalElementIfndefType;
-                anExpressionOrIdentifier = [aPreprocessingTokenStream next];
+                [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+                
+                if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
+                    anExpressionOrIdentifier = [aPreprocessingTokenStream next];
             }
             
             if (aHash && anExpressionOrIdentifier && aNewline)
@@ -227,7 +239,7 @@
                 return YES;
             }
             else
-                [aPreprocessingTokenStream restorePosition];
+                [aPreprocessingTokenStream setPosition:aPosition];
         }
     }
 
@@ -236,7 +248,7 @@
 
 - (BOOL)scanNewlineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCNewline **)aNewline
 {
-    [aPreprocessingTokenStream storePosition];
+    NSUInteger aPosition = [aPreprocessingTokenStream position];
     NUCPreprocessingToken *aToken = [aPreprocessingTokenStream next];
     NUCPreprocessingToken *aCr = nil;
     NUCPreprocessingToken *anLf = nil;
@@ -251,7 +263,7 @@
             if (aToken && [[aToken content] isEqualToString:NUCLF])
                 anLf = aToken;
             else
-                [aPreprocessingTokenStream restorePosition];
+                [aPreprocessingTokenStream setPosition:aPosition];
         }
         else if ([[aToken content] isEqualToString:NUCLF])
         {
@@ -259,7 +271,7 @@
         }
         else
         {
-            [aPreprocessingTokenStream restorePosition];
+            [aPreprocessingTokenStream setPosition:aPosition];
             
             return NO;
         }
@@ -937,13 +949,12 @@
 
 - (BOOL)scanElifGroupFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCElifGroup **)anElifGroup
 {
-    [aPreprocessingTokenStream storePosition];
-    
+    NSUInteger aPosition = [aPreprocessingTokenStream position];
     NUCPreprocessingToken *aToken = [aPreprocessingTokenStream next];
     
     if (![aToken isHash])
     {
-        [aPreprocessingTokenStream restorePosition];
+        [aPreprocessingTokenStream setPosition:aPosition];
         return NO;
     }
     
@@ -962,7 +973,7 @@
                 *anElifGroup = nil;
         }
         else
-            [aPreprocessingTokenStream restorePosition];
+            [aPreprocessingTokenStream setPosition:aPosition];
         
         return YES;
     }
@@ -970,8 +981,41 @@
     return NO;
 }
 
-- (BOOL)scanElseGroupFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCElseGroup **)aToken
+- (BOOL)scanElseGroupFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCElseGroup **)anElseGroup
 {
+    NSUInteger aPosition = [aPreprocessingTokenStream position];
+    NUCPreprocessingToken *aToken = [aPreprocessingTokenStream next];
+    
+    if (!aToken)
+        return NO;
+    
+    if ([aToken isHash])
+    {
+        NUCPreprocessingToken *aHash = aToken;
+        NUCNewline *aNewline = nil;
+        NUCPreprocessingToken *anElse = [aPreprocessingTokenStream next];
+        
+        if (anElse && [[anElse content] isEqualToString:NUCPreprocessingDirectiveElse])
+        {
+            if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
+            {
+                NUCGroup *aGroup = nil;
+                [self scanGroupFrom:aPreprocessingTokenStream into:&aGroup];
+                
+                if (anElseGroup)
+                {
+                    *anElseGroup = [NUCElseGroup elseGroupWithHash:aHash else:anElse newline:aNewline group:aGroup];
+                }
+                
+                return YES;
+            }
+            else
+                [aPreprocessingTokenStream setPosition:aPosition];
+        }
+        else
+            [aPreprocessingTokenStream setPosition:aPosition];
+    }
+    
     return NO;
 }
 
@@ -1073,8 +1117,21 @@
                   || [aScanner scanString:NUCCR intoString:&aNewLineString])
             {
                 NUCRangePair *aRangePair = [NUCRangePair rangePairWithRangeFrom:NUMakeRegion([aLogicalSourceStringInPhase2 length], 0) rangeTo:NUMakeRegion(aScanLocation, 1 + [aNewLineString length])];
-                [aRangeMappingFromPhase2StringToPhase1String setObject:aRangePair forKey:aRangePair];
                 
+                id anExistingObject = [aRangeMappingFromPhase2StringToPhase1String objectForKey:aRangePair];
+                
+                if (anExistingObject)
+                {
+                    if ([anExistingObject isKindOfClass:[NUCRangePair class]])
+                    {
+                        NSMutableArray *anArray = [NSMutableArray array];
+                        [aRangeMappingFromPhase2StringToPhase1String setObject:anArray forKey:anExistingObject];
+                    }
+                    
+                    [(NSMutableArray *)anExistingObject addObject:aRangePair];
+                }
+                else
+                    [aRangeMappingFromPhase2StringToPhase1String setObject:aRangePair forKey:aRangePair];
             }
             else
             {

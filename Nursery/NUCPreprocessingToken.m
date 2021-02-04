@@ -80,6 +80,16 @@
                 && [[self content] isEqualToString:NUCHash];
 }
 
+- (BOOL)isWhitespace
+{
+    return [self type] == NUCLexicalElementWhiteSpaceCharacterType || [self type] == NUCLexicalElementNewlineType || [self type] == NUCLexicalElementCommentType;
+}
+
+- (BOOL)isWhitespacesWithoutNewline
+{
+    return [self type] == NUCLexicalElementWhiteSpaceCharacterType || [self type] == NUCLexicalElementCommentType;
+}
+
 - (NSString *)description
 {
     return content;
