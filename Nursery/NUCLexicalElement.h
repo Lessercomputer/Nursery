@@ -111,6 +111,7 @@ typedef enum : NSUInteger {
     NUCLexicalElementNewlineType,
     NUCLexicalElementEndifLineType,
     NUCLexicalElementElifGroups,
+    NUCLexicalElementElifGroup,
     NUCLexicalElementElseType
 } NUCLexicalElementType;
 

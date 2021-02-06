@@ -6,13 +6,10 @@
 //  Copyright © 2021年 Nursery-Framework. All rights reserved.
 //
 
-#import "NUCPreprocessingDirective.h"
+#import "NUCIfGroup.h"
 
-@interface NUCElifGroup : NUCPreprocessingDirective
-{
-    
-}
+@interface NUCElifGroup : NUCIfGroup
 
-+ (instancetype)elifGroup;
++ (instancetype)elifGroupWithType:(NUCLexicalElementType)aType hash:(NUCPreprocessingToken *)aHash expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup;
 
 @end

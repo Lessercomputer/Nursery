@@ -43,6 +43,11 @@
     return [self type] == NUCLexicalElementIfType;
 }
 
+- (BOOL)isElif
+{
+    return [self type] == NUCLexicalElementElifGroup;
+}
+
 - (BOOL)isIfdef
 {
     return [self type] == NUCLexicalElementIfdefType;
@@ -60,7 +65,7 @@
 
 - (NUCLexicalElement *)expression
 {
-    return [self isIf] ? expressionOrIdentifier : nil;
+    return [self isIf] || [self isElif] ? expressionOrIdentifier : nil;
 }
 
 - (NUCLexicalElement *)identifier

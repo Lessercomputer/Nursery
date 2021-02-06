@@ -23,6 +23,7 @@
 - (instancetype)initWithType:(NUCLexicalElementType)aType hash:(NUCPreprocessingToken *)aHash expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup;
 
 - (BOOL)isIf;
+- (BOOL)isElif;
 - (BOOL)isIfdef;
 - (BOOL)isIfndef;
 

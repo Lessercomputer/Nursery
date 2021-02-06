@@ -85,6 +85,11 @@
     return [self type] == NUCLexicalElementWhiteSpaceCharacterType || [self type] == NUCLexicalElementNewlineType || [self type] == NUCLexicalElementCommentType;
 }
 
+- (BOOL)isNotWhitespace
+{
+    return ![self isWhitespace];
+}
+
 - (BOOL)isWhitespacesWithoutNewline
 {
     return [self type] == NUCLexicalElementWhiteSpaceCharacterType || [self type] == NUCLexicalElementCommentType;

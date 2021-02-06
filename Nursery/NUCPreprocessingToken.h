@@ -34,6 +34,7 @@
 
 - (BOOL)isHash;
 - (BOOL)isWhitespace;
+- (BOOL)isNotWhitespace;
 - (BOOL)isWhitespacesWithoutNewline;
 
 @end

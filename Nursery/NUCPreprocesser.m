@@ -172,6 +172,30 @@
 
 - (BOOL)scanTextLineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)aToken
 {
+    
+    return NO;
+}
+
+- (BOOL)scanPpTokensFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)aToken
+{
+    
+    return NO;
+}
+
+- (BOOL)scanPreprocessingTokenFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingToken **)aToken
+{
+    NUCPreprocessingToken *aPreprocessingToken = [aPreprocessingTokenStream peekNext];
+    
+    if (aPreprocessingToken && [aPreprocessingToken isNotWhitespace])
+    {
+        [aPreprocessingTokenStream next];
+        
+        if (aToken)
+            *aToken = aPreprocessingToken;
+        
+        return YES;
+    }
+    
     return NO;
 }
 
@@ -183,22 +207,15 @@
 - (BOOL)scanIfGroupFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCIfGroup **)anIfGroup
 {
     NSUInteger aPosition = [aPreprocessingTokenStream position];
-    [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
-
+    [aPreprocessingTokenStream skipWhitespaces];
     NUCPreprocessingToken *aToken = [aPreprocessingTokenStream next];
     
-    if (!aToken)
-    {
-        [aPreprocessingTokenStream setPosition:aPosition];
-        return NO;
-    }
-    
-    if ([aToken isHash])
+    if (aToken && [aToken isHash])
     {
         NUCPreprocessingToken *aHash = aToken;
-        [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
         
-        if ((aToken = [aPreprocessingTokenStream next]))
+        if ([aPreprocessingTokenStream skipWhitespacesWithoutNewline]
+                && (aToken = [aPreprocessingTokenStream next]))
         {
             NSString *anIfGroupTypeString = [aToken content];
             NUCLexicalElementType anIfGroupType = NUCLexicalElementNone;
@@ -209,25 +226,25 @@
             if ([anIfGroupTypeString isEqualToString:NUCPreprocessingDirectiveIf])
             {
                 anIfGroupType = NUCLexicalElementIfType;
-                [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
                 
-                if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
+                if ([aPreprocessingTokenStream skipWhitespacesWithoutNewline]
+                        &&[self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
                     [self scanConstantExpressionFrom:aPreprocessingTokenStream into:&anExpressionOrIdentifier];
             }
             else if ([anIfGroupTypeString isEqualToString:NUCPreprocessingDirectiveIfdef])
             {
                 anIfGroupType = NUCLexicalElementIfdefType;
-                [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
                 
-                if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
+                if ([aPreprocessingTokenStream skipWhitespacesWithoutNewline]
+                        && [self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
                     anExpressionOrIdentifier = [aPreprocessingTokenStream next];
             }
             else if ([anIfGroupTypeString isEqualToString:NUCPreprocessingDirectiveIfndef])
             {
                 anIfGroupType = NUCLexicalElementIfndefType;
-                [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
                 
-                if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
+                if ([aPreprocessingTokenStream skipWhitespacesWithoutNewline]
+                        && [self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
                     anExpressionOrIdentifier = [aPreprocessingTokenStream next];
             }
             
@@ -238,11 +255,11 @@
                 
                 return YES;
             }
-            else
-                [aPreprocessingTokenStream setPosition:aPosition];
         }
     }
 
+    [aPreprocessingTokenStream setPosition:aPosition];
+    
     return NO;
 }
 
@@ -950,33 +967,35 @@
 - (BOOL)scanElifGroupFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCElifGroup **)anElifGroup
 {
     NSUInteger aPosition = [aPreprocessingTokenStream position];
+    [aPreprocessingTokenStream skipWhitespaces];
     NUCPreprocessingToken *aToken = [aPreprocessingTokenStream next];
     
-    if (![aToken isHash])
+    if (aToken && [aToken isHash])
     {
-        [aPreprocessingTokenStream setPosition:aPosition];
-        return NO;
-    }
-    
-    NUCLexicalElement *aConstantExpression = nil;
-    
-    if ([self scanConstantExpressionFrom:aPreprocessingTokenStream into:&aConstantExpression])
-    {
-        NUCNewline *aNewline = nil;
+        NUCLexicalElement *aConstantExpression = nil;
         
-        if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
+        if ([aPreprocessingTokenStream skipWhitespacesWithoutNewline])
         {
-            NUCGroup *aGroup = nil;
-            [self scanGroupFrom:aPreprocessingTokenStream into:&aGroup];
-            
-            if (anElifGroup)
-                *anElifGroup = nil;
+            if ([self scanConstantExpressionFrom:aPreprocessingTokenStream into:&aConstantExpression])
+            {
+                NUCNewline *aNewline = nil;
+                [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+                
+                if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
+                {
+                    NUCGroup *aGroup = nil;
+                    [self scanGroupFrom:aPreprocessingTokenStream into:&aGroup];
+                    
+                    if (anElifGroup)
+                        *anElifGroup = [NUCElifGroup elifGroupWithType:NUCLexicalElementElifGroup hash:aToken expressionOrIdentifier:aConstantExpression newline:aNewline group:aGroup];
+                }
+                
+                return YES;
+            }
         }
-        else
-            [aPreprocessingTokenStream setPosition:aPosition];
-        
-        return YES;
     }
+
+    [aPreprocessingTokenStream setPosition:aPosition];
     
     return NO;
 }
@@ -986,10 +1005,7 @@
     NSUInteger aPosition = [aPreprocessingTokenStream position];
     NUCPreprocessingToken *aToken = [aPreprocessingTokenStream next];
     
-    if (!aToken)
-        return NO;
-    
-    if ([aToken isHash])
+    if (aToken && [aToken isHash])
     {
         NUCPreprocessingToken *aHash = aToken;
         NUCNewline *aNewline = nil;
@@ -1009,24 +1025,21 @@
                 
                 return YES;
             }
-            else
-                [aPreprocessingTokenStream setPosition:aPosition];
         }
-        else
-            [aPreprocessingTokenStream setPosition:aPosition];
     }
+    
+    [aPreprocessingTokenStream setPosition:aPosition];
     
     return NO;
 }
 
 - (BOOL)scanEndifLineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)anEndifLine
 {
+    NSUInteger aPosition = [aPreprocessingTokenStream position];
+    [aPreprocessingTokenStream skipWhitespaces];
     NUCPreprocessingToken *aToken = [aPreprocessingTokenStream next];
     
-    if (!aToken)
-        return NO;
-    
-    if ([aToken isHash])
+    if (aToken && [aToken isHash])
     {
         NUCPreprocessingToken *aHash = aToken;
         NUCPreprocessingToken *anEndif = [aPreprocessingTokenStream next];
@@ -1043,6 +1056,8 @@
             }
         }
     }
+    
+    [aPreprocessingTokenStream setPosition:aPosition];
     
     return NO;
 }
