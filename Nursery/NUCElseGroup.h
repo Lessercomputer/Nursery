@@ -13,14 +13,14 @@
 @interface NUCElseGroup : NUCPreprocessingDirective
 {
     NUCPreprocessingToken *hash;
-    NUCPreprocessingToken *ppElse;
+    NUCPreprocessingToken *directiveName;
     NUCNewline *newline;
     NUCGroup *group;
 }
 
-+ (instancetype)elseGroupWithHash:(NUCPreprocessingToken *)aHash else:(NUCPreprocessingToken *)anElse newline:(NUCNewline *)aNewline group:(NUCGroup *)aGroup;
++ (instancetype)elseGroupWithHash:(NUCPreprocessingToken *)aHash directiveName:(NUCPreprocessingToken *)anElse newline:(NUCNewline *)aNewline group:(NUCGroup *)aGroup;
 
-- (instancetype)initWithHash:(NUCPreprocessingToken *)aHash else:(NUCPreprocessingToken *)anElse newline:(NUCNewline *)aNewline group:(NUCGroup *)aGroup;
+- (instancetype)initWithHash:(NUCPreprocessingToken *)aHash directiveName:(NUCPreprocessingToken *)anElse newline:(NUCNewline *)aNewline group:(NUCGroup *)aGroup;
 
 - (NUCPreprocessingToken *)hash;
 - (NUCPreprocessingToken *)else;

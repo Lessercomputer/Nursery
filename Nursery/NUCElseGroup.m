@@ -10,17 +10,17 @@
 
 @implementation NUCElseGroup
 
-+ (instancetype)elseGroupWithHash:(NUCPreprocessingToken *)aHash else:(NUCPreprocessingToken *)anElse newline:(NUCNewline *)aNewline group:(NUCGroup *)aGroup
++ (instancetype)elseGroupWithHash:(NUCPreprocessingToken *)aHash directiveName:(NUCPreprocessingToken *)anElse newline:(NUCNewline *)aNewline group:(NUCGroup *)aGroup
 {
-    return [[[self alloc] initWithHash:aHash else:anElse newline:aNewline group:aGroup] autorelease];
+    return [[[self alloc] initWithHash:aHash directiveName:anElse newline:aNewline group:aGroup] autorelease];
 }
 
-- (instancetype)initWithHash:(NUCPreprocessingToken *)aHash else:(NUCPreprocessingToken *)anElse newline:(NUCNewline *)aNewline group:(NUCGroup *)aGroup
+- (instancetype)initWithHash:(NUCPreprocessingToken *)aHash directiveName:(NUCPreprocessingToken *)anElse newline:(NUCNewline *)aNewline group:(NUCGroup *)aGroup
 {
     if (self = [super initWithType:NUCLexicalElementElseType])
     {
         hash = [aHash retain];
-        ppElse = [anElse retain];
+        directiveName = [anElse retain];
         newline = [aNewline retain];
         group = [aGroup retain];
     }
@@ -31,7 +31,7 @@
 - (void)dealloc
 {
     [hash release];
-    [ppElse release];
+    [directiveName release];
     [newline release];
     [group release];
     
@@ -45,7 +45,7 @@
 
 - (NUCPreprocessingToken *)else
 {
-    return ppElse;
+    return directiveName;
 }
 
 - (NUCNewline *)newline

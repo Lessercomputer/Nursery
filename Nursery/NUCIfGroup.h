@@ -13,14 +13,15 @@
 @interface NUCIfGroup : NUCPreprocessingDirective
 {
     NUCPreprocessingToken *hash;
+    NUCPreprocessingToken *directiveName;
     NUCLexicalElement *expressionOrIdentifier;
     NUCPreprocessingDirective *newline;
     NUCGroup *group;
 }
 
-+ (instancetype)ifGroupWithType:(NUCLexicalElementType)aType hash:(NUCPreprocessingToken *)aHash expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup;
++ (instancetype)ifGroupWithType:(NUCLexicalElementType)aType hash:(NUCPreprocessingToken *)aHash directiveName:(NUCPreprocessingToken *)aName expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup;
 
-- (instancetype)initWithType:(NUCLexicalElementType)aType hash:(NUCPreprocessingToken *)aHash expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup;
+- (instancetype)initWithType:(NUCLexicalElementType)aType hash:(NUCPreprocessingToken *)aHash directiveName:(NUCPreprocessingToken *)aName expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup;
 
 - (BOOL)isIf;
 - (BOOL)isElif;

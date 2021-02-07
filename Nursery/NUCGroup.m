@@ -44,7 +44,7 @@
     return [[self groupParts] count];
 }
 
-- (void)add:(NUCPreprocessingDirective *)aGroupPart
+- (void)add:(NUCPreprocessingToken *)aGroupPart
 {
     [[self groupParts] addObject:aGroupPart];
 }

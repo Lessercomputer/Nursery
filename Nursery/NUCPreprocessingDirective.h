@@ -10,6 +10,4 @@
 
 @interface NUCPreprocessingDirective : NUCLexicalElement
 
-+ (instancetype)preprocessingDirective;
-
 @end

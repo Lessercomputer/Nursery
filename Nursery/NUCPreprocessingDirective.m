@@ -10,9 +10,5 @@
 
 @implementation NUCPreprocessingDirective
 
-+ (instancetype)preprocessingDirective
-{
-    return [[self new] autorelease];
-}
 
 @end
