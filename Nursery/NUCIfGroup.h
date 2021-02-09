@@ -8,27 +8,27 @@
 
 #import "NUCPreprocessingDirective.h"
 
-@class NUCPreprocessingToken, NUCGroup;
+@class NUCDecomposedPreprocessingToken, NUCGroup;
 
 @interface NUCIfGroup : NUCPreprocessingDirective
 {
-    NUCPreprocessingToken *hash;
-    NUCPreprocessingToken *directiveName;
+    NUCDecomposedPreprocessingToken *hash;
+    NUCDecomposedPreprocessingToken *directiveName;
     NUCLexicalElement *expressionOrIdentifier;
     NUCPreprocessingDirective *newline;
     NUCGroup *group;
 }
 
-+ (instancetype)ifGroupWithType:(NUCLexicalElementType)aType hash:(NUCPreprocessingToken *)aHash directiveName:(NUCPreprocessingToken *)aName expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup;
++ (instancetype)ifGroupWithType:(NUCLexicalElementType)aType hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aName expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup;
 
-- (instancetype)initWithType:(NUCLexicalElementType)aType hash:(NUCPreprocessingToken *)aHash directiveName:(NUCPreprocessingToken *)aName expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup;
+- (instancetype)initWithType:(NUCLexicalElementType)aType hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aName expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup;
 
 - (BOOL)isIf;
 - (BOOL)isElif;
 - (BOOL)isIfdef;
 - (BOOL)isIfndef;
 
-- (NUCPreprocessingToken *)hash;
+- (NUCDecomposedPreprocessingToken *)hash;
 - (NUCLexicalElement *)expression;
 - (NUCLexicalElement *)identifier;
 - (NUCPreprocessingDirective *)newline;

@@ -8,7 +8,6 @@
 
 #import "NUCPreprocessingDirective.h"
 
-@class NUCPreprocessingToken;
 
 @interface NUCGroup : NUCPreprocessingDirective
 {
@@ -20,6 +19,6 @@
 - (NSMutableArray *)groupParts;
 - (NSUInteger)count;
 
-- (void)add:(NUCPreprocessingToken *)aGroupPart;
+- (void)add:(NUCPreprocessingDirective *)aGroupPart;
 
 @end

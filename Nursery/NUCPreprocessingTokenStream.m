@@ -7,7 +7,7 @@
 //
 
 #import "NUCPreprocessingTokenStream.h"
-#import "NUCPreprocessingToken.h"
+#import "NUCDecomposedPreprocessingToken.h"
 
 #import <Foundation/NSArray.h>
 
@@ -35,9 +35,9 @@
     [super dealloc];
 }
 
-- (NUCPreprocessingToken *)next
+- (NUCDecomposedPreprocessingToken *)next
 {
-    NUCPreprocessingToken *aToken = nil;
+    NUCDecomposedPreprocessingToken *aToken = nil;
     
     if ([self hasNext])
     {
@@ -87,7 +87,7 @@
     return [self position] != aPosition;
 }
 
-- (NUCPreprocessingToken *)peekNext
+- (NUCDecomposedPreprocessingToken *)peekNext
 {
     return [self hasNext] ? [[self preprocessingTokens] objectAtIndex:[self position]] : nil;
 }

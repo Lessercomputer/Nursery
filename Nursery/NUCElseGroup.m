@@ -10,12 +10,12 @@
 
 @implementation NUCElseGroup
 
-+ (instancetype)elseGroupWithHash:(NUCPreprocessingToken *)aHash directiveName:(NUCPreprocessingToken *)anElse newline:(NUCNewline *)aNewline group:(NUCGroup *)aGroup
++ (instancetype)elseGroupWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)anElse newline:(NUCNewline *)aNewline group:(NUCGroup *)aGroup
 {
     return [[[self alloc] initWithHash:aHash directiveName:anElse newline:aNewline group:aGroup] autorelease];
 }
 
-- (instancetype)initWithHash:(NUCPreprocessingToken *)aHash directiveName:(NUCPreprocessingToken *)anElse newline:(NUCNewline *)aNewline group:(NUCGroup *)aGroup
+- (instancetype)initWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)anElse newline:(NUCNewline *)aNewline group:(NUCGroup *)aGroup
 {
     if (self = [super initWithType:NUCLexicalElementElseType])
     {
@@ -38,12 +38,12 @@
     [super dealloc];
 }
 
-- (NUCPreprocessingToken *)hash
+- (NUCDecomposedPreprocessingToken *)hash
 {
     return hash;
 }
 
-- (NUCPreprocessingToken *)else
+- (NUCDecomposedPreprocessingToken *)else
 {
     return directiveName;
 }

@@ -7,6 +7,7 @@
 //
 
 #import "NUCPpTokens.h"
+#import "NUCDecomposedPreprocessingToken.h"
 
 #import <Foundation/NSArray.h>
 
@@ -34,7 +35,7 @@
     [super dealloc];
 }
 
-- (void)add:(NUCPreprocessingToken *)aPpToken
+- (void)add:(NUCDecomposedPreprocessingToken *)aPpToken
 {
     [[self ppTokens] addObject:aPpToken];
 }

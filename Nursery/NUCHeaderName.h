@@ -6,9 +6,9 @@
 //  Copyright © 2021年 Nursery-Framework. All rights reserved.
 //
 
-#import "NUCPreprocessingToken.h"
+#import "NUCDecomposedPreprocessingToken.h"
 
-@interface NUCHeaderName : NUCPreprocessingToken
+@interface NUCHeaderName : NUCDecomposedPreprocessingToken
 {
     BOOL isHChar;
 }

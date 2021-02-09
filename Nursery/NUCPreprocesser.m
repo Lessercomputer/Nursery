@@ -21,6 +21,8 @@
 #import "NUCPreprocessingDirective.h"
 #import "NUCNewline.h"
 #import "NUCPpTokens.h"
+#import "NUCTextLine.h"
+#import "NUCNonDirective.h"
 #import "NURegion.h"
 #import "NUCRangePair.h"
 #import "NULibrary.h"
@@ -90,7 +92,7 @@
     
     NSMutableArray *aNonwhitespaces = [NSMutableArray array];
     
-    [aPreprocessingTokens enumerateObjectsUsingBlock:^(NUCPreprocessingToken * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [aPreprocessingTokens enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([obj type] == NUCLexicalElementNonWhiteSpaceCharacterType)
             [aNonwhitespaces addObject:obj];
     }];
@@ -108,7 +110,7 @@
 - (BOOL)scanGroupFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCGroup **)aToken
 {
     NUCGroup *aGroup = [NUCGroup group];
-    NUCPreprocessingToken *aGroupPart = nil;
+    NUCPreprocessingDirective *aGroupPart = nil;
     BOOL aTokenScanned = NO;
     
     while ([self scanGroupPartFrom:aPreprocessingTokenStream into:&aGroupPart])
@@ -123,7 +125,7 @@
     return aTokenScanned;
 }
 
-- (BOOL)scanGroupPartFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingToken **)aGroupPart
+- (BOOL)scanGroupPartFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)aGroupPart
 {
     if ([self scanIfSectionFrom:aPreprocessingTokenStream into:aGroupPart])
         return YES;
@@ -137,7 +139,7 @@
         return NO;
 }
 
-- (BOOL)scanIfSectionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingToken **)anIfSection
+- (BOOL)scanIfSectionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)anIfSection
 {
     NSUInteger aPosition = [aPreprocessingTokenStream position];
     NUCIfGroup *anIfGroup = nil;
@@ -154,7 +156,7 @@
         {
             if (anIfSection)
             {
-                *anIfSection = (NUCPreprocessingToken *)[NUCIfSection ifSectionWithIfGroup:anIfGroup elifGroups:anElifGroups elseGroup:anElseGroup endifLine:anEndifLine];
+                *anIfSection = [NUCIfSection ifSectionWithIfGroup:anIfGroup elifGroups:anElifGroups elseGroup:anElseGroup endifLine:anEndifLine];
             }
             
             return YES;
@@ -166,23 +168,24 @@
     return NO;
 }
 
-- (BOOL)scanControlLineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingToken **)aToken
+- (BOOL)scanControlLineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)aToken
 {
     return NO;
 }
 
-- (BOOL)scanTextLineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingToken **)aToken
+- (BOOL)scanTextLineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)aToken
 {
     NSUInteger aPosition = [aPreprocessingTokenStream position];
     NUCPpTokens *aPpTokens = nil;
+    NUCNewline *aNewline = nil;
     
     [self scanPpTokensFrom:aPreprocessingTokenStream into:&aPpTokens];
     [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
     
-    if ([self scanNewlineFrom:aPreprocessingTokenStream into:NULL])
+    if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
     {
         if (aToken)
-            *aToken = aPpTokens;
+            *aToken = [NUCTextLine textLineWithPpTokens:aPpTokens newline:aNewline];
         
         return YES;
     }
@@ -194,7 +197,7 @@
 
 - (BOOL)scanPpTokensFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPpTokens **)aToken
 {
-    NUCPreprocessingToken *aPpToken = nil;
+    NUCDecomposedPreprocessingToken *aPpToken = nil;
     NUCPpTokens *aPpTokens = [NUCPpTokens ppTokens];
     
     while ([[aPreprocessingTokenStream peekNext] isNotWhitespace])
@@ -209,9 +212,9 @@
     return [aPpTokens count] ? YES : NO;
 }
 
-- (BOOL)scanPreprocessingTokenFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingToken **)aToken
+- (BOOL)scanPreprocessingTokenFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCDecomposedPreprocessingToken **)aToken
 {
-    NUCPreprocessingToken *aPreprocessingToken = [aPreprocessingTokenStream peekNext];
+    NUCDecomposedPreprocessingToken *aPreprocessingToken = [aPreprocessingTokenStream peekNext];
     
     if (aPreprocessingToken && [aPreprocessingToken isNotWhitespace])
     {
@@ -226,24 +229,25 @@
     return NO;
 }
 
-- (BOOL)scanHashAndNonDirectiveFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingToken **)aToken
+- (BOOL)scanHashAndNonDirectiveFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)aToken
 {
     NSUInteger aPosition = [aPreprocessingTokenStream position];
     
-    NUCPreprocessingToken *aPpToken = [aPreprocessingTokenStream next];
+    NUCDecomposedPreprocessingToken *aPpToken = [aPreprocessingTokenStream next];
     
     if ([aPpToken isHash])
     {
         NUCPpTokens *aPpTokens = nil;
+        NUCNewline *aNewline = nil;
         
         [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
         
         if ([self scanPpTokensFrom:aPreprocessingTokenStream into:&aPpTokens])
         {
-            if ([self scanNewlineFrom:aPreprocessingTokenStream into:nil])
+            if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
             {
                 if (aToken)
-                    *aToken = aPpTokens;
+                    *aToken = [NUCNonDirective noneDirectiveWithHash:aPpToken ppTokens:aPpTokens newline:aNewline];
                 
                 return YES;
             }
@@ -259,18 +263,18 @@
 {
     NSUInteger aPosition = [aPreprocessingTokenStream position];
     [aPreprocessingTokenStream skipWhitespaces];
-    NUCPreprocessingToken *aToken = [aPreprocessingTokenStream next];
+    NUCDecomposedPreprocessingToken *aToken = [aPreprocessingTokenStream next];
     
     if (aToken && [aToken isHash])
     {
-        NUCPreprocessingToken *aHash = aToken;
+        NUCDecomposedPreprocessingToken *aHash = aToken;
         
         if ([aPreprocessingTokenStream skipWhitespacesWithoutNewline]
                 && (aToken = [aPreprocessingTokenStream next]))
         {
             NSString *anIfGroupTypeString = [aToken content];
             NUCLexicalElementType anIfGroupType = NUCLexicalElementNone;
-            NUCPreprocessingToken *aTypeName = aToken;
+            NUCDecomposedPreprocessingToken *aTypeName = aToken;
             NUCLexicalElement *anExpressionOrIdentifier = nil;
             NUCNewline *aNewline = nil;
             NUCGroup *aGroup = nil;
@@ -319,9 +323,9 @@
 - (BOOL)scanNewlineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCNewline **)aNewline
 {
     NSUInteger aPosition = [aPreprocessingTokenStream position];
-    NUCPreprocessingToken *aToken = [aPreprocessingTokenStream next];
-    NUCPreprocessingToken *aCr = nil;
-    NUCPreprocessingToken *anLf = nil;
+    NUCDecomposedPreprocessingToken *aToken = [aPreprocessingTokenStream next];
+    NUCDecomposedPreprocessingToken *aCr = nil;
+    NUCDecomposedPreprocessingToken *anLf = nil;
     
     if (aToken)
     {
@@ -456,7 +460,7 @@
     {
         NSRange anIdentifierRange = NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation);
         
-        [anElements addObject:[NUCPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:anIdentifierRange type:NUCLexicalElementIdentifierType]];
+        [anElements addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:anIdentifierRange type:NUCLexicalElementIdentifierType]];
         
         return YES;
     }
@@ -513,7 +517,7 @@
     
     if ([aScanner scanLocation] != aScanLocation)
     {
-        [anElements addObject:[NUCPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementPpNumberType]];
+        [anElements addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementPpNumberType]];
         
         return YES;
     }
@@ -544,7 +548,7 @@
         {
             NSRange aRange = NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation);
             
-            [anElements addObject:[NUCPreprocessingToken preprocessingTokenWithContent:[[aScanner string] substringWithRange:aRange] range:aRange type:NUCLexicalElementStringLiteralType]];
+            [anElements addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContent:[[aScanner string] substringWithRange:aRange] range:aRange type:NUCLexicalElementStringLiteralType]];
             
             return YES;
         }
@@ -565,7 +569,7 @@
     
     while (aShouldContinueToScan)
     {
-        if ([aScanner scanCharactersFromSet:[NUCPreprocessingToken NUCSourceCharacterSetExceptDoubleQuoteAndBackslashAndNewline] intoString:&anSChars])
+        if ([aScanner scanCharactersFromSet:[NUCDecomposedPreprocessingToken NUCSourceCharacterSetExceptDoubleQuoteAndBackslashAndNewline] intoString:&anSChars])
         {
             [anSCharSequence appendString:anSChars];
         }
@@ -592,13 +596,13 @@
 {
     __block BOOL aPunctuatorScand = NO;
     
-    [[NUCPreprocessingToken NUCPunctuators] enumerateObjectsUsingBlock:^(NSString *  _Nonnull aPunctuator, NSUInteger idx, BOOL * _Nonnull aStop) {
+    [[NUCDecomposedPreprocessingToken NUCPunctuators] enumerateObjectsUsingBlock:^(NSString *  _Nonnull aPunctuator, NSUInteger idx, BOOL * _Nonnull aStop) {
         
         NSUInteger aScanLocation = [aScanner scanLocation];
         
         if ([aScanner scanString:aPunctuator intoString:NULL])
         {
-            [aPreprocessingTokens addObject:[NUCPreprocessingToken preprocessingTokenWithContent:aPunctuator range:NSMakeRange(aScanLocation, [aPunctuator length]) type:NUCLexicalElementPunctuatorType]];
+            [aPreprocessingTokens addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContent:aPunctuator range:NSMakeRange(aScanLocation, [aPunctuator length]) type:NUCLexicalElementPunctuatorType]];
             
             *aStop = aPunctuatorScand = YES;
         }
@@ -611,10 +615,10 @@
 {
     NSUInteger aLocation = [aScanner scanLocation];
     
-    [aScanner scanCharactersFromSet:[NUCPreprocessingToken NUCWhiteSpaceCharacterSet] intoString:NULL];
+    [aScanner scanCharactersFromSet:[NUCDecomposedPreprocessingToken NUCWhiteSpaceCharacterSet] intoString:NULL];
     
     if ([aScanner scanLocation] != aLocation)
-        [aPreprocessingTokens addObject:[NUCPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aLocation, [aScanner scanLocation] - aLocation) type:NUCLexicalElementWhiteSpaceCharacterType]];
+        [aPreprocessingTokens addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aLocation, [aScanner scanLocation] - aLocation) type:NUCLexicalElementWhiteSpaceCharacterType]];
     
     [self decomposeCommentFrom:aScanner into:aPreprocessingTokens];
     
@@ -638,12 +642,12 @@
     {
         aCommentLocation = [aScanner scanLocation];
         
-        [aScanner scanUpToCharactersFromSet:[NUCPreprocessingToken NUCNewlineCharacterSet] intoString:&aComment];
+        [aScanner scanUpToCharactersFromSet:[NUCDecomposedPreprocessingToken NUCNewlineCharacterSet] intoString:&aComment];
     }
 
     if (aCommentLocation != NSNotFound)
     {
-        [aPreprocessingTokens addObject:[NUCPreprocessingToken preprocessingTokenWithContent:aComment range:NSMakeRange(aCommentLocation, [aComment length]) type:NUCLexicalElementCommentType]];
+        [aPreprocessingTokens addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContent:aComment range:NSMakeRange(aCommentLocation, [aComment length]) type:NUCLexicalElementCommentType]];
         
         return YES;
     }
@@ -657,7 +661,7 @@
     
     if (aRange.location != NSNotFound)
     {
-        [aPreprocessingTokens addObject:[NUCPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:aRange type:NUCLexicalElementNonWhiteSpaceCharacterType]];
+        [aPreprocessingTokens addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:aRange type:NUCLexicalElementNonWhiteSpaceCharacterType]];
         [aScanner setScanLocation:aRange.location + aRange.length];
 
         return YES;
@@ -718,9 +722,9 @@
 {
     NSUInteger aScanLocation = [aScanner scanLocation];
     
-    if ([aScanner scanCharactersFromSet:[NUCPreprocessingToken NUCDigitCharacterSet] intoString:NULL])
+    if ([aScanner scanCharactersFromSet:[NUCDecomposedPreprocessingToken NUCDigitCharacterSet] intoString:NULL])
     {
-        [anElements addObject:[NUCPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementDigitSequenceType]];
+        [anElements addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementDigitSequenceType]];
         
         return YES;
     }
@@ -745,7 +749,7 @@
         && [self scanCCharSequenceFrom:aScanner]
         && [aScanner scanString:NUCSingleQuote intoString:NULL])
     {
-        [anElements addObject:[NUCPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementCharacterConstantType]];
+        [anElements addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementCharacterConstantType]];
         
         return YES;
     }
@@ -755,7 +759,7 @@
 
 - (BOOL)scanCCharSequenceFrom:(NSScanner *)aScanner
 {
-    return [aScanner scanCharactersFromSet:[NUCPreprocessingToken NUCBasicSourceCharacterSetExceptSingleQuoteAndBackslash] intoString:NULL]
+    return [aScanner scanCharactersFromSet:[NUCDecomposedPreprocessingToken NUCBasicSourceCharacterSetExceptSingleQuoteAndBackslash] intoString:NULL]
             || [self scanEscapeSequenceFrom:aScanner into:NULL];
 }
 
@@ -805,7 +809,7 @@
         {
             if (aLength > 3) aLength = 3;
             
-            NSRange aRange = [aString rangeOfCharacterFromSet:[NUCPreprocessingToken NUCOctalDigitCharacterSet] options:0 range:NSMakeRange([aScanner scanLocation], aLength)];
+            NSRange aRange = [aString rangeOfCharacterFromSet:[NUCDecomposedPreprocessingToken NUCOctalDigitCharacterSet] options:0 range:NSMakeRange([aScanner scanLocation], aLength)];
             
             if (aRange.location != NSNotFound)
             {
@@ -823,7 +827,7 @@
 {
     if ([aScanner scanString:@"\\x" intoString:NULL])
     {
-        if ([aScanner scanCharactersFromSet:[NUCPreprocessingToken NUCHexadecimalDigitCharacterSet] intoString:NULL])
+        if ([aScanner scanCharactersFromSet:[NUCDecomposedPreprocessingToken NUCHexadecimalDigitCharacterSet] intoString:NULL])
             return YES;
     }
     
@@ -862,7 +866,7 @@
 {
     if ([[aScanner string] length] - [aScanner scanLocation] >= 4)
     {
-        NSRange aHexdecimalDigitRange = [[aScanner string] rangeOfCharacterFromSet:[NUCPreprocessingToken NUCHexadecimalDigitCharacterSet] options:0 range:NSMakeRange([aScanner scanLocation], 4)];
+        NSRange aHexdecimalDigitRange = [[aScanner string] rangeOfCharacterFromSet:[NUCDecomposedPreprocessingToken NUCHexadecimalDigitCharacterSet] options:0 range:NSMakeRange([aScanner scanLocation], 4)];
         
         if (aHexdecimalDigitRange.length == 4)
             return YES;
@@ -882,7 +886,7 @@
         [self scanDigitFrom:aScanner];
         
         aRange = NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation);
-        [anElements addObject:[NUCPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:aRange type:NUCLexicalElementIntegerConstantType]];
+        [anElements addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:aRange type:NUCLexicalElementIntegerConstantType]];
         
         return YES;
     }
@@ -923,7 +927,7 @@
     if ([aScanner scanString:NUCUnsignedSuffixSmall intoString:NULL]
             || [aScanner scanString:NUCUnsignedSuffixLarge intoString:NULL])
     {
-        [anElements addObject:[NUCPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, 1) type:NUCLexicalElementUnsignedSuffixType]];
+        [anElements addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, 1) type:NUCLexicalElementUnsignedSuffixType]];
         
         return YES;
     }
@@ -938,7 +942,7 @@
     if ([aScanner scanString:NUCLongSuffixSmall intoString:NULL]
             || [aScanner scanString:NUCLongSuffixLarge intoString:NULL])
     {
-        [anElements addObject:[NUCPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, 1) type:NUCLexicalElementLongSuffixType]];
+        [anElements addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, 1) type:NUCLexicalElementLongSuffixType]];
         
         return YES;
     }
@@ -953,7 +957,7 @@
     if ([aScanner scanString:NUCLongLongSuffixSmall intoString:NULL]
             || [aScanner scanString:NUCLongLongSuffixLarge intoString:NULL])
     {
-        [anElements addObject:[NUCPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, 2) type:NUCLexicalElementLongLongSuffixType]];
+        [anElements addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, 2) type:NUCLexicalElementLongLongSuffixType]];
         
         return YES;
     }
@@ -967,9 +971,9 @@
     
     if ([aScanner scanString:NUCOctalDigitZero intoString:NULL])
     {
-        if ([aScanner scanCharactersFromSet:[NUCPreprocessingToken NUCOctalDigitCharacterSet] intoString:NULL])
+        if ([aScanner scanCharactersFromSet:[NUCDecomposedPreprocessingToken NUCOctalDigitCharacterSet] intoString:NULL])
         {
-            [anElements addObject:[NUCPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementOctalConstantType]];
+            [anElements addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementOctalConstantType]];
             
             return YES;
         }
@@ -985,17 +989,17 @@
 
 - (BOOL)scanNonzeroDigitFrom:(NSScanner *)aScanner
 {
-    return [aScanner scanCharactersFromSet:[NUCPreprocessingToken NUCNonzeroDigitCharacterSet] intoString:NULL];
+    return [aScanner scanCharactersFromSet:[NUCDecomposedPreprocessingToken NUCNonzeroDigitCharacterSet] intoString:NULL];
 }
 
 - (BOOL)scanNondigitFrom:(NSScanner *)aScanner
 {
-    return [aScanner scanCharactersFromSet:[NUCPreprocessingToken NUCNondigitCharacterSet] intoString:NULL];
+    return [aScanner scanCharactersFromSet:[NUCDecomposedPreprocessingToken NUCNondigitCharacterSet] intoString:NULL];
 }
 
 - (BOOL)scanDigitFrom:(NSScanner *)aScanner
 {
-    return [aScanner scanCharactersFromSet:[NUCPreprocessingToken NUCDigitCharacterSet] intoString:NULL];
+    return [aScanner scanCharactersFromSet:[NUCDecomposedPreprocessingToken NUCDigitCharacterSet] intoString:NULL];
 }
 
 - (BOOL)scanPeriodFrom:(NSScanner *)aScanner
@@ -1021,7 +1025,7 @@
 {
     NSUInteger aPosition = [aPreprocessingTokenStream position];
     [aPreprocessingTokenStream skipWhitespaces];
-    NUCPreprocessingToken *aToken = [aPreprocessingTokenStream next];
+    NUCDecomposedPreprocessingToken *aToken = [aPreprocessingTokenStream next];
     
     if (aToken && [aToken isHash])
     {
@@ -1029,7 +1033,7 @@
         
         if ([aPreprocessingTokenStream skipWhitespacesWithoutNewline])
         {
-            NUCPreprocessingToken *anElif = [aPreprocessingTokenStream next];
+            NUCDecomposedPreprocessingToken *anElif = [aPreprocessingTokenStream next];
             if ([[anElif content] isEqualToString:NUCPreprocessingDirectiveElif])
             {
                 if ([self scanConstantExpressionFrom:aPreprocessingTokenStream into:&aConstantExpression])
@@ -1060,13 +1064,13 @@
 - (BOOL)scanElseGroupFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCElseGroup **)anElseGroup
 {
     NSUInteger aPosition = [aPreprocessingTokenStream position];
-    NUCPreprocessingToken *aToken = [aPreprocessingTokenStream next];
+    NUCDecomposedPreprocessingToken *aToken = [aPreprocessingTokenStream next];
     
     if (aToken && [aToken isHash])
     {
-        NUCPreprocessingToken *aHash = aToken;
+        NUCDecomposedPreprocessingToken *aHash = aToken;
         NUCNewline *aNewline = nil;
-        NUCPreprocessingToken *anElse = [aPreprocessingTokenStream next];
+        NUCDecomposedPreprocessingToken *anElse = [aPreprocessingTokenStream next];
         
         if (anElse && [[anElse content] isEqualToString:NUCPreprocessingDirectiveElse])
         {
@@ -1094,12 +1098,12 @@
 {
     NSUInteger aPosition = [aPreprocessingTokenStream position];
     [aPreprocessingTokenStream skipWhitespaces];
-    NUCPreprocessingToken *aToken = [aPreprocessingTokenStream next];
+    NUCDecomposedPreprocessingToken *aToken = [aPreprocessingTokenStream next];
     
     if (aToken && [aToken isHash])
     {
-        NUCPreprocessingToken *aHash = aToken;
-        NUCPreprocessingToken *anEndif = [aPreprocessingTokenStream next];
+        NUCDecomposedPreprocessingToken *aHash = aToken;
+        NUCDecomposedPreprocessingToken *anEndif = [aPreprocessingTokenStream next];
         
         if (anEndif && [[anEndif content] isEqualToString:NUCPreprocessingDirectiveEndif])
         {
@@ -1221,9 +1225,9 @@
 
 - (BOOL)decomposeHeaderNameFrom:(NSScanner *)aScanner into:(NSMutableArray *)anElements
 {
-    if ([self decomposeHeaderNameFrom:aScanner beginWith:NUCLessThanSign endWith:NUCGreaterThanSign characterSet:[NUCPreprocessingToken NUCHCharCharacterSet] isHChar:YES into:anElements])
+    if ([self decomposeHeaderNameFrom:aScanner beginWith:NUCLessThanSign endWith:NUCGreaterThanSign characterSet:[NUCDecomposedPreprocessingToken NUCHCharCharacterSet] isHChar:YES into:anElements])
         return YES;
-    else if ([self decomposeHeaderNameFrom:aScanner beginWith:NUCDoubleQuotationMark endWith:NUCDoubleQuotationMark characterSet:[NUCPreprocessingToken NUCQCharCharacterSet] isHChar:NO into:anElements])
+    else if ([self decomposeHeaderNameFrom:aScanner beginWith:NUCDoubleQuotationMark endWith:NUCDoubleQuotationMark characterSet:[NUCDecomposedPreprocessingToken NUCQCharCharacterSet] isHChar:NO into:anElements])
         return YES;
     else
         return NO;
@@ -1248,7 +1252,7 @@
                 else
                     anElementType = NUCLexicalElementDoubleQuotationMarkType;
                 
-                [anElements addObject:[NUCPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange([aScanner scanLocation] - [anEndChar length], [anEndChar length]) type:anElementType]];
+                [anElements addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange([aScanner scanLocation] - [anEndChar length], [anEndChar length]) type:anElementType]];
                 
                 return YES;
             }

@@ -8,7 +8,7 @@
 
 #import <Foundation/NSObject.h>
 
-@class NUCPreprocessingToken;
+@class NUCDecomposedPreprocessingToken;
 @class NSArray;
 
 @interface NUCPreprocessingTokenStream : NSObject
@@ -22,13 +22,13 @@
 
 - (instancetype)initWithPreprocessingTokens:(NSArray *)aPreprocessingTokens;
 
-- (NUCPreprocessingToken *)next;
+- (NUCDecomposedPreprocessingToken *)next;
 - (NSUInteger)position;
 - (void)setPosition:(NSUInteger)aPosition;
 - (BOOL)hasNext;
 - (NSArray *)preprocessingTokens;
 - (BOOL)skipWhitespaces;
 - (BOOL)skipWhitespacesWithoutNewline;
-- (NUCPreprocessingToken *)peekNext;
+- (NUCDecomposedPreprocessingToken *)peekNext;
 
 @end

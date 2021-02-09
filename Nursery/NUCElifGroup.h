@@ -10,6 +10,6 @@
 
 @interface NUCElifGroup : NUCIfGroup
 
-+ (instancetype)elifGroupWithType:(NUCLexicalElementType)aType hash:(NUCPreprocessingToken *)aHash directiveName:(NUCPreprocessingToken *)anElif expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup;
++ (instancetype)elifGroupWithType:(NUCLexicalElementType)aType hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)anElif expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup;
 
 @end

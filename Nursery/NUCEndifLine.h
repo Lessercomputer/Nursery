@@ -8,21 +8,21 @@
 
 #import "NUCPreprocessingDirective.h"
 
-@class NUCPreprocessingToken, NUCNewline;
+@class NUCDecomposedPreprocessingToken, NUCNewline;
 
 @interface NUCEndifLine : NUCPreprocessingDirective
 {
-    NUCPreprocessingToken *hash;
-    NUCPreprocessingToken *endif;
+    NUCDecomposedPreprocessingToken *hash;
+    NUCDecomposedPreprocessingToken *endif;
     NUCNewline *newline;
 }
 
-+ (instancetype)endifLineWithHash:(NUCPreprocessingToken *)aHash endif:(NUCPreprocessingToken *)anEndif newline:(NUCNewline *)aNewline;
++ (instancetype)endifLineWithHash:(NUCDecomposedPreprocessingToken *)aHash endif:(NUCDecomposedPreprocessingToken *)anEndif newline:(NUCNewline *)aNewline;
 
-- (instancetype)initWithHash:(NUCPreprocessingToken *)aHash endif:(NUCPreprocessingToken *)anEndif newline:(NUCNewline *)aNewline;
+- (instancetype)initWithHash:(NUCDecomposedPreprocessingToken *)aHash endif:(NUCDecomposedPreprocessingToken *)anEndif newline:(NUCNewline *)aNewline;
 
-- (NUCPreprocessingToken *)hash;
-- (NUCPreprocessingToken *)endif;
+- (NUCDecomposedPreprocessingToken *)hash;
+- (NUCDecomposedPreprocessingToken *)endif;
 - (NUCNewline *)newline;
 
 @end

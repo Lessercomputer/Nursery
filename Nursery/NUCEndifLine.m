@@ -10,12 +10,12 @@
 
 @implementation NUCEndifLine
 
-+ (instancetype)endifLineWithHash:(NUCPreprocessingToken *)aHash endif:(NUCPreprocessingToken *)anEndif newline:(NUCNewline *)aNewline
++ (instancetype)endifLineWithHash:(NUCDecomposedPreprocessingToken *)aHash endif:(NUCDecomposedPreprocessingToken *)anEndif newline:(NUCNewline *)aNewline
 {
     return [[[self alloc] initWithHash:aHash endif:anEndif newline:aNewline] autorelease];
 }
 
-- (instancetype)initWithHash:(NUCPreprocessingToken *)aHash endif:(NUCPreprocessingToken *)anEndif newline:(NUCNewline *)aNewline
+- (instancetype)initWithHash:(NUCDecomposedPreprocessingToken *)aHash endif:(NUCDecomposedPreprocessingToken *)anEndif newline:(NUCNewline *)aNewline
 {
     if (self = [super initWithType:NUCLexicalElementEndifLineType])
     {
@@ -36,12 +36,12 @@
     [super dealloc];
 }
 
-- (NUCPreprocessingToken *)hash
+- (NUCDecomposedPreprocessingToken *)hash
 {
     return hash;
 }
 
-- (NUCPreprocessingToken *)endif
+- (NUCDecomposedPreprocessingToken *)endif
 {
     return endif;
 }

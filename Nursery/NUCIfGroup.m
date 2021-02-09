@@ -10,12 +10,12 @@
 
 @implementation NUCIfGroup
 
-+ (instancetype)ifGroupWithType:(NUCLexicalElementType)aType hash:(NUCPreprocessingToken *)aHash directiveName:(NUCPreprocessingToken *)aName expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup
++ (instancetype)ifGroupWithType:(NUCLexicalElementType)aType hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aName expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup
 {
     return [[[self alloc] initWithType:aType hash:aHash directiveName:aName expressionOrIdentifier:anExpressionOrIdentifier newline:aNewline group:aGroup] autorelease];
 }
 
-- (instancetype)initWithType:(NUCLexicalElementType)aType hash:(NUCPreprocessingToken *)aHash directiveName:(NUCPreprocessingToken *)aName expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup
+- (instancetype)initWithType:(NUCLexicalElementType)aType hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aName expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup
 {
     if (self = [super initWithType:aType])
     {
@@ -60,7 +60,7 @@
     return [self type] == NUCLexicalElementIfndefType;
 }
 
-- (NUCPreprocessingToken *)hash
+- (NUCDecomposedPreprocessingToken *)hash
 {
     return hash;
 }

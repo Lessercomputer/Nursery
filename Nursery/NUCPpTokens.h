@@ -6,17 +6,18 @@
 //  Copyright © 2021年 Nursery-Framework. All rights reserved.
 //
 
-#import "NUCPreprocessingToken.h"
+#import "NUCPreprocessingDirective.h"
 
+@class NUCDecomposedPreprocessingToken;
 
-@interface NUCPpTokens : NUCPreprocessingToken
+@interface NUCPpTokens : NUCPreprocessingDirective
 {
     NSMutableArray *ppTokens;
 }
 
 + (instancetype)ppTokens;
 
-- (void)add:(NUCPreprocessingToken *)aPpToken;
+- (void)add:(NUCDecomposedPreprocessingToken *)aPpToken;
 
 - (NSMutableArray *)ppTokens;
 - (NSUInteger)count;

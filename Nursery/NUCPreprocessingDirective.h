@@ -6,8 +6,8 @@
 //  Copyright © 2021年 Nursery-Framework. All rights reserved.
 //
 
-#import "NUCLexicalElement.h"
+#import "NUCPreprocessingToken.h"
 
-@interface NUCPreprocessingDirective : NUCLexicalElement
+@interface NUCPreprocessingDirective : NUCPreprocessingToken
 
 @end

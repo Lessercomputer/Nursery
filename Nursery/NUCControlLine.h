@@ -6,10 +6,10 @@
 //  Copyright © 2021年 Nursery-Framework. All rights reserved.
 //
 
-#import "NUCPreprocessingToken.h"
+#import "NUCPreprocessingDirective.h"
 
 
-@interface NUCControlLine : NUCPreprocessingToken
+@interface NUCControlLine : NUCPreprocessingDirective
 {
     NUCPreprocessingToken *hash;
     NUCPreprocessingToken *directiveName;
