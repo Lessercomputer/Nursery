@@ -28,6 +28,12 @@ extern NSString * const NUCPreprocessingDirectiveIfndef;
 extern NSString * const NUCPreprocessingDirectiveEndif;
 extern NSString * const NUCPreprocessingDirectiveElse;
 extern NSString * const NUCPreprocessingDirectiveElif;
+extern NSString * const NUCPreprocessingDirectiveInclude;
+extern NSString * const NUCPreprocessingDirectiveDefine;
+extern NSString * const NUCPreprocessingDirectiveUndef;
+extern NSString * const NUCPreprocessingDirectiveLine;
+extern NSString * const NUCPreprocessingDirectiveError;
+extern NSString * const NUCPreprocessingDirectivePragma;
 
 extern NSString * const NUCTrigraphSequenceEqual;
 extern NSString * const NUCTrigraphSequenceLeftBlacket;
@@ -115,7 +121,8 @@ typedef enum : NSUInteger {
     NUCLexicalElementElifGroup,
     NUCLexicalElementElseType,
     NUCLexicalElementPpTokensType,
-    NUCLexicalElementTextLineType
+    NUCLexicalElementTextLineType,
+    NUCLexicalElementControlLineType
 } NUCLexicalElementType;
 
 @interface NUCLexicalElement : NSObject

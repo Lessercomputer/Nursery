@@ -27,6 +27,12 @@ NSString * const NUCPreprocessingDirectiveIfndef = @"ifndef";
 NSString * const NUCPreprocessingDirectiveEndif = @"endif";
 NSString * const NUCPreprocessingDirectiveElse = @"else";
 NSString * const NUCPreprocessingDirectiveElif = @"elif";
+NSString * const NUCPreprocessingDirectiveInclude = @"include";
+NSString * const NUCPreprocessingDirectiveDefine = @"define";
+NSString * const NUCPreprocessingDirectiveUndef = @"undef";
+NSString * const NUCPreprocessingDirectiveLine = @"line";
+NSString * const NUCPreprocessingDirectiveError = @"error";
+NSString * const NUCPreprocessingDirectivePragma = @"pragma";
 
 NSString * const NUCTrigraphSequenceBeginning = @"??";
 

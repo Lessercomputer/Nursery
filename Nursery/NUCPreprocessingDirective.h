@@ -10,4 +10,6 @@
 
 @interface NUCPreprocessingDirective : NUCPreprocessingToken
 
+- (BOOL)isPpTokens;
+
 @end

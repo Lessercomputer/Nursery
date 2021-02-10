@@ -10,4 +10,40 @@
 
 @implementation NUCControlLine
 
+- (instancetype)initWithType:(NUCLexicalElementType)aType hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName newline:(NUCNewline *)aNewline
+{
+    if (self = [super initWithType:aType])
+    {
+        hash = [aHash retain];
+        directiveName = [aDirectiveName retain];
+        newline = [aNewline retain];
+    }
+    
+    return self;
+}
+
+- (void)dealloc
+{
+    [hash release];
+    [directiveName release];
+    [newline release];
+    
+    [super dealloc];
+}
+
+- (NUCDecomposedPreprocessingToken *)hash
+{
+    return hash;
+}
+
+- (NUCDecomposedPreprocessingToken *)directiveName
+{
+    return directiveName;
+}
+
+- (NUCNewline *)newline
+{
+    return newline;
+}
+
 @end

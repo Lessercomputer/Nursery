@@ -23,6 +23,8 @@
 #import "NUCPpTokens.h"
 #import "NUCTextLine.h"
 #import "NUCNonDirective.h"
+#import "NUCControlLine.h"
+#import "NUCControlLineInclude.h"
 #import "NURegion.h"
 #import "NUCRangePair.h"
 #import "NULibrary.h"
@@ -170,6 +172,43 @@
 
 - (BOOL)scanControlLineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)aToken
 {
+    NSUInteger aPosition = [aPreprocessingTokenStream position];
+    NUCDecomposedPreprocessingToken *aHash = [aPreprocessingTokenStream next];
+    
+    if (aHash && [aHash isHash])
+    {
+        [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+        
+        NUCDecomposedPreprocessingToken *aDirectiveName = [aPreprocessingTokenStream next];
+        
+        if (aDirectiveName)
+        {
+            [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+            
+            if ([[aDirectiveName content] isEqualToString:NUCPreprocessingDirectiveInclude])
+            {
+                NUCPpTokens *aPpTokens = nil;
+                NUCNewline *aNewLine = nil;
+                
+                if ([self scanPpTokensFrom:aPreprocessingTokenStream into:&aPpTokens] && [aPpTokens isPpTokens])
+                {
+                    [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+                    
+                    if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewLine])
+                    {
+                        if (aToken)
+                            *aToken = [NUCControlLineInclude includeWithHash:aHash directiveName:aDirectiveName ppTokens:aPpTokens newline:aNewLine];
+                        
+                        return YES;
+                    }
+                }
+                    
+            }
+        }
+    }
+    
+    [aPreprocessingTokenStream setPosition:aPosition];
+    
     return NO;
 }
 

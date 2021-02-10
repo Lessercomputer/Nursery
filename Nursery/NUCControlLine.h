@@ -8,11 +8,20 @@
 
 #import "NUCPreprocessingDirective.h"
 
+@class NUCDecomposedPreprocessingToken, NUCNewline;
 
 @interface NUCControlLine : NUCPreprocessingDirective
 {
-    NUCPreprocessingToken *hash;
-    NUCPreprocessingToken *directiveName;
+    NUCDecomposedPreprocessingToken *hash;
+    NUCDecomposedPreprocessingToken *directiveName;
+    NUCNewline *newline;
 }
+
+- (instancetype)initWithType:(NUCLexicalElementType)aType hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName newline:(NUCNewline *)aNewline;
+
+- (NUCDecomposedPreprocessingToken *)hash;
+- (NUCDecomposedPreprocessingToken *)directiveName;
+- (NUCNewline *)newline;
+
 @end
 

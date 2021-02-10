@@ -10,5 +10,9 @@
 
 @implementation NUCPreprocessingDirective
 
+- (BOOL)isPpTokens
+{
+    return [self type] == NUCLexicalElementPpTokensType;
+}
 
 @end
