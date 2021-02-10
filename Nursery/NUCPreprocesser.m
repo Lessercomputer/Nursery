@@ -25,6 +25,7 @@
 #import "NUCNonDirective.h"
 #import "NUCControlLine.h"
 #import "NUCControlLineInclude.h"
+#import "NUCReplacementList.h"
 #import "NURegion.h"
 #import "NUCRangePair.h"
 #import "NULibrary.h"
@@ -184,8 +185,9 @@
         if (aDirectiveName)
         {
             [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+            NSString *aDirectiveNameString = [aDirectiveName content];
             
-            if ([[aDirectiveName content] isEqualToString:NUCPreprocessingDirectiveInclude])
+            if ([aDirectiveNameString isEqualToString:NUCPreprocessingDirectiveInclude])
             {
                 NUCPpTokens *aPpTokens = nil;
                 NUCNewline *aNewLine = nil;
@@ -202,12 +204,51 @@
                         return YES;
                     }
                 }
+            }
+            else if ([aDirectiveNameString isEqualToString:NUCPreprocessingDirectiveDefine])
+            {
+                NUCDecomposedPreprocessingToken *anIdentifier = [aPreprocessingTokenStream next];
+                
+                if (anIdentifier)
+                {
+                    NUCReplacementList *aReplacementList = nil;
                     
+                    [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+                    
+                    if ([self scanReplacementListFrom:aPreprocessingTokenStream into:&aReplacementList])
+                    {
+                        NUCNewline *aNewline = nil;
+                        [self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline];
+                        
+                        if (aNewline)
+                        {
+//                            if (aToken)
+//                                *aToken = []
+                            
+                            return YES;
+                        }
+                    }
+                }
             }
         }
     }
     
     [aPreprocessingTokenStream setPosition:aPosition];
+    
+    return NO;
+}
+
+- (BOOL)scanReplacementListFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)aToken
+{
+    NUCPpTokens *aPpTokens = nil;
+    
+    if ([self scanPpTokensFrom:aPreprocessingTokenStream into:&aPpTokens])
+    {
+        if (aToken)
+            *aToken = [NUCReplacementList replacementListWithPpTokens:aPpTokens];
+        
+        return YES;
+    }
     
     return NO;
 }

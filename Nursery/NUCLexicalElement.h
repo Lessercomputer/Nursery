@@ -122,7 +122,8 @@ typedef enum : NSUInteger {
     NUCLexicalElementElseType,
     NUCLexicalElementPpTokensType,
     NUCLexicalElementTextLineType,
-    NUCLexicalElementControlLineType
+    NUCLexicalElementControlLineType,
+    NUCLexicalElementReplacementListType
 } NUCLexicalElementType;
 
 @interface NUCLexicalElement : NSObject
