@@ -25,6 +25,9 @@
 #import "NUCNonDirective.h"
 #import "NUCControlLine.h"
 #import "NUCControlLineInclude.h"
+#import "NUCControlLineDefineObjectLike.h"
+#import "NUCControlLineDefineFunctionLike.h"
+#import "NUCIdentifierList.h"
 #import "NUCReplacementList.h"
 #import "NURegion.h"
 #import "NUCRangePair.h"
@@ -170,7 +173,32 @@
     
     return NO;
 }
-
+- (BOOL)scanControlLineIncludeFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCPreprocessingDirective **)aToken
+{
+    [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+    
+    if ([[aDirectiveName content] isEqualToString:NUCPreprocessingDirectiveInclude])
+    {
+        NUCPpTokens *aPpTokens = nil;
+        NUCNewline *aNewLine = nil;
+        
+        if ([self scanPpTokensFrom:aPreprocessingTokenStream into:&aPpTokens] && [aPpTokens isPpTokens])
+        {
+            [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+            
+            if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewLine])
+            {
+                if (aToken)
+                    *aToken = [NUCControlLineInclude includeWithHash:aHash directiveName:aDirectiveName ppTokens:aPpTokens newline:aNewLine];
+                
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
+}
+    
 - (BOOL)scanControlLineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)aToken
 {
     NSUInteger aPosition = [aPreprocessingTokenStream position];
@@ -184,56 +212,112 @@
         
         if (aDirectiveName)
         {
-            [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
-            NSString *aDirectiveNameString = [aDirectiveName content];
-            
-            if ([aDirectiveNameString isEqualToString:NUCPreprocessingDirectiveInclude])
-            {
-                NUCPpTokens *aPpTokens = nil;
-                NUCNewline *aNewLine = nil;
-                
-                if ([self scanPpTokensFrom:aPreprocessingTokenStream into:&aPpTokens] && [aPpTokens isPpTokens])
-                {
-                    [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
-                    
-                    if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewLine])
-                    {
-                        if (aToken)
-                            *aToken = [NUCControlLineInclude includeWithHash:aHash directiveName:aDirectiveName ppTokens:aPpTokens newline:aNewLine];
-                        
-                        return YES;
-                    }
-                }
-            }
-            else if ([aDirectiveNameString isEqualToString:NUCPreprocessingDirectiveDefine])
-            {
-                NUCDecomposedPreprocessingToken *anIdentifier = [aPreprocessingTokenStream next];
-                
-                if (anIdentifier)
-                {
-                    NUCReplacementList *aReplacementList = nil;
-                    
-                    [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
-                    
-                    if ([self scanReplacementListFrom:aPreprocessingTokenStream into:&aReplacementList])
-                    {
-                        NUCNewline *aNewline = nil;
-                        [self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline];
-                        
-                        if (aNewline)
-                        {
-//                            if (aToken)
-//                                *aToken = []
-                            
-                            return YES;
-                        }
-                    }
-                }
-            }
+            if ([self scanControlLineIncludeFrom:aPreprocessingTokenStream hash:aHash directiveName:aDirectiveName into:aToken])
+                return YES;
+            else if ([self scanControlLineDefineFrom:aPreprocessingTokenStream hash:aHash directiveName:aDirectiveName into:aToken])
+                return YES;
         }
     }
     
     [aPreprocessingTokenStream setPosition:aPosition];
+    
+    return NO;
+}
+
+- (BOOL)scanControlLineDefineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCPreprocessingDirective **)aToken
+{
+    if (![[aDirectiveName content] isEqualToString:NUCPreprocessingDirectiveDefine])
+        return NO;
+    
+    NUCDecomposedPreprocessingToken *anIdentifier = [aPreprocessingTokenStream next];
+    
+    if (!anIdentifier)
+        return NO;
+    
+    NUCDecomposedPreprocessingToken *anLparen = [aPreprocessingTokenStream next];
+
+    if ([[anLparen content] isEqualToString:NUCOpeningParenthesisPunctuator])
+    {
+        if ([self scanControlLineDefineFunctionLikeFrom:aPreprocessingTokenStream hash:aHash directiveName:aDirectiveName identifier:anIdentifier lparen:anLparen into:aToken])
+            return YES;
+    }
+    else
+    {
+        if ([self scanControlLineDefineObjectLikeFrom:aPreprocessingTokenStream hash:aHash directiveName:aDirectiveName identifier:anIdentifier into:aToken])
+            return YES;
+    }
+    
+    return NO;
+}
+
+- (BOOL)scanControlLineDefineFunctionLikeFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCDecomposedPreprocessingToken *)anIdentifier lparen:(NUCDecomposedPreprocessingToken *)anLparen into:(NUCPreprocessingDirective **)aToken
+{
+    NUCDecomposedPreprocessingToken *anEllipsis = nil;
+    NUCIdentifierList *anIdentifierList = nil;
+    NUCDecomposedPreprocessingToken *anRparen = nil;
+    NUCReplacementList *aReplacementList = nil;
+    
+    [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+    [self scanPpIdentifierListFrom:aPreprocessingTokenStream into:&anIdentifierList];
+    [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+
+    if (anIdentifierList)
+    {
+        if ([[aPreprocessingTokenStream peekNext] isComma])
+        {
+            [aPreprocessingTokenStream next];
+            [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+            
+            if (![self scanEllipsisFrom:aPreprocessingTokenStream into:&anEllipsis])
+                return NO;
+        }
+    }
+    else
+    {
+        [self scanEllipsisFrom:aPreprocessingTokenStream into:&anEllipsis];
+    }
+
+    [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+    anRparen = [aPreprocessingTokenStream next];
+    
+    if ([[anRparen content] isEqualToString:NUCClosingParenthesisPunctuator])
+    {
+        NUCNewline *aNewline = nil;
+        [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+        [self scanReplacementListFrom:aPreprocessingTokenStream into:&aReplacementList];
+        [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+        
+        if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
+        {
+            if (aToken)
+                *aToken = [NUCControlLineDefineFunctionLike defineWithHash:aHash directiveName:aDirectiveName identifier:anIdentifier lparen:anLparen identifierList:anIdentifierList ellipsis:anEllipsis rparen:anRparen replacementList:aReplacementList newline:aNewline];
+        }
+        
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (BOOL)scanControlLineDefineObjectLikeFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCDecomposedPreprocessingToken *)anIdentifier into:(NUCPreprocessingDirective **)aToken
+{
+    NUCReplacementList *aReplacementList = nil;
+    NUCNewline *aNewline = nil;
+
+    [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+    [self scanReplacementListFrom:aPreprocessingTokenStream into:&aReplacementList];
+    [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+    
+    if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
+    {
+        if (aNewline)
+        {
+            if (aToken)
+                *aToken = [NUCControlLineDefineObjectLike defineWithHash:aHash directiveName:aDirectiveName identifier:anIdentifier replacementList:aReplacementList newline:aNewline];
+            
+            return YES;
+        }
+    }
     
     return NO;
 }
@@ -249,6 +333,57 @@
         
         return YES;
     }
+    
+    return NO;
+}
+
+- (BOOL)scanPpIdentifierListFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCIdentifierList **)aToken
+{
+    NUCDecomposedPreprocessingToken *aPreprocessingToken = nil;
+    NUCIdentifierList *anIdentifierList = [NUCIdentifierList identifierList];
+    
+    do
+    {
+        [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+        aPreprocessingToken = [aPreprocessingTokenStream peekNext];
+        
+        if ([aPreprocessingToken isIdentifier])
+            [anIdentifierList add:[aPreprocessingTokenStream next]];
+        else if ([aPreprocessingToken isComma])
+            [aPreprocessingTokenStream next];
+        
+        [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+        aPreprocessingToken = [aPreprocessingTokenStream peekNext];
+    }
+    while ([aPreprocessingToken isComma] || [aPreprocessingToken isIdentifier]);
+    
+    if ([anIdentifierList count])
+    {
+        if (aToken)
+            *aToken = anIdentifierList;
+        
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (BOOL)scanEllipsisFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCDecomposedPreprocessingToken **)aToken
+{
+    NSUInteger aPosition = [aPreprocessingTokenStream position];
+    NUCDecomposedPreprocessingToken *aFirstCharacterOfEllipsis = [aPreprocessingTokenStream peekNext];
+    
+    if ([[aPreprocessingTokenStream next] isPeriod]
+        && [[aPreprocessingTokenStream next] isPeriod]
+        && [[aPreprocessingTokenStream next] isPeriod])
+    {
+        if (aToken)
+            *aToken = aFirstCharacterOfEllipsis;
+        
+        return YES;
+    }
+    
+    [aPreprocessingTokenStream setPosition:aPosition];
     
     return NO;
 }

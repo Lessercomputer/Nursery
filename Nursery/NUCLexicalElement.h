@@ -22,6 +22,9 @@ extern NSString * const NUCLessThanSign;
 extern NSString * const NUCGreaterThanSign;
 extern NSString * const NUCDoubleQuotationMark;
 extern NSString * const NUCHash;
+extern NSString * const NUCOpeningParenthesisPunctuator;
+extern NSString * const NUCClosingParenthesisPunctuator;
+extern NSString * const NUCCommaPunctuator;
 extern NSString * const NUCPreprocessingDirectiveIf;
 extern NSString * const NUCPreprocessingDirectiveIfdef;
 extern NSString * const NUCPreprocessingDirectiveIfndef;
@@ -123,7 +126,9 @@ typedef enum : NSUInteger {
     NUCLexicalElementPpTokensType,
     NUCLexicalElementTextLineType,
     NUCLexicalElementControlLineType,
-    NUCLexicalElementReplacementListType
+    NUCLexicalElementReplacementListType,
+    NUCLexicalElementIdentifierListType,
+    NUCLexicalElementDefineType
 } NUCLexicalElementType;
 
 @interface NUCLexicalElement : NSObject

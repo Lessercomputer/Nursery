@@ -33,6 +33,9 @@
 - (NSString *)content;
 
 - (BOOL)isHash;
+- (BOOL)isIdentifier;
+- (BOOL)isComma;
+- (BOOL)isPeriod;
 - (BOOL)isWhitespace;
 - (BOOL)isNotWhitespace;
 - (BOOL)isWhitespacesWithoutNewline;

@@ -80,6 +80,22 @@
                 && [[self content] isEqualToString:NUCHash];
 }
 
+- (BOOL)isIdentifier
+{
+    return [self type] == NUCLexicalElementIdentifierType;
+}
+
+- (BOOL)isComma
+{
+    return [self type] == NUCLexicalElementPunctuatorType
+                && [[self content] isEqualToString:NUCCommaPunctuator];
+}
+
+- (BOOL)isPeriod
+{
+    return [self type] == NUCLexicalElementPunctuatorType
+                && [[self content] isEqualToString:NUCPeriod];
+}
 - (BOOL)isWhitespace
 {
     return [self type] == NUCLexicalElementWhiteSpaceCharacterType || [self type] == NUCLexicalElementNewlineType || [self type] == NUCLexicalElementCommentType;
