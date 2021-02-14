@@ -96,6 +96,18 @@
     return [self type] == NUCLexicalElementPunctuatorType
                 && [[self content] isEqualToString:NUCPeriod];
 }
+
+- (BOOL)isQuestionMark
+{
+    return [self type] == NUCLexicalElementPunctuatorType
+                && [[self content] isEqualToString:NUCQuestionMarkPunctuator];
+}
+
+- (BOOL)isColon
+{
+    return [self type] == NUCLexicalElementPunctuatorType
+                && [[self content] isEqualToString:NUCColonPunctuator];
+}
 - (BOOL)isWhitespace
 {
     return [self type] == NUCLexicalElementWhiteSpaceCharacterType || [self type] == NUCLexicalElementNewlineType || [self type] == NUCLexicalElementCommentType;

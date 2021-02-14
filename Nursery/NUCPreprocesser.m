@@ -29,6 +29,11 @@
 #import "NUCControlLineDefineFunctionLike.h"
 #import "NUCIdentifierList.h"
 #import "NUCReplacementList.h"
+#import "NUCConstantExpression.h"
+#import "NUCConditionalExpression.h"
+#import "NUCLogicalORExpression.h"
+#import "NUCLogicalANDExpression.h"
+#import "NUCExpression.h"
 #import "NURegion.h"
 #import "NUCRangePair.h"
 #import "NULibrary.h"
@@ -574,23 +579,93 @@
     return NO;
 }
 
-- (BOOL)scanConstantExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCLexicalElement **)aConstantExpression
+- (BOOL)scanConstantExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCLexicalElement **)aToken
 {
+    NUCConditionalExpression *aConditionalExpression = nil;
+    
+    if ([self scanConditionalExpressionFrom:aPreprocessingTokenStream into:&aConditionalExpression])
+    {
+        if (aToken)
+            *aToken = [NUCConstantExpression expressionWithConditionalExpression:aConditionalExpression];
+        
+        return YES;
+    }
     
     return NO;
 }
 
-- (BOOL)scanConditionalExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+- (BOOL)scanConditionalExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCConditionalExpression **)aToken
+{
+    NUCLogicalORExpression *aLogicalOrExpression = nil;
+    if ([self scanLogicalORExpressionFrom:aPreprocessingTokenStream into:&aLogicalOrExpression])
+    {
+        NSUInteger aPosition = [aPreprocessingTokenStream position];
+        [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+        
+        NUCDecomposedPreprocessingToken *aQuestionMark = [aPreprocessingTokenStream next];
+        if ([aQuestionMark isQuestionMark])
+        {
+            [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+            
+            NUCExpression *anExpression = nil;
+            if ([self scanExpressionFrom:aPreprocessingTokenStream into:&anExpression])
+            {
+                [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+                
+                NUCDecomposedPreprocessingToken *aColon = [aPreprocessingTokenStream next];
+                if ([aColon isColon])
+                {
+                    [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+                    
+                    NUCConditionalExpression *aConditionalExpression = nil;
+                    if ([self scanConditionalExpressionFrom:aPreprocessingTokenStream into:&aConditionalExpression])
+                    {
+                        if (aToken)
+                            *aToken = [NUCConditionalExpression expressionWithLogicalORExpression:aLogicalOrExpression questionMarkPunctuator:aQuestionMark expression:anExpression colonPunctuator:aColon conditionalExpression:aConditionalExpression];
+                        
+                        return YES;
+                    }
+                }
+            }
+        }
+        else
+        {
+            [aPreprocessingTokenStream setPosition:aPosition];
+            
+            if (aToken)
+                *aToken = [NUCConditionalExpression expressionWithLogicalORExpression:aLogicalOrExpression];
+            
+            return YES;
+        }
+        
+        [aPreprocessingTokenStream setPosition:aPosition];
+    }
+
+    return NO;
+}
+
+- (BOOL)scanLogicalORExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCLogicalORExpression **)aToken
+{
+    NUCLogicalANDExpression *anAndExpression = nil;
+    
+    if ([self scanLogicalANDExpressionFrom:aPreprocessingTokenStream into:&anAndExpression])
+    {
+        
+    }
+    else
+    {
+        
+    }
+        
+    return NO;
+}
+
+- (BOOL)scanExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCExpression **)aToken
 {
     return NO;
 }
 
-- (BOOL)scanLogicalOrExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
-{
-    return NO;
-}
-
-- (BOOL)scanLogicalAndExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+- (BOOL)scanLogicalANDExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCLogicalANDExpression **)aToken
 {
     return NO;
 }

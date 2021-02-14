@@ -36,6 +36,8 @@
 - (BOOL)isIdentifier;
 - (BOOL)isComma;
 - (BOOL)isPeriod;
+- (BOOL)isQuestionMark;
+- (BOOL)isColon;
 - (BOOL)isWhitespace;
 - (BOOL)isNotWhitespace;
 - (BOOL)isWhitespacesWithoutNewline;
