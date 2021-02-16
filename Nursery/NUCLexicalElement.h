@@ -27,6 +27,8 @@ extern NSString * const NUCClosingParenthesisPunctuator;
 extern NSString * const NUCCommaPunctuator;
 extern NSString * const NUCQuestionMarkPunctuator;
 extern NSString * const NUCColonPunctuator;
+extern NSString * const NUCLogicalOROperator;
+extern NSString * const NUCLogicalANDOperator;
 extern NSString * const NUCPreprocessingDirectiveIf;
 extern NSString * const NUCPreprocessingDirectiveIfdef;
 extern NSString * const NUCPreprocessingDirectiveIfndef;
@@ -132,7 +134,10 @@ typedef enum : NSUInteger {
     NUCLexicalElementIdentifierListType,
     NUCLexicalElementDefineType,
     NUCLexicalElementConstantExpressionType,
-    NUCLexicalElementConditionalExpressionType
+    NUCLexicalElementConditionalExpressionType,
+    NUCLexicalElementExpressionType,
+    NUCLexicalElementLogicalORExpressionType,
+    NUCLexicalElementLogicalANDExpressionType
 } NUCLexicalElementType;
 
 @interface NUCLexicalElement : NSObject

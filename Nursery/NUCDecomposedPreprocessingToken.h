@@ -34,10 +34,13 @@
 
 - (BOOL)isHash;
 - (BOOL)isIdentifier;
+- (BOOL)isPunctuator;
 - (BOOL)isComma;
 - (BOOL)isPeriod;
 - (BOOL)isQuestionMark;
 - (BOOL)isColon;
+- (BOOL)isLogicalOROperator;
+- (BOOL)isLogicalANDOperator;
 - (BOOL)isWhitespace;
 - (BOOL)isNotWhitespace;
 - (BOOL)isWhitespacesWithoutNewline;

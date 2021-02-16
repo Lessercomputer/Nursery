@@ -33,6 +33,7 @@
 #import "NUCConditionalExpression.h"
 #import "NUCLogicalORExpression.h"
 #import "NUCLogicalANDExpression.h"
+#import "NUCInclusiveORExpression.h"
 #import "NUCExpression.h"
 #import "NURegion.h"
 #import "NUCRangePair.h"
@@ -650,27 +651,97 @@
     
     if ([self scanLogicalANDExpressionFrom:aPreprocessingTokenStream into:&anAndExpression])
     {
+        if (aToken)
+            *aToken = [NUCLogicalORExpression expressionWithLogicalANDExpression:anAndExpression];
         
+        return YES;
     }
     else
     {
+        NSUInteger aPosition = [aPreprocessingTokenStream position];
+        NUCLogicalORExpression *anORExpression = nil;
         
+        if ([self scanLogicalORExpressionFrom:aPreprocessingTokenStream into:&anORExpression])
+        {
+            [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+            
+            NUCDecomposedPreprocessingToken *anOROperator = [aPreprocessingTokenStream next];
+            if ([anOROperator isLogicalOROperator])
+            {
+                [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+                
+                if ([self scanLogicalANDExpressionFrom:aPreprocessingTokenStream into:&anAndExpression])
+                {
+                    if (aToken)
+                        *aToken = [NUCLogicalORExpression expressionWithlogicalORExpression:anORExpression logicalOREperator:anOROperator logicalANDExpression:anAndExpression];
+                    
+                    return YES;
+                }
+            }
+        }
+        
+        [aPreprocessingTokenStream setPosition:aPosition];
+        return NO;
     }
-        
-    return NO;
 }
 
 - (BOOL)scanExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCExpression **)aToken
 {
+    NUCConditionalExpression *aConditionalExpression = nil;
+    
+    if ([self scanConditionalExpressionFrom:aPreprocessingTokenStream into:&aConditionalExpression])
+    {
+        if (aToken)
+            *aToken = [NUCExpression expressionWithConditionalExpression:aConditionalExpression];
+        
+        return YES;
+    }
+    
     return NO;
 }
 
 - (BOOL)scanLogicalANDExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCLogicalANDExpression **)aToken
 {
-    return NO;
+    NUCInclusiveORExpression *anInclusiveORExpression = nil;
+    
+    if ([self scanInclusiveORExpressionFrom:aPreprocessingTokenStream into:&anInclusiveORExpression])
+    {
+        if (aToken)
+            *aToken = [NUCLogicalANDExpression expressionWithInclusiveORExpression:anInclusiveORExpression];
+        
+        return YES;
+    }
+    else
+    {
+        NSUInteger aPosition = [aPreprocessingTokenStream position];
+        NUCLogicalANDExpression *anAndExpression = nil;
+        
+        if ([self scanLogicalANDExpressionFrom:aPreprocessingTokenStream into:&anAndExpression])
+        {
+            [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+            
+            NUCDecomposedPreprocessingToken *aLogicalANDOperator = [aPreprocessingTokenStream next];
+            if ([aLogicalANDOperator isLogicalANDOperator])
+            {
+                [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+                
+                if ([self scanInclusiveORExpressionFrom:aPreprocessingTokenStream into:&anInclusiveORExpression])
+                {
+                    if (aToken)
+                        *aToken = [NUCLogicalANDExpression expressionWithLogicalANDExpression:anAndExpression logicalANDOperator:aLogicalANDOperator inclusiveORExpression:anInclusiveORExpression];
+                    
+                    return YES;
+                }
+            }
+        }
+        
+        [aPreprocessingTokenStream setPosition:aPosition];
+        
+        return NO;
+    }
 }
 
-- (BOOL)scanInclusiveOrExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+- (BOOL)scanInclusiveORExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCInclusiveORExpression **)aToken
 {
     return NO;
 }

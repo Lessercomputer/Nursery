@@ -85,29 +85,47 @@
     return [self type] == NUCLexicalElementIdentifierType;
 }
 
+- (BOOL)isPunctuator
+{
+    return [self type] == NUCLexicalElementPunctuatorType;
+}
+
 - (BOOL)isComma
 {
-    return [self type] == NUCLexicalElementPunctuatorType
+    return [self isPunctuator]
                 && [[self content] isEqualToString:NUCCommaPunctuator];
 }
 
 - (BOOL)isPeriod
 {
-    return [self type] == NUCLexicalElementPunctuatorType
+    return [self isPunctuator]
                 && [[self content] isEqualToString:NUCPeriod];
 }
 
 - (BOOL)isQuestionMark
 {
-    return [self type] == NUCLexicalElementPunctuatorType
+    return [self isPunctuator]
                 && [[self content] isEqualToString:NUCQuestionMarkPunctuator];
 }
 
 - (BOOL)isColon
 {
-    return [self type] == NUCLexicalElementPunctuatorType
+    return [self isPunctuator]
                 && [[self content] isEqualToString:NUCColonPunctuator];
 }
+
+- (BOOL)isLogicalOROperator
+{
+    return [self isPunctuator]
+                && [[self content] isEqualToString:NUCLogicalOROperator];
+}
+
+- (BOOL)isLogicalANDOperator
+{
+    return [self isPunctuator]
+                && [[self content] isEqualToString:NUCLogicalANDOperator];
+}
+
 - (BOOL)isWhitespace
 {
     return [self type] == NUCLexicalElementWhiteSpaceCharacterType || [self type] == NUCLexicalElementNewlineType || [self type] == NUCLexicalElementCommentType;
