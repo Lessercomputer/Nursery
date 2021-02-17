@@ -126,6 +126,21 @@
                 && [[self content] isEqualToString:NUCLogicalANDOperator];
 }
 
+- (BOOL)isInclusiveOROperator
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCInclusiveOROperator];
+}
+
+- (BOOL)isExclusiveOROperator
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCExclusiveOROperator];
+}
+
+- (BOOL)isBitwiseANDOperator
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCBitwiseANDOperator];
+}
+
 - (BOOL)isWhitespace
 {
     return [self type] == NUCLexicalElementWhiteSpaceCharacterType || [self type] == NUCLexicalElementNewlineType || [self type] == NUCLexicalElementCommentType;

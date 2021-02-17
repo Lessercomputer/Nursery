@@ -8,8 +8,22 @@
 
 #import "NUCPreprocessingToken.h"
 
+@class NUCDecomposedPreprocessingToken, NUCExclusiveORExpression;
 
 @interface NUCInclusiveORExpression : NUCPreprocessingToken
+{
+    NUCInclusiveORExpression *inclusiveORExpression;
+    NUCDecomposedPreprocessingToken *inclusiveOROperator;
+    NUCExclusiveORExpression *exclusiveORExpression;
+}
+
++ (instancetype)expressionExclusiveExpression:(NUCExclusiveORExpression *)anExclusiveORExpression;
+
++ (instancetype)expressionWithInclusiveORExpression:(NUCInclusiveORExpression *)anInclusiveORExpression inclusiveOROperator:(NUCDecomposedPreprocessingToken *)anInclusiveOROperator exclusiveORExpression:(NUCExclusiveORExpression *)anExclusiveORExpression;
+
+- (instancetype)initWithExclusiveExpression:(NUCExclusiveORExpression *)anExclusiveORExpression;
+
+- (instancetype)initWithInclusiveORExpression:(NUCInclusiveORExpression *)anInclusiveORExpression inclusiveOROperator:(NUCDecomposedPreprocessingToken *)anInclusiveOROperator exclusiveORExpression:(NUCExclusiveORExpression *)anExclusiveORExpression;
 
 @end
 

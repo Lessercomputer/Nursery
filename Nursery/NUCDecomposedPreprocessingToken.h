@@ -41,6 +41,9 @@
 - (BOOL)isColon;
 - (BOOL)isLogicalOROperator;
 - (BOOL)isLogicalANDOperator;
+- (BOOL)isInclusiveOROperator;
+- (BOOL)isExclusiveOROperator;
+- (BOOL)isBitwiseANDOperator;
 - (BOOL)isWhitespace;
 - (BOOL)isNotWhitespace;
 - (BOOL)isWhitespacesWithoutNewline;

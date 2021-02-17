@@ -34,6 +34,8 @@
 #import "NUCLogicalORExpression.h"
 #import "NUCLogicalANDExpression.h"
 #import "NUCInclusiveORExpression.h"
+#import "NUCExclusiveORExpression.h"
+#import "NUCANDExpression.h"
 #import "NUCExpression.h"
 #import "NURegion.h"
 #import "NUCRangePair.h"
@@ -743,16 +745,91 @@
 
 - (BOOL)scanInclusiveORExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCInclusiveORExpression **)aToken
 {
-    return NO;
+    NUCExclusiveORExpression *anExclusiveORExpression = nil;
+    
+    if ([self scanExclusiveORExpressionFrom:aPreprocessingTokenStream into:&anExclusiveORExpression])
+    {
+        if (aToken)
+            *aToken = [NUCInclusiveORExpression expressionExclusiveExpression:anExclusiveORExpression];
+        
+        return YES;
+    }
+    else
+    {
+        NSUInteger aPosition = [aPreprocessingTokenStream position];
+        NUCInclusiveORExpression *anInclusiveExpression = nil;
+        
+        if ([self scanInclusiveORExpressionFrom:aPreprocessingTokenStream into:&anInclusiveExpression])
+        {
+            [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+            
+            NUCDecomposedPreprocessingToken *anInclusiveOROperator =  [aPreprocessingTokenStream next];
+            if ([anInclusiveOROperator isInclusiveOROperator])
+            {
+                [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+                
+                NUCExclusiveORExpression *anExclusiveORExpression = nil;
+                if ([self scanExclusiveORExpressionFrom:aPreprocessingTokenStream into:&anExclusiveORExpression])
+                {
+                    if (aToken)
+                        *aToken = [NUCInclusiveORExpression expressionWithInclusiveORExpression:anInclusiveExpression inclusiveOROperator:anInclusiveOROperator exclusiveORExpression:anExclusiveORExpression];
+                    
+                    return YES;
+                }
+            }
+        }
+        
+        [aPreprocessingTokenStream setPosition:aPosition];
+        
+        return NO;
+    }
 }
 
-- (BOOL)scanExclusiveOrExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+- (BOOL)scanExclusiveORExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCExclusiveORExpression **)aToken
 {
-    return NO;
+    NUCANDExpression *anANDExpression = nil;
+    
+    if ([self scanANDExpressionFrom:aPreprocessingTokenStream into:&anANDExpression])
+    {
+        if (aToken)
+            *aToken = [NUCExclusiveORExpression expressionWithANDExpression:anANDExpression];
+        
+        return YES;
+    }
+    else
+    {
+        NSUInteger aPosition = [aPreprocessingTokenStream position];
+        NUCExclusiveORExpression *anExclusiveORExpression = nil;
+        
+        if ([self scanExclusiveORExpressionFrom:aPreprocessingTokenStream into:&anExclusiveORExpression])
+        {
+            [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+            
+            NUCDecomposedPreprocessingToken *anExclusiveOROperator = [aPreprocessingTokenStream next];
+            
+            if ([anExclusiveOROperator isExclusiveOROperator])
+            {
+                [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+                
+                if ([self scanANDExpressionFrom:aPreprocessingTokenStream into:&anANDExpression])
+                {
+                    if (aToken)
+                        *aToken = [NUCExclusiveORExpression expressionWithExclusiveORExpression:anExclusiveORExpression exclusiveOROperator:anExclusiveOROperator andExpression:anANDExpression];
+                    
+                    return YES;
+                }
+            }
+        }
+        
+        [aPreprocessingTokenStream setPosition:aPosition];
+        
+        return NO;
+    }
 }
 
-- (BOOL)scanAndExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+- (BOOL)scanANDExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCANDExpression **)aToken
 {
+    
     return NO;
 }
 
