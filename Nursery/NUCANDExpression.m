@@ -11,22 +11,22 @@
 @implementation NUCANDExpression
 
 
-+ (instancetype)expressionWithEqualityExpression:(NUCEqulityExpression *)anEqulityExpression
++ (instancetype)expressionWithEqualityExpression:(NUCEqualityExpression *)anEqulityExpression
 {
     return [self expressionWithEqualityExpression:anEqulityExpression];
 }
 
-+ (instancetype)expressionWithANDExpression:(NUCANDExpression *)anANDExpression andOperator:(NUCDecomposedPreprocessingToken *)anANDOperator equlityExpression:(NUCEqulityExpression *)anEqulityExpression
++ (instancetype)expressionWithANDExpression:(NUCANDExpression *)anANDExpression andOperator:(NUCDecomposedPreprocessingToken *)anANDOperator equlityExpression:(NUCEqualityExpression *)anEqulityExpression
 {
     return [[[self alloc] initWithANDExpression:anANDExpression andOperator:anANDOperator equlityExpression:anEqulityExpression] autorelease];
 }
 
-- (instancetype)initWithEqualityExpression:(NUCEqulityExpression *)anEqulityExpression
+- (instancetype)initWithEqualityExpression:(NUCEqualityExpression *)anEqulityExpression
 {
     return [self initWithANDExpression:nil andOperator:nil equlityExpression:anEqulityExpression];
 }
 
-- (instancetype)initWithANDExpression:(NUCANDExpression *)anANDExpression andOperator:(NUCDecomposedPreprocessingToken *)anANDOperator equlityExpression:(NUCEqulityExpression *)anEqulityExpression
+- (instancetype)initWithANDExpression:(NUCANDExpression *)anANDExpression andOperator:(NUCDecomposedPreprocessingToken *)anANDOperator equlityExpression:(NUCEqualityExpression *)anEqulityExpression
 {
     if (self = [super initWithType:NUCLexicalElementANDExpressionType])
     {

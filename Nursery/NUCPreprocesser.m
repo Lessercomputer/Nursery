@@ -36,6 +36,7 @@
 #import "NUCInclusiveORExpression.h"
 #import "NUCExclusiveORExpression.h"
 #import "NUCANDExpression.h"
+#import "NUCEqualityExpression.h"
 #import "NUCExpression.h"
 #import "NURegion.h"
 #import "NUCRangePair.h"
@@ -266,7 +267,7 @@
     NUCReplacementList *aReplacementList = nil;
     
     [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
-    [self scanPpIdentifierListFrom:aPreprocessingTokenStream into:&anIdentifierList];
+    [self scanIdentifierListFrom:aPreprocessingTokenStream into:&anIdentifierList];
     [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
 
     if (anIdentifierList)
@@ -345,7 +346,7 @@
     return NO;
 }
 
-- (BOOL)scanPpIdentifierListFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCIdentifierList **)aToken
+- (BOOL)scanIdentifierListFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCIdentifierList **)aToken
 {
     NUCDecomposedPreprocessingToken *aPreprocessingToken = nil;
     NUCIdentifierList *anIdentifierList = [NUCIdentifierList identifierList];
@@ -379,14 +380,12 @@
 - (BOOL)scanEllipsisFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCDecomposedPreprocessingToken **)aToken
 {
     NSUInteger aPosition = [aPreprocessingTokenStream position];
-    NUCDecomposedPreprocessingToken *aFirstCharacterOfEllipsis = [aPreprocessingTokenStream peekNext];
+    NUCDecomposedPreprocessingToken *anEllipsis = [aPreprocessingTokenStream next];
     
-    if ([[aPreprocessingTokenStream next] isPeriod]
-        && [[aPreprocessingTokenStream next] isPeriod]
-        && [[aPreprocessingTokenStream next] isPeriod])
+    if ([anEllipsis isEllipsis])
     {
         if (aToken)
-            *aToken = aFirstCharacterOfEllipsis;
+            *aToken = anEllipsis;
         
         return YES;
     }
@@ -829,21 +828,89 @@
 
 - (BOOL)scanANDExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCANDExpression **)aToken
 {
+    NUCEqualityExpression *anEqulityExpression = nil;
     
-    return NO;
+    if ([self scanEqualityExpresionFrom:aPreprocessingTokenStream into:&anEqulityExpression])
+    {
+        if (aToken)
+            *aToken = [NUCANDExpression expressionWithEqualityExpression:anEqulityExpression];
+        
+        return YES;
+    }
+    else
+    {
+        NSUInteger aPosition = [aPreprocessingTokenStream position];
+        NUCANDExpression *anANDExpression = nil;
+        
+        if ([self scanANDExpressionFrom:aPreprocessingTokenStream into:&anANDExpression])
+        {
+            [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+            NUCDecomposedPreprocessingToken *anAndOperator = [aPreprocessingTokenStream next];
+            
+            if ([anAndOperator isBitwiseANDOperator])
+            {
+                [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+                NUCEqualityExpression *anEqulityExpression = nil;
+                
+                if ([self scanEqualityExpresionFrom:aPreprocessingTokenStream into:&anEqulityExpression])
+                {
+                    if (aToken)
+                        *aToken = [NUCANDExpression expressionWithANDExpression:anANDExpression andOperator:anAndOperator equlityExpression:anEqulityExpression];
+                    
+                    return YES;
+                }
+            }
+        }
+        
+        [aPreprocessingTokenStream setPosition:aPosition];
+        
+        return NO;
+    }
 }
 
-- (BOOL)scanEqualityExpresionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+- (BOOL)scanEqualityExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCEqualityExpression **)aToken
 {
-    return NO;
+    NUCRelationalExpression *aRelationalExpression = nil;
+    
+    if ([self scanRelationalExpressionFrom:aPreprocessingTokenStream into:&aRelationalExpression])
+    {
+        if (aToken)
+            *aToken = [NUCEqualityExpression expressionWithRelationalExpression:aRelationalExpression];
+        
+        return YES;
+    }
+    else
+    {
+        NSUInteger aPosition = [aPreprocessingTokenStream position];
+        NUCEqualityExpression *anEqualityExpression = nil;
+        
+        if ([self scanEqualityExpressionFrom:aPreprocessingTokenStream into:&anEqualityExpression])
+        {
+            [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+            
+            NUCDecomposedPreprocessingToken *anOperator = [aPreprocessingTokenStream next];
+            
+            if ([anOperator isEqualityOperator] || [anOperator isInequalityOperator])
+            {
+                [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+                
+                if ([self scanRelationalExpressionFrom:aPreprocessingTokenStream into:&aRelationalExpression])
+                {
+                    if (aToken)
+                        *aToken = [NUCEqualityExpression expressionWithEqualityExpression:anEqualityExpression operator:anOperator relationalExpression:aRelationalExpression];
+                    
+                    return YES;
+                }
+            }
+        }
+        
+        [aPreprocessingTokenStream setPosition:aPosition];
+        
+        return NO;
+    }
 }
 
-- (BOOL)scanEqualityExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
-{
-    return NO;
-}
-
-- (BOOL)scanRelationalExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+- (BOOL)scanRelationalExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCRelationalExpression **)aToken
 {
     return NO;
 }

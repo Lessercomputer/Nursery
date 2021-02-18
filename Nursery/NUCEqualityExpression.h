@@ -8,10 +8,22 @@
 
 #import "NUCPreprocessingToken.h"
 
-NS_ASSUME_NONNULL_BEGIN
+@class NUCRelationalExpression, NUCDecomposedPreprocessingToken;
 
 @interface NUCEqualityExpression : NUCPreprocessingToken
+{
+    NUCRelationalExpression *relationalExpression;
+    NUCEqualityExpression *equalityExpression;
+    NUCDecomposedPreprocessingToken *operator;
+}
+
++ (instancetype)expressionWithRelationalExpression:(NUCRelationalExpression *)aRelationalExpression;
+
++ (instancetype)expressionWithEqualityExpression:(NUCEqualityExpression *)anEqualityExpression operator:(NUCDecomposedPreprocessingToken *)anOperator relationalExpression:(NUCRelationalExpression *)aRelationalExpression;
+
+- (instancetype)initWithRelationalExpression:(NUCRelationalExpression *)aRelationalExpression;
+
+- (instancetype)initWithEqualityExpression:(NUCEqualityExpression *)anEqualityExpression operator:(NUCDecomposedPreprocessingToken *)anOperator relationalExpression:(NUCRelationalExpression *)aRelationalExpression;
 
 @end
 
-NS_ASSUME_NONNULL_END

@@ -8,22 +8,22 @@
 
 #import "NUCPreprocessingToken.h"
 
-@class NUCEqulityExpression, NUCANDExpression, NUCDecomposedPreprocessingToken;
+@class NUCEqualityExpression, NUCANDExpression, NUCDecomposedPreprocessingToken;
 
 @interface NUCANDExpression : NUCPreprocessingToken
 {
-    NUCEqulityExpression *equlityExpression;
+    NUCEqualityExpression *equlityExpression;
     NUCANDExpression *andExpression;
     NUCDecomposedPreprocessingToken *andOperator;
 }
 
-+ (instancetype)expressionWithEqualityExpression:(NUCEqulityExpression *)anEqulityExpression;
++ (instancetype)expressionWithEqualityExpression:(NUCEqualityExpression *)anEqulityExpression;
 
-+ (instancetype)expressionWithANDExpression:(NUCANDExpression *)anANDExpression andOperator:(NUCDecomposedPreprocessingToken *)anANDOperator equlityExpression:(NUCEqulityExpression *)anEqulityExpression;
++ (instancetype)expressionWithANDExpression:(NUCANDExpression *)anANDExpression andOperator:(NUCDecomposedPreprocessingToken *)anANDOperator equlityExpression:(NUCEqualityExpression *)anEqulityExpression;
 
-- (instancetype)initWithEqualityExpression:(NUCEqulityExpression *)anEqulityExpression;
+- (instancetype)initWithEqualityExpression:(NUCEqualityExpression *)anEqulityExpression;
 
-- (instancetype)initWithANDExpression:(NUCANDExpression *)anANDExpression andOperator:(NUCDecomposedPreprocessingToken *)anANDOperator equlityExpression:(NUCEqulityExpression *)anEqulityExpression;
+- (instancetype)initWithANDExpression:(NUCANDExpression *)anANDExpression andOperator:(NUCDecomposedPreprocessingToken *)anANDOperator equlityExpression:(NUCEqualityExpression *)anEqulityExpression;
 
 @end
 

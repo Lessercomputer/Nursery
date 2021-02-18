@@ -114,6 +114,11 @@
                 && [[self content] isEqualToString:NUCColonPunctuator];
 }
 
+- (BOOL)isEllipsis
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCEllipsis];
+}
+
 - (BOOL)isLogicalOROperator
 {
     return [self isPunctuator]
@@ -139,6 +144,16 @@
 - (BOOL)isBitwiseANDOperator
 {
     return [self isPunctuator] && [[self content] isEqualToString:NUCBitwiseANDOperator];
+}
+
+- (BOOL)isInequalityOperator
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCInequalityOperator];
+}
+
+- (BOOL)isEqualityOperator
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCEqualityOperator];
 }
 
 - (BOOL)isWhitespace

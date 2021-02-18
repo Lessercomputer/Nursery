@@ -39,11 +39,14 @@
 - (BOOL)isPeriod;
 - (BOOL)isQuestionMark;
 - (BOOL)isColon;
+- (BOOL)isEllipsis;
 - (BOOL)isLogicalOROperator;
 - (BOOL)isLogicalANDOperator;
 - (BOOL)isInclusiveOROperator;
 - (BOOL)isExclusiveOROperator;
 - (BOOL)isBitwiseANDOperator;
+- (BOOL)isInequalityOperator;
+- (BOOL)isEqualityOperator;
 - (BOOL)isWhitespace;
 - (BOOL)isNotWhitespace;
 - (BOOL)isWhitespacesWithoutNewline;
