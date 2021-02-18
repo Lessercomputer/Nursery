@@ -830,7 +830,7 @@
 {
     NUCEqualityExpression *anEqulityExpression = nil;
     
-    if ([self scanEqualityExpresionFrom:aPreprocessingTokenStream into:&anEqulityExpression])
+    if ([self scanEqualityExpressionFrom:aPreprocessingTokenStream into:&anEqulityExpression])
     {
         if (aToken)
             *aToken = [NUCANDExpression expressionWithEqualityExpression:anEqulityExpression];
@@ -852,7 +852,7 @@
                 [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
                 NUCEqualityExpression *anEqulityExpression = nil;
                 
-                if ([self scanEqualityExpresionFrom:aPreprocessingTokenStream into:&anEqulityExpression])
+                if ([self scanEqualityExpressionFrom:aPreprocessingTokenStream into:&anEqulityExpression])
                 {
                     if (aToken)
                         *aToken = [NUCANDExpression expressionWithANDExpression:anANDExpression andOperator:anAndOperator equlityExpression:anEqulityExpression];
