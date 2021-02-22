@@ -156,6 +156,26 @@
     return [self isPunctuator] && [[self content] isEqualToString:NUCEqualityOperator];
 }
 
+- (BOOL)isRelationalOperator
+{
+    return [self isPunctuator] && ([[self content] isEqualToString:NUCLessThanOperator] || [[self content] isEqualToString:NUCLessThanOrEqualToOperator] || [[self content] isEqualToString:NUCGreaterThanOperator] || [[self content] isEqualToString:NUCGreaterThanOrEqualToOperator]);
+}
+
+- (BOOL)isShiftOperator;
+{
+    return [self isPunctuator] && ([[self content] isEqualToString:NUCLeftShiftOperator] || [[self content] isEqualToString:NUCRightShiftOperator]);
+}
+
+- (BOOL)isAdditiveOperator
+{
+    return [self isPunctuator] && ([[self content] isEqualToString:NUCAdditionOperator] || [[self content] isEqualToString:NUCSubtractionOperator]);
+}
+
+- (BOOL)isMultiplicativeOperator
+{
+    return [self isPunctuator] && ([[self content] isEqualToString:NUCMultiplicationOperator] || [[self content] isEqualToString:NUCDivisionOperator] || [[self content] isEqualToString:NUCRemainderOperator]);
+}
+
 - (BOOL)isWhitespace
 {
     return [self type] == NUCLexicalElementWhiteSpaceCharacterType || [self type] == NUCLexicalElementNewlineType || [self type] == NUCLexicalElementCommentType;

@@ -35,6 +35,17 @@ extern NSString * const NUCExclusiveOROperator;
 extern NSString * const NUCBitwiseANDOperator;
 extern NSString * const NUCInequalityOperator;
 extern NSString * const NUCEqualityOperator;
+extern NSString * const NUCLessThanOperator;
+extern NSString * const NUCLessThanOrEqualToOperator;
+extern NSString * const NUCGreaterThanOperator;
+extern NSString * const NUCGreaterThanOrEqualToOperator;
+extern NSString * const NUCLeftShiftOperator;
+extern NSString * const NUCRightShiftOperator;
+extern NSString * const NUCAdditionOperator;
+extern NSString * const NUCSubtractionOperator;
+extern NSString * const NUCMultiplicationOperator;
+extern NSString * const NUCDivisionOperator;
+extern NSString * const NUCRemainderOperator;
 extern NSString * const NUCPreprocessingDirectiveIf;
 extern NSString * const NUCPreprocessingDirectiveIfdef;
 extern NSString * const NUCPreprocessingDirectiveIfndef;
@@ -147,7 +158,15 @@ typedef enum : NSUInteger {
     NUCLexicalElementInclusiveORExpressionType,
     NUCLexicalElementExclusiveORExpressionType,
     NUCLexicalElementANDExpressionType,
-    NUCLexicalElementEqualityExpressionType
+    NUCLexicalElementEqualityExpressionType,
+    NUCLexicalElementRelationalExpressionType,
+    NUCLexicalElementShiftExpressionType,
+    NUCLexicalElementAdditiveExpressionType,
+    NUCLexicalElementMultiplicativeExpressionType,
+    NUCLexicalElementCastExpressionType,
+    NUCLexicalElementUnaryExpressionType,
+    NUCLexicalElementPostfixExpressionType,
+    NUCLexicalElementPrimaryExpressionType
 } NUCLexicalElementType;
 
 @interface NUCLexicalElement : NSObject

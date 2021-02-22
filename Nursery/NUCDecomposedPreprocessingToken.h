@@ -47,6 +47,10 @@
 - (BOOL)isBitwiseANDOperator;
 - (BOOL)isInequalityOperator;
 - (BOOL)isEqualityOperator;
+- (BOOL)isRelationalOperator;
+- (BOOL)isShiftOperator;
+- (BOOL)isAdditiveOperator;
+- (BOOL)isMultiplicativeOperator;
 - (BOOL)isWhitespace;
 - (BOOL)isNotWhitespace;
 - (BOOL)isWhitespacesWithoutNewline;

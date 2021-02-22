@@ -8,10 +8,22 @@
 
 #import "NUCPreprocessingToken.h"
 
-NS_ASSUME_NONNULL_BEGIN
+@class NUCShiftExpression, NUCDecomposedPreprocessingToken;
 
 @interface NUCRelationalExpression : NUCPreprocessingToken
+{
+    NUCShiftExpression *shiftExpression;
+    NUCRelationalExpression *relationalExpression;
+    NUCDecomposedPreprocessingToken *relationalOperator;
+}
+
++ (instancetype)expressionWithShiftExpression:(NUCShiftExpression *)aShiftExpression;
+
++ (instancetype)expressionWithRelationalExpression:(NUCRelationalExpression *)aRelationalExpression relationalOperator:(NUCDecomposedPreprocessingToken *)aRelationalOperator shiftExpression:(NUCShiftExpression *)aShiftExpression;
+
+- (instancetype)initWithShiftExpression:(NUCShiftExpression *)aShiftExpression;
+
+- (instancetype)initWithRelationalExpression:(NUCRelationalExpression *)aRelationalExpression relationalOperator:(NUCDecomposedPreprocessingToken *)aRelationalOperator shiftExpression:(NUCShiftExpression *)aShiftExpression;
 
 @end
 
-NS_ASSUME_NONNULL_END

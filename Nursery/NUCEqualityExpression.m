@@ -15,23 +15,23 @@
     return [[[self alloc] initWithRelationalExpression:aRelationalExpression] autorelease];
 }
 
-+ (instancetype)expressionWithEqualityExpression:(NUCEqualityExpression *)anEqualityExpression operator:(NUCDecomposedPreprocessingToken *)anOperator relationalExpression:(NUCRelationalExpression *)aRelationalExpression
++ (instancetype)expressionWithEqualityExpression:(NUCEqualityExpression *)anEqualityExpression equalityOperator:(NUCDecomposedPreprocessingToken *)anOperator relationalExpression:(NUCRelationalExpression *)aRelationalExpression
 {
-    return [[[self alloc] initWithEqualityExpression:anEqualityExpression operator:anOperator relationalExpression:aRelationalExpression] autorelease];
+    return [[[self alloc] initWithEqualityExpression:anEqualityExpression equalityOperator:anOperator relationalExpression:aRelationalExpression] autorelease];
 }
 
 - (instancetype)initWithRelationalExpression:(NUCRelationalExpression *)aRelationalExpression
 {
-    return [self initWithEqualityExpression:nil operator:nil relationalExpression:aRelationalExpression];
+    return [self initWithEqualityExpression:nil equalityOperator:nil relationalExpression:aRelationalExpression];
 }
 
-- (instancetype)initWithEqualityExpression:(NUCEqualityExpression *)anEqualityExpression operator:(NUCDecomposedPreprocessingToken *)anOperator relationalExpression:(NUCRelationalExpression *)aRelationalExpression
+- (instancetype)initWithEqualityExpression:(NUCEqualityExpression *)anEqualityExpression equalityOperator:(NUCDecomposedPreprocessingToken *)anOperator relationalExpression:(NUCRelationalExpression *)aRelationalExpression
 {
     if (self = [super initWithType:NUCLexicalElementEqualityExpressionType])
     {
         relationalExpression = [aRelationalExpression retain];
         equalityExpression = [anEqualityExpression retain];
-        operator = [anOperator retain];
+        equalityOperator = [anOperator retain];
     }
     
     return self;
@@ -41,7 +41,7 @@
 {
     [relationalExpression release];
     [equalityExpression release];
-    [operator release];
+    [equalityOperator release];
     
     [super dealloc];
 }

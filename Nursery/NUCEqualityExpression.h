@@ -14,16 +14,16 @@
 {
     NUCRelationalExpression *relationalExpression;
     NUCEqualityExpression *equalityExpression;
-    NUCDecomposedPreprocessingToken *operator;
+    NUCDecomposedPreprocessingToken *equalityOperator;
 }
 
 + (instancetype)expressionWithRelationalExpression:(NUCRelationalExpression *)aRelationalExpression;
 
-+ (instancetype)expressionWithEqualityExpression:(NUCEqualityExpression *)anEqualityExpression operator:(NUCDecomposedPreprocessingToken *)anOperator relationalExpression:(NUCRelationalExpression *)aRelationalExpression;
++ (instancetype)expressionWithEqualityExpression:(NUCEqualityExpression *)anEqualityExpression equalityOperator:(NUCDecomposedPreprocessingToken *)anOperator relationalExpression:(NUCRelationalExpression *)aRelationalExpression;
 
 - (instancetype)initWithRelationalExpression:(NUCRelationalExpression *)aRelationalExpression;
 
-- (instancetype)initWithEqualityExpression:(NUCEqualityExpression *)anEqualityExpression operator:(NUCDecomposedPreprocessingToken *)anOperator relationalExpression:(NUCRelationalExpression *)aRelationalExpression;
+- (instancetype)initWithEqualityExpression:(NUCEqualityExpression *)anEqualityExpression equalityOperator:(NUCDecomposedPreprocessingToken *)anOperator relationalExpression:(NUCRelationalExpression *)aRelationalExpression;
 
 @end
 

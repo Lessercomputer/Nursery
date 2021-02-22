@@ -38,6 +38,14 @@
 #import "NUCANDExpression.h"
 #import "NUCEqualityExpression.h"
 #import "NUCExpression.h"
+#import "NUCRelationalExpression.h"
+#import "NUCShiftExpression.h"
+#import "NUCAdditiveExpression.h"
+#import "NUCMultiplicativeExpression.h"
+#import "NUCCastExpression.h"
+#import "NUCUnaryExpression.h"
+#import "NUCPostfixExpression.h"
+#import "NUCPrimaryExpression.h"
 #import "NURegion.h"
 #import "NUCRangePair.h"
 #import "NULibrary.h"
@@ -897,7 +905,7 @@
                 if ([self scanRelationalExpressionFrom:aPreprocessingTokenStream into:&aRelationalExpression])
                 {
                     if (aToken)
-                        *aToken = [NUCEqualityExpression expressionWithEqualityExpression:anEqualityExpression operator:anOperator relationalExpression:aRelationalExpression];
+                        *aToken = [NUCEqualityExpression expressionWithEqualityExpression:anEqualityExpression equalityOperator:anOperator relationalExpression:aRelationalExpression];
                     
                     return YES;
                 }
@@ -912,41 +920,204 @@
 
 - (BOOL)scanRelationalExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCRelationalExpression **)aToken
 {
+    NUCShiftExpression *aShiftExpression = nil;
+    
+    if ([self scanShiftExpressionFrom:aPreprocessingTokenStream into:&aShiftExpression])
+    {
+        if (aToken)
+            *aToken = [NUCRelationalExpression expressionWithShiftExpression:aShiftExpression];
+        
+        return YES;
+    }
+    else
+    {
+        NSUInteger aPosition = [aPreprocessingTokenStream position];
+        NUCRelationalExpression *aRelationalExpression = nil;
+        
+        if ([self scanRelationalExpressionFrom:aPreprocessingTokenStream into:&aRelationalExpression])
+        {
+            [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+            
+            NUCDecomposedPreprocessingToken *anOperator = [aPreprocessingTokenStream next];
+            
+            if ([anOperator isRelationalOperator])
+            {
+                [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+                
+                if ([self scanShiftExpressionFrom:aPreprocessingTokenStream into:&aShiftExpression])
+                {
+                    if (aToken)
+                        *aToken = [NUCRelationalExpression expressionWithRelationalExpression:aRelationalExpression relationalOperator:anOperator shiftExpression:aShiftExpression];
+                    
+                    return YES;
+                }
+            }
+        }
+        
+        [aPreprocessingTokenStream setPosition:aPosition];
+        
+        return NO;
+    }
+}
+
+- (BOOL)scanShiftExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCShiftExpression **)aToken
+{
+    NUCAdditiveExpression *anAdditiveExpression = nil;
+    
+    if ([self scanAdditiveExpressionFrom:aPreprocessingTokenStream into:&anAdditiveExpression])
+    {
+        if (aToken)
+            *aToken = [NUCShiftExpression expressionWithAdditiveExpression:anAdditiveExpression];
+        
+        return YES;
+    }
+    else
+    {
+        NSUInteger aPosition = [aPreprocessingTokenStream position];
+        NUCShiftExpression *aShiftExpression = nil;
+        
+        if ([self scanShiftExpressionFrom:aPreprocessingTokenStream into:&aShiftExpression])
+        {
+            [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+            
+            NUCDecomposedPreprocessingToken *aShiftOperator = [aPreprocessingTokenStream next];
+            
+            if ([aShiftOperator isShiftOperator])
+            {
+                [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+                
+                if ([self scanAdditiveExpressionFrom:aPreprocessingTokenStream into:&anAdditiveExpression])
+                {
+                    if (aToken)
+                        *aToken = [NUCShiftExpression expressionWithShiftExpression:aShiftExpression shiftOperator:aShiftOperator additiveExpression:anAdditiveExpression];
+                    
+                    return YES;
+                }
+            }
+        }
+        
+        [aPreprocessingTokenStream setPosition:aPosition];
+        
+        return NO;
+    }
+}
+
+- (BOOL)scanAdditiveExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCAdditiveExpression **)aToken
+{
+    NUCMultiplicativeExpression *aMultiplicativeExpression = nil;
+    
+    if ([self scanMultiplicativeExpressionFrom:aPreprocessingTokenStream into:&aMultiplicativeExpression])
+    {
+        if (aToken)
+            *aToken = [NUCAdditiveExpression expressionWithMultiplicativeExpression:aMultiplicativeExpression];
+        
+        return YES;
+    }
+    else
+    {
+        NSUInteger aPosition = [aPreprocessingTokenStream position];
+        NUCAdditiveExpression *anAdditiveExpression = nil;
+        
+        if ([self scanAdditiveExpressionFrom:aPreprocessingTokenStream into:&anAdditiveExpression])
+        {
+            [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+            
+            NUCDecomposedPreprocessingToken *anAdditiveOperator = [aPreprocessingTokenStream next];
+            
+            if ([anAdditiveOperator isAdditiveOperator])
+            {
+                [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+                
+                if ([self scanMultiplicativeExpressionFrom:aPreprocessingTokenStream into:&aMultiplicativeExpression])
+                {
+                    if (aToken)
+                        *aToken = [NUCAdditiveExpression expressionWithAdditiveExpression:anAdditiveExpression additiveOperator:anAdditiveOperator multiplicativeExpression:aMultiplicativeExpression];
+                    
+                    return YES;
+                }
+            }
+        }
+        
+        [aPreprocessingTokenStream setPosition:aPosition];
+        return NO;
+    }
+}
+
+- (BOOL)scanMultiplicativeExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCMultiplicativeExpression **)aToken
+{
+    NUCCastExpression *aCastExpression = nil;
+    
+    if ([self scanCastExpressionFrom:aPreprocessingTokenStream into:&aCastExpression])
+    {
+        if (aToken)
+            *aToken = [NUCMultiplicativeExpression expressionWithCastExpression:aCastExpression];
+        
+        return YES;
+    }
+    else
+    {
+        NSUInteger aPosition = [aPreprocessingTokenStream position];
+        NUCMultiplicativeExpression *aMultiplicativeExpression = nil;
+        
+        if ([self scanMultiplicativeExpressionFrom:aPreprocessingTokenStream into:&aMultiplicativeExpression])
+        {
+            [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+            
+            NUCDecomposedPreprocessingToken *aMultiplicativeOperator = [aPreprocessingTokenStream next];
+            
+            if ([aMultiplicativeOperator isMultiplicativeOperator])
+            {
+                [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+                
+                if ([self scanCastExpressionFrom:aPreprocessingTokenStream into:&aCastExpression])
+                {
+                    if (aToken)
+                        *aToken = [NUCMultiplicativeExpression expressionWithMultiplicativeExpression:aMultiplicativeExpression multiplicativeOperator:aMultiplicativeOperator castExpression:aCastExpression];
+                    
+                    return YES;
+                }
+            }
+        }
+        
+        [aPreprocessingTokenStream setPosition:aPosition];
+        
+        return NO;
+    }
+}
+
+- (BOOL)scanCastExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCCastExpression **)aToken
+{
+    NUCUnaryExpression *anUnaryExpression = nil;
+    
+    if ([self scanUnaryExpressionFrom:aPreprocessingTokenStream into:&anUnaryExpression])
+    {
+        if (aToken)
+            *aToken = [NUCCastExpression expressionWithUnaryExpression:anUnaryExpression];
+        
+        return YES;
+    }
+                       
     return NO;
 }
 
-- (BOOL)scanShiftExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+- (BOOL)scanUnaryExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCUnaryExpression **)aToken
 {
-    return NO;
-}
-
-- (BOOL)scanAdditiveExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
-{
+    NUCPostfixExpression *aPostfixExpression = nil;
+    
+    if ([self scanPostfixExpressionFrom:aPreprocessingTokenStream into:&aPostfixExpression])
+    {
+        
+    }
     
     return NO;
 }
 
-- (BOOL)scanMultiplicativeExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+- (BOOL)scanPostfixExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPostfixExpression **)aToken
 {
     return NO;
 }
 
-- (BOOL)scanCastExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
-{
-    return NO;
-}
-
-- (BOOL)scanUnaryExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
-{
-    return NO;
-}
-
-- (BOOL)scanPostfixExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
-{
-    return NO;
-}
-
-- (BOOL)scanPrimaryExpressionFrom:(NSScanner *)aScanner addTo:(NSMutableArray *)anElements
+- (BOOL)scanPrimaryExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPrimaryExpression **)aToken
 {
     
     return NO;
