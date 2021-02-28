@@ -141,7 +141,7 @@ Person *aPerson = [Person new];
 ```
 
 ## macOS support
-macOS (10.8 or higher)
+macOS (10.9 or higher)
 
 ## How to buld
 1. Click "Open in Xcode" on project page and clone to (For Example) your Desktop 
@@ -172,7 +172,6 @@ The released area is compacted
 ## See also
 * [API Documentation](https://github.com/AkifumiTakata/DocumentationForNursery)  
 * [Examples](https://github.com/AkifumiTakata/ExamplesOfNursery)  
-* [Nursery Net Service App for macOS](https://github.com/AkifumiTakata/nursery-net-service-app)
 * [Bookmarks App for macOS](https://github.com/AkifumiTakata/Bookmarks)
 
 ## Contribution
