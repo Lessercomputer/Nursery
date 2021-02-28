@@ -338,7 +338,7 @@ static NSString *NUNurseryTestFilePath = nil;
 	NUNursery *aNursery = [NUMainBranchNursery nurseryWithContentsOfFile:NUNurseryTestFilePath];
     NUGarden *aGarden = [aNursery makeGarden];
 	NSMutableArray *aUserRoot = [aGarden root];
-	
+
 	XCTAssertFalse(anArray == aUserRoot, @"");
 	XCTAssertEqualObjects(anArray, aUserRoot, @"");
 }

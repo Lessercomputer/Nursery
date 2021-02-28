@@ -1878,6 +1878,7 @@
                     {
                         NSMutableArray *anArray = [NSMutableArray array];
                         [aRangeMappingFromPhase2StringToPhase1String setObject:anArray forKey:anExistingObject];
+                        anExistingObject = anArray;
                     }
                     
                     [(NSMutableArray *)anExistingObject addObject:aRangePair];
