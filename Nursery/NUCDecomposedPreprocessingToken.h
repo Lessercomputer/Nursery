@@ -34,6 +34,9 @@
 
 - (BOOL)isHash;
 - (BOOL)isIdentifier;
+- (BOOL)isStringLiteral;
+- (BOOL)isCharacterConstant;
+- (BOOL)isPpNumber;
 - (BOOL)isPunctuator;
 - (BOOL)isComma;
 - (BOOL)isPeriod;
@@ -51,6 +54,7 @@
 - (BOOL)isShiftOperator;
 - (BOOL)isAdditiveOperator;
 - (BOOL)isMultiplicativeOperator;
+- (BOOL)isUnaryOperator;
 - (BOOL)isWhitespace;
 - (BOOL)isNotWhitespace;
 - (BOOL)isWhitespacesWithoutNewline;

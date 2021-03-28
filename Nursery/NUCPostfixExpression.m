@@ -10,4 +10,26 @@
 
 @implementation NUCPostfixExpression
 
++ (instancetype)expressionWithPrimaryExpression:(NUCPrimaryExpression *)aPrimaryExpression
+{
+    return [[[self alloc] initWithPrimaryExpression:aPrimaryExpression] autorelease];
+}
+
+- (instancetype)initWithPrimaryExpression:(NUCPrimaryExpression *)aPrimaryExpression
+{
+    if (self = [super initWithType:NUCLexicalElementPostfixExpressionType])
+    {
+        primaryExpression = [aPrimaryExpression retain];
+    }
+    
+    return self;
+}
+
+- (void)dealloc
+{
+    [primaryExpression release];
+    
+    [super dealloc];
+}
+
 @end

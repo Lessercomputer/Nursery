@@ -46,6 +46,8 @@
 #import "NUCUnaryExpression.h"
 #import "NUCPostfixExpression.h"
 #import "NUCPrimaryExpression.h"
+#import "NUCConstant.h"
+#import "NUCIntegerConstant.h"
 #import "NURegion.h"
 #import "NUCRangePair.h"
 #import "NULibrary.h"
@@ -1106,7 +1108,32 @@
     
     if ([self scanPostfixExpressionFrom:aPreprocessingTokenStream into:&aPostfixExpression])
     {
+        if (aToken)
+            *aToken = [NUCUnaryExpression expressionWithPostfixExpression:aPostfixExpression];
         
+        return YES;
+    }
+    else
+    {
+        NSUInteger aPosition = [aPreprocessingTokenStream position];
+        NUCDecomposedPreprocessingToken *anUnaryOperator = [aPreprocessingTokenStream next];
+        
+        if ([anUnaryOperator isUnaryOperator])
+        {
+            NUCCastExpression *aCastExpression = nil;
+            
+            if ([self scanCastExpressionFrom:aPreprocessingTokenStream into:&aCastExpression])
+            {
+                if (aToken)
+                    *aToken = [NUCUnaryExpression expressionWithUnaryOperator:anUnaryOperator castExpression:aCastExpression];
+                
+                return YES;
+            }
+        }
+        
+        [aPreprocessingTokenStream setPosition:aPosition];
+        
+        return NO;
     }
     
     return NO;
@@ -1114,13 +1141,127 @@
 
 - (BOOL)scanPostfixExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPostfixExpression **)aToken
 {
+    NUCPrimaryExpression *aPrimaryExpression = nil;
+    
+    if ([self scanPrimaryExpressionFrom:aPreprocessingTokenStream into:&aPrimaryExpression])
+    {
+        if (aToken)
+            *aToken = [NUCPostfixExpression expressionWithPrimaryExpression:aPrimaryExpression];
+        
+        return YES;
+    }
+    
     return NO;
 }
 
-- (BOOL)scanPrimaryExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPrimaryExpression **)aToken
+- (BOOL)scanPrimaryExpressionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPrimaryExpression **)anExpression
 {
+    NUCDecomposedPreprocessingToken *aToken = [aPreprocessingTokenStream next];
+    NUCConstant *aConstant = nil;
+    
+    if ([aToken isIdentifier])
+    {
+        if (anExpression)
+            *anExpression = [NUCPrimaryExpression expressionWithIdentifier:aToken];
+        
+        return YES;
+    }
+    else if ([self scanConstantFrom:aToken into:&aConstant])
+    {
+        if (anExpression)
+            *anExpression = [NUCPrimaryExpression expressionWithConstant:aConstant];
+        
+        return YES;
+    }
+    else if ([aToken isStringLiteral])
+    {
+        if (anExpression)
+            *anExpression = [NUCPrimaryExpression expressionWithStringLiteral:aToken];
+        
+        return YES;
+    }
     
     return NO;
+}
+
+- (BOOL)scanConstantFrom:(NUCDecomposedPreprocessingToken *)aPreprocessingToken into:(NUCConstant **)aConstant
+{
+    
+    if ([self scanIntegerConstantFrom:aPreprocessingToken into:aConstant])
+    {
+        return YES;
+    }
+    else if ([aPreprocessingToken isCharacterConstant])
+    {
+        if (aConstant)
+            *aConstant = [NUCConstant constantWithCharacterConstant:aPreprocessingToken];
+        
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (BOOL)scanIntegerConstantFrom:(NUCDecomposedPreprocessingToken *)aPreprocessingToken into:(NUCConstant **)aConstant
+{
+    if (![aPreprocessingToken isPpNumber])
+        return NO;
+    
+    NUUInt64 aValue = 0;
+    NSString *aString = [aPreprocessingToken content];
+    
+    if ([aString hasPrefix:NUCHexadecimalPrefixSmall] || [aString hasPrefix:NUCHexadecimalPrefixLarge])
+    {
+        NSRange aHexDigitsRange = [aString rangeOfCharacterFromSet:[NUCLexicalElement NUCHexadecimalDigitCharacterSet] options:0 range:NSMakeRange(2, [aString length] - 2)];
+        
+        if (aHexDigitsRange.location == NSNotFound)
+            return NO;
+        
+        for (NSUInteger aLocation = aHexDigitsRange.location; NSLocationInRange(aLocation, aHexDigitsRange); aLocation++)
+        {
+            unichar aCharacter = [aString characterAtIndex:aLocation];
+            
+            aValue *= 16;
+            
+            if (aCharacter >= 'a')
+                aValue += aCharacter - 'a' + 10;
+            else if (aCharacter >= 'A')
+                aValue += aCharacter - 'A' + 10;
+            else
+                aValue += aCharacter - '0';
+        }
+    }
+    else if ([aString hasPrefix:NUCOctalDigitZero])
+    {
+        NSRange anOctalDigitsRange = [aString rangeOfCharacterFromSet:[NUCLexicalElement NUCOctalDigitCharacterSet]];
+        
+        if (anOctalDigitsRange.location == NSNotFound)
+            return NO;
+        
+        for (NSUInteger aLocation = anOctalDigitsRange.location; NSLocationInRange(aLocation, anOctalDigitsRange); aLocation++)
+        {
+            aValue *= 8;
+            aValue += [aString characterAtIndex:aLocation] - '0';
+        }
+    }
+    else
+    {
+        NSRange aDecimalDigitsRange = [aString rangeOfCharacterFromSet:[NUCLexicalElement NUCDigitCharacterSet]];
+        
+        if (aDecimalDigitsRange.location == NSNotFound)
+            return NO;
+        
+        for (NSUInteger aLocation = aDecimalDigitsRange.location; NSLocationInRange(aLocation, aDecimalDigitsRange) ; aLocation++)
+        {
+            aValue *= 10;
+            aValue += [aString characterAtIndex:aLocation] - '0';
+        }
+    }
+    
+    if (aConstant)
+        *aConstant = [NUCConstant constantWithIntegerConstant:[NUCIntegerConstant constantWithPpNumber:aPreprocessingToken value:aValue]];
+    
+    return YES;
 }
 
 - (BOOL)decomposeIdentifierFrom:(NSScanner *)aScanner into:(NSMutableArray *)anElements

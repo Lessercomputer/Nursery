@@ -8,10 +8,16 @@
 
 #import "NUCPreprocessingToken.h"
 
-NS_ASSUME_NONNULL_BEGIN
+@class NUCPrimaryExpression;
 
 @interface NUCPostfixExpression : NUCPreprocessingToken
+{
+    NUCPrimaryExpression *primaryExpression;
+}
+
++ (instancetype)expressionWithPrimaryExpression:(NUCPrimaryExpression *)aPrimaryExpression;
+
+- (instancetype)initWithPrimaryExpression:(NUCPrimaryExpression *)aPrimaryExpression;
 
 @end
 
-NS_ASSUME_NONNULL_END

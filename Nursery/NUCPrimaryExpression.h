@@ -8,10 +8,19 @@
 
 #import "NUCPreprocessingToken.h"
 
-NS_ASSUME_NONNULL_BEGIN
+@class NUCDecomposedPreprocessingToken, NUCConstant, NUCExpression;
 
 @interface NUCPrimaryExpression : NUCPreprocessingToken
+{
+    NUCPreprocessingToken *content;
+}
+
++ (instancetype)expressionWithIdentifier:(NUCDecomposedPreprocessingToken *)anIdentifier;
++ (instancetype)expressionWithConstant:(NUCConstant *)aConstant;
++ (instancetype)expressionWithStringLiteral:(NUCDecomposedPreprocessingToken *)aStringLiteral;
++ (instancetype)expressionWithExpression:(NUCExpression *)anExpression;
+
+- (instancetype)initWithToken:(NUCPreprocessingToken *)aContent;
 
 @end
 
-NS_ASSUME_NONNULL_END

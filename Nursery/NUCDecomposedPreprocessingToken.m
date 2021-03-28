@@ -32,8 +32,6 @@
     return [[[self alloc] initWithContent:aContent region:aRange type:anElementType] autorelease];
 }
 
-
-
 - (instancetype)initWithRange:(NSRange)aRange type:(NUCLexicalElementType)anElementType
 {
     return [self initWithContent:nil range:aRange type:anElementType];
@@ -83,6 +81,21 @@
 - (BOOL)isIdentifier
 {
     return [self type] == NUCLexicalElementIdentifierType;
+}
+
+- (BOOL)isStringLiteral
+{
+    return [self type] == NUCLexicalElementStringLiteralType;
+}
+
+- (BOOL)isCharacterConstant
+{
+    return [self type] == NUCLexicalElementCharacterConstantType;
+}
+
+- (BOOL)isPpNumber
+{
+    return [self type] == NUCLexicalElementPpNumberType;
 }
 
 - (BOOL)isPunctuator
@@ -174,6 +187,11 @@
 - (BOOL)isMultiplicativeOperator
 {
     return [self isPunctuator] && ([[self content] isEqualToString:NUCMultiplicationOperator] || [[self content] isEqualToString:NUCDivisionOperator] || [[self content] isEqualToString:NUCRemainderOperator]);
+}
+
+- (BOOL)isUnaryOperator
+{
+    return [self isPunctuator] && ([[self content] isEqualToString:NUCUnaryPlusOperator] || [[self content] isEqualToString:NUCUnaryMinusOperator] || [[self content] isEqualToString:NUCBitwiseComplementOperator] || [[self content] isEqualToString:NUCLogicalNegationOperator]);
 }
 
 - (BOOL)isWhitespace
