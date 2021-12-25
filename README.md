@@ -170,9 +170,7 @@ GC implements garbage collection with Tri-color marking.
 The released area is compacted 
 
 ## See also
-* [API Documentation](https://github.com/AkifumiTakata/DocumentationForNursery)  
-* [Examples](https://github.com/AkifumiTakata/ExamplesOfNursery)  
-* [Bookmarks App for macOS](https://github.com/AkifumiTakata/Bookmarks)
+* [Documents](Documents/)  
 
 ## Contribution
 Bug fixes are welcome
