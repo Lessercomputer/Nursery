@@ -31,6 +31,9 @@
 #import "NUCControlLineDefineObjectLike.h"
 #import "NUCControlLineDefineFunctionLike.h"
 #import "NUCUndef.h"
+#import "NUCLine.h"
+#import "NUCError.h"
+#import "NUCPragma.h"
 #import "NUCIdentifierList.h"
 #import "NUCReplacementList.h"
 #import "NUCConstantExpression.h"
@@ -254,6 +257,17 @@
                 return YES;
             else if ([self scanUndefFrom:aPreprocessingTokenStream hash:aHash directiveName:aDirectiveName into:aToken])
                 return YES;
+            else if ([self scanControlLineLineFrom:aPreprocessingTokenStream hash:aHash directiveName:aDirectiveName into:(NUCLine **)aToken])
+                return YES;
+            else if ([self scanErrorFrom:aPreprocessingTokenStream hash:aHash directiveName:aDirectiveName into:(NUCError **)aToken])
+                return YES;
+            else if ([self scanPragmaFrom:aPreprocessingTokenStream hash:aHash directiveName:aDirectiveName into:(NUCPragma **)aToken])
+                return YES;
+        }
+        else
+        {
+            if ([self scanControlLineNewlineFrom:aPreprocessingTokenStream hash:aHash directiveName:aDirectiveName into:(NUCControlLine **)aToken])
+                return YES;
         }
     }
     
@@ -454,8 +468,106 @@
     return NO;
 }
 
-- (BOOL)scanLineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCPreprocessingDirective **)aToken
+- (BOOL)scanControlLineLineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCLine **)aToken
 {
+    if ([aDirectiveName isLine])
+    {
+        NSUInteger aPosition = [aPreprocessingTokenStream position];
+        NUCPpTokens *aTokens = nil;
+        NUCNewline *aNewline = nil;
+        
+        [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+        
+        if ([self scanPpTokensFrom:aPreprocessingTokenStream into:&aTokens])
+        {
+            [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+            
+            if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
+            {
+                if (aToken)
+                    *aToken = [NUCLine lineWithHash:aHash directiveName:aDirectiveName ppTokens:aTokens newline:aNewline];
+                
+                return YES;
+            }
+        }
+        
+        [aPreprocessingTokenStream setPosition:aPosition];
+    }
+    
+    return NO;
+}
+
+- (BOOL)scanErrorFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCControlLine **)aToken
+{
+    if ([aDirectiveName isError])
+    {
+        NSUInteger aPosition = [aPreprocessingTokenStream position];
+        NUCPpTokens *aPpTokens = nil;
+        NUCNewline *aNewline = nil;
+        
+        if ([self scanPpTokensFrom:aPreprocessingTokenStream into:&aPpTokens])
+        {
+            [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+            
+            if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
+            {
+                if (aToken)
+                    *aToken = [NUCError errorWithHash:aHash directiveName:aDirectiveName ppTokens:aPpTokens newline:aNewline];
+                
+                return YES;
+            }
+        }
+        
+        [aPreprocessingTokenStream setPosition:aPosition];
+    }
+    
+    return NO;
+}
+
+- (BOOL)scanPragmaFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCControlLine **)aToken
+{
+    if ([aDirectiveName isPragma])
+    {
+        NSUInteger aPosition = [aPreprocessingTokenStream position];
+        NUCPpTokens *aPpTokens = nil;
+        NUCNewline *aNewline = nil;
+        
+        if ([self scanPpTokensFrom:aPreprocessingTokenStream into:&aPpTokens])
+        {
+            [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+            
+            if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
+            {
+                if (aToken)
+                    *aToken = [NUCPragma pragmaWithHash:aHash directiveName:aDirectiveName ppTokens:aPpTokens newline:aNewline];
+                
+                return YES;
+            }
+        }
+        
+        [aPreprocessingTokenStream setPosition:aPosition];
+    }
+    
+    return NO;
+}
+
+- (BOOL)scanControlLineNewlineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCControlLine **)aToken
+{
+    NSUInteger aPosition = [aPreprocessingTokenStream position];
+    NUCNewline *aNewline = nil;
+    
+    [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+    
+    if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
+    {
+        if (aToken)
+            *aToken = [[[NUCControlLine alloc] initWithType:NUCLexicalElementControlLineNewlineType hash:aHash directiveName:aDirectiveName newline:aNewline] autorelease];
+        
+        return YES;
+    }
+    
+    [aPreprocessingTokenStream setPosition:aPosition];
+    
     return NO;
 }
 

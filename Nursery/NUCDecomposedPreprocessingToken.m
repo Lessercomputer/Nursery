@@ -137,6 +137,26 @@
     return [self type] == NUCLexicalElementUndefType;
 }
 
+- (BOOL)isLine
+{
+    return [self type] == NUCLexicalElementLineType;
+}
+
+- (BOOL)isError
+{
+    return [self type] == NUCLexicalElementErrorType;
+}
+
+- (BOOL)isPragma
+{
+    return [self type] == NUCLexicalElementPragmaType;
+}
+
+- (BOOL)isControlNewline
+{
+    return [self type] == NUCLexicalElementControlLineNewlineType;
+}
+
 - (BOOL)isLogicalOROperator
 {
     return [self isPunctuator]

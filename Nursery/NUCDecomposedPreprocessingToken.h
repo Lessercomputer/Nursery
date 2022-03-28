@@ -44,6 +44,10 @@
 - (BOOL)isColon;
 - (BOOL)isEllipsis;
 - (BOOL)isUndef;
+- (BOOL)isLine;
+- (BOOL)isError;
+- (BOOL)isPragma;
+- (BOOL)isControlNewline;
 - (BOOL)isLogicalOROperator;
 - (BOOL)isLogicalANDOperator;
 - (BOOL)isInclusiveOROperator;
