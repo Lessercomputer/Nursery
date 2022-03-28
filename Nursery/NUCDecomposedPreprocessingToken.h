@@ -43,6 +43,7 @@
 - (BOOL)isQuestionMark;
 - (BOOL)isColon;
 - (BOOL)isEllipsis;
+- (BOOL)isUndef;
 - (BOOL)isLogicalOROperator;
 - (BOOL)isLogicalANDOperator;
 - (BOOL)isInclusiveOROperator;

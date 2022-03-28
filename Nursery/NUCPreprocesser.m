@@ -10,7 +10,10 @@
 #import "NUCSourceFile.h"
 #import "NUCLexicalElement.h"
 #import "NUCHeaderName.h"
+
 #import "NUCPreprocessingTokenStream.h"
+
+#import "NUCPreprocessingFile.h"
 #import "NUCGroup.h"
 #import "NUCIfGroup.h"
 #import "NUCElifGroups.h"
@@ -27,6 +30,7 @@
 #import "NUCControlLineInclude.h"
 #import "NUCControlLineDefineObjectLike.h"
 #import "NUCControlLineDefineFunctionLike.h"
+#import "NUCUndef.h"
 #import "NUCIdentifierList.h"
 #import "NUCReplacementList.h"
 #import "NUCConstantExpression.h"
@@ -86,10 +90,21 @@
     
     [aSourceFile setLogicalSourceString:aLogicalSourceStringInPhase2];
     
-    [self decomposePreprocessingFile:aSourceFile];
+    NSArray *aPreprocessingTokens = [self decomposePreprocessingFile:aSourceFile];
+    NSMutableArray *aNonwhitespaces = [NSMutableArray array];
+    
+    [aPreprocessingTokens enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj type] == NUCLexicalElementNonWhiteSpaceCharacterType)
+            [aNonwhitespaces addObject:obj];
+    }];
+    NSLog(@"%@", aNonwhitespaces);
+    
+    NUCPreprocessingFile *aPreprocessingFile = nil;
+    
+    [self scanPreprocessingFileFrom:aPreprocessingTokens into:&aPreprocessingFile];
 }
 
-- (void)decomposePreprocessingFile:(NUCSourceFile *)aSourceFile
+- (NSArray *)decomposePreprocessingFile:(NUCSourceFile *)aSourceFile
 {
     NSMutableArray *aPreprocessingTokens = [NSMutableArray array];
     NSScanner *aScanner = [NSScanner scannerWithString:[aSourceFile logicalSourceString]];
@@ -115,21 +130,23 @@
             continue;
     }
     
-    NSMutableArray *aNonwhitespaces = [NSMutableArray array];
-    
-    [aPreprocessingTokens enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([obj type] == NUCLexicalElementNonWhiteSpaceCharacterType)
-            [aNonwhitespaces addObject:obj];
-    }];
-    NSLog(@"%@", aNonwhitespaces);
+    return aPreprocessingTokens;
 }
 
-- (BOOL)scanPreprocessingFileFrom:(NSArray *)aPreprocessingTokens
+- (BOOL)scanPreprocessingFileFrom:(NSArray *)aPreprocessingTokens into:(NUCPreprocessingFile **)aPreprocessingFile
 {
     NUCPreprocessingTokenStream *aPreprocessingTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aPreprocessingTokens];
     NUCGroup *aGroup = nil;
 
-    return [self scanGroupFrom:aPreprocessingTokenStream into:&aGroup];
+    if ([self scanGroupFrom:aPreprocessingTokenStream into:&aGroup])
+    {
+        if (aPreprocessingFile)
+            *aPreprocessingFile = [NUCPreprocessingFile preprocessingFileWithGroup:aGroup];
+        
+        return YES;
+    }
+    
+    return NO;
 }
 
 - (BOOL)scanGroupFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCGroup **)aToken
@@ -234,6 +251,8 @@
             if ([self scanControlLineIncludeFrom:aPreprocessingTokenStream hash:aHash directiveName:aDirectiveName into:aToken])
                 return YES;
             else if ([self scanControlLineDefineFrom:aPreprocessingTokenStream hash:aHash directiveName:aDirectiveName into:aToken])
+                return YES;
+            else if ([self scanUndefFrom:aPreprocessingTokenStream hash:aHash directiveName:aDirectiveName into:aToken])
                 return YES;
         }
     }
@@ -402,6 +421,41 @@
     
     [aPreprocessingTokenStream setPosition:aPosition];
     
+    return NO;
+}
+
+- (BOOL)scanUndefFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCPreprocessingDirective **)aToken
+{
+    if ([aDirectiveName isUndef])
+    {
+        NSUInteger aPosition = [aPreprocessingTokenStream position];
+        
+        [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+        
+        NUCDecomposedPreprocessingToken *anIdentifier = [aPreprocessingTokenStream next];
+        NUCNewline *aNewline = nil;
+
+        if ([anIdentifier isIdentifier])
+        {
+            [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+                        
+            if (anIdentifier && [self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
+            {
+                if (aToken)
+                    *aToken = [NUCUndef undefWithHash:aHash directiveName:aDirectiveName identifier:anIdentifier newline:aNewline];
+                
+                return YES;
+            }
+        }
+        
+        [aPreprocessingTokenStream setPosition:aPosition];
+    }
+    
+    return NO;
+}
+
+- (BOOL)scanLineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCPreprocessingDirective **)aToken
+{
     return NO;
 }
 

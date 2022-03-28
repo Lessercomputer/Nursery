@@ -132,6 +132,11 @@
     return [self isPunctuator] && [[self content] isEqualToString:NUCEllipsis];
 }
 
+- (BOOL)isUndef
+{
+    return [self type] == NUCLexicalElementUndefType;
+}
+
 - (BOOL)isLogicalOROperator
 {
     return [self isPunctuator]
