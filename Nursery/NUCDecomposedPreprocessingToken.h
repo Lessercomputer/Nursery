@@ -63,5 +63,7 @@
 - (BOOL)isWhitespace;
 - (BOOL)isNotWhitespace;
 - (BOOL)isWhitespacesWithoutNewline;
+- (BOOL)isNewLine;
+- (BOOL)isNotNewLine;
 
 @end

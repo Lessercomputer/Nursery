@@ -81,7 +81,7 @@
 {
     NSUInteger aPosition = [self position];
     
-    while ([[self peekNext] isWhitespace])
+    while ([[self peekNext] isWhitespacesWithoutNewline])
         [self next];
     
     return [self position] != aPosition;

@@ -94,17 +94,18 @@
     [aSourceFile setLogicalSourceString:aLogicalSourceStringInPhase2];
     
     NSArray *aPreprocessingTokens = [self decomposePreprocessingFile:aSourceFile];
-    NSMutableArray *aNonwhitespaces = [NSMutableArray array];
-    
-    [aPreprocessingTokens enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([obj type] == NUCLexicalElementNonWhiteSpaceCharacterType)
-            [aNonwhitespaces addObject:obj];
-    }];
-    NSLog(@"%@", aNonwhitespaces);
+//    NSMutableArray *aNonwhitespaces = [NSMutableArray array];
+//
+//    [aPreprocessingTokens enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//        if ([obj type] == NUCLexicalElementNonWhiteSpaceCharacterType)
+//            [aNonwhitespaces addObject:obj];
+//    }];
+//    NSLog(@"%@", aNonwhitespaces);
     
     NUCPreprocessingFile *aPreprocessingFile = nil;
     
-    [self scanPreprocessingFileFrom:aPreprocessingTokens into:&aPreprocessingFile];
+    if ([self scanPreprocessingFileFrom:aPreprocessingTokens into:&aPreprocessingFile])
+        [self preprocessPreprocessingFile:aPreprocessingFile];
 }
 
 - (NSArray *)decomposePreprocessingFile:(NUCSourceFile *)aSourceFile
@@ -150,6 +151,16 @@
     }
     
     return NO;
+}
+
+- (void)preprocessPreprocessingFile:(NUCPreprocessingFile *)aPreprocessingFile
+{
+    NUCGroup *aGroup = [aPreprocessingFile group];
+    
+    if (!aGroup)
+        return;
+    
+    NSLog(@"%@", [aGroup description]);
 }
 
 - (BOOL)scanGroupFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCGroup **)aToken
@@ -286,10 +297,12 @@
     if (!anIdentifier)
         return NO;
     
-    NUCDecomposedPreprocessingToken *anLparen = [aPreprocessingTokenStream next];
+    NUCDecomposedPreprocessingToken *anLparen = [aPreprocessingTokenStream peekNext];
 
     if ([[anLparen content] isEqualToString:NUCOpeningParenthesisPunctuator])
     {
+        [aPreprocessingTokenStream next];
+        
         if ([self scanControlLineDefineFunctionLikeFrom:aPreprocessingTokenStream hash:aHash directiveName:aDirectiveName identifier:anIdentifier lparen:anLparen into:aToken])
             return YES;
     }
@@ -1596,16 +1609,45 @@
 
 - (BOOL)decomposeWhiteSpaceCharacterFrom:(NSScanner *)aScanner into:(NSMutableArray *)aPreprocessingTokens
 {
+    if ([self decomposWhitespaceWithoutNewlineFrom:aScanner into:aPreprocessingTokens])
+        return YES;
+    else if ([self decomposNewlineFrom:aScanner into:aPreprocessingTokens])
+        return YES;
+    else if ([self decomposeCommentFrom:aScanner into:aPreprocessingTokens])
+        return YES;
+    else
+        return NO;
+}
+
+- (BOOL)decomposWhitespaceWithoutNewlineFrom:(NSScanner *)aScanner into:(NSMutableArray *)aPreprocessingTokens
+{
     NSUInteger aLocation = [aScanner scanLocation];
-    
-    [aScanner scanCharactersFromSet:[NUCDecomposedPreprocessingToken NUCWhiteSpaceCharacterSet] intoString:NULL];
-    
-    if ([aScanner scanLocation] != aLocation)
+
+    if ([aScanner scanCharactersFromSet:[NUCDecomposedPreprocessingToken NUCWhiteSpaceWithoutNewlineCharacterSet] intoString:NULL])
+    {
         [aPreprocessingTokens addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aLocation, [aScanner scanLocation] - aLocation) type:NUCLexicalElementWhiteSpaceCharacterType]];
+        
+        return YES;
+    }
+
+
+    return NO;
+}
+
+- (BOOL)decomposNewlineFrom:(NSScanner *)aScanner into:(NSMutableArray *)aPreprocessingTokens
+{
+    NSUInteger aLocation = [aScanner scanLocation];
+    NUCDecomposedPreprocessingToken *aToken = nil;
     
-    [self decomposeCommentFrom:aScanner into:aPreprocessingTokens];
-    
-    return [aScanner scanLocation] != aLocation;
+    if ([aScanner scanString:NUCLF intoString:NULL] || [aScanner scanString:NUCCRLF intoString:NULL] || [aScanner scanString:NUCCR intoString:NULL])
+    {
+        aToken = [NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aLocation, [aScanner scanLocation] - aLocation) type:NUCLexicalElementWhiteSpaceCharacterType];
+        [aPreprocessingTokens addObject:aToken];
+        
+        return YES;
+    }
+        
+    return NO;
 }
 
 - (BOOL)decomposeCommentFrom:(NSScanner *)aScanner into:(NSMutableArray *)aPreprocessingTokens

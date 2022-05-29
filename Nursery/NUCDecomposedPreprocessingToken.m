@@ -221,7 +221,7 @@
 
 - (BOOL)isWhitespace
 {
-    return [self type] == NUCLexicalElementWhiteSpaceCharacterType || [self type] == NUCLexicalElementNewlineType || [self type] == NUCLexicalElementCommentType;
+    return [self type] == NUCLexicalElementWhiteSpaceCharacterType || [self type] == NUCLexicalElementCommentType;
 }
 
 - (BOOL)isNotWhitespace
@@ -231,7 +231,17 @@
 
 - (BOOL)isWhitespacesWithoutNewline
 {
-    return [self type] == NUCLexicalElementWhiteSpaceCharacterType || [self type] == NUCLexicalElementCommentType;
+    return [self isWhitespace] && [self isNotNewLine];
+}
+
+- (BOOL)isNewLine
+{
+    return  [[self content] isEqualToString:NUCLF] || [[self content] isEqualToString:NUCCR] || [[self content] isEqualToString:NUCCRLF];
+}
+
+- (BOOL)isNotNewLine
+{
+    return ![self isNewLine];
 }
 
 - (NSString *)description

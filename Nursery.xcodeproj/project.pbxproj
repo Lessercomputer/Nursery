@@ -72,6 +72,9 @@
 		24529DD525C8200B000B49D9 /* NUCEndifLine.h in Headers */ = {isa = PBXBuildFile; fileRef = 24529DD225C8200B000B49D9 /* NUCEndifLine.h */; };
 		24529DD625C8200B000B49D9 /* NUCEndifLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 24529DD325C8200B000B49D9 /* NUCEndifLine.m */; };
 		24529DD725C8200B000B49D9 /* NUCEndifLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 24529DD325C8200B000B49D9 /* NUCEndifLine.m */; };
+		2459DB87284332F800C859FC /* MacroExample in Sources */ = {isa = PBXBuildFile; fileRef = 2459DB86284332F800C859FC /* MacroExample */; };
+		2459DB88284332F800C859FC /* MacroExample in Sources */ = {isa = PBXBuildFile; fileRef = 2459DB86284332F800C859FC /* MacroExample */; };
+		2459DB892843353F00C859FC /* MacroExample in Resources */ = {isa = PBXBuildFile; fileRef = 2459DB86284332F800C859FC /* MacroExample */; };
 		246B1714244A76C000B6677D /* NUCLexicalElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 246B1712244A76C000B6677D /* NUCLexicalElement.h */; };
 		246B1715244A76C000B6677D /* NUCLexicalElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 246B1712244A76C000B6677D /* NUCLexicalElement.h */; };
 		246B1716244A76C000B6677D /* NUCLexicalElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 246B1713244A76C000B6677D /* NUCLexicalElement.m */; };
@@ -785,6 +788,7 @@
 		24529DCD25C81DB8000B49D9 /* NUCIfSection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCIfSection.m; sourceTree = "<group>"; };
 		24529DD225C8200B000B49D9 /* NUCEndifLine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCEndifLine.h; sourceTree = "<group>"; };
 		24529DD325C8200B000B49D9 /* NUCEndifLine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCEndifLine.m; sourceTree = "<group>"; };
+		2459DB86284332F800C859FC /* MacroExample */ = {isa = PBXFileReference; lastKnownFileType = text; path = MacroExample; sourceTree = "<group>"; };
 		246B1712244A76C000B6677D /* NUCLexicalElement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCLexicalElement.h; sourceTree = "<group>"; };
 		246B1713244A76C000B6677D /* NUCLexicalElement.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCLexicalElement.m; sourceTree = "<group>"; };
 		246B1718244B0D1B00B6677D /* NUCPreprocesser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCPreprocesser.h; sourceTree = "<group>"; };
@@ -1173,6 +1177,7 @@
 				2447C650244C3269006E9AC7 /* CTranslationPhase1to2Example */,
 				2447C653244C3359006E9AC7 /* ExpectedCTranslationPhase1to2Example */,
 				240352CB25035B37009F4659 /* CommentExample */,
+				2459DB86284332F800C859FC /* MacroExample */,
 			);
 			name = CTests;
 			sourceTree = "<group>";
@@ -2276,6 +2281,7 @@
 				240352CC25035B37009F4659 /* CommentExample in Resources */,
 				2447C651244C3269006E9AC7 /* CTranslationPhase1to2Example in Resources */,
 				2447C654244C3359006E9AC7 /* ExpectedCTranslationPhase1to2Example in Resources */,
+				2459DB892843353F00C859FC /* MacroExample in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2482,6 +2488,7 @@
 				619B096B1913F2EE00A4BAA2 /* NUBranchNurseryTests.m in Sources */,
 				619B09711913F2EE00A4BAA2 /* NUOpaqueArrayTest.m in Sources */,
 				619B096E1913F2EE00A4BAA2 /* NULibraryTests.m in Sources */,
+				2459DB87284332F800C859FC /* MacroExample in Sources */,
 				619B09721913F2EE00A4BAA2 /* NURegionArrayTest.m in Sources */,
 				619B096D1913F2EE00A4BAA2 /* NUU64ODictionaryTests.m in Sources */,
 				61DCED6419DCEEC8009E4E9E /* AllTypesObject.m in Sources */,
@@ -2673,6 +2680,7 @@
 				B81662F920ECD4A500B9075E /* AllTypesObject.m in Sources */,
 				B81662FB20ECD4A500B9075E /* SelfReferenceObject.m in Sources */,
 				B81662FC20ECD4A500B9075E /* NUQueueTest.m in Sources */,
+				2459DB88284332F800C859FC /* MacroExample in Sources */,
 				B81662FD20ECD4A500B9075E /* NULazyMutableArrayTest.m in Sources */,
 				B81661F020ECC07000B9075E /* Nursery__iOS_Tests.m in Sources */,
 			);

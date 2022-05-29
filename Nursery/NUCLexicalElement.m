@@ -254,6 +254,11 @@ static NSArray *NUCPunctuators;
 
 + (NSCharacterSet *)NUCWhiteSpaceCharacterSet
 {
+    return [NSCharacterSet whitespaceAndNewlineCharacterSet];
+}
+
++ (NSCharacterSet *)NUCWhiteSpaceWithoutNewlineCharacterSet
+{
     return [NSCharacterSet whitespaceCharacterSet];
 }
 
