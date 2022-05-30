@@ -13,7 +13,7 @@
 
 + (instancetype)expressionWithEqualityExpression:(NUCEqualityExpression *)anEqulityExpression
 {
-    return [self expressionWithEqualityExpression:anEqulityExpression];
+    return [[[self alloc] initWithEqualityExpression:anEqulityExpression] autorelease];
 }
 
 + (instancetype)expressionWithANDExpression:(NUCANDExpression *)anANDExpression andOperator:(NUCDecomposedPreprocessingToken *)anANDOperator equlityExpression:(NUCEqualityExpression *)anEqulityExpression

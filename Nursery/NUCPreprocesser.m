@@ -679,44 +679,44 @@
     if (aToken && [aToken isHash])
     {
         NUCDecomposedPreprocessingToken *aHash = aToken;
+        [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
+        aToken = [aPreprocessingTokenStream next];
         
-        if ([aPreprocessingTokenStream skipWhitespacesWithoutNewline]
-                && (aToken = [aPreprocessingTokenStream next]))
+        if (aToken)
         {
             NSString *anIfGroupTypeString = [aToken content];
             NUCLexicalElementType anIfGroupType = NUCLexicalElementNone;
             NUCDecomposedPreprocessingToken *aTypeName = aToken;
             NUCLexicalElement *anExpressionOrIdentifier = nil;
             NUCNewline *aNewline = nil;
-            NUCGroup *aGroup = nil;
             
             if ([anIfGroupTypeString isEqualToString:NUCPreprocessingDirectiveIf])
             {
                 anIfGroupType = NUCLexicalElementIfType;
                 
-                if ([aPreprocessingTokenStream skipWhitespacesWithoutNewline]
-                        &&[self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
-                    [self scanConstantExpressionFrom:aPreprocessingTokenStream into:&anExpressionOrIdentifier];
+                [aPreprocessingTokenStream skipWhitespaces];
+                [self scanConstantExpressionFrom:aPreprocessingTokenStream into:&anExpressionOrIdentifier];
             }
             else if ([anIfGroupTypeString isEqualToString:NUCPreprocessingDirectiveIfdef])
             {
                 anIfGroupType = NUCLexicalElementIfdefType;
                 
-                if ([aPreprocessingTokenStream skipWhitespacesWithoutNewline]
-                        && [self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
-                    anExpressionOrIdentifier = [aPreprocessingTokenStream next];
+                [aPreprocessingTokenStream skipWhitespaces];
+                anExpressionOrIdentifier = [aPreprocessingTokenStream next];
             }
             else if ([anIfGroupTypeString isEqualToString:NUCPreprocessingDirectiveIfndef])
             {
                 anIfGroupType = NUCLexicalElementIfndefType;
                 
-                if ([aPreprocessingTokenStream skipWhitespacesWithoutNewline]
-                        && [self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
-                    anExpressionOrIdentifier = [aPreprocessingTokenStream next];
+                [aPreprocessingTokenStream skipWhitespaces];
+                anExpressionOrIdentifier = [aPreprocessingTokenStream next];
             }
             
-            if (aHash && anExpressionOrIdentifier && aNewline)
+            if (aHash && anExpressionOrIdentifier && [self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
             {
+                NUCGroup *aGroup = nil;
+                [self scanGroupFrom:aPreprocessingTokenStream into:&aGroup];
+                
                 if (anIfGroup)
                     *anIfGroup = [NUCIfGroup ifGroupWithType:anIfGroupType hash:aHash
                                                     directiveName:aTypeName expressionOrIdentifier:anExpressionOrIdentifier newline:aNewline group:aGroup];
