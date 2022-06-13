@@ -47,6 +47,8 @@
 - (BOOL)isLine;
 - (BOOL)isError;
 - (BOOL)isPragma;
+- (BOOL)isDirectiveName;
+- (BOOL)isNonDirectiveName;
 - (BOOL)isControlNewline;
 - (BOOL)isLogicalOROperator;
 - (BOOL)isLogicalANDOperator;

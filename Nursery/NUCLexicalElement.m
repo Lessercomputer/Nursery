@@ -174,6 +174,8 @@ static NSCharacterSet *NUCNewlineCharacterSet;
 
 static NSArray *NUCPunctuators;
 
+static NSArray *NUCPreprocessingDirectiveNames;
+
 @implementation NUCLexicalElement
 
 + (void)initialize
@@ -204,6 +206,8 @@ static NSArray *NUCPunctuators;
                            @"=", @"*", @"/", @"%", @"+", @"-", @"<=", @">=", @"&", @"^", @"|",
                            @",", @"##", @"#",
                            @"<%", @"%>", @"<", @">", @"%:%:", @"%:", nil] copy];
+        
+        NUCPreprocessingDirectiveNames = [[NSArray arrayWithObjects:NUCPreprocessingDirectiveIf, NUCPreprocessingDirectiveIfdef, NUCPreprocessingDirectiveIfndef, NUCPreprocessingDirectiveEndif, NUCPreprocessingDirectiveElse, NUCPreprocessingDirectiveElif, NUCPreprocessingDirectiveInclude, NUCPreprocessingDirectiveDefine, NUCPreprocessingDirectiveUndef, NUCPreprocessingDirectiveLine, NUCPreprocessingDirectiveError, NUCPreprocessingDirectivePragma, nil] copy];
     }
 }
 
@@ -270,6 +274,11 @@ static NSArray *NUCPunctuators;
 + (NSArray *)NUCPunctuators
 {
     return NUCPunctuators;
+}
+
++ (NSArray *)NUCPreprocessingDirectiveNames
+{
+    return NUCPreprocessingDirectiveNames;
 }
 
 + (instancetype)lexicalElementWithType:(NUCLexicalElementType)aType

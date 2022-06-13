@@ -586,6 +586,9 @@
 
 - (BOOL)scanTextLineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)aToken
 {
+    if ([[aPreprocessingTokenStream peekNext] isHash])
+        return NO;
+    
     NSUInteger aPosition = [aPreprocessingTokenStream position];
     NUCPpTokens *aPpTokens = nil;
     NUCNewline *aNewline = nil;
@@ -643,29 +646,43 @@
 - (BOOL)scanHashAndNonDirectiveFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)aToken
 {
     NSUInteger aPosition = [aPreprocessingTokenStream position];
-    
     NUCDecomposedPreprocessingToken *aPpToken = [aPreprocessingTokenStream next];
     
     if ([aPpToken isHash])
     {
-        NUCPpTokens *aPpTokens = nil;
-        NUCNewline *aNewline = nil;
-        
+        NUCNonDirective *aNonDirective = nil;
+
         [aPreprocessingTokenStream skipWhitespacesWithoutNewline];
-        
-        if ([self scanPpTokensFrom:aPreprocessingTokenStream into:&aPpTokens])
+    
+        if ([self scanNonDirectiveFrom:aPreprocessingTokenStream into:&aNonDirective hash:aPpToken])
         {
-            if ([self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
-            {
-                if (aToken)
-                    *aToken = [NUCNonDirective noneDirectiveWithHash:aPpToken ppTokens:aPpTokens newline:aNewline];
-                
-                return YES;
-            }
+            if (aToken)
+                *aToken = aNonDirective;
+            
+            return YES;
         }
     }
     
     [aPreprocessingTokenStream setPosition:aPosition];
+    
+    return NO;
+}
+
+- (BOOL)scanNonDirectiveFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCNonDirective **)aToken hash:(NUCDecomposedPreprocessingToken *)aHash
+{
+    NUCPpTokens *aPpTokens = [NUCPpTokens ppTokens];
+    NUCNewline *aNewline = nil;
+    
+    if ([[aPreprocessingTokenStream peekNext] isDirectiveName])
+        return NO;
+    
+    if ([self scanPpTokensFrom:aPreprocessingTokenStream into:&aPpTokens] && [self scanNewlineFrom:aPreprocessingTokenStream into:&aNewline])
+    {
+        if (aToken)
+            *aToken = [NUCNonDirective noneDirectiveWithHash:aHash ppTokens:aPpTokens newline:aNewline];
+        
+        return YES;
+    }
     
     return NO;
 }

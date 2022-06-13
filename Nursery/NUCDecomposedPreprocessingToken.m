@@ -152,6 +152,16 @@
     return [self type] == NUCLexicalElementPragmaType;
 }
 
+- (BOOL)isDirectiveName
+{
+    return [[[self class] NUCPreprocessingDirectiveNames] containsObject:[self content]];
+}
+
+- (BOOL)isNonDirectiveName
+{
+    return ![self isDirectiveName];
+}
+
 - (BOOL)isControlNewline
 {
     return [self type] == NUCLexicalElementControlLineNewlineType;

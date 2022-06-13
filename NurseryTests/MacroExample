@@ -1,1 +1,6 @@
 #define EMPTY
+#if 1
+#define NUM 1
+#else
+#define NUM 0
+#endif

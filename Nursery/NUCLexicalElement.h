@@ -202,6 +202,8 @@ typedef enum : NSUInteger {
 
 + (NSArray *)NUCPunctuators;
 
++ (NSArray *)NUCPreprocessingDirectiveNames;
+
 + (instancetype)lexicalElementWithType:(NUCLexicalElementType)aType;
 
 - (instancetype)initWithType:(NUCLexicalElementType)aType;
