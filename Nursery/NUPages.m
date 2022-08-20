@@ -955,10 +955,10 @@ const NUUInt64 NULogDataLengthOffset = 85;
             [aPage setIsChanged:NO];
             removablePageBufferCount++;
         }
-        
-        [self removeRemovablePagesFromBufferIfNeeded];
     }];
     
+    [self removeRemovablePagesFromBufferIfNeeded];
+
     [aCopyOfPageBuffer release];
 }
 
@@ -972,19 +972,19 @@ const NUUInt64 NULogDataLengthOffset = 85;
     while (removablePageBufferCount > maximumRemovablePageBufferCount)
     {
         NUPage *aPage = [aListElementWithPage object];
-        
+
         if (![aPage isChanged])
         {
 #ifdef DEBUG
             NSLog(@"page:{%@} is removed", @([aPage location]));
 #endif
             [[aListElementWithPage retain] autorelease];
-            [pageLinkedList remove:aListElementWithPage];
+            [pageLinkedList remove:aListElementWithPage]; //これが非常に遅い
             [pageBuffer removeObjectForKey:[aPage location]];
 
             removablePageBufferCount--;
         }
-        
+
         aListElementWithPage = [aListElementWithPage previous];
     }
 }
