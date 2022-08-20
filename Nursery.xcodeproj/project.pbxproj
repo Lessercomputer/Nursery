@@ -1666,7 +1666,7 @@
 		619B07841913ED8900A4BAA2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1010;
+				LastUpgradeCheck = 1340;
 				ORGANIZATIONNAME = "Nursery-Framework";
 				TargetAttributes = {
 					619B078C1913ED8D00A4BAA2 = {
