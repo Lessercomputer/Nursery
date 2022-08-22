@@ -30,7 +30,6 @@ extern const NUUInt64 NUNextPageLocationOffset;
 	NUUInt64 savedNextPageLocation;
 	NUUInt64 fileSize;
 	NSFileHandle *fileHandle;
-	NUChangedRegionArray *changedRegions;
     NSRecursiveLock *lock;
 }
 
@@ -111,7 +110,6 @@ extern const NUUInt64 NUNextPageLocationOffset;
 - (void)applyLogDataBody:(NSData *)aData;
 - (void)applyLogDataHeader:(NSData *)aData;
 - (NSData *)loadLogData;
-- (void)getFirstChangedRegionWithoutFirstPageRegionInto:(NURegion *)aRegion indexInto:(NUUInt32 *)anIndex;
 - (NUUInt64)computeLogDataLength;
 - (void)writeLogDataWithRegion:(NURegion)aRegion at:(NUUInt64)aLocation;
 - (void)writeDataWithRegion:(NURegion)aRegion;

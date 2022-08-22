@@ -47,7 +47,6 @@ const NUUInt64 NULogDataLengthOffset = 85;
         pageBuffer = [[NUPageLocationODictionary alloc] initWithPages:self];
         pageLinkedList = [NULinkedList new];
         maximumRemovablePageBufferCount = NUDefaultMaximumRemovablePageBufferCount;
-        changedRegions = [[NUChangedRegionArray alloc] initWithCapacity:pageSize];
     }
     
 	return self;
@@ -58,7 +57,6 @@ const NUUInt64 NULogDataLengthOffset = 85;
 	[self setFileHandle:nil];
 	[pageBuffer release];
     [pageLinkedList release];
-	[changedRegions release];
     [lock release];
 	
 	[super dealloc];
@@ -463,7 +461,6 @@ const NUUInt64 NULogDataLengthOffset = 85;
 	   
     [lock lock];
     
-	[changedRegions addRegion:NUMakeRegion(aWritingOffset, aLength)];
 	
 	while (aRemainingLength)
 	{
@@ -655,9 +652,24 @@ const NUUInt64 NULogDataLengthOffset = 85;
         removablePageBufferCount--;
 }
 
+- (BOOL)hasChangedPage
+{
+    __block BOOL aPageIsChanged = NO;
+    
+    [pageBuffer enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NULinkedListElement *aListElementWithPage, BOOL *stop) {
+        if ([[aListElementWithPage object] isChanged])
+        {
+            aPageIsChanged = YES;
+            *stop = YES;
+        }
+    }];
+    
+    return aPageIsChanged;
+}
+
 - (void)save
 {
-    if (![changedRegions count]) return;
+    if (![self hasChangedPage]) return;
     
     [self writeLogData];
     [self flush];
@@ -665,19 +677,13 @@ const NUUInt64 NULogDataLengthOffset = 85;
 
 - (void)flush
 {
-    NURegion aRegion;
-    NUUInt32 aRegionIndex;
-    [self getFirstChangedRegionWithoutFirstPageRegionInto:&aRegion indexInto:&aRegionIndex];
     
-    if (aRegionIndex == NUNotFound32) return;
-    
-    [self writeDataWithRegion:aRegion];
-
-    for (NUUInt32 i = aRegionIndex + 1; i < [changedRegions count]; i++)
-    {
-        aRegion = [changedRegions regionAt:i];
-        [self writeDataWithRegion:aRegion];
-    }
+    [pageBuffer enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NULinkedListElement *aListElementWithPage, BOOL *stop) {
+        if ([[aListElementWithPage object] location])
+        {
+            [self writeDataWithRegion:NUMakeRegion([[aListElementWithPage object] location], [self pageSize])];
+        }
+    }];
     
     [[self fileHandle] synchronizeFile];
     
@@ -691,8 +697,6 @@ const NUUInt64 NULogDataLengthOffset = 85;
     savedNextPageLocation = nextPageLocation;
     
     [self setChangeStatusOfAllPagesToUnchanged];
-    
-    [changedRegions removeAll];
 }
 
 - (void)writeLogData
@@ -703,18 +707,18 @@ const NUUInt64 NULogDataLengthOffset = 85;
 
 - (NUUInt64)writeLogDataBody
 {
-    NUUInt64 aLocation = [self nextPageLocation];
+    __block NUUInt64 aLocation = [self nextPageLocation];
     NUUInt64 aLogDataLength = [self computeLogDataLength];
     
     [[self fileHandle] truncateFileAtOffset:aLocation + aLogDataLength];
     
-    for (NUUInt32 i = 0; i < [changedRegions count]; i++)
-    {
-        NURegion aRegion = [changedRegions regionAt:i];
+    
+    [pageBuffer enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NULinkedListElement *aListElementWithPage, BOOL *stop) {
+        NURegion aRegion = NUMakeRegion([[aListElementWithPage object] location], [self pageSize]);
         [self writeLogDataWithRegion:aRegion at:aLocation];
         aLocation += sizeof(NURegion);
         aLocation += aRegion.length;
-    }
+    }];
     
     [[self fileHandle] synchronizeFile];
     
@@ -807,8 +811,6 @@ const NUUInt64 NULogDataLengthOffset = 85;
     [[self fileHandle] synchronizeFile];
 
     [self setChangeStatusOfAllPagesToUnchanged];
-    
-    [changedRegions removeAll];
 }
 
 - (NURegion)getRegionFrom:(NSData *)aData at:(NUUInt64)anIndex
@@ -828,47 +830,17 @@ const NUUInt64 NULogDataLengthOffset = 85;
     return [[self fileHandle] readDataOfLength:(NSUInteger)aLogDataLength];
 }
 
-- (void)getFirstChangedRegionWithoutFirstPageRegionInto:(NURegion *)aRegion indexInto:(NUUInt32 *)anIndex
-{
-    NURegion aRegionWithoutFirstPageRegion = NUMakeRegion(NUNotFound64, 0);
-    NUUInt32 aRegionIndexWithoutFirstPageRegion = NUNotFound32;
-    NURegion aFirstPageRegion = [self firstPageRegion];
-//    NURegion anAllRegionButFirstPageRegion;
-//    NURegionSplitWithLength(NUMakeRegion(0, NUUInt64Max), [self pageSize], &anAllRegionButFirstPageRegion);
-    NURegion anAllRegionButFirstPageRegion = [self allRegionButFirstPage];
-    
-    for (NUUInt32 i = 0; i < [changedRegions count]; i++)
-    {
-        NURegion aChangedRegion = [changedRegions regionAt:i];
-        
-        if (!NUIntersectsRegion(aChangedRegion, anAllRegionButFirstPageRegion)) continue;
-        
-        if (NUIntersectsRegion(aFirstPageRegion, aChangedRegion))
-            NURegionSplitWithLength(aChangedRegion, [self pageSize] - aChangedRegion.location, &aRegionWithoutFirstPageRegion);
-        else
-            aRegionWithoutFirstPageRegion = aChangedRegion;
-        
-        aRegionIndexWithoutFirstPageRegion = i;
-        
-        break;
-    }
-    
-    if (aRegion)
-        *aRegion = aRegionWithoutFirstPageRegion;
-    if (anIndex)
-        *anIndex = aRegionIndexWithoutFirstPageRegion;
-}
-
 - (NUUInt64)computeLogDataLength
 {
-    NUUInt64 aLogDataLength = 0;    
+    __block NUUInt64 aLogDataLength = 0;
     
-    for (NUUInt32 i = 0; i < [changedRegions count]; i++)
-    {
-        NURegion aRegion = [changedRegions regionAt:i];
-        aLogDataLength += sizeof(NURegion);
-        aLogDataLength += aRegion.length;
-    }
+    [pageBuffer enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NULinkedListElement *aListElementWithPage, BOOL *stop) {
+        if ([[aListElementWithPage object] isChanged])
+        {
+            aLogDataLength += sizeof(NURegion);
+            aLogDataLength += [self pageSize];
+        }
+    }];
     
     return aLogDataLength;
 }
@@ -945,9 +917,8 @@ const NUUInt64 NULogDataLengthOffset = 85;
 
 - (void)setChangeStatusOfAllPagesToUnchanged
 {
-    NUPageLocationODictionary *aCopyOfPageBuffer = [pageBuffer copy];
-    
-    [aCopyOfPageBuffer enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NULinkedListElement *aListElementWithPage, BOOL *stop) {
+
+    [pageBuffer enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NULinkedListElement *aListElementWithPage, BOOL *stop) {
         NUPage *aPage = [aListElementWithPage object];
         
         if ([aPage isChanged])
@@ -958,8 +929,6 @@ const NUUInt64 NULogDataLengthOffset = 85;
     }];
     
     [self removeRemovablePagesFromBufferIfNeeded];
-
-    [aCopyOfPageBuffer release];
 }
 
 - (void)removeRemovablePagesFromBufferIfNeeded
@@ -979,7 +948,7 @@ const NUUInt64 NULogDataLengthOffset = 85;
             NSLog(@"page:{%@} is removed", @([aPage location]));
 #endif
             [[aListElementWithPage retain] autorelease];
-            [pageLinkedList remove:aListElementWithPage]; //これが非常に遅い
+            [pageLinkedList remove:aListElementWithPage];
             [pageBuffer removeObjectForKey:[aPage location]];
 
             removablePageBufferCount--;
