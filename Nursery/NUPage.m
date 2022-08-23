@@ -88,7 +88,12 @@
 
 - (void)writeToFielHandle:(NSFileHandle *)aFileHandle
 {
-    [aFileHandle seekToFileOffset:location];
+    [self writeToFielHandle:aFileHandle at:location];
+}
+
+- (void)writeToFielHandle:(NSFileHandle *)aFileHandle at:(NUUInt64)aLocation
+{
+    [aFileHandle seekToFileOffset:aLocation];
     [aFileHandle writeData:data];
 }
 

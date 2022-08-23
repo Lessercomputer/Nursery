@@ -715,10 +715,10 @@ const NUUInt64 NULogDataLengthOffset = 85;
     
     [[self fileHandle] truncateFileAtOffset:aLocation + aLogDataLength];
     
-    
     [pageBuffer enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NULinkedListElement *aListElementWithPage, BOOL *stop) {
-        NURegion aRegion = NUMakeRegion([[aListElementWithPage object] location], [self pageSize]);
-        [self writeLogDataWithRegion:aRegion at:aLocation];
+        NUPage *aPage = [aListElementWithPage object];
+        NURegion aRegion = NUMakeRegion([aPage location], [self pageSize]);
+        [self writeLogDataWithRegion:aRegion at:aLocation page:aPage];
         aLocation += sizeof(NURegion);
         aLocation += aRegion.length;
     }];
@@ -848,17 +848,19 @@ const NUUInt64 NULogDataLengthOffset = 85;
     return aLogDataLength;
 }
 
-- (void)writeLogDataWithRegion:(NURegion)aRegion at:(NUUInt64)aLocation
+- (void)writeLogDataWithRegion:(NURegion)aRegion at:(NUUInt64)aLocation page:(NUPage *)aPage
 {
     [[self fileHandle] seekToFileOffset:aLocation];
     
-    NSMutableData *aRegionData = [NSMutableData dataWithCapacity:sizeof(NURegion)];
+    NSMutableData *aRegionData = [[NSMutableData alloc] initWithCapacity:sizeof(NURegion)];
     NURegion aBigRegion = NUSwapHostRegionToBig(aRegion);
     [aRegionData appendBytes:(const void *)&aBigRegion.location length:sizeof(NUUInt64)];
     [aRegionData appendBytes:(const void *)&aBigRegion.length length:sizeof(NUUInt64)];
     [[self fileHandle] writeData:aRegionData];
+    [aRegionData release];
+    aRegionData = nil;
     
-    [[self fileHandle] writeData:[self dataWithRegion:aRegion]];
+    [aPage writeToFielHandle:[self fileHandle] at:aLocation + sizeof(NURegion)];
 }
 
 - (void)writeDataWithRegion:(NURegion)aRegion

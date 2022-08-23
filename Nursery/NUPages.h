@@ -111,7 +111,7 @@ extern const NUUInt64 NUNextPageLocationOffset;
 - (void)applyLogDataHeader:(NSData *)aData;
 - (NSData *)loadLogData;
 - (NUUInt64)computeLogDataLength;
-- (void)writeLogDataWithRegion:(NURegion)aRegion at:(NUUInt64)aLocation;
+- (void)writeLogDataWithRegion:(NURegion)aRegion at:(NUUInt64)aLocation page:(NUPage *)aPage;
 - (void)writeDataWithRegion:(NURegion)aRegion;
 - (NSData *)dataWithRegion:(NURegion)aRegion;
 - (void)addDataWithRegion:(NURegion)aRegion toData:(NSMutableData *)aData;
