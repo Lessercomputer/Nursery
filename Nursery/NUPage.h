@@ -36,6 +36,8 @@
 - (void)appendDataWithRegion:(NURegion)aRegion toData:(NSMutableData *)aData;
 - (void)writeDataWithRegion:(NURegion)aRegion toFielHandle:(NSFileHandle *)aFileHandle;
 
+- (void)writeToFielHandle:(NSFileHandle *)aFileHandle;
+
 - (void)setIsChanged:(BOOL)aChangedFlag;
 - (void)setIsRead:(BOOL)aReadFlag;
 

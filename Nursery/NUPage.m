@@ -86,6 +86,12 @@
     [aFileHandle writeData:aData];
 }
 
+- (void)writeToFielHandle:(NSFileHandle *)aFileHandle
+{
+    [aFileHandle seekToFileOffset:location];
+    [aFileHandle writeData:data];
+}
+
 - (NUUInt64)readUInt64At:(NUUInt64)anOffset
 {
 	NUUInt64 aValue;

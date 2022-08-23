@@ -679,9 +679,12 @@ const NUUInt64 NULogDataLengthOffset = 85;
 {
     
     [pageBuffer enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NULinkedListElement *aListElementWithPage, BOOL *stop) {
-        if ([[aListElementWithPage object] location])
+        
+        NUPage *aPage = [aListElementWithPage object];
+        
+        if ([aPage location])
         {
-            [self writeDataWithRegion:NUMakeRegion([[aListElementWithPage object] location], [self pageSize])];
+            [aPage writeToFielHandle:[self fileHandle]];
         }
     }];
     
