@@ -48,6 +48,11 @@
 	return data;
 }
 
+- (BOOL)isFirst
+{
+    return location == 0;
+}
+
 - (BOOL)isChanged
 {
 	return isChanged;

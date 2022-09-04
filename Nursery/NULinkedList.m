@@ -136,4 +136,9 @@
     [self remove:last];
 }
 
+- (void)removeAll
+{
+    [elements removeAllObjects];
+}
+
 @end

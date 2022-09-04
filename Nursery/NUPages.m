@@ -703,25 +703,50 @@ const NUUInt64 NULogDataLengthOffset = 85;
 }
 
 - (void)writeLogData
-{    
+{
+    [spaces willWriteLog];
+    
     NUUInt64 aLogDataLength = [self writeLogDataBody];
     [self writeLogDataHeader:aLogDataLength];
+    
+    [spaces didWriteLog];
 }
 
 - (NUUInt64)writeLogDataBody
 {
     __block NUUInt64 aLocation = [self nextPageLocation];
     NUUInt64 aLogDataLength = [self computeLogDataLength];
+    NSMutableArray *aChangedPages = [NSMutableArray new];
     
     [[self fileHandle] truncateFileAtOffset:aLocation + aLogDataLength];
     
     [pageBuffer enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NULinkedListElement *aListElementWithPage, BOOL *stop) {
+        
         NUPage *aPage = [aListElementWithPage object];
+        
+        if ([aPage isChanged])
+            [aChangedPages addObject:aPage];
+    }];
+    
+    [aChangedPages sortUsingComparator:^NSComparisonResult(NUPage  * _Nonnull aPage1, NUPage *  _Nonnull aPage2) {
+        
+        if ([aPage1 location] > [aPage2 location])
+            return NSOrderedDescending;
+        
+        if ([aPage1 location] < [aPage2 location])
+            return NSOrderedAscending;
+        
+        return NSOrderedSame;
+    }];
+    
+    [aChangedPages enumerateObjectsUsingBlock:^(NUPage *  _Nonnull aPage, NSUInteger idx, BOOL * _Nonnull stop) {
         NURegion aRegion = NUMakeRegion([aPage location], [self pageSize]);
         [self writeLogDataWithRegion:aRegion at:aLocation page:aPage];
         aLocation += sizeof(NURegion);
         aLocation += aRegion.length;
     }];
+    
+    [aChangedPages release];
     
     [[self fileHandle] synchronizeFile];
     
@@ -803,9 +828,9 @@ const NUUInt64 NULogDataLengthOffset = 85;
             i += sizeof(NURegion);
             [self writeData:[aData subdataWithRange:NSMakeRange((NSUInteger)i, (NSUInteger)aWriteLength)] at:aRegion.location];
             i += aRegion.length;
-        }
-        else
+            
             break;
+        }
     }
     
     [self writeUInt64:0 at:NULogDataLocationOffset];
@@ -922,7 +947,6 @@ const NUUInt64 NULogDataLengthOffset = 85;
 
 - (void)setChangeStatusOfAllPagesToUnchanged
 {
-
     [pageBuffer enumerateKeysAndObjectsUsingBlock:^(NUUInt64 aKey, NULinkedListElement *aListElementWithPage, BOOL *stop) {
         NUPage *aPage = [aListElementWithPage object];
         

@@ -59,6 +59,9 @@ extern NSString *NUSpaceInvalidOperationException;
 - (void)save;
 - (void)load;
 
+- (void)willWriteLog;
+- (void)didWriteLog;
+
 @end
 
 @interface NUSpaces (RegionSpace)

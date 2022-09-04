@@ -27,6 +27,7 @@
 - (NUUInt64)location;
 - (NSMutableData *)data;
 
+- (BOOL)isFirst;
 - (BOOL)isChanged;
 - (BOOL)isRead;
 

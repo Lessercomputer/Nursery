@@ -11,7 +11,7 @@
 #import <Nursery/NUTypes.h>
 
 @class NSString;
-@class NUGarden;
+@class NUNursery, NUGarden;
 
 extern NSString * const NUOOPNotFoundException;
 
@@ -23,6 +23,7 @@ typedef enum : NSUInteger {
     NUNurseryOpenStatusOpenWithoutFile,
     NUNurseryOpenStatusOpenWithFile,
 } NUNurseryOpenStatus;
+
 
 @interface NUNursery : NSObject
 {
@@ -50,3 +51,4 @@ typedef enum : NSUInteger {
 - (NUGarden *)makeGardenWithGrade:(NUUInt64)aGrade;
 
 @end
+
