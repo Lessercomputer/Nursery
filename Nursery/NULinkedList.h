@@ -31,5 +31,6 @@
 - (void)moveToFirst:(NULinkedListElement *)anElement;
 - (void)remove:(NULinkedListElement *)anElement;
 - (void)removeLast;
+- (void)removeAll;
 
 @end

@@ -714,3 +714,29 @@ NSString *NUNurseryFarmingOutForbiddenException = @"NUNurseryFarmingOutForbidden
 }
 
 @end
+
+@implementation NUMainBranchNursery (Delegate)
+
+- (id <NUNurseryDelegate>)delegate
+{
+    return delegate;
+}
+
+- (void)setDelegate:(id <NUNurseryDelegate>)aDelegate
+{
+    delegate = aDelegate;
+}
+
+- (void)willWriteLog
+{
+    if (delegate)
+        [delegate nurseryWillWriteLog:self];
+}
+
+- (void)didWriteLog
+{
+    if (delegate)
+        [delegate nurseryDidWriteLog:self];
+}
+
+@end

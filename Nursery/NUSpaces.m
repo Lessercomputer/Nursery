@@ -144,6 +144,16 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
     [self unlock];
 }
 
+- (void)willWriteLog
+{
+    [[self nursery] willWriteLog];
+}
+
+- (void)didWriteLog
+{
+    [[self nursery] didWriteLog];
+}
+
 @end
 
 @implementation NUSpaces (RegionSpace)
