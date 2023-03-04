@@ -15,6 +15,7 @@
 
 #import "NUCPreprocessingFile.h"
 #import "NUCGroup.h"
+#import "NUCGroupPart.h"
 #import "NUCIfGroup.h"
 #import "NUCElifGroups.h"
 #import "NUCElifGroup.h"
@@ -162,9 +163,9 @@
     
     NSLog(@"%@", [aGroup description]);
     
-    [[aGroup groupParts] enumerateObjectsUsingBlock:^(NUCPreprocessingToken * _Nonnull aGroupPart, NSUInteger idx, BOOL * _Nonnull stop) {
+    [[aGroup groupParts] enumerateObjectsUsingBlock:^(NUCGroupPart * _Nonnull aGroupPart, NSUInteger idx, BOOL * _Nonnull stop) {
         
-        NUCLexicalElementType aGroupPartType = [aGroupPart type];
+        NUCLexicalElementType aGroupPartType = [[aGroupPart content] type];
         
         switch (aGroupPartType)
         {
@@ -206,16 +207,23 @@
 
 - (BOOL)scanGroupPartFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)aGroupPart
 {
-    if ([self scanIfSectionFrom:aPreprocessingTokenStream into:aGroupPart])
-        return YES;
-    else if ([self scanControlLineFrom:aPreprocessingTokenStream into:aGroupPart])
-        return YES;
-    else if ([self scanTextLineFrom:aPreprocessingTokenStream into:aGroupPart])
-        return YES;
-    else if ([self scanHashAndNonDirectiveFrom:aPreprocessingTokenStream into:aGroupPart])
-        return YES;
+    NUCPreprocessingDirective *aPreprocessingDirective = nil;
+    
+    if ([self scanIfSectionFrom:aPreprocessingTokenStream into:&aPreprocessingDirective])
+        ;
+    else if ([self scanControlLineFrom:aPreprocessingTokenStream into:&aPreprocessingDirective])
+        ;
+    else if ([self scanTextLineFrom:aPreprocessingTokenStream into:&aPreprocessingDirective])
+        ;
+    else if ([self scanHashAndNonDirectiveFrom:aPreprocessingTokenStream into:&aPreprocessingDirective])
+        ;
     else
         return NO;
+    
+    if (aGroupPart)
+        *aGroupPart = [NUCGroupPart groupPartWithContent:aPreprocessingDirective];
+    
+    return YES;
 }
 
 - (BOOL)scanIfSectionFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)anIfSection
