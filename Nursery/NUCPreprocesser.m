@@ -161,6 +161,29 @@
         return;
     
     NSLog(@"%@", [aGroup description]);
+    
+    [[aGroup groupParts] enumerateObjectsUsingBlock:^(NUCPreprocessingToken * _Nonnull aGroupPart, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        NUCLexicalElementType aGroupPartType = [aGroupPart type];
+        
+        switch (aGroupPartType)
+        {
+            case NUCLexicalElementIfSectionType:
+                
+                
+                break;
+            case NUCLexicalElementControlLineType:
+                
+                break;
+                
+            case NUCLexicalElementTextLineType:
+                
+                break;
+                
+            default:
+                break;
+        }
+    }];
 }
 
 - (BOOL)scanGroupFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCGroup **)aToken
