@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 
-#import "NUCTranslationEnvironment.h"
+#import "NUCTranslator.h"
 #import "NUCSourceFile.h"
 
 @interface NUCTests : XCTestCase
@@ -31,13 +31,13 @@
     NSURL *aPhysicalSourceFileURL = [aBundle URLForResource:@"CTranslationPhase1to2Example" withExtension:NULL subdirectory:NULL];
     NSURL *anExpectedLogicalSourceFileURL = [aBundle URLForResource:@"ExpectedCTranslationPhase1to2Example" withExtension:NULL subdirectory:NULL];
 
-    NUCTranslationEnvironment *aCTranslationEnvironment = [[[NUCTranslationEnvironment alloc] initWithSourceFileURLs:[NSArray arrayWithObject:aPhysicalSourceFileURL]] autorelease];
+    NUCTranslator *aCTranslator = [[[NUCTranslator alloc] initWithSourceFileURLs:[NSArray arrayWithObject:aPhysicalSourceFileURL]] autorelease];
     NUCSourceFile *aSourceFile = nil;
     NSString *anExpectedLogicalSourceString = [NSString stringWithContentsOfURL:anExpectedLogicalSourceFileURL usedEncoding:NULL error:NULL];
     
-    [aCTranslationEnvironment translate];
+    [aCTranslator translate];
     
-    aSourceFile = [[aCTranslationEnvironment sourceFiles] firstObject];
+    aSourceFile = [[aCTranslator preprocessedSourceFiles] firstObject];
     XCTAssertEqualObjects([aSourceFile logicalSourceString], anExpectedLogicalSourceString);
 }
 
@@ -47,20 +47,20 @@
     NSURL *aPhysicalSourceFileURL = [aBundle URLForResource:@"CommentExample" withExtension:NULL subdirectory:NULL];
 //    NSURL *anExpectedLogicalSourceFileURL = [aBundle URLForResource:@"ExpectedCTranslationPhase1to2Example" withExtension:NULL subdirectory:NULL];
     
-    NUCTranslationEnvironment *aCTranslationEnvironment = [[[NUCTranslationEnvironment alloc] initWithSourceFileURLs:[NSArray arrayWithObject:aPhysicalSourceFileURL]] autorelease];
+    NUCTranslator *aCTranslator = [[[NUCTranslator alloc] initWithSourceFileURLs:[NSArray arrayWithObject:aPhysicalSourceFileURL]] autorelease];
     NUCSourceFile *aSourceFile = nil;
 //    NSString *anExpectedLogicalSourceString = [NSString stringWithContentsOfURL:anExpectedLogicalSourceFileURL usedEncoding:NULL error:NULL];
     
-    [aCTranslationEnvironment translate];
+    [aCTranslator translate];
 }
 
 - (void)testTranslationPhase1to4
 {
     NSBundle *aBundle = [NSBundle bundleForClass:[self class]];
     NSURL *aPhysicalSourceFileURL = [aBundle URLForResource:@"MacroExample" withExtension:NULL subdirectory:NULL];
-    NUCTranslationEnvironment *aCTranslationEnvironment = [[[NUCTranslationEnvironment alloc] initWithSourceFileURLs:[NSArray arrayWithObject:aPhysicalSourceFileURL]] autorelease];
+    NUCTranslator *aCTranslator = [[[NUCTranslator alloc] initWithSourceFileURLs:[NSArray arrayWithObject:aPhysicalSourceFileURL]] autorelease];
     
-    [aCTranslationEnvironment translate];
+    [aCTranslator translate];
 }
 
 @end

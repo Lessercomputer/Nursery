@@ -8,7 +8,7 @@
 
 #import "NUCPreprocessingDirective.h"
 
-@class NUCPreprocessingTokenStream;
+@class NUCPreprocessingTokenStream, NUCPreprocessor;
 @class NUCGroup;
 
 @interface NUCPreprocessingFile : NUCPreprocessingDirective
@@ -22,5 +22,7 @@
 - (instancetype)initWithGroup:(NUCGroup *)aGroup;
 
 - (NUCGroup *)group;
+
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocesser;
 
 @end

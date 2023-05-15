@@ -1,12 +1,12 @@
 //
-//  NUCPreprocesser.m
+//  NUCPreprocessor.m
 //  Nursery
 //
 //  Created by TAKATA Akifumi on 2020/04/18.
 //  Copyright © 2020年 Nursery-Framework. All rights reserved.
 //
 
-#import "NUCPreprocesser.h"
+#import "NUCPreprocessor.h"
 #import "NUCDecomposer.h"
 #import "NUCPreprocessingTokenStream.h"
 #import "NUCDecomposedPreprocessingToken.h"
@@ -21,13 +21,13 @@
 #import <Foundation/NSScanner.h>
 #import <Foundation/NSArray.h>
 
-@implementation NUCPreprocesser
+@implementation NUCPreprocessor
 
-- (instancetype)initWithTranslationEnvironment:(NUCTranslationEnvironment *)aTranslationEnvironment
+- (instancetype)initWithTranslator:(NUCTranslator *)aTranslator
 {
     if (self = [super init])
     {
-        translationEnvironment = [aTranslationEnvironment retain];
+        translator = [aTranslator retain];
     }
     
     return self;
@@ -35,10 +35,15 @@
 
 - (void)dealloc
 {
-    [translationEnvironment release];
-    translationEnvironment = nil;
+    [translator release];
+    translator = nil;
     
     [super dealloc];
+}
+
+- (NUCTranslator *)translator
+{
+    return translator;
 }
 
 - (void)preprocessSourceFile:(NUCSourceFile *)aSourceFile
@@ -57,8 +62,8 @@
     NUCPreprocessingTokenStream *aStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aPreprocessingTokens];
     NUCPreprocessingFile *aPreprocessingFile = nil;
     
-//    if ([NUCPreprocessingFile preprocessingFileFrom:aStream into:&aPreprocessingFile])
-//        [aPreprocessingFile preprocess];
+    if ([NUCPreprocessingFile preprocessingFileFrom:aStream into:&aPreprocessingFile])
+        [aPreprocessingFile preprocessWith:self];
 }
 
 - (NSString *)preprocessPhase1:(NSString *)aPhysicalSourceString forSourceFile:(NUCSourceFile *)aSourceFile rangeMappingFromPhase1ToPhysicalSourceString:(NULibrary *)aRangeMappingFromPhase1ToPhysicalSourceString
@@ -162,15 +167,15 @@
     return aLogicalSourceStringInPhase2;
 }
 
-- (void)preprocessPreprocessingFile:(NUCPreprocessingFile *)aPreprocessingFile
-{
-    NUCGroup *aGroup = [aPreprocessingFile group];
-    
-    if (!aGroup)
-        return;
-    
-    [self preprocessGroup:aGroup];
-}
+//- (void)preprocessPreprocessingFile:(NUCPreprocessingFile *)aPreprocessingFile
+//{
+//    NUCGroup *aGroup = [aPreprocessingFile group];
+//    
+//    if (!aGroup)
+//        return;
+//    
+//    [self preprocessGroup:aGroup];
+//}
 
 //- (void)preprocessGroup:(NUCGroup *)aGroup
 //{
