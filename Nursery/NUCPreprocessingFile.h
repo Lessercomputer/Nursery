@@ -23,6 +23,4 @@
 
 - (NUCGroup *)group;
 
-- (void)preprocessWith:(NUCPreprocessor *)aPreprocesser;
-
 @end

@@ -92,4 +92,9 @@
     return endifLine;
 }
 
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocesser
+{
+    [[self ifGroup] preprocessWith:aPreprocesser];
+}
+
 @end

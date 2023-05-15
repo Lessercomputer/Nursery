@@ -60,7 +60,7 @@
 
 - (void)preprocessWith:(NUCPreprocessor *)aPreprocesser
 {
-    
+    [[self group] preprocessWith:aPreprocesser];
 }
 
 @end

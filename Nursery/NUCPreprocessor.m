@@ -58,6 +58,7 @@
     
     NUCDecomposer *aDecomposer = [NUCDecomposer new];
     NSArray *aPreprocessingTokens = [aDecomposer decomposePreprocessingFile:aSourceFile];
+    [aDecomposer release];
 
     NUCPreprocessingTokenStream *aStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aPreprocessingTokens];
     NUCPreprocessingFile *aPreprocessingFile = nil;
@@ -166,78 +167,5 @@
     
     return aLogicalSourceStringInPhase2;
 }
-
-//- (void)preprocessPreprocessingFile:(NUCPreprocessingFile *)aPreprocessingFile
-//{
-//    NUCGroup *aGroup = [aPreprocessingFile group];
-//    
-//    if (!aGroup)
-//        return;
-//    
-//    [self preprocessGroup:aGroup];
-//}
-
-//- (void)preprocessGroup:(NUCGroup *)aGroup
-//{
-//    NSLog(@"%@", [aGroup description]);
-//
-//    [[aGroup groupParts] enumerateObjectsUsingBlock:^(NUCGroupPart * _Nonnull aGroupPart, NSUInteger idx, BOOL * _Nonnull stop) {
-//        [self preprocessGroupPart:aGroupPart];
-//    }];
-//}
-//
-//- (void)preprocessGroupPart:(NUCGroupPart *)aGroupPart
-//{
-//    NUCLexicalElementType aGroupPartType = [[aGroupPart content] type];
-//
-//    switch (aGroupPartType)
-//    {
-//        case NUCLexicalElementIfSectionType:
-//
-//            [self preprocessIfSection:(NUCIfSection *)[aGroupPart content]];
-//            break;
-//        case NUCLexicalElementControlLineType:
-//
-//            break;
-//
-//        case NUCLexicalElementTextLineType:
-//
-//            break;
-//
-//        default:
-//            break;
-//    }
-//}
-//
-//- (void)preprocessIfSection:(NUCIfSection *)anIfSection
-//{
-//    [self preprocessIfGroup:[anIfSection ifGroup]];
-//}
-//
-//- (void)preprocessIfGroup:(NUCIfGroup *)anIfGroup
-//{
-//    if ([anIfGroup isIf])
-//    {
-//        [self preprocessConstantExpression:(NUCConstantExpression *)[anIfGroup expression]];
-//    }
-//    else if ([anIfGroup isIfdef])
-//    {
-//
-//    }
-//    else if ([anIfGroup isIfndef])
-//    {
-//
-//    }
-//}
-//
-//- (void)preprocessConstantExpression:(NUCConstantExpression *)aConstantExpression
-//{
-//    [self preprocessConditionalExpression:[aConstantExpression conditionalExpression]];
-//}
-//
-//- (void)preprocessConditionalExpression:(NUCConditionalExpression *)aConditionalExpression
-//{
-//
-//}
 
 @end

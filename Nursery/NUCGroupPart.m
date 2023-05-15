@@ -13,6 +13,8 @@
 #import "NUCTextLine.h"
 #import "NUCNonDirective.h"
 
+@class NUCPreprocessor;
+
 @implementation NUCGroupPart
 
 + (BOOL)groupPartFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingDirective **)aGroupPart
@@ -61,6 +63,11 @@
 -(NUCPreprocessingDirective *)content
 {
     return content;
+}
+
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocesser
+{
+    [[self content] preprocessWith:aPreprocesser];
 }
 
 @end

@@ -8,8 +8,11 @@
 
 #import "NUCLexicalElement.h"
 
+@class NUCPreprocessor;
 
 @interface NUCPreprocessingToken : NUCLexicalElement
+
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocesser;
 
 @end
 

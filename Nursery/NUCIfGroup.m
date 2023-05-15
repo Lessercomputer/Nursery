@@ -153,4 +153,20 @@
     return group;
 }
 
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocesser
+{
+    if ([self isIf])
+    {
+        [(NUCConstantExpression *)[self expression] preprocessWith:aPreprocesser];
+    }
+    else if ([self isIfdef])
+    {
+
+    }
+    else if ([self isIfndef])
+    {
+
+    }
+}
+
 @end
