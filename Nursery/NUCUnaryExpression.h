@@ -8,7 +8,7 @@
 
 #import "NUCPreprocessingToken.h"
 
-@class NUCPostfixExpression, NUCDecomposedPreprocessingToken, NUCCastExpression;
+@class NUCPostfixExpression, NUCDecomposedPreprocessingToken, NUCCastExpression, NUCPreprocessingTokenStream;
 
 @interface NUCUnaryExpression : NUCPreprocessingToken
 {
@@ -17,6 +17,8 @@
     NUCUnaryExpression *unaryExpression;
     NUCCastExpression *castExpression;
 }
+
++ (BOOL)unaryExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCUnaryExpression **)aToken;
 
 + (instancetype)expressionWithPostfixExpression:(NUCPostfixExpression *)aPostfixExpression;
 

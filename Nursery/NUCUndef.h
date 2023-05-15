@@ -13,6 +13,8 @@
     NUCPreprocessingToken *identifier;
 }
 
++ (BOOL)undefFrom:(NUCPreprocessingTokenStream *)aStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCPreprocessingDirective **)aToken;
+
 + (instancetype)undefWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCPreprocessingToken *)anIdentifier newline:(NUCNewline *)aNewline;
 
 - (instancetype)initWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCPreprocessingToken *)anIdentifier newline:(NUCNewline *)aNewline;

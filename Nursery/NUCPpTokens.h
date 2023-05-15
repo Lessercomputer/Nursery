@@ -8,12 +8,14 @@
 
 #import "NUCPreprocessingDirective.h"
 
-@class NUCDecomposedPreprocessingToken;
+@class NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream;
 
 @interface NUCPpTokens : NUCPreprocessingDirective
 {
     NSMutableArray *ppTokens;
 }
+
++ (BOOL)ppTokensFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPpTokens **)aToken;
 
 + (instancetype)ppTokens;
 

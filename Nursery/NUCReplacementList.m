@@ -7,8 +7,25 @@
 //
 
 #import "NUCReplacementList.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCPpTokens.h"
 
 @implementation NUCReplacementList
+
++ (BOOL)replacementListFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingDirective **)aToken
+{
+    NUCPpTokens *aPpTokens = nil;
+    
+    if ([NUCPpTokens ppTokensFrom:aStream into:&aPpTokens])
+    {
+        if (aToken)
+            *aToken = [NUCReplacementList replacementListWithPpTokens:aPpTokens];
+        
+        return YES;
+    }
+    
+    return NO;
+}
 
 + (instancetype)replacementListWithPpTokens:(NUCPpTokens *)aPpTokens
 {

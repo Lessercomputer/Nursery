@@ -8,12 +8,14 @@
 
 #import "NUCPreprocessingToken.h"
 
-@class NUCConditionalExpression;
+@class NUCConditionalExpression, NUCPreprocessingTokenStream;
 
 @interface NUCConstantExpression : NUCPreprocessingToken
 {
     NUCConditionalExpression *conditionalExpression;
 }
+
++ (BOOL)constantExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCLexicalElement **)aToken;
 
 + (instancetype)expressionWithConditionalExpression:(NUCConditionalExpression *)anExpression;
 

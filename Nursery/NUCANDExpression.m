@@ -7,9 +7,53 @@
 //
 
 #import "NUCANDExpression.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCDecomposedPreprocessingToken.h"
+#import "NUCEqualityExpression.h"
 
 @implementation NUCANDExpression
 
++ (BOOL)andExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCANDExpression **)aToken
+{
+    NUCEqualityExpression *anEqulityExpression = nil;
+    
+    if ([NUCEqualityExpression equalityExpressionFrom:aStream into:&anEqulityExpression])
+    {
+        if (aToken)
+            *aToken = [NUCANDExpression expressionWithEqualityExpression:anEqulityExpression];
+        
+        return YES;
+    }
+    else
+    {
+        NSUInteger aPosition = [aStream position];
+        NUCANDExpression *anANDExpression = nil;
+        
+        if ([self andExpressionFrom:aStream into:&anANDExpression])
+        {
+            [aStream skipWhitespacesWithoutNewline];
+            NUCDecomposedPreprocessingToken *anAndOperator = [aStream next];
+            
+            if ([anAndOperator isBitwiseANDOperator])
+            {
+                [aStream skipWhitespacesWithoutNewline];
+                NUCEqualityExpression *anEqulityExpression = nil;
+                
+                if ([NUCEqualityExpression equalityExpressionFrom:aStream into:&anEqulityExpression])
+                {
+                    if (aToken)
+                        *aToken = [NUCANDExpression expressionWithANDExpression:anANDExpression andOperator:anAndOperator equlityExpression:anEqulityExpression];
+                    
+                    return YES;
+                }
+            }
+        }
+        
+        [aStream setPosition:aPosition];
+        
+        return NO;
+    }
+}
 
 + (instancetype)expressionWithEqualityExpression:(NUCEqualityExpression *)anEqulityExpression
 {

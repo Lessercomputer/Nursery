@@ -8,12 +8,14 @@
 
 #import "NUCPreprocessingToken.h"
 
-@class NUCDecomposedPreprocessingToken, NUCConstant, NUCExpression;
+@class NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream, NUCConstant, NUCExpression;
 
 @interface NUCPrimaryExpression : NUCPreprocessingToken
 {
     NUCPreprocessingToken *content;
 }
+
++ (BOOL)primaryExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPrimaryExpression **)anExpression;
 
 + (instancetype)expressionWithIdentifier:(NUCDecomposedPreprocessingToken *)anIdentifier;
 + (instancetype)expressionWithConstant:(NUCConstant *)aConstant;

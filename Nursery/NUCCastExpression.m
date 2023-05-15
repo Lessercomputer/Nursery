@@ -7,8 +7,25 @@
 //
 
 #import "NUCCastExpression.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCUnaryExpression.h"
 
 @implementation NUCCastExpression
+
++ (BOOL)castExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCCastExpression **)aToken
+{
+    NUCUnaryExpression *anUnaryExpression = nil;
+    
+    if ([NUCUnaryExpression unaryExpressionFrom:aStream into:&anUnaryExpression])
+    {
+        if (aToken)
+            *aToken = [NUCCastExpression expressionWithUnaryExpression:anUnaryExpression];
+        
+        return YES;
+    }
+                       
+    return NO;
+}
 
 + (instancetype)expressionWithUnaryExpression:(NUCUnaryExpression *)anUnaryExpression
 {

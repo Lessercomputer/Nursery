@@ -8,11 +8,14 @@
 
 #import "NUCPreprocessingDirective.h"
 
+@class NUCPreprocessingTokenStream;
 
 @interface NUCGroupPart : NUCPreprocessingDirective
 {
     NUCPreprocessingDirective *content;
 }
+
++ (BOOL)groupPartFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingDirective **)aGroupPart;
 
 + (instancetype)groupPartWithContent:(NUCPreprocessingDirective *)aContent;
 

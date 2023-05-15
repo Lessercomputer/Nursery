@@ -7,10 +7,29 @@
 //
 
 #import "NUCDecomposedPreprocessingToken.h"
+#import "NUCPreprocessingTokenStream.h"
 
 #import <Foundation/NSString.h>
 
 @implementation NUCDecomposedPreprocessingToken
+
++ (BOOL)ellipsisFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCDecomposedPreprocessingToken **)aToken
+{
+    NSUInteger aPosition = [aStream position];
+    NUCDecomposedPreprocessingToken *anEllipsis = [aStream next];
+    
+    if ([anEllipsis isEllipsis])
+    {
+        if (aToken)
+            *aToken = anEllipsis;
+        
+        return YES;
+    }
+    
+    [aStream setPosition:aPosition];
+    
+    return NO;
+}
 
 + (instancetype)preprocessingTokenWithContentFromString:(NSString *)aString range:(NSRange)aRange type:(NUCLexicalElementType)anElementType
 {

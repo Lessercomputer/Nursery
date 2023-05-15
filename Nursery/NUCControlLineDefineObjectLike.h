@@ -11,6 +11,7 @@
 
 @interface NUCControlLineDefineObjectLike : NUCControlLineDefine
 
++ (BOOL)controlLineDefineObjectLikeFrom:(NUCPreprocessingTokenStream *)aStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCDecomposedPreprocessingToken *)anIdentifier into:(NUCPreprocessingDirective **)aToken;
 
 @end
 

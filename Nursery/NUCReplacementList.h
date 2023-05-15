@@ -8,12 +8,14 @@
 
 #import "NUCPreprocessingDirective.h"
 
-@class NUCPpTokens;
+@class NUCPpTokens, NUCPreprocessingTokenStream;
 
 @interface NUCReplacementList : NUCPreprocessingDirective
 {
     NUCPpTokens *ppTokens;
 }
+
++ (BOOL)replacementListFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingDirective **)aToken;
 
 + (instancetype)replacementListWithPpTokens:(NUCPpTokens *)aPpTokens;
 

@@ -7,8 +7,34 @@
 //
 
 #import "NUCGroupPart.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCIfSection.h"
+#import "NUCControlLine.h"
+#import "NUCTextLine.h"
+#import "NUCNonDirective.h"
 
 @implementation NUCGroupPart
+
++ (BOOL)groupPartFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingDirective **)aGroupPart
+{
+    NUCPreprocessingDirective *aPreprocessingDirective = nil;
+    
+    if ([NUCIfSection ifSectionFrom:aStream into:&aPreprocessingDirective])
+        ;
+    else if ([NUCControlLine controlLineFrom:aStream into:&aPreprocessingDirective])
+        ;
+    else if ([NUCTextLine textLineFrom:aStream into:&aPreprocessingDirective])
+        ;
+    else if ([NUCNonDirective hashAndNonDirectiveFrom:aStream into:&aPreprocessingDirective])
+        ;
+    else
+        return NO;
+    
+    if (aGroupPart)
+        *aGroupPart = [NUCGroupPart groupPartWithContent:aPreprocessingDirective];
+    
+    return YES;
+}
 
 + (instancetype)groupPartWithContent:(NUCPreprocessingDirective *)aContent
 {

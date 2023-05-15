@@ -7,10 +7,30 @@
 //
 
 #import "NUCGroup.h"
+#import "NUCPreprocessingFile.h"
+#import "NUCGroupPart.h"
 
 #import <Foundation/NSArray.h>
 
 @implementation NUCGroup
+
++ (BOOL)groupFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCGroup **)aToken
+{
+    NUCGroup *aGroup = [NUCGroup group];
+    NUCPreprocessingDirective *aGroupPart = nil;
+    BOOL aTokenScanned = NO;
+    
+    while ([NUCGroupPart groupPartFrom:aStream into:&aGroupPart])
+    {
+        aTokenScanned = YES;
+        [aGroup add:aGroupPart];
+    }
+    
+    if (aToken)
+        *aToken = aGroup;
+    
+    return aTokenScanned;
+}
 
 + (instancetype)group
 {

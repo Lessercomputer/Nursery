@@ -7,8 +7,39 @@
 //
 
 #import "NUCPragma.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCDecomposedPreprocessingToken.h"
+#import "NUCPpTokens.h"
+#import "NUCNewline.h"
 
 @implementation NUCPragma
+
++ (BOOL)pragmaFrom:(NUCPreprocessingTokenStream *)aStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCControlLine **)aToken
+{
+    if ([aDirectiveName isPragma])
+    {
+        NSUInteger aPosition = [aStream position];
+        NUCPpTokens *aPpTokens = nil;
+        NUCNewline *aNewline = nil;
+        
+        if ([NUCPpTokens ppTokensFrom:aStream into:&aPpTokens])
+        {
+            [aStream skipWhitespacesWithoutNewline];
+            
+            if ([NUCNewline newlineFrom:aStream into:&aNewline])
+            {
+                if (aToken)
+                    *aToken = [NUCPragma pragmaWithHash:aHash directiveName:aDirectiveName ppTokens:aPpTokens newline:aNewline];
+                
+                return YES;
+            }
+        }
+        
+        [aStream setPosition:aPosition];
+    }
+    
+    return NO;
+}
 
 + (instancetype)pragmaWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName ppTokens:(NUCPpTokens *)aPpTokens newline:(NUCNewline *)aNewline
 {

@@ -7,10 +7,43 @@
 //
 
 #import "NUCIdentifierList.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCDecomposedPreprocessingToken.h"
 
 #import <Foundation/NSArray.h>
 
 @implementation NUCIdentifierList
+
++ (BOOL)identifierListFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCIdentifierList **)aToken
+{
+    NUCDecomposedPreprocessingToken *aPreprocessingToken = nil;
+    NUCIdentifierList *anIdentifierList = [NUCIdentifierList identifierList];
+    
+    do
+    {
+        [aStream skipWhitespacesWithoutNewline];
+        aPreprocessingToken = [aStream peekNext];
+        
+        if ([aPreprocessingToken isIdentifier])
+            [anIdentifierList add:[aStream next]];
+        else if ([aPreprocessingToken isComma])
+            [aStream next];
+        
+        [aStream skipWhitespacesWithoutNewline];
+        aPreprocessingToken = [aStream peekNext];
+    }
+    while ([aPreprocessingToken isComma] || [aPreprocessingToken isIdentifier]);
+    
+    if ([anIdentifierList count])
+    {
+        if (aToken)
+            *aToken = anIdentifierList;
+        
+        return YES;
+    }
+    
+    return NO;
+}
 
 + (instancetype)identifierList
 {

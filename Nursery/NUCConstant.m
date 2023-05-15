@@ -12,6 +12,24 @@
 
 @implementation NUCConstant
 
++ (BOOL)constantFrom:(NUCDecomposedPreprocessingToken *)aStream into:(NUCConstant **)aConstant
+{
+    
+    if ([NUCIntegerConstant integerConstantFrom:aStream into:aConstant])
+    {
+        return YES;
+    }
+    else if ([aStream isCharacterConstant])
+    {
+        if (aConstant)
+            *aConstant = [NUCConstant constantWithCharacterConstant:aStream];
+        
+        return YES;
+    }
+    
+    return NO;
+}
+
 + (instancetype)constantWithIntegerConstant:(NUCIntegerConstant *)anIntegerConstant
 {
     return [[[self alloc] initWithContent:anIntegerConstant] autorelease];

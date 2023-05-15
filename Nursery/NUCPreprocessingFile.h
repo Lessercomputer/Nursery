@@ -8,6 +8,7 @@
 
 #import "NUCPreprocessingDirective.h"
 
+@class NUCPreprocessingTokenStream;
 @class NUCGroup;
 
 @interface NUCPreprocessingFile : NUCPreprocessingDirective
@@ -15,6 +16,7 @@
     NUCGroup *group;
 }
 
++ (BOOL)preprocessingFileFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingFile **)aToken;
 + (instancetype)preprocessingFileWithGroup:(NUCGroup *)aGroup;
 
 - (instancetype)initWithGroup:(NUCGroup *)aGroup;

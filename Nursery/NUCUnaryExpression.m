@@ -7,8 +7,49 @@
 //
 
 #import "NUCUnaryExpression.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCDecomposedPreprocessingToken.h"
+#import "NUCCastExpression.h"
+#import "NUCPostfixExpression.h"
 
 @implementation NUCUnaryExpression
+
++ (BOOL)unaryExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCUnaryExpression **)aToken
+{
+    NUCPostfixExpression *aPostfixExpression = nil;
+    
+    if ([NUCPostfixExpression postfixExpressionFrom:aStream into:&aPostfixExpression])
+    {
+        if (aToken)
+            *aToken = [NUCUnaryExpression expressionWithPostfixExpression:aPostfixExpression];
+        
+        return YES;
+    }
+    else
+    {
+        NSUInteger aPosition = [aStream position];
+        NUCDecomposedPreprocessingToken *anUnaryOperator = [aStream next];
+        
+        if ([anUnaryOperator isUnaryOperator])
+        {
+            NUCCastExpression *aCastExpression = nil;
+            
+            if ([NUCCastExpression castExpressionFrom:aStream into:&aCastExpression])
+            {
+                if (aToken)
+                    *aToken = [NUCUnaryExpression expressionWithUnaryOperator:anUnaryOperator castExpression:aCastExpression];
+                
+                return YES;
+            }
+        }
+        
+        [aStream setPosition:aPosition];
+        
+        return NO;
+    }
+    
+    return NO;
+}
 
 + (instancetype)expressionWithPostfixExpression:(NUCPostfixExpression *)aPostfixExpression
 {

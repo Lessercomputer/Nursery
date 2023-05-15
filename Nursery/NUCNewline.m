@@ -7,8 +7,51 @@
 //
 
 #import "NUCNewline.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCDecomposedPreprocessingToken.h"
+
+#import <Foundation/NSString.h>
 
 @implementation NUCNewline
+
++ (BOOL)newlineFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCNewline **)aNewline
+{
+    NSUInteger aPosition = [aStream position];
+    NUCDecomposedPreprocessingToken *aToken = [aStream next];
+    NUCDecomposedPreprocessingToken *aCr = nil;
+    NUCDecomposedPreprocessingToken *anLf = nil;
+    
+    if (aToken)
+    {
+        if ([[aToken content] isEqualToString:NUCCR])
+        {
+            aCr = aToken;
+            aToken = [aStream next];
+            
+            if (aToken && [[aToken content] isEqualToString:NUCLF])
+                anLf = aToken;
+            else
+                [aStream setPosition:aPosition];
+        }
+        else if ([[aToken content] isEqualToString:NUCLF])
+        {
+            anLf = aToken;
+        }
+        else
+        {
+            [aStream setPosition:aPosition];
+            
+            return NO;
+        }
+        
+        if (aNewline)
+            *aNewline = [NUCNewline newlineWithCr:aCr lf:anLf];
+        
+        return YES;
+    }
+    
+    return NO;
+}
 
 + (instancetype)newlineWithCr:(NUCLexicalElement *)aCr lf:(NUCLexicalElement *)anLf
 {

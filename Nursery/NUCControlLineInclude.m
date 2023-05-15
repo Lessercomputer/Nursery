@@ -7,8 +7,40 @@
 //
 
 #import "NUCControlLineInclude.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCDecomposedPreprocessingToken.h"
+#import "NUCPpTokens.h"
+#import "NUCNewline.h"
+
+#import <Foundation/NSString.h>
 
 @implementation NUCControlLineInclude
+
++ (BOOL)controlLineIncludeFrom:(NUCPreprocessingTokenStream *)aStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCPreprocessingDirective **)aToken
+{
+    [aStream skipWhitespacesWithoutNewline];
+    
+    if ([[aDirectiveName content] isEqualToString:NUCPreprocessingDirectiveInclude])
+    {
+        NUCPpTokens *aPpTokens = nil;
+        NUCNewline *aNewLine = nil;
+        
+        if ([NUCPpTokens ppTokensFrom:aStream into:&aPpTokens] && [aPpTokens isPpTokens])
+        {
+            [aStream skipWhitespacesWithoutNewline];
+            
+            if ([NUCNewline newlineFrom:aStream into:&aNewLine])
+            {
+                if (aToken)
+                    *aToken = [NUCControlLineInclude includeWithHash:aHash directiveName:aDirectiveName ppTokens:aPpTokens newline:aNewLine];
+                
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
+}
 
 + (instancetype)includeWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName ppTokens:(NUCPpTokens *)aPpTokens newline:(NUCNewline *)aNewline
 {

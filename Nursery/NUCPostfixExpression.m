@@ -7,8 +7,25 @@
 //
 
 #import "NUCPostfixExpression.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCPrimaryExpression.h"
 
 @implementation NUCPostfixExpression
+
++ (BOOL)postfixExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPostfixExpression **)aToken
+{
+    NUCPrimaryExpression *aPrimaryExpression = nil;
+    
+    if ([NUCPrimaryExpression primaryExpressionFrom:aStream into:&aPrimaryExpression])
+    {
+        if (aToken)
+            *aToken = [NUCPostfixExpression expressionWithPrimaryExpression:aPrimaryExpression];
+        
+        return YES;
+    }
+    
+    return NO;
+}
 
 + (instancetype)expressionWithPrimaryExpression:(NUCPrimaryExpression *)aPrimaryExpression
 {

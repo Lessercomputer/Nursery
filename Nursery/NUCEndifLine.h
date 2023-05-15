@@ -8,7 +8,7 @@
 
 #import "NUCPreprocessingDirective.h"
 
-@class NUCDecomposedPreprocessingToken, NUCNewline;
+@class NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream, NUCNewline;
 
 @interface NUCEndifLine : NUCPreprocessingDirective
 {
@@ -16,6 +16,8 @@
     NUCDecomposedPreprocessingToken *endif;
     NUCNewline *newline;
 }
+
++ (BOOL)endifLineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCPreprocessingDirective **)anEndifLine;
 
 + (instancetype)endifLineWithHash:(NUCDecomposedPreprocessingToken *)aHash endif:(NUCDecomposedPreprocessingToken *)anEndif newline:(NUCNewline *)aNewline;
 

@@ -15,6 +15,8 @@
     NUCPreprocessingToken *content;
 }
 
++ (BOOL)constantFrom:(NUCDecomposedPreprocessingToken *)aStream into:(NUCConstant **)aConstant;
+
 + (instancetype)constantWithIntegerConstant:(NUCIntegerConstant *)anIntegerConstant;
 + (instancetype)constantWithCharacterConstant:(NUCDecomposedPreprocessingToken *)aCharacterConstant;
 

@@ -8,12 +8,14 @@
 
 #import "NUCPreprocessingDirective.h"
 
-@class NUCElifGroup;
+@class NUCElifGroup, NUCPreprocessingTokenStream;
 
 @interface NUCElifGroups : NUCPreprocessingDirective
 {
     NSMutableArray *groups;
 }
+
++ (BOOL)elifGroupsFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCElifGroups **)aToken;
 
 + (instancetype)elifGroups;
 

@@ -209,6 +209,8 @@
 		24A39F5025E25AAC00299F81 /* NUCPrimaryExpression.h in Headers */ = {isa = PBXBuildFile; fileRef = 24A39F4D25E25AAC00299F81 /* NUCPrimaryExpression.h */; };
 		24A39F5125E25AAC00299F81 /* NUCPrimaryExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 24A39F4E25E25AAC00299F81 /* NUCPrimaryExpression.m */; };
 		24A39F5225E25AAC00299F81 /* NUCPrimaryExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 24A39F4E25E25AAC00299F81 /* NUCPrimaryExpression.m */; };
+		24B9660C2A11E810007D12FF /* NUCDecomposer.h in Headers */ = {isa = PBXBuildFile; fileRef = 24B9660A2A11E810007D12FF /* NUCDecomposer.h */; };
+		24B9660D2A11E810007D12FF /* NUCDecomposer.m in Sources */ = {isa = PBXBuildFile; fileRef = 24B9660B2A11E810007D12FF /* NUCDecomposer.m */; };
 		24BADF0125C4362B007BA31E /* NUCPreprocessingTokenStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 24BADEFF25C4362B007BA31E /* NUCPreprocessingTokenStream.h */; };
 		24BADF0225C4362B007BA31E /* NUCPreprocessingTokenStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 24BADEFF25C4362B007BA31E /* NUCPreprocessingTokenStream.h */; };
 		24BADF0325C4362B007BA31E /* NUCPreprocessingTokenStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BADF0025C4362B007BA31E /* NUCPreprocessingTokenStream.m */; };
@@ -863,6 +865,8 @@
 		24A39F4825E25A5E00299F81 /* NUCPostfixExpression.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCPostfixExpression.m; sourceTree = "<group>"; };
 		24A39F4D25E25AAC00299F81 /* NUCPrimaryExpression.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCPrimaryExpression.h; sourceTree = "<group>"; };
 		24A39F4E25E25AAC00299F81 /* NUCPrimaryExpression.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCPrimaryExpression.m; sourceTree = "<group>"; };
+		24B9660A2A11E810007D12FF /* NUCDecomposer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCDecomposer.h; sourceTree = "<group>"; };
+		24B9660B2A11E810007D12FF /* NUCDecomposer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCDecomposer.m; sourceTree = "<group>"; };
 		24BADEFF25C4362B007BA31E /* NUCPreprocessingTokenStream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCPreprocessingTokenStream.h; sourceTree = "<group>"; };
 		24BADF0025C4362B007BA31E /* NUCPreprocessingTokenStream.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCPreprocessingTokenStream.m; sourceTree = "<group>"; };
 		24C8A76D245650E000174253 /* NUCRangePair.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCRangePair.h; sourceTree = "<group>"; };
@@ -1213,6 +1217,8 @@
 			children = (
 				246B1718244B0D1B00B6677D /* NUCPreprocesser.h */,
 				246B1719244B0D1B00B6677D /* NUCPreprocesser.m */,
+				24B9660A2A11E810007D12FF /* NUCDecomposer.h */,
+				24B9660B2A11E810007D12FF /* NUCDecomposer.m */,
 				24BADEFF25C4362B007BA31E /* NUCPreprocessingTokenStream.h */,
 				24BADF0025C4362B007BA31E /* NUCPreprocessingTokenStream.m */,
 				246B1712244A76C000B6677D /* NUCLexicalElement.h */,
@@ -1851,6 +1857,7 @@
 				619B08C71913EEC000A4BAA2 /* NUBranchAperture.h in Headers */,
 				619B09391913EEC000A4BAA2 /* NULocationTreeLeaf.h in Headers */,
 				619B093E1913EEC000A4BAA2 /* NUOpaqueBPlusTreeNode.h in Headers */,
+				24B9660C2A11E810007D12FF /* NUCDecomposer.h in Headers */,
 				619B08F81913EEC000A4BAA2 /* NUNSString.h in Headers */,
 				619B091C1913EEC000A4BAA2 /* NUReversedObjectTable.h in Headers */,
 				619B08D91913EEC000A4BAA2 /* NUDictionaryCoder.h in Headers */,
@@ -2455,6 +2462,7 @@
 				619B09271913EEC000A4BAA2 /* NUTypes.m in Sources */,
 				619B08EE1913EEC000A4BAA2 /* NUMutableDictionary.m in Sources */,
 				619B08A41913EEC000A4BAA2 /* NUNumberCoder.m in Sources */,
+				24B9660D2A11E810007D12FF /* NUCDecomposer.m in Sources */,
 				619B08A21913EEC000A4BAA2 /* NUNSSet.m in Sources */,
 				619B08B91913EEC000A4BAA2 /* NUArrayCoder.m in Sources */,
 				24A39ECC25D4AC8000299F81 /* NUCIdentifierList.m in Sources */,
@@ -2790,7 +2798,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INSTALL_PATH = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
@@ -2839,7 +2847,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INSTALL_PATH = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -2856,7 +2864,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "Nursery/Nursery-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.nursery-framework.Nursery";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
@@ -2875,7 +2883,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "Nursery/Nursery-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.nursery-framework.Nursery";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
@@ -2900,7 +2908,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "NurseryTests/NurseryTests-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.nursery-framework.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = xctest;
@@ -2921,7 +2929,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Nursery/Nursery-Prefix.pch";
 				INFOPLIST_FILE = "NurseryTests/NurseryTests-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.nursery-framework.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = xctest;

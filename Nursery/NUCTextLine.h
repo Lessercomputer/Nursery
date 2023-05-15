@@ -8,13 +8,15 @@
 
 #import "NUCPreprocessingDirective.h"
 
-@class NUCPpTokens, NUCNewline;
+@class NUCPpTokens, NUCNewline, NUCPreprocessingTokenStream;
 
 @interface NUCTextLine : NUCPreprocessingDirective
 {
     NUCPpTokens *ppTokens;
     NUCNewline *newline;
 }
+
++ (BOOL)textLineFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingDirective **)aToken;
 
 + (instancetype)textLineWithPpTokens:(NUCPpTokens *)aPpTokens newline:(NUCNewline *)aNewline;
 

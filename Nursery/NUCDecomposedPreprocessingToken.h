@@ -8,11 +8,15 @@
 
 #import "NUCPreprocessingToken.h"
 
+@class NUCPreprocessingTokenStream;
+
 @interface NUCDecomposedPreprocessingToken : NUCPreprocessingToken
 {
     NSString *content;
     NURegion range;
 }
+
++ (BOOL)ellipsisFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCDecomposedPreprocessingToken **)aToken;
 
 + (instancetype)preprocessingTokenWithContentFromString:(NSString *)aString range:(NSRange)aRange type:(NUCLexicalElementType)anElementType;
 

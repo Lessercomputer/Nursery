@@ -7,12 +7,33 @@
 //
 
 #import "NUCPreprocessingFile.h"
+#import "NUCGroup.h"
 
 @implementation NUCPreprocessingFile
+
++ (BOOL)preprocessingFileFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingFile **)aToken
+{
+    NUCGroup *aGroup = nil;
+
+    if ([NUCGroup groupFrom:aStream into:&aGroup])
+    {
+        if (aToken)
+            *aToken = [self preprocessingFileWithGroup:aGroup];
+        
+        return YES;
+    }
+    
+    return NO;
+}
 
 + (instancetype)preprocessingFileWithGroup:(NUCGroup *)aGroup
 {
     return [[[self alloc] initWithGroup:aGroup] autorelease];
+}
+
+- (instancetype)init
+{    
+    return self = [super initWithType:NUCLexicalElementProcessingFileType];
 }
 
 - (instancetype)initWithGroup:(NUCGroup *)aGroup

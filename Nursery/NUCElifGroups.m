@@ -7,10 +7,26 @@
 //
 
 #import "NUCElifGroups.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCElifGroup.h"
 
 #import <Foundation/NSArray.h>
 
 @implementation NUCElifGroups
+
++ (BOOL)elifGroupsFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCElifGroups **)aToken
+{
+    NUCElifGroups *anElifGroups = [NUCElifGroups elifGroups];
+    NUCElifGroup *anElifGroup = nil;
+    
+    while ([NUCElifGroup elifGroupFrom:aStream into:&anElifGroup])
+        [anElifGroups add:anElifGroup];
+
+    if (aToken && [anElifGroups count])
+        *aToken = anElifGroups;
+    
+    return [anElifGroups count] ? YES : NO;
+}
 
 + (instancetype)elifGroups
 {

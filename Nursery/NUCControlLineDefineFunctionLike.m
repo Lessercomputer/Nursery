@@ -7,9 +7,64 @@
 //
 
 #import "NUCControlLineDefineFunctionLike.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCDecomposedPreprocessingToken.h"
+#import "NUCNewline.h"
+#import "NUCIdentifierList.h"
+#import "NUCReplacementList.h"
+
+#import <Foundation/NSString.h>
 
 @implementation NUCControlLineDefineFunctionLike
 
++ (BOOL)controlLineDefineFunctionLikeFrom:(NUCPreprocessingTokenStream *)aStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCDecomposedPreprocessingToken *)anIdentifier lparen:(NUCDecomposedPreprocessingToken *)anLparen into:(NUCPreprocessingDirective **)aToken
+{
+    NUCDecomposedPreprocessingToken *anEllipsis = nil;
+    NUCIdentifierList *anIdentifierList = nil;
+    NUCDecomposedPreprocessingToken *anRparen = nil;
+    NUCReplacementList *aReplacementList = nil;
+    
+    [aStream skipWhitespacesWithoutNewline];
+    [NUCIdentifierList identifierListFrom:aStream into:&anIdentifierList];
+    [aStream skipWhitespacesWithoutNewline];
+
+    if (anIdentifierList)
+    {
+        if ([[aStream peekNext] isComma])
+        {
+            [aStream next];
+            [aStream skipWhitespacesWithoutNewline];
+            
+            if (![NUCDecomposedPreprocessingToken ellipsisFrom:aStream into:&anEllipsis])
+                return NO;
+        }
+    }
+    else
+    {
+        [NUCDecomposedPreprocessingToken ellipsisFrom:aStream into:&anEllipsis];
+    }
+
+    [aStream skipWhitespacesWithoutNewline];
+    anRparen = [aStream next];
+    
+    if ([[anRparen content] isEqualToString:NUCClosingParenthesisPunctuator])
+    {
+        NUCNewline *aNewline = nil;
+        [aStream skipWhitespacesWithoutNewline];
+        [NUCReplacementList replacementListFrom:aStream into:&aReplacementList];
+        [aStream skipWhitespacesWithoutNewline];
+        
+        if ([NUCNewline newlineFrom:aStream into:&aNewline])
+        {
+            if (aToken)
+                *aToken = [NUCControlLineDefineFunctionLike defineWithHash:aHash directiveName:aDirectiveName identifier:anIdentifier lparen:anLparen identifierList:anIdentifierList ellipsis:anEllipsis rparen:anRparen replacementList:aReplacementList newline:aNewline];
+        }
+        
+        return YES;
+    }
+    
+    return NO;
+}
 + (instancetype)defineWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCDecomposedPreprocessingToken *)anIdentifier lparen:(NUCDecomposedPreprocessingToken *)anLparen identifierList:(NUCIdentifierList *)anIdentifierList ellipsis:(NUCDecomposedPreprocessingToken *)anEllipsis rparen:(NUCDecomposedPreprocessingToken *)anRparen replacementList:(NUCReplacementList *)aReplacementList newline:(NUCNewline *)aNewline
 {
     return [[[self alloc] initWithHash:aHash directiveName:aDirectiveName identifier:anIdentifier lparen:anLparen identifierList:anIdentifierList ellipsis:anEllipsis rparen:anRparen replacementList:aReplacementList newline:aNewline] autorelease];

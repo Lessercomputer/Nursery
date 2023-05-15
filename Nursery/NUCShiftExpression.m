@@ -7,8 +7,53 @@
 //
 
 #import "NUCShiftExpression.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCDecomposedPreprocessingToken.h"
+#import "NUCAdditiveExpression.h"
 
 @implementation NUCShiftExpression
+
++ (BOOL)shiftExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCShiftExpression **)aToken
+{
+    NUCAdditiveExpression *anAdditiveExpression = nil;
+    
+    if ([NUCAdditiveExpression additiveExpressionFrom:aStream into:&anAdditiveExpression])
+    {
+        if (aToken)
+            *aToken = [NUCShiftExpression expressionWithAdditiveExpression:anAdditiveExpression];
+        
+        return YES;
+    }
+    else
+    {
+        NSUInteger aPosition = [aStream position];
+        NUCShiftExpression *aShiftExpression = nil;
+        
+        if ([self shiftExpressionFrom:aStream into:&aShiftExpression])
+        {
+            [aStream skipWhitespacesWithoutNewline];
+            
+            NUCDecomposedPreprocessingToken *aShiftOperator = [aStream next];
+            
+            if ([aShiftOperator isShiftOperator])
+            {
+                [aStream skipWhitespacesWithoutNewline];
+                
+                if ([NUCAdditiveExpression additiveExpressionFrom:aStream into:&anAdditiveExpression])
+                {
+                    if (aToken)
+                        *aToken = [NUCShiftExpression expressionWithShiftExpression:aShiftExpression shiftOperator:aShiftOperator additiveExpression:anAdditiveExpression];
+                    
+                    return YES;
+                }
+            }
+        }
+        
+        [aStream setPosition:aPosition];
+        
+        return NO;
+    }
+}
 
 + (instancetype)expressionWithAdditiveExpression:(NUCAdditiveExpression *)anAdditiveExpression
 {

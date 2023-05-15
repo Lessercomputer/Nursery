@@ -7,8 +7,42 @@
 //
 
 #import "NUCControlLineDefine.h"
+#import "NUCDecomposedPreprocessingToken.h"
+#import "NUCControlLineDefineFunctionLike.h"
+#import "NUCControlLineDefineObjectLike.h"
+#import "NUCPreprocessingTokenStream.h"
+
+#import <Foundation/NSString.h>
 
 @implementation NUCControlLineDefine
+
++ (BOOL)controlLineDefineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCPreprocessingDirective **)aToken
+{
+    if (![[aDirectiveName content] isEqualToString:NUCPreprocessingDirectiveDefine])
+        return NO;
+    
+    NUCDecomposedPreprocessingToken *anIdentifier = [aPreprocessingTokenStream next];
+    
+    if (!anIdentifier)
+        return NO;
+    
+    NUCDecomposedPreprocessingToken *anLparen = [aPreprocessingTokenStream peekNext];
+
+    if ([[anLparen content] isEqualToString:NUCOpeningParenthesisPunctuator])
+    {
+        [aPreprocessingTokenStream next];
+        
+        if ([NUCControlLineDefineFunctionLike controlLineDefineFunctionLikeFrom:aPreprocessingTokenStream hash:aHash directiveName:aDirectiveName identifier:anIdentifier lparen:anLparen into:aToken])
+            return YES;
+    }
+    else
+    {
+        if ([NUCControlLineDefineObjectLike controlLineDefineObjectLikeFrom:aPreprocessingTokenStream hash:aHash directiveName:aDirectiveName identifier:anIdentifier into:aToken])
+            return YES;
+    }
+    
+    return NO;
+}
 
 + (instancetype)defineWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCDecomposedPreprocessingToken *)anIdentifier replacementList:(NUCReplacementList *)aReplacementList newline:(NUCNewline *)aNewline
 {

@@ -7,8 +7,62 @@
 //
 
 #import "NUCConditionalExpression.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCDecomposedPreprocessingToken.h"
+#import "NUCLogicalORExpression.h"
+#import "NUCExpression.h"
 
 @implementation NUCConditionalExpression
+
++ (BOOL)conditionalExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCConditionalExpression **)aToken
+{
+    NUCLogicalORExpression *aLogicalOrExpression = nil;
+    if ([NUCLogicalORExpression logicalORExpressionFrom:aStream into:&aLogicalOrExpression])
+    {
+        NSUInteger aPosition = [aStream position];
+        [aStream skipWhitespacesWithoutNewline];
+        
+        NUCDecomposedPreprocessingToken *aQuestionMark = [aStream next];
+        if ([aQuestionMark isQuestionMark])
+        {
+            [aStream skipWhitespacesWithoutNewline];
+            
+            NUCExpression *anExpression = nil;
+            if ([NUCExpression expressionFrom:aStream into:&anExpression])
+            {
+                [aStream skipWhitespacesWithoutNewline];
+                
+                NUCDecomposedPreprocessingToken *aColon = [aStream next];
+                if ([aColon isColon])
+                {
+                    [aStream skipWhitespacesWithoutNewline];
+                    
+                    NUCConditionalExpression *aConditionalExpression = nil;
+                    if ([self conditionalExpressionFrom:aStream into:&aConditionalExpression])
+                    {
+                        if (aToken)
+                            *aToken = [NUCConditionalExpression expressionWithLogicalORExpression:aLogicalOrExpression questionMarkPunctuator:aQuestionMark expression:anExpression colonPunctuator:aColon conditionalExpression:aConditionalExpression];
+                        
+                        return YES;
+                    }
+                }
+            }
+        }
+        else
+        {
+            [aStream setPosition:aPosition];
+            
+            if (aToken)
+                *aToken = [NUCConditionalExpression expressionWithLogicalORExpression:aLogicalOrExpression];
+            
+            return YES;
+        }
+        
+        [aStream setPosition:aPosition];
+    }
+
+    return NO;
+}
 
 + (instancetype)expressionWithLogicalORExpression:(NUCLogicalORExpression *)aLogicalORExpression
 {

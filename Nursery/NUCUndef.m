@@ -7,8 +7,41 @@
 //
 
 #import "NUCUndef.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCDecomposedPreprocessingToken.h"
+#import "NUCNewline.h"
 
 @implementation NUCUndef
+
++ (BOOL)undefFrom:(NUCPreprocessingTokenStream *)aStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCPreprocessingDirective **)aToken
+{
+    if ([aDirectiveName isUndef])
+    {
+        NSUInteger aPosition = [aStream position];
+        
+        [aStream skipWhitespacesWithoutNewline];
+        
+        NUCDecomposedPreprocessingToken *anIdentifier = [aStream next];
+        NUCNewline *aNewline = nil;
+
+        if ([anIdentifier isIdentifier])
+        {
+            [aStream skipWhitespacesWithoutNewline];
+                        
+            if (anIdentifier && [NUCNewline newlineFrom:aStream into:&aNewline])
+            {
+                if (aToken)
+                    *aToken = [NUCUndef undefWithHash:aHash directiveName:aDirectiveName identifier:anIdentifier newline:aNewline];
+                
+                return YES;
+            }
+        }
+        
+        [aStream setPosition:aPosition];
+    }
+    
+    return NO;
+}
 
 + (instancetype)undefWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCPreprocessingToken *)anIdentifier newline:(NUCNewline *)aNewline
 {

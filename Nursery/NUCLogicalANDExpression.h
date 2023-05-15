@@ -8,7 +8,7 @@
 
 #import "NUCPreprocessingToken.h"
 
-@class NUCInclusiveORExpression, NUCLogicalANDExpression, NUCDecomposedPreprocessingToken;
+@class NUCInclusiveORExpression, NUCLogicalANDExpression, NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream;
 
 @interface NUCLogicalANDExpression : NUCPreprocessingToken
 {
@@ -16,6 +16,8 @@
     NUCLogicalANDExpression *logicalANDExpression;
     NUCDecomposedPreprocessingToken *logicalANDOperator;
 }
+
++ (BOOL)logicalANDExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCLogicalANDExpression **)aToken;
 
 + (instancetype)expressionWithInclusiveORExpression:(NUCInclusiveORExpression *)anInclusiveORExpression;
 

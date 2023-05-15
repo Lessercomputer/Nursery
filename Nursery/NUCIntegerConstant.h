@@ -8,13 +8,15 @@
 
 #import "NUCPreprocessingToken.h"
 
-@class NUCDecomposedPreprocessingToken;
+@class NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream, NUCConstant;
 
 @interface NUCIntegerConstant : NUCPreprocessingToken
 {
     NUCDecomposedPreprocessingToken *ppNumber;
     NUUInt64 value;
 }
+
++ (BOOL)integerConstantFrom:(NUCDecomposedPreprocessingToken *)aPreprocessingToken into:(NUCConstant **)aConstant;
 
 + (instancetype)constantWithPpNumber:(NUCDecomposedPreprocessingToken *)aPpNumber value:(NUUInt64)aValue;
 

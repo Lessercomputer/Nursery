@@ -15,6 +15,9 @@
     NUCDecomposedPreprocessingToken *hash;
 }
 
++ (BOOL)hashAndNonDirectiveFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingDirective **)aToken;
++ (BOOL)nonDirectiveFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCNonDirective **)aToken hash:(NUCDecomposedPreprocessingToken *)aHash;
+
 + (instancetype)noneDirectiveWithHash:(NUCDecomposedPreprocessingToken *)aHash ppTokens:(NUCPpTokens *)aPpTokens newline:(NUCNewline *)aNewline;
 
 - (instancetype)initWithHash:(NUCDecomposedPreprocessingToken *)aHash ppTokens:(NUCPpTokens *)aPpTokens newline:(NUCNewline *)aNewline;

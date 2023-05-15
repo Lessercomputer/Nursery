@@ -8,7 +8,7 @@
 
 #import "NUCPreprocessingToken.h"
 
-@class NUCEqualityExpression, NUCANDExpression, NUCDecomposedPreprocessingToken;
+@class NUCEqualityExpression, NUCANDExpression, NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream;
 
 @interface NUCANDExpression : NUCPreprocessingToken
 {
@@ -16,6 +16,8 @@
     NUCANDExpression *andExpression;
     NUCDecomposedPreprocessingToken *andOperator;
 }
+
++ (BOOL)andExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCANDExpression **)aToken;
 
 + (instancetype)expressionWithEqualityExpression:(NUCEqualityExpression *)anEqulityExpression;
 

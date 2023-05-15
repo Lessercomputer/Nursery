@@ -7,8 +7,25 @@
 //
 
 #import "NUCConstantExpression.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCConditionalExpression.h"
 
 @implementation NUCConstantExpression
+
++ (BOOL)constantExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCLexicalElement **)aToken
+{
+    NUCConditionalExpression *aConditionalExpression = nil;
+    
+    if ([NUCConditionalExpression conditionalExpressionFrom:aStream into:&aConditionalExpression])
+    {
+        if (aToken)
+            *aToken = [NUCConstantExpression expressionWithConditionalExpression:aConditionalExpression];
+        
+        return YES;
+    }
+    
+    return NO;
+}
 
 + (instancetype)expressionWithConditionalExpression:(NUCConditionalExpression *)anExpression
 {

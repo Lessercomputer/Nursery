@@ -7,8 +7,42 @@
 //
 
 #import "NUCEndifLine.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCDecomposedPreprocessingToken.h"
+#import "NUCNewline.h"
+
+#import <Foundation/NSString.h>
 
 @implementation NUCEndifLine
+
++ (BOOL)endifLineFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingDirective **)anEndifLine
+{
+    NSUInteger aPosition = [aStream position];
+    [aStream skipWhitespaces];
+    NUCDecomposedPreprocessingToken *aToken = [aStream next];
+    
+    if (aToken && [aToken isHash])
+    {
+        NUCDecomposedPreprocessingToken *aHash = aToken;
+        NUCDecomposedPreprocessingToken *anEndif = [aStream next];
+        
+        if (anEndif && [[anEndif content] isEqualToString:NUCPreprocessingDirectiveEndif])
+        {
+            NUCNewline *aNewline = nil;
+            if ([NUCNewline newlineFrom:aStream into:&aNewline])
+            {
+                if (anEndif)
+                    *anEndifLine = [NUCEndifLine endifLineWithHash:aHash endif:anEndif newline:aNewline];
+                
+                return YES;
+            }
+        }
+    }
+    
+    [aStream setPosition:aPosition];
+    
+    return NO;
+}
 
 + (instancetype)endifLineWithHash:(NUCDecomposedPreprocessingToken *)aHash endif:(NUCDecomposedPreprocessingToken *)anEndif newline:(NUCNewline *)aNewline
 {

@@ -8,10 +8,28 @@
 
 #import "NUCPpTokens.h"
 #import "NUCDecomposedPreprocessingToken.h"
+#import "NUCPreprocessingTokenStream.h"
 
 #import <Foundation/NSArray.h>
 
 @implementation NUCPpTokens
+
++ (BOOL)ppTokensFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPpTokens **)aToken
+{
+    NUCDecomposedPreprocessingToken *aPpToken = nil;
+    NUCPpTokens *aPpTokens = [NUCPpTokens ppTokens];
+    
+    while ([[aStream peekNext] isNotWhitespace])
+    {
+        aPpToken = [aStream next];
+        [aPpTokens add:aPpToken];
+        
+        if (aToken)
+            *aToken = aPpTokens;
+    }
+    
+    return [aPpTokens count] ? YES : NO;
+}
 
 + (instancetype)ppTokens
 {

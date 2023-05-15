@@ -7,8 +7,37 @@
 //
 
 #import "NUCTextLine.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCDecomposedPreprocessingToken.h"
+#import "NUCPpTokens.h"
+#import "NUCNewline.h"
 
 @implementation NUCTextLine
+
++ (BOOL)textLineFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingDirective **)aToken
+{
+    if ([[aStream peekNext] isHash])
+        return NO;
+    
+    NSUInteger aPosition = [aStream position];
+    NUCPpTokens *aPpTokens = nil;
+    NUCNewline *aNewline = nil;
+    
+    [NUCPpTokens ppTokensFrom:aStream into:&aPpTokens];
+    [aStream skipWhitespacesWithoutNewline];
+    
+    if ([NUCNewline newlineFrom:aStream into:&aNewline])
+    {
+        if (aToken)
+            *aToken = [NUCTextLine textLineWithPpTokens:aPpTokens newline:aNewline];
+        
+        return YES;
+    }
+    
+    [aStream setPosition:aPosition];
+    
+    return NO;
+}
 
 + (instancetype)textLineWithPpTokens:(NUCPpTokens *)aPpTokens newline:(NUCNewline *)aNewline
 {

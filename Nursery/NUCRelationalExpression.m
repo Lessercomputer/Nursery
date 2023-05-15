@@ -7,8 +7,53 @@
 //
 
 #import "NUCRelationalExpression.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCDecomposedPreprocessingToken.h"
+#import "NUCShiftExpression.h"
 
 @implementation NUCRelationalExpression
+
++ (BOOL)relationalExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCRelationalExpression **)aToken
+{
+    NUCShiftExpression *aShiftExpression = nil;
+    
+    if ([NUCShiftExpression shiftExpressionFrom:aStream into:&aShiftExpression])
+    {
+        if (aToken)
+            *aToken = [NUCRelationalExpression expressionWithShiftExpression:aShiftExpression];
+        
+        return YES;
+    }
+    else
+    {
+        NSUInteger aPosition = [aStream position];
+        NUCRelationalExpression *aRelationalExpression = nil;
+        
+        if ([self relationalExpressionFrom:aStream into:&aRelationalExpression])
+        {
+            [aStream skipWhitespacesWithoutNewline];
+            
+            NUCDecomposedPreprocessingToken *anOperator = [aStream next];
+            
+            if ([anOperator isRelationalOperator])
+            {
+                [aStream skipWhitespacesWithoutNewline];
+                
+                if ([NUCShiftExpression shiftExpressionFrom:aStream into:&aShiftExpression])
+                {
+                    if (aToken)
+                        *aToken = [NUCRelationalExpression expressionWithRelationalExpression:aRelationalExpression relationalOperator:anOperator shiftExpression:aShiftExpression];
+                    
+                    return YES;
+                }
+            }
+        }
+        
+        [aStream setPosition:aPosition];
+        
+        return NO;
+    }
+}
 
 + (instancetype)expressionWithShiftExpression:(NUCShiftExpression *)aShiftExpression
 {

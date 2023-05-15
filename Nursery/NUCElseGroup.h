@@ -8,7 +8,7 @@
 
 #import "NUCPreprocessingDirective.h"
 
-@class NUCDecomposedPreprocessingToken, NUCNewline, NUCGroup;
+@class NUCDecomposedPreprocessingToken, NUCNewline, NUCGroup, NUCPreprocessingTokenStream;
 
 @interface NUCElseGroup : NUCPreprocessingDirective
 {
@@ -17,6 +17,8 @@
     NUCNewline *newline;
     NUCGroup *group;
 }
+
++ (BOOL)elseGroupFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCElseGroup **)anElseGroup;
 
 + (instancetype)elseGroupWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)anElse newline:(NUCNewline *)aNewline group:(NUCGroup *)aGroup;
 

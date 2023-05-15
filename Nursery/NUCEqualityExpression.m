@@ -7,8 +7,53 @@
 //
 
 #import "NUCEqualityExpression.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCDecomposedPreprocessingToken.h"
+#import "NUCRelationalExpression.h"
 
 @implementation NUCEqualityExpression
+
++ (BOOL)equalityExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCEqualityExpression **)aToken
+{
+    NUCRelationalExpression *aRelationalExpression = nil;
+    
+    if ([NUCRelationalExpression relationalExpressionFrom:aStream into:&aRelationalExpression])
+    {
+        if (aToken)
+            *aToken = [NUCEqualityExpression expressionWithRelationalExpression:aRelationalExpression];
+        
+        return YES;
+    }
+    else
+    {
+        NSUInteger aPosition = [aStream position];
+        NUCEqualityExpression *anEqualityExpression = nil;
+        
+        if ([self equalityExpressionFrom:aStream into:&anEqualityExpression])
+        {
+            [aStream skipWhitespacesWithoutNewline];
+            
+            NUCDecomposedPreprocessingToken *anOperator = [aStream next];
+            
+            if ([anOperator isEqualityOperator] || [anOperator isInequalityOperator])
+            {
+                [aStream skipWhitespacesWithoutNewline];
+                
+                if ([NUCRelationalExpression relationalExpressionFrom:aStream into:&aRelationalExpression])
+                {
+                    if (aToken)
+                        *aToken = [NUCEqualityExpression expressionWithEqualityExpression:anEqualityExpression equalityOperator:anOperator relationalExpression:aRelationalExpression];
+                    
+                    return YES;
+                }
+            }
+        }
+        
+        [aStream setPosition:aPosition];
+        
+        return NO;
+    }
+}
 
 + (instancetype)expressionWithRelationalExpression:(NUCRelationalExpression *)aRelationalExpression
 {

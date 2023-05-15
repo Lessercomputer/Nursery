@@ -7,8 +7,47 @@
 //
 
 #import "NUCElseGroup.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCDecomposedPreprocessingToken.h"
+#import "NUCNewline.h"
+#import "NUCGroup.h"
+
+#import <Foundation/NSString.h>
 
 @implementation NUCElseGroup
+
++ (BOOL)elseGroupFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCElseGroup **)anElseGroup
+{
+    NSUInteger aPosition = [aPreprocessingTokenStream position];
+    NUCDecomposedPreprocessingToken *aToken = [aPreprocessingTokenStream next];
+    
+    if (aToken && [aToken isHash])
+    {
+        NUCDecomposedPreprocessingToken *aHash = aToken;
+        NUCNewline *aNewline = nil;
+        NUCDecomposedPreprocessingToken *anElse = [aPreprocessingTokenStream next];
+        
+        if (anElse && [[anElse content] isEqualToString:NUCPreprocessingDirectiveElse])
+        {
+            if ([NUCNewline newlineFrom:aPreprocessingTokenStream into:&aNewline])
+            {
+                NUCGroup *aGroup = nil;
+                [NUCGroup groupFrom:aPreprocessingTokenStream into:&aGroup];
+                
+                if (anElseGroup)
+                {
+                    *anElseGroup = [NUCElseGroup elseGroupWithHash:aHash directiveName:anElse newline:aNewline group:aGroup];
+                }
+                
+                return YES;
+            }
+        }
+    }
+    
+    [aPreprocessingTokenStream setPosition:aPosition];
+    
+    return NO;
+}
 
 + (instancetype)elseGroupWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)anElse newline:(NUCNewline *)aNewline group:(NUCGroup *)aGroup
 {

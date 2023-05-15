@@ -8,12 +8,14 @@
 
 #import "NUCPreprocessingDirective.h"
 
+@class NUCPreprocessingTokenStream;
 
 @interface NUCGroup : NUCPreprocessingDirective
 {
     NSMutableArray *groupParts;
 }
 
++ (BOOL)groupFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCGroup **)aToken;
 + (instancetype)group;
 
 - (NSMutableArray *)groupParts;

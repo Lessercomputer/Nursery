@@ -9,6 +9,7 @@
 #import "NUCPreprocessingDirective.h"
 
 @class NUCIfGroup, NUCElifGroups, NUCElseGroup, NUCEndifLine;
+@class NUCPreprocessingTokenStream;
 
 @interface NUCIfSection : NUCPreprocessingDirective
 {
@@ -17,6 +18,8 @@
     NUCElseGroup *elseGroup;
     NUCEndifLine *endifLine;
 }
+
++ (BOOL)ifSectionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingDirective **)anIfSection;
 
 + (instancetype)ifSectionWithIfGroup:(NUCIfGroup *)anIfGroup elifGroups:(NUCElifGroups *)anElifGroups elseGroup:(NUCElseGroup *)anElseGroup endifLine:(NUCEndifLine *)anEndifLine;
 

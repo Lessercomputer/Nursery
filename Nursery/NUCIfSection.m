@@ -7,8 +7,42 @@
 //
 
 #import "NUCIfSection.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCIfGroup.h"
+#import "NUCElifGroups.h"
+#import "NUCElseGroup.h"
+#import "NUCEndifLine.h"
 
 @implementation NUCIfSection
+
++ (BOOL)ifSectionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingDirective **)anIfSection
+{
+    NSUInteger aPosition = [aStream position];
+    NUCIfGroup *anIfGroup = nil;
+    NUCElifGroups *anElifGroups = nil;
+    NUCElseGroup *anElseGroup = nil;
+    NUCEndifLine *anEndifLine = nil;
+    
+    if ([NUCIfGroup ifGroupFrom:aStream into:&anIfGroup])
+    {
+        [NUCElifGroups elifGroupsFrom:aStream into:&anElifGroups];
+        [NUCElseGroup elseGroupFrom:aStream into:&anElseGroup];
+        
+        if ([NUCEndifLine endifLineFrom:aStream into:&anEndifLine])
+        {
+            if (anIfSection)
+            {
+                *anIfSection = [NUCIfSection ifSectionWithIfGroup:anIfGroup elifGroups:anElifGroups elseGroup:anElseGroup endifLine:anEndifLine];
+            }
+            
+            return YES;
+        }
+        else
+            [aStream setPosition:aPosition];
+    }
+    
+    return NO;
+}
 
 + (instancetype)ifSectionWithIfGroup:(NUCIfGroup *)anIfGroup elifGroups:(NUCElifGroups *)anElifGroups elseGroup:(NUCElseGroup *)anElseGroup endifLine:(NUCEndifLine *)anEndifLine
 {

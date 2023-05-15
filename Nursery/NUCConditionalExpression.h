@@ -8,7 +8,7 @@
 
 #import "NUCPreprocessingToken.h"
 
-@class NUCDecomposedPreprocessingToken, NUCLogicalORExpression, NUCExpression;
+@class NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream, NUCLogicalORExpression, NUCExpression;
 
 @interface NUCConditionalExpression : NUCPreprocessingToken
 {
@@ -18,6 +18,8 @@
     NUCDecomposedPreprocessingToken *colonPunctuator;
     NUCConditionalExpression *conditionalExpression;
 }
+
++ (BOOL)conditionalExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCConditionalExpression **)aToken;
 
 + (instancetype)expressionWithLogicalORExpression:(NUCLogicalORExpression *)aLogicalORExpression;
 

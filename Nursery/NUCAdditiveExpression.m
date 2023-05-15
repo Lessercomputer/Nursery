@@ -7,8 +7,52 @@
 //
 
 #import "NUCAdditiveExpression.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCDecomposedPreprocessingToken.h"
+#import "NUCMultiplicativeExpression.h"
 
 @implementation NUCAdditiveExpression
+
++ (BOOL)additiveExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCAdditiveExpression **)aToken
+{
+    NUCMultiplicativeExpression *aMultiplicativeExpression = nil;
+    
+    if ([NUCMultiplicativeExpression multiplicativeExpressionFrom:aStream into:&aMultiplicativeExpression])
+    {
+        if (aToken)
+            *aToken = [NUCAdditiveExpression expressionWithMultiplicativeExpression:aMultiplicativeExpression];
+        
+        return YES;
+    }
+    else
+    {
+        NSUInteger aPosition = [aStream position];
+        NUCAdditiveExpression *anAdditiveExpression = nil;
+        
+        if ([NUCAdditiveExpression additiveExpressionFrom:aStream into:&anAdditiveExpression])
+        {
+            [aStream skipWhitespacesWithoutNewline];
+            
+            NUCDecomposedPreprocessingToken *anAdditiveOperator = [aStream next];
+            
+            if ([anAdditiveOperator isAdditiveOperator])
+            {
+                [aStream skipWhitespacesWithoutNewline];
+                
+                if ([NUCMultiplicativeExpression multiplicativeExpressionFrom:aStream into:&aMultiplicativeExpression])
+                {
+                    if (aToken)
+                        *aToken = [NUCAdditiveExpression expressionWithAdditiveExpression:anAdditiveExpression additiveOperator:anAdditiveOperator multiplicativeExpression:aMultiplicativeExpression];
+                    
+                    return YES;
+                }
+            }
+        }
+        
+        [aStream setPosition:aPosition];
+        return NO;
+    }
+}
 
 + (instancetype)expressionWithMultiplicativeExpression:(NUCMultiplicativeExpression *)aMultiplicativeExpression
 {

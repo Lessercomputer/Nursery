@@ -8,7 +8,7 @@
 
 #import "NUCPreprocessingToken.h"
 
-@class NUCShiftExpression, NUCDecomposedPreprocessingToken;
+@class NUCShiftExpression, NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream;
 
 @interface NUCRelationalExpression : NUCPreprocessingToken
 {
@@ -16,6 +16,8 @@
     NUCRelationalExpression *relationalExpression;
     NUCDecomposedPreprocessingToken *relationalOperator;
 }
+
++ (BOOL)relationalExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCRelationalExpression **)aToken;
 
 + (instancetype)expressionWithShiftExpression:(NUCShiftExpression *)aShiftExpression;
 

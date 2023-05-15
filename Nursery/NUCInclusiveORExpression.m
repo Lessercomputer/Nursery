@@ -7,8 +7,53 @@
 //
 
 #import "NUCInclusiveORExpression.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCDecomposedPreprocessingToken.h"
+#import "NUCExclusiveORExpression.h"
 
 @implementation NUCInclusiveORExpression
+
++ (BOOL)inclusiveORExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCInclusiveORExpression **)aToken
+{
+    NUCExclusiveORExpression *anExclusiveORExpression = nil;
+    
+    if ([NUCExclusiveORExpression exclusiveORExpressionFrom:aStream into:&anExclusiveORExpression])
+    {
+        if (aToken)
+            *aToken = [NUCInclusiveORExpression expressionExclusiveExpression:anExclusiveORExpression];
+        
+        return YES;
+    }
+    else
+    {
+        NSUInteger aPosition = [aStream position];
+        NUCInclusiveORExpression *anInclusiveExpression = nil;
+        
+        if ([self inclusiveORExpressionFrom:aStream into:&anInclusiveExpression])
+        {
+            [aStream skipWhitespacesWithoutNewline];
+            
+            NUCDecomposedPreprocessingToken *anInclusiveOROperator =  [aStream next];
+            if ([anInclusiveOROperator isInclusiveOROperator])
+            {
+                [aStream skipWhitespacesWithoutNewline];
+                
+                NUCExclusiveORExpression *anExclusiveORExpression = nil;
+                if ([NUCExclusiveORExpression exclusiveORExpressionFrom:aStream into:&anExclusiveORExpression])
+                {
+                    if (aToken)
+                        *aToken = [NUCInclusiveORExpression expressionWithInclusiveORExpression:anInclusiveExpression inclusiveOROperator:anInclusiveOROperator exclusiveORExpression:anExclusiveORExpression];
+                    
+                    return YES;
+                }
+            }
+        }
+        
+        [aStream setPosition:aPosition];
+        
+        return NO;
+    }
+}
 
 + (instancetype)expressionExclusiveExpression:(NUCExclusiveORExpression *)anExclusiveORExpression
 {

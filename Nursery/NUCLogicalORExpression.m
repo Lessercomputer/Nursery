@@ -7,8 +7,51 @@
 //
 
 #import "NUCLogicalORExpression.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCLogicalANDExpression.h"
+#import "NUCDecomposedPreprocessingToken.h"
 
 @implementation NUCLogicalORExpression
+
++ (BOOL)logicalORExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCLogicalORExpression **)aToken
+{
+    NUCLogicalANDExpression *anAndExpression = nil;
+    
+    if ([NUCLogicalANDExpression logicalANDExpressionFrom:aStream into:&anAndExpression])
+    {
+        if (aToken)
+            *aToken = [NUCLogicalORExpression expressionWithLogicalANDExpression:anAndExpression];
+        
+        return YES;
+    }
+    else
+    {
+        NSUInteger aPosition = [aStream position];
+        NUCLogicalORExpression *anORExpression = nil;
+        
+        if ([self logicalORExpressionFrom:aStream into:&anORExpression])
+        {
+            [aStream skipWhitespacesWithoutNewline];
+            
+            NUCDecomposedPreprocessingToken *anOROperator = [aStream next];
+            if ([anOROperator isLogicalOROperator])
+            {
+                [aStream skipWhitespacesWithoutNewline];
+                
+                if ([NUCLogicalANDExpression logicalANDExpressionFrom:aStream into:&anAndExpression])
+                {
+                    if (aToken)
+                        *aToken = [NUCLogicalORExpression expressionWithlogicalORExpression:anORExpression logicalOREperator:anOROperator logicalANDExpression:anAndExpression];
+                    
+                    return YES;
+                }
+            }
+        }
+        
+        [aStream setPosition:aPosition];
+        return NO;
+    }
+}
 
 + (instancetype)expressionWithLogicalANDExpression:(NUCLogicalANDExpression *)aLogicalANDExpression
 {

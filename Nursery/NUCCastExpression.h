@@ -8,12 +8,14 @@
 
 #import "NUCPreprocessingToken.h"
 
-@class NUCUnaryExpression;
+@class NUCUnaryExpression, NUCPreprocessingTokenStream;
 
 @interface NUCCastExpression : NUCPreprocessingToken
 {
     NUCUnaryExpression *unaryExpression;
 }
+
++ (BOOL)castExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCCastExpression **)aToken;
 
 + (instancetype)expressionWithUnaryExpression:(NUCUnaryExpression *)anUnaryExpression;
 

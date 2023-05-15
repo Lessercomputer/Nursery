@@ -8,12 +8,15 @@
 
 #import "NUCPreprocessingDirective.h"
 
+@class NUCPreprocessingTokenStream;
+
 @interface NUCNewline : NUCPreprocessingDirective
 {
     NUCLexicalElement *cr;
     NUCLexicalElement *lf;
 }
 
++ (BOOL)newlineFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCNewline **)aNewline;
 
 + (instancetype)newlineWithCr:(NUCLexicalElement *)aCr lf:(NUCLexicalElement *)aLf;
 

@@ -8,7 +8,7 @@
 
 #import "NUCPreprocessingDirective.h"
 
-@class NUCDecomposedPreprocessingToken, NUCNewline;
+@class NUCPreprocessingTokenStream, NUCDecomposedPreprocessingToken, NUCNewline, NUCLine;
 
 @interface NUCControlLine : NUCPreprocessingDirective
 {
@@ -16,6 +16,12 @@
     NUCDecomposedPreprocessingToken *directiveName;
     NUCNewline *newline;
 }
+
++ (BOOL)controlLineFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingDirective **)aToken;
+
++ (BOOL)controlLineLineFrom:(NUCPreprocessingTokenStream *)aStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCLine **)aToken;
+
++ (BOOL)controlLineNewlineFrom:(NUCPreprocessingTokenStream *)aStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCControlLine **)aToken;
 
 - (instancetype)initWithType:(NUCLexicalElementType)aType hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName newline:(NUCNewline *)aNewline;
 

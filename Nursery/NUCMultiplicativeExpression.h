@@ -8,7 +8,7 @@
 
 #import "NUCPreprocessingToken.h"
 
-@class NUCCastExpression, NUCDecomposedPreprocessingToken;
+@class NUCCastExpression, NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream;
 
 @interface NUCMultiplicativeExpression : NUCPreprocessingToken
 {
@@ -16,6 +16,8 @@
     NUCMultiplicativeExpression *multiplicativeExpression;
     NUCDecomposedPreprocessingToken *multiplicativeOperator;
 }
+
++ (BOOL)multiplicativeExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCMultiplicativeExpression **)aToken;
 
 + (instancetype)expressionWithCastExpression:(NUCCastExpression *)aCastExpression;
 

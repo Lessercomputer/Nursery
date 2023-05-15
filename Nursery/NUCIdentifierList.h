@@ -8,11 +8,14 @@
 
 #import "NUCLexicalElement.h"
 
+@class NUCPreprocessingTokenStream;
 
 @interface NUCIdentifierList : NUCLexicalElement
 {
     NSMutableArray *identifiers;
 }
+
++ (BOOL)identifierListFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCIdentifierList **)aToken;
 
 + (instancetype)identifierList;
 
