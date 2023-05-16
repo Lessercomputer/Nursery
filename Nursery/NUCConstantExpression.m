@@ -54,9 +54,9 @@
     return conditionalExpression;
 }
 
-- (void)preprocessWith:(NUCPreprocessor *)aPreprocesser
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
 {
-    [[self conditionalExpression] preprocessWith:aPreprocesser];
+    [[self conditionalExpression] preprocessWith:aPreprocessor];
 }
 
 @end

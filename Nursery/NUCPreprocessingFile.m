@@ -58,9 +58,9 @@
     return group;
 }
 
-- (void)preprocessWith:(NUCPreprocessor *)aPreprocesser
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
 {
-    [[self group] preprocessWith:aPreprocesser];
+    [[self group] preprocessWith:aPreprocessor];
 }
 
 @end

@@ -92,9 +92,9 @@
     return endifLine;
 }
 
-- (void)preprocessWith:(NUCPreprocessor *)aPreprocesser
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
 {
-    [[self ifGroup] preprocessWith:aPreprocesser];
+    [[self ifGroup] preprocessWith:aPreprocessor];
 }
 
 @end

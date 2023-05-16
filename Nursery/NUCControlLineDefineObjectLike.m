@@ -36,4 +36,9 @@
     return NO;
 }
 
+- (BOOL)isObjectLike
+{
+    return YES;
+}
+
 @end

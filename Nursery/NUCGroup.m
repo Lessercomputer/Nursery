@@ -69,10 +69,10 @@
     [[self groupParts] addObject:aGroupPart];
 }
 
-- (void)preprocessWith:(NUCPreprocessor *)aPreprocesser
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
 {
     [[self groupParts] enumerateObjectsUsingBlock:^(NUCGroupPart * _Nonnull aGroupPart, NSUInteger idx, BOOL * _Nonnull stop) {
-            [aGroupPart preprocessWith:aPreprocesser];
+            [aGroupPart preprocessWith:aPreprocessor];
     }];
 }
 

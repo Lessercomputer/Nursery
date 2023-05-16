@@ -87,13 +87,13 @@
     
     while ((aSourceFile = [[self sourceFiles] firstObject]))
     {
-        NUCPreprocessor *aPreprocesser = [[NUCPreprocessor alloc] initWithTranslator:self];
+        NUCPreprocessor *aPreprocessor = [[NUCPreprocessor alloc] initWithTranslator:self];
 
-        [aPreprocesser preprocessSourceFile:aSourceFile];
+        [aPreprocessor preprocessSourceFile:aSourceFile];
         [preprocessedSourceFiles addObject:aSourceFile];
         
         [[self sourceFiles] removeObjectAtIndex:0];
-        [aPreprocesser release];
+        [aPreprocessor release];
     };
 }
 

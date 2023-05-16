@@ -113,4 +113,9 @@
     return rparen;
 }
 
+- (BOOL)isFunctionLike
+{
+    return YES;
+}
+
 @end

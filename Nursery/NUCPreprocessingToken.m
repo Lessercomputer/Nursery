@@ -10,7 +10,7 @@
 
 @implementation NUCPreprocessingToken
 
-- (void)preprocessWith:(NUCPreprocessor *)aPreprocesser
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
 {
     
 }

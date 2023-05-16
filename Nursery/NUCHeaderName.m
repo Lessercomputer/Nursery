@@ -34,7 +34,7 @@
 
 - (instancetype)initWithContent:(NSString *)aContent range:(NSRange)aRange isHChar:(BOOL)anIsHChar
 {
-    if (self = [super initWithContent:aContent region:NURegionFromRange(aRange) type:NUCLexicalElementHeaderNameType])
+    if (self = [super initWithContent:aContent range:aRange type:NUCLexicalElementHeaderNameType])
     {
         isHChar = anIsHChar;
     }

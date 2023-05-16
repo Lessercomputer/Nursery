@@ -36,19 +36,9 @@
     return [self preprocessingTokenWithContent:[aString substringWithRange:aRange] range:aRange type:anElementType];
 }
 
-+ (instancetype)preprocessingTokenWithRange:(NSRange)aRange type:(NUCLexicalElementType)anElementType
-{
-    return [self preprocessingTokenWithContent:nil range:aRange type:anElementType];
-}
-
 + (instancetype)preprocessingTokenWithContent:(NSString *)aContent range:(NSRange)aRange type:(NUCLexicalElementType)anElementType
 {
-    return [self preprocessingTokenWithContent:aContent region:NURegionFromRange(aRange) type:anElementType];
-}
-
-+ (instancetype)preprocessingTokenWithContent:(NSString *)aContent region:(NURegion)aRange type:(NUCLexicalElementType)anElementType
-{
-    return [[[self alloc] initWithContent:aContent region:aRange type:anElementType] autorelease];
+    return [[[self alloc] initWithContent:aContent range:aRange type:anElementType] autorelease];
 }
 
 - (instancetype)initWithRange:(NSRange)aRange type:(NUCLexicalElementType)anElementType
@@ -62,11 +52,6 @@
 }
 
 - (instancetype)initWithContent:(NSString *)aContent range:(NSRange)aRange type:(NUCLexicalElementType)anElementType
-{
-    return [self initWithContent:aContent region:NURegionFromRange(aRange) type:anElementType];
-}
-
-- (instancetype)initWithContent:(NSString *)aContent region:(NURegion)aRange type:(NUCLexicalElementType)anElementType
 {
     if (self = [super init])
     {

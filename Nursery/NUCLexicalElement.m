@@ -191,7 +191,7 @@ static NSArray *NUCPreprocessingDirectiveNames;
         NUCSourceCharacterSetExceptDoubleQuoteAndBackslashAndNewline = [aBasicSourceMutableCharacterSet copy];
         
         NUCHCharCharacterSet = [[[NSCharacterSet characterSetWithCharactersInString:@"\r\n>"] invertedSet] copy];
-        NUCQCharCharacterSet = [[[NSCharacterSet characterSetWithCharactersInString:@"\r\n'"] invertedSet] copy];
+        NUCQCharCharacterSet = [[[NSCharacterSet characterSetWithCharactersInString:@"\r\n\""] invertedSet] copy];
         NUCNonzeroDigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCNonzeroDigits] copy];
         NUCNondigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:@"_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"] copy];
         NUCDigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCDigits] copy];

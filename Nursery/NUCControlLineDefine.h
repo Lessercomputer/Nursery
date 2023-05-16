@@ -25,5 +25,8 @@
 - (NUCDecomposedPreprocessingToken *)identifier;
 - (NUCReplacementList *)replacementList;
 
+- (BOOL)isObjectLike;
+- (BOOL)isFunctionLike;
+
 @end
 

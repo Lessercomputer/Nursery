@@ -78,4 +78,14 @@
     return replacementList;
 }
 
+- (BOOL)isObjectLike
+{
+    return NO;
+}
+
+- (BOOL)isFunctionLike
+{
+    return NO;
+}
+
 @end

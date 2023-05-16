@@ -8,17 +8,22 @@
 
 #import <Foundation/NSObject.h>
 
-@class NSString, NUCTranslator, NUCSourceFile;
+@class NSString, NSMutableDictionary, NUCTranslator, NUCSourceFile, NUCControlLineDefine;
 
 @interface NUCPreprocessor : NSObject
 {
     NUCTranslator *translator;
+    NSMutableDictionary *macroDictionary;
 }
 
 - (instancetype)initWithTranslator:(NUCTranslator *)aTranslator;
 
 - (NUCTranslator *)translator;
 
+- (NSMutableDictionary *)macroDictionary;
+
 - (void)preprocessSourceFile:(NUCSourceFile *)aSourceFile;
+
+- (void)define:(NUCControlLineDefine *)aMacro;
 
 @end

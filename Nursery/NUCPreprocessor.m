@@ -12,6 +12,7 @@
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCSourceFile.h"
 #import "NUCPreprocessingFile.h"
+#import "NUCControlLineDefine.h"
 
 #import "NURegion.h"
 #import "NUCRangePair.h"
@@ -20,6 +21,7 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSScanner.h>
 #import <Foundation/NSArray.h>
+#import <Foundation/NSDictionary.h>
 
 @implementation NUCPreprocessor
 
@@ -28,6 +30,7 @@
     if (self = [super init])
     {
         translator = [aTranslator retain];
+        macroDictionary = [NSMutableDictionary new];
     }
     
     return self;
@@ -37,6 +40,8 @@
 {
     [translator release];
     translator = nil;
+    [macroDictionary release];
+    macroDictionary = nil;
     
     [super dealloc];
 }
@@ -44,6 +49,11 @@
 - (NUCTranslator *)translator
 {
     return translator;
+}
+
+- (NSMutableDictionary *)macroDictionary
+{
+    return macroDictionary;
 }
 
 - (void)preprocessSourceFile:(NUCSourceFile *)aSourceFile
@@ -168,4 +178,10 @@
     return aLogicalSourceStringInPhase2;
 }
 
+- (void)define:(NUCControlLineDefine *)aMacro
+{
+    NUCControlLineDefine *anExistingMacro = [[self macroDictionary] objectForKey:[aMacro identifier]];
+    
+    
+}
 @end

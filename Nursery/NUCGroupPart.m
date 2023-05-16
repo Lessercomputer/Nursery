@@ -65,9 +65,9 @@
     return content;
 }
 
-- (void)preprocessWith:(NUCPreprocessor *)aPreprocesser
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
 {
-    [[self content] preprocessWith:aPreprocesser];
+    [[self content] preprocessWith:aPreprocessor];
 }
 
 @end

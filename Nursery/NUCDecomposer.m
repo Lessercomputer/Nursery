@@ -11,6 +11,7 @@
 #import "NUCLexicalElement.h"
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCHeaderName.h"
+#import "NUCIdentifier.h"
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSScanner.h>
@@ -61,7 +62,7 @@
     {
         NSRange anIdentifierRange = NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation);
         
-        [anElements addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:anIdentifierRange type:NUCLexicalElementIdentifierType]];
+        [anElements addObject:[NUCIdentifier preprocessingTokenWithContentFromString:[aScanner string] range:anIdentifierRange]];
         
         return YES;
     }
@@ -276,16 +277,9 @@
         {
             if ([aScanner scanString:anEndChar intoString:NULL])
             {
-                NUCLexicalElementType anElementType;
-
-                [anElements addObject:[NUCHeaderName preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aScanlocation + [aBeginChar length], [aScanner scanLocation] - [anEndChar length]) isHChar:anIsHChar]];
-                
-                if (anIsHChar)
-                    anElementType = NUCLexicalElementLessThanSignType;
-                else
-                    anElementType = NUCLexicalElementDoubleQuotationMarkType;
-                
-                [anElements addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange([aScanner scanLocation] - [anEndChar length], [anEndChar length]) type:anElementType]];
+                NSUInteger aSequenceBegin = aScanlocation + [aBeginChar length];
+                NSUInteger aSequenceEnd = [aScanner scanLocation] - [anEndChar length];
+                [anElements addObject:[NUCHeaderName preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aSequenceBegin, aSequenceEnd - aSequenceBegin) isHChar:anIsHChar]];
                 
                 return YES;
             }

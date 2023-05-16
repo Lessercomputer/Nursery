@@ -153,11 +153,11 @@
     return group;
 }
 
-- (void)preprocessWith:(NUCPreprocessor *)aPreprocesser
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
 {
     if ([self isIf])
     {
-        [(NUCConstantExpression *)[self expression] preprocessWith:aPreprocesser];
+        [(NUCConstantExpression *)[self expression] preprocessWith:aPreprocessor];
     }
     else if ([self isIfdef])
     {
