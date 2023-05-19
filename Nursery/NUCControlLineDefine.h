@@ -8,21 +8,21 @@
 
 #import "NUCControlLine.h"
 
-@class NUCReplacementList, NUCIdentifierList;
+@class NUCIdentifier, NUCReplacementList, NUCIdentifierList;
 
 @interface NUCControlLineDefine : NUCControlLine
 {
-    NUCDecomposedPreprocessingToken *identifier;
+    NUCIdentifier *identifier;
     NUCReplacementList *replacementList;
 }
 
 + (BOOL)controlLineDefineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCPreprocessingDirective **)aToken;
 
-+ (instancetype)defineWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCDecomposedPreprocessingToken *)anIdentifier replacementList:(NUCReplacementList *)aReplacementList newline:(NUCNewline *)aNewline;
++ (instancetype)defineWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCIdentifier *)anIdentifier replacementList:(NUCReplacementList *)aReplacementList newline:(NUCNewline *)aNewline;
 
-- (instancetype)initWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCDecomposedPreprocessingToken *)anIdentifier replacementList:(NUCReplacementList *)aReplacementList newline:(NUCNewline *)aNewline;
+- (instancetype)initWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCIdentifier *)anIdentifier replacementList:(NUCReplacementList *)aReplacementList newline:(NUCNewline *)aNewline;
 
-- (NUCDecomposedPreprocessingToken *)identifier;
+- (NUCIdentifier *)identifier;
 - (NUCReplacementList *)replacementList;
 
 - (BOOL)isObjectLike;

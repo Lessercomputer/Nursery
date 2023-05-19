@@ -76,6 +76,21 @@
     return content;
 }
 
+- (NSRange )range
+{
+    return range;
+}
+
+- (NUCReplacementList *)replacementList
+{
+    return replacementList;
+}
+
+- (void)setReplacementList:(NUCReplacementList *)aReplacementList
+{
+    replacementList = aReplacementList;
+}
+
 - (BOOL)isHash
 {
     return [self type] == NUCLexicalElementPunctuatorType
@@ -262,6 +277,21 @@
 {
     return content;
     //    return [NSString stringWithFormat:@"<%@: %p> content:%@, type:%lu", [self class], self, [self content], type];
+}
+
+- (BOOL)isEqual:(id)anOther
+{
+    if (anOther == self)
+        return YES;
+    else if (![super isEqual:anOther])
+        return NO;
+    else
+        return [[self content] isEqual:[anOther content]];
+}
+
+- (NSUInteger)hash
+{
+    return [[self content] hash];
 }
 
 @end

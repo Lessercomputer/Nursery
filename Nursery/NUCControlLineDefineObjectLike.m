@@ -13,7 +13,7 @@
 
 @implementation NUCControlLineDefineObjectLike
 
-+ (BOOL)controlLineDefineObjectLikeFrom:(NUCPreprocessingTokenStream *)aStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCDecomposedPreprocessingToken *)anIdentifier into:(NUCPreprocessingDirective **)aToken
++ (BOOL)controlLineDefineObjectLikeFrom:(NUCPreprocessingTokenStream *)aStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCIdentifier *)anIdentifier into:(NUCPreprocessingDirective **)aToken
 {
     NUCReplacementList *aReplacementList = nil;
     NUCNewline *aNewline = nil;

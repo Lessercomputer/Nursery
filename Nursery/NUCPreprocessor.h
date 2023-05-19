@@ -13,14 +13,14 @@
 @interface NUCPreprocessor : NSObject
 {
     NUCTranslator *translator;
-    NSMutableDictionary *macroDictionary;
+    NSMutableDictionary *macros;
 }
 
 - (instancetype)initWithTranslator:(NUCTranslator *)aTranslator;
 
 - (NUCTranslator *)translator;
 
-- (NSMutableDictionary *)macroDictionary;
+- (NSMutableDictionary *)macros;
 
 - (void)preprocessSourceFile:(NUCSourceFile *)aSourceFile;
 

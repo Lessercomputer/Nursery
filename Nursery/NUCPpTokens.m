@@ -68,4 +68,41 @@
     return [[self ppTokens] count];
 }
 
+- (BOOL)isEqual:(id)anOther
+{
+    if (self == anOther)
+        return YES;
+    else if (![super isEqual:anOther])
+        return NO;
+    else
+        return [[self ppTokens] isEqual:[anOther ppTokens]];
+}
+
+- (BOOL)containsIdentifier:(NUCIdentifier *)anIdentifier
+{
+    return [[self ppTokens] containsObject:anIdentifier];
+}
+
+- (NUCDecomposedPreprocessingToken *)replacementTargetFor:(NUCIdentifier *)anIdentifier
+{
+    __block NUCDecomposedPreprocessingToken *aFoundToken = nil;
+    
+    [self enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop) {
+        if ([aPpToken isEqual:anIdentifier])
+        {
+            aFoundToken = aPpToken;
+            *aStop = YES;
+        }
+    }];
+    
+    return aFoundToken;
+}
+
+- (void)enumerateObjectsUsingBlock:(void (^)(NUCDecomposedPreprocessingToken *, NSUInteger, BOOL *))aBlock
+{
+    [[self ppTokens] enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken   * _Nonnull aPpToken, NSUInteger anIndex, BOOL * _Nonnull aStop) {
+        aBlock(aPpToken, anIndex, aStop);
+    }];
+}
+
 @end

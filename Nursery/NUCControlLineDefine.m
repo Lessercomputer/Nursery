@@ -11,6 +11,8 @@
 #import "NUCControlLineDefineFunctionLike.h"
 #import "NUCControlLineDefineObjectLike.h"
 #import "NUCPreprocessingTokenStream.h"
+#import "NUCIdentifier.h"
+#import "NUCPreprocessor.h"
 
 #import <Foundation/NSString.h>
 
@@ -44,12 +46,12 @@
     return NO;
 }
 
-+ (instancetype)defineWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCDecomposedPreprocessingToken *)anIdentifier replacementList:(NUCReplacementList *)aReplacementList newline:(NUCNewline *)aNewline
++ (instancetype)defineWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCIdentifier *)anIdentifier replacementList:(NUCReplacementList *)aReplacementList newline:(NUCNewline *)aNewline
 {
     return [[[self alloc] initWithHash:aHash directiveName:aDirectiveName identifier:anIdentifier replacementList:aReplacementList newline:aNewline] autorelease];
 }
 
-- (instancetype)initWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCDecomposedPreprocessingToken *)anIdentifier replacementList:(NUCReplacementList *)aReplacementList newline:(NUCNewline *)aNewline
+- (instancetype)initWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCIdentifier *)anIdentifier replacementList:(NUCReplacementList *)aReplacementList newline:(NUCNewline *)aNewline
 {
     if (self = [super initWithType:NUCLexicalElementDefineType hash:aHash directiveName:aDirectiveName newline:aNewline])
     {
@@ -68,7 +70,7 @@
     [super dealloc];
 }
 
-- (NUCDecomposedPreprocessingToken *)identifier
+- (NUCIdentifier *)identifier
 {
     return identifier;
 }
@@ -86,6 +88,11 @@
 - (BOOL)isFunctionLike
 {
     return NO;
+}
+
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
+{
+    [aPreprocessor define:self];
 }
 
 @end

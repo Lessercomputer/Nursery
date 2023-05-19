@@ -15,4 +15,9 @@
     return [self type] == NUCLexicalElementPpTokensType;
 }
 
+- (BOOL)isControlLine
+{
+    return [self type] == NUCLexicalElementControlLineType;
+}
+
 @end

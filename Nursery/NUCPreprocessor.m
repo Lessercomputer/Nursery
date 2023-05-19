@@ -13,6 +13,8 @@
 #import "NUCSourceFile.h"
 #import "NUCPreprocessingFile.h"
 #import "NUCControlLineDefine.h"
+#import "NUCIdentifier.h"
+#import "NUCReplacementList.h"
 
 #import "NURegion.h"
 #import "NUCRangePair.h"
@@ -30,7 +32,7 @@
     if (self = [super init])
     {
         translator = [aTranslator retain];
-        macroDictionary = [NSMutableDictionary new];
+        macros = [NSMutableDictionary new];
     }
     
     return self;
@@ -40,8 +42,8 @@
 {
     [translator release];
     translator = nil;
-    [macroDictionary release];
-    macroDictionary = nil;
+    [macros release];
+    macros = nil;
     
     [super dealloc];
 }
@@ -51,9 +53,9 @@
     return translator;
 }
 
-- (NSMutableDictionary *)macroDictionary
+- (NSMutableDictionary *)macros
 {
-    return macroDictionary;
+    return macros;
 }
 
 - (void)preprocessSourceFile:(NUCSourceFile *)aSourceFile
@@ -180,8 +182,34 @@
 
 - (void)define:(NUCControlLineDefine *)aMacro
 {
-    NUCControlLineDefine *anExistingMacro = [[self macroDictionary] objectForKey:[aMacro identifier]];
+    NUCIdentifier *aMacroName = [aMacro identifier];
+    NUCControlLineDefine *anExistingMacro = [[self macros] objectForKey:aMacroName];
     
-    
+    if (!anExistingMacro || (anExistingMacro && [anExistingMacro isEqual:aMacro]))
+    {
+        [[self macros] setObject:aMacro forKey:[aMacro identifier]];
+        
+        [[self macros] enumerateKeysAndObjectsUsingBlock:^(NUCIdentifier *  _Nonnull aDefinedMacroName, NUCDecomposedPreprocessingToken *  _Nonnull aMacro, BOOL * _Nonnull stop) {
+            
+            NUCDecomposedPreprocessingToken *aMacroNameToReplace = [[aMacro replacementList] replacementTargetFor:aDefinedMacroName];
+            
+            if (aMacroNameToReplace)
+                [aMacroNameToReplace setReplacementList:[aMacro replacementList]];
+        }];
+        
+        [[aMacro replacementList] enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop) {
+            
+            if ([aPpToken isEqual:aMacroName])
+                *aStop = YES;
+            else
+            {
+                NUCControlLineDefine *aDefinedMacro = [[self macros] objectForKey:aMacroName];
+                
+                if (aDefinedMacro)
+                    [aPpToken setReplacementList:[aDefinedMacro replacementList]];
+            }
+        }];
+    }
 }
+
 @end

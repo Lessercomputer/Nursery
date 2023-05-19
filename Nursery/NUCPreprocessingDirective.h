@@ -11,5 +11,6 @@
 @interface NUCPreprocessingDirective : NUCPreprocessingToken
 
 - (BOOL)isPpTokens;
+- (BOOL)isControlLine;
 
 @end

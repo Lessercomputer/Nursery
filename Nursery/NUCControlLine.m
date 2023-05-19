@@ -17,6 +17,7 @@
 #import "NUCUndef.h"
 #import "NUCPpTokens.h"
 #import "NUCNewline.h"
+#import "NUCPreprocessor.h"
 
 @implementation NUCControlLine
 

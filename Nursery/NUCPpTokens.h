@@ -8,7 +8,7 @@
 
 #import "NUCPreprocessingDirective.h"
 
-@class NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream;
+@class NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream, NUCIdentifier;
 
 @interface NUCPpTokens : NUCPreprocessingDirective
 {
@@ -23,6 +23,11 @@
 
 - (NSMutableArray *)ppTokens;
 - (NSUInteger)count;
+
+- (BOOL)containsIdentifier:(NUCIdentifier *)anIdentifier;
+- (NUCDecomposedPreprocessingToken *)replacementTargetFor:(NUCIdentifier *)anIdentifier;
+
+- (void)enumerateObjectsUsingBlock:(void (^)(NUCDecomposedPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop))aBlock;
 
 @end
 

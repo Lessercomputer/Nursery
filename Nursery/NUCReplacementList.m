@@ -10,6 +10,8 @@
 #import "NUCPreprocessingTokenStream.h"
 #import "NUCPpTokens.h"
 
+#import <Foundation/NSArray.h>
+
 @implementation NUCReplacementList
 
 + (BOOL)replacementListFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingDirective **)aToken
@@ -42,11 +44,41 @@
     return self;
 }
 
+- (NUCPpTokens *)ppTokens
+{
+    return ppTokens;
+}
+
+- (BOOL)containsReplacementTargetFor:(NUCIdentifier *)anIdentifier
+{
+    return [self replacementTargetFor:anIdentifier] ? YES : NO;
+}
+
+- (NUCDecomposedPreprocessingToken *)replacementTargetFor:(NUCIdentifier *)anIdentifier
+{
+    return [[self ppTokens] replacementTargetFor:anIdentifier];
+}
+
 - (void)dealloc
 {
     [ppTokens release];
     
     [super dealloc];
+}
+
+- (BOOL)isEqual:(id)anOther
+{
+    if (anOther == self)
+        return YES;
+    else if (![super isEqual:anOther])
+        return NO;
+    else
+        return [[self ppTokens] isEqual:[anOther ppTokens]];
+}
+
+- (void)enumerateObjectsUsingBlock:(void (^)(NUCDecomposedPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop))aBlock;
+{
+    [[self ppTokens] enumerateObjectsUsingBlock:aBlock];
 }
 
 @end

@@ -8,12 +8,13 @@
 
 #import "NUCPreprocessingToken.h"
 
-@class NUCPreprocessingTokenStream;
+@class NUCPreprocessingTokenStream, NUCReplacementList, NUCIdentifier;
 
 @interface NUCDecomposedPreprocessingToken : NUCPreprocessingToken
 {
     NSString *content;
     NSRange range;
+    NUCReplacementList *replacementList;
 }
 
 + (BOOL)ellipsisFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCDecomposedPreprocessingToken **)aToken;
@@ -29,6 +30,10 @@
 
 
 - (NSString *)content;
+- (NSRange)range;
+
+- (NUCReplacementList *)replacementList;
+- (void)setReplacementList:(NUCReplacementList *)aReplacementList;
 
 - (BOOL)isHash;
 - (BOOL)isIdentifier;
