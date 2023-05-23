@@ -118,4 +118,19 @@
     return YES;
 }
 
+- (BOOL)isEqual:(id)anObject
+{
+    if (self == anObject)
+        return YES;
+    else if (![super isEqual:anObject])
+        return NO;
+    else
+    {
+        NUCControlLineDefineFunctionLike *aDefineFunctionLike = anObject;
+        
+        return ([self ellipsis] && [aDefineFunctionLike ellipsis])
+                    || (![self ellipsis] && ![aDefineFunctionLike ellipsis]);
+    }
+}
+
 @end

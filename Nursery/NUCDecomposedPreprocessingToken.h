@@ -10,7 +10,7 @@
 
 @class NUCPreprocessingTokenStream, NUCReplacementList, NUCIdentifier;
 
-@interface NUCDecomposedPreprocessingToken : NUCPreprocessingToken
+@interface NUCDecomposedPreprocessingToken : NUCPreprocessingToken <NSCopying>
 {
     NSString *content;
     NSRange range;

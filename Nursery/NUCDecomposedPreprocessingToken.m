@@ -91,6 +91,16 @@
     replacementList = aReplacementList;
 }
 
+- (NSUInteger)hash
+{
+    return [[self content] hash];
+}
+
+- (nonnull id)copyWithZone:(nullable NSZone *)zone
+{
+    return [[self class] preprocessingTokenWithContent:[self content] range:[self range] type:[self type]];
+}
+
 - (BOOL)isHash
 {
     return [self type] == NUCLexicalElementPunctuatorType
@@ -287,11 +297,6 @@
         return NO;
     else
         return [[self content] isEqual:[anOther content]];
-}
-
-- (NSUInteger)hash
-{
-    return [[self content] hash];
 }
 
 @end

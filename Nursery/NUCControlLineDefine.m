@@ -90,6 +90,28 @@
     return NO;
 }
 
+- (BOOL)isEqual:(id)anObject
+{
+    NUCControlLineDefine *aDefine = (NUCControlLineDefine *)anObject;
+    
+    if (self == anObject)
+        return YES;
+    else if ([aDefine type] == NUCLexicalElementDefineType && [[self identifier] isEqual:[aDefine identifier]])
+    {
+        if (!(([self isObjectLike] && [aDefine isObjectLike]) || ([self isFunctionLike] && [aDefine isFunctionLike])))
+            return NO;
+        
+        if ([self replacementList] && [aDefine replacementList])
+            return [[self replacementList] isEqual:[aDefine replacementList]];
+        else if (![self replacementList] && ![aDefine replacementList])
+            return YES;
+        else
+            return NO;
+    }
+    else
+        return NO;
+}
+
 - (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
 {
     [aPreprocessor define:self];

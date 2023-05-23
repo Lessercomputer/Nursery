@@ -185,17 +185,9 @@
     NUCIdentifier *aMacroName = [aMacro identifier];
     NUCControlLineDefine *anExistingMacro = [[self macros] objectForKey:aMacroName];
     
-    if (!anExistingMacro || (anExistingMacro && [anExistingMacro isEqual:aMacro]))
+    if (!anExistingMacro || [anExistingMacro isEqual:aMacro])
     {
         [[self macros] setObject:aMacro forKey:[aMacro identifier]];
-        
-        [[self macros] enumerateKeysAndObjectsUsingBlock:^(NUCIdentifier *  _Nonnull aDefinedMacroName, NUCDecomposedPreprocessingToken *  _Nonnull aMacro, BOOL * _Nonnull stop) {
-            
-            NUCDecomposedPreprocessingToken *aMacroNameToReplace = [[aMacro replacementList] replacementTargetFor:aDefinedMacroName];
-            
-            if (aMacroNameToReplace)
-                [aMacroNameToReplace setReplacementList:[aMacro replacementList]];
-        }];
         
         [[aMacro replacementList] enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop) {
             
@@ -203,7 +195,7 @@
                 *aStop = YES;
             else
             {
-                NUCControlLineDefine *aDefinedMacro = [[self macros] objectForKey:aMacroName];
+                NUCControlLineDefine *aDefinedMacro = [[self macros] objectForKey:aPpToken];
                 
                 if (aDefinedMacro)
                     [aPpToken setReplacementList:[aDefinedMacro replacementList]];

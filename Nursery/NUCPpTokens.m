@@ -100,7 +100,7 @@
 
 - (void)enumerateObjectsUsingBlock:(void (^)(NUCDecomposedPreprocessingToken *, NSUInteger, BOOL *))aBlock
 {
-    [[self ppTokens] enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken   * _Nonnull aPpToken, NSUInteger anIndex, BOOL * _Nonnull aStop) {
+    [[self ppTokens] enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken * _Nonnull aPpToken, NSUInteger anIndex, BOOL * _Nonnull aStop) {
         aBlock(aPpToken, anIndex, aStop);
     }];
 }

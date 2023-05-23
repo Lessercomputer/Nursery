@@ -9,7 +9,7 @@
 #import "NUCDecomposedPreprocessingToken.h"
 
 
-@interface NUCIdentifier : NUCDecomposedPreprocessingToken <NSCopying>
+@interface NUCIdentifier : NUCDecomposedPreprocessingToken 
 
 + (instancetype)preprocessingTokenWithContentFromString:(NSString *)aString range:(NSRange)aRange;
 
