@@ -180,6 +180,11 @@
     return aLogicalSourceStringInPhase2;
 }
 
+- (void)include:(NUCControlLineInclude *)anInclude
+{
+    
+}
+
 - (void)define:(NUCControlLineDefine *)aMacro
 {
     NUCIdentifier *aMacroName = [aMacro identifier];

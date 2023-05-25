@@ -12,6 +12,7 @@
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCHeaderName.h"
 #import "NUCIdentifier.h"
+#import "NUCStringLiteral.h"
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSScanner.h>
@@ -30,18 +31,24 @@
     {
         if ([self decomposeWhiteSpaceCharacterFrom:aScanner into:aPreprocessingTokens])
             continue;
-        if ([self decomposeHeaderNameFrom:aScanner into:aPreprocessingTokens])
-            continue;
         if ([self decomposeIdentifierFrom:aScanner into:aPreprocessingTokens])
             continue;
         if ([self decomposePpNumberFrom:aScanner into:aPreprocessingTokens])
             continue;
         if ([self decomposeCharacterConstantFrom:aScanner into:aPreprocessingTokens])
             continue;
-        if ([self decomposeStringLiteralFrom:aScanner into:aPreprocessingTokens])
-            continue;
         if ([self decomposePunctuatorFrom:aScanner into:aPreprocessingTokens])
             continue;
+        if ([self isInInclude])
+        {
+            if ([self decomposeHeaderNameFrom:aScanner into:aPreprocessingTokens])
+                continue;
+        }
+        else
+        {
+            if ([self decomposeStringLiteralFrom:aScanner into:aPreprocessingTokens])
+                continue;
+        }
         if ([self decomposeNonWhiteSpaceCharacterFrom:aScanner into:aPreprocessingTokens])
             continue;
     }
@@ -61,8 +68,13 @@
     if (aScanLocation != [aScanner scanLocation])
     {
         NSRange anIdentifierRange = NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation);
+        NUCIdentifier *anIdentifier = [NUCIdentifier preprocessingTokenWithContentFromString:[aScanner string] range:anIdentifierRange];
+        [anElements addObject:anIdentifier];
         
-        [anElements addObject:[NUCIdentifier preprocessingTokenWithContentFromString:[aScanner string] range:anIdentifierRange]];
+        if ([[anIdentifier content] isEqual:NUCPreprocessingDirectiveInclude])
+            includeExistsOnCurrentLine = YES;
+        else
+            [self clearIsInInclude];
         
         return YES;
     }
@@ -96,6 +108,8 @@
     {
         [anElements addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementPpNumberType]];
         
+        [self clearIsInInclude];
+        
         return YES;
     }
     else
@@ -105,11 +119,12 @@
 - (BOOL)decomposeStringLiteralFrom:(NSScanner *)aScanner into:(NSMutableArray *)anElements
 {
     NSUInteger aScanLocation = [aScanner scanLocation];
+    NSString *anEncodingPrefix = nil;
     
-    [aScanner scanString:NUCStringLiteralEncodingPrefixSmallU8 intoString:NULL]
-        || [aScanner scanString:NUCStringLiteralEncodingPrefixSmallU intoString:NULL]
-        || [aScanner scanString:NUCStringLiteralEncodingPrefixLargeU intoString:NULL]
-        || [aScanner scanString:NUCStringLiteralEncodingPrefixLargeL intoString:NULL];
+    [aScanner scanString:NUCStringLiteralEncodingPrefixSmallU8 intoString:&anEncodingPrefix]
+        || [aScanner scanString:NUCStringLiteralEncodingPrefixSmallU intoString:&anEncodingPrefix]
+        || [aScanner scanString:NUCStringLiteralEncodingPrefixLargeU intoString:&anEncodingPrefix]
+        || [aScanner scanString:NUCStringLiteralEncodingPrefixLargeL intoString:&anEncodingPrefix];
     
     if ([aScanner scanString:NUCDoubleQuotationMark intoString:NULL])
     {
@@ -119,7 +134,7 @@
         {
             NSRange aRange = NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation);
             
-            [anElements addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContent:[[aScanner string] substringWithRange:aRange] range:aRange type:NUCLexicalElementStringLiteralType]];
+            [anElements addObject:[NUCStringLiteral preprocessingTokenWithContent:[[aScanner string] substringWithRange:aRange] range:aRange encodingPrefix:anEncodingPrefix]];
             
             return YES;
         }
@@ -141,6 +156,16 @@
         if ([aScanner scanString:aPunctuator intoString:NULL])
         {
             [aPreprocessingTokens addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContent:aPunctuator range:NSMakeRange(aScanLocation, [aPunctuator length]) type:NUCLexicalElementPunctuatorType]];
+            
+            if ([aPunctuator isEqual:NUCHash])
+            {
+                if (hashExistsOnCurrentLine)
+                    [self clearIsInInclude];
+                else
+                    hashExistsOnCurrentLine = YES;
+            }
+            else
+                [self clearIsInInclude];
             
             *aStop = aPunctuatorScand = YES;
         }
@@ -185,6 +210,9 @@
     {
         aToken = [NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aLocation, [aScanner scanLocation] - aLocation) type:NUCLexicalElementWhiteSpaceCharacterType];
         [aPreprocessingTokens addObject:aToken];
+        
+        hashExistsOnCurrentLine = NO;
+        includeExistsOnCurrentLine = NO;
         
         return YES;
     }
@@ -250,6 +278,8 @@
         && [aScanner scanString:NUCSingleQuote intoString:NULL])
     {
         [anElements addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementCharacterConstantType]];
+        
+        [self clearIsInInclude];
         
         return YES;
     }
@@ -486,6 +516,17 @@
     }
     
     return NO;
+}
+
+- (BOOL)isInInclude
+{
+    return hashExistsOnCurrentLine && includeExistsOnCurrentLine;
+}
+
+- (void)clearIsInInclude
+{
+    hashExistsOnCurrentLine = NO;
+    includeExistsOnCurrentLine = NO;
 }
 
 @end

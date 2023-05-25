@@ -8,7 +8,7 @@
 
 #import <Foundation/NSObject.h>
 
-@class NSString, NSMutableDictionary, NUCTranslator, NUCSourceFile, NUCControlLineDefine;
+@class NSString, NSMutableDictionary, NUCTranslator, NUCSourceFile, NUCControlLineDefine, NUCControlLineInclude;
 
 @interface NUCPreprocessor : NSObject
 {
@@ -24,6 +24,7 @@
 
 - (void)preprocessSourceFile:(NUCSourceFile *)aSourceFile;
 
+- (void)include:(NUCControlLineInclude *)anInclude;
 - (void)define:(NUCControlLineDefine *)aMacro;
 
 @end

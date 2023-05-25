@@ -301,4 +301,14 @@ static NSArray *NUCPreprocessingDirectiveNames;
     return type;
 }
 
+- (BOOL)isCharacterConstant
+{
+    return [self type] == NUCLexicalElementCharacterConstantType;
+}
+
+- (BOOL)isStringLiteral
+{
+    return [self type] == NUCLexicalElementStringLiteralType;
+}
+
 @end

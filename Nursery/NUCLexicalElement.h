@@ -210,6 +210,9 @@ typedef enum : NSUInteger {
 
 - (NUCLexicalElementType)type;
 
+- (BOOL)isCharacterConstant;
+- (BOOL)isStringLiteral;
+
 @end
 
 

@@ -52,4 +52,19 @@
     return !isHChar;
 }
 
+- (BOOL)isEqual:(id)anObject
+{
+    if (self == anObject)
+        return YES;
+    else
+    {
+        if ([anObject isKindOfClass:[NUCHeaderName class]])
+            if (([self isHChar] && ![anObject isHChar])
+                || (![self isHChar] && [anObject isHChar]))
+                return NO;
+        
+        return [super isEqual:anObject];
+    }
+}
+
 @end

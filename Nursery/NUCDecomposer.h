@@ -12,6 +12,10 @@
 @class NSArray;
 
 @interface NUCDecomposer : NSObject
+{
+    BOOL hashExistsOnCurrentLine;
+    BOOL includeExistsOnCurrentLine;
+}
 
 - (NSArray *)decomposePreprocessingFile:(NUCSourceFile *)aSourceFile;
 

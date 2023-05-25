@@ -64,4 +64,9 @@
     [super dealloc];
 }
 
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
+{
+    [aPreprocessor include:self];
+}
+
 @end
