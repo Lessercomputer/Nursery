@@ -25,7 +25,6 @@
 - (NSUInteger)count;
 
 - (BOOL)containsIdentifier:(NUCIdentifier *)anIdentifier;
-- (NUCDecomposedPreprocessingToken *)replacementTargetFor:(NUCIdentifier *)anIdentifier;
 
 - (void)enumerateObjectsUsingBlock:(void (^)(NUCDecomposedPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop))aBlock;
 

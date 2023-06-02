@@ -8,25 +8,30 @@
 
 #import <Foundation/NSObject.h>
 
-@class NSURL, NSString, NSMutableString, NSMutableArray, NULibrary;
+@class NSURL, NSString, NSMutableArray, NULibrary, NUCPreprocessingFile;
 
 @interface NUCSourceFile : NSObject
 {
     NSURL *url;
     NSString *physicalSourceString;
     NSString *logicalSourcePhase1String;
-    NSString *logicalSourcePhase2String;
-    NSMutableString *logicalSourceString;
-    NULibrary *rangeMappingForPhase1StringToPhysicalString;
-    NULibrary *rangeMappingForPhase2StringToPhase1String;
+    NSString *logicalSourceString;
+    NULibrary *rangeMappingOfPhase1StringToPhysicalString;
+    NULibrary *rangeMappingOfPhase2StringToPhase1String;
+    NUCPreprocessingFile *preprocessingFile;
 }
 
 - (instancetype)initWithSourceURL:(NSURL *)aURL;
 - (instancetype)initWithSourceString:(NSString *)aString url:(NSURL *)aURL;
 
+- (void)preprocessFromPhase1ToPhase2;
+
 - (NSString *)physicalSourceString;
 - (NSString *)logicalSourceString;
 
 - (void)setLogicalSourceString:(NSString *)aString;
+
+- (NUCPreprocessingFile *)preprocessingFile;
+- (void)setPreprocessingFile:(NUCPreprocessingFile *)aPreprocessingFile;
 
 @end

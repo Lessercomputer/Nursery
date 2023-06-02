@@ -83,21 +83,6 @@
     return [[self ppTokens] containsObject:anIdentifier];
 }
 
-- (NUCDecomposedPreprocessingToken *)replacementTargetFor:(NUCIdentifier *)anIdentifier
-{
-    __block NUCDecomposedPreprocessingToken *aFoundToken = nil;
-    
-    [self enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop) {
-        if ([aPpToken isEqual:anIdentifier])
-        {
-            aFoundToken = aPpToken;
-            *aStop = YES;
-        }
-    }];
-    
-    return aFoundToken;
-}
-
 - (void)enumerateObjectsUsingBlock:(void (^)(NUCDecomposedPreprocessingToken *, NSUInteger, BOOL *))aBlock
 {
     [[self ppTokens] enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken * _Nonnull aPpToken, NSUInteger anIndex, BOOL * _Nonnull aStop) {

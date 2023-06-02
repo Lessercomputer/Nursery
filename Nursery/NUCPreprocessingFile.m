@@ -8,6 +8,10 @@
 
 #import "NUCPreprocessingFile.h"
 #import "NUCGroup.h"
+#import "NUCControlLineDefine.h"
+#import "NUCIdentifier.h"
+
+#import <Foundation/NSDictionary.h>
 
 @implementation NUCPreprocessingFile
 
@@ -31,16 +35,12 @@
     return [[[self alloc] initWithGroup:aGroup] autorelease];
 }
 
-- (instancetype)init
-{    
-    return self = [super initWithType:NUCLexicalElementProcessingFileType];
-}
-
 - (instancetype)initWithGroup:(NUCGroup *)aGroup
 {
     if (self = [super initWithType:NUCLexicalElementProcessingFileType])
     {
         group = [aGroup retain];
+        macros = [NSMutableDictionary new];
     }
     
     return self;
@@ -49,6 +49,8 @@
 - (void)dealloc
 {
     [group release];
+    [macros release];
+    macros = nil;
     
     [super dealloc];
 }
@@ -56,6 +58,21 @@
 - (NUCGroup *)group
 {
     return group;
+}
+
+- (NSMutableDictionary *)macros
+{
+    return macros;
+}
+
+- (NUCControlLineDefine *)macroFor:(NUCIdentifier *)aMacroName
+{
+    return [[self macros] objectForKey:aMacroName];
+}
+
+- (void)setMacro:(NUCControlLineDefine *)aMacro
+{
+    [[self macros] setObject:aMacro forKey:[aMacro identifier]];
 }
 
 - (void)preprocessWith:(NUCPreprocessor *)aPreprocessor

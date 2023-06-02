@@ -49,16 +49,6 @@
     return ppTokens;
 }
 
-- (BOOL)containsReplacementTargetFor:(NUCIdentifier *)anIdentifier
-{
-    return [self replacementTargetFor:anIdentifier] ? YES : NO;
-}
-
-- (NUCDecomposedPreprocessingToken *)replacementTargetFor:(NUCIdentifier *)anIdentifier
-{
-    return [[self ppTokens] replacementTargetFor:anIdentifier];
-}
-
 - (void)dealloc
 {
     [ppTokens release];

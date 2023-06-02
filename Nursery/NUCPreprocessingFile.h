@@ -8,12 +8,14 @@
 
 #import "NUCPreprocessingDirective.h"
 
+@class NSMutableDictionary;
 @class NUCPreprocessingTokenStream, NUCPreprocessor;
-@class NUCGroup;
+@class NUCGroup, NUCControlLineDefine, NUCIdentifier;
 
 @interface NUCPreprocessingFile : NUCPreprocessingDirective
 {
     NUCGroup *group;
+    NSMutableDictionary *macros;
 }
 
 + (BOOL)preprocessingFileFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingFile **)aToken;
@@ -22,5 +24,9 @@
 - (instancetype)initWithGroup:(NUCGroup *)aGroup;
 
 - (NUCGroup *)group;
+
+- (NSMutableDictionary *)macros;
+- (NUCControlLineDefine *)macroFor:(NUCIdentifier *)aMacroName;
+- (void)setMacro:(NUCControlLineDefine *)aMacro;
 
 @end
