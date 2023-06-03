@@ -17,18 +17,27 @@
 + (BOOL)ppTokensFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPpTokens **)aToken
 {
     NUCDecomposedPreprocessingToken *aPpToken = nil;
-    NUCPpTokens *aPpTokens = [NUCPpTokens ppTokens];
+    NUCPpTokens *aPpTokens = nil;
     
-    while ([[aStream peekNext] isNotWhitespace])
+    while ([[aStream peekNext] isNotNewLine])
     {
         aPpToken = [aStream next];
-        [aPpTokens add:aPpToken];
         
-        if (aToken)
-            *aToken = aPpTokens;
+        if (!aPpTokens)
+            aPpTokens = [NUCPpTokens ppTokens];
+        
+        [aPpTokens add:aPpToken];
     }
     
-    return [aPpTokens count] ? YES : NO;
+    if ([aPpTokens count])
+    {
+        if (aToken)
+            *aToken = aPpTokens;
+        
+        return YES;
+    }
+    
+    return NO;
 }
 
 + (instancetype)ppTokens

@@ -50,6 +50,16 @@
     return [[[self alloc] initWithType:NUCLexicalElementIdentifierListType] autorelease];
 }
 
+- (instancetype)initWithType:(NUCLexicalElementType)aType
+{
+    if (self = [super initWithType:aType])
+    {
+        identifiers = [NSMutableArray new];
+    }
+    
+    return self;
+}
+
 - (void)dealloc
 {
     [identifiers release];
