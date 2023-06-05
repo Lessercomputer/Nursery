@@ -98,7 +98,7 @@
 
 - (nonnull id)copyWithZone:(nullable NSZone *)zone
 {
-    return [[self class] preprocessingTokenWithContent:[self content] range:[self range] type:[self type]];
+    return [[[self class] allocWithZone:zone] initWithContent:[self content] range:[self range] type:[self type]];
 }
 
 - (BOOL)isHash
