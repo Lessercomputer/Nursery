@@ -22,5 +22,7 @@
 
 - (instancetype)initWithPpTokens:(NUCPpTokens *)aPpTokens newline:(NUCNewline *)aNewline;
 
+- (NUCPpTokens *)ppTokens;
+
 @end
 

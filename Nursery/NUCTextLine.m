@@ -11,6 +11,7 @@
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCPpTokens.h"
 #import "NUCNewline.h"
+#import "NUCPreprocessor.h"
 
 @implementation NUCTextLine
 
@@ -61,6 +62,16 @@
     [newline release];
     
     [super dealloc];
+}
+
+- (NUCPpTokens *)ppTokens
+{
+    return ppTokens;
+}
+
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
+{
+    [self setExpandedMacro:(NUCPreprocessingToken *)[aPreprocessor preprocessPpTokens:[self ppTokens]]];
 }
 
 @end

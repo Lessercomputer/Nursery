@@ -10,6 +10,16 @@
 
 @implementation NUCPreprocessingToken
 
+- (NUCPreprocessingToken *)expandedMacro
+{
+    return expandedMacro;
+}
+
+- (void)setExpandedMacro:(NUCPreprocessingToken *)anExpandedMacro
+{
+    expandedMacro = anExpandedMacro;
+}
+
 - (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
 {
     

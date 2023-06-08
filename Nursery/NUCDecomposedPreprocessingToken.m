@@ -8,6 +8,7 @@
 
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCPreprocessingTokenStream.h"
+#import "NUCExpandedMacro.h"
 
 #import <Foundation/NSString.h>
 
@@ -79,16 +80,6 @@
 - (NSRange )range
 {
     return range;
-}
-
-- (NUCReplacementList *)replacementList
-{
-    return replacementList;
-}
-
-- (void)setReplacementList:(NUCReplacementList *)aReplacementList
-{
-    replacementList = aReplacementList;
 }
 
 - (NSUInteger)hash
@@ -293,10 +284,10 @@
 {
     if (anOther == self)
         return YES;
-    else if (![super isEqual:anOther])
-        return NO;
-    else
-        return [[self content] isEqual:[anOther content]];
+
+    NUCDecomposedPreprocessingToken *aToken = anOther;
+        
+    return [[self content] isEqual:[aToken content]];
 }
 
 @end

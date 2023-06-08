@@ -11,6 +11,7 @@
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCPpTokens.h"
 #import "NUCNewline.h"
+#import "NUCPreprocessor.h"
 
 #import <Foundation/NSString.h>
 

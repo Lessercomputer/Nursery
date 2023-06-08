@@ -11,8 +11,14 @@
 @class NUCPreprocessor;
 
 @interface NUCPreprocessingToken : NUCLexicalElement
+{
+    NUCPreprocessingToken *expandedMacro;
+}
 
 - (void)preprocessWith:(NUCPreprocessor *)aPreprocessor;
+
+- (NUCPreprocessingToken *)expandedMacro;
+- (void)setExpandedMacro:(NUCPreprocessingToken *)anExpandedMacro;
 
 @end
 

@@ -15,6 +15,9 @@
 #import "NUCControlLineDefine.h"
 #import "NUCIdentifier.h"
 #import "NUCReplacementList.h"
+#import "NUCControlLineDefine.h"
+#import "NUCPpTokens.h"
+#import "NUCExpandedMacro.h"
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSDictionary.h>
@@ -53,32 +56,44 @@
 - (void)preprocessSourceFile:(NUCSourceFile *)aSourceFile
 {
     sourceFile = aSourceFile;
-    [aSourceFile preprocessFromPhase1ToPhase2];
+    [[self sourceFile] preprocessFromPhase1ToPhase2];
     
-    NUCDecomposer *aDecomposer = [NUCDecomposer new];
-    NSArray *aPreprocessingTokens = [aDecomposer decomposePreprocessingFile:aSourceFile];
-    [aDecomposer release];
+    NSArray *aPreprocessingTokens = [self preprocesPhase3];
 
     NUCPreprocessingTokenStream *aStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aPreprocessingTokens];
     NUCPreprocessingFile *aPreprocessingFile = nil;
     
     if ([NUCPreprocessingFile preprocessingFileFrom:aStream into:&aPreprocessingFile])
     {
-        [aSourceFile setPreprocessingFile:aPreprocessingFile];
-        [aPreprocessingFile preprocessWith:self];
+        [[self sourceFile] setPreprocessingFile:aPreprocessingFile];
+        [self preprocessPhase4];
     }
     
     sourceFile = nil;
 }
 
-- (NUCControlLineDefine *)macroFor:(NUCIdentifier *)aMacroName
+- (NSArray *)preprocesPhase3
 {
-    return [[[self sourceFile] preprocessingFile] macroFor:aMacroName];
+    NUCDecomposer *aDecomposer = [NUCDecomposer new];
+    NSArray *aPreprocessingTokens = [aDecomposer decomposePreprocessingFile:[self sourceFile]];
+    [aDecomposer release];
+    
+    return aPreprocessingTokens;
 }
 
-- (void)setMacro:(NUCControlLineDefine *)aMacro
+- (void)preprocessPhase4
 {
-    [[[self sourceFile] preprocessingFile] setMacro:aMacro];
+    [[[self sourceFile] preprocessingFile] preprocessWith:self];
+}
+
+- (NUCControlLineDefine *)macroDefineFor:(NUCIdentifier *)aMacroDefineName
+{
+    return [[[self sourceFile] preprocessingFile] macroDefineFor:aMacroDefineName];
+}
+
+- (void)setMacroDefine:(NUCControlLineDefine *)aMacroDefine
+{
+    [[[self sourceFile] preprocessingFile] setMacroDefine:aMacroDefine];
 }
 
 - (void)include:(NUCControlLineInclude *)anInclude
@@ -86,33 +101,60 @@
     
 }
 
-- (void)define:(NUCControlLineDefine *)aMacro
+- (void)define:(NUCControlLineDefine *)aMacroDefine
 {
-    NUCIdentifier *aMacroName = [aMacro identifier];
-    NUCControlLineDefine *anExistingMacro = [self macroFor:aMacroName];
+    NUCIdentifier *aMacroName = [aMacroDefine identifier];
+    NUCControlLineDefine *anExistingMacro = [self macroDefineFor:aMacroName];
     
-    if (!anExistingMacro || [anExistingMacro isEqual:aMacro])
-    {
-        [self setMacro:aMacro];
+    if (!anExistingMacro || [anExistingMacro isEqual:aMacroDefine])
+        [self setMacroDefine:aMacroDefine];
+}
+
+- (NUCExpandedMacro *)preprocessPpTokens:(NUCPpTokens *)aPpTokens
+{
+    return [self expandMacroInvocationsIn:aPpTokens expandingMacroDefines:[NSMutableArray array]];
+}
+
+- (NUCExpandedMacro *)expandMacroInvocationsIn:(NUCPpTokens *)aPpTokens expandingMacroDefines:(NSMutableArray *)anExpandingMacroDefines
+{
+    NUCExpandedMacro *anExpandedMacro = [[NUCExpandedMacro new] autorelease];
+    
+    [aPpTokens enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop) {
         
-        [[aMacro replacementList] enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop) {
+        if ([aPpToken isIdentifier])
+        {
+            NUCIdentifier *aMacroNameToExpand = (NUCIdentifier *)aPpToken;
+            NUCControlLineDefine *aMacroDefineToExpand = [self macroDefineFor:aMacroNameToExpand];
             
-            if ([aPpToken isIdentifier])
+            if (aMacroDefineToExpand && ![anExpandingMacroDefines containsObject:aMacroDefineToExpand])
             {
-                NUCIdentifier *anIdentifier = (NUCIdentifier *)aPpToken;
+                [anExpandingMacroDefines addObject:aMacroDefineToExpand];
                 
-                if ([anIdentifier isEqual:aMacroName])
-                    *aStop = YES;
+                [anExpandedMacro setDefine:aMacroDefineToExpand];
+                
+                if ([aMacroDefineToExpand isObjectLike])
+                {
+                    NUCExpandedMacro *anExpandedMacroForDefine = [self expandMacroInvocationsIn:[[aMacroDefineToExpand replacementList] ppTokens] expandingMacroDefines:anExpandingMacroDefines];
+
+                    [aMacroNameToExpand setExpandedMacro:anExpandedMacroForDefine];
+                    
+                    [anExpandedMacro add:anExpandedMacroForDefine];
+                }
                 else
                 {
-                    NUCControlLineDefine *aDefinedMacro = [self macroFor:anIdentifier];
                     
-                    if (aDefinedMacro)
-                        [anIdentifier setReplacementList:[aDefinedMacro replacementList]];
                 }
+                
+                [anExpandingMacroDefines removeLastObject];
             }
-        }];
-    }
+            else
+                [anExpandedMacro add:aPpToken];
+        }
+        else
+            [anExpandedMacro add:aPpToken];
+    }];
+    
+    return anExpandedMacro;
 }
 
 @end

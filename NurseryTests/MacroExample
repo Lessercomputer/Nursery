@@ -1,3 +1,9 @@
+#define C "c"
+#define B C
+#define A B
+
+A
+
 #define EMPTY
 #if 1
 #define NUM 1

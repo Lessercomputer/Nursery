@@ -40,7 +40,7 @@
     if (self = [super initWithType:NUCLexicalElementProcessingFileType])
     {
         group = [aGroup retain];
-        macros = [NSMutableDictionary new];
+        macroDefines = [NSMutableDictionary new];
     }
     
     return self;
@@ -49,8 +49,8 @@
 - (void)dealloc
 {
     [group release];
-    [macros release];
-    macros = nil;
+    [macroDefines release];
+    macroDefines = nil;
     
     [super dealloc];
 }
@@ -60,19 +60,19 @@
     return group;
 }
 
-- (NSMutableDictionary *)macros
+- (NSMutableDictionary *)macroDefines
 {
-    return macros;
+    return macroDefines;
 }
 
-- (NUCControlLineDefine *)macroFor:(NUCIdentifier *)aMacroName
+- (NUCControlLineDefine *)macroDefineFor:(NUCIdentifier *)aMacroName
 {
-    return [[self macros] objectForKey:aMacroName];
+    return [[self macroDefines] objectForKey:aMacroName];
 }
 
-- (void)setMacro:(NUCControlLineDefine *)aMacro
+- (void)setMacroDefine:(NUCControlLineDefine *)aMacroDefine
 {
-    [[self macros] setObject:aMacro forKey:[aMacro identifier]];
+    [[self macroDefines] setObject:aMacroDefine forKey:[aMacroDefine identifier]];
 }
 
 - (void)preprocessWith:(NUCPreprocessor *)aPreprocessor

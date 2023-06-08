@@ -15,7 +15,7 @@
 @interface NUCPreprocessingFile : NUCPreprocessingDirective
 {
     NUCGroup *group;
-    NSMutableDictionary *macros;
+    NSMutableDictionary *macroDefines;
 }
 
 + (BOOL)preprocessingFileFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingFile **)aToken;
@@ -25,8 +25,8 @@
 
 - (NUCGroup *)group;
 
-- (NSMutableDictionary *)macros;
-- (NUCControlLineDefine *)macroFor:(NUCIdentifier *)aMacroName;
-- (void)setMacro:(NUCControlLineDefine *)aMacro;
+- (NSMutableDictionary *)macroDefines;
+- (NUCControlLineDefine *)macroDefineFor:(NUCIdentifier *)aMacroName;
+- (void)setMacroDefine:(NUCControlLineDefine *)aMacroDefine;
 
 @end
