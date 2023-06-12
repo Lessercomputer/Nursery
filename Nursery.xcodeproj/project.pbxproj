@@ -448,6 +448,10 @@
 		619B09711913F2EE00A4BAA2 /* NUOpaqueArrayTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B09611913F2EE00A4BAA2 /* NUOpaqueArrayTest.m */; };
 		619B09721913F2EE00A4BAA2 /* NURegionArrayTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B09621913F2EE00A4BAA2 /* NURegionArrayTest.m */; };
 		61A3297E1B9AED82006B6FC5 /* NUMovingUp.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A3297D1B9AED82006B6FC5 /* NUMovingUp.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		61B3D48D2A32F356005EF3F4 /* NUCConcatenatedPpToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 61B3D48B2A32F356005EF3F4 /* NUCConcatenatedPpToken.h */; };
+		61B3D48E2A32F356005EF3F4 /* NUCConcatenatedPpToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 61B3D48B2A32F356005EF3F4 /* NUCConcatenatedPpToken.h */; };
+		61B3D48F2A32F356005EF3F4 /* NUCConcatenatedPpToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 61B3D48C2A32F356005EF3F4 /* NUCConcatenatedPpToken.m */; };
+		61B3D4902A32F356005EF3F4 /* NUCConcatenatedPpToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 61B3D48C2A32F356005EF3F4 /* NUCConcatenatedPpToken.m */; };
 		61DC96341FA104D900AABC9E /* Nursery.h in Headers */ = {isa = PBXBuildFile; fileRef = 61DC96331FA104D900AABC9E /* Nursery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		61DCED6419DCEEC8009E4E9E /* AllTypesObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 61DCED6319DCEEC8009E4E9E /* AllTypesObject.m */; };
 		61FCF72820044F32001BD320 /* NUNurseryNetService.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FCF72720044F32001BD320 /* NUNurseryNetService.m */; };
@@ -1104,6 +1108,8 @@
 		619B09611913F2EE00A4BAA2 /* NUOpaqueArrayTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = NUOpaqueArrayTest.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		619B09621913F2EE00A4BAA2 /* NURegionArrayTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NURegionArrayTest.m; sourceTree = "<group>"; };
 		61A3297D1B9AED82006B6FC5 /* NUMovingUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUMovingUp.h; sourceTree = "<group>"; };
+		61B3D48B2A32F356005EF3F4 /* NUCConcatenatedPpToken.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCConcatenatedPpToken.h; sourceTree = "<group>"; };
+		61B3D48C2A32F356005EF3F4 /* NUCConcatenatedPpToken.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCConcatenatedPpToken.m; sourceTree = "<group>"; };
 		61DC96331FA104D900AABC9E /* Nursery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Nursery.h; sourceTree = "<group>"; };
 		61DCED6219DCEEC8009E4E9E /* AllTypesObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTypesObject.h; sourceTree = "<group>"; };
 		61DCED6319DCEEC8009E4E9E /* AllTypesObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTypesObject.m; sourceTree = "<group>"; };
@@ -1715,6 +1721,8 @@
 				24A39ED525D4BB2500299F81 /* NUCControlLineDefineFunctionLike.m */,
 				24FB48FA2A3048FC001F0061 /* NUCExpandedMacro.h */,
 				24FB48FB2A3048FC001F0061 /* NUCExpandedMacro.m */,
+				61B3D48B2A32F356005EF3F4 /* NUCConcatenatedPpToken.h */,
+				61B3D48C2A32F356005EF3F4 /* NUCConcatenatedPpToken.m */,
 				2413CDE42746935000E4623F /* NUCUndef.h */,
 				2413CDE52746935000E4623F /* NUCUndef.m */,
 				24D57D8327F1E18C0082BCEF /* NUCLine.h */,
@@ -1969,6 +1977,7 @@
 				24F86FB827F204E8001CC4AC /* NUCError.h in Headers */,
 				24B966112A13B2EB007D12FF /* NUCIdentifier.h in Headers */,
 				619B08F61913EEC000A4BAA2 /* NUNSObject.h in Headers */,
+				61B3D48D2A32F356005EF3F4 /* NUCConcatenatedPpToken.h in Headers */,
 				24529DA425C8190F000B49D9 /* NUCPreprocessingDirective.h in Headers */,
 				24D57D8527F1E18C0082BCEF /* NUCLine.h in Headers */,
 				619B093A1913EEC000A4BAA2 /* NUObjectTableBranch.h in Headers */,
@@ -2101,6 +2110,7 @@
 				B816629020ECC2DF00B9075E /* NUCodingContext.h in Headers */,
 				24C8A770245650E000174253 /* NUCRangePair.h in Headers */,
 				B816629120ECC2DF00B9075E /* NUMainBranchCodingContext.h in Headers */,
+				61B3D48E2A32F356005EF3F4 /* NUCConcatenatedPpToken.h in Headers */,
 				B816629220ECC2DF00B9075E /* NUCodingContextWithPupilNote.h in Headers */,
 				24A39EEF25D5F8F400299F81 /* NUCConstantExpression.h in Headers */,
 				24A39ECB25D4AC8000299F81 /* NUCIdentifierList.h in Headers */,
@@ -2420,6 +2430,7 @@
 				619B088F1913EEC000A4BAA2 /* NUCharacterDictionary.m in Sources */,
 				619B09221913EEC000A4BAA2 /* NUSpaces.m in Sources */,
 				2493FFCC2448753300E816C3 /* NUCSourceFile.m in Sources */,
+				61B3D48F2A32F356005EF3F4 /* NUCConcatenatedPpToken.m in Sources */,
 				24529DA625C8190F000B49D9 /* NUCPreprocessingDirective.m in Sources */,
 				619B08C81913EEC000A4BAA2 /* NUBranchAperture.m in Sources */,
 				24A39E9C25CF6C1B00299F81 /* NUCPpTokens.m in Sources */,
@@ -2620,6 +2631,7 @@
 				B816622020ECC28500B9075E /* NUMainBranchCodingContext.m in Sources */,
 				24A39E9D25CF6C1B00299F81 /* NUCPpTokens.m in Sources */,
 				B816622120ECC28500B9075E /* NUCodingContextWithPupilNote.m in Sources */,
+				61B3D4902A32F356005EF3F4 /* NUCConcatenatedPpToken.m in Sources */,
 				B816622220ECC28500B9075E /* NUCoder.m in Sources */,
 				B816622320ECC28500B9075E /* NUStringCoder.m in Sources */,
 				24A39F2825DDEBA200299F81 /* NUCRelationalExpression.m in Sources */,

@@ -98,6 +98,12 @@
                 && [[self content] isEqualToString:NUCHash];
 }
 
+- (BOOL)isHashHash
+{
+    return [self type] == NUCLexicalElementPunctuatorType
+                && [[self content] isEqualToString:NUCHashHash];
+}
+
 - (BOOL)isIdentifier
 {
     return [self type] == NUCLexicalElementIdentifierType;

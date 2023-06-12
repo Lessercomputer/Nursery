@@ -32,6 +32,7 @@
 - (NSRange)range;
 
 - (BOOL)isHash;
+- (BOOL)isHashHash;
 - (BOOL)isIdentifier;
 - (BOOL)isStringLiteral;
 - (BOOL)isCharacterConstant;

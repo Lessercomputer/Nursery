@@ -18,6 +18,7 @@
 #import "NUCControlLineDefine.h"
 #import "NUCPpTokens.h"
 #import "NUCExpandedMacro.h"
+#import "NUCConcatenatedPpToken.h"
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSDictionary.h>
@@ -112,49 +113,103 @@
 
 - (NUCExpandedMacro *)preprocessPpTokens:(NUCPpTokens *)aPpTokens
 {
-    return [self expandMacroInvocationsIn:aPpTokens expandingMacroDefines:[NSMutableArray array]];
+    return [self expandMacroInvocationsIn:aPpTokens rescanningMacros:NO rescanningMacroDefines:nil];
 }
 
-- (NUCExpandedMacro *)expandMacroInvocationsIn:(NUCPpTokens *)aPpTokens expandingMacroDefines:(NSMutableArray *)anExpandingMacroDefines
+- (NUCExpandedMacro *)expandMacroInvocationsIn:(NUCPpTokens *)aPpTokens  rescanningMacros:(BOOL)aRescanningMacros rescanningMacroDefines:(NSMutableArray *)aRescanningMacroDefines
 {
+    NSArray *aPpTokensInArray = aRescanningMacros ? [self preprocessHashHashOperetorsIn:[aPpTokens ppTokens]] : [aPpTokens ppTokens];
     NUCExpandedMacro *anExpandedMacro = [[NUCExpandedMacro new] autorelease];
     
-    [aPpTokens enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop) {
+    NUCPreprocessingTokenStream *aPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aPpTokensInArray];
         
-        if ([aPpToken isIdentifier])
+    while ([aPpTokenStream hasNext])
+    {
+        NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
+        NUCIdentifier *aMacroNameToExpand = (NUCIdentifier *)aPpToken;
+        
+        NUCControlLineDefine *aMacroDefineToExpand = [self macroDefineFor:aMacroNameToExpand];
+        
+        if (aMacroDefineToExpand && ![aRescanningMacroDefines containsObject:aMacroDefineToExpand])
         {
-            NUCIdentifier *aMacroNameToExpand = (NUCIdentifier *)aPpToken;
-            NUCControlLineDefine *aMacroDefineToExpand = [self macroDefineFor:aMacroNameToExpand];
+            if (!aRescanningMacroDefines)
+                aRescanningMacroDefines = [NSMutableArray array];
             
-            if (aMacroDefineToExpand && ![anExpandingMacroDefines containsObject:aMacroDefineToExpand])
+            [aRescanningMacroDefines addObject:aMacroDefineToExpand];
+            
+            [anExpandedMacro setDefine:aMacroDefineToExpand];
+            
+            NUCExpandedMacro *anExpandedMacroForDefine = [self expandMacroInvocationsIn:[[aMacroDefineToExpand replacementList] ppTokens] rescanningMacros:YES rescanningMacroDefines:aRescanningMacroDefines];
+            
+            [aMacroNameToExpand setExpandedMacro:anExpandedMacroForDefine];
+            
+            [anExpandedMacro add:anExpandedMacroForDefine];
+            
+            if ([aMacroDefineToExpand isObjectLike])
             {
-                [anExpandingMacroDefines addObject:aMacroDefineToExpand];
                 
-                [anExpandedMacro setDefine:aMacroDefineToExpand];
-                
-                if ([aMacroDefineToExpand isObjectLike])
-                {
-                    NUCExpandedMacro *anExpandedMacroForDefine = [self expandMacroInvocationsIn:[[aMacroDefineToExpand replacementList] ppTokens] expandingMacroDefines:anExpandingMacroDefines];
-
-                    [aMacroNameToExpand setExpandedMacro:anExpandedMacroForDefine];
-                    
-                    [anExpandedMacro add:anExpandedMacroForDefine];
-                }
-                else
-                {
-                    
-                }
-                
-                [anExpandingMacroDefines removeLastObject];
             }
             else
-                [anExpandedMacro add:aPpToken];
+            {
+                
+            }
+            
+            [aRescanningMacroDefines removeLastObject];
         }
         else
             [anExpandedMacro add:aPpToken];
-    }];
+    }
     
     return anExpandedMacro;
+}
+
+- (NSMutableArray *)preprocessHashHashOperetorsIn:(NSArray *)aPpTokens
+{
+    NUCPreprocessingTokenStream *aPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aPpTokens];
+    
+    if ([[aPpTokenStream peekNext] isHashHash])
+        return nil;
+    
+    NSMutableArray *aPpTokensAfterPreprocessingOfHashHashOperators = [NSMutableArray array];
+    
+    while ([aPpTokenStream hasNext])
+    {
+        NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
+        
+        if ([aPpToken isIdentifier])
+        {
+            while ([aPpTokenStream nextIsWhitespaces])
+                [aPpTokensAfterPreprocessingOfHashHashOperators addObject:[aPpTokenStream next]];
+            
+            if ([aPpTokenStream hasNext])
+            {
+                NUCDecomposedPreprocessingToken *aHashHashOrOther = [aPpTokenStream next];
+                
+                if ([aHashHashOrOther isHashHash])
+                {
+                    while ([aPpTokenStream nextIsWhitespaces])
+                        [aPpTokensAfterPreprocessingOfHashHashOperators addObject:[aPpTokenStream next]];
+                    
+                    NUCDecomposedPreprocessingToken *aHashHashOperatorOperand = [aPpTokenStream next];
+                    
+                    if (aHashHashOperatorOperand)
+                    {
+                        NUCConcatenatedPpToken *aConcatenatedPpToken = [[NUCConcatenatedPpToken alloc] initWithLeft:aPpToken right:aHashHashOperatorOperand];
+                        
+                        [aPpTokensAfterPreprocessingOfHashHashOperators addObject:aConcatenatedPpToken];
+                    }
+                    else
+                        return nil;
+                }
+                else
+                    [aPpTokensAfterPreprocessingOfHashHashOperators addObject:aPpToken];
+            }
+        }
+        else
+            [aPpTokensAfterPreprocessingOfHashHashOperators addObject:aPpToken];
+    }
+    
+    return aPpTokensAfterPreprocessingOfHashHashOperators;
 }
 
 @end

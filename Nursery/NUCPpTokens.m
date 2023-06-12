@@ -77,6 +77,11 @@
     return [[self ppTokens] count];
 }
 
+- (NUCDecomposedPreprocessingToken *)at:(NSUInteger)anIndex
+{
+    return [[self ppTokens] objectAtIndex:anIndex];
+}
+
 - (BOOL)isEqual:(id)anOther
 {
     if (self == anOther)
@@ -99,4 +104,11 @@
     }];
 }
 
+- (void)enumerateObjectsUsingBlock:(void (^)(NUCDecomposedPreprocessingToken *, NSUInteger, BOOL *))aBlock skipWhitespaces:(BOOL)aSkipWhitespaces
+{
+    [[self ppTokens] enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken * _Nonnull aPpToken, NSUInteger anIndex, BOOL * _Nonnull aStop) {
+        if (![aPpToken isWhitespace])
+            aBlock(aPpToken, anIndex, aStop);
+    }];
+}
 @end

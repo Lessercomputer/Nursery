@@ -24,9 +24,13 @@
 - (NSMutableArray *)ppTokens;
 - (NSUInteger)count;
 
+- (NUCDecomposedPreprocessingToken *)at:(NSUInteger)anIndex;
+
 - (BOOL)containsIdentifier:(NUCIdentifier *)anIdentifier;
 
 - (void)enumerateObjectsUsingBlock:(void (^)(NUCDecomposedPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop))aBlock;
+
+- (void)enumerateObjectsUsingBlock:(void (^)(NUCDecomposedPreprocessingToken *, NSUInteger, BOOL *))aBlock skipWhitespaces:(BOOL)aSkipWhitespaces;
 
 @end
 

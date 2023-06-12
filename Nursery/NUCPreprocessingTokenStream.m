@@ -92,4 +92,9 @@
     return [self hasNext] ? [[self preprocessingTokens] objectAtIndex:[self position]] : nil;
 }
 
+- (BOOL)nextIsWhitespaces
+{
+    return [[self peekNext] isWhitespace] ? YES : NO;
+}
+
 @end

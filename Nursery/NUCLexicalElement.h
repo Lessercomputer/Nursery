@@ -22,6 +22,7 @@ extern NSString * const NUCLessThanSign;
 extern NSString * const NUCGreaterThanSign;
 extern NSString * const NUCDoubleQuotationMark;
 extern NSString * const NUCHash;
+extern NSString * const NUCHashHash;
 extern NSString * const NUCEllipsis;
 extern NSString * const NUCOpeningParenthesisPunctuator;
 extern NSString * const NUCClosingParenthesisPunctuator;

@@ -21,6 +21,7 @@ NSString * const NUCLessThanSign = @"<";
 NSString * const NUCGreaterThanSign = @">";
 NSString * const NUCDoubleQuotationMark = @"\"";
 NSString * const NUCHash = @"#";
+NSString * const NUCHashHash = @"##";
 NSString * const NUCEllipsis = @"...";
 NSString * const NUCOpeningParenthesisPunctuator = @"(";
 NSString * const NUCClosingParenthesisPunctuator = @")";

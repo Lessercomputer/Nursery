@@ -31,6 +31,6 @@
 
 - (NUCExpandedMacro *)preprocessPpTokens:(NUCPpTokens *)aPpTokens;
 
-- (NUCExpandedMacro *)expandMacroInvocationsIn:(NUCPpTokens *)aPpTokens expandingMacroDefines:(NSMutableArray *)anExpandingMacroDefines;
+- (NUCExpandedMacro *)expandMacroInvocationsIn:(NUCPpTokens *)aPpTokens  rescanningMacros:(BOOL)aRescanningMacros rescanningMacroDefines:(NSMutableArray *)aRescanningMacroDefines;
 
 @end
