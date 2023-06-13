@@ -8,16 +8,26 @@
 
 #import "NUCPreprocessingToken.h"
 
+#import <Foundation/NSArray.h>
+
 @implementation NUCPreprocessingToken
 
-- (NUCPreprocessingToken *)expandedMacro
+- (void)dealloc
 {
-    return expandedMacro;
+    [macroExpandedPpTokens release];
+    
+    [super dealloc];
 }
 
-- (void)setExpandedMacro:(NUCPreprocessingToken *)anExpandedMacro
+- (NSArray *)macroExpandedPpTokens
 {
-    expandedMacro = anExpandedMacro;
+    return macroExpandedPpTokens;
+}
+
+- (void)setMacroExpandedPpTokens:(NSArray *)aMacroExpandedPpTokens
+{
+    [macroExpandedPpTokens release];
+    macroExpandedPpTokens = [aMacroExpandedPpTokens retain];
 }
 
 - (void)preprocessWith:(NUCPreprocessor *)aPreprocessor

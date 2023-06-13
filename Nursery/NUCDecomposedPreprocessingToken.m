@@ -8,7 +8,7 @@
 
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCPreprocessingTokenStream.h"
-#import "NUCExpandedMacro.h"
+#import "NUCMacroExpandedPpTokens.h"
 
 #import <Foundation/NSString.h>
 

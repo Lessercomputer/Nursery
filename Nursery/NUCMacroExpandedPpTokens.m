@@ -1,18 +1,18 @@
 //
-//  NUCExpandedMacro.m
+//  NUCMacroExpandedPpTokens.m
 //  Nursery
 //
 //  Created by TAKATA Akifumi on 2023/06/07.
 //  Copyright © 2023 Nursery-Framework. All rights reserved.
 //
 
-#import "NUCExpandedMacro.h"
+#import "NUCMacroExpandedPpTokens.h"
 #import "NUCControlLineDefine.h"
 #import "NUCPreprocessor.h"
 
 #import <Foundation/NSArray.h>
 
-@implementation NUCExpandedMacro
+@implementation NUCMacroExpandedPpTokens
 
 - (instancetype)init
 {

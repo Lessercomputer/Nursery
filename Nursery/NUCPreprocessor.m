@@ -17,7 +17,7 @@
 #import "NUCReplacementList.h"
 #import "NUCControlLineDefine.h"
 #import "NUCPpTokens.h"
-#import "NUCExpandedMacro.h"
+#import "NUCMacroExpandedPpTokens.h"
 #import "NUCConcatenatedPpToken.h"
 
 #import <Foundation/NSArray.h>
@@ -111,59 +111,78 @@
         [self setMacroDefine:aMacroDefine];
 }
 
-- (NUCExpandedMacro *)preprocessPpTokens:(NUCPpTokens *)aPpTokens
+- (NSArray *)preprocessPpTokens:(NUCPpTokens *)aPpTokens
 {
-    return [self expandMacroInvocationsIn:aPpTokens rescanningMacros:NO rescanningMacroDefines:nil];
+    return [self ppTokensByExpandingMacroInvocationsIn:[aPpTokens ppTokens] inRescanningMacros:NO rescanningMacroDefines:nil];
 }
 
-- (NUCExpandedMacro *)expandMacroInvocationsIn:(NUCPpTokens *)aPpTokens  rescanningMacros:(BOOL)aRescanningMacros rescanningMacroDefines:(NSMutableArray *)aRescanningMacroDefines
+- (NSArray *)ppTokensByExpandingMacroInvocationsIn:(NSArray *)aPpTokens  inRescanningMacros:(BOOL)aRescanningMacros rescanningMacroDefines:(NSMutableArray *)aRescanningMacroDefines
 {
-    NSArray *aPpTokensInArray = aRescanningMacros ? [self preprocessHashHashOperetorsIn:[aPpTokens ppTokens]] : [aPpTokens ppTokens];
-    NUCExpandedMacro *anExpandedMacro = [[NUCExpandedMacro new] autorelease];
+    NSMutableArray *aMacroExpandedPpTokens = [NSMutableArray array];
+    NSArray *aPpTokensInArray = nil;
+    
+    if (aRescanningMacros)
+        aPpTokensInArray = [self preprocessHashAndHashHashOperatorsInReplacementList:aPpTokens ofMacroDefine:[aRescanningMacroDefines lastObject]];
+    else
+        aPpTokensInArray = aPpTokens;
+    
     
     NUCPreprocessingTokenStream *aPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aPpTokensInArray];
         
     while ([aPpTokenStream hasNext])
     {
         NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
-        NUCIdentifier *aMacroNameToExpand = (NUCIdentifier *)aPpToken;
         
-        NUCControlLineDefine *aMacroDefineToExpand = [self macroDefineFor:aMacroNameToExpand];
-        
-        if (aMacroDefineToExpand && ![aRescanningMacroDefines containsObject:aMacroDefineToExpand])
+        if ([aPpToken isIdentifier])
         {
-            if (!aRescanningMacroDefines)
-                aRescanningMacroDefines = [NSMutableArray array];
+            NUCIdentifier *aMacroNameToExpand = (NUCIdentifier *)aPpToken;
             
-            [aRescanningMacroDefines addObject:aMacroDefineToExpand];
+            NUCControlLineDefine *aMacroDefineToExpand = [self macroDefineFor:aMacroNameToExpand];
             
-            [anExpandedMacro setDefine:aMacroDefineToExpand];
-            
-            NUCExpandedMacro *anExpandedMacroForDefine = [self expandMacroInvocationsIn:[[aMacroDefineToExpand replacementList] ppTokens] rescanningMacros:YES rescanningMacroDefines:aRescanningMacroDefines];
-            
-            [aMacroNameToExpand setExpandedMacro:anExpandedMacroForDefine];
-            
-            [anExpandedMacro add:anExpandedMacroForDefine];
-            
-            if ([aMacroDefineToExpand isObjectLike])
+            if (aMacroDefineToExpand && ![aRescanningMacroDefines containsObject:aMacroDefineToExpand])
             {
+                if (!aRescanningMacroDefines)
+                    aRescanningMacroDefines = [NSMutableArray array];
                 
+                [aRescanningMacroDefines addObject:aMacroDefineToExpand];
+                
+                NSArray *aMacroExpandedPpTokensForDefine = [self ppTokensByExpandingMacroInvocationsIn:[[[aMacroDefineToExpand replacementList] ppTokens] ppTokens] inRescanningMacros:YES rescanningMacroDefines:aRescanningMacroDefines];
+                
+                [aMacroNameToExpand setMacroExpandedPpTokens:aMacroExpandedPpTokensForDefine];
+                
+                [aMacroExpandedPpTokens addObject:aMacroExpandedPpTokensForDefine];
+                
+                if ([aMacroDefineToExpand isFunctionLike])
+                {
+                    [aPpTokenStream skipWhitespaces];
+                    
+                    NUCDecomposedPreprocessingToken *aPpToken2 = [aPpTokenStream next];
+                    
+                }
+                
+                [aRescanningMacroDefines removeLastObject];
             }
             else
-            {
-                
-            }
-            
-            [aRescanningMacroDefines removeLastObject];
+                [aMacroExpandedPpTokens addObject:aPpToken];
         }
         else
-            [anExpandedMacro add:aPpToken];
+            [aMacroExpandedPpTokens addObject:aPpToken];
     }
     
-    return anExpandedMacro;
+    return aMacroExpandedPpTokens;
 }
 
-- (NSMutableArray *)preprocessHashHashOperetorsIn:(NSArray *)aPpTokens
+- (NSArray *)preprocessHashAndHashHashOperatorsInReplacementList:(NSArray *)aPpTokens ofMacroDefine:(NUCControlLineDefine *)aRescanningMacroDefine
+{
+    NSArray *aPpTokensInArray = [self preprocessHashHashOperetorsInReplacementList:aPpTokens];
+    
+    if ([aRescanningMacroDefine isFunctionLike])
+        aPpTokensInArray = [self preprocessHashOperatorsInReplacementList:aPpTokensInArray macroDefine:aRescanningMacroDefine];
+    
+    return aPpTokensInArray;
+}
+
+- (NSArray *)preprocessHashHashOperetorsInReplacementList:(NSArray *)aPpTokens
 {
     NUCPreprocessingTokenStream *aPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aPpTokens];
     
@@ -210,6 +229,27 @@
     }
     
     return aPpTokensAfterPreprocessingOfHashHashOperators;
+}
+
+- (NSArray *)preprocessHashOperatorsInReplacementList:(NSArray *)aPpTokens macroDefine:(NUCControlLineDefine *)aMacroDefine
+{
+    NUCPreprocessingTokenStream *aPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aPpTokens];
+    NSMutableArray *aPpTokensAfterPreprocessingOfHashOperators = [NSMutableArray array];
+
+    while ([aPpTokenStream hasNext])
+    {
+        NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
+
+        if (aPpToken)
+        {
+            if ([aPpToken isHash])
+            {
+
+            }
+        }
+    }
+
+    return aPpTokensAfterPreprocessingOfHashOperators;
 }
 
 @end

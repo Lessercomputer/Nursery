@@ -9,7 +9,7 @@
 #import <Foundation/NSObject.h>
 
 @class NSString, NSMutableDictionary, NSMutableArray;
-@class NUCTranslator, NUCSourceFile, NUCControlLineDefine, NUCControlLineInclude, NUCIdentifier, NUCPpTokens, NUCExpandedMacro;
+@class NUCTranslator, NUCSourceFile, NUCControlLineDefine, NUCControlLineInclude, NUCIdentifier, NUCPpTokens, NUCMacroExpandedPpTokens;
 
 @interface NUCPreprocessor : NSObject
 {
@@ -29,8 +29,8 @@
 - (void)include:(NUCControlLineInclude *)anInclude;
 - (void)define:(NUCControlLineDefine *)aMacroDefine;
 
-- (NUCExpandedMacro *)preprocessPpTokens:(NUCPpTokens *)aPpTokens;
+- (NSArray *)preprocessPpTokens:(NUCPpTokens *)aPpTokens;
 
-- (NUCExpandedMacro *)expandMacroInvocationsIn:(NUCPpTokens *)aPpTokens  rescanningMacros:(BOOL)aRescanningMacros rescanningMacroDefines:(NSMutableArray *)aRescanningMacroDefines;
+- (NSArray *)ppTokensByExpandingMacroInvocationsIn:(NSArray *)aPpTokens  inRescanningMacros:(BOOL)aRescanningMacros rescanningMacroDefines:(NSMutableArray *)aRescanningMacroDefines;
 
 @end

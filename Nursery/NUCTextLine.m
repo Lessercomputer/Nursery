@@ -71,7 +71,7 @@
 
 - (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
 {
-    [self setExpandedMacro:(NUCPreprocessingToken *)[aPreprocessor preprocessPpTokens:[self ppTokens]]];
+    [self setMacroExpandedPpTokens:[aPreprocessor preprocessPpTokens:[self ppTokens]]];
 }
 
 @end

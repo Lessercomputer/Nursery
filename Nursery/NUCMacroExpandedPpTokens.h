@@ -1,5 +1,5 @@
 //
-//  NUCExpandedMacro.h
+//  NUCMacroExpandedPpTokens.h
 //  Nursery
 //
 //  Created by TAKATA Akifumi on 2023/06/07.
@@ -10,7 +10,7 @@
 
 @class NUCControlLineDefine;
 
-@interface NUCExpandedMacro : NUCDecomposedPreprocessingToken
+@interface NUCMacroExpandedPpTokens : NUCDecomposedPreprocessingToken
 {
     NUCControlLineDefine *define;
     NSMutableArray *expandedPpTokens;
@@ -18,7 +18,6 @@
 
 - (instancetype)initWithDefine:(NUCControlLineDefine *)aDefine;
 
-- (NUCControlLineDefine *)define;
 - (void)setDefine:(NUCControlLineDefine *)aDefine;
 
 - (NSMutableArray *)expandedPpTokens;
