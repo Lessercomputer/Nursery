@@ -104,9 +104,9 @@
     }];
 }
 
-- (NUCPreprocessingToken *)ppTokensByExpandingMacrosWith:(NUCPreprocessor *)aPreprocessor
+- (NUCPreprocessingToken *)ppTokensWithMacroInvocationsByInstantiateMacroInvocationsWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [aPreprocessor ppTokensByExpandingMacroInvocationsIn:self];
+    return [aPreprocessor ppTokensWithMacroInvocationsByInstantiateMacroInvocationsIn:self];
 }
 
 @end

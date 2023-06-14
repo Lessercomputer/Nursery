@@ -29,8 +29,8 @@
 - (void)include:(NUCControlLineInclude *)anInclude;
 - (void)define:(NUCControlLineDefine *)aMacroDefine;
 
-- (NUCPpTokens *)ppTokensByExpandingMacroInvocationsIn:(NUCPpTokens *)aPpTokens;
+- (NUCPpTokens *)ppTokensWithMacroInvocationsByInstantiateMacroInvocationsIn:(NUCPpTokens *)aPpTokens;
 
-- (NUCPpTokens *)ppTokensByExpandingMacroInvocationsIn:(NSArray *)aPpTokens  inRescanningMacros:(BOOL)aRescanningMacros rescanningMacroDefines:(NSMutableArray *)aRescanningMacroDefines;
+- (NUCPpTokens *)instantiateMacroInvocationsIn:(NSArray *)aPpTokens  inRescanningMacros:(BOOL)aRescanningMacros rescanningMacroDefines:(NSMutableArray *)aRescanningMacroDefines;
 
 @end

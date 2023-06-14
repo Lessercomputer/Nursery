@@ -12,25 +12,6 @@
 
 @implementation NUCPreprocessingToken
 
-- (void)dealloc
-{
-    [macroExpandedPpTokens release];
-    
-    [super dealloc];
-}
-
-- (NUCPreprocessingToken *)macroExpandedPpTokens
-{
-    return macroExpandedPpTokens;
-}
-
-- (void)setMacroExpandedPpTokens:(NUCPreprocessingToken *)aMacroExpandedPpTokens
-{
-    [aMacroExpandedPpTokens retain];
-    [macroExpandedPpTokens release];
-    macroExpandedPpTokens = aMacroExpandedPpTokens;
-}
-
 - (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
 {
     

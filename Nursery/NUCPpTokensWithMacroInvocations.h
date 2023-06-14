@@ -1,5 +1,5 @@
 //
-//  NUCMacroExpandedPpTokens.h
+//  NUCPpTokensWithMacroInvocations.h
 //  Nursery
 //
 //  Created by TAKATA Akifumi on 2023/06/14.
@@ -9,7 +9,7 @@
 #import "NUCPreprocessingDirective.h"
 
 
-@interface NUCMacroExpandedPpTokens : NUCPreprocessingDirective
+@interface NUCPpTokensWithMacroInvocations : NUCPreprocessingDirective
 {
     NSMutableArray *ppTokens;
 }
