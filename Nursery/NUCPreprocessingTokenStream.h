@@ -31,5 +31,6 @@
 - (BOOL)skipWhitespacesWithoutNewline;
 - (NUCDecomposedPreprocessingToken *)peekNext;
 - (BOOL)nextIsWhitespaces;
+- (BOOL)nextIsWhitespacesWithoutNewline;
 
 @end

@@ -8,7 +8,7 @@
 
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCPreprocessingTokenStream.h"
-#import "NUCMacroExpandedPpTokens.h"
+#import "NUCMacroInvocation.h"
 
 #import <Foundation/NSString.h>
 
@@ -278,6 +278,16 @@
 - (BOOL)isNotNewLine
 {
     return ![self isNewLine];
+}
+
+- (BOOL)isOpeningParenthesis
+{
+    return [[self content] isEqual:NUCOpeningParenthesisPunctuator];
+}
+
+- (BOOL)isClosingParenthesis
+{
+    return [[self content] isEqual:NUCClosingParenthesisPunctuator];
 }
 
 - (NSString *)description

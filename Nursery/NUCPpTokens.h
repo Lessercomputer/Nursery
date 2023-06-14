@@ -32,5 +32,7 @@
 
 - (void)enumerateObjectsUsingBlock:(void (^)(NUCDecomposedPreprocessingToken *, NSUInteger, BOOL *))aBlock skipWhitespaces:(BOOL)aSkipWhitespaces;
 
+- (NUCPreprocessingToken *)ppTokensByExpandingMacrosWith:(NUCPreprocessor *)aPreprocessor;
+
 @end
 

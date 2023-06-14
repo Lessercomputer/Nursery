@@ -2,59 +2,39 @@
 //  NUCMacroExpandedPpTokens.m
 //  Nursery
 //
-//  Created by TAKATA Akifumi on 2023/06/07.
+//  Created by TAKATA Akifumi on 2023/06/14.
 //  Copyright © 2023 Nursery-Framework. All rights reserved.
 //
 
 #import "NUCMacroExpandedPpTokens.h"
-#import "NUCControlLineDefine.h"
-#import "NUCPreprocessor.h"
 
 #import <Foundation/NSArray.h>
 
 @implementation NUCMacroExpandedPpTokens
 
-- (instancetype)init
++ (instancetype)ppTokens
 {
-    return [self initWithDefine:nil];
-}
-
-- (instancetype)initWithDefine:(NUCControlLineDefine *)aDefine
-{
-    if (self = [super initWithType:NUCLexicalElementNone])
-    {
-        define = aDefine;
-        expandedPpTokens = [NSMutableArray new];
-    }
-    
-    return self;
+    return [[self new] autorelease];
 }
 
 - (void)dealloc
 {
-    [expandedPpTokens release];
+    [ppTokens release];
     
     [super dealloc];
 }
 
-- (NUCControlLineDefine *)define
+- (void)add:(NUCPreprocessingToken *)aPpToken
 {
-    return define;
+    [[self ppTokens] addObject:aPpToken];
 }
 
-- (void)setDefine:(NUCControlLineDefine *)aDefine
+- (NSMutableArray *)ppTokens
 {
-    define = aDefine;
-}
-
-- (NSMutableArray *)expandedPpTokens
-{
-    return expandedPpTokens;
-}
-
-- (void)add:(NUCDecomposedPreprocessingToken *)aPpToken
-{
-    [[self expandedPpTokens] addObject:aPpToken];
+    if (!ppTokens)
+        ppTokens = [NSMutableArray new];
+    
+    return ppTokens;
 }
 
 @end

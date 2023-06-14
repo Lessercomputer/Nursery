@@ -19,15 +19,16 @@
     [super dealloc];
 }
 
-- (NSArray *)macroExpandedPpTokens
+- (NUCPreprocessingToken *)macroExpandedPpTokens
 {
     return macroExpandedPpTokens;
 }
 
-- (void)setMacroExpandedPpTokens:(NSArray *)aMacroExpandedPpTokens
+- (void)setMacroExpandedPpTokens:(NUCPreprocessingToken *)aMacroExpandedPpTokens
 {
+    [aMacroExpandedPpTokens retain];
     [macroExpandedPpTokens release];
-    macroExpandedPpTokens = [aMacroExpandedPpTokens retain];
+    macroExpandedPpTokens = aMacroExpandedPpTokens;
 }
 
 - (void)preprocessWith:(NUCPreprocessor *)aPreprocessor

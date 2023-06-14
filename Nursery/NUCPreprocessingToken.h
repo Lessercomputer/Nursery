@@ -12,13 +12,13 @@
 
 @interface NUCPreprocessingToken : NUCLexicalElement
 {
-    NSArray *macroExpandedPpTokens;
+    NUCPreprocessingToken *macroExpandedPpTokens;
 }
 
 - (void)preprocessWith:(NUCPreprocessor *)aPreprocessor;
 
-- (NSArray *)macroExpandedPpTokens;
-- (void)setMacroExpandedPpTokens:(NSArray *)aMacroExpandedPpTokens;
+- (NUCPreprocessingToken *)macroExpandedPpTokens;
+- (void)setMacroExpandedPpTokens:(NUCPreprocessingToken *)aMacroExpandedPpTokens;
 
 @end
 

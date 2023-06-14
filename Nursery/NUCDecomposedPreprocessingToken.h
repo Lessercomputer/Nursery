@@ -67,5 +67,7 @@
 - (BOOL)isWhitespacesWithoutNewline;
 - (BOOL)isNewLine;
 - (BOOL)isNotNewLine;
+- (BOOL)isOpeningParenthesis;
+- (BOOL)isClosingParenthesis;
 
 @end

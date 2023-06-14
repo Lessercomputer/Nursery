@@ -97,4 +97,9 @@
     return [[self peekNext] isWhitespace] ? YES : NO;
 }
 
+- (BOOL)nextIsWhitespacesWithoutNewline
+{
+    return [[self peekNext] isWhitespacesWithoutNewline] ? YES : NO;
+}
+
 @end

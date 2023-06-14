@@ -9,6 +9,7 @@
 #import "NUCPpTokens.h"
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCPreprocessingTokenStream.h"
+#import "NUCPreprocessor.h"
 
 #import <Foundation/NSArray.h>
 
@@ -45,16 +46,6 @@
     return [[[self alloc] initWithType:NUCLexicalElementPpTokensType] autorelease];
 }
 
-- (instancetype)initWithType:(NUCLexicalElementType)aType
-{
-    if (self = [super initWithType:aType])
-    {
-        ppTokens = [NSMutableArray new];
-    }
-    
-    return self;
-}
-
 - (void)dealloc
 {
     [ppTokens release];
@@ -69,6 +60,9 @@
 
 - (NSMutableArray *)ppTokens
 {
+    if (!ppTokens)
+        ppTokens = [NSMutableArray new];
+    
     return ppTokens;
 }
 
@@ -86,8 +80,6 @@
 {
     if (self == anOther)
         return YES;
-    else if (![super isEqual:anOther])
-        return NO;
     else
         return [[self ppTokens] isEqual:[anOther ppTokens]];
 }
@@ -111,4 +103,10 @@
             aBlock(aPpToken, anIndex, aStop);
     }];
 }
+
+- (NUCPreprocessingToken *)ppTokensByExpandingMacrosWith:(NUCPreprocessor *)aPreprocessor
+{
+    return [aPreprocessor ppTokensByExpandingMacroInvocationsIn:self];
+}
+
 @end

@@ -2,27 +2,23 @@
 //  NUCMacroExpandedPpTokens.h
 //  Nursery
 //
-//  Created by TAKATA Akifumi on 2023/06/07.
+//  Created by TAKATA Akifumi on 2023/06/14.
 //  Copyright © 2023 Nursery-Framework. All rights reserved.
 //
 
-#import "NUCDecomposedPreprocessingToken.h"
+#import "NUCPreprocessingDirective.h"
 
-@class NUCControlLineDefine;
 
-@interface NUCMacroExpandedPpTokens : NUCDecomposedPreprocessingToken
+@interface NUCMacroExpandedPpTokens : NUCPreprocessingDirective
 {
-    NUCControlLineDefine *define;
-    NSMutableArray *expandedPpTokens;
+    NSMutableArray *ppTokens;
 }
 
-- (instancetype)initWithDefine:(NUCControlLineDefine *)aDefine;
++ (instancetype)ppTokens;
 
-- (void)setDefine:(NUCControlLineDefine *)aDefine;
+- (NSMutableArray *)ppTokens;
 
-- (NSMutableArray *)expandedPpTokens;
-
-- (void)add:(NUCDecomposedPreprocessingToken *)aPpToken;
+- (void)add:(NUCPreprocessingToken *)aPpToken;
 
 @end
 
