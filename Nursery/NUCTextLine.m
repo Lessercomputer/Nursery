@@ -60,7 +60,6 @@
 {
     [ppTokens release];
     [newline release];
-    [ppTokensWithMacroInvocations release];
 
     [super dealloc];
 }
@@ -68,22 +67,6 @@
 - (NUCPpTokens *)ppTokens
 {
     return ppTokens;
-}
-
-- (NUCPreprocessingToken *)ppTokensWithMacroInvocations
-{
-    return ppTokensWithMacroInvocations;
-}
-
-- (void)setPpTokensWithMacroInvocations:(NUCPreprocessingToken *)aPpTokensWithMacroInvocations
-{
-    [ppTokensWithMacroInvocations release];
-    ppTokensWithMacroInvocations = [aPpTokensWithMacroInvocations retain];
-}
-
-- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
-{
-    [self setPpTokensWithMacroInvocations:[[self ppTokens] ppTokensWithMacroInvocationsByInstantiateMacroInvocationsWith:aPreprocessor]];
 }
 
 @end

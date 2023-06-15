@@ -14,7 +14,6 @@
 {
     NUCPpTokens *ppTokens;
     NUCNewline *newline;
-    NUCPreprocessingToken *ppTokensWithMacroInvocations;
 }
 
 + (BOOL)textLineFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingDirective **)aToken;
@@ -24,9 +23,6 @@
 - (instancetype)initWithPpTokens:(NUCPpTokens *)aPpTokens newline:(NUCNewline *)aNewline;
 
 - (NUCPpTokens *)ppTokens;
-
-- (NUCPreprocessingToken *)ppTokensWithMacroInvocations;
-- (void)setPpTokensWithMacroInvocations:(NUCPreprocessingToken *)aMacroExpandedPpTokens;
 
 @end
 

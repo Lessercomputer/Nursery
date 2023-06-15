@@ -128,7 +128,7 @@
         NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
         
         if ([aPpToken isIdentifier])
-            [aPpTokensWithMacroInvocations add:[self macroInvocationOrIdentifier:(NUCIdentifier *)aPpToken from:aPpTokenStream]];
+            [aPpTokensWithMacroInvocations add:[self identifierOrMacroInvocation:(NUCIdentifier *)aPpToken from:aPpTokenStream]];
         else
             [aPpTokensWithMacroInvocations add:aPpToken];
     }
@@ -136,30 +136,26 @@
     return aPpTokensWithMacroInvocations;
 }
 
-- (NUCPreprocessingToken *)macroInvocationOrIdentifier:(NUCIdentifier *)anIdentifier from:(NUCPreprocessingTokenStream *)aPpTokenStream
+- (NUCPreprocessingToken *)identifierOrMacroInvocation:(NUCIdentifier *)anIdentifier from:(NUCPreprocessingTokenStream *)aPpTokenStream
 {
-    NUCIdentifier *aMacroNameToInvoke = anIdentifier;
-    NUCControlLineDefine *aMacroDefineToInvoke = [self macroDefineFor:aMacroNameToInvoke];
+    NUCControlLineDefine *aMacroDefineToInvoke = [self macroDefineFor:anIdentifier];
     
-    if (aMacroDefineToInvoke)
+    if (!aMacroDefineToInvoke)
+        return anIdentifier;
+    else
     {
         NUCMacroInvocation *aMacroInvocation = [NUCMacroInvocation macroInvocationWithDefine:aMacroDefineToInvoke];
         
         if ([aMacroDefineToInvoke isFunctionLike])
         {
-            NUCDecomposedPreprocessingToken *aPpTokenFollowsFunctionLikeMacroName = [aPpTokenStream next];
+            NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
             
-            if ([aPpTokenFollowsFunctionLikeMacroName isOpeningParenthesis])
+            if ([aPpToken isOpeningParenthesis])
             {
-                while ([aPpTokenStream hasNext])
-                {
-                    aPpTokenFollowsFunctionLikeMacroName = [aPpTokenStream next];
-                    
-                    
-                    
-                    if ([aPpTokenFollowsFunctionLikeMacroName isClosingParenthesis])
-                        ;
-                }
+                [aMacroInvocation addArgument:[self macroInvocationArgumentFrom:aPpTokenStream]];
+                
+                if (![[aPpTokenStream next] isClosingParenthesis])
+                    return nil;
             }
             else
                 return nil;
@@ -167,8 +163,36 @@
         
         return aMacroInvocation;
     }
-    else
-        return anIdentifier;
+}
+
+- (NSArray *)macroInvocationArgumentFrom:(NUCPreprocessingTokenStream *)aPpTokenStream
+{
+    NSMutableArray *anArgument = [NSMutableArray array];
+    NSInteger anOpeningParenthesisCount = 0;
+    
+    while ([aPpTokenStream hasNext])
+    {
+        NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
+        
+        if ([aPpToken isIdentifier])
+            [anArgument addObject:[self identifierOrMacroInvocation:(NUCIdentifier *)aPpToken from:aPpTokenStream]];
+        else
+        {
+            if ([aPpToken isComma])
+            {
+                if (anOpeningParenthesisCount == 0)
+                    break;
+            }
+            else if ([aPpToken isOpeningParenthesis])
+                anOpeningParenthesisCount++;
+            else if ([aPpToken isClosingParenthesis])
+                anOpeningParenthesisCount--;
+            
+            [anArgument addObject:aPpToken];
+        }
+    }
+    
+    return anArgument;
 }
 
 - (NUCPreprocessingToken *)rescanReplacementListOf:(NUCControlLineDefine *)aMacroDefine rescanningMacroDefines:(NSMutableArray *)aRescanningMacroDefines
@@ -176,73 +200,73 @@
     return nil;
 }
 
-- (NUCPpTokensWithMacroInvocations *)instantiateMacroInvocationsIn:(NSArray *)aPpTokens  inRescanningMacros:(BOOL)aRescanningMacros rescanningMacroDefines:(NSMutableArray *)aRescanningMacroDefines
-{
-    NUCPpTokensWithMacroInvocations *aMacroExpandedPpTokens = [NUCPpTokensWithMacroInvocations ppTokens];
-    NSArray *aPpTokensInArray = nil;
-    
-    if (aRescanningMacros)
-        aPpTokensInArray = [self preprocessHashHashOperetorsInReplacementList:aPpTokens];
-    else
-        aPpTokensInArray = aPpTokens;
-    
-    NUCPreprocessingTokenStream *aPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aPpTokensInArray];
-        
-    while ([aPpTokenStream hasNext])
-    {
-        NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
-        
-        if ([aPpToken isIdentifier])
-        {
-            NUCIdentifier *aMacroNameToInvoke = (NUCIdentifier *)aPpToken;
-            
-            NUCControlLineDefine *aMacroDefineToInvoke = [self macroDefineFor:aMacroNameToInvoke];
-            
-            if (aMacroDefineToInvoke && ![aRescanningMacroDefines containsObject:aMacroDefineToInvoke])
-            {
-                if (!aRescanningMacroDefines)
-                    aRescanningMacroDefines = [NSMutableArray array];
-                
-                if ([aMacroDefineToInvoke isObjectLike])
-                {
-                    [aRescanningMacroDefines addObject:aMacroDefineToInvoke];
-                    
-                    NUCPreprocessingToken *aMacroExpandedPpTokensForDefine = [self instantiateMacroInvocationsIn:[[[aMacroDefineToInvoke replacementList] ppTokens] ppTokens] inRescanningMacros:YES rescanningMacroDefines:aRescanningMacroDefines];
-                    
-                    [aMacroExpandedPpTokens add:aMacroExpandedPpTokensForDefine];
-                }
-                else
-                {
-                    NUCDecomposedPreprocessingToken *aPpTokenFollowsFunctionLikeMacroName = [aPpTokenStream next];
-                    
-                    if ([aPpTokenFollowsFunctionLikeMacroName isOpeningParenthesis])
-                    {
-                        NUCMacroInvocation *aMacroInvocation = [NUCMacroInvocation macroInvocationWithDefine:aMacroDefineToInvoke];
-                        
-                        while ([aPpTokenStream hasNext])
-                        {
-                            aPpTokenFollowsFunctionLikeMacroName = [aPpTokenStream next];
-                            
-                            
-                            if ([aPpTokenFollowsFunctionLikeMacroName isClosingParenthesis])
-                                ;
-                        }
-                    }
-                    else
-                        ;
-                }
-                
-                [aRescanningMacroDefines removeLastObject];
-            }
-            else
-                [aMacroExpandedPpTokens add:aPpToken];
-        }
-        else
-            [aMacroExpandedPpTokens add:aPpToken];
-    }
-    
-    return aMacroExpandedPpTokens;
-}
+//- (NUCPpTokensWithMacroInvocations *)instantiateMacroInvocationsIn:(NSArray *)aPpTokens  inRescanningMacros:(BOOL)aRescanningMacros rescanningMacroDefines:(NSMutableArray *)aRescanningMacroDefines
+//{
+//    NUCPpTokensWithMacroInvocations *aMacroExpandedPpTokens = [NUCPpTokensWithMacroInvocations ppTokens];
+//    NSArray *aPpTokensInArray = nil;
+//    
+//    if (aRescanningMacros)
+//        aPpTokensInArray = [self preprocessHashHashOperetorsInReplacementList:aPpTokens];
+//    else
+//        aPpTokensInArray = aPpTokens;
+//    
+//    NUCPreprocessingTokenStream *aPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aPpTokensInArray];
+//        
+//    while ([aPpTokenStream hasNext])
+//    {
+//        NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
+//        
+//        if ([aPpToken isIdentifier])
+//        {
+//            NUCIdentifier *aMacroNameToInvoke = (NUCIdentifier *)aPpToken;
+//            
+//            NUCControlLineDefine *aMacroDefineToInvoke = [self macroDefineFor:aMacroNameToInvoke];
+//            
+//            if (aMacroDefineToInvoke && ![aRescanningMacroDefines containsObject:aMacroDefineToInvoke])
+//            {
+//                if (!aRescanningMacroDefines)
+//                    aRescanningMacroDefines = [NSMutableArray array];
+//                
+//                if ([aMacroDefineToInvoke isObjectLike])
+//                {
+//                    [aRescanningMacroDefines addObject:aMacroDefineToInvoke];
+//                    
+//                    NUCPreprocessingToken *aMacroExpandedPpTokensForDefine = [self instantiateMacroInvocationsIn:[[[aMacroDefineToInvoke replacementList] ppTokens] ppTokens] inRescanningMacros:YES rescanningMacroDefines:aRescanningMacroDefines];
+//                    
+//                    [aMacroExpandedPpTokens add:aMacroExpandedPpTokensForDefine];
+//                }
+//                else
+//                {
+//                    NUCDecomposedPreprocessingToken *aPpTokenFollowsFunctionLikeMacroName = [aPpTokenStream next];
+//                    
+//                    if ([aPpTokenFollowsFunctionLikeMacroName isOpeningParenthesis])
+//                    {
+//                        NUCMacroInvocation *aMacroInvocation = [NUCMacroInvocation macroInvocationWithDefine:aMacroDefineToInvoke];
+//                        
+//                        while ([aPpTokenStream hasNext])
+//                        {
+//                            aPpTokenFollowsFunctionLikeMacroName = [aPpTokenStream next];
+//                            
+//                            
+//                            if ([aPpTokenFollowsFunctionLikeMacroName isClosingParenthesis])
+//                                ;
+//                        }
+//                    }
+//                    else
+//                        ;
+//                }
+//                
+//                [aRescanningMacroDefines removeLastObject];
+//            }
+//            else
+//                [aMacroExpandedPpTokens add:aPpToken];
+//        }
+//        else
+//            [aMacroExpandedPpTokens add:aPpToken];
+//    }
+//    
+//    return aMacroExpandedPpTokens;
+//}
 
 - (NSArray *)preprocessHashHashOperetorsInReplacementList:(NSArray *)aPpTokens
 {

@@ -24,7 +24,7 @@
 
 - (NSMutableArray *)arguments;
 
-- (void)addArgument:(NUCPreprocessingToken *)anArgument;
+- (void)addArgument:(NSArray *)anArgument;
 
 @end
 

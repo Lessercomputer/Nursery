@@ -57,7 +57,7 @@
     return arguments;
 }
 
-- (void)addArgument:(NUCPreprocessingToken *)anArgument
+- (void)addArgument:(NSArray *)anArgument
 {
     [[self arguments] addObject:anArgument];
 }
