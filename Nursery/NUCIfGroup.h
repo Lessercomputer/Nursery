@@ -19,7 +19,7 @@
     NUCGroup *group;
 }
 
-+ (BOOL)ifGroupFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCIfGroup **)anIfGroup;
++ (BOOL)ifGroupFrom:(NUCPreprocessingTokenStream *)aStream with:(NUCPreprocessor *)aPreprocessor isSkipped:(BOOL)aGroupIsSkipped into:(NUCIfGroup **)anIfGroup;
 
 + (instancetype)ifGroupWithType:(NUCLexicalElementType)aType hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aName expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup;
 

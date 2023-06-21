@@ -19,7 +19,7 @@
     NUCEndifLine *endifLine;
 }
 
-+ (BOOL)ifSectionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingDirective **)anIfSection;
++ (BOOL)ifSectionFrom:(NUCPreprocessingTokenStream *)aStream  with:(NUCPreprocessor *)aPreprocessor isSkipped:(BOOL)aGroupIsSkipped into:(NUCPreprocessingDirective **)anIfSection;
 
 + (instancetype)ifSectionWithIfGroup:(NUCIfGroup *)anIfGroup elifGroups:(NUCElifGroups *)anElifGroups elseGroup:(NUCElseGroup *)anElseGroup endifLine:(NUCEndifLine *)anEndifLine;
 

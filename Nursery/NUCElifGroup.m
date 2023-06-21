@@ -17,7 +17,7 @@
 
 @implementation NUCElifGroup
 
-+ (BOOL)elifGroupFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCElifGroup **)anElifGroup
++ (BOOL)elifGroupFrom:(NUCPreprocessingTokenStream *)aStream with:(NUCPreprocessor *)aPreprocessor isSkipped:(BOOL)aGroupIsSkipped into:(NUCElifGroup **)anElifGroup
 {
     NSUInteger aPosition = [aStream position];
     [aStream skipWhitespaces];
@@ -25,26 +25,30 @@
     
     if (aToken && [aToken isHash])
     {
-        NUCLexicalElement *aConstantExpression = nil;
-        
         if ([aStream skipWhitespacesWithoutNewline])
         {
             NUCDecomposedPreprocessingToken *anElif = [aStream next];
+            
             if ([[anElif content] isEqualToString:NUCPreprocessingDirectiveElif])
             {
-                if ([NUCConstantExpression constantExpressionFrom:aStream into:&aConstantExpression])
+                NUCLexicalElement *aConstantExpression = nil;
+                NUCNewline *aNewline = nil;
+
+                if (!aGroupIsSkipped)
                 {
-                    NUCNewline *aNewline = nil;
+                    [NUCConstantExpression constantExpressionFrom:aStream into:&aConstantExpression];
                     [aStream skipWhitespacesWithoutNewline];
+                }
+                else
+                    [self readPpTokensUntilNewlineFrom:aStream into:&aConstantExpression];
+
+                if (aConstantExpression && [NUCNewline newlineFrom:aStream into:&aNewline])
+                {
+                    NUCGroup *aGroup = nil;
+                    [NUCGroup groupFrom:aStream with:aPreprocessor isSkipped:aGroupIsSkipped into:&aGroup];
                     
-                    if ([NUCNewline newlineFrom:aStream into:&aNewline])
-                    {
-                        NUCGroup *aGroup = nil;
-                        [NUCGroup groupFrom:aStream into:&aGroup];
-                        
-                        if (anElifGroup)
-                            *anElifGroup = [NUCElifGroup elifGroupWithType:NUCLexicalElementElifGroup hash:aToken directiveName:anElif expressionOrIdentifier:aConstantExpression newline:aNewline group:aGroup];
-                    }
+                    if (anElifGroup)
+                        *anElifGroup = [NUCElifGroup elifGroupWithType:NUCLexicalElementElifGroup hash:aToken directiveName:anElif expressionOrIdentifier:aConstantExpression newline:aNewline group:aGroup];
                     
                     return YES;
                 }

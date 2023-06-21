@@ -15,7 +15,7 @@
 
 @implementation NUCIfSection
 
-+ (BOOL)ifSectionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingDirective **)anIfSection
++ (BOOL)ifSectionFrom:(NUCPreprocessingTokenStream *)aStream  with:(NUCPreprocessor *)aPreprocessor isSkipped:(BOOL)aGroupIsSkipped into:(NUCPreprocessingDirective **)anIfSection
 {
     NSUInteger aPosition = [aStream position];
     NUCIfGroup *anIfGroup = nil;
@@ -23,10 +23,11 @@
     NUCElseGroup *anElseGroup = nil;
     NUCEndifLine *anEndifLine = nil;
     
-    if ([NUCIfGroup ifGroupFrom:aStream into:&anIfGroup])
+    if ([NUCIfGroup ifGroupFrom:aStream with:aPreprocessor isSkipped:aGroupIsSkipped into:&anIfGroup])
     {
-        [NUCElifGroups elifGroupsFrom:aStream into:&anElifGroups];
-        [NUCElseGroup elseGroupFrom:aStream into:&anElseGroup];
+        [NUCElifGroups elifGroupsFrom:aStream with:aPreprocessor isSkipped:aGroupIsSkipped into:&anElifGroups];
+        [NUCElseGroup elseGroupFrom:aStream with:aPreprocessor isSkipped:aGroupIsSkipped
+                            into:&anElseGroup];
         
         if ([NUCEndifLine endifLineFrom:aStream into:&anEndifLine])
         {
@@ -92,9 +93,9 @@
     return endifLine;
 }
 
-- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
+- (void)executeWith:(NUCPreprocessor *)aPreprocessor
 {
-    [[self ifGroup] preprocessWith:aPreprocessor];
+    [[self ifGroup] executeWith:aPreprocessor];
 }
 
 @end

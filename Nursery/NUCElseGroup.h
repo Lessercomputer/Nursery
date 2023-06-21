@@ -18,7 +18,7 @@
     NUCGroup *group;
 }
 
-+ (BOOL)elseGroupFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCElseGroup **)anElseGroup;
++ (BOOL)elseGroupFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream with:(NUCPreprocessor *)aPreprocessor isSkipped:(BOOL)aGroupIsSkipped into:(NUCElseGroup **)anElseGroup;
 
 + (instancetype)elseGroupWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)anElse newline:(NUCNewline *)aNewline group:(NUCGroup *)aGroup;
 

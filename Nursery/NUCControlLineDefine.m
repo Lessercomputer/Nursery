@@ -18,7 +18,7 @@
 
 @implementation NUCControlLineDefine
 
-+ (BOOL)controlLineDefineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCPreprocessingDirective **)aToken
++ (BOOL)controlLineDefineFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream with:(NUCPreprocessor *)aPreprocessor isSkipped:(BOOL)aGroupIsSkipped hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCPreprocessingDirective **)aToken
 {
     if (![[aDirectiveName content] isEqualToString:NUCPreprocessingDirectiveDefine])
         return NO;
@@ -34,12 +34,12 @@
     {
         [aPreprocessingTokenStream next];
         
-        if ([NUCControlLineDefineFunctionLike controlLineDefineFunctionLikeFrom:aPreprocessingTokenStream hash:aHash directiveName:aDirectiveName identifier:anIdentifier lparen:anLparen into:aToken])
+        if ([NUCControlLineDefineFunctionLike controlLineDefineFunctionLikeFrom:aPreprocessingTokenStream with:aPreprocessor isSkipped:aGroupIsSkipped hash:aHash directiveName:aDirectiveName identifier:anIdentifier lparen:anLparen into:aToken])
             return YES;
     }
     else
     {
-        if ([NUCControlLineDefineObjectLike controlLineDefineObjectLikeFrom:aPreprocessingTokenStream hash:aHash directiveName:aDirectiveName identifier:anIdentifier into:aToken])
+        if ([NUCControlLineDefineObjectLike controlLineDefineObjectLikeFrom:aPreprocessingTokenStream with:aPreprocessor isSkipped:aGroupIsSkipped hash:aHash directiveName:aDirectiveName identifier:anIdentifier into:aToken])
             return YES;
     }
     
@@ -112,7 +112,7 @@
         return NO;
 }
 
-- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
+- (void)executeWith:(NUCPreprocessor *)aPreprocessor
 {
     [aPreprocessor define:self];
 }

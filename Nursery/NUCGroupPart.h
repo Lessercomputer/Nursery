@@ -15,7 +15,7 @@
     NUCPreprocessingDirective *content;
 }
 
-+ (BOOL)groupPartFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingDirective **)aGroupPart;
++ (BOOL)groupPartFrom:(NUCPreprocessingTokenStream *)aStream  with:(NUCPreprocessor *)aPreprocessor isSkipped:(BOOL)aGroupIsSkipped into:(NUCPreprocessingDirective **)aGroupPart;
 
 + (instancetype)groupPartWithContent:(NUCPreprocessingDirective *)aContent;
 

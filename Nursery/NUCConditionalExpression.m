@@ -124,7 +124,7 @@
     return conditionalExpression;
 }
 
-- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
+- (void)executeWith:(NUCPreprocessor *)aPreprocessor
 {
     
 }

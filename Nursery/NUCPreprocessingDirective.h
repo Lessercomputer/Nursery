@@ -8,7 +8,11 @@
 
 #import "NUCPreprocessingToken.h"
 
+@class NUCPreprocessingTokenStream;
+
 @interface NUCPreprocessingDirective : NUCPreprocessingToken
+
++ (BOOL)readPpTokensUntilNewlineFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCLexicalElement **)aPpTokens;
 
 - (BOOL)isPpTokens;
 - (BOOL)isControlLine;

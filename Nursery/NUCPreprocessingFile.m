@@ -15,11 +15,11 @@
 
 @implementation NUCPreprocessingFile
 
-+ (BOOL)preprocessingFileFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingFile **)aToken
++ (BOOL)preprocessingFileFrom:(NUCPreprocessingTokenStream *)aStream with:(NUCPreprocessor *)aPreprocessor into:(NUCPreprocessingFile **)aToken
 {
     NUCGroup *aGroup = nil;
 
-    if ([NUCGroup groupFrom:aStream into:&aGroup])
+    if ([NUCGroup groupFrom:aStream with:aPreprocessor isSkipped:NO into:&aGroup])
     {
         if (aToken)
             *aToken = [self preprocessingFileWithGroup:aGroup];
@@ -75,9 +75,9 @@
     [[self macroDefines] setObject:aMacroDefine forKey:[aMacroDefine identifier]];
 }
 
-- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
+- (void)executeWith:(NUCPreprocessor *)aPreprocessor
 {
-    [[self group] preprocessWith:aPreprocessor];
+    [[self group] executeWith:aPreprocessor];
 }
 
 @end

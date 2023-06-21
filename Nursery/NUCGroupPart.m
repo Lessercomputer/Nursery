@@ -17,13 +17,13 @@
 
 @implementation NUCGroupPart
 
-+ (BOOL)groupPartFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingDirective **)aGroupPart
++ (BOOL)groupPartFrom:(NUCPreprocessingTokenStream *)aStream  with:(NUCPreprocessor *)aPreprocessor isSkipped:(BOOL)aGroupIsSkipped into:(NUCPreprocessingDirective **)aGroupPart
 {
     NUCPreprocessingDirective *aPreprocessingDirective = nil;
     
-    if ([NUCIfSection ifSectionFrom:aStream into:&aPreprocessingDirective])
+    if ([NUCIfSection ifSectionFrom:aStream with:aPreprocessor isSkipped:aGroupIsSkipped into:&aPreprocessingDirective])
         ;
-    else if ([NUCControlLine controlLineFrom:aStream into:&aPreprocessingDirective])
+    else if ([NUCControlLine controlLineFrom:aStream with:aPreprocessor isSkipped:aGroupIsSkipped into:&aPreprocessingDirective])
         ;
     else if ([NUCTextLine textLineFrom:aStream into:&aPreprocessingDirective])
         ;
@@ -65,9 +65,9 @@
     return content;
 }
 
-- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
+- (void)executeWith:(NUCPreprocessor *)aPreprocessor
 {
-    [[self content] preprocessWith:aPreprocessor];
+    [[self content] executeWith:aPreprocessor];
 }
 
 @end

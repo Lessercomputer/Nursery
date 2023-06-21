@@ -16,7 +16,7 @@
 
 @implementation NUCElseGroup
 
-+ (BOOL)elseGroupFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCElseGroup **)anElseGroup
++ (BOOL)elseGroupFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream with:(NUCPreprocessor *)aPreprocessor isSkipped:(BOOL)aGroupIsSkipped into:(NUCElseGroup **)anElseGroup
 {
     NSUInteger aPosition = [aPreprocessingTokenStream position];
     NUCDecomposedPreprocessingToken *aToken = [aPreprocessingTokenStream next];
@@ -32,7 +32,7 @@
             if ([NUCNewline newlineFrom:aPreprocessingTokenStream into:&aNewline])
             {
                 NUCGroup *aGroup = nil;
-                [NUCGroup groupFrom:aPreprocessingTokenStream into:&aGroup];
+                [NUCGroup groupFrom:aPreprocessingTokenStream with:aPreprocessor isSkipped:aGroupIsSkipped into:&aGroup];
                 
                 if (anElseGroup)
                 {

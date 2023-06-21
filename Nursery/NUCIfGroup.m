@@ -12,12 +12,14 @@
 #import "NUCNewline.h"
 #import "NUCGroup.h"
 #import "NUCConstantExpression.h"
+#import "NUCPreprocessor.h"
+#import "NUCPpTokens.h"
 
 #import <Foundation/NSString.h>
 
 @implementation NUCIfGroup
 
-+ (BOOL)ifGroupFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCIfGroup **)anIfGroup
++ (BOOL)ifGroupFrom:(NUCPreprocessingTokenStream *)aStream  with:(NUCPreprocessor *)aPreprocessor isSkipped:(BOOL)aGroupIsSkipped into:(NUCIfGroup **)anIfGroup
 {
     NSUInteger aPosition = [aStream position];
     [aStream skipWhitespaces];
@@ -32,37 +34,41 @@
         if (aToken)
         {
             NSString *anIfGroupTypeString = [aToken content];
-            NUCLexicalElementType anIfGroupType = NUCLexicalElementNone;
+            NUCLexicalElementType anIfGroupType = [self lexicalElementTypeForDirectiveName:anIfGroupTypeString];
             NUCDecomposedPreprocessingToken *aTypeName = aToken;
             NUCLexicalElement *anExpressionOrIdentifier = nil;
             NUCNewline *aNewline = nil;
             
-            if ([anIfGroupTypeString isEqualToString:NUCPreprocessingDirectiveIf])
+            if (!aGroupIsSkipped)
             {
-                anIfGroupType = NUCLexicalElementIfType;
-                
-                [aStream skipWhitespaces];
-                [NUCConstantExpression constantExpressionFrom:aStream into:&anExpressionOrIdentifier];
+                if (anIfGroupType == NUCLexicalElementIfType)
+                {
+                    [aStream skipWhitespaces];
+                    
+                    id aPpTokens = nil;
+                    [self readPpTokensUntilNewlineFrom:aStream into:&aPpTokens];
+                    
+                    id aPpTokensWithMacroInvocations = [aPreprocessor ppTokensWithMacroInvocationsByInstantiateMacroInvocationsIn:aPpTokens];
+                    NUCPpTokens *aMacroExecutedPpTokens = [aPreprocessor executeMacrosInPpTokens:aPpTokensWithMacroInvocations];
+                    NUCPreprocessingTokenStream *aMacroExecutedStream = [[[NUCPreprocessingTokenStream alloc] initWithPreprocessingTokens:[aMacroExecutedPpTokens ppTokens]] autorelease];
+                    
+                    [NUCConstantExpression constantExpressionFrom:aStream into:&anExpressionOrIdentifier];
+                }
+                else if (anIfGroupType == NUCLexicalElementIfdefType
+                    || anIfGroupType == NUCLexicalElementIfndefType)
+                {
+                    [aStream skipWhitespaces];
+                    anExpressionOrIdentifier = [aStream next];
+                }
             }
-            else if ([anIfGroupTypeString isEqualToString:NUCPreprocessingDirectiveIfdef])
-            {
-                anIfGroupType = NUCLexicalElementIfdefType;
-                
-                [aStream skipWhitespaces];
-                anExpressionOrIdentifier = [aStream next];
-            }
-            else if ([anIfGroupTypeString isEqualToString:NUCPreprocessingDirectiveIfndef])
-            {
-                anIfGroupType = NUCLexicalElementIfndefType;
-                
-                [aStream skipWhitespaces];
-                anExpressionOrIdentifier = [aStream next];
-            }
+            else
+                [self readPpTokensUntilNewlineFrom:aStream into:&anExpressionOrIdentifier];
+            
             
             if (aHash && anExpressionOrIdentifier && [NUCNewline newlineFrom:aStream into:&aNewline])
             {
                 NUCGroup *aGroup = nil;
-                [NUCGroup groupFrom:aStream into:&aGroup];
+                [NUCGroup groupFrom:aStream with:aPreprocessor isSkipped:aGroupIsSkipped into:&aGroup];
                 
                 if (anIfGroup)
                     *anIfGroup = [NUCIfGroup ifGroupWithType:anIfGroupType hash:aHash
@@ -76,6 +82,20 @@
     [aStream setPosition:aPosition];
     
     return NO;
+}
+
++ (NUCLexicalElementType)lexicalElementTypeForDirectiveName:(NSString *)aName
+{
+    NUCLexicalElementType anIfGroupType = NUCLexicalElementNone;
+    
+    if ([aName isEqualToString:NUCPreprocessingDirectiveIf])
+        anIfGroupType = NUCLexicalElementIfType;
+    else if ([aName isEqualToString:NUCPreprocessingDirectiveIfdef])
+        anIfGroupType = NUCLexicalElementIfdefType;
+    else if ([aName isEqualToString:NUCPreprocessingDirectiveIfndef])
+        anIfGroupType = NUCLexicalElementIfndefType;
+    
+    return anIfGroupType;
 }
 
 + (instancetype)ifGroupWithType:(NUCLexicalElementType)aType hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aName expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup
@@ -153,11 +173,11 @@
     return group;
 }
 
-- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
+- (void)executeWith:(NUCPreprocessor *)aPreprocessor
 {
     if ([self isIf])
     {
-        [(NUCConstantExpression *)[self expression] preprocessWith:aPreprocessor];
+        [(NUCConstantExpression *)[self expression] executeWith:aPreprocessor];
     }
     else if ([self isIfdef])
     {

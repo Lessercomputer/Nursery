@@ -18,7 +18,7 @@
     NSMutableDictionary *macroDefines;
 }
 
-+ (BOOL)preprocessingFileFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingFile **)aToken;
++ (BOOL)preprocessingFileFrom:(NUCPreprocessingTokenStream *)aStream with:(NUCPreprocessor *)aPreprocessor into:(NUCPreprocessingFile **)aToken;
 + (instancetype)preprocessingFileWithGroup:(NUCGroup *)aGroup;
 
 - (instancetype)initWithGroup:(NUCGroup *)aGroup;

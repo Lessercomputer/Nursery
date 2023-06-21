@@ -14,13 +14,13 @@
 
 @implementation NUCGroup
 
-+ (BOOL)groupFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCGroup **)aToken
++ (BOOL)groupFrom:(NUCPreprocessingTokenStream *)aStream with:(NUCPreprocessor *)aPreprocessor isSkipped:(BOOL)aGroupIsSkipped into:(NUCGroup **)aToken
 {
     NUCGroup *aGroup = [NUCGroup group];
     NUCPreprocessingDirective *aGroupPart = nil;
     BOOL aTokenScanned = NO;
     
-    while ([NUCGroupPart groupPartFrom:aStream into:&aGroupPart])
+    while ([NUCGroupPart groupPartFrom:aStream with:aPreprocessor isSkipped:aGroupIsSkipped into:&aGroupPart])
     {
         aTokenScanned = YES;
         [aGroup add:aGroupPart];
@@ -69,10 +69,10 @@
     [[self groupParts] addObject:aGroupPart];
 }
 
-- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
+- (void)executeWith:(NUCPreprocessor *)aPreprocessor
 {
     [[self groupParts] enumerateObjectsUsingBlock:^(NUCGroupPart * _Nonnull aGroupPart, NSUInteger idx, BOOL * _Nonnull stop) {
-            [aGroupPart preprocessWith:aPreprocessor];
+            [aGroupPart executeWith:aPreprocessor];
     }];
 }
 

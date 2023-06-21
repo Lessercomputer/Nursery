@@ -31,6 +31,8 @@
 
 - (NUCPpTokens *)ppTokensWithMacroInvocationsByInstantiateMacroInvocationsIn:(NUCPpTokens *)aPpTokens;
 
+- (NUCPpTokens *)executeMacrosInPpTokens:(NUCPpTokens *)aPpTokens;
+
 //- (NUCPpTokens *)instantiateMacroInvocationsIn:(NSArray *)aPpTokens  inRescanningMacros:(BOOL)aRescanningMacros rescanningMacroDefines:(NSMutableArray *)aRescanningMacroDefines;
 
 @end

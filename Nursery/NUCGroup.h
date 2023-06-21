@@ -15,7 +15,7 @@
     NSMutableArray *groupParts;
 }
 
-+ (BOOL)groupFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCGroup **)aToken;
++ (BOOL)groupFrom:(NUCPreprocessingTokenStream *)aStream with:(NUCPreprocessor *)aPreprocessor isSkipped:(BOOL)aGroupIsSkipped into:(NUCGroup **)aToken;
 + (instancetype)group;
 
 - (NSMutableArray *)groupParts;

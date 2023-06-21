@@ -15,7 +15,7 @@
     NSMutableArray *groups;
 }
 
-+ (BOOL)elifGroupsFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCElifGroups **)aToken;
++ (BOOL)elifGroupsFrom:(NUCPreprocessingTokenStream *)aStream with:(NUCPreprocessor *)aPreprocessor isSkipped:(BOOL)aGroupIsSkipped into:(NUCElifGroups **)aToken;
 
 + (instancetype)elifGroups;
 

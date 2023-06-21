@@ -12,7 +12,7 @@
 
 @interface NUCPreprocessingToken : NUCLexicalElement
 
-- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor;
+- (void)executeWith:(NUCPreprocessor *)aPreprocessor;
 
 @end
 

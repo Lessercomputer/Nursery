@@ -21,7 +21,7 @@
 
 @implementation NUCControlLine
 
-+ (BOOL)controlLineFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingDirective **)aToken
++ (BOOL)controlLineFrom:(NUCPreprocessingTokenStream *)aStream with:(NUCPreprocessor *)aPreprocessor isSkipped:(BOOL)aGroupIsSkipped into:(NUCPreprocessingDirective **)aToken
 {
     NSUInteger aPosition = [aStream position];
     NUCDecomposedPreprocessingToken *aHash = [aStream next];
@@ -36,7 +36,7 @@
         {
             if ([NUCControlLineInclude controlLineIncludeFrom:aStream hash:aHash directiveName:aDirectiveName into:aToken])
                 return YES;
-            else if ([NUCControlLineDefine controlLineDefineFrom:aStream hash:aHash directiveName:aDirectiveName into:aToken])
+            else if ([NUCControlLineDefine controlLineDefineFrom:aStream with:aPreprocessor isSkipped:aGroupIsSkipped hash:aHash directiveName:aDirectiveName into:aToken])
                 return YES;
             else if ([NUCUndef undefFrom:aStream hash:aHash directiveName:aDirectiveName into:aToken])
                 return YES;

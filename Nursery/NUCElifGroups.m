@@ -14,12 +14,12 @@
 
 @implementation NUCElifGroups
 
-+ (BOOL)elifGroupsFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCElifGroups **)aToken
++ (BOOL)elifGroupsFrom:(NUCPreprocessingTokenStream *)aStream with:(NUCPreprocessor *)aPreprocessor isSkipped:(BOOL)aGroupIsSkipped into:(NUCElifGroups **)aToken
 {
     NUCElifGroups *anElifGroups = [NUCElifGroups elifGroups];
     NUCElifGroup *anElifGroup = nil;
     
-    while ([NUCElifGroup elifGroupFrom:aStream into:&anElifGroup])
+    while ([NUCElifGroup elifGroupFrom:aStream with:aPreprocessor isSkipped:aGroupIsSkipped into:&anElifGroup])
         [anElifGroups add:anElifGroup];
 
     if (aToken && [anElifGroups count])
