@@ -16,5 +16,6 @@
 
 - (BOOL)isPpTokens;
 - (BOOL)isControlLine;
+- (BOOL)isTextLine;
 
 @end

@@ -20,6 +20,7 @@
 #import "NUCPpTokensWithMacroInvocations.h"
 #import "NUCMacroInvocation.h"
 #import "NUCConcatenatedPpToken.h"
+#import "NUCConstantExpression.h"
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSDictionary.h>
@@ -31,6 +32,7 @@
     if (self = [super init])
     {
         translator = [aTranslator retain];
+        macroDefines = [NSMutableDictionary new];
     }
     
     return self;
@@ -40,6 +42,7 @@
 {
     [translator release];
     translator = nil;
+    [macroDefines release];
 
     
     [super dealloc];
@@ -53,6 +56,26 @@
 - (NUCSourceFile *)sourceFile
 {
     return sourceFile;
+}
+
+- (NSMutableDictionary *)macroDefines
+{
+    return macroDefines;
+}
+
+- (NUCControlLineDefine *)macroDefineFor:(NUCIdentifier *)aMacroName
+{
+    return [[self macroDefines] objectForKey:aMacroName];
+}
+
+- (void)setMacroDefine:(NUCControlLineDefine *)aMacroDefine
+{
+    [[self macroDefines] setObject:aMacroDefine forKey:[aMacroDefine identifier]];
+}
+
+- (BOOL)macroIsDefined:(NUCIdentifier *)aMacroName
+{
+    return [self macroDefineFor:aMacroName] ? YES : NO;
 }
 
 - (void)preprocessSourceFile:(NUCSourceFile *)aSourceFile
@@ -81,16 +104,6 @@
     
     if ([NUCPreprocessingFile preprocessingFileFrom:aStream with:self into:&aPreprocessingFile])
         [[self sourceFile] setPreprocessingFile:aPreprocessingFile];
-}
-
-- (NUCControlLineDefine *)macroDefineFor:(NUCIdentifier *)aMacroDefineName
-{
-    return [[[self sourceFile] preprocessingFile] macroDefineFor:aMacroDefineName];
-}
-
-- (void)setMacroDefine:(NUCControlLineDefine *)aMacroDefine
-{
-    [[[self sourceFile] preprocessingFile] setMacroDefine:aMacroDefine];
 }
 
 - (void)include:(NUCControlLineInclude *)anInclude
@@ -136,6 +149,11 @@
     NUCPpTokens *aMacroExecutedPpTokens = nil;
     
     return aMacroExecutedPpTokens;
+}
+
+- (NSInteger)executeConstantExpression:(NUCConstantExpression *)aConstantExpression
+{
+    return 0;
 }
 
 - (NUCPreprocessingToken *)identifierOrMacroInvocation:(NUCIdentifier *)anIdentifier from:(NUCPreprocessingTokenStream *)aPpTokenStream
@@ -318,6 +336,13 @@
     }
     
     return aPpTokensAfterPreprocessingOfHashHashOperators;
+}
+
+- (NSArray *)executeMacrosInTextLines:(NSArray *)aTextLines
+{
+    NSMutableArray *aMacroExecutedTextLines = nil;
+    
+    return aMacroExecutedTextLines;
 }
 
 @end

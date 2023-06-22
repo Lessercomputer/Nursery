@@ -65,9 +65,4 @@
     return content;
 }
 
-- (void)executeWith:(NUCPreprocessor *)aPreprocessor
-{
-    [[self content] executeWith:aPreprocessor];
-}
-
 @end

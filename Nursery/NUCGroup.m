@@ -9,6 +9,7 @@
 #import "NUCGroup.h"
 #import "NUCPreprocessingFile.h"
 #import "NUCGroupPart.h"
+#import "NUCPreprocessor.h"
 
 #import <Foundation/NSArray.h>
 
@@ -19,11 +20,36 @@
     NUCGroup *aGroup = [NUCGroup group];
     NUCPreprocessingDirective *aGroupPart = nil;
     BOOL aTokenScanned = NO;
+    NSUInteger aCurrentTextLinesBeginningIndex = NSUIntegerMax;
+    NSUInteger aCurrentTextLineCount = 0;
     
     while ([NUCGroupPart groupPartFrom:aStream with:aPreprocessor isSkipped:aGroupIsSkipped into:&aGroupPart])
     {
         aTokenScanned = YES;
         [aGroup add:aGroupPart];
+        
+        if (!aGroupIsSkipped)
+        {
+            if ([aGroupPart isTextLine])
+            {
+                if (aCurrentTextLinesBeginningIndex == NSUIntegerMax)
+                    aCurrentTextLinesBeginningIndex = [aGroup count] - 1;
+                
+                aCurrentTextLineCount++;
+            }
+            else
+            {
+                if (aCurrentTextLinesBeginningIndex != NSUIntegerMax)
+                {
+                    NSArray *aCurrentTextLines = [[aGroup groupParts] subarrayWithRange:NSMakeRange(aCurrentTextLinesBeginningIndex, aCurrentTextLineCount)];
+                    
+                    NSArray *aMacroExecutedTextLines = [aPreprocessor executeMacrosInTextLines:aCurrentTextLines];
+                    
+                    aCurrentTextLinesBeginningIndex = NSUIntegerMax;
+                    aCurrentTextLineCount = 0;
+                }
+            }
+        }
     }
     
     if (aToken)
@@ -67,13 +93,6 @@
 - (void)add:(NUCPreprocessingDirective *)aGroupPart
 {
     [[self groupParts] addObject:aGroupPart];
-}
-
-- (void)executeWith:(NUCPreprocessor *)aPreprocessor
-{
-    [[self groupParts] enumerateObjectsUsingBlock:^(NUCGroupPart * _Nonnull aGroupPart, NSUInteger idx, BOOL * _Nonnull stop) {
-            [aGroupPart executeWith:aPreprocessor];
-    }];
 }
 
 @end

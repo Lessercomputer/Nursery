@@ -93,9 +93,4 @@
     return endifLine;
 }
 
-- (void)executeWith:(NUCPreprocessor *)aPreprocessor
-{
-    [[self ifGroup] executeWith:aPreprocessor];
-}
-
 @end

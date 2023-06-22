@@ -10,12 +10,11 @@
 
 @class NSMutableDictionary;
 @class NUCPreprocessingTokenStream, NUCPreprocessor;
-@class NUCGroup, NUCControlLineDefine, NUCIdentifier;
+@class NUCGroup;
 
 @interface NUCPreprocessingFile : NUCPreprocessingDirective
 {
     NUCGroup *group;
-    NSMutableDictionary *macroDefines;
 }
 
 + (BOOL)preprocessingFileFrom:(NUCPreprocessingTokenStream *)aStream with:(NUCPreprocessor *)aPreprocessor into:(NUCPreprocessingFile **)aToken;
@@ -24,9 +23,5 @@
 - (instancetype)initWithGroup:(NUCGroup *)aGroup;
 
 - (NUCGroup *)group;
-
-- (NSMutableDictionary *)macroDefines;
-- (NUCControlLineDefine *)macroDefineFor:(NUCIdentifier *)aMacroName;
-- (void)setMacroDefine:(NUCControlLineDefine *)aMacroDefine;
 
 @end

@@ -38,37 +38,47 @@
             NUCDecomposedPreprocessingToken *aTypeName = aToken;
             NUCLexicalElement *anExpressionOrIdentifier = nil;
             NUCNewline *aNewline = nil;
-            
+            NSInteger anExpressionValue = 0;
+
             if (!aGroupIsSkipped)
             {
                 if (anIfGroupType == NUCLexicalElementIfType)
                 {
                     [aStream skipWhitespaces];
                     
-                    id aPpTokens = nil;
+                    NUCPpTokens *aPpTokens = nil;
                     [self readPpTokensUntilNewlineFrom:aStream into:&aPpTokens];
                     
-                    id aPpTokensWithMacroInvocations = [aPreprocessor ppTokensWithMacroInvocationsByInstantiateMacroInvocationsIn:aPpTokens];
-                    NUCPpTokens *aMacroExecutedPpTokens = [aPreprocessor executeMacrosInPpTokens:aPpTokensWithMacroInvocations];
-                    NUCPreprocessingTokenStream *aMacroExecutedStream = [[[NUCPreprocessingTokenStream alloc] initWithPreprocessingTokens:[aMacroExecutedPpTokens ppTokens]] autorelease];
+                    NUCPpTokens *aPpTokensWithMacroInvocations = [aPreprocessor ppTokensWithMacroInvocationsByInstantiateMacroInvocationsIn:aPpTokens];
                     
-                    [NUCConstantExpression constantExpressionFrom:aStream into:&anExpressionOrIdentifier];
+                    NUCPpTokens *aMacroExecutedPpTokens = [aPreprocessor executeMacrosInPpTokens:aPpTokensWithMacroInvocations];
+                    
+                    NUCPreprocessingTokenStream *aMacroExecutedPpTokenStream = [[[NUCPreprocessingTokenStream alloc] initWithPreprocessingTokens:[aMacroExecutedPpTokens ppTokens]] autorelease];
+                    
+                    [NUCConstantExpression constantExpressionFrom:aMacroExecutedPpTokenStream into:&anExpressionOrIdentifier];
+                    
+                    anExpressionValue = [aPreprocessor executeConstantExpression:(NUCConstantExpression *)anExpressionOrIdentifier];
                 }
                 else if (anIfGroupType == NUCLexicalElementIfdefType
                     || anIfGroupType == NUCLexicalElementIfndefType)
                 {
                     [aStream skipWhitespaces];
                     anExpressionOrIdentifier = [aStream next];
+                    BOOL aMacroIsDeffined = [aPreprocessor macroIsDefined:(NUCIdentifier *)anExpressionOrIdentifier];
+                    
+                    if (anIfGroupType == NUCLexicalElementIfdefType)
+                        anExpressionValue = aMacroIsDeffined ? 1 : 0;
+                    else
+                        anExpressionValue = aMacroIsDeffined ? 0 : 1;
                 }
             }
             else
                 [self readPpTokensUntilNewlineFrom:aStream into:&anExpressionOrIdentifier];
             
-            
             if (aHash && anExpressionOrIdentifier && [NUCNewline newlineFrom:aStream into:&aNewline])
             {
                 NUCGroup *aGroup = nil;
-                [NUCGroup groupFrom:aStream with:aPreprocessor isSkipped:aGroupIsSkipped into:&aGroup];
+                [NUCGroup groupFrom:aStream with:aPreprocessor isSkipped:aGroupIsSkipped ? YES : anExpressionValue ? NO : YES into:&aGroup];
                 
                 if (anIfGroup)
                     *anIfGroup = [NUCIfGroup ifGroupWithType:anIfGroupType hash:aHash
@@ -171,22 +181,6 @@
 - (NUCGroup *)group
 {
     return group;
-}
-
-- (void)executeWith:(NUCPreprocessor *)aPreprocessor
-{
-    if ([self isIf])
-    {
-        [(NUCConstantExpression *)[self expression] executeWith:aPreprocessor];
-    }
-    else if ([self isIfdef])
-    {
-
-    }
-    else if ([self isIfndef])
-    {
-
-    }
 }
 
 @end

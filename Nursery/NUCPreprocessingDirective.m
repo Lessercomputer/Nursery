@@ -43,4 +43,9 @@
     return [self type] == NUCLexicalElementControlLineType;
 }
 
+- (BOOL)isTextLine
+{
+    return [self type] == NUCLexicalElementTextLineType;
+}
+
 @end
