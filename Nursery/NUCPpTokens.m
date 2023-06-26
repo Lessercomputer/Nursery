@@ -58,6 +58,11 @@
     [[self ppTokens] addObject:aPpToken];
 }
 
+- (void)addFromArray:(NSArray *)aPpTokens
+{
+    [[self ppTokens] addObjectsFromArray:aPpTokens];
+}
+
 - (NSMutableArray *)ppTokens
 {
     if (!ppTokens)
@@ -106,7 +111,7 @@
 
 - (NUCPreprocessingToken *)ppTokensWithMacroInvocationsByInstantiateMacroInvocationsWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [aPreprocessor ppTokensWithMacroInvocationsByInstantiateMacroInvocationsIn:self];
+    return [aPreprocessor instantiateMacroInvocationsInPpTokens:self];
 }
 
 @end

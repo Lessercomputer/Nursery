@@ -12,6 +12,14 @@
 
 @implementation NUCPreprocessingToken
 
+- (BOOL)isMacroInvocation
+{
+    return NO;
+}
 
+- (BOOL)isPpTokensWithMacroInvocations
+{
+    return NO;
+}
 
 @end

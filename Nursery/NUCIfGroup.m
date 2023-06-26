@@ -49,11 +49,11 @@
                     NUCPpTokens *aPpTokens = nil;
                     [self readPpTokensUntilNewlineFrom:aStream into:&aPpTokens];
                     
-                    NUCPpTokens *aPpTokensWithMacroInvocations = [aPreprocessor ppTokensWithMacroInvocationsByInstantiateMacroInvocationsIn:aPpTokens];
+                    NUCPpTokens *aPpTokensWithMacroInvocations = [aPreprocessor instantiateMacroInvocationsInPpTokens:aPpTokens];
                     
                     NUCPpTokens *aMacroExecutedPpTokens = [aPreprocessor executeMacrosInPpTokens:aPpTokensWithMacroInvocations];
                     
-                    NUCPreprocessingTokenStream *aMacroExecutedPpTokenStream = [[[NUCPreprocessingTokenStream alloc] initWithPreprocessingTokens:[aMacroExecutedPpTokens ppTokens]] autorelease];
+                    NUCPreprocessingTokenStream *aMacroExecutedPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:[aMacroExecutedPpTokens ppTokens]];
                     
                     [NUCConstantExpression constantExpressionFrom:aMacroExecutedPpTokenStream into:&anExpressionOrIdentifier];
                     

@@ -23,8 +23,11 @@
 - (void)setDefine:(NUCControlLineDefine *)aDefine;
 
 - (NSMutableArray *)arguments;
+- (void)setArguments:(NSMutableArray *)anArguments;
 
 - (void)addArgument:(NSArray *)anArgument;
+
+- (NSArray *)execute;
 
 @end
 

@@ -43,7 +43,9 @@
                 {
                     NSArray *aCurrentTextLines = [[aGroup groupParts] subarrayWithRange:NSMakeRange(aCurrentTextLinesBeginningIndex, aCurrentTextLineCount)];
                     
-                    NSArray *aMacroExecutedTextLines = [aPreprocessor executeMacrosInTextLines:aCurrentTextLines];
+                    NUCPreprocessingToken *aPpTokensWithMacroInvocations = [aPreprocessor instantiateMacroInvocationsInTextLines:aCurrentTextLines];
+                    
+                    [aPreprocessor executeMacrosInPpTokens:aPpTokensWithMacroInvocations];
                     
                     aCurrentTextLinesBeginningIndex = NSUIntegerMax;
                     aCurrentTextLineCount = 0;

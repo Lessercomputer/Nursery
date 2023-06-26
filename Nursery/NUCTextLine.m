@@ -69,4 +69,9 @@
     return ppTokens;
 }
 
+-(NUCNewline *)newline
+{
+    return newline;
+}
+
 @end

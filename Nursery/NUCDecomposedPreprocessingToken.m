@@ -14,6 +14,8 @@
 
 @implementation NUCDecomposedPreprocessingToken
 
+static NUCDecomposedPreprocessingToken *whitespaceToken = nil;
+
 + (BOOL)ellipsisFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCDecomposedPreprocessingToken **)aToken
 {
     NSUInteger aPosition = [aStream position];
@@ -30,6 +32,14 @@
     [aStream setPosition:aPosition];
     
     return NO;
+}
+
++ (instancetype)whitespace
+{
+    if (!whitespaceToken)
+        whitespaceToken = [[self alloc] initWithType:NUCLexicalElementWhiteSpaceCharacterType];
+    
+    return whitespaceToken;
 }
 
 + (instancetype)preprocessingTokenWithContentFromString:(NSString *)aString range:(NSRange)aRange type:(NUCLexicalElementType)anElementType

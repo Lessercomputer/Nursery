@@ -20,6 +20,7 @@
 + (instancetype)ppTokens;
 
 - (void)add:(NUCDecomposedPreprocessingToken *)aPpToken;
+- (void)addFromArray:(NSArray *)aPpTokens;
 
 - (NSMutableArray *)ppTokens;
 - (NSUInteger)count;

@@ -9,6 +9,9 @@
 #import "NUCMacroInvocation.h"
 #import "NUCControlLineDefine.h"
 #import "NUCPreprocessor.h"
+#import "NUCPreprocessingTokenStream.h"
+#import "NUCDecomposedPreprocessingToken.h"
+#import "NUCConcatenatedPpToken.h"
 
 #import <Foundation/NSArray.h>
 
@@ -57,9 +60,78 @@
     return arguments;
 }
 
+- (void)setArguments:(NSMutableArray *)anArguments
+{
+    [[self arguments] addObjectsFromArray:anArguments];
+}
+
 - (void)addArgument:(NSArray *)anArgument
 {
     [[self arguments] addObject:anArgument];
+}
+
+- (BOOL)isMacroInvocation
+{
+    return YES;
+}
+
+- (NSArray *)execute
+{
+    NSMutableArray *aPpTokens = [NSMutableArray array];
+    
+    
+    
+    return aPpTokens;
+}
+
+- (NSArray *)executeHashHashOperetorsInReplacementList:(NSArray *)aPpTokens
+{
+    NUCPreprocessingTokenStream *aPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aPpTokens];
+    
+    if ([[aPpTokenStream peekNext] isHashHash])
+        return nil;
+    
+    NSMutableArray *aPpTokensAfterPreprocessingOfHashHashOperators = [NSMutableArray array];
+    
+    while ([aPpTokenStream hasNext])
+    {
+        NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
+        
+        if ([aPpToken isIdentifier])
+        {
+            while ([aPpTokenStream nextIsWhitespacesWithoutNewline])
+                [aPpTokensAfterPreprocessingOfHashHashOperators addObject:[aPpTokenStream next]];
+            
+            if ([aPpTokenStream hasNext])
+            {
+                NUCDecomposedPreprocessingToken *aHashHashOrOther = [aPpTokenStream next];
+                
+                if ([aHashHashOrOther isHashHash])
+                {
+                    while ([aPpTokenStream nextIsWhitespacesWithoutNewline])
+                        [aPpTokensAfterPreprocessingOfHashHashOperators addObject:[aPpTokenStream next]];
+                    
+                    NUCDecomposedPreprocessingToken *aHashHashOperatorOperand = [aPpTokenStream next];
+                    
+                    if (aHashHashOperatorOperand)
+                    {
+                        NUCConcatenatedPpToken *aConcatenatedPpToken = [[NUCConcatenatedPpToken alloc] initWithLeft:aPpToken right:aHashHashOperatorOperand];
+                        
+                        [aPpTokensAfterPreprocessingOfHashHashOperators addObject:aConcatenatedPpToken];
+                        [aConcatenatedPpToken release];
+                    }
+                    else
+                        return nil;
+                }
+                else
+                    [aPpTokensAfterPreprocessingOfHashHashOperators addObject:aPpToken];
+            }
+        }
+        else
+            [aPpTokensAfterPreprocessingOfHashHashOperators addObject:aPpToken];
+    }
+    
+    return aPpTokensAfterPreprocessingOfHashHashOperators;
 }
 
 @end

@@ -9,7 +9,7 @@
 #import <Foundation/NSObject.h>
 
 @class NSString, NSMutableDictionary, NSMutableArray;
-@class NUCTranslator, NUCSourceFile, NUCControlLineDefine, NUCControlLineInclude, NUCIdentifier, NUCPpTokens, NUCConstantExpression;
+@class NUCTranslator, NUCSourceFile, NUCControlLineDefine, NUCControlLineInclude, NUCIdentifier, NUCPpTokens, NUCConstantExpression, NUCPreprocessingToken;
 
 @interface NUCPreprocessor : NSObject
 {
@@ -33,13 +33,13 @@
 - (void)include:(NUCControlLineInclude *)anInclude;
 - (void)define:(NUCControlLineDefine *)aMacroDefine;
 
-- (NUCPpTokens *)ppTokensWithMacroInvocationsByInstantiateMacroInvocationsIn:(NUCPpTokens *)aPpTokens;
+- (NUCPpTokens *)instantiateMacroInvocationsInPpTokens:(NUCPpTokens *)aPpTokens;
 
-- (NUCPpTokens *)executeMacrosInPpTokens:(NUCPpTokens *)aPpTokens;
+- (NUCPpTokens *)executeMacrosInPpTokens:(NUCPreprocessingToken *)aPpTokens;
 
 - (NSInteger)executeConstantExpression:(NUCConstantExpression *)aConstantExpression;
 
-- (NSArray *)executeMacrosInTextLines:(NSArray *)aTextLines;
+- (NUCPreprocessingToken *)instantiateMacroInvocationsInTextLines:(NSArray *)aTextLines;
 
 //- (NUCPpTokens *)instantiateMacroInvocationsIn:(NSArray *)aPpTokens  inRescanningMacros:(BOOL)aRescanningMacros rescanningMacroDefines:(NSMutableArray *)aRescanningMacroDefines;
 

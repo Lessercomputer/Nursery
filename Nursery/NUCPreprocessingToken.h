@@ -12,6 +12,8 @@
 
 @interface NUCPreprocessingToken : NUCLexicalElement
 
+- (BOOL)isMacroInvocation;
+- (BOOL)isPpTokensWithMacroInvocations;
 
 @end
 

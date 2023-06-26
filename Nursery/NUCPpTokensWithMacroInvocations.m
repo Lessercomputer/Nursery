@@ -37,4 +37,9 @@
     return ppTokens;
 }
 
+- (BOOL)isPpTokensWithMacroInvocations
+{
+    return YES;
+}
+
 @end
