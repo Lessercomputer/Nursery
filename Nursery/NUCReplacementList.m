@@ -37,9 +37,7 @@
 - (instancetype)initWithPpTokens:(NUCPpTokens *)aPpTokens
 {
     if (self = [super initWithType:NUCLexicalElementReplacementListType])
-    {
         ppTokens = [aPpTokens retain];
-    }
     
     return self;
 }
@@ -60,8 +58,6 @@
 {
     if (anOther == self)
         return YES;
-    else if (![super isEqual:anOther])
-        return NO;
     else
         return [[self ppTokens] isEqual:[anOther ppTokens]];
 }

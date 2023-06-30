@@ -22,6 +22,7 @@
 #import "NUCConcatenatedPpToken.h"
 #import "NUCConstantExpression.h"
 #import "NUCTextLine.h"
+#import "NUCControlLineDefineFunctionLike.h"
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSDictionary.h>
@@ -176,7 +177,7 @@
             
             if ([aPpToken isOpeningParenthesis])
             {
-                [aMacroInvocation setArguments:[self macroInvocationArgumentsFrom:aPpTokenStream]];
+                [aMacroInvocation setArguments:[self macroInvocationArgumentsFrom:aPpTokenStream define:(NUCControlLineDefineFunctionLike *)aMacroDefineToInvoke]];
                 
                 if (![[aPpTokenStream next] isClosingParenthesis])
                     return nil;
@@ -189,13 +190,13 @@
     }
 }
 
-- (NSMutableArray *)macroInvocationArgumentsFrom:(NUCPreprocessingTokenStream *)aPpTokenStream
+- (NSMutableArray *)macroInvocationArgumentsFrom:(NUCPreprocessingTokenStream *)aPpTokenStream define:(NUCControlLineDefineFunctionLike *)aMacroDefine
 {
     NSMutableArray *anArguments = [NSMutableArray array];
     
     while ([aPpTokenStream hasNext])
     {
-        NSMutableArray *anArgument = [self macroInvocationArgumentFrom:aPpTokenStream];
+        NSMutableArray *anArgument = [self macroInvocationArgumentAt:[anArguments count] of:aMacroDefine from:aPpTokenStream];
         if (anArgument)
             [anArguments addObject:anArgument];
         else
@@ -205,7 +206,7 @@
     return anArguments;
 }
 
-- (NSMutableArray *)macroInvocationArgumentFrom:(NUCPreprocessingTokenStream *)aPpTokenStream
+- (NSMutableArray *)macroInvocationArgumentAt:(NSUInteger)anIndex of:(NUCControlLineDefineFunctionLike *)aMacroDefine from:(NUCPreprocessingTokenStream *)aPpTokenStream
 {
     NSMutableArray *anArgument = [NSMutableArray array];
     NSInteger anOpeningParenthesisCount = 0;
@@ -215,7 +216,12 @@
         NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
         
         if ([aPpToken isIdentifier])
-            [anArgument addObject:[self identifierOrMacroInvocation:(NUCIdentifier *)aPpToken from:aPpTokenStream]];
+        {
+            if ([aMacroDefine parameterIsHashOperatorOperandAt:anIndex])
+                [anArgument addObject:aPpToken];
+            else
+                [anArgument addObject:[self identifierOrMacroInvocation:(NUCIdentifier *)aPpToken from:aPpTokenStream]];
+        }
         else if ([aPpToken isWhitespace])
         {
             [aPpTokenStream skipWhitespaces];

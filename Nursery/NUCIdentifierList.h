@@ -8,7 +8,7 @@
 
 #import "NUCLexicalElement.h"
 
-@class NUCPreprocessingTokenStream;
+@class NUCPreprocessingTokenStream, NUCDecomposedPreprocessingToken, NUCIdentifier;
 
 @interface NUCIdentifierList : NUCLexicalElement
 {
@@ -19,9 +19,13 @@
 
 + (instancetype)identifierList;
 
-- (void)add:(NUCLexicalElement *)anIdentifier;
+- (void)add:(NUCIdentifier *)anIdentifier;
 - (NSMutableArray *)identifiers;
 - (NSUInteger)count;
+- (BOOL)contains:(NUCIdentifier *)anIdentifier;
+- (NSUInteger)indexOf:(NUCIdentifier *)anIdentifier;
+
+- (void)enumerateObjectsUsingBlock:(void (^)(NUCDecomposedPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop))aBlock;
 
 @end
 

@@ -12,6 +12,9 @@
 #import "NUCNewline.h"
 #import "NUCIdentifierList.h"
 #import "NUCReplacementList.h"
+#import "NUCPpTokens.h"
+#import "NUCDiagnostic.h"
+#import "NUCDiagnostics.h"
 
 #import <Foundation/NSString.h>
 
@@ -89,6 +92,7 @@
     [identifierList release];
     [ellipsis release];
     [rparen release];
+    [hashOperatorOperandIndexesInParameters release];
     
     [super dealloc];
 }
@@ -131,6 +135,89 @@
         return ([self ellipsis] && [aDefineFunctionLike ellipsis])
                     || (![self ellipsis] && ![aDefineFunctionLike ellipsis]);
     }
+}
+
+- (NSMutableArray *)parameters
+{
+    if (!parameters)
+    {
+        __block NSMutableArray *aParameters = [NSMutableArray array];
+        
+        [[self identifierList] enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop) {
+            
+            if ([aPpToken isIdentifier])
+                [aParameters addObject:aPpToken];
+        }];
+        
+        parameters = aParameters;
+    }
+    
+    return parameters;
+}
+
+- (NSUInteger)parameterCount
+{
+    return [[self parameters] count];
+}
+
+- (BOOL)identifierIsParameter:(NUCIdentifier *)anIdentifier
+{
+    return [[self parameters] containsObject:anIdentifier];
+}
+
+- (NSUInteger)parameterIndexOf:(NUCIdentifier *)anIdentifier
+{
+    return [[self parameters] indexOfObject:anIdentifier];
+}
+
+- (BOOL)parameterIsHashOperatorOperandAt:(NSUInteger)anIndex
+{
+    if (anIndex >= [self parameterCount])
+        return NO;
+    
+    return [[self hashOperatorOperandIndexesInParameters] containsIndex:anIndex];
+}
+
+- (NSMutableIndexSet *)hashOperatorOperandIndexesInParameters
+{
+    if (!hashOperatorOperandIndexesInParameters)
+        [self getHashOperatorOperandIndexesInParameters:NULL];
+    
+    return hashOperatorOperandIndexesInParameters;
+}
+
+- (void)getHashOperatorOperandIndexesInParameters:(NUCDiagnostics **)aDiagnostics
+{
+    NSMutableIndexSet *aHashOperatorOperandIndexesInParameters = [NSMutableIndexSet indexSet];
+    NUCPreprocessingTokenStream *aStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:[[[self replacementList] ppTokens] ppTokens]];
+    NUCDiagnostics *aParameterDiagnostics = [NUCDiagnostics diagnostics];
+     
+    while ([aStream hasNext])
+    {
+        NUCDecomposedPreprocessingToken *aPpToken = [aStream next];
+        
+        if ([aPpToken isHash])
+        {
+            [aStream skipWhitespaces];
+            
+            aPpToken = [aStream next];
+            
+            if ([aPpToken isIdentifier])
+            {
+                NSUInteger aParameterIndex = [self parameterIndexOf:(NUCIdentifier *)aPpToken];
+                
+                if (aParameterIndex != NSNotFound)
+                    [aHashOperatorOperandIndexesInParameters addIndex:aParameterIndex];
+                else
+                    [aParameterDiagnostics add:[NUCDiagnostic diagnostic]];
+            }
+        }
+    }
+    
+    hashOperatorOperandIndexesInParameters = [aHashOperatorOperandIndexesInParameters retain];
+    
+    if (aDiagnostics)
+        *aDiagnostics = aParameterDiagnostics;
 }
 
 @end

@@ -25,7 +25,7 @@
         aPreprocessingToken = [aStream peekNext];
         
         if ([aPreprocessingToken isIdentifier])
-            [anIdentifierList add:[aStream next]];
+            [anIdentifierList add:(NUCIdentifier *)[aStream next]];
         else if ([aPreprocessingToken isComma])
             [aStream next];
         
@@ -67,7 +67,7 @@
     [super dealloc];
 }
 
-- (void)add:(NUCLexicalElement *)anIdentifier
+- (void)add:(NUCIdentifier *)anIdentifier
 {
     [[self identifiers] addObject:anIdentifier];
 }
@@ -80,6 +80,21 @@
 - (NSUInteger)count
 {
     return [[self identifiers] count];
+}
+
+- (BOOL)contains:(NUCIdentifier *)anIdentifier
+{
+    return [[self identifiers] containsObject:anIdentifier];
+}
+
+- (NSUInteger)indexOf:(NUCIdentifier *)anIdentifier
+{
+    return [[self identifiers] indexOfObject:anIdentifier];
+}
+
+- (void)enumerateObjectsUsingBlock:(void (^)(NUCDecomposedPreprocessingToken *, NSUInteger, BOOL *))aBlock
+{
+    [[self identifiers] enumerateObjectsUsingBlock:aBlock];
 }
 
 @end

@@ -8,6 +8,7 @@
 
 #import "NUCControlLineDefine.h"
 
+@class NSMutableIndexSet;
 
 @interface NUCControlLineDefineFunctionLike : NUCControlLineDefine
 {
@@ -15,6 +16,8 @@
     NUCIdentifierList *identifierList;
     NUCDecomposedPreprocessingToken *ellipsis;
     NUCDecomposedPreprocessingToken *rparen;
+    NSMutableArray *parameters;
+    NSMutableIndexSet *hashOperatorOperandIndexesInParameters;
 }
 
 + (BOOL)controlLineDefineFunctionLikeFrom:(NUCPreprocessingTokenStream *)aStream with:(NUCPreprocessor *)aPreprocessor isSkipped:(BOOL)aGroupIsSkipped hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCDecomposedPreprocessingToken *)anIdentifier lparen:(NUCDecomposedPreprocessingToken *)anLparen into:(NUCPreprocessingDirective **)aToken;
@@ -27,6 +30,12 @@
 - (NUCIdentifierList *)identifierList;
 - (NUCDecomposedPreprocessingToken *)ellipsis;
 - (NUCDecomposedPreprocessingToken *)rparen;
+
+- (NSMutableArray *)parameters;
+- (NSUInteger)parameterCount;
+- (BOOL)identifierIsParameter:(NUCIdentifier *)anIdentifier;
+- (NSUInteger)parameterIndexOf:(NUCIdentifier *)anIdentifier;
+- (BOOL)parameterIsHashOperatorOperandAt:(NSUInteger)anIndex;
 
 @end
 

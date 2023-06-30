@@ -87,6 +87,10 @@
 		246B171B244B0D1B00B6677D /* NUCPreprocessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 246B1718244B0D1B00B6677D /* NUCPreprocessor.h */; };
 		246B171C244B0D1B00B6677D /* NUCPreprocessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 246B1719244B0D1B00B6677D /* NUCPreprocessor.m */; };
 		246B171D244B0D1B00B6677D /* NUCPreprocessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 246B1719244B0D1B00B6677D /* NUCPreprocessor.m */; };
+		24813F822A4EEB080028B12D /* NUCDiagnostics.h in Headers */ = {isa = PBXBuildFile; fileRef = 24813F802A4EEB080028B12D /* NUCDiagnostics.h */; };
+		24813F832A4EEB080028B12D /* NUCDiagnostics.h in Headers */ = {isa = PBXBuildFile; fileRef = 24813F802A4EEB080028B12D /* NUCDiagnostics.h */; };
+		24813F842A4EEB080028B12D /* NUCDiagnostics.m in Sources */ = {isa = PBXBuildFile; fileRef = 24813F812A4EEB080028B12D /* NUCDiagnostics.m */; };
+		24813F852A4EEB080028B12D /* NUCDiagnostics.m in Sources */ = {isa = PBXBuildFile; fileRef = 24813F812A4EEB080028B12D /* NUCDiagnostics.m */; };
 		2493FFC4244873E700E816C3 /* NUCTranslator.h in Headers */ = {isa = PBXBuildFile; fileRef = 2493FFC2244873E700E816C3 /* NUCTranslator.h */; };
 		2493FFC5244873E700E816C3 /* NUCTranslator.h in Headers */ = {isa = PBXBuildFile; fileRef = 2493FFC2244873E700E816C3 /* NUCTranslator.h */; };
 		2493FFC6244873E700E816C3 /* NUCTranslator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2493FFC3244873E700E816C3 /* NUCTranslator.m */; };
@@ -456,6 +460,10 @@
 		61B3D48E2A32F356005EF3F4 /* NUCConcatenatedPpToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 61B3D48B2A32F356005EF3F4 /* NUCConcatenatedPpToken.h */; };
 		61B3D48F2A32F356005EF3F4 /* NUCConcatenatedPpToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 61B3D48C2A32F356005EF3F4 /* NUCConcatenatedPpToken.m */; };
 		61B3D4902A32F356005EF3F4 /* NUCConcatenatedPpToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 61B3D48C2A32F356005EF3F4 /* NUCConcatenatedPpToken.m */; };
+		61BE864E2A4C017D00B54651 /* NUCDiagnostic.h in Headers */ = {isa = PBXBuildFile; fileRef = 61BE864C2A4C017D00B54651 /* NUCDiagnostic.h */; };
+		61BE864F2A4C017D00B54651 /* NUCDiagnostic.h in Headers */ = {isa = PBXBuildFile; fileRef = 61BE864C2A4C017D00B54651 /* NUCDiagnostic.h */; };
+		61BE86502A4C017D00B54651 /* NUCDiagnostic.m in Sources */ = {isa = PBXBuildFile; fileRef = 61BE864D2A4C017D00B54651 /* NUCDiagnostic.m */; };
+		61BE86512A4C017D00B54651 /* NUCDiagnostic.m in Sources */ = {isa = PBXBuildFile; fileRef = 61BE864D2A4C017D00B54651 /* NUCDiagnostic.m */; };
 		61DC96341FA104D900AABC9E /* Nursery.h in Headers */ = {isa = PBXBuildFile; fileRef = 61DC96331FA104D900AABC9E /* Nursery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		61DCED6419DCEEC8009E4E9E /* AllTypesObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 61DCED6319DCEEC8009E4E9E /* AllTypesObject.m */; };
 		61FCF72820044F32001BD320 /* NUNurseryNetService.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FCF72720044F32001BD320 /* NUNurseryNetService.m */; };
@@ -819,6 +827,8 @@
 		246B1713244A76C000B6677D /* NUCLexicalElement.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCLexicalElement.m; sourceTree = "<group>"; };
 		246B1718244B0D1B00B6677D /* NUCPreprocessor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCPreprocessor.h; sourceTree = "<group>"; };
 		246B1719244B0D1B00B6677D /* NUCPreprocessor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCPreprocessor.m; sourceTree = "<group>"; };
+		24813F802A4EEB080028B12D /* NUCDiagnostics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCDiagnostics.h; sourceTree = "<group>"; };
+		24813F812A4EEB080028B12D /* NUCDiagnostics.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCDiagnostics.m; sourceTree = "<group>"; };
 		2493FFC2244873E700E816C3 /* NUCTranslator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCTranslator.h; sourceTree = "<group>"; };
 		2493FFC3244873E700E816C3 /* NUCTranslator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCTranslator.m; sourceTree = "<group>"; };
 		2493FFC82448753300E816C3 /* NUCSourceFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCSourceFile.h; sourceTree = "<group>"; };
@@ -1116,6 +1126,8 @@
 		61A3297D1B9AED82006B6FC5 /* NUMovingUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUMovingUp.h; sourceTree = "<group>"; };
 		61B3D48B2A32F356005EF3F4 /* NUCConcatenatedPpToken.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCConcatenatedPpToken.h; sourceTree = "<group>"; };
 		61B3D48C2A32F356005EF3F4 /* NUCConcatenatedPpToken.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCConcatenatedPpToken.m; sourceTree = "<group>"; };
+		61BE864C2A4C017D00B54651 /* NUCDiagnostic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCDiagnostic.h; sourceTree = "<group>"; };
+		61BE864D2A4C017D00B54651 /* NUCDiagnostic.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCDiagnostic.m; sourceTree = "<group>"; };
 		61DC96331FA104D900AABC9E /* Nursery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Nursery.h; sourceTree = "<group>"; };
 		61DCED6219DCEEC8009E4E9E /* AllTypesObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTypesObject.h; sourceTree = "<group>"; };
 		61DCED6319DCEEC8009E4E9E /* AllTypesObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTypesObject.m; sourceTree = "<group>"; };
@@ -1229,6 +1241,10 @@
 				2493FFC92448753300E816C3 /* NUCSourceFile.m */,
 				24C8A76D245650E000174253 /* NUCRangePair.h */,
 				24C8A76E245650E000174253 /* NUCRangePair.m */,
+				61BE864C2A4C017D00B54651 /* NUCDiagnostic.h */,
+				61BE864D2A4C017D00B54651 /* NUCDiagnostic.m */,
+				24813F802A4EEB080028B12D /* NUCDiagnostics.h */,
+				24813F812A4EEB080028B12D /* NUCDiagnostics.m */,
 				24A39F2225DDE8EC00299F81 /* Preprocessing */,
 				61DA2F622A31B7AA00C19FD2 /* Expressions */,
 			);
@@ -2017,6 +2033,8 @@
 				24A39F0C25DCA69600299F81 /* NUCEqualityExpression.h in Headers */,
 				24A39EFA25DB45B300299F81 /* NUCInclusiveORExpression.h in Headers */,
 				61A3297E1B9AED82006B6FC5 /* NUMovingUp.h in Headers */,
+				61BE864E2A4C017D00B54651 /* NUCDiagnostic.h in Headers */,
+				24813F822A4EEB080028B12D /* NUCDiagnostics.h in Headers */,
 				6172CCA61FF8F6270037EE37 /* NUNurseryNetService.h in Headers */,
 				619B09331913EEC000A4BAA2 /* NULocationTree.h in Headers */,
 				2493FFC4244873E700E816C3 /* NUCTranslator.h in Headers */,
@@ -2083,6 +2101,7 @@
 				24A39F5025E25AAC00299F81 /* NUCPrimaryExpression.h in Headers */,
 				24A39F3825E259EB00299F81 /* NUCMultiplicativeExpression.h in Headers */,
 				B816627220ECC2DF00B9075E /* NUBPlusTreeBranch.h in Headers */,
+				24813F832A4EEB080028B12D /* NUCDiagnostics.h in Headers */,
 				24A39F0725DBE6DF00299F81 /* NUCANDExpression.h in Headers */,
 				B816627320ECC2DF00B9075E /* NUBPlusTreeLeaf.h in Headers */,
 				B816627420ECC2DF00B9075E /* NUBPlusTreeEnumerator.h in Headers */,
@@ -2172,6 +2191,7 @@
 				B81662BB20ECC2DF00B9075E /* NUPageLocationODictionary.h in Headers */,
 				B81662BC20ECC2DF00B9075E /* NUBellBallODictionary.h in Headers */,
 				246B1715244A76C000B6677D /* NUCLexicalElement.h in Headers */,
+				61BE864F2A4C017D00B54651 /* NUCDiagnostic.h in Headers */,
 				B81662BD20ECC2DF00B9075E /* NUOpaqueQueue.h in Headers */,
 				24529DB725C81D13000B49D9 /* NUCElifGroups.h in Headers */,
 				B81662BE20ECC2DF00B9075E /* NUQueue.h in Headers */,
@@ -2438,6 +2458,7 @@
 				619B09071913EEC000A4BAA2 /* NUOpaqueBPlusTreeBranch.m in Sources */,
 				619B08CC1913EEC000A4BAA2 /* NUBPlusTreeLeaf.m in Sources */,
 				619B088F1913EEC000A4BAA2 /* NUCharacterDictionary.m in Sources */,
+				61BE86502A4C017D00B54651 /* NUCDiagnostic.m in Sources */,
 				619B09221913EEC000A4BAA2 /* NUSpaces.m in Sources */,
 				2493FFCC2448753300E816C3 /* NUCSourceFile.m in Sources */,
 				61B3D48F2A32F356005EF3F4 /* NUCConcatenatedPpToken.m in Sources */,
@@ -2537,6 +2558,7 @@
 				619B08EB1913EEC000A4BAA2 /* NUMainBranchAperture.m in Sources */,
 				2493FFC6244873E700E816C3 /* NUCTranslator.m in Sources */,
 				24A39EAE25D2B1F400299F81 /* NUCPreprocessingToken.m in Sources */,
+				24813F842A4EEB080028B12D /* NUCDiagnostics.m in Sources */,
 				619B09251913EEC000A4BAA2 /* NUChildminder.m in Sources */,
 				24A39EC025D4146500299F81 /* NUCReplacementList.m in Sources */,
 				619B08911913EEC000A4BAA2 /* NUCodingContext.m in Sources */,
@@ -2612,6 +2634,7 @@
 				B816620B20ECC28500B9075E /* NUDefaultCharacterTargetClassResolver.m in Sources */,
 				B816620C20ECC28500B9075E /* NUIvar.m in Sources */,
 				24A39EE525D5F4C400299F81 /* NUCLogicalORExpression.m in Sources */,
+				61BE86512A4C017D00B54651 /* NUCDiagnostic.m in Sources */,
 				B816620D20ECC28500B9075E /* NUNSObject.m in Sources */,
 				B816620E20ECC28500B9075E /* NUNSString.m in Sources */,
 				B816620F20ECC28500B9075E /* NUNSNumber.m in Sources */,
@@ -2749,6 +2772,7 @@
 				B816626420ECC28600B9075E /* NUNurseryNetMessageArgument.m in Sources */,
 				24529DD725C8200B000B49D9 /* NUCEndifLine.m in Sources */,
 				24F86FC127F20541001CC4AC /* NUCPragma.m in Sources */,
+				24813F852A4EEB080028B12D /* NUCDiagnostics.m in Sources */,
 				24A39EA925D2ABAF00299F81 /* NUCTextLine.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
