@@ -23,6 +23,7 @@
 #import "NUCConstantExpression.h"
 #import "NUCTextLine.h"
 #import "NUCControlLineDefineFunctionLike.h"
+#import "NUCGroupPart.h"
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSDictionary.h>
@@ -132,9 +133,9 @@
     NUCPreprocessingToken *aPpTokensWithMacroInvocations = nil;
     NSMutableArray *aPpTokensInTextLines = [NSMutableArray array];
     
-    [aTextLines enumerateObjectsUsingBlock:^(NUCTextLine * _Nonnull  aTextLine, NSUInteger idx, BOOL * _Nonnull stop) {
+    [aTextLines enumerateObjectsUsingBlock:^(NUCGroupPart * _Nonnull aGroupPart, NSUInteger idx, BOOL * _Nonnull stop) {
+        NUCTextLine *aTextLine = (NUCTextLine *)[aGroupPart content];
         [aPpTokensInTextLines addObjectsFromArray:[[aTextLine ppTokens] ppTokens]];
-        [aPpTokensInTextLines addObject:[aTextLine newline]];
     }];
     
     aPpTokensWithMacroInvocations = [self instantiateMacroInvocationsIn:aPpTokensInTextLines];
@@ -179,7 +180,7 @@
             {
                 [aMacroInvocation setArguments:[self macroInvocationArgumentsFrom:aPpTokenStream define:(NUCControlLineDefineFunctionLike *)aMacroDefineToInvoke]];
                 
-                if (![[aPpTokenStream next] isClosingParenthesis])
+                if (![[aPpTokenStream peekPrevious] isClosingParenthesis])
                     return nil;
             }
             else
@@ -235,11 +236,18 @@
                     break;
             }
             else if ([aPpToken isOpeningParenthesis])
+            {
+                [anArgument addObject:aPpToken];
                 anOpeningParenthesisCount++;
+            }
             else if ([aPpToken isClosingParenthesis])
+            {
+                if (anOpeningParenthesisCount == 0)
+                    break;
+                
+                [anArgument addObject:aPpToken];
                 anOpeningParenthesisCount--;
-            
-            [anArgument addObject:aPpToken];
+            }
         }
     }
     

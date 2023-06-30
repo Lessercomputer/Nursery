@@ -144,4 +144,14 @@
     return newline;
 }
 
+- (BOOL)isControlLine
+{
+    return YES;
+}
+
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
+{
+    
+}
+
 @end

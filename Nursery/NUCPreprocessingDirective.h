@@ -15,7 +15,10 @@
 + (BOOL)readPpTokensUntilNewlineFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCLexicalElement **)aPpTokens;
 
 - (BOOL)isPpTokens;
+- (BOOL)isIfSection;
 - (BOOL)isControlLine;
 - (BOOL)isTextLine;
+- (BOOL)isNonDirective;
+- (BOOL)isDefine;
 
 @end

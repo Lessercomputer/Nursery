@@ -1,12 +1,6 @@
 #define C "c"
 #define B C
 #define A B
-
+#define F(a, b) #a b
 A
-
-#define EMPTY
-#if 1
-#define NUM 1
-#else
-#define NUM 0
-#endif
+F(abc, d)

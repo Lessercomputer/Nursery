@@ -65,4 +65,24 @@
     return content;
 }
 
+- (BOOL)isIfSection
+{
+    return [[self content] isIfSection];
+}
+
+-(BOOL)isControlLine
+{
+    return [[self content] isControlLine];
+}
+
+- (BOOL)isTextLine
+{
+    return [[self content] isTextLine];
+}
+
+- (BOOL)isNonDirective
+{
+    return [[self content] isNonDirective];
+}
+
 @end

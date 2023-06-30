@@ -29,5 +29,7 @@
 - (NUCDecomposedPreprocessingToken *)directiveName;
 - (NUCNewline *)newline;
 
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor;
+
 @end
 

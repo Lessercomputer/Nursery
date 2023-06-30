@@ -29,6 +29,7 @@
 - (BOOL)skipWhitespaces;
 - (BOOL)skipWhitespacesWithoutNewline;
 - (NUCDecomposedPreprocessingToken *)peekNext;
+- (NUCDecomposedPreprocessingToken *)peekPrevious;
 - (BOOL)nextIsWhitespaces;
 - (BOOL)nextIsWhitespacesWithoutNewline;
 

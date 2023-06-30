@@ -10,6 +10,7 @@
 #import "NUCPreprocessingFile.h"
 #import "NUCGroupPart.h"
 #import "NUCPreprocessor.h"
+#import "NUCControlLine.h"
 
 #import <Foundation/NSArray.h>
 
@@ -37,15 +38,16 @@
                 
                 aCurrentTextLineCount++;
             }
+            else if ([aGroupPart isControlLine])
+            {
+                NUCControlLine *aControlLine = (NUCControlLine *)[(NUCGroupPart *)aGroupPart content];
+                [aControlLine preprocessWith:aPreprocessor];
+            }
             else
             {
                 if (aCurrentTextLinesBeginningIndex != NSUIntegerMax)
                 {
-                    NSArray *aCurrentTextLines = [[aGroup groupParts] subarrayWithRange:NSMakeRange(aCurrentTextLinesBeginningIndex, aCurrentTextLineCount)];
-                    
-                    NUCPreprocessingToken *aPpTokensWithMacroInvocations = [aPreprocessor instantiateMacroInvocationsInTextLines:aCurrentTextLines];
-                    
-                    [aPreprocessor executeMacrosInPpTokens:aPpTokensWithMacroInvocations];
+                    [self executeMacrosAt:aCurrentTextLinesBeginningIndex count:aCurrentTextLineCount inGroup:aGroup with:aPreprocessor];
                     
                     aCurrentTextLinesBeginningIndex = NSUIntegerMax;
                     aCurrentTextLineCount = 0;
@@ -54,10 +56,22 @@
         }
     }
     
+    if (aCurrentTextLineCount)
+        [self executeMacrosAt:aCurrentTextLinesBeginningIndex count:aCurrentTextLineCount inGroup:aGroup with:aPreprocessor];
+    
     if (aToken)
         *aToken = aGroup;
     
     return aTokenScanned;
+}
+
++ (void)executeMacrosAt:(NSUInteger)aTextLineBeginningIndex count:(NSUInteger)aTextLineCount inGroup:(NUCGroup *)aGroup with:(NUCPreprocessor *)aPreprocessor
+{
+    NSArray *aCurrentTextLines = [[aGroup groupParts] subarrayWithRange:NSMakeRange(aTextLineBeginningIndex, aTextLineCount)];
+    
+    NUCPreprocessingToken *aPpTokensWithMacroInvocations = [aPreprocessor instantiateMacroInvocationsInTextLines:aCurrentTextLines];
+    
+    [aPreprocessor executeMacrosInPpTokens:aPpTokensWithMacroInvocations];
 }
 
 + (instancetype)group

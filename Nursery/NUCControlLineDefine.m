@@ -80,6 +80,11 @@
     return replacementList;
 }
 
+- (BOOL)isDefine
+{
+    return YES;
+}
+
 - (BOOL)isObjectLike
 {
     return NO;
@@ -112,7 +117,7 @@
         return NO;
 }
 
-- (void)executeWith:(NUCPreprocessor *)aPreprocessor
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
 {
     [aPreprocessor define:self];
 }

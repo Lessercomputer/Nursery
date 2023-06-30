@@ -92,6 +92,14 @@
     return [self hasNext] ? [[self preprocessingTokens] objectAtIndex:[self position]] : nil;
 }
 
+- (NUCDecomposedPreprocessingToken *)peekPrevious
+{
+    NSUInteger aPosition = [self position];
+    NSArray *aTokens = [self preprocessingTokens];
+    
+    return aPosition > 0 && aPosition <= [aTokens count] ? [aTokens objectAtIndex:aPosition - 1] : nil;
+}
+
 - (BOOL)nextIsWhitespaces
 {
     return [[self peekNext] isWhitespace] ? YES : NO;

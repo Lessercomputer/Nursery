@@ -38,6 +38,11 @@
     return [self type] == NUCLexicalElementPpTokensType;
 }
 
+- (BOOL)isIfSection
+{
+    return [self type] == NUCLexicalElementIfSectionType;
+}
+
 - (BOOL)isControlLine
 {
     return [self type] == NUCLexicalElementControlLineType;
@@ -46,6 +51,16 @@
 - (BOOL)isTextLine
 {
     return [self type] == NUCLexicalElementTextLineType;
+}
+
+- (BOOL)isNonDirective
+{
+    return NO;
+}
+
+- (BOOL)isDefine
+{
+    return [self type] == NUCLexicalElementDefineType;
 }
 
 @end
