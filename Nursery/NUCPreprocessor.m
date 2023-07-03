@@ -123,144 +123,13 @@
         [self setMacroDefine:aMacroDefine];
 }
 
-- (NUCPreprocessingToken *)instantiateMacroInvocationsInPpTokens:(NUCPpTokens *)aPpTokens
-{
-    return [self instantiateMacroInvocationsIn:[aPpTokens ppTokens]];
-}
-
-- (NUCPreprocessingToken *)instantiateMacroInvocationsInTextLines:(NSArray *)aTextLines
-{
-    NUCPreprocessingToken *aPpTokensWithMacroInvocations = nil;
-    NSMutableArray *aPpTokensInTextLines = [NSMutableArray array];
-    
-    [aTextLines enumerateObjectsUsingBlock:^(NUCGroupPart * _Nonnull aGroupPart, NSUInteger idx, BOOL * _Nonnull stop) {
-        NUCTextLine *aTextLine = (NUCTextLine *)[aGroupPart content];
-        [aPpTokensInTextLines addObjectsFromArray:[[aTextLine ppTokens] ppTokens]];
-    }];
-    
-    aPpTokensWithMacroInvocations = [self instantiateMacroInvocationsIn:aPpTokensInTextLines];
-    
-    return aPpTokensWithMacroInvocations;
-}
-
-- (NUCPreprocessingToken *)instantiateMacroInvocationsIn:(NSArray *)aPpTokens
-{
-    NUCPpTokensWithMacroInvocations *aPpTokensWithMacroInvocations =  [NUCPpTokensWithMacroInvocations ppTokens];
-    
-    NUCPreprocessingTokenStream *aPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aPpTokens];
-    
-    while ([aPpTokenStream hasNext])
-    {
-        NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
-        
-        if ([aPpToken isIdentifier])
-            [aPpTokensWithMacroInvocations add:[self identifierOrMacroInvocation:(NUCIdentifier *)aPpToken from:aPpTokenStream]];
-        else
-            [aPpTokensWithMacroInvocations add:aPpToken];
-    }
-    
-    return aPpTokensWithMacroInvocations;
-}
-
-- (NUCPreprocessingToken *)identifierOrMacroInvocation:(NUCIdentifier *)anIdentifier from:(NUCPreprocessingTokenStream *)aPpTokenStream
-{
-    NUCControlLineDefine *aMacroDefineToInvoke = [self macroDefineFor:anIdentifier];
-    
-    if (!aMacroDefineToInvoke)
-        return anIdentifier;
-    else
-    {
-        NUCMacroInvocation *aMacroInvocation = [NUCMacroInvocation macroInvocationWithDefine:aMacroDefineToInvoke];
-        
-        if ([aMacroDefineToInvoke isFunctionLike])
-        {
-            NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
-            
-            if ([aPpToken isOpeningParenthesis])
-            {
-                [aMacroInvocation setArguments:[self macroInvocationArgumentsFrom:aPpTokenStream define:(NUCControlLineDefineFunctionLike *)aMacroDefineToInvoke]];
-                
-                if (![[aPpTokenStream peekPrevious] isClosingParenthesis])
-                    return nil;
-            }
-            else
-                return nil;
-        }
-        
-        return aMacroInvocation;
-    }
-}
-
-- (NSMutableArray *)macroInvocationArgumentsFrom:(NUCPreprocessingTokenStream *)aPpTokenStream define:(NUCControlLineDefineFunctionLike *)aMacroDefine
-{
-    NSMutableArray *anArguments = [NSMutableArray array];
-    
-    while ([aPpTokenStream hasNext])
-    {
-        NSMutableArray *anArgument = [self macroInvocationArgumentAt:[anArguments count] of:aMacroDefine from:aPpTokenStream];
-        if (anArgument)
-            [anArguments addObject:anArgument];
-        else
-            break;
-    }
-    
-    return anArguments;
-}
-
-- (NSMutableArray *)macroInvocationArgumentAt:(NSUInteger)anIndex of:(NUCControlLineDefineFunctionLike *)aMacroDefine from:(NUCPreprocessingTokenStream *)aPpTokenStream
-{
-    NSMutableArray *anArgument = [NSMutableArray array];
-    NSInteger anOpeningParenthesisCount = 0;
-    
-    while ([aPpTokenStream hasNext])
-    {
-        NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
-        
-        if ([aPpToken isIdentifier])
-        {
-            if ([aMacroDefine parameterIsHashOperatorOperandAt:anIndex])
-                [anArgument addObject:aPpToken];
-            else
-                [anArgument addObject:[self identifierOrMacroInvocation:(NUCIdentifier *)aPpToken from:aPpTokenStream]];
-        }
-        else if ([aPpToken isWhitespace])
-        {
-            [aPpTokenStream skipWhitespaces];
-            [anArgument addObject:[NUCDecomposedPreprocessingToken whitespace]];
-        }
-        else
-        {
-            if ([aPpToken isComma])
-            {
-                if (anOpeningParenthesisCount == 0)
-                    break;
-            }
-            else if ([aPpToken isOpeningParenthesis])
-            {
-                [anArgument addObject:aPpToken];
-                anOpeningParenthesisCount++;
-            }
-            else if ([aPpToken isClosingParenthesis])
-            {
-                if (anOpeningParenthesisCount == 0)
-                    break;
-                
-                [anArgument addObject:aPpToken];
-                anOpeningParenthesisCount--;
-            }
-        }
-    }
-    
-    return anArgument;
-}
-
-- (NUCPpTokens *)executeMacrosInPpTokens:(NUCPreprocessingToken *)aPpTokens
+- (NSMutableArray *)replaceMacrosInPpTokens:(NUCPpTokens *)aPpTokens
 {
     if (![aPpTokens isPpTokensWithMacroInvocations])
-        return (NUCPpTokens *)aPpTokens;
+        return [(NUCPpTokens *)aPpTokens ppTokens];
     else
     {
-        NUCPpTokens *aMacroExecutedPpTokens = [NUCPpTokens ppTokens];
+        NSMutableArray *aMacroReplacedPpTokens = [NSMutableArray array];
         
         NUCPpTokensWithMacroInvocations *aPpTokensWithMacroInvocations = (NUCPpTokensWithMacroInvocations *)aPpTokens;
         
@@ -268,13 +137,13 @@
             if ([aPpToken isMacroInvocation])
             {
                 NUCMacroInvocation *aMacroInvocation = (NUCMacroInvocation *)aPpToken;
-                [aMacroExecutedPpTokens addFromArray:[aMacroInvocation execute]];
+                [aMacroReplacedPpTokens addObjectsFromArray:[aMacroInvocation executeWith:self]];
             }
             else
-                [aMacroExecutedPpTokens add:aPpToken];
+                [aMacroReplacedPpTokens addObject:aPpToken];
         }];
 
-        return aMacroExecutedPpTokens;
+        return aMacroReplacedPpTokens;
     }
 }
 

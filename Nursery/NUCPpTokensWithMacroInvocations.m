@@ -12,31 +12,6 @@
 
 @implementation NUCPpTokensWithMacroInvocations
 
-+ (instancetype)ppTokens
-{
-    return [[self new] autorelease];
-}
-
-- (void)dealloc
-{
-    [ppTokens release];
-    
-    [super dealloc];
-}
-
-- (void)add:(NUCPreprocessingToken *)aPpToken
-{
-    [[self ppTokens] addObject:aPpToken];
-}
-
-- (NSMutableArray *)ppTokens
-{
-    if (!ppTokens)
-        ppTokens = [NSMutableArray new];
-    
-    return ppTokens;
-}
-
 - (BOOL)isPpTokensWithMacroInvocations
 {
     return YES;

@@ -33,14 +33,7 @@
 - (void)include:(NUCControlLineInclude *)anInclude;
 - (void)define:(NUCControlLineDefine *)aMacroDefine;
 
-- (NUCPpTokens *)instantiateMacroInvocationsInPpTokens:(NUCPpTokens *)aPpTokens;
-
-- (NUCPpTokens *)executeMacrosInPpTokens:(NUCPreprocessingToken *)aPpTokens;
-
+- (NUCPpTokens *)replaceMacrosInPpTokens:(NUCPpTokens *)aPpTokens;
 - (NSInteger)executeConstantExpression:(NUCConstantExpression *)aConstantExpression;
-
-- (NUCPreprocessingToken *)instantiateMacroInvocationsInTextLines:(NSArray *)aTextLines;
-
-//- (NUCPpTokens *)instantiateMacroInvocationsIn:(NSArray *)aPpTokens  inRescanningMacros:(BOOL)aRescanningMacros rescanningMacroDefines:(NSMutableArray *)aRescanningMacroDefines;
 
 @end

@@ -19,21 +19,20 @@
 
 + (instancetype)ppTokens;
 
-- (void)add:(NUCDecomposedPreprocessingToken *)aPpToken;
+- (void)add:(NUCPreprocessingToken *)aPpToken;
 - (void)addFromArray:(NSArray *)aPpTokens;
 
 - (NSMutableArray *)ppTokens;
 - (NSUInteger)count;
 
-- (NUCDecomposedPreprocessingToken *)at:(NSUInteger)anIndex;
+- (NUCPreprocessingToken *)at:(NSUInteger)anIndex;
 
 - (BOOL)containsIdentifier:(NUCIdentifier *)anIdentifier;
 
-- (void)enumerateObjectsUsingBlock:(void (^)(NUCDecomposedPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop))aBlock;
+- (void)enumerateObjectsUsingBlock:(void (^)(NUCPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop))aBlock;
 
-- (void)enumerateObjectsUsingBlock:(void (^)(NUCDecomposedPreprocessingToken *, NSUInteger, BOOL *))aBlock skipWhitespaces:(BOOL)aSkipWhitespaces;
+- (void)enumerateObjectsUsingBlock:(void (^)(NUCPreprocessingToken *, NSUInteger, BOOL *))aBlock skipWhitespaces:(BOOL)aSkipWhitespaces;
 
-- (NUCPreprocessingToken *)ppTokensWithMacroInvocationsByInstantiateMacroInvocationsWith:(NUCPreprocessor *)aPreprocessor;
 
 @end
 

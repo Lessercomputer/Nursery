@@ -8,18 +8,24 @@
 
 #import "NUCPreprocessingToken.h"
 
-@class NUCControlLineDefine;
+@class NUCControlLineDefine, NUCPpTokens;
+@class NSMutableSet;
 
 @interface NUCMacroInvocation : NUCPreprocessingToken
 {
     NUCControlLineDefine *define;
     NSMutableArray *arguments;
+    NUCPpTokens *ppTokensWithMacroinvocations;
 }
+
++ (NUCPpTokens *)ppTokensWithMacroInvocationsFromPpTokens:(NUCPpTokens *)aPpTokens with:(NUCPreprocessor *)aPreprocessor;
++ (NUCPpTokens *)ppTokensWithMacroInvocationsFromTextLines:(NSArray *)aTextLines with:(NUCPreprocessor *)aPreprocessor;
 
 + (instancetype)macroInvocationWithDefine:(NUCControlLineDefine *)aDefine;
 
 - (instancetype)initWithDefine:(NUCControlLineDefine *)aDefine;
 
+- (NUCControlLineDefine *)define;
 - (void)setDefine:(NUCControlLineDefine *)aDefine;
 
 - (NSMutableArray *)arguments;
@@ -27,7 +33,11 @@
 
 - (void)addArgument:(NSArray *)anArgument;
 
-- (NSArray *)execute;
+- (NUCPpTokens *)ppTokensWithMacroinvocations;
+- (void)setPpTokensWithMacroinvocations:(NUCPpTokens *)aPpTokens;
+
+- (NSArray *)executeWith:(NUCPreprocessor *)aPreprocessor;
+- (NSArray *)executeWith:(NUCPreprocessor *)aPreprocessor inReplacingMacroNames:(NSMutableSet *)anExecutingMacros;
 
 @end
 

@@ -9,7 +9,7 @@
 #import "NUCPreprocessingDirective.h"
 
 @class NSIndexSet;
-@class NUCPpTokens, NUCPreprocessingTokenStream, NUCIdentifier, NUCDecomposedPreprocessingToken;
+@class NUCPpTokens, NUCPreprocessingTokenStream;
 
 @interface NUCReplacementList : NUCPreprocessingDirective
 {
@@ -24,7 +24,7 @@
 
 - (NUCPpTokens *)ppTokens;
 
-- (void)enumerateObjectsUsingBlock:(void (^)(NUCDecomposedPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop))aBlock;
+- (void)enumerateObjectsUsingBlock:(void (^)(NUCPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop))aBlock;
 
 @end
 

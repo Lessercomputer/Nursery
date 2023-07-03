@@ -11,6 +11,7 @@
 #import "NUCGroupPart.h"
 #import "NUCPreprocessor.h"
 #import "NUCControlLine.h"
+#import "NUCMacroInvocation.h"
 
 #import <Foundation/NSArray.h>
 
@@ -69,9 +70,9 @@
 {
     NSArray *aCurrentTextLines = [[aGroup groupParts] subarrayWithRange:NSMakeRange(aTextLineBeginningIndex, aTextLineCount)];
     
-    NUCPreprocessingToken *aPpTokensWithMacroInvocations = [aPreprocessor instantiateMacroInvocationsInTextLines:aCurrentTextLines];
+    NUCPpTokens *aPpTokensWithMacroInvocations = [NUCMacroInvocation ppTokensWithMacroInvocationsFromTextLines:aCurrentTextLines with:aPreprocessor];
     
-    [aPreprocessor executeMacrosInPpTokens:aPpTokensWithMacroInvocations];
+    [aPreprocessor replaceMacrosInPpTokens:aPpTokensWithMacroInvocations];
 }
 
 + (instancetype)group

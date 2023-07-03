@@ -14,6 +14,7 @@
 #import "NUCConstantExpression.h"
 #import "NUCPreprocessor.h"
 #import "NUCPpTokens.h"
+#import "NUCMacroInvocation.h"
 
 #import <Foundation/NSString.h>
 
@@ -49,13 +50,13 @@
                     NUCPpTokens *aPpTokens = nil;
                     [self readPpTokensUntilNewlineFrom:aStream into:&aPpTokens];
                     
-                    NUCPpTokens *aPpTokensWithMacroInvocations = [aPreprocessor instantiateMacroInvocationsInPpTokens:aPpTokens];
+                    NUCPpTokens *aPpTokensWithMacroInvocations = [NUCMacroInvocation ppTokensWithMacroInvocationsFromPpTokens:aPpTokens with:aPreprocessor];
                     
-                    NUCPpTokens *aMacroExecutedPpTokens = [aPreprocessor executeMacrosInPpTokens:aPpTokensWithMacroInvocations];
+                    NUCPpTokens *aMacroReplacedPpTokens = [aPreprocessor replaceMacrosInPpTokens:aPpTokensWithMacroInvocations];
                     
-                    NUCPreprocessingTokenStream *aMacroExecutedPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:[aMacroExecutedPpTokens ppTokens]];
+                    NUCPreprocessingTokenStream *aMacroReplacedPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:[aMacroReplacedPpTokens ppTokens]];
                     
-                    [NUCConstantExpression constantExpressionFrom:aMacroExecutedPpTokenStream into:&anExpressionOrIdentifier];
+                    [NUCConstantExpression constantExpressionFrom:aMacroReplacedPpTokenStream into:&anExpressionOrIdentifier];
                     
                     anExpressionValue = [aPreprocessor executeConstantExpression:(NUCConstantExpression *)anExpressionOrIdentifier];
                 }

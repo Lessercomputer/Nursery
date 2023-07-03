@@ -53,7 +53,7 @@
     [super dealloc];
 }
 
-- (void)add:(NUCDecomposedPreprocessingToken *)aPpToken
+- (void)add:(NUCPreprocessingToken *)aPpToken
 {
     [[self ppTokens] addObject:aPpToken];
 }
@@ -76,7 +76,7 @@
     return [[self ppTokens] count];
 }
 
-- (NUCDecomposedPreprocessingToken *)at:(NSUInteger)anIndex
+- (NUCPreprocessingToken *)at:(NSUInteger)anIndex
 {
     return [[self ppTokens] objectAtIndex:anIndex];
 }
@@ -94,24 +94,19 @@
     return [[self ppTokens] containsObject:anIdentifier];
 }
 
-- (void)enumerateObjectsUsingBlock:(void (^)(NUCDecomposedPreprocessingToken *, NSUInteger, BOOL *))aBlock
+- (void)enumerateObjectsUsingBlock:(void (^)( NUCPreprocessingToken*, NSUInteger, BOOL *))aBlock
 {
-    [[self ppTokens] enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken * _Nonnull aPpToken, NSUInteger anIndex, BOOL * _Nonnull aStop) {
+    [[self ppTokens] enumerateObjectsUsingBlock:^(NUCPreprocessingToken * _Nonnull aPpToken, NSUInteger anIndex, BOOL * _Nonnull aStop) {
         aBlock(aPpToken, anIndex, aStop);
     }];
 }
 
-- (void)enumerateObjectsUsingBlock:(void (^)(NUCDecomposedPreprocessingToken *, NSUInteger, BOOL *))aBlock skipWhitespaces:(BOOL)aSkipWhitespaces
+- (void)enumerateObjectsUsingBlock:(void (^)(NUCPreprocessingToken *, NSUInteger, BOOL *))aBlock skipWhitespaces:(BOOL)aSkipWhitespaces
 {
-    [[self ppTokens] enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken * _Nonnull aPpToken, NSUInteger anIndex, BOOL * _Nonnull aStop) {
-        if (![aPpToken isWhitespace])
+    [[self ppTokens] enumerateObjectsUsingBlock:^(NUCPreprocessingToken * _Nonnull aPpToken, NSUInteger anIndex, BOOL * _Nonnull aStop) {
+        if ([aPpToken isKindOfClass:[NUCDecomposedPreprocessingToken class]] && ![(NUCDecomposedPreprocessingToken *)aPpToken isWhitespace])
             aBlock(aPpToken, anIndex, aStop);
     }];
-}
-
-- (NUCPreprocessingToken *)ppTokensWithMacroInvocationsByInstantiateMacroInvocationsWith:(NUCPreprocessor *)aPreprocessor
-{
-    return [aPreprocessor instantiateMacroInvocationsInPpTokens:self];
 }
 
 @end

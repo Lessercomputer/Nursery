@@ -6,19 +6,10 @@
 //  Copyright © 2023 Nursery-Framework. All rights reserved.
 //
 
-#import "NUCPreprocessingDirective.h"
+#import "NUCPpTokens.h"
 
 
-@interface NUCPpTokensWithMacroInvocations : NUCPreprocessingDirective
-{
-    NSMutableArray *ppTokens;
-}
-
-+ (instancetype)ppTokens;
-
-- (NSMutableArray *)ppTokens;
-
-- (void)add:(NUCPreprocessingToken *)aPpToken;
+@interface NUCPpTokensWithMacroInvocations : NUCPpTokens
 
 @end
 

@@ -62,7 +62,7 @@
         return [[self ppTokens] isEqual:[anOther ppTokens]];
 }
 
-- (void)enumerateObjectsUsingBlock:(void (^)(NUCDecomposedPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop))aBlock;
+- (void)enumerateObjectsUsingBlock:(void (^)(NUCPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop))aBlock;
 {
     [[self ppTokens] enumerateObjectsUsingBlock:aBlock];
 }
