@@ -123,29 +123,6 @@
         [self setMacroDefine:aMacroDefine];
 }
 
-- (NSMutableArray *)replaceMacrosInPpTokens:(NUCPpTokens *)aPpTokens
-{
-    if (![aPpTokens isPpTokensWithMacroInvocations])
-        return [(NUCPpTokens *)aPpTokens ppTokens];
-    else
-    {
-        NSMutableArray *aMacroReplacedPpTokens = [NSMutableArray array];
-        
-        NUCPpTokensWithMacroInvocations *aPpTokensWithMacroInvocations = (NUCPpTokensWithMacroInvocations *)aPpTokens;
-        
-        [[aPpTokensWithMacroInvocations ppTokens] enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken * _Nonnull aPpToken, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([aPpToken isMacroInvocation])
-            {
-                NUCMacroInvocation *aMacroInvocation = (NUCMacroInvocation *)aPpToken;
-                [aMacroReplacedPpTokens addObjectsFromArray:[aMacroInvocation executeWith:self]];
-            }
-            else
-                [aMacroReplacedPpTokens addObject:aPpToken];
-        }];
-
-        return aMacroReplacedPpTokens;
-    }
-}
 
 - (NSInteger)executeConstantExpression:(NUCConstantExpression *)aConstantExpression
 {

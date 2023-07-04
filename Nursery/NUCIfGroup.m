@@ -50,11 +50,11 @@
                     NUCPpTokens *aPpTokens = nil;
                     [self readPpTokensUntilNewlineFrom:aStream into:&aPpTokens];
                     
-                    NUCPpTokens *aPpTokensWithMacroInvocations = [NUCMacroInvocation ppTokensWithMacroInvocationsFromPpTokens:aPpTokens with:aPreprocessor];
+                    NUCPpTokens *aPpTokensWithMacroInvocations = [NUCPpTokens ppTokensWithMacroInvocationsFromPpTokens:aPpTokens with:aPreprocessor];
                     
-                    NUCPpTokens *aMacroReplacedPpTokens = [aPreprocessor replaceMacrosInPpTokens:aPpTokensWithMacroInvocations];
+                    NSMutableArray *aMacroReplacedPpTokens =  [aPpTokensWithMacroInvocations replaceMacrosWith:aPreprocessor];
                     
-                    NUCPreprocessingTokenStream *aMacroReplacedPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:[aMacroReplacedPpTokens ppTokens]];
+                    NUCPreprocessingTokenStream *aMacroReplacedPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aMacroReplacedPpTokens];
                     
                     [NUCConstantExpression constantExpressionFrom:aMacroReplacedPpTokenStream into:&anExpressionOrIdentifier];
                     

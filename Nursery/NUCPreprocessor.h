@@ -33,7 +33,6 @@
 - (void)include:(NUCControlLineInclude *)anInclude;
 - (void)define:(NUCControlLineDefine *)aMacroDefine;
 
-- (NUCPpTokens *)replaceMacrosInPpTokens:(NUCPpTokens *)aPpTokens;
 - (NSInteger)executeConstantExpression:(NUCConstantExpression *)aConstantExpression;
 
 @end

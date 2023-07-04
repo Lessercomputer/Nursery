@@ -10,8 +10,13 @@
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCPreprocessingTokenStream.h"
 #import "NUCPreprocessor.h"
+#import "NUCPpTokensWithMacroInvocations.h"
+#import "NUCMacroInvocation.h"
+#import "NUCGroupPart.h"
+#import "NUCTextLine.h"
 
 #import <Foundation/NSArray.h>
+#import <Foundation/NSSet.h>
 
 @implementation NUCPpTokens
 
@@ -107,6 +112,68 @@
         if ([aPpToken isKindOfClass:[NUCDecomposedPreprocessingToken class]] && ![(NUCDecomposedPreprocessingToken *)aPpToken isWhitespace])
             aBlock(aPpToken, anIndex, aStop);
     }];
+}
+
++ (NUCPpTokens *)ppTokensWithMacroInvocationsFromPpTokens:(NUCPpTokens *)aPpTokens with:(NUCPreprocessor *)aPreprocessor
+{
+    return [self ppTokensWithMacroInvocationsFrom:[aPpTokens ppTokens] with:aPreprocessor isRescanning:NO parentMacroInvocation:nil replacingMacroNames:nil];
+}
+
++ (NUCPpTokens *)ppTokensWithMacroInvocationsFromTextLines:(NSArray *)aTextLines with:(NUCPreprocessor *)aPreprocessor
+{
+    NUCPpTokens *aPpTokensWithMacroInvocations = nil;
+    NSMutableArray *aPpTokensInTextLines = [NSMutableArray array];
+    
+    [aTextLines enumerateObjectsUsingBlock:^(NUCGroupPart * _Nonnull aGroupPart, NSUInteger idx, BOOL * _Nonnull stop) {
+        NUCTextLine *aTextLine = (NUCTextLine *)[aGroupPart content];
+        [aPpTokensInTextLines addObjectsFromArray:[[aTextLine ppTokens] ppTokens]];
+    }];
+    
+    aPpTokensWithMacroInvocations = [self ppTokensWithMacroInvocationsFrom:aPpTokensInTextLines with:aPreprocessor isRescanning:NO parentMacroInvocation:nil replacingMacroNames:nil];
+    
+    return aPpTokensWithMacroInvocations;
+}
+
++ (NUCPpTokens *)ppTokensWithMacroInvocationsFrom:(NSArray *)aPpTokens with:(NUCPreprocessor *)aPreprocessor isRescanning:(BOOL)aRescanning parentMacroInvocation:(NUCMacroInvocation *)aParentMacroInvocation replacingMacroNames:(NSMutableSet *)aReplacingMacroNames
+{
+    NUCPpTokensWithMacroInvocations *aPpTokensWithMacroInvocations =  [NUCPpTokensWithMacroInvocations ppTokens];
+    
+    NUCPreprocessingTokenStream *aPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aPpTokens];
+    
+    while ([aPpTokenStream hasNext])
+    {
+        NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
+        
+        if ([aPpToken isIdentifier] && ![aReplacingMacroNames containsObject:aPpToken])
+            [aPpTokensWithMacroInvocations add:[[NUCMacroInvocation class] identifierOrMacroInvocation:(NUCIdentifier *)aPpToken from:aPpTokenStream with:aPreprocessor isRescanning:aRescanning parentMacroInvocation:aParentMacroInvocation replacingMacroNames:aReplacingMacroNames]];
+        else
+            [aPpTokensWithMacroInvocations add:aPpToken];
+    }
+    
+    return aPpTokensWithMacroInvocations;
+}
+
+- (NSMutableArray *)replaceMacrosWith:(NUCPreprocessor *)aPreprocessor
+{
+    if (![self isPpTokensWithMacroInvocations])
+        return [self ppTokens];
+    else
+    {
+        NSMutableArray *aMacroReplacedPpTokens = [NSMutableArray array];
+        
+        [self enumerateObjectsUsingBlock:^(NUCPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop) {
+            
+            if ([aPpToken isMacroInvocation])
+            {
+                NUCMacroInvocation *aMacroInvocation = (NUCMacroInvocation *)aPpToken;
+                [aMacroInvocation addMacroReplacedPpTokensTo:aMacroReplacedPpTokens With:aPreprocessor];
+            }
+            else
+                [aMacroReplacedPpTokens addObject:aPpToken];
+        }];
+
+        return aMacroReplacedPpTokens;
+    }
 }
 
 @end

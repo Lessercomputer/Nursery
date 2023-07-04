@@ -8,7 +8,7 @@
 
 #import "NUCPreprocessingToken.h"
 
-@class NUCControlLineDefine, NUCPpTokens;
+@class NUCControlLineDefine, NUCPpTokens, NUCIdentifier, NUCPreprocessingTokenStream;
 @class NSMutableSet;
 
 @interface NUCMacroInvocation : NUCPreprocessingToken
@@ -18,10 +18,9 @@
     NUCPpTokens *ppTokensWithMacroinvocations;
 }
 
-+ (NUCPpTokens *)ppTokensWithMacroInvocationsFromPpTokens:(NUCPpTokens *)aPpTokens with:(NUCPreprocessor *)aPreprocessor;
-+ (NUCPpTokens *)ppTokensWithMacroInvocationsFromTextLines:(NSArray *)aTextLines with:(NUCPreprocessor *)aPreprocessor;
-
 + (instancetype)macroInvocationWithDefine:(NUCControlLineDefine *)aDefine;
+
++ (NUCPreprocessingToken *)identifierOrMacroInvocation:(NUCIdentifier *)anIdentifier from:(NUCPreprocessingTokenStream *)aPpTokenStream with:(NUCPreprocessor *)aPreprocessor isRescanning:(BOOL)aRescanning parentMacroInvocation:(NUCMacroInvocation *)aParentMacroInvocation replacingMacroNames:(NSMutableSet *)aReplacingMacroNames;
 
 - (instancetype)initWithDefine:(NUCControlLineDefine *)aDefine;
 
@@ -36,8 +35,7 @@
 - (NUCPpTokens *)ppTokensWithMacroinvocations;
 - (void)setPpTokensWithMacroinvocations:(NUCPpTokens *)aPpTokens;
 
-- (NSArray *)executeWith:(NUCPreprocessor *)aPreprocessor;
-- (NSArray *)executeWith:(NUCPreprocessor *)aPreprocessor inReplacingMacroNames:(NSMutableSet *)anExecutingMacros;
+- (void)addMacroReplacedPpTokensTo:(NSMutableArray *)aPpTokens With:(NUCPreprocessor *)aPreprocessor;
 
 @end
 

@@ -8,7 +8,8 @@
 
 #import "NUCPreprocessingDirective.h"
 
-@class NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream, NUCIdentifier;
+@class NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream, NUCIdentifier, NUCMacroInvocation;
+@class NSMutableSet;
 
 @interface NUCPpTokens : NUCPreprocessingDirective
 {
@@ -16,6 +17,9 @@
 }
 
 + (BOOL)ppTokensFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPpTokens **)aToken;
+
++ (NUCPpTokens *)ppTokensWithMacroInvocationsFromPpTokens:(NUCPpTokens *)aPpTokens with:(NUCPreprocessor *)aPreprocessor;
++ (NUCPpTokens *)ppTokensWithMacroInvocationsFromTextLines:(NSArray *)aTextLines with:(NUCPreprocessor *)aPreprocessor;
 
 + (instancetype)ppTokens;
 
@@ -33,6 +37,9 @@
 
 - (void)enumerateObjectsUsingBlock:(void (^)(NUCPreprocessingToken *, NSUInteger, BOOL *))aBlock skipWhitespaces:(BOOL)aSkipWhitespaces;
 
++ (NUCPpTokens *)ppTokensWithMacroInvocationsFrom:(NSArray *)aPpTokens with:(NUCPreprocessor *)aPreprocessor isRescanning:(BOOL)aRescanning parentMacroInvocation:(NUCMacroInvocation *)aParentMacroInvocation replacingMacroNames:(NSMutableSet *)aReplacingMacroNames;
+
+- (NSMutableArray *)replaceMacrosWith:(NUCPreprocessor *)aPreprocessor;
 
 @end
 
