@@ -37,7 +37,7 @@
 
 - (void)enumerateObjectsUsingBlock:(void (^)(NUCPreprocessingToken *, NSUInteger, BOOL *))aBlock skipWhitespaces:(BOOL)aSkipWhitespaces;
 
-+ (NUCPpTokens *)ppTokensWithMacroInvocationsFrom:(NSArray *)aPpTokens with:(NUCPreprocessor *)aPreprocessor isRescanning:(BOOL)aRescanning parentMacroInvocation:(NUCMacroInvocation *)aParentMacroInvocation replacingMacroNames:(NSMutableSet *)aReplacingMacroNames;
++ (NUCPpTokens *)ppTokensWithMacroInvocationsFrom:(NSArray *)aPpTokens with:(NUCPreprocessor *)aPreprocessor isRescanning:(BOOL)aRescanning macroInvocation:(NUCMacroInvocation *)aMacroInvocation replacingMacroNames:(NSMutableSet *)aReplacingMacroNames;
 
 - (NSMutableArray *)replaceMacrosWith:(NUCPreprocessor *)aPreprocessor;
 

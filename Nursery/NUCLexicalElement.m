@@ -200,10 +200,10 @@ static NSArray *NUCPreprocessingDirectiveNames;
         NUCHexadecimalDigitCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCHexadecimalDigits] copy];
         NUCNewlineCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:NUCCRLF] copy];
         
-        NUCPunctuators = [[NSArray arrayWithObjects:@"[", @"]", @"(", @")", @"{", @"}", @".", @"->",
+        NUCPunctuators = [[NSArray arrayWithObjects:@"[", @"]", @"(", @")", @"{", @"}", @"...", @"->",
                            @"++", @"--", @"&&", @"*=", @"+=", @"-=", @"~", @"!",
                            @"/=", @"%=", @"<<=", @">>=", @"<:", @":>", @"<<", @">>", @"==", @"!=", @"^=", @"||", @"&=", @"|=",
-                           @"?", @":", @";", @"...",
+                           @"?", @":", @";", @".",
                            @"=", @"*", @"/", @"%", @"+", @"-", @"<=", @">=", @"&", @"^", @"|",
                            @",", @"##", @"#",
                            @"<%", @"%>", @"<", @">", @"%:%:", @"%:", nil] copy];

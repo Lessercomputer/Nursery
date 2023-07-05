@@ -29,6 +29,7 @@
 
 - (NSMutableArray *)arguments;
 - (void)setArguments:(NSMutableArray *)anArguments;
+- (NSArray *)vaArgs;
 
 - (void)addArgument:(NSArray *)anArgument;
 

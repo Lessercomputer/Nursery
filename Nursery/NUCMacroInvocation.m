@@ -59,7 +59,7 @@
         [aReplacingMacroNames addObject:[aMacroDefineToInvoke identifier]];
         
         NUCPpTokens *aPpTokens = [[aMacroDefineToInvoke replacementList] ppTokens];
-        NUCPpTokens *aPpTokensWithMacroInvocations = [[NUCPpTokens class] ppTokensWithMacroInvocationsFrom:[aPpTokens ppTokens] with:aPreprocessor isRescanning:YES parentMacroInvocation:aParentMacroInvocation replacingMacroNames:aReplacingMacroNames];
+        NUCPpTokens *aPpTokensWithMacroInvocations = [[NUCPpTokens class] ppTokensWithMacroInvocationsFrom:[aPpTokens ppTokens] with:aPreprocessor isRescanning:YES macroInvocation:aMacroInvocation replacingMacroNames:aReplacingMacroNames];
         [aMacroInvocation setPpTokensWithMacroinvocations:aPpTokensWithMacroInvocations];
         
         [aReplacingMacroNames removeObject:[aMacroDefineToInvoke identifier]];
@@ -88,6 +88,8 @@
 {
     NSMutableArray *anArgument = [NSMutableArray array];
     NSInteger anOpeningParenthesisCount = 0;
+    NUCControlLineDefineFunctionLike *aDefine = (NUCControlLineDefineFunctionLike *)[aMacroinvocation define];
+    BOOL aCurrentArgumentIsVaArgs = [aDefine ellipsis] && anIndex >= [aDefine parameterCount];
     
     while ([aPpTokenStream hasNext])
     {
@@ -110,7 +112,12 @@
             if ([aPpToken isComma])
             {
                 if (anOpeningParenthesisCount == 0)
-                    break;
+                {
+                    if (aCurrentArgumentIsVaArgs)
+                        [anArgument addObject:aPpToken];
+                    else
+                        break;
+                }
             }
             else if ([aPpToken isOpeningParenthesis])
             {
@@ -173,6 +180,19 @@
 - (void)setArguments:(NSMutableArray *)anArguments
 {
     [[self arguments] addObjectsFromArray:anArguments];
+}
+
+- (NSArray *)vaArgs
+{
+    if (![[self define] isFunctionLike])
+        return nil;
+    
+    NUCControlLineDefineFunctionLike *aDefine = (NUCControlLineDefineFunctionLike *)[self define];
+    
+    if ([aDefine ellipsis])
+        return [[self arguments] lastObject];
+    else
+        return nil;
 }
 
 - (void)addArgument:(NSArray *)anArgument

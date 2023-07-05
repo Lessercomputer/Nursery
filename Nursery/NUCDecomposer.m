@@ -89,19 +89,21 @@
     
     while (aLoopShouldContinue)
     {
-        BOOL aDigitScand = NO;
+        NSUInteger aScanLocation = [aScanner scanLocation];
         
         if ([self scanDigitFrom:aScanner])
-            aDigitScand = YES;
-        else if ([self scanPeriodFrom:aScanner])
-            aDigitScand = [self scanDigitFrom:aScanner];
-        
-        if (aDigitScand)
-            aLoopShouldContinue = (([self scanSmallEFrom:aScanner] || [self scanLargeEFrom:aScanner]) && [self scanSignFrom:aScanner])
-            || (([self scanSmallPFrom:aScanner] || [self scanLargePFrom:aScanner]) && [self scanSignFrom:aScanner])
-            || [self scanIdentifierNondigitFrom:aScanner];
+            ;
+        else if ([self scanPeriodFrom:aScanner] && [self scanDigitFrom:aScanner])
+            ;
+        else if ((([self scanSmallEFrom:aScanner] || [self scanLargeEFrom:aScanner]) && [self scanSignFrom:aScanner])
+                 || (([self scanSmallPFrom:aScanner] || [self scanLargePFrom:aScanner]) && [self scanSignFrom:aScanner])
+                 || [self scanIdentifierNondigitFrom:aScanner])
+            ;
         else
+        {
+            [aScanner setScanLocation:aScanLocation];
             aLoopShouldContinue = NO;
+        }
     }
     
     if ([aScanner scanLocation] != aScanLocation)
