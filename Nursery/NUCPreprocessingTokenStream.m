@@ -87,6 +87,16 @@
     return [self position] != aPosition;
 }
 
+- (NSArray *)scanWhiteSpaces
+{
+    NSMutableArray *aPpTokens = [NSMutableArray array];
+    
+    while ([[self peekNext] isWhitespace])
+        [aPpTokens addObject:[self next]];
+    
+    return aPpTokens;
+}
+
 - (NUCDecomposedPreprocessingToken *)peekNext
 {
     return [self hasNext] ? [[self preprocessingTokens] objectAtIndex:[self position]] : nil;

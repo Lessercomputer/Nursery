@@ -29,12 +29,17 @@
 
 - (NSMutableArray *)arguments;
 - (void)setArguments:(NSMutableArray *)anArguments;
+
 - (NSArray *)vaArgs;
+
+- (NSMutableArray *)argumentAt:(NSUInteger)anIndex;
 
 - (void)addArgument:(NSArray *)anArgument;
 
 - (NUCPpTokens *)ppTokensWithMacroinvocations;
 - (void)setPpTokensWithMacroinvocations:(NUCPpTokens *)aPpTokens;
+
+- (NUCPpTokens *)scanPpTokensFrom:(NUCPreprocessingTokenStream *)aPpTokenStream with:(NUCPreprocessor *)aPreprocessor;
 
 - (void)addMacroReplacedPpTokensTo:(NSMutableArray *)aPpTokens With:(NUCPreprocessor *)aPreprocessor;
 

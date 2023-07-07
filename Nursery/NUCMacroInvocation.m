@@ -17,6 +17,7 @@
 #import "NUCIdentifier.h"
 #import "NUCControlLineDefineFunctionLike.h"
 #import "NUCReplacementList.h"
+#import "NUCReplacedStringLiteral.h"
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSSet.h>
@@ -59,7 +60,7 @@
         [aReplacingMacroNames addObject:[aMacroDefineToInvoke identifier]];
         
         NUCPpTokens *aPpTokens = [[aMacroDefineToInvoke replacementList] ppTokens];
-        NUCPpTokens *aPpTokensWithMacroInvocations = [[NUCPpTokens class] ppTokensWithMacroInvocationsFrom:[aPpTokens ppTokens] with:aPreprocessor isRescanning:YES macroInvocation:aMacroInvocation replacingMacroNames:aReplacingMacroNames];
+        NUCPpTokens *aPpTokensWithMacroInvocations = [[NUCPpTokens class] ppTokensWithMacroInvocationsFrom:[aPpTokens ppTokens] of:aMacroInvocation with:aPreprocessor isRescanning:YES replacingMacroNames:aReplacingMacroNames];
         [aMacroInvocation setPpTokensWithMacroinvocations:aPpTokensWithMacroInvocations];
         
         [aReplacingMacroNames removeObject:[aMacroDefineToInvoke identifier]];
@@ -195,6 +196,11 @@
         return nil;
 }
 
+- (NSMutableArray *)argumentAt:(NSUInteger)anIndex
+{
+    return [[self arguments] objectAtIndex:anIndex];
+}
+
 - (void)addArgument:(NSArray *)anArgument
 {
     [[self arguments] addObject:anArgument];
@@ -214,6 +220,38 @@
 - (BOOL)isMacroInvocation
 {
     return YES;
+}
+
+- (NUCPpTokens *)scanPpTokensFrom:(NUCPreprocessingTokenStream *)aPpTokenStream with:(NUCPreprocessor *)aPreprocessor
+{
+    NUCPpTokensWithMacroInvocations *aPpTokensWithMacroInvocation = [NUCPpTokensWithMacroInvocations ppTokens];
+    
+    if ([[self define] isFunctionLike])
+    {
+        NUCControlLineDefineFunctionLike *aMacroDefine = (NUCControlLineDefineFunctionLike *)[self define];
+        
+        while ([aPpTokenStream hasNext])
+        {
+            NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
+            
+            if ([aPpToken isHash])
+            {
+                NSMutableArray *aPpTokens = [NSMutableArray array];
+
+                [aPpTokens addObject:aPpToken];
+                [aPpTokens addObjectsFromArray:[aPpTokenStream scanWhiteSpaces]];
+                [aPpTokens addObjectsFromArray:[self argumentAt:[aMacroDefine parameterIndexOf:(NUCIdentifier *)[aPpTokenStream next]]]];
+                
+                [aPpTokensWithMacroInvocation add:[NUCReplacedStringLiteral replacedStringLiteralWithPpTokens:aPpTokens]];
+            }
+            else
+            {
+                [aPpTokensWithMacroInvocation add:aPpToken];
+            }
+        }
+    }
+    
+    return aPpTokensWithMacroInvocation;
 }
 
 - (void)addMacroReplacedPpTokensTo:(NSMutableArray *)aPpTokens With:(NUCPreprocessor *)aPreprocessor

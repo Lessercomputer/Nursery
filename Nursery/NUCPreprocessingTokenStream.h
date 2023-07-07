@@ -28,6 +28,7 @@
 - (NSArray *)preprocessingTokens;
 - (BOOL)skipWhitespaces;
 - (BOOL)skipWhitespacesWithoutNewline;
+- (NSArray *)scanWhiteSpaces;
 - (NUCDecomposedPreprocessingToken *)peekNext;
 - (NUCDecomposedPreprocessingToken *)peekPrevious;
 - (BOOL)nextIsWhitespaces;

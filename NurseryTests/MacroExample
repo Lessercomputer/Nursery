@@ -1,6 +1,6 @@
 #define C "c"
 #define B C
-#define A A
+#define A B
 #define F(a, b) #a b
 #define F2(a, b) a ## b
 #define F3(...) __VA_ARGS__
