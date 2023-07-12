@@ -29,7 +29,7 @@
     return [[[self alloc] initWithDefine:aDefine] autorelease];
 }
 
-+ (NUCPreprocessingToken *)identifierOrMacroInvocation:(NUCIdentifier *)anIdentifier from:(NUCPreprocessingTokenStream *)aPpTokenStream with:(NUCPreprocessor *)aPreprocessor isRescanning:(BOOL)aRescanning parentMacroInvocation:(NUCMacroInvocation *)aParentMacroInvocation replacingMacroNames:(NSMutableSet *)aReplacingMacroNames
++ (NUCPreprocessingToken *)identifierOrMacroInvocation:(NUCIdentifier *)anIdentifier from:(NUCPreprocessingTokenStream *)aPpTokenStream with:(NUCPreprocessor *)aPreprocessor parentMacroInvocation:(NUCMacroInvocation *)aParentMacroInvocation replacingMacroNames:(NSMutableSet *)aReplacingMacroNames
 {
     NUCControlLineDefine *aMacroDefineToInvoke = [aPreprocessor macroDefineFor:anIdentifier];
     
@@ -47,7 +47,7 @@
             
             if ([aPpToken isOpeningParenthesis])
             {
-                [aMacroInvocation setArguments:[self macroInvocationArgumentsOf:aMacroInvocation from:aPpTokenStream with:aPreprocessor isRescanning:aRescanning parentMacroInvocation:aParentMacroInvocation replacingMacroNames:aReplacingMacroNames]];
+                [aMacroInvocation setArguments:[self macroInvocationArgumentsOf:aMacroInvocation from:aPpTokenStream with:aPreprocessor parentMacroInvocation:aParentMacroInvocation replacingMacroNames:aReplacingMacroNames]];
                 
                 if (![[aPpTokenStream peekPrevious] isClosingParenthesis])
                     return nil;
@@ -65,7 +65,7 @@
         [aReplacingMacroNames addObject:[aMacroDefineToInvoke identifier]];
         
         NUCPpTokens *aPpTokens = [[aMacroDefineToInvoke replacementList] ppTokens];
-        NUCPpTokens *aPpTokensWithMacroInvocations = [[NUCPpTokens class] ppTokensWithMacroInvocationsFrom:[aPpTokens ppTokens] of:aMacroInvocation with:aPreprocessor isRescanning:YES replacingMacroNames:aReplacingMacroNames];
+        NUCPpTokens *aPpTokensWithMacroInvocations = [[NUCPpTokens class] ppTokensWithMacroInvocationsFrom:[aPpTokens ppTokens] of:aMacroInvocation with:aPreprocessor replacingMacroNames:aReplacingMacroNames];
         [aMacroInvocation setPpTokensWithMacroinvocations:aPpTokensWithMacroInvocations];
         
         [aReplacingMacroNames removeObject:[aMacroDefineToInvoke identifier]];
@@ -74,13 +74,13 @@
     }
 }
 
-+ (NSMutableArray *)macroInvocationArgumentsOf:(NUCMacroInvocation *)aMacroInvocation from:(NUCPreprocessingTokenStream *)aPpTokenStream with:(NUCPreprocessor *)aPreprocessor isRescanning:(BOOL)aRescanning parentMacroInvocation:(NUCMacroInvocation *)aParentMacroInvocation replacingMacroNames:(NSMutableSet *)aReplacingMacroNames
++ (NSMutableArray *)macroInvocationArgumentsOf:(NUCMacroInvocation *)aMacroInvocation from:(NUCPreprocessingTokenStream *)aPpTokenStream with:(NUCPreprocessor *)aPreprocessor parentMacroInvocation:(NUCMacroInvocation *)aParentMacroInvocation replacingMacroNames:(NSMutableSet *)aReplacingMacroNames
 {
     NSMutableArray *anArguments = [NSMutableArray array];
     
     while ([aPpTokenStream hasNext] && ![[aPpTokenStream peekPrevious] isClosingParenthesis])
     {
-        NSMutableArray *anArgument = [self macroInvocationArgumentAt:[anArguments count] of:aMacroInvocation from:aPpTokenStream with:aPreprocessor isRescanning:aRescanning parentMacroInvocation:aParentMacroInvocation replacingMacroNames:aReplacingMacroNames];
+        NSMutableArray *anArgument = [self macroInvocationArgumentAt:[anArguments count] of:aMacroInvocation from:aPpTokenStream with:aPreprocessor parentMacroInvocation:aParentMacroInvocation replacingMacroNames:aReplacingMacroNames];
         if (anArgument)
             [anArguments addObject:anArgument];
         else
@@ -90,7 +90,7 @@
     return anArguments;
 }
 
-+ (NSMutableArray *)macroInvocationArgumentAt:(NSUInteger)anIndex of:(NUCMacroInvocation *)aMacroinvocation from:(NUCPreprocessingTokenStream *)aPpTokenStream with:(NUCPreprocessor *)aPreprocessor isRescanning:(BOOL)aRescanning parentMacroInvocation:(NUCMacroInvocation *)aParentMacroInvocation replacingMacroNames:(NSMutableSet *)aReplacingMacroNames
++ (NSMutableArray *)macroInvocationArgumentAt:(NSUInteger)anIndex of:(NUCMacroInvocation *)aMacroinvocation from:(NUCPreprocessingTokenStream *)aPpTokenStream with:(NUCPreprocessor *)aPreprocessor parentMacroInvocation:(NUCMacroInvocation *)aParentMacroInvocation replacingMacroNames:(NSMutableSet *)aReplacingMacroNames
 {
     NSMutableArray *anArgument = [NSMutableArray array];
     NSInteger anOpeningParenthesisCount = 0;
@@ -106,7 +106,7 @@
             if ([(NUCControlLineDefineFunctionLike *)[aMacroinvocation define] parameterIsHashOperatorOperandAt:anIndex])
                 [anArgument addObject:aPpToken];
             else
-                [anArgument addObject:[self identifierOrMacroInvocation:(NUCIdentifier *)aPpToken from:aPpTokenStream with:aPreprocessor isRescanning:aRescanning parentMacroInvocation:aParentMacroInvocation replacingMacroNames:aReplacingMacroNames]];
+                [anArgument addObject:[self identifierOrMacroInvocation:(NUCIdentifier *)aPpToken from:aPpTokenStream with:aPreprocessor parentMacroInvocation:aParentMacroInvocation replacingMacroNames:aReplacingMacroNames]];
         }
         else if ([aPpToken isWhitespace])
         {
