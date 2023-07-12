@@ -41,6 +41,8 @@
         
         if ([aMacroDefineToInvoke isFunctionLike])
         {
+            NSUInteger aPosition = [aPpTokenStream position];
+            [aPpTokenStream skipWhitespaces];
             NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
             
             if ([aPpToken isOpeningParenthesis])
@@ -51,7 +53,10 @@
                     return nil;
             }
             else
-                return nil;
+            {
+                [aPpTokenStream setPosition:aPosition];
+                return anIdentifier;
+            }
         }
         
         if (!aReplacingMacroNames)
@@ -133,6 +138,8 @@
                 [anArgument addObject:aPpToken];
                 anOpeningParenthesisCount--;
             }
+            else
+                [anArgument addObject:aPpToken];
         }
     }
     

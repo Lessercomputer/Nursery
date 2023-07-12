@@ -4,7 +4,10 @@
 #define F(a, b) #a b
 #define F2(a, b) a ## b
 #define F3(...) __VA_ARGS__
+#define f(a) a*g
+#define g(a) f(a)
 A
 F(abc, (A))
 F2(a, F2(b, c))
 F3(a, b, c)
+f(2)(9)
