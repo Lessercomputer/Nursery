@@ -194,8 +194,21 @@
                 else
                 {
                     [aPpTokenStream setPosition:aPosition];
+                    
                     if ([aPpToken isIdentifier])
-                        [aPpTokensWithMacroInvocations add:[[NUCMacroInvocation class] identifierOrMacroInvocation:(NUCIdentifier *)aPpToken from:aPpTokenStream with:aPreprocessor parentMacroInvocation:aMacroInvocation replacingMacroNames:aReplacingMacroNames]];
+                    {
+                        NUCIdentifier *anIdentifier = (NUCIdentifier *)aPpToken;
+                        if ([[aMacroInvocation define] isFunctionLike])
+                        {
+                            NUCControlLineDefineFunctionLike *aDefine = (NUCControlLineDefineFunctionLike *)[aMacroInvocation define];
+                            if ([aDefine identifierIsParameter:anIdentifier])
+                                [aPpTokensWithMacroInvocations addFromArray:[aMacroInvocation argumentAt:[aDefine parameterIndexOf:anIdentifier]]];
+                            else
+                                [aPpTokensWithMacroInvocations add:aPpToken];
+                        }
+                        else
+                            [aPpTokensWithMacroInvocations add:[[NUCMacroInvocation class] identifierOrMacroInvocation:(NUCIdentifier *)aPpToken from:aPpTokenStream with:aPreprocessor parentMacroInvocation:aMacroInvocation replacingMacroNames:aReplacingMacroNames]];
+                    }
                     else
                         [aPpTokensWithMacroInvocations add:aPpToken];
                 }
