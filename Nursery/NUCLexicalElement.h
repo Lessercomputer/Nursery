@@ -14,6 +14,7 @@
 
 extern NSString * const NUCBasicSourceCharacters;
 extern NSString * const NUCBasicSourceCharactersExceptSingleQuoteAndBackslash;
+extern NSString * const NUCSpace;
 extern NSString * const NUCLF;
 extern NSString * const NUCCRLF;
 extern NSString * const NUCCR;

@@ -13,6 +13,7 @@
 @interface NUCReplacedStringLiteral : NUCPreprocessingToken
 {
     NSMutableArray *ppTokens;
+    NSString *string;
 }
 
 + (instancetype)replacedStringLiteral;
@@ -20,7 +21,9 @@
 
 - (instancetype)initWithPpTokens:(NSMutableArray *)aPpTokens;
 
--(NSMutableArray *)ppTokens;
+- (NSMutableArray *)ppTokens;
+
+- (NSString *)string;
 
 @end
 

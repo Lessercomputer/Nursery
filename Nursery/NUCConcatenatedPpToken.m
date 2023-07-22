@@ -10,6 +10,11 @@
 
 @implementation NUCConcatenatedPpToken
 
++ (instancetype)concatenatedPpTokenWithLeft:(NUCDecomposedPreprocessingToken *)aLeftToken right:(NUCDecomposedPreprocessingToken *)aRightToken
+{
+    return [[[self alloc] initWithLeft:aLeftToken right:aRightToken] autorelease];
+}
+
 - (instancetype)initWithLeft:(NUCDecomposedPreprocessingToken *)aLeftToken right:(NUCDecomposedPreprocessingToken *)aRightToken
 {
     if (self = [super initWithType:NUCLexicalElementNone])

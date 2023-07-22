@@ -15,6 +15,8 @@
     NUCDecomposedPreprocessingToken *rightToken;
 }
 
++ (instancetype)concatenatedPpTokenWithLeft:(NUCDecomposedPreprocessingToken *)aLeftToken right:(NUCDecomposedPreprocessingToken *)aRightToken;
+
 - (instancetype)initWithLeft:(NUCDecomposedPreprocessingToken *)aLeftToken right:(NUCDecomposedPreprocessingToken *)aRightToken;
 
 - (NUCDecomposedPreprocessingToken *)leftToken;

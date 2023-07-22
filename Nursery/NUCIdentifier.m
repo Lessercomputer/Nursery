@@ -22,4 +22,9 @@
     return self = [super initWithContent:aContent range:aRange type:NUCLexicalElementIdentifierType];
 }
 
+- (NSString *)string
+{
+    return [self content];
+}
+
 @end

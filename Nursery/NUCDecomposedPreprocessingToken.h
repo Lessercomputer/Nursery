@@ -32,6 +32,8 @@
 - (NSString *)content;
 - (NSRange)range;
 
+- (NSString *)string;
+
 - (BOOL)isHash;
 - (BOOL)isHashHash;
 - (BOOL)isIdentifier;

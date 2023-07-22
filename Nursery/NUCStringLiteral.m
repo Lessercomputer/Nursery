@@ -39,4 +39,12 @@
     return encodingPrefix;
 }
 
+- (NSString *)string
+{
+    if ([self encodingPrefix])
+        return [NSString stringWithFormat:@"%@\"%@\"", [self encodingPrefix], [self content]];
+    else
+        return [NSString stringWithFormat:@"\"%@\"", [self content]];
+}
+
 @end

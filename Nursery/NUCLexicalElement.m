@@ -13,6 +13,7 @@
 NSString * const NUCBasicSourceCharacters = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#%&'()*+,-./:;<=>?[\\]^_{|}~";
 NSString * const NUCBasicSourceCharactersExceptSingleQuoteAndBackslash = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#%&()*+,-./:;<=>?[]^_{|}~";
 //NSString * const NUCSourceCharactersExceptDoubleQuoteAndBackslashAndNewline = nil;
+NSString * const NUCSpace = @" ";
 NSString * const NUCLF = @"\n";
 NSString * const NUCCRLF = @"\r\n";
 NSString * const NUCCR = @"\r";

@@ -92,6 +92,14 @@ static NUCDecomposedPreprocessingToken *whitespaceToken = nil;
     return range;
 }
 
+- (NSString *)string
+{
+    if ([self isWhitespace])
+        return NUCSpace;
+    else
+        return [self content];
+}
+
 - (NSUInteger)hash
 {
     return [[self content] hash];

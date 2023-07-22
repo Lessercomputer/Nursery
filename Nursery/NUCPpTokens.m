@@ -16,6 +16,7 @@
 #import "NUCTextLine.h"
 #import "NUCControlLineDefineFunctionLike.h"
 #import "NUCReplacedStringLiteral.h"
+#import "NUCConcatenatedPpToken.h"
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSSet.h>
@@ -152,26 +153,43 @@
             else
                 [aPpTokensWithMacroInvocations add:aPpToken];
         }
-        else if ([[aMacroInvocation define] isFunctionLike])
+        else
         {
-            NUCControlLineDefineFunctionLike *aMacroDefine = (NUCControlLineDefineFunctionLike *)[aMacroInvocation define];
-
-            if ([aPpToken isHash])
+            if ([aPpToken isNotWhitespace])
             {
-                NSMutableArray *aPpTokens = [NSMutableArray array];
+                [aPpTokenStream skipWhitespaces];
                 
-                [aPpTokens addObject:aPpToken];
-                [aPpTokens addObjectsFromArray:[aPpTokenStream scanWhiteSpaces]];
-                [aPpTokens addObjectsFromArray:[aMacroInvocation argumentAt:[aMacroDefine parameterIndexOf:(NUCIdentifier *)[aPpTokenStream next]]]];
-                
-                [aPpTokensWithMacroInvocations add:[NUCReplacedStringLiteral replacedStringLiteralWithPpTokens:aPpTokens]];
+                if ([[aPpTokenStream peekNext] isHashHash])
+                {
+                    [aPpTokenStream skipWhitespaces];
+                    NUCDecomposedPreprocessingToken *aFolowingPpToken = [aPpTokenStream next];
+                    
+                    NUCConcatenatedPpToken *aConcatenatedPpToken = [NUCConcatenatedPpToken concatenatedPpTokenWithLeft:aPpToken right:aFolowingPpToken];
+                    [aPpTokensWithMacroInvocations add:aConcatenatedPpToken];
+                }
             }
-            else
+            
+            if ([[aMacroInvocation define] isFunctionLike])
             {
-                if ([aPpToken isIdentifier])
-                    [aPpTokensWithMacroInvocations add:[[NUCMacroInvocation class] identifierOrMacroInvocation:(NUCIdentifier *)aPpToken from:aPpTokenStream with:aPreprocessor parentMacroInvocation:aMacroInvocation replacingMacroNames:aReplacingMacroNames]];
+                NUCControlLineDefineFunctionLike *aMacroDefine = (NUCControlLineDefineFunctionLike *)[aMacroInvocation define];
+                
+                if ([aPpToken isHash])
+                {
+                    NSMutableArray *aPpTokens = [NSMutableArray array];
+                    
+                    [aPpTokens addObject:aPpToken];
+                    [aPpTokens addObjectsFromArray:[aPpTokenStream scanWhiteSpaces]];
+                    [aPpTokens addObjectsFromArray:[aMacroInvocation argumentAt:[aMacroDefine parameterIndexOf:(NUCIdentifier *)[aPpTokenStream next]]]];
+                    
+                    [aPpTokensWithMacroInvocations add:[NUCReplacedStringLiteral replacedStringLiteralWithPpTokens:aPpTokens]];
+                }
                 else
-                    [aPpTokensWithMacroInvocations add:aPpToken];
+                {
+                    if ([aPpToken isIdentifier])
+                        [aPpTokensWithMacroInvocations add:[[NUCMacroInvocation class] identifierOrMacroInvocation:(NUCIdentifier *)aPpToken from:aPpTokenStream with:aPreprocessor parentMacroInvocation:aMacroInvocation replacingMacroNames:aReplacingMacroNames]];
+                    else
+                        [aPpTokensWithMacroInvocations add:aPpToken];
+                }
             }
         }
     }
