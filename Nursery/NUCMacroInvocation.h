@@ -41,7 +41,9 @@
 
 - (NUCPpTokens *)scanPpTokensFrom:(NUCPreprocessingTokenStream *)aPpTokenStream with:(NUCPreprocessor *)aPreprocessor;
 
-- (void)addMacroReplacedPpTokensTo:(NSMutableArray *)aPpTokens With:(NUCPreprocessor *)aPreprocessor;
+- (NSMutableArray *)expandedPpTokens;
+
+- (void)addExpandedPpTokensTo:(NSMutableArray *)aPpTokens With:(NUCPreprocessor *)aPreprocessor;
 
 @end
 

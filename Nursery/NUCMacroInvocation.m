@@ -261,12 +261,21 @@
     return aPpTokensWithMacroInvocation;
 }
 
-- (void)addMacroReplacedPpTokensTo:(NSMutableArray *)aPpTokens With:(NUCPreprocessor *)aPreprocessor
+- (NSMutableArray *)expandedPpTokens
+{
+    NSMutableArray *anExpandedPpTokens = [NSMutableArray array];
+    
+    [self addExpandedPpTokensTo:anExpandedPpTokens With:nil];
+    
+    return anExpandedPpTokens;
+}
+
+- (void)addExpandedPpTokensTo:(NSMutableArray *)aPpTokens With:(NUCPreprocessor *)aPreprocessor
 {
     [[self ppTokensWithMacroinvocations] enumerateObjectsUsingBlock:^(NUCPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop) {
         
         if ([aPpToken isMacroInvocation])
-            [(NUCMacroInvocation *)aPpToken addMacroReplacedPpTokensTo:aPpTokens With:aPreprocessor];
+            [(NUCMacroInvocation *)aPpToken addExpandedPpTokensTo:aPpTokens With:aPreprocessor];
         else
             [aPpTokens addObject:aPpToken];
     }];
