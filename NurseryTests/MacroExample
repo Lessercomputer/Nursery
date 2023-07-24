@@ -1,12 +1,14 @@
 #define C "c"
 #define B C
 #define A B
+#define D a ## b ## c
 #define F(a, b) #a b
 #define F2(a, b) a ## b
 #define F3(...) __VA_ARGS__
 #define f(a) a*g
 #define g(a) f(a)
 A
+D
 F(abc, (A))
 F2(a, F2(b, c))
 F3(a, b, c)

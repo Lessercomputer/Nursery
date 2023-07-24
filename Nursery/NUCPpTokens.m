@@ -171,37 +171,76 @@
     
     while ([aPpTokenStream hasNext])
     {
-        NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
+        NSMutableArray *aPastingTokens = [self scanPastingTokensInObjectLikeMacroFrom:aPpTokenStream];
         
-        if ([aPpToken isNotWhitespace])
+        if ([aPastingTokens count])
         {
-            NSUInteger aPosition = [aPpTokenStream position];
+            NUCConcatenatedPpToken *aConcatenatedPpToken = [NUCConcatenatedPpToken concatenatedPpTokenWithLeft:[aPastingTokens objectAtIndex:0] right:[aPastingTokens objectAtIndex:1]];
+
+            for (NSUInteger anIndex = 2; anIndex < [aPastingTokens count]; anIndex++)
+                aConcatenatedPpToken = [NUCConcatenatedPpToken concatenatedPpTokenWithLeft:aConcatenatedPpToken right:[aPastingTokens objectAtIndex:anIndex]];
+            
+            [aPpTokensWithMacroInvocations add:aConcatenatedPpToken];
+        }
+        else
+        {
+            NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
+
+            if ([aPpToken isIdentifier])
+                [aPpTokensWithMacroInvocations add:[[NUCMacroInvocation class] identifierOrMacroInvocation:(NUCIdentifier *)aPpToken from:aPpTokenStream with:aPreprocessor parentMacroInvocation:aMacroInvocation replacingMacroNames:aReplacingMacroNames]];
+            else
+                [aPpTokensWithMacroInvocations add:aPpToken];
+        }
+    }
+    
+    return aPpTokensWithMacroInvocations;
+}
+
++ (NSMutableArray *)scanPastingTokensInObjectLikeMacroFrom:(NUCPreprocessingTokenStream *)aPpTokenStream
+{
+    NSMutableArray *aPastingTokens = [NSMutableArray array];
+    NSUInteger aPosition = [aPpTokenStream position];
+    
+    NUCDecomposedPreprocessingToken *aPrecededPpToken = [aPpTokenStream next];
+    
+    if ([aPrecededPpToken isNotWhitespace])
+    {
+        [aPpTokenStream skipWhitespaces];
+            
+        while ([aPpTokenStream hasNext])
+        {
+            aPosition = [aPpTokenStream position];
+            
             [aPpTokenStream skipWhitespaces];
             
             if ([[aPpTokenStream peekNext] isHashHash])
             {
                 [aPpTokenStream next];
                 [aPpTokenStream skipWhitespaces];
-                NUCDecomposedPreprocessingToken *aFolowingPpToken = [aPpTokenStream next];
                 
-                NUCConcatenatedPpToken *aConcatenatedPpToken = [NUCConcatenatedPpToken concatenatedPpTokenWithLeft:aPpToken right:aFolowingPpToken];
-                [aPpTokensWithMacroInvocations add:aConcatenatedPpToken];
+                if (aPrecededPpToken)
+                {
+                    [aPastingTokens addObject:aPrecededPpToken];
+                    aPrecededPpToken = nil;
+                }
+                
+                NUCDecomposedPreprocessingToken *aFollowingPpToken = [aPpTokenStream next];
+                
+                if (aFollowingPpToken)
+                    [aPastingTokens addObject:aFollowingPpToken];
             }
             else
             {
                 [aPpTokenStream setPosition:aPosition];
-                
-                if ([aPpToken isIdentifier])
-                    [aPpTokensWithMacroInvocations add:[[NUCMacroInvocation class] identifierOrMacroInvocation:(NUCIdentifier *)aPpToken from:aPpTokenStream with:aPreprocessor parentMacroInvocation:aMacroInvocation replacingMacroNames:aReplacingMacroNames]];
-                else
-                    [aPpTokensWithMacroInvocations add:aPpToken];
+                break;
             }
         }
-        else
-            [aPpTokensWithMacroInvocations add:aPpToken];
     }
     
-    return aPpTokensWithMacroInvocations;
+    if (![aPastingTokens count])
+        [aPpTokenStream setPosition:aPosition];
+    
+    return aPastingTokens;
 }
 
 + (NUCPpTokens *)ppTokensWithMacroInvocationsFrom:(NSArray *)aPpTokens ofFunctionLike:(NUCMacroInvocation *)aMacroInvocation with:(NUCPreprocessor *)aPreprocessor replacingMacroNames:(NSMutableSet *)aReplacingMacroNames

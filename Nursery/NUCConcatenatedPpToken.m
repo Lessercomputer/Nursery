@@ -19,11 +19,19 @@
 {
     if (self = [super initWithType:NUCLexicalElementNone])
     {
-        leftToken = aLeftToken;
-        rightToken = aRightToken;
+        leftToken = [aLeftToken retain];
+        rightToken = [aRightToken retain];
     }
     
     return self;
+}
+
+- (void)dealloc
+{
+    [leftToken release];
+    [rightToken release];
+    
+    [super dealloc];
 }
 
 - (NUCDecomposedPreprocessingToken *)leftToken
