@@ -142,7 +142,6 @@
     NUCPpTokens *aPpTokensWithMacroInvocations = [NUCPpTokensWithMacroInvocations ppTokens];
     NUCPreprocessingTokenStream *aPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aPpTokens];
     
-
     while ([aPpTokenStream hasNext])
     {
         NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
@@ -174,14 +173,7 @@
         NSMutableArray *aPastingTokens = [self scanPastingTokensInObjectLikeMacroFrom:aPpTokenStream];
         
         if ([aPastingTokens count])
-        {
-            NUCConcatenatedPpToken *aConcatenatedPpToken = [NUCConcatenatedPpToken concatenatedPpTokenWithLeft:[aPastingTokens objectAtIndex:0] right:[aPastingTokens objectAtIndex:1]];
-
-            for (NSUInteger anIndex = 2; anIndex < [aPastingTokens count]; anIndex++)
-                aConcatenatedPpToken = [NUCConcatenatedPpToken concatenatedPpTokenWithLeft:aConcatenatedPpToken right:[aPastingTokens objectAtIndex:anIndex]];
-            
-            [aPpTokensWithMacroInvocations add:aConcatenatedPpToken];
-        }
+            [aPpTokensWithMacroInvocations add:[self concatenatePastingTokens:aPastingTokens]];
         else
         {
             NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
@@ -196,6 +188,16 @@
     return aPpTokensWithMacroInvocations;
 }
 
++ (NUCConcatenatedPpToken *)concatenatePastingTokens:(NSMutableArray *)aPastingTokens
+{
+    NUCConcatenatedPpToken *aConcatenatedPpToken = [NUCConcatenatedPpToken concatenatedPpTokenWithLeft:[aPastingTokens objectAtIndex:0] right:[aPastingTokens objectAtIndex:1]];
+
+    for (NSUInteger anIndex = 2; anIndex < [aPastingTokens count]; anIndex++)
+        aConcatenatedPpToken = [NUCConcatenatedPpToken concatenatedPpTokenWithLeft:aConcatenatedPpToken right:[aPastingTokens objectAtIndex:anIndex]];
+    
+    return aConcatenatedPpToken;
+}
+
 + (NSMutableArray *)scanPastingTokensInObjectLikeMacroFrom:(NUCPreprocessingTokenStream *)aPpTokenStream
 {
     NSMutableArray *aPastingTokens = [NSMutableArray array];
@@ -205,8 +207,6 @@
     
     if ([aPrecededPpToken isNotWhitespace])
     {
-        [aPpTokenStream skipWhitespaces];
-            
         while ([aPpTokenStream hasNext])
         {
             aPosition = [aPpTokenStream position];
