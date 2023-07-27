@@ -31,12 +31,6 @@
     {
         if ([self decomposeWhiteSpaceCharacterFrom:aScanner into:aPreprocessingTokens])
             continue;
-        if ([self decomposeIdentifierFrom:aScanner into:aPreprocessingTokens])
-            continue;
-        if ([self decomposePpNumberFrom:aScanner into:aPreprocessingTokens])
-            continue;
-        if ([self decomposeCharacterConstantFrom:aScanner into:aPreprocessingTokens])
-            continue;
         if ([self decomposePunctuatorFrom:aScanner into:aPreprocessingTokens])
             continue;
         if ([self isInInclude])
@@ -49,6 +43,12 @@
             if ([self decomposeStringLiteralFrom:aScanner into:aPreprocessingTokens])
                 continue;
         }
+        if ([self decomposeIdentifierFrom:aScanner into:aPreprocessingTokens])
+            continue;
+        if ([self decomposePpNumberFrom:aScanner into:aPreprocessingTokens])
+            continue;
+        if ([self decomposeCharacterConstantFrom:aScanner into:aPreprocessingTokens])
+            continue;
         if ([self decomposeNonWhiteSpaceCharacterFrom:aScanner into:aPreprocessingTokens])
             continue;
     }
@@ -130,11 +130,12 @@
     
     if ([aScanner scanString:NUCDoubleQuotationMark intoString:NULL])
     {
+        NSUInteger aFirstCharacterLocation = [aScanner scanLocation];
         [self scanSCharSequenceFrom:aScanner into:NULL];
         
         if ([aScanner scanString:NUCDoubleQuotationMark intoString:NULL])
         {
-            NSRange aRange = NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation);
+            NSRange aRange = NSMakeRange(aFirstCharacterLocation, [aScanner scanLocation] - aFirstCharacterLocation - 1);
             
             [anElements addObject:[NUCStringLiteral preprocessingTokenWithContent:[[aScanner string] substringWithRange:aRange] range:aRange encodingPrefix:anEncodingPrefix]];
             

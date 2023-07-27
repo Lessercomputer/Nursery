@@ -173,7 +173,9 @@
         NSMutableArray *aPastingTokens = [self scanPastingTokensInObjectLikeMacroFrom:aPpTokenStream];
         
         if ([aPastingTokens count])
+        {
             [aPpTokensWithMacroInvocations add:[self concatenatePastingTokens:aPastingTokens]];
+        }
         else
         {
             NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];

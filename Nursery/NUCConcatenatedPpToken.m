@@ -7,6 +7,7 @@
 //
 
 #import "NUCConcatenatedPpToken.h"
+#import <Foundation/NSString.h>
 
 @implementation NUCConcatenatedPpToken
 
@@ -42,6 +43,20 @@
 - (NUCDecomposedPreprocessingToken *)rightToken
 {
     return rightToken;
+}
+
+- (NSString *)string
+{
+    NSMutableString *aString = [NSMutableString string];
+    [self addStringTo:aString];
+    
+    return aString;
+}
+
+- (void)addStringTo:(NSMutableString *)aString
+{
+    [[self leftToken] addStringTo:aString];
+    [[self rightToken] addStringTo:aString];
 }
 
 @end

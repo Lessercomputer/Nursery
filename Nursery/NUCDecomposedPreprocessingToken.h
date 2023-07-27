@@ -8,6 +8,7 @@
 
 #import "NUCPreprocessingToken.h"
 
+@class NSMutableString;
 @class NUCPreprocessingTokenStream, NUCIdentifier;
 
 @interface NUCDecomposedPreprocessingToken : NUCPreprocessingToken <NSCopying>
@@ -33,6 +34,7 @@
 - (NSRange)range;
 
 - (NSString *)string;
+- (void)addStringTo:(NSMutableString *)aString;
 
 - (BOOL)isHash;
 - (BOOL)isHashHash;

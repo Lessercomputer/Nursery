@@ -1,4 +1,4 @@
-#define C "c"
+#define C u8"c"
 #define B C
 #define A B
 #define D a ## b ## c ## 1 C
