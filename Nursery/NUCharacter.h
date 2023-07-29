@@ -3,7 +3,6 @@
 //  Nursery
 //
 //  Created by Akifumi Takata on 11/02/08.
-//  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 
 #import <Foundation/NSObjCRuntime.h>

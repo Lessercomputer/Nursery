@@ -3,7 +3,6 @@
 //  Nursery
 //
 //  Created by Akifumi Takata on 10/09/25.
-//  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
 #import <Foundation/NSSet.h>

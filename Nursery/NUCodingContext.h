@@ -3,7 +3,6 @@
 //  Nursery
 //
 //  Created by Akifumi Takata on 11/03/19.
-//  Copyright 2011 Nursery-Framework. All rights reserved.
 //
 
 #import "NUTypes.h"

@@ -3,7 +3,6 @@
 //  Nursery
 //
 //  Created by Akifumi Takata on 2018/06/16.
-//  Copyright © 2018年 Nursery-Framework. All rights reserved.
 //
 
 #import "NUOpaqueQueue.h"
