@@ -33,7 +33,7 @@
 	if (aCount)
 	{
 		id *anObjectsAndKeys = malloc((size_t)(sizeof(id) * aCount * 2));
-        [aDictionary getObjects:anObjectsAndKeys andKeys:&anObjectsAndKeys[aCount]];
+        [aDictionary getObjects:anObjectsAndKeys andKeys:&anObjectsAndKeys[aCount] count:aCount];
 		[anAliaser encodeIndexedIvars:anObjectsAndKeys count:aCount * 2];
 		free(anObjectsAndKeys);
 	}

@@ -8,7 +8,7 @@
 
 #import <Foundation/NSObject.h>
 
-#import "NUTypes.h"
+#import <Nursery/NUTypes.h>
 
 extern NSString *NUInvalidatedObjectException;
 

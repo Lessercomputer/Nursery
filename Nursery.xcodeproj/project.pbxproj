@@ -7,7 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6116644F1FCBDEFC00774707 /* NUQueueTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6116644E1FCBDEFC00774707 /* NUQueueTest.m */; };
+		24DC9D7E2A74C90000195718 /* Nursery.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 619B078D1913ED8D00A4BAA2 /* Nursery.framework */; };
+		24DC9DAB2A74CD9000195718 /* NUMutableDictionaryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DC9D992A74CD9000195718 /* NUMutableDictionaryTests.m */; };
+		24DC9DAC2A74CD9000195718 /* NURegionArrayTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DC9D9A2A74CD9000195718 /* NURegionArrayTest.m */; };
+		24DC9DAD2A74CD9000195718 /* NUOpaqueArrayTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DC9D9B2A74CD9000195718 /* NUOpaqueArrayTest.m */; };
+		24DC9DAE2A74CD9000195718 /* NUU64ODictionaryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DC9D9C2A74CD9000195718 /* NUU64ODictionaryTests.m */; };
+		24DC9DAF2A74CD9000195718 /* NUMainBranchNurseryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DC9D9D2A74CD9000195718 /* NUMainBranchNurseryTest.m */; };
+		24DC9DB02A74CD9000195718 /* AllTypesObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DC9D9F2A74CD9000195718 /* AllTypesObject.m */; };
+		24DC9DB12A74CD9000195718 /* SelfReferenceObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DC9DA02A74CD9000195718 /* SelfReferenceObject.m */; };
+		24DC9DB22A74CD9000195718 /* NUBellBallODictionaryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DC9DA12A74CD9000195718 /* NUBellBallODictionaryTests.m */; };
+		24DC9DB32A74CD9000195718 /* NUBranchNurseryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DC9DA22A74CD9000195718 /* NUBranchNurseryTests.m */; };
+		24DC9DB42A74CD9000195718 /* CharacterTargetClassResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DC9DA32A74CD9000195718 /* CharacterTargetClassResolver.m */; };
+		24DC9DB52A74CD9000195718 /* NULazyMutableArrayTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DC9DA42A74CD9000195718 /* NULazyMutableArrayTest.m */; };
+		24DC9DB62A74CD9000195718 /* NUQueueTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DC9DA62A74CD9000195718 /* NUQueueTest.m */; };
+		24DC9DB72A74CD9000195718 /* NULibraryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DC9DA72A74CD9000195718 /* NULibraryTests.m */; };
+		24DC9DB82A74CD9000195718 /* NurseryTests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 24DC9DA82A74CD9000195718 /* NurseryTests-Info.plist */; };
+		24DC9DB92A74CD9000195718 /* NULinkedListTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DC9DA92A74CD9000195718 /* NULinkedListTest.m */; };
+		24DC9DBA2A74CD9000195718 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DC9DAA2A74CD9000195718 /* Person.m */; };
 		613511301B6F9CA4008392C0 /* NUCodingNote.h in Headers */ = {isa = PBXBuildFile; fileRef = 6135112F1B6F9CA4008392C0 /* NUCodingNote.h */; };
 		6172CCA61FF8F6270037EE37 /* NUNurseryNetService.h in Headers */ = {isa = PBXBuildFile; fileRef = 6172CCA41FF8F6270037EE37 /* NUNurseryNetService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6172CCAA1FF8F6670037EE37 /* NUNurseryNetClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 6172CCA81FF8F6670037EE37 /* NUNurseryNetClient.h */; };
@@ -15,11 +31,6 @@
 		61785DF920060AF800590C8D /* NUNurseryNetServiceIO.h in Headers */ = {isa = PBXBuildFile; fileRef = 61785DF720060AF800590C8D /* NUNurseryNetServiceIO.h */; };
 		61785DFA20060AF800590C8D /* NUNurseryNetServiceIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 61785DF820060AF800590C8D /* NUNurseryNetServiceIO.m */; };
 		61826D521FAC84970042B6D9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 619B07931913ED8D00A4BAA2 /* Foundation.framework */; };
-		619B07A61913ED8D00A4BAA2 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 619B07A51913ED8D00A4BAA2 /* XCTest.framework */; };
-		619B07A71913ED8D00A4BAA2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 619B07901913ED8D00A4BAA2 /* Cocoa.framework */; };
-		619B07AA1913ED8D00A4BAA2 /* Nursery.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 619B078D1913ED8D00A4BAA2 /* Nursery.framework */; };
-		619B07B01913ED8D00A4BAA2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 619B07AE1913ED8D00A4BAA2 /* InfoPlist.strings */; };
-		619B07B21913ED8D00A4BAA2 /* NurseryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07B11913ED8D00A4BAA2 /* NurseryTests.m */; };
 		619B08881913EEC000A4BAA2 /* NUAliaser.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07BB1913EEBF00A4BAA2 /* NUAliaser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		619B08891913EEC000A4BAA2 /* NUAliaser.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07BC1913EEBF00A4BAA2 /* NUAliaser.m */; };
 		619B088A1913EEC000A4BAA2 /* NUBell.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07BD1913EEBF00A4BAA2 /* NUBell.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -202,18 +213,8 @@
 		619B09511913EEC000A4BAA2 /* NULocationTreeBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08841913EEC000A4BAA2 /* NULocationTreeBranch.m */; };
 		619B09521913EEC000A4BAA2 /* NULocationTreeLeaf.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08851913EEC000A4BAA2 /* NULocationTreeLeaf.m */; };
 		619B09541913EEC000A4BAA2 /* NURegionArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08871913EEC000A4BAA2 /* NURegionArray.h */; };
-		619B096A1913F2EE00A4BAA2 /* NUMainBranchNurseryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B09561913F2EE00A4BAA2 /* NUMainBranchNurseryTest.m */; };
-		619B096B1913F2EE00A4BAA2 /* NUBranchNurseryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B09581913F2EE00A4BAA2 /* NUBranchNurseryTests.m */; };
-		619B096C1913F2EE00A4BAA2 /* NUBellBallODictionaryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B09591913F2EE00A4BAA2 /* NUBellBallODictionaryTests.m */; };
-		619B096D1913F2EE00A4BAA2 /* NUU64ODictionaryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B095A1913F2EE00A4BAA2 /* NUU64ODictionaryTests.m */; };
-		619B096E1913F2EE00A4BAA2 /* NULibraryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B095B1913F2EE00A4BAA2 /* NULibraryTests.m */; };
-		619B096F1913F2EE00A4BAA2 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B095C1913F2EE00A4BAA2 /* Person.m */; };
-		619B09701913F2EE00A4BAA2 /* NUMutableDictionaryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B095D1913F2EE00A4BAA2 /* NUMutableDictionaryTests.m */; };
-		619B09711913F2EE00A4BAA2 /* NUOpaqueArrayTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B09611913F2EE00A4BAA2 /* NUOpaqueArrayTest.m */; };
-		619B09721913F2EE00A4BAA2 /* NURegionArrayTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B09621913F2EE00A4BAA2 /* NURegionArrayTest.m */; };
 		61A3297E1B9AED82006B6FC5 /* NUMovingUp.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A3297D1B9AED82006B6FC5 /* NUMovingUp.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		61DC96341FA104D900AABC9E /* Nursery.h in Headers */ = {isa = PBXBuildFile; fileRef = 61DC96331FA104D900AABC9E /* Nursery.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		61DCED6419DCEEC8009E4E9E /* AllTypesObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 61DCED6319DCEEC8009E4E9E /* AllTypesObject.m */; };
 		61FCF72820044F32001BD320 /* NUNurseryNetService.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FCF72720044F32001BD320 /* NUNurseryNetService.m */; };
 		61FD7A6E1FF9E4E2009ED9D5 /* NUNurseryNetResponder.h in Headers */ = {isa = PBXBuildFile; fileRef = 61FD7A6C1FF9E4E2009ED9D5 /* NUNurseryNetResponder.h */; };
 		61FD7A6F1FF9E4E2009ED9D5 /* NUNurseryNetResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FD7A6D1FF9E4E2009ED9D5 /* NUNurseryNetResponder.m */; };
@@ -223,258 +224,11 @@
 		61FD7A771FFA48E9009ED9D5 /* NUNurseryNetMessageArgument.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FD7A751FFA48E9009ED9D5 /* NUNurseryNetMessageArgument.m */; };
 		B812EF8D2062725100BB7513 /* NUPageLocationODictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = B812EF8B2062725100BB7513 /* NUPageLocationODictionary.h */; };
 		B812EF8E2062725100BB7513 /* NUPageLocationODictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = B812EF8C2062725100BB7513 /* NUPageLocationODictionary.m */; };
-		B81661EB20ECC07000B9075E /* Nursery__iOS_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B81661E220ECC06F00B9075E /* Nursery__iOS_.framework */; };
-		B81661F020ECC07000B9075E /* Nursery__iOS_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = B81661EF20ECC07000B9075E /* Nursery__iOS_Tests.m */; };
-		B81661FA20ECC24000B9075E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B81661F920ECC24000B9075E /* Foundation.framework */; };
-		B81661FB20ECC28500B9075E /* NUGarden.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07DE1913EEBF00A4BAA2 /* NUGarden.m */; };
-		B81661FC20ECC28500B9075E /* NUMainBranchGarden.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07CE1913EEBF00A4BAA2 /* NUMainBranchGarden.m */; };
-		B81661FD20ECC28500B9075E /* NUPairedMainBranchGarden.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08441913EEBF00A4BAA2 /* NUPairedMainBranchGarden.m */; };
-		B81661FE20ECC28500B9075E /* NUBranchGarden.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07E51913EEBF00A4BAA2 /* NUBranchGarden.m */; };
-		B81661FF20ECC28500B9075E /* NUNurseryRoot.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08321913EEBF00A4BAA2 /* NUNurseryRoot.m */; };
-		B816620020ECC28500B9075E /* NUCharacterDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07C21913EEBF00A4BAA2 /* NUCharacterDictionary.m */; };
-		B816620120ECC28500B9075E /* NUMutableDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08211913EEBF00A4BAA2 /* NUMutableDictionary.m */; };
-		B816620220ECC28500B9075E /* NULazyMutableArray.m in Sources */ = {isa = PBXBuildFile; fileRef = B861518720B3FED400862B9D /* NULazyMutableArray.m */; };
-		B816620320ECC28500B9075E /* NULibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08161913EEBF00A4BAA2 /* NULibrary.m */; };
-		B816620420ECC28500B9075E /* NUDefaultComparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B080B1913EEBF00A4BAA2 /* NUDefaultComparator.m */; };
-		B816620520ECC28500B9075E /* NUBPlusTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07FD1913EEBF00A4BAA2 /* NUBPlusTree.m */; };
-		B816620620ECC28500B9075E /* NUBPlusTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08011913EEBF00A4BAA2 /* NUBPlusTreeNode.m */; };
-		B816620720ECC28500B9075E /* NUBPlusTreeBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07FE1913EEBF00A4BAA2 /* NUBPlusTreeBranch.m */; };
-		B816620820ECC28500B9075E /* NUBPlusTreeLeaf.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07FF1913EEBF00A4BAA2 /* NUBPlusTreeLeaf.m */; };
-		B816620920ECC28500B9075E /* NUBPlusTreeEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08641913EEC000A4BAA2 /* NUBPlusTreeEnumerator.m */; };
-		B816620A20ECC28500B9075E /* NUCharacter.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07C11913EEBF00A4BAA2 /* NUCharacter.m */; };
-		B816620B20ECC28500B9075E /* NUDefaultCharacterTargetClassResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = B81B14A320CF71520034AC0E /* NUDefaultCharacterTargetClassResolver.m */; };
-		B816620C20ECC28500B9075E /* NUIvar.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08121913EEBF00A4BAA2 /* NUIvar.m */; };
-		B816620D20ECC28500B9075E /* NUNSObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07D41913EEBF00A4BAA2 /* NUNSObject.m */; };
-		B816620E20ECC28500B9075E /* NUNSString.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B082C1913EEBF00A4BAA2 /* NUNSString.m */; };
-		B816620F20ECC28500B9075E /* NUNSNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07D31913EEBF00A4BAA2 /* NUNSNumber.m */; };
-		B816621020ECC28500B9075E /* NUNSDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07D01913EEBF00A4BAA2 /* NUNSDate.m */; };
-		B816621120ECC28500B9075E /* NUNSURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07D61913EEBF00A4BAA2 /* NUNSURL.m */; };
-		B816621220ECC28500B9075E /* NUNSData.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07CF1913EEBF00A4BAA2 /* NUNSData.m */; };
-		B816621320ECC28500B9075E /* NUNSArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08231913EEBF00A4BAA2 /* NUNSArray.m */; };
-		B816621420ECC28500B9075E /* NUNSDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07D11913EEBF00A4BAA2 /* NUNSDictionary.m */; };
-		B816621520ECC28500B9075E /* NUNSSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07D51913EEBF00A4BAA2 /* NUNSSet.m */; };
-		B816621620ECC28500B9075E /* NUNSIndexSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07D21913EEBF00A4BAA2 /* NUNSIndexSet.m */; };
-		B816621720ECC28500B9075E /* NUAliaser.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07BC1913EEBF00A4BAA2 /* NUAliaser.m */; };
-		B816621820ECC28500B9075E /* NUMainBranchAliaser.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07CA1913EEBF00A4BAA2 /* NUMainBranchAliaser.m */; };
-		B816621920ECC28500B9075E /* NUPairedMainBranchAliaser.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07EA1913EEBF00A4BAA2 /* NUPairedMainBranchAliaser.m */; };
-		B816621A20ECC28500B9075E /* NUBranchAliaser.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07E11913EEBF00A4BAA2 /* NUBranchAliaser.m */; };
-		B816621B20ECC28500B9075E /* NUBell.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07BE1913EEBF00A4BAA2 /* NUBell.m */; };
-		B816621C20ECC28500B9075E /* NUObjectWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08371913EEBF00A4BAA2 /* NUObjectWrapper.m */; };
-		B816621D20ECC28500B9075E /* NUPupilNote.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B084C1913EEBF00A4BAA2 /* NUPupilNote.m */; };
-		B816621E20ECC28500B9075E /* NUPupilNoteCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B084A1913EEBF00A4BAA2 /* NUPupilNoteCache.m */; };
-		B816621F20ECC28500B9075E /* NUCodingContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07C41913EEBF00A4BAA2 /* NUCodingContext.m */; };
-		B816622020ECC28500B9075E /* NUMainBranchCodingContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07CB1913EEBF00A4BAA2 /* NUMainBranchCodingContext.m */; };
-		B816622120ECC28500B9075E /* NUCodingContextWithPupilNote.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07BF1913EEBF00A4BAA2 /* NUCodingContextWithPupilNote.m */; };
-		B816622220ECC28500B9075E /* NUCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08051913EEBF00A4BAA2 /* NUCoder.m */; };
-		B816622320ECC28500B9075E /* NUStringCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07DF1913EEBF00A4BAA2 /* NUStringCoder.m */; };
-		B816622420ECC28500B9075E /* NUNumberCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07D71913EEBF00A4BAA2 /* NUNumberCoder.m */; };
-		B816622520ECC28500B9075E /* NUURLCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08601913EEC000A4BAA2 /* NUURLCoder.m */; };
-		B816622620ECC28500B9075E /* NUDateCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08091913EEBF00A4BAA2 /* NUDateCoder.m */; };
-		B816622720ECC28500B9075E /* NUDataCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07C51913EEBF00A4BAA2 /* NUDataCoder.m */; };
-		B816622820ECC28500B9075E /* NUArrayCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07EC1913EEBF00A4BAA2 /* NUArrayCoder.m */; };
-		B816622920ECC28500B9075E /* NUDictionaryCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07C61913EEBF00A4BAA2 /* NUDictionaryCoder.m */; };
-		B816622A20ECC28500B9075E /* NUSetCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08531913EEBF00A4BAA2 /* NUSetCoder.m */; };
-		B816622B20ECC28500B9075E /* NUIndexSetCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08101913EEBF00A4BAA2 /* NUIndexSetCoder.m */; };
-		B816622C20ECC28500B9075E /* NUChildminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08581913EEBF00A4BAA2 /* NUChildminder.m */; };
-		B816622D20ECC28500B9075E /* NUNurserySeeker.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07C91913EEBF00A4BAA2 /* NUNurserySeeker.m */; };
-		B816622E20ECC28500B9075E /* NUNurseryParader.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08461913EEBF00A4BAA2 /* NUNurseryParader.m */; };
-		B816622F20ECC28500B9075E /* NUGardenSeeker.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07C81913EEBF00A4BAA2 /* NUGardenSeeker.m */; };
-		B816623020ECC28500B9075E /* NUMainBranchGardenSeeker.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B081B1913EEBF00A4BAA2 /* NUMainBranchGardenSeeker.m */; };
-		B816623120ECC28500B9075E /* NUBranchGardenSeeker.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07F51913EEBF00A4BAA2 /* NUBranchGardenSeeker.m */; };
-		B816623220ECC28500B9075E /* NUAperture.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08481913EEBF00A4BAA2 /* NUAperture.m */; };
-		B816623320ECC28500B9075E /* NUMainBranchAperture.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B081E1913EEBF00A4BAA2 /* NUMainBranchAperture.m */; };
-		B816623420ECC28500B9075E /* NUBranchAperture.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07FB1913EEBF00A4BAA2 /* NUBranchAperture.m */; };
-		B816623520ECC28500B9075E /* NUPairedMainBranchAperture.m in Sources */ = {isa = PBXBuildFile; fileRef = B8D59EB720AFC415009FC4A9 /* NUPairedMainBranchAperture.m */; };
-		B816623620ECC28500B9075E /* NUNursery.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07D91913EEBF00A4BAA2 /* NUNursery.m */; };
-		B816623720ECC28500B9075E /* NUMainBranchNursery.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07CD1913EEBF00A4BAA2 /* NUMainBranchNursery.m */; };
-		B816623820ECC28500B9075E /* NUBranchNursery.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07E21913EEBF00A4BAA2 /* NUBranchNursery.m */; };
-		B816623920ECC28600B9075E /* NUTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B085A1913EEBF00A4BAA2 /* NUTypes.m */; };
-		B816623A20ECC28600B9075E /* NURegion.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B084E1913EEBF00A4BAA2 /* NURegion.m */; };
-		B816623B20ECC28600B9075E /* NUBellBall.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07EE1913EEBF00A4BAA2 /* NUBellBall.m */; };
-		B816623C20ECC28600B9075E /* NUOpaqueArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08611913EEC000A4BAA2 /* NUOpaqueArray.m */; };
-		B816623D20ECC28600B9075E /* NUBellBallArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07F01913EEBF00A4BAA2 /* NUBellBallArray.m */; };
-		B816623E20ECC28600B9075E /* NUIndexArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B080E1913EEBF00A4BAA2 /* NUIndexArray.m */; };
-		B816623F20ECC28600B9075E /* NURegionArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B087A1913EEC000A4BAA2 /* NURegionArray.m */; };
-		B816624020ECC28600B9075E /* NUChangedRegionArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08021913EEBF00A4BAA2 /* NUChangedRegionArray.m */; };
-		B816624120ECC28600B9075E /* NUOpaqueBPlusTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08391913EEBF00A4BAA2 /* NUOpaqueBPlusTree.m */; };
-		B816624220ECC28600B9075E /* NUOpaqueBPlusTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B083B1913EEBF00A4BAA2 /* NUOpaqueBPlusTreeNode.m */; };
-		B816624320ECC28600B9075E /* NUOpaqueBPlusTreeBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B083A1913EEBF00A4BAA2 /* NUOpaqueBPlusTreeBranch.m */; };
-		B816624420ECC28600B9075E /* NUOpaqueBPlusTreeLeaf.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08671913EEC000A4BAA2 /* NUOpaqueBPlusTreeLeaf.m */; };
-		B816624520ECC28600B9075E /* NUOpaqueODictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B083D1913EEBF00A4BAA2 /* NUOpaqueODictionary.m */; };
-		B816624620ECC28600B9075E /* NUU64ODictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B085E1913EEC000A4BAA2 /* NUU64ODictionary.m */; };
-		B816624720ECC28600B9075E /* NUPageLocationODictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = B812EF8C2062725100BB7513 /* NUPageLocationODictionary.m */; };
-		B816624820ECC28600B9075E /* NUBellBallODictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07F21913EEBF00A4BAA2 /* NUBellBallODictionary.m */; };
-		B816624920ECC28600B9075E /* NUOpaqueQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = B861B3BD20D495DA001F76BF /* NUOpaqueQueue.m */; };
-		B816624A20ECC28600B9075E /* NUQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = B861B3C120D52E12001F76BF /* NUQueue.m */; };
-		B816624B20ECC28600B9075E /* NUUInt64Queue.m in Sources */ = {isa = PBXBuildFile; fileRef = B837365820D5DE96006AE915 /* NUUInt64Queue.m */; };
-		B816624C20ECC28600B9075E /* NUQueueWithDepth.m in Sources */ = {isa = PBXBuildFile; fileRef = B848ECE720B2F56200B1C06E /* NUQueueWithDepth.m */; };
-		B816624D20ECC28600B9075E /* NULinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = B83F010220C10D990010048B /* NULinkedList.m */; };
-		B816624E20ECC28600B9075E /* NULinkedListElement.m in Sources */ = {isa = PBXBuildFile; fileRef = B83F010620C10DC60010048B /* NULinkedListElement.m */; };
-		B816624F20ECC28600B9075E /* NUSpaces.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08551913EEBF00A4BAA2 /* NUSpaces.m */; };
-		B816625020ECC28600B9075E /* NUPages.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08411913EEBF00A4BAA2 /* NUPages.m */; };
-		B816625120ECC28600B9075E /* NUPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B083F1913EEBF00A4BAA2 /* NUPage.m */; };
-		B816625220ECC28600B9075E /* NUObjectTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B07DC1913EEBF00A4BAA2 /* NUObjectTable.m */; };
-		B816625320ECC28600B9075E /* NUObjectTableBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08341913EEBF00A4BAA2 /* NUObjectTableBranch.m */; };
-		B816625420ECC28600B9075E /* NUObjectTableLeaf.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08351913EEBF00A4BAA2 /* NUObjectTableLeaf.m */; };
-		B816625520ECC28600B9075E /* NUReversedObjectTableBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08761913EEC000A4BAA2 /* NUReversedObjectTableBranch.m */; };
-		B816625620ECC28600B9075E /* NUReversedObjectTableLeaf.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08511913EEBF00A4BAA2 /* NUReversedObjectTableLeaf.m */; };
-		B816625720ECC28600B9075E /* NUReversedObjectTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08501913EEBF00A4BAA2 /* NUReversedObjectTable.m */; };
-		B816625820ECC28600B9075E /* NURegionTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08731913EEC000A4BAA2 /* NURegionTree.m */; };
-		B816625920ECC28600B9075E /* NULocationTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08171913EEBF00A4BAA2 /* NULocationTree.m */; };
-		B816625A20ECC28600B9075E /* NULocationTreeBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08841913EEC000A4BAA2 /* NULocationTreeBranch.m */; };
-		B816625B20ECC28600B9075E /* NULocationTreeLeaf.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08851913EEC000A4BAA2 /* NULocationTreeLeaf.m */; };
-		B816625C20ECC28600B9075E /* NULengthTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08141913EEBF00A4BAA2 /* NULengthTree.m */; };
-		B816625D20ECC28600B9075E /* NULengthTreeBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08831913EEC000A4BAA2 /* NULengthTreeBranch.m */; };
-		B816625E20ECC28600B9075E /* NULengthTreeLeaf.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B08771913EEC000A4BAA2 /* NULengthTreeLeaf.m */; };
-		B816625F20ECC28600B9075E /* NUNurseryNetService.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FCF72720044F32001BD320 /* NUNurseryNetService.m */; };
-		B816626020ECC28600B9075E /* NUNurseryNetServiceIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 61785DF820060AF800590C8D /* NUNurseryNetServiceIO.m */; };
-		B816626120ECC28600B9075E /* NUNurseryNetResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FD7A6D1FF9E4E2009ED9D5 /* NUNurseryNetResponder.m */; };
-		B816626220ECC28600B9075E /* NUNurseryNetClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 6172CCA91FF8F6670037EE37 /* NUNurseryNetClient.m */; };
-		B816626320ECC28600B9075E /* NUNurseryNetMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FD7A711FFA48CA009ED9D5 /* NUNurseryNetMessage.m */; };
-		B816626420ECC28600B9075E /* NUNurseryNetMessageArgument.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FD7A751FFA48E9009ED9D5 /* NUNurseryNetMessageArgument.m */; };
-		B816626520ECC2DE00B9075E /* NUGarden+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B86D15202093FB2400D95C4C /* NUGarden+Project.h */; };
-		B816626620ECC2DE00B9075E /* NUMainBranchGarden.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B081F1913EEBF00A4BAA2 /* NUMainBranchGarden.h */; };
-		B816626720ECC2DE00B9075E /* NUPairedMainBranchGarden.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08431913EEBF00A4BAA2 /* NUPairedMainBranchGarden.h */; };
-		B816626820ECC2DE00B9075E /* NUBranchGarden.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07E41913EEBF00A4BAA2 /* NUBranchGarden.h */; };
-		B816626920ECC2DE00B9075E /* NUNurseryRoot.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08311913EEBF00A4BAA2 /* NUNurseryRoot.h */; };
-		B816626A20ECC2DE00B9075E /* NUCharacterDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08031913EEBF00A4BAA2 /* NUCharacterDictionary.h */; };
-		B816626B20ECC2DE00B9075E /* NUMutableDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08201913EEBF00A4BAA2 /* NUMutableDictionary.h */; };
-		B816626C20ECC2DE00B9075E /* NULazyMutableArray.h in Headers */ = {isa = PBXBuildFile; fileRef = B861518620B3FED400862B9D /* NULazyMutableArray.h */; };
-		B816626F20ECC2DF00B9075E /* NUDefaultComparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B080A1913EEBF00A4BAA2 /* NUDefaultComparator.h */; };
-		B816627020ECC2DF00B9075E /* NUBPlusTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07FC1913EEBF00A4BAA2 /* NUBPlusTree.h */; };
-		B816627120ECC2DF00B9075E /* NUBPlusTreeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08001913EEBF00A4BAA2 /* NUBPlusTreeNode.h */; };
-		B816627220ECC2DF00B9075E /* NUBPlusTreeBranch.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08621913EEC000A4BAA2 /* NUBPlusTreeBranch.h */; };
-		B816627320ECC2DF00B9075E /* NUBPlusTreeLeaf.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08651913EEC000A4BAA2 /* NUBPlusTreeLeaf.h */; };
-		B816627420ECC2DF00B9075E /* NUBPlusTreeEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08631913EEC000A4BAA2 /* NUBPlusTreeEnumerator.h */; };
-		B816627620ECC2DF00B9075E /* NUCharacter+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B86D152A209589E100D95C4C /* NUCharacter+Project.h */; };
-		B816627720ECC2DF00B9075E /* NUDefaultCharacterTargetClassResolver.h in Headers */ = {isa = PBXBuildFile; fileRef = B81B14A220CF71520034AC0E /* NUDefaultCharacterTargetClassResolver.h */; };
-		B816627920ECC2DF00B9075E /* NUNSObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08291913EEBF00A4BAA2 /* NUNSObject.h */; };
-		B816627A20ECC2DF00B9075E /* NUNSString.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B082B1913EEBF00A4BAA2 /* NUNSString.h */; };
-		B816627B20ECC2DF00B9075E /* NUNSNumber.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08281913EEBF00A4BAA2 /* NUNSNumber.h */; };
-		B816627C20ECC2DF00B9075E /* NUNSDate.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08251913EEBF00A4BAA2 /* NUNSDate.h */; };
-		B816627D20ECC2DF00B9075E /* NUNSURL.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B082D1913EEBF00A4BAA2 /* NUNSURL.h */; };
-		B816627E20ECC2DF00B9075E /* NUNSData.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08241913EEBF00A4BAA2 /* NUNSData.h */; };
-		B816627F20ECC2DF00B9075E /* NUNSArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08221913EEBF00A4BAA2 /* NUNSArray.h */; };
-		B816628020ECC2DF00B9075E /* NUNSDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08261913EEBF00A4BAA2 /* NUNSDictionary.h */; };
-		B816628120ECC2DF00B9075E /* NUNSSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B082A1913EEBF00A4BAA2 /* NUNSSet.h */; };
-		B816628220ECC2DF00B9075E /* NUNSIndexSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08271913EEBF00A4BAA2 /* NUNSIndexSet.h */; };
-		B816628420ECC2DF00B9075E /* NUAliaser+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B86D15282095845300D95C4C /* NUAliaser+Project.h */; };
-		B816628520ECC2DF00B9075E /* NUMainBranchAliaser.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08181913EEBF00A4BAA2 /* NUMainBranchAliaser.h */; };
-		B816628620ECC2DF00B9075E /* NUPairedMainBranchAliaser.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08421913EEBF00A4BAA2 /* NUPairedMainBranchAliaser.h */; };
-		B816628720ECC2DF00B9075E /* NUBranchAliaser.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07E01913EEBF00A4BAA2 /* NUBranchAliaser.h */; };
-		B816628A20ECC2DF00B9075E /* NUCodingNote.h in Headers */ = {isa = PBXBuildFile; fileRef = 6135112F1B6F9CA4008392C0 /* NUCodingNote.h */; };
-		B816628C20ECC2DF00B9075E /* NUBell+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B86D152C20958C9200D95C4C /* NUBell+Project.h */; };
-		B816628D20ECC2DF00B9075E /* NUObjectWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08361913EEBF00A4BAA2 /* NUObjectWrapper.h */; };
-		B816628E20ECC2DF00B9075E /* NUPupilNote.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B084B1913EEBF00A4BAA2 /* NUPupilNote.h */; };
-		B816628F20ECC2DF00B9075E /* NUPupilNoteCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08491913EEBF00A4BAA2 /* NUPupilNoteCache.h */; };
-		B816629020ECC2DF00B9075E /* NUCodingContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07C31913EEBF00A4BAA2 /* NUCodingContext.h */; };
-		B816629120ECC2DF00B9075E /* NUMainBranchCodingContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08191913EEBF00A4BAA2 /* NUMainBranchCodingContext.h */; };
-		B816629220ECC2DF00B9075E /* NUCodingContextWithPupilNote.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07F31913EEBF00A4BAA2 /* NUCodingContextWithPupilNote.h */; };
-		B816629420ECC2DF00B9075E /* NUStringCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08561913EEBF00A4BAA2 /* NUStringCoder.h */; };
-		B816629520ECC2DF00B9075E /* NUNumberCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B082E1913EEBF00A4BAA2 /* NUNumberCoder.h */; };
-		B816629620ECC2DF00B9075E /* NUURLCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B085F1913EEC000A4BAA2 /* NUURLCoder.h */; };
-		B816629720ECC2DF00B9075E /* NUDateCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08081913EEBF00A4BAA2 /* NUDateCoder.h */; };
-		B816629820ECC2DF00B9075E /* NUDataCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08071913EEBF00A4BAA2 /* NUDataCoder.h */; };
-		B816629920ECC2DF00B9075E /* NUArrayCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07EB1913EEBF00A4BAA2 /* NUArrayCoder.h */; };
-		B816629A20ECC2DF00B9075E /* NUDictionaryCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B080C1913EEBF00A4BAA2 /* NUDictionaryCoder.h */; };
-		B816629B20ECC2DF00B9075E /* NUSetCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08521913EEBF00A4BAA2 /* NUSetCoder.h */; };
-		B816629C20ECC2DF00B9075E /* NUIndexSetCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B080F1913EEBF00A4BAA2 /* NUIndexSetCoder.h */; };
-		B816629D20ECC2DF00B9075E /* NUChildminder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08571913EEBF00A4BAA2 /* NUChildminder.h */; };
-		B816629E20ECC2DF00B9075E /* NUNurserySeeker.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08131913EEBF00A4BAA2 /* NUNurserySeeker.h */; };
-		B816629F20ECC2DF00B9075E /* NUNurseryParader.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08451913EEBF00A4BAA2 /* NUNurseryParader.h */; };
-		B81662A020ECC2DF00B9075E /* NUGardenSeeker.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07C71913EEBF00A4BAA2 /* NUGardenSeeker.h */; };
-		B81662A120ECC2DF00B9075E /* NUMainBranchGardenSeeker.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B081A1913EEBF00A4BAA2 /* NUMainBranchGardenSeeker.h */; };
-		B81662A220ECC2DF00B9075E /* NUBranchGardenSeeker.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07F41913EEBF00A4BAA2 /* NUBranchGardenSeeker.h */; };
-		B81662A320ECC2DF00B9075E /* NUAperture.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08471913EEBF00A4BAA2 /* NUAperture.h */; };
-		B81662A420ECC2DF00B9075E /* NUMainBranchAperture.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B081D1913EEBF00A4BAA2 /* NUMainBranchAperture.h */; };
-		B81662A520ECC2DF00B9075E /* NUBranchAperture.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07FA1913EEBF00A4BAA2 /* NUBranchAperture.h */; };
-		B81662A620ECC2DF00B9075E /* NUPairedMainBranchAperture.h in Headers */ = {isa = PBXBuildFile; fileRef = B8D59EB620AFC415009FC4A9 /* NUPairedMainBranchAperture.h */; };
-		B81662A820ECC2DF00B9075E /* NUNursery+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B86D152120943AEF00D95C4C /* NUNursery+Project.h */; };
-		B81662AA20ECC2DF00B9075E /* NUMainBranchNursery+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B86D152420943DA600D95C4C /* NUMainBranchNursery+Project.h */; };
-		B81662AC20ECC2DF00B9075E /* NUBranchNursery+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B86D15262094412400D95C4C /* NUBranchNursery+Project.h */; };
-		B81662B020ECC2DF00B9075E /* NUOpaqueArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08781913EEC000A4BAA2 /* NUOpaqueArray.h */; };
-		B81662B120ECC2DF00B9075E /* NUBellBallArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07EF1913EEBF00A4BAA2 /* NUBellBallArray.h */; };
-		B81662B220ECC2DF00B9075E /* NUIndexArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B080D1913EEBF00A4BAA2 /* NUIndexArray.h */; };
-		B81662B320ECC2DF00B9075E /* NURegionArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08871913EEC000A4BAA2 /* NURegionArray.h */; };
-		B81662B420ECC2DF00B9075E /* NUChangedRegionArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B087D1913EEC000A4BAA2 /* NUChangedRegionArray.h */; };
-		B81662B520ECC2DF00B9075E /* NUOpaqueBPlusTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08381913EEBF00A4BAA2 /* NUOpaqueBPlusTree.h */; };
-		B81662B620ECC2DF00B9075E /* NUOpaqueBPlusTreeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08711913EEC000A4BAA2 /* NUOpaqueBPlusTreeNode.h */; };
-		B81662B720ECC2DF00B9075E /* NUOpaqueBPlusTreeBranch.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B086F1913EEC000A4BAA2 /* NUOpaqueBPlusTreeBranch.h */; };
-		B81662B820ECC2DF00B9075E /* NUOpaqueBPlusTreeLeaf.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08701913EEC000A4BAA2 /* NUOpaqueBPlusTreeLeaf.h */; };
-		B81662B920ECC2DF00B9075E /* NUOpaqueODictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B083C1913EEBF00A4BAA2 /* NUOpaqueODictionary.h */; };
-		B81662BA20ECC2DF00B9075E /* NUU64ODictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B085D1913EEBF00A4BAA2 /* NUU64ODictionary.h */; };
-		B81662BB20ECC2DF00B9075E /* NUPageLocationODictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = B812EF8B2062725100BB7513 /* NUPageLocationODictionary.h */; };
-		B81662BC20ECC2DF00B9075E /* NUBellBallODictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07F11913EEBF00A4BAA2 /* NUBellBallODictionary.h */; };
-		B81662BD20ECC2DF00B9075E /* NUOpaqueQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = B861B3BC20D495DA001F76BF /* NUOpaqueQueue.h */; };
-		B81662BE20ECC2DF00B9075E /* NUQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = B861B3C020D52E12001F76BF /* NUQueue.h */; };
-		B81662BF20ECC2DF00B9075E /* NUUInt64Queue.h in Headers */ = {isa = PBXBuildFile; fileRef = B837365720D5DE96006AE915 /* NUUInt64Queue.h */; };
-		B81662C020ECC2DF00B9075E /* NUQueueWithDepth.h in Headers */ = {isa = PBXBuildFile; fileRef = B848ECE620B2F56200B1C06E /* NUQueueWithDepth.h */; };
-		B81662C120ECC2DF00B9075E /* NULinkedList.h in Headers */ = {isa = PBXBuildFile; fileRef = B83F010120C10D990010048B /* NULinkedList.h */; };
-		B81662C220ECC2DF00B9075E /* NULinkedListElement.h in Headers */ = {isa = PBXBuildFile; fileRef = B83F010520C10DC60010048B /* NULinkedListElement.h */; };
-		B81662C320ECC2DF00B9075E /* NUSpaces.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08541913EEBF00A4BAA2 /* NUSpaces.h */; };
-		B81662C420ECC2DF00B9075E /* NUPages.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08401913EEBF00A4BAA2 /* NUPages.h */; };
-		B81662C520ECC2DF00B9075E /* NUPage.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B083E1913EEBF00A4BAA2 /* NUPage.h */; };
-		B81662C620ECC2DF00B9075E /* NUObjectTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07DB1913EEBF00A4BAA2 /* NUObjectTable.h */; };
-		B81662C720ECC2DF00B9075E /* NUObjectTableBranch.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B086D1913EEC000A4BAA2 /* NUObjectTableBranch.h */; };
-		B81662C820ECC2DF00B9075E /* NUObjectTableLeaf.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B086E1913EEC000A4BAA2 /* NUObjectTableLeaf.h */; };
-		B81662C920ECC2DF00B9075E /* NUReversedObjectTableBranch.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08741913EEC000A4BAA2 /* NUReversedObjectTableBranch.h */; };
-		B81662CA20ECC2DF00B9075E /* NUReversedObjectTableLeaf.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08751913EEC000A4BAA2 /* NUReversedObjectTableLeaf.h */; };
-		B81662CB20ECC2DF00B9075E /* NUReversedObjectTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B084F1913EEBF00A4BAA2 /* NUReversedObjectTable.h */; };
-		B81662CC20ECC2DF00B9075E /* NURegionTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08721913EEC000A4BAA2 /* NURegionTree.h */; };
-		B81662CD20ECC2DF00B9075E /* NULocationTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08661913EEC000A4BAA2 /* NULocationTree.h */; };
-		B81662CE20ECC2DF00B9075E /* NULocationTreeBranch.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B086B1913EEC000A4BAA2 /* NULocationTreeBranch.h */; };
-		B81662CF20ECC2DF00B9075E /* NULocationTreeLeaf.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B086C1913EEC000A4BAA2 /* NULocationTreeLeaf.h */; };
-		B81662D020ECC2DF00B9075E /* NULengthTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08821913EEC000A4BAA2 /* NULengthTree.h */; };
-		B81662D120ECC2DF00B9075E /* NULengthTreeBranch.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08691913EEC000A4BAA2 /* NULengthTreeBranch.h */; };
-		B81662D220ECC2DF00B9075E /* NULengthTreeLeaf.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B086A1913EEC000A4BAA2 /* NULengthTreeLeaf.h */; };
-		B81662D420ECC2DF00B9075E /* NUNurseryNetService+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B86D152E2095EA9200D95C4C /* NUNurseryNetService+Project.h */; };
-		B81662D520ECC2DF00B9075E /* NUNurseryNetServiceIO.h in Headers */ = {isa = PBXBuildFile; fileRef = 61785DF720060AF800590C8D /* NUNurseryNetServiceIO.h */; };
-		B81662D620ECC2DF00B9075E /* NUNurseryNetResponder.h in Headers */ = {isa = PBXBuildFile; fileRef = 61FD7A6C1FF9E4E2009ED9D5 /* NUNurseryNetResponder.h */; };
-		B81662D720ECC2DF00B9075E /* NUNurseryNetClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 6172CCA81FF8F6670037EE37 /* NUNurseryNetClient.h */; };
-		B81662D820ECC2DF00B9075E /* NUNurseryNetMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 61FD7A701FFA48CA009ED9D5 /* NUNurseryNetMessage.h */; };
-		B81662D920ECC2DF00B9075E /* NUNurseryNetMessageArgument.h in Headers */ = {isa = PBXBuildFile; fileRef = 61FD7A741FFA48E9009ED9D5 /* NUNurseryNetMessageArgument.h */; };
-		B81662DA20ECC3BF00B9075E /* Nursery.h in Headers */ = {isa = PBXBuildFile; fileRef = 61DC96331FA104D900AABC9E /* Nursery.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B81662DB20ECC44600B9075E /* NUTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08591913EEBF00A4BAA2 /* NUTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B81662DC20ECC45000B9075E /* NURegion.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B084D1913EEBF00A4BAA2 /* NURegion.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B81662DD20ECC45F00B9075E /* NUNursery.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07D81913EEBF00A4BAA2 /* NUNursery.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B81662DE20ECC47100B9075E /* NUMainBranchNursery.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07CC1913EEBF00A4BAA2 /* NUMainBranchNursery.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B81662DF20ECC47C00B9075E /* NUBranchNursery.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07F61913EEBF00A4BAA2 /* NUBranchNursery.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B81662E020ECC48900B9075E /* NUGarden.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07DD1913EEBF00A4BAA2 /* NUGarden.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B81662E120ECC49300B9075E /* NUAliaser.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07BB1913EEBF00A4BAA2 /* NUAliaser.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B81662E220ECC49D00B9075E /* NUCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08061913EEBF00A4BAA2 /* NUCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B81662E320ECC4A700B9075E /* NUMovingUp.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A3297D1B9AED82006B6FC5 /* NUMovingUp.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B81662E420ECC4B200B9075E /* NUCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08041913EEBF00A4BAA2 /* NUCoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B81662E520ECC4BF00B9075E /* NUCharacter.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07C01913EEBF00A4BAA2 /* NUCharacter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B81662E620ECC4C900B9075E /* NUIvar.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08111913EEBF00A4BAA2 /* NUIvar.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B81662E720ECC4D900B9075E /* NUBell.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07BD1913EEBF00A4BAA2 /* NUBell.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B81662E820ECC4D900B9075E /* NUBellBall.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B07ED1913EEBF00A4BAA2 /* NUBellBall.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B81662E920ECC4E800B9075E /* NULibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08151913EEBF00A4BAA2 /* NULibrary.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B81662EA20ECC4F300B9075E /* NUComparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B08681913EEC000A4BAA2 /* NUComparator.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B81662EB20ECC4FE00B9075E /* NUNurseryNetService.h in Headers */ = {isa = PBXBuildFile; fileRef = 6172CCA41FF8F6270037EE37 /* NUNurseryNetService.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B81662EC20ECD4A500B9075E /* NUOpaqueArrayTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B09611913F2EE00A4BAA2 /* NUOpaqueArrayTest.m */; };
-		B81662ED20ECD4A500B9075E /* NURegionArrayTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B09621913F2EE00A4BAA2 /* NURegionArrayTest.m */; };
-		B81662EE20ECD4A500B9075E /* NUU64ODictionaryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B095A1913F2EE00A4BAA2 /* NUU64ODictionaryTests.m */; };
-		B81662EF20ECD4A500B9075E /* NUBellBallODictionaryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B09591913F2EE00A4BAA2 /* NUBellBallODictionaryTests.m */; };
-		B81662F020ECD4A500B9075E /* NUMutableDictionaryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B095D1913F2EE00A4BAA2 /* NUMutableDictionaryTests.m */; };
-		B81662F120ECD4A500B9075E /* NULibraryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B095B1913F2EE00A4BAA2 /* NULibraryTests.m */; };
-		B81662F220ECD4A500B9075E /* Person.h in Headers */ = {isa = PBXBuildFile; fileRef = 619B095E1913F2EE00A4BAA2 /* Person.h */; };
-		B81662F320ECD4A500B9075E /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B095C1913F2EE00A4BAA2 /* Person.m */; };
-		B81662F420ECD4A500B9075E /* CharacterTargetClassResolver.h in Headers */ = {isa = PBXBuildFile; fileRef = B8727BD120C8FEAA00D92DE6 /* CharacterTargetClassResolver.h */; };
-		B81662F520ECD4A500B9075E /* CharacterTargetClassResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = B8727BD220C8FEAA00D92DE6 /* CharacterTargetClassResolver.m */; };
-		B81662F620ECD4A500B9075E /* NUMainBranchNurseryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B09561913F2EE00A4BAA2 /* NUMainBranchNurseryTest.m */; };
-		B81662F720ECD4A500B9075E /* NUBranchNurseryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 619B09581913F2EE00A4BAA2 /* NUBranchNurseryTests.m */; };
-		B81662F820ECD4A500B9075E /* AllTypesObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 61DCED6219DCEEC8009E4E9E /* AllTypesObject.h */; };
-		B81662F920ECD4A500B9075E /* AllTypesObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 61DCED6319DCEEC8009E4E9E /* AllTypesObject.m */; };
-		B81662FA20ECD4A500B9075E /* SelfReferenceObject.h in Headers */ = {isa = PBXBuildFile; fileRef = B8BD5EAA2069058B00091994 /* SelfReferenceObject.h */; };
-		B81662FB20ECD4A500B9075E /* SelfReferenceObject.m in Sources */ = {isa = PBXBuildFile; fileRef = B8BD5EAB2069058B00091994 /* SelfReferenceObject.m */; };
-		B81662FC20ECD4A500B9075E /* NUQueueTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6116644E1FCBDEFC00774707 /* NUQueueTest.m */; };
-		B81662FD20ECD4A500B9075E /* NULazyMutableArrayTest.m in Sources */ = {isa = PBXBuildFile; fileRef = B8BDFF1520B6B96300839DCF /* NULazyMutableArrayTest.m */; };
 		B81B14A420CF71520034AC0E /* NUDefaultCharacterTargetClassResolver.h in Headers */ = {isa = PBXBuildFile; fileRef = B81B14A220CF71520034AC0E /* NUDefaultCharacterTargetClassResolver.h */; };
 		B81B14A520CF71520034AC0E /* NUDefaultCharacterTargetClassResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = B81B14A320CF71520034AC0E /* NUDefaultCharacterTargetClassResolver.m */; };
 		B837365920D5DE96006AE915 /* NUUInt64Queue.h in Headers */ = {isa = PBXBuildFile; fileRef = B837365720D5DE96006AE915 /* NUUInt64Queue.h */; };
 		B837365A20D5DE96006AE915 /* NUUInt64Queue.m in Sources */ = {isa = PBXBuildFile; fileRef = B837365820D5DE96006AE915 /* NUUInt64Queue.m */; };
 		B83E43682141272E000A5DD0 /* NUIvar+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B83E43672141272E000A5DD0 /* NUIvar+Project.h */; };
-		B83E43692141272E000A5DD0 /* NUIvar+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B83E43672141272E000A5DD0 /* NUIvar+Project.h */; };
 		B83F010320C10D990010048B /* NULinkedList.h in Headers */ = {isa = PBXBuildFile; fileRef = B83F010120C10D990010048B /* NULinkedList.h */; };
 		B83F010420C10D990010048B /* NULinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = B83F010220C10D990010048B /* NULinkedList.m */; };
 		B83F010720C10DC60010048B /* NULinkedListElement.h in Headers */ = {isa = PBXBuildFile; fileRef = B83F010520C10DC60010048B /* NULinkedListElement.h */; };
@@ -495,29 +249,17 @@
 		B86D152B209589E100D95C4C /* NUCharacter+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B86D152A209589E100D95C4C /* NUCharacter+Project.h */; };
 		B86D152D20958C9200D95C4C /* NUBell+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B86D152C20958C9200D95C4C /* NUBell+Project.h */; };
 		B86D152F2095EA9200D95C4C /* NUNurseryNetService+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B86D152E2095EA9200D95C4C /* NUNurseryNetService+Project.h */; };
-		B8727BD320C8FEAA00D92DE6 /* CharacterTargetClassResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = B8727BD220C8FEAA00D92DE6 /* CharacterTargetClassResolver.m */; };
-		B8AF2EB021055ADE00FA72F4 /* NULinkedListTest.m in Sources */ = {isa = PBXBuildFile; fileRef = B8AF2EAF21055ADE00FA72F4 /* NULinkedListTest.m */; };
-		B8AF2EB121055ADE00FA72F4 /* NULinkedListTest.m in Sources */ = {isa = PBXBuildFile; fileRef = B8AF2EAF21055ADE00FA72F4 /* NULinkedListTest.m */; };
-		B8BD5EAC2069058B00091994 /* SelfReferenceObject.m in Sources */ = {isa = PBXBuildFile; fileRef = B8BD5EAB2069058B00091994 /* SelfReferenceObject.m */; };
-		B8BDFF1620B6B96300839DCF /* NULazyMutableArrayTest.m in Sources */ = {isa = PBXBuildFile; fileRef = B8BDFF1520B6B96300839DCF /* NULazyMutableArrayTest.m */; };
 		B8D59EB820AFC415009FC4A9 /* NUPairedMainBranchAperture.h in Headers */ = {isa = PBXBuildFile; fileRef = B8D59EB620AFC415009FC4A9 /* NUPairedMainBranchAperture.h */; };
 		B8D59EB920AFC415009FC4A9 /* NUPairedMainBranchAperture.m in Sources */ = {isa = PBXBuildFile; fileRef = B8D59EB720AFC415009FC4A9 /* NUPairedMainBranchAperture.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		619B07A81913ED8D00A4BAA2 /* PBXContainerItemProxy */ = {
+		24DC9D7F2A74C90000195718 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 619B07841913ED8900A4BAA2 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 619B078C1913ED8D00A4BAA2;
 			remoteInfo = Nursery;
-		};
-		B81661EC20ECC07000B9075E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 619B07841913ED8900A4BAA2 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = B81661E120ECC06F00B9075E;
-			remoteInfo = "Nursery (iOS)";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -536,9 +278,27 @@
 
 /* Begin PBXFileReference section */
 		245DC04A27774D5800958FE1 /* Documents */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Documents; sourceTree = "<group>"; };
-		6116644E1FCBDEFC00774707 /* NUQueueTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUQueueTest.m; sourceTree = "<group>"; };
-		611FA36219433D4900D416B3 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		611FA36319433D4900D416B3 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		24DC9D7A2A74C90000195718 /* NurseryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NurseryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		24DC9D972A74CD9000195718 /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
+		24DC9D982A74CD9000195718 /* SelfReferenceObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelfReferenceObject.h; sourceTree = "<group>"; };
+		24DC9D992A74CD9000195718 /* NUMutableDictionaryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUMutableDictionaryTests.m; sourceTree = "<group>"; };
+		24DC9D9A2A74CD9000195718 /* NURegionArrayTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NURegionArrayTest.m; sourceTree = "<group>"; };
+		24DC9D9B2A74CD9000195718 /* NUOpaqueArrayTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUOpaqueArrayTest.m; sourceTree = "<group>"; };
+		24DC9D9C2A74CD9000195718 /* NUU64ODictionaryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUU64ODictionaryTests.m; sourceTree = "<group>"; };
+		24DC9D9D2A74CD9000195718 /* NUMainBranchNurseryTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUMainBranchNurseryTest.m; sourceTree = "<group>"; };
+		24DC9D9E2A74CD9000195718 /* AllTypesObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTypesObject.h; sourceTree = "<group>"; };
+		24DC9D9F2A74CD9000195718 /* AllTypesObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTypesObject.m; sourceTree = "<group>"; };
+		24DC9DA02A74CD9000195718 /* SelfReferenceObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelfReferenceObject.m; sourceTree = "<group>"; };
+		24DC9DA12A74CD9000195718 /* NUBellBallODictionaryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUBellBallODictionaryTests.m; sourceTree = "<group>"; };
+		24DC9DA22A74CD9000195718 /* NUBranchNurseryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUBranchNurseryTests.m; sourceTree = "<group>"; };
+		24DC9DA32A74CD9000195718 /* CharacterTargetClassResolver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CharacterTargetClassResolver.m; sourceTree = "<group>"; };
+		24DC9DA42A74CD9000195718 /* NULazyMutableArrayTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NULazyMutableArrayTest.m; sourceTree = "<group>"; };
+		24DC9DA52A74CD9000195718 /* CharacterTargetClassResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CharacterTargetClassResolver.h; sourceTree = "<group>"; };
+		24DC9DA62A74CD9000195718 /* NUQueueTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUQueueTest.m; sourceTree = "<group>"; };
+		24DC9DA72A74CD9000195718 /* NULibraryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NULibraryTests.m; sourceTree = "<group>"; };
+		24DC9DA82A74CD9000195718 /* NurseryTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "NurseryTests-Info.plist"; sourceTree = "<group>"; };
+		24DC9DA92A74CD9000195718 /* NULinkedListTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NULinkedListTest.m; sourceTree = "<group>"; };
+		24DC9DAA2A74CD9000195718 /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
 		6135112F1B6F9CA4008392C0 /* NUCodingNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUCodingNote.h; sourceTree = "<group>"; };
 		6172CCA41FF8F6270037EE37 /* NUNurseryNetService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUNurseryNetService.h; sourceTree = "<group>"; };
 		6172CCA81FF8F6670037EE37 /* NUNurseryNetClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUNurseryNetClient.h; sourceTree = "<group>"; };
@@ -552,10 +312,7 @@
 		619B07951913ED8D00A4BAA2 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		619B07981913ED8D00A4BAA2 /* Nursery-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Nursery-Info.plist"; sourceTree = "<group>"; };
 		619B079C1913ED8D00A4BAA2 /* Nursery-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Nursery-Prefix.pch"; sourceTree = "<group>"; };
-		619B07A41913ED8D00A4BAA2 /* NurseryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NurseryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		619B07A51913ED8D00A4BAA2 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		619B07AD1913ED8D00A4BAA2 /* NurseryTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NurseryTests-Info.plist"; sourceTree = "<group>"; };
-		619B07B11913ED8D00A4BAA2 /* NurseryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NurseryTests.m; sourceTree = "<group>"; };
 		619B07BB1913EEBF00A4BAA2 /* NUAliaser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = NUAliaser.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		619B07BC1913EEBF00A4BAA2 /* NUAliaser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = NUAliaser.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		619B07BD1913EEBF00A4BAA2 /* NUBell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUBell.h; sourceTree = "<group>"; };
@@ -738,20 +495,8 @@
 		619B08841913EEC000A4BAA2 /* NULocationTreeBranch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NULocationTreeBranch.m; sourceTree = "<group>"; };
 		619B08851913EEC000A4BAA2 /* NULocationTreeLeaf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NULocationTreeLeaf.m; sourceTree = "<group>"; };
 		619B08871913EEC000A4BAA2 /* NURegionArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NURegionArray.h; sourceTree = "<group>"; };
-		619B09561913F2EE00A4BAA2 /* NUMainBranchNurseryTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUMainBranchNurseryTest.m; sourceTree = "<group>"; };
-		619B09581913F2EE00A4BAA2 /* NUBranchNurseryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUBranchNurseryTests.m; sourceTree = "<group>"; };
-		619B09591913F2EE00A4BAA2 /* NUBellBallODictionaryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUBellBallODictionaryTests.m; sourceTree = "<group>"; };
-		619B095A1913F2EE00A4BAA2 /* NUU64ODictionaryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUU64ODictionaryTests.m; sourceTree = "<group>"; };
-		619B095B1913F2EE00A4BAA2 /* NULibraryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NULibraryTests.m; sourceTree = "<group>"; };
-		619B095C1913F2EE00A4BAA2 /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
-		619B095D1913F2EE00A4BAA2 /* NUMutableDictionaryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUMutableDictionaryTests.m; sourceTree = "<group>"; };
-		619B095E1913F2EE00A4BAA2 /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
-		619B09611913F2EE00A4BAA2 /* NUOpaqueArrayTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = NUOpaqueArrayTest.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		619B09621913F2EE00A4BAA2 /* NURegionArrayTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NURegionArrayTest.m; sourceTree = "<group>"; };
 		61A3297D1B9AED82006B6FC5 /* NUMovingUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUMovingUp.h; sourceTree = "<group>"; };
 		61DC96331FA104D900AABC9E /* Nursery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Nursery.h; sourceTree = "<group>"; };
-		61DCED6219DCEEC8009E4E9E /* AllTypesObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTypesObject.h; sourceTree = "<group>"; };
-		61DCED6319DCEEC8009E4E9E /* AllTypesObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTypesObject.m; sourceTree = "<group>"; };
 		61FCF72720044F32001BD320 /* NUNurseryNetService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUNurseryNetService.m; sourceTree = "<group>"; };
 		61FD7A6C1FF9E4E2009ED9D5 /* NUNurseryNetResponder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUNurseryNetResponder.h; sourceTree = "<group>"; };
 		61FD7A6D1FF9E4E2009ED9D5 /* NUNurseryNetResponder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUNurseryNetResponder.m; sourceTree = "<group>"; };
@@ -761,12 +506,6 @@
 		61FD7A751FFA48E9009ED9D5 /* NUNurseryNetMessageArgument.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUNurseryNetMessageArgument.m; sourceTree = "<group>"; };
 		B812EF8B2062725100BB7513 /* NUPageLocationODictionary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUPageLocationODictionary.h; sourceTree = "<group>"; };
 		B812EF8C2062725100BB7513 /* NUPageLocationODictionary.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUPageLocationODictionary.m; sourceTree = "<group>"; };
-		B81661E220ECC06F00B9075E /* Nursery__iOS_.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Nursery__iOS_.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B81661E420ECC06F00B9075E /* Nursery__iOS_.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Nursery__iOS_.h; sourceTree = "<group>"; };
-		B81661E520ECC06F00B9075E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B81661EA20ECC07000B9075E /* Nursery (iOS)Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Nursery (iOS)Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		B81661EF20ECC07000B9075E /* Nursery__iOS_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Nursery__iOS_Tests.m; sourceTree = "<group>"; };
-		B81661F120ECC07000B9075E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B81661F920ECC24000B9075E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.4.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		B81B14A220CF71520034AC0E /* NUDefaultCharacterTargetClassResolver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUDefaultCharacterTargetClassResolver.h; sourceTree = "<group>"; };
 		B81B14A320CF71520034AC0E /* NUDefaultCharacterTargetClassResolver.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUDefaultCharacterTargetClassResolver.m; sourceTree = "<group>"; };
@@ -793,17 +532,19 @@
 		B86D152A209589E100D95C4C /* NUCharacter+Project.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NUCharacter+Project.h"; sourceTree = "<group>"; };
 		B86D152C20958C9200D95C4C /* NUBell+Project.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NUBell+Project.h"; sourceTree = "<group>"; };
 		B86D152E2095EA9200D95C4C /* NUNurseryNetService+Project.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NUNurseryNetService+Project.h"; sourceTree = "<group>"; };
-		B8727BD120C8FEAA00D92DE6 /* CharacterTargetClassResolver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CharacterTargetClassResolver.h; sourceTree = "<group>"; };
-		B8727BD220C8FEAA00D92DE6 /* CharacterTargetClassResolver.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CharacterTargetClassResolver.m; sourceTree = "<group>"; };
-		B8AF2EAF21055ADE00FA72F4 /* NULinkedListTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NULinkedListTest.m; sourceTree = "<group>"; };
-		B8BD5EAA2069058B00091994 /* SelfReferenceObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SelfReferenceObject.h; sourceTree = "<group>"; };
-		B8BD5EAB2069058B00091994 /* SelfReferenceObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SelfReferenceObject.m; sourceTree = "<group>"; };
-		B8BDFF1520B6B96300839DCF /* NULazyMutableArrayTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NULazyMutableArrayTest.m; sourceTree = "<group>"; };
 		B8D59EB620AFC415009FC4A9 /* NUPairedMainBranchAperture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUPairedMainBranchAperture.h; sourceTree = "<group>"; };
 		B8D59EB720AFC415009FC4A9 /* NUPairedMainBranchAperture.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUPairedMainBranchAperture.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		24DC9D772A74C90000195718 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				24DC9D7E2A74C90000195718 /* Nursery.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		619B07891913ED8D00A4BAA2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -812,35 +553,36 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		619B07A11913ED8D00A4BAA2 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				619B07A71913ED8D00A4BAA2 /* Cocoa.framework in Frameworks */,
-				619B07AA1913ED8D00A4BAA2 /* Nursery.framework in Frameworks */,
-				619B07A61913ED8D00A4BAA2 /* XCTest.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B81661DE20ECC06F00B9075E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B81661FA20ECC24000B9075E /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B81661E720ECC07000B9075E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B81661EB20ECC07000B9075E /* Nursery__iOS_.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		24DC9D7B2A74C90000195718 /* NurseryTests */ = {
+			isa = PBXGroup;
+			children = (
+				24DC9D9E2A74CD9000195718 /* AllTypesObject.h */,
+				24DC9D9F2A74CD9000195718 /* AllTypesObject.m */,
+				24DC9DA52A74CD9000195718 /* CharacterTargetClassResolver.h */,
+				24DC9DA32A74CD9000195718 /* CharacterTargetClassResolver.m */,
+				24DC9DA12A74CD9000195718 /* NUBellBallODictionaryTests.m */,
+				24DC9DA22A74CD9000195718 /* NUBranchNurseryTests.m */,
+				24DC9DA42A74CD9000195718 /* NULazyMutableArrayTest.m */,
+				24DC9DA72A74CD9000195718 /* NULibraryTests.m */,
+				24DC9DA92A74CD9000195718 /* NULinkedListTest.m */,
+				24DC9D9D2A74CD9000195718 /* NUMainBranchNurseryTest.m */,
+				24DC9D992A74CD9000195718 /* NUMutableDictionaryTests.m */,
+				24DC9D9B2A74CD9000195718 /* NUOpaqueArrayTest.m */,
+				24DC9DA62A74CD9000195718 /* NUQueueTest.m */,
+				24DC9D9A2A74CD9000195718 /* NURegionArrayTest.m */,
+				24DC9D9C2A74CD9000195718 /* NUU64ODictionaryTests.m */,
+				24DC9D972A74CD9000195718 /* Person.h */,
+				24DC9DAA2A74CD9000195718 /* Person.m */,
+				24DC9D982A74CD9000195718 /* SelfReferenceObject.h */,
+				24DC9DA02A74CD9000195718 /* SelfReferenceObject.m */,
+				24DC9DA82A74CD9000195718 /* NurseryTests-Info.plist */,
+			);
+			path = NurseryTests;
+			sourceTree = "<group>";
+		};
 		610E4BD51915060F000D5247 /* Nursery */ = {
 			isa = PBXGroup;
 			children = (
@@ -1167,10 +909,8 @@
 			isa = PBXGroup;
 			children = (
 				619B07961913ED8D00A4BAA2 /* Nursery */,
+				24DC9D7B2A74C90000195718 /* NurseryTests */,
 				245DC04A27774D5800958FE1 /* Documents */,
-				619B07AB1913ED8D00A4BAA2 /* NurseryTests */,
-				B81661E320ECC06F00B9075E /* Nursery (iOS) */,
-				B81661EE20ECC07000B9075E /* Nursery (iOS)Tests */,
 				619B078F1913ED8D00A4BAA2 /* Frameworks */,
 				619B078E1913ED8D00A4BAA2 /* Products */,
 			);
@@ -1180,9 +920,7 @@
 			isa = PBXGroup;
 			children = (
 				619B078D1913ED8D00A4BAA2 /* Nursery.framework */,
-				619B07A41913ED8D00A4BAA2 /* NurseryTests.xctest */,
-				B81661E220ECC06F00B9075E /* Nursery__iOS_.framework */,
-				B81661EA20ECC07000B9075E /* Nursery (iOS)Tests.xctest */,
+				24DC9D7A2A74C90000195718 /* NurseryTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1224,45 +962,7 @@
 			isa = PBXGroup;
 			children = (
 				619B07981913ED8D00A4BAA2 /* Nursery-Info.plist */,
-				619B07991913ED8D00A4BAA2 /* InfoPlist.strings */,
 				619B079C1913ED8D00A4BAA2 /* Nursery-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		619B07AB1913ED8D00A4BAA2 /* NurseryTests */ = {
-			isa = PBXGroup;
-			children = (
-				619B09611913F2EE00A4BAA2 /* NUOpaqueArrayTest.m */,
-				619B09621913F2EE00A4BAA2 /* NURegionArrayTest.m */,
-				619B095A1913F2EE00A4BAA2 /* NUU64ODictionaryTests.m */,
-				619B09591913F2EE00A4BAA2 /* NUBellBallODictionaryTests.m */,
-				619B095D1913F2EE00A4BAA2 /* NUMutableDictionaryTests.m */,
-				619B095B1913F2EE00A4BAA2 /* NULibraryTests.m */,
-				619B095E1913F2EE00A4BAA2 /* Person.h */,
-				619B095C1913F2EE00A4BAA2 /* Person.m */,
-				B8727BD120C8FEAA00D92DE6 /* CharacterTargetClassResolver.h */,
-				B8727BD220C8FEAA00D92DE6 /* CharacterTargetClassResolver.m */,
-				619B09561913F2EE00A4BAA2 /* NUMainBranchNurseryTest.m */,
-				619B09581913F2EE00A4BAA2 /* NUBranchNurseryTests.m */,
-				61DCED6219DCEEC8009E4E9E /* AllTypesObject.h */,
-				61DCED6319DCEEC8009E4E9E /* AllTypesObject.m */,
-				B8BD5EAA2069058B00091994 /* SelfReferenceObject.h */,
-				B8BD5EAB2069058B00091994 /* SelfReferenceObject.m */,
-				6116644E1FCBDEFC00774707 /* NUQueueTest.m */,
-				B8BDFF1520B6B96300839DCF /* NULazyMutableArrayTest.m */,
-				B8AF2EAF21055ADE00FA72F4 /* NULinkedListTest.m */,
-				619B07B11913ED8D00A4BAA2 /* NurseryTests.m */,
-				619B07AC1913ED8D00A4BAA2 /* Supporting Files */,
-			);
-			path = NurseryTests;
-			sourceTree = "<group>";
-		};
-		619B07AC1913ED8D00A4BAA2 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				619B07AD1913ED8D00A4BAA2 /* NurseryTests-Info.plist */,
-				619B07AE1913ED8D00A4BAA2 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1278,24 +978,6 @@
 				619B08461913EEBF00A4BAA2 /* NUNurseryParader.m */,
 			);
 			name = Childminders;
-			sourceTree = "<group>";
-		};
-		B81661E320ECC06F00B9075E /* Nursery (iOS) */ = {
-			isa = PBXGroup;
-			children = (
-				B81661E420ECC06F00B9075E /* Nursery__iOS_.h */,
-				B81661E520ECC06F00B9075E /* Info.plist */,
-			);
-			path = "Nursery (iOS)";
-			sourceTree = "<group>";
-		};
-		B81661EE20ECC07000B9075E /* Nursery (iOS)Tests */ = {
-			isa = PBXGroup;
-			children = (
-				B81661EF20ECC07000B9075E /* Nursery__iOS_Tests.m */,
-				B81661F120ECC07000B9075E /* Info.plist */,
-			);
-			path = "Nursery (iOS)Tests";
 			sourceTree = "<group>";
 		};
 		B84B5EA820FF1CF5007C4A1B /* Apertures */ = {
@@ -1443,147 +1125,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B81661DF20ECC06F00B9075E /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B81662DA20ECC3BF00B9075E /* Nursery.h in Headers */,
-				B81662EB20ECC4FE00B9075E /* NUNurseryNetService.h in Headers */,
-				B81662EA20ECC4F300B9075E /* NUComparator.h in Headers */,
-				B81662E920ECC4E800B9075E /* NULibrary.h in Headers */,
-				B81662E720ECC4D900B9075E /* NUBell.h in Headers */,
-				B81662E820ECC4D900B9075E /* NUBellBall.h in Headers */,
-				B81662E620ECC4C900B9075E /* NUIvar.h in Headers */,
-				B81662E520ECC4BF00B9075E /* NUCharacter.h in Headers */,
-				B81662E420ECC4B200B9075E /* NUCoder.h in Headers */,
-				B81662E320ECC4A700B9075E /* NUMovingUp.h in Headers */,
-				B81662E220ECC49D00B9075E /* NUCoding.h in Headers */,
-				B81662E120ECC49300B9075E /* NUAliaser.h in Headers */,
-				B81662E020ECC48900B9075E /* NUGarden.h in Headers */,
-				B81662DF20ECC47C00B9075E /* NUBranchNursery.h in Headers */,
-				B81662DE20ECC47100B9075E /* NUMainBranchNursery.h in Headers */,
-				B81662DD20ECC45F00B9075E /* NUNursery.h in Headers */,
-				B81662DC20ECC45000B9075E /* NURegion.h in Headers */,
-				B81662DB20ECC44600B9075E /* NUTypes.h in Headers */,
-				B816626520ECC2DE00B9075E /* NUGarden+Project.h in Headers */,
-				B816626620ECC2DE00B9075E /* NUMainBranchGarden.h in Headers */,
-				B816626720ECC2DE00B9075E /* NUPairedMainBranchGarden.h in Headers */,
-				B816626820ECC2DE00B9075E /* NUBranchGarden.h in Headers */,
-				B816626920ECC2DE00B9075E /* NUNurseryRoot.h in Headers */,
-				B816626A20ECC2DE00B9075E /* NUCharacterDictionary.h in Headers */,
-				B816626B20ECC2DE00B9075E /* NUMutableDictionary.h in Headers */,
-				B816626C20ECC2DE00B9075E /* NULazyMutableArray.h in Headers */,
-				B816626F20ECC2DF00B9075E /* NUDefaultComparator.h in Headers */,
-				B816627020ECC2DF00B9075E /* NUBPlusTree.h in Headers */,
-				B816627120ECC2DF00B9075E /* NUBPlusTreeNode.h in Headers */,
-				B816627220ECC2DF00B9075E /* NUBPlusTreeBranch.h in Headers */,
-				B816627320ECC2DF00B9075E /* NUBPlusTreeLeaf.h in Headers */,
-				B816627420ECC2DF00B9075E /* NUBPlusTreeEnumerator.h in Headers */,
-				B816627620ECC2DF00B9075E /* NUCharacter+Project.h in Headers */,
-				B816627720ECC2DF00B9075E /* NUDefaultCharacterTargetClassResolver.h in Headers */,
-				B816627920ECC2DF00B9075E /* NUNSObject.h in Headers */,
-				B816627A20ECC2DF00B9075E /* NUNSString.h in Headers */,
-				B83E43692141272E000A5DD0 /* NUIvar+Project.h in Headers */,
-				B816627B20ECC2DF00B9075E /* NUNSNumber.h in Headers */,
-				B816627C20ECC2DF00B9075E /* NUNSDate.h in Headers */,
-				B816627D20ECC2DF00B9075E /* NUNSURL.h in Headers */,
-				B816627E20ECC2DF00B9075E /* NUNSData.h in Headers */,
-				B816627F20ECC2DF00B9075E /* NUNSArray.h in Headers */,
-				B816628020ECC2DF00B9075E /* NUNSDictionary.h in Headers */,
-				B816628120ECC2DF00B9075E /* NUNSSet.h in Headers */,
-				B816628220ECC2DF00B9075E /* NUNSIndexSet.h in Headers */,
-				B816628420ECC2DF00B9075E /* NUAliaser+Project.h in Headers */,
-				B816628520ECC2DF00B9075E /* NUMainBranchAliaser.h in Headers */,
-				B816628620ECC2DF00B9075E /* NUPairedMainBranchAliaser.h in Headers */,
-				B816628720ECC2DF00B9075E /* NUBranchAliaser.h in Headers */,
-				B816628A20ECC2DF00B9075E /* NUCodingNote.h in Headers */,
-				B816628C20ECC2DF00B9075E /* NUBell+Project.h in Headers */,
-				B816628D20ECC2DF00B9075E /* NUObjectWrapper.h in Headers */,
-				B816628E20ECC2DF00B9075E /* NUPupilNote.h in Headers */,
-				B816628F20ECC2DF00B9075E /* NUPupilNoteCache.h in Headers */,
-				B816629020ECC2DF00B9075E /* NUCodingContext.h in Headers */,
-				B816629120ECC2DF00B9075E /* NUMainBranchCodingContext.h in Headers */,
-				B816629220ECC2DF00B9075E /* NUCodingContextWithPupilNote.h in Headers */,
-				B816629420ECC2DF00B9075E /* NUStringCoder.h in Headers */,
-				B816629520ECC2DF00B9075E /* NUNumberCoder.h in Headers */,
-				B816629620ECC2DF00B9075E /* NUURLCoder.h in Headers */,
-				B816629720ECC2DF00B9075E /* NUDateCoder.h in Headers */,
-				B816629820ECC2DF00B9075E /* NUDataCoder.h in Headers */,
-				B816629920ECC2DF00B9075E /* NUArrayCoder.h in Headers */,
-				B816629A20ECC2DF00B9075E /* NUDictionaryCoder.h in Headers */,
-				B816629B20ECC2DF00B9075E /* NUSetCoder.h in Headers */,
-				B816629C20ECC2DF00B9075E /* NUIndexSetCoder.h in Headers */,
-				B816629D20ECC2DF00B9075E /* NUChildminder.h in Headers */,
-				B816629E20ECC2DF00B9075E /* NUNurserySeeker.h in Headers */,
-				B816629F20ECC2DF00B9075E /* NUNurseryParader.h in Headers */,
-				B81662A020ECC2DF00B9075E /* NUGardenSeeker.h in Headers */,
-				B81662A120ECC2DF00B9075E /* NUMainBranchGardenSeeker.h in Headers */,
-				B81662A220ECC2DF00B9075E /* NUBranchGardenSeeker.h in Headers */,
-				B81662A320ECC2DF00B9075E /* NUAperture.h in Headers */,
-				B81662A420ECC2DF00B9075E /* NUMainBranchAperture.h in Headers */,
-				B81662A520ECC2DF00B9075E /* NUBranchAperture.h in Headers */,
-				B81662A620ECC2DF00B9075E /* NUPairedMainBranchAperture.h in Headers */,
-				B81662A820ECC2DF00B9075E /* NUNursery+Project.h in Headers */,
-				B81662AA20ECC2DF00B9075E /* NUMainBranchNursery+Project.h in Headers */,
-				B81662AC20ECC2DF00B9075E /* NUBranchNursery+Project.h in Headers */,
-				B81662B020ECC2DF00B9075E /* NUOpaqueArray.h in Headers */,
-				B81662B120ECC2DF00B9075E /* NUBellBallArray.h in Headers */,
-				B81662B220ECC2DF00B9075E /* NUIndexArray.h in Headers */,
-				B81662B320ECC2DF00B9075E /* NURegionArray.h in Headers */,
-				B81662B420ECC2DF00B9075E /* NUChangedRegionArray.h in Headers */,
-				B81662B520ECC2DF00B9075E /* NUOpaqueBPlusTree.h in Headers */,
-				B81662B620ECC2DF00B9075E /* NUOpaqueBPlusTreeNode.h in Headers */,
-				B81662B720ECC2DF00B9075E /* NUOpaqueBPlusTreeBranch.h in Headers */,
-				B81662B820ECC2DF00B9075E /* NUOpaqueBPlusTreeLeaf.h in Headers */,
-				B81662B920ECC2DF00B9075E /* NUOpaqueODictionary.h in Headers */,
-				B81662BA20ECC2DF00B9075E /* NUU64ODictionary.h in Headers */,
-				B81662BB20ECC2DF00B9075E /* NUPageLocationODictionary.h in Headers */,
-				B81662BC20ECC2DF00B9075E /* NUBellBallODictionary.h in Headers */,
-				B81662BD20ECC2DF00B9075E /* NUOpaqueQueue.h in Headers */,
-				B81662BE20ECC2DF00B9075E /* NUQueue.h in Headers */,
-				B81662BF20ECC2DF00B9075E /* NUUInt64Queue.h in Headers */,
-				B81662C020ECC2DF00B9075E /* NUQueueWithDepth.h in Headers */,
-				B81662C120ECC2DF00B9075E /* NULinkedList.h in Headers */,
-				B81662C220ECC2DF00B9075E /* NULinkedListElement.h in Headers */,
-				B81662C320ECC2DF00B9075E /* NUSpaces.h in Headers */,
-				B81662C420ECC2DF00B9075E /* NUPages.h in Headers */,
-				B81662C520ECC2DF00B9075E /* NUPage.h in Headers */,
-				B81662C620ECC2DF00B9075E /* NUObjectTable.h in Headers */,
-				B81662C720ECC2DF00B9075E /* NUObjectTableBranch.h in Headers */,
-				B81662C820ECC2DF00B9075E /* NUObjectTableLeaf.h in Headers */,
-				B81662C920ECC2DF00B9075E /* NUReversedObjectTableBranch.h in Headers */,
-				B81662CA20ECC2DF00B9075E /* NUReversedObjectTableLeaf.h in Headers */,
-				B81662CB20ECC2DF00B9075E /* NUReversedObjectTable.h in Headers */,
-				B81662CC20ECC2DF00B9075E /* NURegionTree.h in Headers */,
-				B81662CD20ECC2DF00B9075E /* NULocationTree.h in Headers */,
-				B81662CE20ECC2DF00B9075E /* NULocationTreeBranch.h in Headers */,
-				B81662CF20ECC2DF00B9075E /* NULocationTreeLeaf.h in Headers */,
-				B81662D020ECC2DF00B9075E /* NULengthTree.h in Headers */,
-				B81662D120ECC2DF00B9075E /* NULengthTreeBranch.h in Headers */,
-				B81662D220ECC2DF00B9075E /* NULengthTreeLeaf.h in Headers */,
-				B81662D420ECC2DF00B9075E /* NUNurseryNetService+Project.h in Headers */,
-				B81662D520ECC2DF00B9075E /* NUNurseryNetServiceIO.h in Headers */,
-				B81662D620ECC2DF00B9075E /* NUNurseryNetResponder.h in Headers */,
-				B81662D720ECC2DF00B9075E /* NUNurseryNetClient.h in Headers */,
-				B81662D820ECC2DF00B9075E /* NUNurseryNetMessage.h in Headers */,
-				B81662D920ECC2DF00B9075E /* NUNurseryNetMessageArgument.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B81662FE20ECD4E200B9075E /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B81662FA20ECD4A500B9075E /* SelfReferenceObject.h in Headers */,
-				B81662F220ECD4A500B9075E /* Person.h in Headers */,
-				B81662F420ECD4A500B9075E /* CharacterTargetClassResolver.h in Headers */,
-				B81662F820ECD4A500B9075E /* AllTypesObject.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		24DC9D792A74C90000195718 /* NurseryTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 24DC9D812A74C90000195718 /* Build configuration list for PBXNativeTarget "NurseryTests" */;
+			buildPhases = (
+				24DC9D762A74C90000195718 /* Sources */,
+				24DC9D772A74C90000195718 /* Frameworks */,
+				24DC9D782A74C90000195718 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				24DC9D802A74C90000195718 /* PBXTargetDependency */,
+			);
+			name = NurseryTests;
+			productName = NurseryTests;
+			productReference = 24DC9D7A2A74C90000195718 /* NurseryTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		619B078C1913ED8D00A4BAA2 /* Nursery */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 619B07B51913ED8D00A4BAA2 /* Build configuration list for PBXNativeTarget "Nursery" */;
@@ -1603,61 +1165,6 @@
 			productReference = 619B078D1913ED8D00A4BAA2 /* Nursery.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		619B07A31913ED8D00A4BAA2 /* NurseryTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 619B07B81913ED8D00A4BAA2 /* Build configuration list for PBXNativeTarget "NurseryTests" */;
-			buildPhases = (
-				619B07A01913ED8D00A4BAA2 /* Sources */,
-				619B07A11913ED8D00A4BAA2 /* Frameworks */,
-				619B07A21913ED8D00A4BAA2 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				619B07A91913ED8D00A4BAA2 /* PBXTargetDependency */,
-			);
-			name = NurseryTests;
-			productName = NurseryTests;
-			productReference = 619B07A41913ED8D00A4BAA2 /* NurseryTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		B81661E120ECC06F00B9075E /* Nursery (iOS) */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = B81661F720ECC07000B9075E /* Build configuration list for PBXNativeTarget "Nursery (iOS)" */;
-			buildPhases = (
-				B81661DD20ECC06F00B9075E /* Sources */,
-				B81661DE20ECC06F00B9075E /* Frameworks */,
-				B81661DF20ECC06F00B9075E /* Headers */,
-				B81661E020ECC06F00B9075E /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Nursery (iOS)";
-			productName = "Nursery (iOS)";
-			productReference = B81661E220ECC06F00B9075E /* Nursery__iOS_.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		B81661E920ECC07000B9075E /* Nursery (iOS)Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = B81661F820ECC07000B9075E /* Build configuration list for PBXNativeTarget "Nursery (iOS)Tests" */;
-			buildPhases = (
-				B81661E620ECC07000B9075E /* Sources */,
-				B81661E720ECC07000B9075E /* Frameworks */,
-				B81661E820ECC07000B9075E /* Resources */,
-				B81662FE20ECD4E200B9075E /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				B81661ED20ECC07000B9075E /* PBXTargetDependency */,
-			);
-			name = "Nursery (iOS)Tests";
-			productName = "Nursery (iOS)Tests";
-			productReference = B81661EA20ECC07000B9075E /* Nursery (iOS)Tests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1666,29 +1173,23 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
-				ORGANIZATIONNAME = "Nursery-Framework";
+				ORGANIZATIONNAME = "com.lily-bud";
 				TargetAttributes = {
+					24DC9D792A74C90000195718 = {
+						CreatedOnToolsVersion = 14.3.1;
+					};
 					619B078C1913ED8D00A4BAA2 = {
 						ProvisioningStyle = Manual;
-					};
-					B81661E120ECC06F00B9075E = {
-						CreatedOnToolsVersion = 9.4.1;
-						ProvisioningStyle = Automatic;
-					};
-					B81661E920ECC07000B9075E = {
-						CreatedOnToolsVersion = 9.4.1;
-						ProvisioningStyle = Automatic;
 					};
 				};
 			};
 			buildConfigurationList = 619B07871913ED8900A4BAA2 /* Build configuration list for PBXProject "Nursery" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
+				Base,
 				en,
-				ja,
 			);
 			mainGroup = 619B07831913ED8900A4BAA2;
 			productRefGroup = 619B078E1913ED8D00A4BAA2 /* Products */;
@@ -1696,37 +1197,21 @@
 			projectRoot = "";
 			targets = (
 				619B078C1913ED8D00A4BAA2 /* Nursery */,
-				619B07A31913ED8D00A4BAA2 /* NurseryTests */,
-				B81661E120ECC06F00B9075E /* Nursery (iOS) */,
-				B81661E920ECC07000B9075E /* Nursery (iOS)Tests */,
+				24DC9D792A74C90000195718 /* NurseryTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		24DC9D782A74C90000195718 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				24DC9DB82A74CD9000195718 /* NurseryTests-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		619B078B1913ED8D00A4BAA2 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		619B07A21913ED8D00A4BAA2 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				619B07B01913ED8D00A4BAA2 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B81661E020ECC06F00B9075E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B81661E820ECC07000B9075E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1736,6 +1221,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		24DC9D762A74C90000195718 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				24DC9DB72A74CD9000195718 /* NULibraryTests.m in Sources */,
+				24DC9DB52A74CD9000195718 /* NULazyMutableArrayTest.m in Sources */,
+				24DC9DB12A74CD9000195718 /* SelfReferenceObject.m in Sources */,
+				24DC9DAE2A74CD9000195718 /* NUU64ODictionaryTests.m in Sources */,
+				24DC9DB32A74CD9000195718 /* NUBranchNurseryTests.m in Sources */,
+				24DC9DB62A74CD9000195718 /* NUQueueTest.m in Sources */,
+				24DC9DAD2A74CD9000195718 /* NUOpaqueArrayTest.m in Sources */,
+				24DC9DB02A74CD9000195718 /* AllTypesObject.m in Sources */,
+				24DC9DB22A74CD9000195718 /* NUBellBallODictionaryTests.m in Sources */,
+				24DC9DB92A74CD9000195718 /* NULinkedListTest.m in Sources */,
+				24DC9DAC2A74CD9000195718 /* NURegionArrayTest.m in Sources */,
+				24DC9DAB2A74CD9000195718 /* NUMutableDictionaryTests.m in Sources */,
+				24DC9DBA2A74CD9000195718 /* Person.m in Sources */,
+				24DC9DAF2A74CD9000195718 /* NUMainBranchNurseryTest.m in Sources */,
+				24DC9DB42A74CD9000195718 /* CharacterTargetClassResolver.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		619B07881913ED8D00A4BAA2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1849,200 +1356,69 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		619B07A01913ED8D00A4BAA2 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B8BD5EAC2069058B00091994 /* SelfReferenceObject.m in Sources */,
-				B8BDFF1620B6B96300839DCF /* NULazyMutableArrayTest.m in Sources */,
-				619B096C1913F2EE00A4BAA2 /* NUBellBallODictionaryTests.m in Sources */,
-				B8AF2EB021055ADE00FA72F4 /* NULinkedListTest.m in Sources */,
-				619B07B21913ED8D00A4BAA2 /* NurseryTests.m in Sources */,
-				619B096F1913F2EE00A4BAA2 /* Person.m in Sources */,
-				619B09701913F2EE00A4BAA2 /* NUMutableDictionaryTests.m in Sources */,
-				6116644F1FCBDEFC00774707 /* NUQueueTest.m in Sources */,
-				619B096A1913F2EE00A4BAA2 /* NUMainBranchNurseryTest.m in Sources */,
-				619B096B1913F2EE00A4BAA2 /* NUBranchNurseryTests.m in Sources */,
-				619B09711913F2EE00A4BAA2 /* NUOpaqueArrayTest.m in Sources */,
-				619B096E1913F2EE00A4BAA2 /* NULibraryTests.m in Sources */,
-				619B09721913F2EE00A4BAA2 /* NURegionArrayTest.m in Sources */,
-				619B096D1913F2EE00A4BAA2 /* NUU64ODictionaryTests.m in Sources */,
-				61DCED6419DCEEC8009E4E9E /* AllTypesObject.m in Sources */,
-				B8727BD320C8FEAA00D92DE6 /* CharacterTargetClassResolver.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B81661DD20ECC06F00B9075E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B81661FB20ECC28500B9075E /* NUGarden.m in Sources */,
-				B81661FC20ECC28500B9075E /* NUMainBranchGarden.m in Sources */,
-				B81661FD20ECC28500B9075E /* NUPairedMainBranchGarden.m in Sources */,
-				B81661FE20ECC28500B9075E /* NUBranchGarden.m in Sources */,
-				B81661FF20ECC28500B9075E /* NUNurseryRoot.m in Sources */,
-				B816620020ECC28500B9075E /* NUCharacterDictionary.m in Sources */,
-				B816620120ECC28500B9075E /* NUMutableDictionary.m in Sources */,
-				B816620220ECC28500B9075E /* NULazyMutableArray.m in Sources */,
-				B816620320ECC28500B9075E /* NULibrary.m in Sources */,
-				B816620420ECC28500B9075E /* NUDefaultComparator.m in Sources */,
-				B816620520ECC28500B9075E /* NUBPlusTree.m in Sources */,
-				B816620620ECC28500B9075E /* NUBPlusTreeNode.m in Sources */,
-				B816620720ECC28500B9075E /* NUBPlusTreeBranch.m in Sources */,
-				B816620820ECC28500B9075E /* NUBPlusTreeLeaf.m in Sources */,
-				B816620920ECC28500B9075E /* NUBPlusTreeEnumerator.m in Sources */,
-				B816620A20ECC28500B9075E /* NUCharacter.m in Sources */,
-				B816620B20ECC28500B9075E /* NUDefaultCharacterTargetClassResolver.m in Sources */,
-				B816620C20ECC28500B9075E /* NUIvar.m in Sources */,
-				B816620D20ECC28500B9075E /* NUNSObject.m in Sources */,
-				B816620E20ECC28500B9075E /* NUNSString.m in Sources */,
-				B816620F20ECC28500B9075E /* NUNSNumber.m in Sources */,
-				B816621020ECC28500B9075E /* NUNSDate.m in Sources */,
-				B816621120ECC28500B9075E /* NUNSURL.m in Sources */,
-				B816621220ECC28500B9075E /* NUNSData.m in Sources */,
-				B816621320ECC28500B9075E /* NUNSArray.m in Sources */,
-				B816621420ECC28500B9075E /* NUNSDictionary.m in Sources */,
-				B816621520ECC28500B9075E /* NUNSSet.m in Sources */,
-				B816621620ECC28500B9075E /* NUNSIndexSet.m in Sources */,
-				B816621720ECC28500B9075E /* NUAliaser.m in Sources */,
-				B816621820ECC28500B9075E /* NUMainBranchAliaser.m in Sources */,
-				B816621920ECC28500B9075E /* NUPairedMainBranchAliaser.m in Sources */,
-				B816621A20ECC28500B9075E /* NUBranchAliaser.m in Sources */,
-				B816621B20ECC28500B9075E /* NUBell.m in Sources */,
-				B816621C20ECC28500B9075E /* NUObjectWrapper.m in Sources */,
-				B816621D20ECC28500B9075E /* NUPupilNote.m in Sources */,
-				B816621E20ECC28500B9075E /* NUPupilNoteCache.m in Sources */,
-				B816621F20ECC28500B9075E /* NUCodingContext.m in Sources */,
-				B816622020ECC28500B9075E /* NUMainBranchCodingContext.m in Sources */,
-				B816622120ECC28500B9075E /* NUCodingContextWithPupilNote.m in Sources */,
-				B816622220ECC28500B9075E /* NUCoder.m in Sources */,
-				B816622320ECC28500B9075E /* NUStringCoder.m in Sources */,
-				B816622420ECC28500B9075E /* NUNumberCoder.m in Sources */,
-				B816622520ECC28500B9075E /* NUURLCoder.m in Sources */,
-				B816622620ECC28500B9075E /* NUDateCoder.m in Sources */,
-				B816622720ECC28500B9075E /* NUDataCoder.m in Sources */,
-				B816622820ECC28500B9075E /* NUArrayCoder.m in Sources */,
-				B816622920ECC28500B9075E /* NUDictionaryCoder.m in Sources */,
-				B816622A20ECC28500B9075E /* NUSetCoder.m in Sources */,
-				B816622B20ECC28500B9075E /* NUIndexSetCoder.m in Sources */,
-				B816622C20ECC28500B9075E /* NUChildminder.m in Sources */,
-				B816622D20ECC28500B9075E /* NUNurserySeeker.m in Sources */,
-				B816622E20ECC28500B9075E /* NUNurseryParader.m in Sources */,
-				B816622F20ECC28500B9075E /* NUGardenSeeker.m in Sources */,
-				B816623020ECC28500B9075E /* NUMainBranchGardenSeeker.m in Sources */,
-				B816623120ECC28500B9075E /* NUBranchGardenSeeker.m in Sources */,
-				B816623220ECC28500B9075E /* NUAperture.m in Sources */,
-				B816623320ECC28500B9075E /* NUMainBranchAperture.m in Sources */,
-				B816623420ECC28500B9075E /* NUBranchAperture.m in Sources */,
-				B816623520ECC28500B9075E /* NUPairedMainBranchAperture.m in Sources */,
-				B816623620ECC28500B9075E /* NUNursery.m in Sources */,
-				B816623720ECC28500B9075E /* NUMainBranchNursery.m in Sources */,
-				B816623820ECC28500B9075E /* NUBranchNursery.m in Sources */,
-				B816623920ECC28600B9075E /* NUTypes.m in Sources */,
-				B816623A20ECC28600B9075E /* NURegion.m in Sources */,
-				B816623B20ECC28600B9075E /* NUBellBall.m in Sources */,
-				B816623C20ECC28600B9075E /* NUOpaqueArray.m in Sources */,
-				B816623D20ECC28600B9075E /* NUBellBallArray.m in Sources */,
-				B816623E20ECC28600B9075E /* NUIndexArray.m in Sources */,
-				B816623F20ECC28600B9075E /* NURegionArray.m in Sources */,
-				B816624020ECC28600B9075E /* NUChangedRegionArray.m in Sources */,
-				B816624120ECC28600B9075E /* NUOpaqueBPlusTree.m in Sources */,
-				B816624220ECC28600B9075E /* NUOpaqueBPlusTreeNode.m in Sources */,
-				B816624320ECC28600B9075E /* NUOpaqueBPlusTreeBranch.m in Sources */,
-				B816624420ECC28600B9075E /* NUOpaqueBPlusTreeLeaf.m in Sources */,
-				B816624520ECC28600B9075E /* NUOpaqueODictionary.m in Sources */,
-				B816624620ECC28600B9075E /* NUU64ODictionary.m in Sources */,
-				B816624720ECC28600B9075E /* NUPageLocationODictionary.m in Sources */,
-				B816624820ECC28600B9075E /* NUBellBallODictionary.m in Sources */,
-				B816624920ECC28600B9075E /* NUOpaqueQueue.m in Sources */,
-				B816624A20ECC28600B9075E /* NUQueue.m in Sources */,
-				B816624B20ECC28600B9075E /* NUUInt64Queue.m in Sources */,
-				B816624C20ECC28600B9075E /* NUQueueWithDepth.m in Sources */,
-				B816624D20ECC28600B9075E /* NULinkedList.m in Sources */,
-				B816624E20ECC28600B9075E /* NULinkedListElement.m in Sources */,
-				B816624F20ECC28600B9075E /* NUSpaces.m in Sources */,
-				B816625020ECC28600B9075E /* NUPages.m in Sources */,
-				B816625120ECC28600B9075E /* NUPage.m in Sources */,
-				B816625220ECC28600B9075E /* NUObjectTable.m in Sources */,
-				B816625320ECC28600B9075E /* NUObjectTableBranch.m in Sources */,
-				B816625420ECC28600B9075E /* NUObjectTableLeaf.m in Sources */,
-				B816625520ECC28600B9075E /* NUReversedObjectTableBranch.m in Sources */,
-				B816625620ECC28600B9075E /* NUReversedObjectTableLeaf.m in Sources */,
-				B816625720ECC28600B9075E /* NUReversedObjectTable.m in Sources */,
-				B816625820ECC28600B9075E /* NURegionTree.m in Sources */,
-				B816625920ECC28600B9075E /* NULocationTree.m in Sources */,
-				B816625A20ECC28600B9075E /* NULocationTreeBranch.m in Sources */,
-				B816625B20ECC28600B9075E /* NULocationTreeLeaf.m in Sources */,
-				B816625C20ECC28600B9075E /* NULengthTree.m in Sources */,
-				B816625D20ECC28600B9075E /* NULengthTreeBranch.m in Sources */,
-				B816625E20ECC28600B9075E /* NULengthTreeLeaf.m in Sources */,
-				B816625F20ECC28600B9075E /* NUNurseryNetService.m in Sources */,
-				B816626020ECC28600B9075E /* NUNurseryNetServiceIO.m in Sources */,
-				B816626120ECC28600B9075E /* NUNurseryNetResponder.m in Sources */,
-				B816626220ECC28600B9075E /* NUNurseryNetClient.m in Sources */,
-				B816626320ECC28600B9075E /* NUNurseryNetMessage.m in Sources */,
-				B816626420ECC28600B9075E /* NUNurseryNetMessageArgument.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B81661E620ECC07000B9075E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B81662EC20ECD4A500B9075E /* NUOpaqueArrayTest.m in Sources */,
-				B81662ED20ECD4A500B9075E /* NURegionArrayTest.m in Sources */,
-				B81662EE20ECD4A500B9075E /* NUU64ODictionaryTests.m in Sources */,
-				B8AF2EB121055ADE00FA72F4 /* NULinkedListTest.m in Sources */,
-				B81662EF20ECD4A500B9075E /* NUBellBallODictionaryTests.m in Sources */,
-				B81662F020ECD4A500B9075E /* NUMutableDictionaryTests.m in Sources */,
-				B81662F120ECD4A500B9075E /* NULibraryTests.m in Sources */,
-				B81662F320ECD4A500B9075E /* Person.m in Sources */,
-				B81662F520ECD4A500B9075E /* CharacterTargetClassResolver.m in Sources */,
-				B81662F620ECD4A500B9075E /* NUMainBranchNurseryTest.m in Sources */,
-				B81662F720ECD4A500B9075E /* NUBranchNurseryTests.m in Sources */,
-				B81662F920ECD4A500B9075E /* AllTypesObject.m in Sources */,
-				B81662FB20ECD4A500B9075E /* SelfReferenceObject.m in Sources */,
-				B81662FC20ECD4A500B9075E /* NUQueueTest.m in Sources */,
-				B81662FD20ECD4A500B9075E /* NULazyMutableArrayTest.m in Sources */,
-				B81661F020ECC07000B9075E /* Nursery__iOS_Tests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		619B07A91913ED8D00A4BAA2 /* PBXTargetDependency */ = {
+		24DC9D802A74C90000195718 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 619B078C1913ED8D00A4BAA2 /* Nursery */;
-			targetProxy = 619B07A81913ED8D00A4BAA2 /* PBXContainerItemProxy */;
-		};
-		B81661ED20ECC07000B9075E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = B81661E120ECC06F00B9075E /* Nursery (iOS) */;
-			targetProxy = B81661EC20ECC07000B9075E /* PBXContainerItemProxy */;
+			targetProxy = 24DC9D7F2A74C90000195718 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
-/* Begin PBXVariantGroup section */
-		619B07991913ED8D00A4BAA2 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				611FA36219433D4900D416B3 /* ja */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		619B07AE1913ED8D00A4BAA2 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				611FA36319433D4900D416B3 /* ja */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
-
 /* Begin XCBuildConfiguration section */
+		24DC9D822A74C90000195718 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = T4MRPG3HJY;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.lily-bud.NurseryTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+			};
+			name = Debug;
+		};
+		24DC9D832A74C90000195718 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T4MRPG3HJY;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.lily-bud.NurseryTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+			};
+			name = Release;
+		};
 		619B07B31913ED8D00A4BAA2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2093,7 +1469,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INSTALL_PATH = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
@@ -2143,7 +1519,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INSTALL_PATH = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -2163,7 +1539,7 @@
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "Nursery/Nursery-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.nursery-framework.Nursery";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.lily-bud.Nursery";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				WRAPPER_EXTENSION = framework;
@@ -2185,212 +1561,25 @@
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "Nursery/Nursery-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.nursery-framework.Nursery";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.lily-bud.Nursery";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;
 		};
-		619B07B91913ED8D00A4BAA2 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				FRAMEWORK_VERSION = A;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Nursery/Nursery-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "NurseryTests/NurseryTests-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.nursery-framework.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		619B07BA1913ED8D00A4BAA2 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				FRAMEWORK_VERSION = A;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Nursery/Nursery-Prefix.pch";
-				INFOPLIST_FILE = "NurseryTests/NurseryTests-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.nursery-framework.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
-		B81661F320ECC07000B9075E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_ARC = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "Nursery (iOS)/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
-				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
-				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.nursery-framework.Nursery";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		B81661F420ECC07000B9075E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_ARC = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "Nursery (iOS)/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
-				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
-				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.nursery-framework.Nursery";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		B81661F520ECC07000B9075E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_ARC = NO;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "Nursery (iOS)Tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.nursery-framework.Nursery--iOS-Tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		B81661F620ECC07000B9075E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_ARC = NO;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = "";
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "Nursery (iOS)Tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.nursery-framework.Nursery--iOS-Tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		24DC9D812A74C90000195718 /* Build configuration list for PBXNativeTarget "NurseryTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				24DC9D822A74C90000195718 /* Debug */,
+				24DC9D832A74C90000195718 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		619B07871913ED8900A4BAA2 /* Build configuration list for PBXProject "Nursery" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -2405,33 +1594,6 @@
 			buildConfigurations = (
 				619B07B61913ED8D00A4BAA2 /* Debug */,
 				619B07B71913ED8D00A4BAA2 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		619B07B81913ED8D00A4BAA2 /* Build configuration list for PBXNativeTarget "NurseryTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				619B07B91913ED8D00A4BAA2 /* Debug */,
-				619B07BA1913ED8D00A4BAA2 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		B81661F720ECC07000B9075E /* Build configuration list for PBXNativeTarget "Nursery (iOS)" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				B81661F320ECC07000B9075E /* Debug */,
-				B81661F420ECC07000B9075E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		B81661F820ECC07000B9075E /* Build configuration list for PBXNativeTarget "Nursery (iOS)Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				B81661F520ECC07000B9075E /* Debug */,
-				B81661F620ECC07000B9075E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

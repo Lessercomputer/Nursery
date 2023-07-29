@@ -86,7 +86,7 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
         [[self netService] netResponderDidStop:self];
     }] autorelease];
     
-    [aThread setName:@"org.nursery-framework.NUNurseryNetResponder"];
+    [aThread setName:@"com.lily-bud.NUNurseryNetResponder"];
     [self setThread:aThread];
     [aThread start];
 }

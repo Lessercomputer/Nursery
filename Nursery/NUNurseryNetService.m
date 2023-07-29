@@ -140,7 +140,7 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
             }] autorelease];
             
             [self setNetServiceThread:aThread];
-            [[self netServiceThread] setName:@"org.nursery-framework.NUNurseryNetServiceNetworking"];
+            [[self netServiceThread] setName:@"com.lily-bud.NUNurseryNetServiceNetworking"];
             
             [[self netServiceThread] start];
             

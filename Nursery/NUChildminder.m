@@ -56,7 +56,7 @@ const int NUThreadedChildminderTerminateCondition   = 2;
 
 - (NSString *)threadName
 {
-    return [NSString stringWithFormat:@"org.nursery-framework.%@", self];
+    return [NSString stringWithFormat:@"com.lily-bud.%@", self];
 }
 
 - (double)threadPriority

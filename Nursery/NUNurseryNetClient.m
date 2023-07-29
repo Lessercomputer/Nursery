@@ -136,7 +136,7 @@ const NUUInt64 NUNurseryNetClientDefaultMaximumFellowPupilNotesSizeGrowDownFacto
         NSThread *aThread = [[[NSThread alloc] initWithBlock:^{
             [self startInNewThread];
         }] autorelease];
-        [aThread setName:@"org.nursery-framework.NUNurseryNetClientNetworking"];
+        [aThread setName:@"com.lily-bud.NUNurseryNetClientNetworking"];
         [self setThread:aThread];
         
         [aThread start];
