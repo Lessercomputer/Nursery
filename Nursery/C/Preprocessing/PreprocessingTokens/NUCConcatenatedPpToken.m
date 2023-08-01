@@ -7,6 +7,7 @@
 //
 
 #import "NUCConcatenatedPpToken.h"
+#import "NUCDecomposer.h"
 #import <Foundation/NSString.h>
 
 @implementation NUCConcatenatedPpToken
@@ -57,6 +58,12 @@
 {
     [[self leftToken] addStringTo:aString];
     [[self rightToken] addStringTo:aString];
+}
+
+- (BOOL)isValid
+{
+    NSArray *aTokens = [[[NUCDecomposer new] autorelease] decomposePreprocessingTokensIn:[self string]];
+    return [aTokens count] == 1;
 }
 
 @end

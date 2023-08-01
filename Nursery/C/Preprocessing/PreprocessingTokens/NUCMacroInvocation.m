@@ -166,6 +166,7 @@
 {
     [arguments release];
     [ppTokensWithMacroinvocations release];
+    [overlappedMacroInvocation release];
     
     [super dealloc];
 }
@@ -224,7 +225,41 @@
     ppTokensWithMacroinvocations = [aPpTokens retain];
 }
 
+- (NUCPreprocessingToken *)lastPpTokenWithoutWhitespaces
+{
+    return [[self ppTokensWithMacroinvocations] lastPpTokenWithoutWhitespaces];
+}
+
+- (NUCMacroInvocation *)lastMacroInvocationWithoutWhitespaces
+{
+    NUCMacroInvocation *aMacroInvocation = [[self ppTokensWithMacroinvocations] lastMacroInvocationWithoutWhitespaces];
+    if (aMacroInvocation)
+        return aMacroInvocation;
+    else
+        return self;
+}
+
+- (NUCMacroInvocation *)overlappedMacroInvocation
+{
+    return overlappedMacroInvocation;
+}
+
+- (void)setOverlappedMacroInvocation:(NUCMacroInvocation *)aMacroInvocation
+{
+    overlappedMacroInvocation = [aMacroInvocation retain];
+}
+
+- (BOOL)isOverlapped
+{
+    return [self overlappedMacroInvocation] ? YES : NO;
+}
+
 - (BOOL)isMacroInvocation
+{
+    return YES;
+}
+
+- (BOOL)isNotWhitespace
 {
     return YES;
 }

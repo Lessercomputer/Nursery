@@ -22,5 +22,7 @@
 - (NUCDecomposedPreprocessingToken *)leftToken;
 - (NUCDecomposedPreprocessingToken *)rightToken;
 
+- (BOOL)isValid;
+
 @end
 

@@ -18,6 +18,7 @@
 }
 
 - (NSArray *)decomposePreprocessingFile:(NUCSourceFile *)aSourceFile;
+- (NSArray *)decomposePreprocessingTokensIn:(NSString *)aString;
 
 @end
 

@@ -23,8 +23,13 @@
 
 - (NSArray *)decomposePreprocessingFile:(NUCSourceFile *)aSourceFile
 {
+    return [self decomposePreprocessingTokensIn:[aSourceFile logicalSourceString]];
+}
+
+- (NSArray *)decomposePreprocessingTokensIn:(NSString *)aString
+{
     NSMutableArray *aPreprocessingTokens = [NSMutableArray array];
-    NSScanner *aScanner = [NSScanner scannerWithString:[aSourceFile logicalSourceString]];
+    NSScanner *aScanner = [NSScanner scannerWithString:aString];
     [aScanner setCharactersToBeSkipped:nil];
     
     while (![aScanner isAtEnd])

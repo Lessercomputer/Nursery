@@ -14,6 +14,7 @@
 
 - (BOOL)isMacroInvocation;
 - (BOOL)isPpTokensWithMacroInvocations;
+- (BOOL)isNotWhitespace;
 
 @end
 

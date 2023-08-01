@@ -22,4 +22,9 @@
     return NO;
 }
 
+- (BOOL)isNotWhitespace
+{
+    return NO;
+}
+
 @end
