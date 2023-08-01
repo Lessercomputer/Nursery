@@ -3,7 +3,6 @@
 //  Nursery
 //
 //  Created by Akifumi Takata on 10/09/09.
-//  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
 #import "NUTypes.h"
@@ -30,7 +29,6 @@ extern const NUUInt64 NUNextPageLocationOffset;
 	NUUInt64 savedNextPageLocation;
 	NUUInt64 fileSize;
 	NSFileHandle *fileHandle;
-	NUChangedRegionArray *changedRegions;
     NSRecursiveLock *lock;
 }
 
@@ -111,9 +109,8 @@ extern const NUUInt64 NUNextPageLocationOffset;
 - (void)applyLogDataBody:(NSData *)aData;
 - (void)applyLogDataHeader:(NSData *)aData;
 - (NSData *)loadLogData;
-- (void)getFirstChangedRegionWithoutFirstPageRegionInto:(NURegion *)aRegion indexInto:(NUUInt32 *)anIndex;
 - (NUUInt64)computeLogDataLength;
-- (void)writeLogDataWithRegion:(NURegion)aRegion at:(NUUInt64)aLocation;
+- (void)writeLogDataWithRegion:(NURegion)aRegion at:(NUUInt64)aLocation page:(NUPage *)aPage;
 - (void)writeDataWithRegion:(NURegion)aRegion;
 - (NSData *)dataWithRegion:(NURegion)aRegion;
 - (void)addDataWithRegion:(NURegion)aRegion toData:(NSMutableData *)aData;

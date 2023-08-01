@@ -3,7 +3,6 @@
 //  Nursery
 //
 //  Created by Akifumi Takata on 2017/12/31.
-//  Copyright © 2017年 Nursery-Framework. All rights reserved.
 //
 
 #import <Foundation/NSLock.h>
@@ -140,7 +139,7 @@ void handleConnect(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, 
             }] autorelease];
             
             [self setNetServiceThread:aThread];
-            [[self netServiceThread] setName:@"org.nursery-framework.NUNurseryNetServiceNetworking"];
+            [[self netServiceThread] setName:@"com.lily-bud.NUNurseryNetServiceNetworking"];
             
             [[self netServiceThread] start];
             

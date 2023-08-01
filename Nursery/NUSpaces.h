@@ -3,7 +3,6 @@
 //  Nursery
 //
 //  Created by Akifumi Takata on 10/12/23.
-//  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
 #import <Foundation/NSObject.h>
@@ -58,6 +57,9 @@ extern NSString *NUSpaceInvalidOperationException;
 
 - (void)save;
 - (void)load;
+
+- (void)willWriteLog;
+- (void)didWriteLog;
 
 @end
 

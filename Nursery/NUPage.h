@@ -3,7 +3,6 @@
 //  Nursery
 //
 //  Created by Akifumi Takata on 10/09/29.
-//  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
 #import <Foundation/NSObject.h>
@@ -27,6 +26,7 @@
 - (NUUInt64)location;
 - (NSMutableData *)data;
 
+- (BOOL)isFirst;
 - (BOOL)isChanged;
 - (BOOL)isRead;
 
@@ -35,6 +35,9 @@
 
 - (void)appendDataWithRegion:(NURegion)aRegion toData:(NSMutableData *)aData;
 - (void)writeDataWithRegion:(NURegion)aRegion toFielHandle:(NSFileHandle *)aFileHandle;
+
+- (void)writeToFielHandle:(NSFileHandle *)aFileHandle;
+- (void)writeToFielHandle:(NSFileHandle *)aFileHandle at:(NUUInt64)aLocation;
 
 - (void)setIsChanged:(BOOL)aChangedFlag;
 - (void)setIsRead:(BOOL)aReadFlag;

@@ -33,7 +33,7 @@
 	if (aCount)
 	{
 		id *anObjects = malloc((size_t)(sizeof(id) * aCount));
-		[anArray getObjects:anObjects];
+        [anArray getObjects:anObjects range:NSMakeRange(0, aCount)];
 		[anAliaser encodeIndexedIvars:anObjects count:aCount];
 		free(anObjects);
 	}

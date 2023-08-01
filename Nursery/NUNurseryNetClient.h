@@ -3,7 +3,6 @@
 //  Nursery
 //
 //  Created by Akifumi Takata on 2017/12/31.
-//  Copyright © 2017年 Nursery-Framework. All rights reserved.
 //
 
 #import <Foundation/NSNetServices.h>

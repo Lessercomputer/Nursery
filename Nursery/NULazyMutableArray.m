@@ -3,7 +3,6 @@
 //  Nursery
 //
 //  Created by Akifumi Takata on 2018/05/22.
-//  Copyright © 2018年 Nursery-Framework. All rights reserved.
 //
 
 #import <stdlib.h>

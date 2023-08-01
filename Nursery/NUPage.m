@@ -3,7 +3,6 @@
 //  Nursery
 //
 //  Created by Akifumi Takata on 10/09/29.
-//  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
 #import <Foundation/NSData.h>
@@ -48,6 +47,11 @@
 	return data;
 }
 
+- (BOOL)isFirst
+{
+    return location == 0;
+}
+
 - (BOOL)isChanged
 {
 	return isChanged;
@@ -84,6 +88,17 @@
     [self appendDataWithRegion:aRegion toData:aData];
     [aFileHandle seekToFileOffset:location + aRegion.location];
     [aFileHandle writeData:aData];
+}
+
+- (void)writeToFielHandle:(NSFileHandle *)aFileHandle
+{
+    [self writeToFielHandle:aFileHandle at:location];
+}
+
+- (void)writeToFielHandle:(NSFileHandle *)aFileHandle at:(NUUInt64)aLocation
+{
+    [aFileHandle seekToFileOffset:aLocation];
+    [aFileHandle writeData:data];
 }
 
 - (NUUInt64)readUInt64At:(NUUInt64)anOffset

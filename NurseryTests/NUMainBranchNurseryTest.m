@@ -3,7 +3,6 @@
 //  Nursery
 //
 //  Created by Akifumi Takata on 10/10/01.
-//  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
@@ -27,7 +26,7 @@ static NSString *NUNurseryTestFilePath = nil;
 - (void)setUp
 {
     [super setUp];
-    NUNurseryTestFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"nursery.nursery"];
+    NUNurseryTestFilePath = [[[NSBundle bundleForClass:[self class]] bundlePath] stringByAppendingPathComponent:@"nursery.nursery"];
 	[[NSFileManager defaultManager] removeItemAtPath:NUNurseryTestFilePath error:nil];
 }
 

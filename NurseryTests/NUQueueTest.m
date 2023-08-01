@@ -3,7 +3,6 @@
 //  NurseryTests
 //
 //  Created by Akifumi Takata on 2017/11/27.
-//  Copyright © 2017年 Nursery-Framework. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>

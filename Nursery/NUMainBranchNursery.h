@@ -11,6 +11,13 @@
 @class NSMutableDictionary, NSRecursiveLock;
 @class NUObjectTable, NUReversedObjectTable, NUSpaces, NUNurserySeeker, NUNurseryParader;
 
+@protocol NUNurseryDelegate <NSObject>
+
+- (void)nurseryWillWriteLog:(NUNursery *)aNursery;
+- (void)nurseryDidWriteLog:(NUNursery *)aNursery;
+
+@end
+
 @interface NUMainBranchNursery : NUNursery
 {
     NSString *filePath;
@@ -25,6 +32,7 @@
     NSRecursiveLock *lock;
     BOOL backups;
     BOOL isSavingForbidden;
+    id <NUNurseryDelegate> delegate;
 }
 @end
 
@@ -52,5 +60,15 @@
 @interface NUMainBranchNursery (Testing)
 
 - (BOOL)isOpen;
+
+@end
+
+@interface NUMainBranchNursery (Delegate)
+
+- (id <NUNurseryDelegate>)delegate;
+- (void)setDelegate:(id <NUNurseryDelegate>)aDelegate;
+
+- (void)willWriteLog;
+- (void)didWriteLog;
 
 @end

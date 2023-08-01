@@ -3,7 +3,6 @@
 //  Nursery
 //
 //  Created by Akifumi Takata on 2017/12/31.
-//  Copyright © 2017年 Nursery-Framework. All rights reserved.
 //
 
 #import <Foundation/NSString.h>
@@ -136,7 +135,7 @@ const NUUInt64 NUNurseryNetClientDefaultMaximumFellowPupilNotesSizeGrowDownFacto
         NSThread *aThread = [[[NSThread alloc] initWithBlock:^{
             [self startInNewThread];
         }] autorelease];
-        [aThread setName:@"org.nursery-framework.NUNurseryNetClientNetworking"];
+        [aThread setName:@"com.lily-bud.NUNurseryNetClientNetworking"];
         [self setThread:aThread];
         
         [aThread start];

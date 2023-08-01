@@ -3,7 +3,6 @@
 //  Nursery
 //
 //  Created by Akifumi Takata on 2018/01/01.
-//  Copyright © 2018年 Nursery-Framework. All rights reserved.
 //
 
 #import <Foundation/NSDictionary.h>
@@ -86,7 +85,7 @@ const NSTimeInterval NUNurseryNetResponderSleepTimeInterval = 0.001;
         [[self netService] netResponderDidStop:self];
     }] autorelease];
     
-    [aThread setName:@"org.nursery-framework.NUNurseryNetResponder"];
+    [aThread setName:@"com.lily-bud.NUNurseryNetResponder"];
     [self setThread:aThread];
     [aThread start];
 }

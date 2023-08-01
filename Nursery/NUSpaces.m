@@ -3,7 +3,6 @@
 //  Nursery
 //
 //  Created by Akifumi Takata on 10/12/23.
-//  Copyright 2010 Nursery-Framework. All rights reserved.
 //
 
 #import <Foundation/NSLock.h>
@@ -142,6 +141,16 @@ NSString *NUSpaceInvalidOperationException = @"NUSpaceInvalidOperationException"
 	[lengthTree load];
     
     [self unlock];
+}
+
+- (void)willWriteLog
+{
+    [[self nursery] willWriteLog];
+}
+
+- (void)didWriteLog
+{
+    [[self nursery] didWriteLog];
 }
 
 @end

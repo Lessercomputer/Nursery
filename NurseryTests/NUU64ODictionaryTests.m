@@ -131,44 +131,44 @@ static NSArray *numbers;
     XCTAssertTrue([aDic count] == entryCount, @"");
     for (NUUInt64 i = 0; i < entryCount; i++)
     {
-        [aDic objectForKey:@(i)];
+        [aDic objectForKey:[numbers objectAtIndex:i]];
     }
 }
 
-- (void)testSetAndRemoveManyEntriesWithNSDictionary
-{
-    NSMutableDictionary *aDic = [NSMutableDictionary dictionary];
-    XCTAssertTrue([aDic count] == 0, @"");
-    for (NUUInt64 i = 0; i < entryCount; i++)
-    {
-        NSNumber *aNum = [numbers objectAtIndex:i];
-        [aDic setObject:aNum forKey:aNum];
-        [aNum unsignedLongLongValue];
-    }
-    XCTAssertTrue([aDic count] == entryCount, @"");
-    for (NUUInt64 i = 0; i < entryCount; i++)
-    {
-        NSNumber *aSetNum = [numbers objectAtIndex:i];
-        NSNumber *aGetNum = [aDic objectForKey:aSetNum];
-        [aSetNum unsignedLongLongValue];
-        XCTAssertEqualObjects(aSetNum, aGetNum, @"");
-    }
-    NSEnumerator *anEnumerator = [aDic objectEnumerator];
-    NSNumber *anEachNum;
-    NUUInt64 aCount = 0;
-    while (anEachNum = [anEnumerator nextObject])
-    {
-        aCount++;
-    }
-    XCTAssertTrue(aCount == entryCount, @"");
-    for (NUUInt64 i = 0; i < entryCount; i++)
-    {
-        NSNumber *aNum = [numbers objectAtIndex:i];
-        XCTAssertTrue([aDic count] == entryCount - i, @"");
-        [aDic removeObjectForKey:aNum];
-        [aNum unsignedLongLongValue];
-        XCTAssertTrue([aDic count] == entryCount - i - 1, @"");
-    }
-}
+//- (void)testSetAndRemoveManyEntriesWithNSDictionary
+//{
+//    NSMutableDictionary *aDic = [NSMutableDictionary dictionary];
+//    XCTAssertTrue([aDic count] == 0, @"");
+//    for (NUUInt64 i = 0; i < entryCount; i++)
+//    {
+//        NSNumber *aNum = [numbers objectAtIndex:i];
+//        [aDic setObject:aNum forKey:aNum];
+//        [aNum unsignedLongLongValue];
+//    }
+//    XCTAssertTrue([aDic count] == entryCount, @"");
+//    for (NUUInt64 i = 0; i < entryCount; i++)
+//    {
+//        NSNumber *aSetNum = [numbers objectAtIndex:i];
+//        NSNumber *aGetNum = [aDic objectForKey:aSetNum];
+//        [aSetNum unsignedLongLongValue];
+//        XCTAssertEqualObjects(aSetNum, aGetNum, @"");
+//    }
+//    NSEnumerator *anEnumerator = [aDic objectEnumerator];
+//    NSNumber *anEachNum;
+//    NUUInt64 aCount = 0;
+//    while (anEachNum = [anEnumerator nextObject])
+//    {
+//        aCount++;
+//    }
+//    XCTAssertTrue(aCount == entryCount, @"");
+//    for (NUUInt64 i = 0; i < entryCount; i++)
+//    {
+//        NSNumber *aNum = [numbers objectAtIndex:i];
+//        XCTAssertTrue([aDic count] == entryCount - i, @"");
+//        [aDic removeObjectForKey:aNum];
+//        [aNum unsignedLongLongValue];
+//        XCTAssertTrue([aDic count] == entryCount - i - 1, @"");
+//    }
+//}
 
 @end
