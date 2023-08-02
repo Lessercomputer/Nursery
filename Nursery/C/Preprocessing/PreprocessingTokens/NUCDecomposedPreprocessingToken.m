@@ -127,31 +127,6 @@ static NUCDecomposedPreprocessingToken *whitespaceToken = nil;
                 && [[self content] isEqualToString:NUCHashHash];
 }
 
-- (BOOL)isIdentifier
-{
-    return [self type] == NUCLexicalElementIdentifierType;
-}
-
-- (BOOL)isStringLiteral
-{
-    return [self type] == NUCLexicalElementStringLiteralType;
-}
-
-- (BOOL)isCharacterConstant
-{
-    return [self type] == NUCLexicalElementCharacterConstantType;
-}
-
-- (BOOL)isPpNumber
-{
-    return [self type] == NUCLexicalElementPpNumberType;
-}
-
-- (BOOL)isPunctuator
-{
-    return [self type] == NUCLexicalElementPunctuatorType;
-}
-
 - (BOOL)isComma
 {
     return [self isPunctuator]
@@ -181,26 +156,6 @@ static NUCDecomposedPreprocessingToken *whitespaceToken = nil;
     return [self isPunctuator] && [[self content] isEqualToString:NUCEllipsis];
 }
 
-- (BOOL)isUndef
-{
-    return [self type] == NUCLexicalElementUndefType;
-}
-
-- (BOOL)isLine
-{
-    return [self type] == NUCLexicalElementLineType;
-}
-
-- (BOOL)isError
-{
-    return [self type] == NUCLexicalElementErrorType;
-}
-
-- (BOOL)isPragma
-{
-    return [self type] == NUCLexicalElementPragmaType;
-}
-
 - (BOOL)isDirectiveName
 {
     return [[[self class] NUCPreprocessingDirectiveNames] containsObject:[self content]];
@@ -209,11 +164,6 @@ static NUCDecomposedPreprocessingToken *whitespaceToken = nil;
 - (BOOL)isNonDirectiveName
 {
     return ![self isDirectiveName];
-}
-
-- (BOOL)isControlNewline
-{
-    return [self type] == NUCLexicalElementControlLineNewlineType;
 }
 
 - (BOOL)isLogicalOROperator
@@ -276,16 +226,6 @@ static NUCDecomposedPreprocessingToken *whitespaceToken = nil;
 - (BOOL)isUnaryOperator
 {
     return [self isPunctuator] && ([[self content] isEqualToString:NUCUnaryPlusOperator] || [[self content] isEqualToString:NUCUnaryMinusOperator] || [[self content] isEqualToString:NUCBitwiseComplementOperator] || [[self content] isEqualToString:NUCLogicalNegationOperator]);
-}
-
-- (BOOL)isWhitespace
-{
-    return [self type] == NUCLexicalElementWhiteSpaceCharacterType || [self type] == NUCLexicalElementCommentType;
-}
-
-- (BOOL)isNotWhitespace
-{
-    return ![self isWhitespace];
 }
 
 - (BOOL)isWhitespacesWithoutNewline

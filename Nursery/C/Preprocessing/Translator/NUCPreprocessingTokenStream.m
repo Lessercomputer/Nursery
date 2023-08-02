@@ -40,9 +40,17 @@
     NUCDecomposedPreprocessingToken *aToken = nil;
     
     if ([self hasNext])
-    {
         aToken = [[self preprocessingTokens] objectAtIndex:position++];
-    }
+    
+    return aToken;
+}
+
+- (NUCDecomposedPreprocessingToken *)previous
+{
+    NUCDecomposedPreprocessingToken *aToken = nil;
+    
+    if ([self hasPrevious])
+        aToken = [[self preprocessingTokens] objectAtIndex:--position];
     
     return aToken;
 }
@@ -60,6 +68,11 @@
 - (BOOL)hasNext
 {
     return [self position] < [[self preprocessingTokens] count];
+}
+
+- (BOOL)hasPrevious
+{
+    return [self position]  != 0;
 }
 
 - (NSArray *)preprocessingTokens
@@ -89,10 +102,14 @@
 
 - (NSArray *)scanWhiteSpaces
 {
-    NSMutableArray *aPpTokens = [NSMutableArray array];
+    NSMutableArray *aPpTokens = nil;
     
     while ([[self peekNext] isWhitespace])
+    {
+        if (!aPpTokens)
+            aPpTokens = [NSMutableArray array];
         [aPpTokens addObject:[self next]];
+    }
     
     return aPpTokens;
 }

@@ -22,9 +22,11 @@
 - (instancetype)initWithPreprocessingTokens:(NSArray *)aPreprocessingTokens;
 
 - (NUCDecomposedPreprocessingToken *)next;
+- (NUCDecomposedPreprocessingToken *)previous;
 - (NSUInteger)position;
 - (void)setPosition:(NSUInteger)aPosition;
 - (BOOL)hasNext;
+- (BOOL)hasPrevious;
 - (NSArray *)preprocessingTokens;
 - (BOOL)skipWhitespaces;
 - (BOOL)skipWhitespacesWithoutNewline;

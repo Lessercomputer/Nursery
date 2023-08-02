@@ -12,9 +12,21 @@
 
 @interface NUCPreprocessingToken : NUCLexicalElement
 
+- (BOOL)isIdentifier;
+- (BOOL)isStringLiteral;
+- (BOOL)isCharacterConstant;
+- (BOOL)isPpNumber;
+- (BOOL)isPunctuator;
+- (BOOL)isUndef;
+- (BOOL)isLine;
+- (BOOL)isError;
+- (BOOL)isPragma;
+- (BOOL)isControlNewline;
+- (BOOL)isWhitespace;
+- (BOOL)isNotWhitespace;
 - (BOOL)isMacroInvocation;
 - (BOOL)isPpTokensWithMacroInvocations;
-- (BOOL)isNotWhitespace;
+- (BOOL)isOpeningParenthesis;
 
 @end
 

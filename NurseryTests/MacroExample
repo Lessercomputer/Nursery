@@ -9,6 +9,11 @@
 #define g(a) f(a)
 #define E1 F
 #define E2 E1 (1, 2)
+#define o1 f1
+#define f1() o2
+#define o2() v
+#define E3 o1()()
+
 A
 D
 F(abc, (A))
@@ -16,4 +21,4 @@ F2(a, F2(b, c))
 F3(a, b, c)
 f(2)(9)
 E2
-
+E3

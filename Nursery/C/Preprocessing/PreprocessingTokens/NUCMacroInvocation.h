@@ -46,6 +46,7 @@
 - (NUCMacroInvocation *)overlappedMacroInvocation;
 - (void)setOverlappedMacroInvocation:(NUCMacroInvocation *)aMacroInvocation;
 - (BOOL)isOverlapped;
+- (NUCMacroInvocation *)lastOverlappedMacroInvocation;
 
 - (NUCPpTokens *)scanPpTokensFrom:(NUCPreprocessingTokenStream *)aPpTokenStream with:(NUCPreprocessor *)aPreprocessor;
 

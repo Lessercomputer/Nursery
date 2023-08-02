@@ -236,12 +236,23 @@
     if (aMacroInvocation)
         return aMacroInvocation;
     else
-        return self;
+        if ([self isOverlapped])
+            return [self lastOverlappedMacroInvocation];
+        else
+            return self;
 }
 
 - (NUCMacroInvocation *)overlappedMacroInvocation
 {
     return overlappedMacroInvocation;
+}
+
+- (NUCMacroInvocation *)lastOverlappedMacroInvocation
+{
+    if ([self isOverlapped])
+        return [[self overlappedMacroInvocation] lastOverlappedMacroInvocation];
+    else
+        return self;
 }
 
 - (void)setOverlappedMacroInvocation:(NUCMacroInvocation *)aMacroInvocation
