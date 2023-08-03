@@ -88,4 +88,9 @@
     return NO;
 }
 
+- (BOOL)isPlacemaker
+{
+    return NO;
+}
+
 @end

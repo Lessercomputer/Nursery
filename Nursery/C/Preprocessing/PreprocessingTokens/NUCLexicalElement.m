@@ -64,6 +64,8 @@ NSString * const NUCPreprocessingDirectiveLine = @"line";
 NSString * const NUCPreprocessingDirectiveError = @"error";
 NSString * const NUCPreprocessingDirectivePragma = @"pragma";
 
+NSString * const NUCPredfinedMacroVA_ARGS = @"__VA_ARGS__";
+
 NSString * const NUCTrigraphSequenceBeginning = @"??";
 
 NSString * const NUCTrigraphSequenceEqual = @"=";

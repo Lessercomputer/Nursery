@@ -274,8 +274,14 @@
         {
             NUCIdentifier *anIdentifier = (NUCIdentifier *)aPpToken;
             
-            if ([aMacroDefine isFunctionLike] && [(NUCControlLineDefineFunctionLike *)aMacroDefine identifierIsParameter:anIdentifier])
-                [anOperatorAppliedPpTokens addObjectsFromArray:[aMacroInvocation argumentAt:[(NUCControlLineDefineFunctionLike *)aMacroDefine parameterIndexOf:anIdentifier]]];
+            if ([aMacroDefine isFunctionLike])
+            {
+                NUCControlLineDefineFunctionLike *aFunctionLikeDefine = (NUCControlLineDefineFunctionLike *)aMacroDefine;
+                if ([aFunctionLikeDefine identifierIsParameter:anIdentifier])
+                    [anOperatorAppliedPpTokens addObjectsFromArray:[aMacroInvocation argumentAt:[aFunctionLikeDefine parameterIndexOf:anIdentifier]]];
+                else
+                    ;
+            }
             else
                 [anOperatorAppliedPpTokens addObject:anIdentifier];
         }

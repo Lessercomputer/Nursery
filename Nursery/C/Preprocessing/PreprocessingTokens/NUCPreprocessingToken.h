@@ -27,6 +27,7 @@
 - (BOOL)isMacroInvocation;
 - (BOOL)isPpTokensWithMacroInvocations;
 - (BOOL)isOpeningParenthesis;
+- (BOOL)isPlacemaker;
 
 @end
 

@@ -162,12 +162,18 @@
 
 - (BOOL)identifierIsParameter:(NUCIdentifier *)anIdentifier
 {
-    return [[self parameters] containsObject:anIdentifier];
+    if (![self ellipsis])
+        return [[self parameters] containsObject:anIdentifier];
+    else
+        return [[anIdentifier content] isEqual:NUCPredfinedMacroVA_ARGS];
 }
 
 - (NSUInteger)parameterIndexOf:(NUCIdentifier *)anIdentifier
 {
-    return [[self parameters] indexOfObject:anIdentifier];
+    if (![[anIdentifier content] isEqual:NUCPredfinedMacroVA_ARGS])
+        return [[self parameters] indexOfObject:anIdentifier];
+    else
+        return [self parameterCount] ? [self parameterCount] - 1 : 0;;
 }
 
 - (BOOL)parameterIsHashOperatorOperandAt:(NSUInteger)anIndex

@@ -14,6 +14,8 @@
 #define o2() v
 #define E3 o1()()
 #define G G ## 1
+#define F4(a, ...) a __VA_ARGS__
+
 A
 D
 F(abc, (A))
@@ -23,3 +25,4 @@ f(2)(9)
 E2
 E3
 G
+F4(x, y, z)

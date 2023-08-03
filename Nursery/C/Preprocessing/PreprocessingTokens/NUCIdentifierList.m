@@ -16,23 +16,52 @@
 
 + (BOOL)identifierListFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCIdentifierList **)aToken
 {
-    NUCDecomposedPreprocessingToken *aPreprocessingToken = nil;
     NUCIdentifierList *anIdentifierList = [NUCIdentifierList identifierList];
-    
-    do
+        
+    while ([aStream hasNext])
     {
-        [aStream skipWhitespacesWithoutNewline];
-        aPreprocessingToken = [aStream peekNext];
-        
-        if ([aPreprocessingToken isIdentifier])
-            [anIdentifierList add:(NUCIdentifier *)[aStream next]];
-        else if ([aPreprocessingToken isComma])
-            [aStream next];
+        NSUInteger aPosition = [aStream position];
+        NUCDecomposedPreprocessingToken *aPpToken1 = nil, *aPpToken2 = nil, *aPpToken3 = nil;
         
         [aStream skipWhitespacesWithoutNewline];
-        aPreprocessingToken = [aStream peekNext];
+        aPpToken1 = [aStream next];
+        
+        if ([aPpToken1 isIdentifier])
+        {
+            aPosition = [aStream position];
+            [aStream skipWhitespacesWithoutNewline];
+            aPpToken2 = [aStream next];
+            
+            if ([aPpToken2 isComma])
+            {
+                [aStream skipWhitespacesWithoutNewline];
+                aPpToken3 = [aStream next];
+                
+                if ([aPpToken3 isIdentifier])
+                {
+                    [anIdentifierList add:(NUCIdentifier *)aPpToken1];
+                    [anIdentifierList add:(NUCIdentifier *)aPpToken3];
+                }
+                else
+                {
+                    [anIdentifierList add:(NUCIdentifier *)aPpToken1];
+                    [aStream setPosition:aPosition];
+                    break;
+                }
+            }
+            else
+            {
+                [anIdentifierList add:(NUCIdentifier *)aPpToken1];
+                [aStream setPosition:aPosition];
+                break;
+            }
+        }
+        else
+        {
+            [aStream setPosition:aPosition];
+            break;
+        }
     }
-    while ([aPreprocessingToken isComma] || [aPreprocessingToken isIdentifier]);
     
     if ([anIdentifierList count])
     {
