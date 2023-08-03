@@ -32,6 +32,9 @@
 
 + (NUCPreprocessingToken *)identifierOrMacroInvocation:(NUCIdentifier *)anIdentifier from:(NUCPreprocessingTokenStream *)aPpTokenStream with:(NUCPreprocessor *)aPreprocessor parentMacroInvocation:(NUCMacroInvocation *)aParentMacroInvocation replacingMacroNames:(NSMutableSet *)aReplacingMacroNames
 {
+    if ([aReplacingMacroNames containsObject:anIdentifier])
+        return anIdentifier;
+    
     NUCControlLineDefine *aMacroDefineToInvoke = [aPreprocessor macroDefineFor:anIdentifier];
     
     if (!aMacroDefineToInvoke)

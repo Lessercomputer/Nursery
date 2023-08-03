@@ -13,7 +13,7 @@
 #define f1() o2
 #define o2() v
 #define E3 o1()()
-
+#define G G ## 1
 A
 D
 F(abc, (A))
@@ -22,3 +22,4 @@ F3(a, b, c)
 f(2)(9)
 E2
 E3
+G
