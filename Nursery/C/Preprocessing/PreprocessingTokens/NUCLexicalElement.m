@@ -313,4 +313,9 @@ static NSArray *NUCPreprocessingDirectiveNames;
     return [self type] == NUCLexicalElementStringLiteralType;
 }
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@:%p> type:%lu", [self class], self, (unsigned long)[self type]];
+}
+
 @end

@@ -269,7 +269,7 @@
 		61BC39652A78A6C6006CFBB3 /* NUCReplacementList.h in Headers */ = {isa = PBXBuildFile; fileRef = 61BC39172A78A6C6006CFBB3 /* NUCReplacementList.h */; };
 		61BC39662A78A6C6006CFBB3 /* NUCElseGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 61BC39182A78A6C6006CFBB3 /* NUCElseGroup.h */; };
 		61BC39672A78A6C6006CFBB3 /* NUCUndef.m in Sources */ = {isa = PBXBuildFile; fileRef = 61BC39192A78A6C6006CFBB3 /* NUCUndef.m */; };
-		61BC39682A78A6C6006CFBB3 /* NUCReplacedStringLiteral.h in Headers */ = {isa = PBXBuildFile; fileRef = 61BC391A2A78A6C6006CFBB3 /* NUCReplacedStringLiteral.h */; };
+		61BC39682A78A6C6006CFBB3 /* NUCSubstitutedStringLiteral.h in Headers */ = {isa = PBXBuildFile; fileRef = 61BC391A2A78A6C6006CFBB3 /* NUCSubstitutedStringLiteral.h */; };
 		61BC39692A78A6C6006CFBB3 /* NUCPreprocessingToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 61BC391B2A78A6C6006CFBB3 /* NUCPreprocessingToken.m */; };
 		61BC396A2A78A6C6006CFBB3 /* NUCControlLine.h in Headers */ = {isa = PBXBuildFile; fileRef = 61BC391C2A78A6C6006CFBB3 /* NUCControlLine.h */; };
 		61BC396B2A78A6C6006CFBB3 /* NUCControlLineDefineFunctionLike.h in Headers */ = {isa = PBXBuildFile; fileRef = 61BC391D2A78A6C6006CFBB3 /* NUCControlLineDefineFunctionLike.h */; };
@@ -300,7 +300,7 @@
 		61BC39842A78A6C6006CFBB3 /* NUCNewline.h in Headers */ = {isa = PBXBuildFile; fileRef = 61BC39362A78A6C6006CFBB3 /* NUCNewline.h */; };
 		61BC39852A78A6C6006CFBB3 /* NUCIntegerConstant.h in Headers */ = {isa = PBXBuildFile; fileRef = 61BC39372A78A6C6006CFBB3 /* NUCIntegerConstant.h */; };
 		61BC39862A78A6C6006CFBB3 /* NUCUndef.h in Headers */ = {isa = PBXBuildFile; fileRef = 61BC39382A78A6C6006CFBB3 /* NUCUndef.h */; };
-		61BC39872A78A6C6006CFBB3 /* NUCReplacedStringLiteral.m in Sources */ = {isa = PBXBuildFile; fileRef = 61BC39392A78A6C6006CFBB3 /* NUCReplacedStringLiteral.m */; };
+		61BC39872A78A6C6006CFBB3 /* NUCSubstitutedStringLiteral.m in Sources */ = {isa = PBXBuildFile; fileRef = 61BC39392A78A6C6006CFBB3 /* NUCSubstitutedStringLiteral.m */; };
 		61BC39882A78A6C6006CFBB3 /* NUCElseGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 61BC393A2A78A6C6006CFBB3 /* NUCElseGroup.m */; };
 		61BC39892A78A6C6006CFBB3 /* NUCReplacementList.m in Sources */ = {isa = PBXBuildFile; fileRef = 61BC393B2A78A6C6006CFBB3 /* NUCReplacementList.m */; };
 		61BC398A2A78A6C6006CFBB3 /* NUCPreprocessingFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 61BC393C2A78A6C6006CFBB3 /* NUCPreprocessingFile.h */; };
@@ -680,7 +680,7 @@
 		61BC39172A78A6C6006CFBB3 /* NUCReplacementList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUCReplacementList.h; sourceTree = "<group>"; };
 		61BC39182A78A6C6006CFBB3 /* NUCElseGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUCElseGroup.h; sourceTree = "<group>"; };
 		61BC39192A78A6C6006CFBB3 /* NUCUndef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUCUndef.m; sourceTree = "<group>"; };
-		61BC391A2A78A6C6006CFBB3 /* NUCReplacedStringLiteral.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUCReplacedStringLiteral.h; sourceTree = "<group>"; };
+		61BC391A2A78A6C6006CFBB3 /* NUCSubstitutedStringLiteral.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUCSubstitutedStringLiteral.h; sourceTree = "<group>"; };
 		61BC391B2A78A6C6006CFBB3 /* NUCPreprocessingToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUCPreprocessingToken.m; sourceTree = "<group>"; };
 		61BC391C2A78A6C6006CFBB3 /* NUCControlLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUCControlLine.h; sourceTree = "<group>"; };
 		61BC391D2A78A6C6006CFBB3 /* NUCControlLineDefineFunctionLike.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUCControlLineDefineFunctionLike.h; sourceTree = "<group>"; };
@@ -711,7 +711,7 @@
 		61BC39362A78A6C6006CFBB3 /* NUCNewline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUCNewline.h; sourceTree = "<group>"; };
 		61BC39372A78A6C6006CFBB3 /* NUCIntegerConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUCIntegerConstant.h; sourceTree = "<group>"; };
 		61BC39382A78A6C6006CFBB3 /* NUCUndef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUCUndef.h; sourceTree = "<group>"; };
-		61BC39392A78A6C6006CFBB3 /* NUCReplacedStringLiteral.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUCReplacedStringLiteral.m; sourceTree = "<group>"; };
+		61BC39392A78A6C6006CFBB3 /* NUCSubstitutedStringLiteral.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUCSubstitutedStringLiteral.m; sourceTree = "<group>"; };
 		61BC393A2A78A6C6006CFBB3 /* NUCElseGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUCElseGroup.m; sourceTree = "<group>"; };
 		61BC393B2A78A6C6006CFBB3 /* NUCReplacementList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUCReplacementList.m; sourceTree = "<group>"; };
 		61BC393C2A78A6C6006CFBB3 /* NUCPreprocessingFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUCPreprocessingFile.h; sourceTree = "<group>"; };
@@ -1361,8 +1361,8 @@
 				61BC39152A78A6C6006CFBB3 /* NUCPreprocessingFile.m */,
 				61BC394C2A78A6C6006CFBB3 /* NUCPreprocessingToken.h */,
 				61BC391B2A78A6C6006CFBB3 /* NUCPreprocessingToken.m */,
-				61BC391A2A78A6C6006CFBB3 /* NUCReplacedStringLiteral.h */,
-				61BC39392A78A6C6006CFBB3 /* NUCReplacedStringLiteral.m */,
+				61BC391A2A78A6C6006CFBB3 /* NUCSubstitutedStringLiteral.h */,
+				61BC39392A78A6C6006CFBB3 /* NUCSubstitutedStringLiteral.m */,
 				61BC39172A78A6C6006CFBB3 /* NUCReplacementList.h */,
 				61BC393B2A78A6C6006CFBB3 /* NUCReplacementList.m */,
 				61BC394D2A78A6C6006CFBB3 /* NUCStringLiteral.h */,
@@ -1442,7 +1442,7 @@
 				619B08F71913EEC000A4BAA2 /* NUNSSet.h in Headers */,
 				619B09371913EEC000A4BAA2 /* NULengthTreeLeaf.h in Headers */,
 				619B08F21913EEC000A4BAA2 /* NUNSDate.h in Headers */,
-				61BC39682A78A6C6006CFBB3 /* NUCReplacedStringLiteral.h in Headers */,
+				61BC39682A78A6C6006CFBB3 /* NUCSubstitutedStringLiteral.h in Headers */,
 				619B08941913EEC000A4BAA2 /* NUGardenSeeker.h in Headers */,
 				619B08EA1913EEC000A4BAA2 /* NUMainBranchAperture.h in Headers */,
 				619B08A51913EEC000A4BAA2 /* NUNursery.h in Headers */,
@@ -1794,7 +1794,7 @@
 				619B09441913EEC000A4BAA2 /* NULengthTreeLeaf.m in Sources */,
 				619B09341913EEC000A4BAA2 /* NUOpaqueBPlusTreeLeaf.m in Sources */,
 				619B09061913EEC000A4BAA2 /* NUOpaqueBPlusTree.m in Sources */,
-				61BC39872A78A6C6006CFBB3 /* NUCReplacedStringLiteral.m in Sources */,
+				61BC39872A78A6C6006CFBB3 /* NUCSubstitutedStringLiteral.m in Sources */,
 				619B090C1913EEC000A4BAA2 /* NUPage.m in Sources */,
 				619B09071913EEC000A4BAA2 /* NUOpaqueBPlusTreeBranch.m in Sources */,
 				619B08CC1913EEC000A4BAA2 /* NUBPlusTreeLeaf.m in Sources */,

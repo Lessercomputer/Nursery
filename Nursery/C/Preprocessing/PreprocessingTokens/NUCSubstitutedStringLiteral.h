@@ -1,5 +1,5 @@
 //
-//  NUCReplacedStringLiteral.h
+//  NUCSubstitutedStringLiteral.h
 //  Nursery
 //
 //  Created by aki on 2023/07/07.
@@ -10,14 +10,13 @@
 
 @class NSMutableArray;
 
-@interface NUCReplacedStringLiteral : NUCPreprocessingToken
+@interface NUCSubstitutedStringLiteral : NUCPreprocessingToken
 {
     NSMutableArray *ppTokens;
     NSString *string;
 }
 
-+ (instancetype)replacedStringLiteral;
-+ (instancetype)replacedStringLiteralWithPpTokens:(NSMutableArray *)aPpTokens;
++ (instancetype)substitutedStringLiteralWithPpTokens:(NSMutableArray *)aPpTokens;
 
 - (instancetype)initWithPpTokens:(NSMutableArray *)aPpTokens;
 

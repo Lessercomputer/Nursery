@@ -17,10 +17,11 @@
 #import "NUCIdentifier.h"
 #import "NUCControlLineDefineFunctionLike.h"
 #import "NUCReplacementList.h"
-#import "NUCReplacedStringLiteral.h"
+#import "NUCSubstitutedStringLiteral.h"
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSSet.h>
+#import <Foundation/NSString.h>
 
 @implementation NUCMacroInvocation
 
@@ -295,7 +296,7 @@
                 [aPpTokens addObjectsFromArray:[aPpTokenStream scanWhiteSpaces]];
                 [aPpTokens addObjectsFromArray:[self argumentAt:[aMacroDefine parameterIndexOf:(NUCIdentifier *)[aPpTokenStream next]]]];
                 
-                [aPpTokensWithMacroInvocation add:[NUCReplacedStringLiteral replacedStringLiteralWithPpTokens:aPpTokens]];
+                [aPpTokensWithMacroInvocation add:[NUCSubstitutedStringLiteral substitutedStringLiteralWithPpTokens:aPpTokens]];
             }
             else
             {
@@ -375,6 +376,11 @@
     }
     
     return aPpTokensAfterPreprocessingOfHashHashOperators;
+}
+
+- (NSString *)description
+{
+    return [[super description] stringByAppendingFormat:@", name:%@", [[[self define] identifier] string]];
 }
 
 @end

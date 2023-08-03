@@ -1,12 +1,12 @@
 //
-//  NUCReplacedStringLiteral.m
+//  NUCSubstitutedStringLiteral.m
 //  Nursery
 //
 //  Created by aki on 2023/07/07.
 //  Copyright © 2023 Nursery-Framework. All rights reserved.
 //
 
-#import "NUCReplacedStringLiteral.h"
+#import "NUCSubstitutedStringLiteral.h"
 #import "NUCPreprocessingTokenStream.h"
 #import "NUCDecomposedPreprocessingToken.h"
 
@@ -14,14 +14,9 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSCharacterSet.h>
 
-@implementation NUCReplacedStringLiteral
+@implementation NUCSubstitutedStringLiteral
 
-+ (instancetype)replacedStringLiteral
-{
-    return [self replacedStringLiteralWithPpTokens:nil];
-}
-
-+ (instancetype)replacedStringLiteralWithPpTokens:(NSMutableArray *)aPpTokens
++ (instancetype)substitutedStringLiteralWithPpTokens:(NSMutableArray *)aPpTokens
 {
     return [[[self alloc] initWithPpTokens:aPpTokens] autorelease];
 }
