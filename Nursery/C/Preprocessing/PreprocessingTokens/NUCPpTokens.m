@@ -3,7 +3,6 @@
 //  Nursery
 //
 //  Created by TAKATA Akifumi on 2021/02/07.
-//  Copyright © 2021年 Nursery-Framework. All rights reserved.
 //
 
 #import "NUCPpTokens.h"
@@ -17,6 +16,7 @@
 #import "NUCControlLineDefineFunctionLike.h"
 #import "NUCSubstitutedStringLiteral.h"
 #import "NUCConcatenatedPpToken.h"
+#import "NUCMacroArgument.h"
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSSet.h>
@@ -189,10 +189,12 @@
     NUCPpTokens *aPpTokensForMacroInvocation = [NUCPpTokensWithMacroInvocations ppTokens];
     NUCPreprocessingTokenStream *aPpTokenStream = nil;
     
-    if (aMacroInvocation)
-        aPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:[self applyHashOrHashHashOpelatorsIn:aPpTokens forMacroInvocation:aMacroInvocation]];
-    else
+    if (!aMacroInvocation)
         aPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aPpTokens];
+    else if ([[aMacroInvocation define] isObjectLike])
+        aPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:[self applyHashOrHashHashOpelatorInReplacementList:aPpTokens forMacroInvocation:aMacroInvocation]];
+    else
+        aPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:[self applyOpelatorAndSubstituteParametersInReplacementList:aPpTokens forMacroInvocation:aMacroInvocation]];
     
     while ([aPpTokenStream hasNext])
     {
@@ -246,50 +248,73 @@
     return aPpTokensForMacroInvocation;
 }
 
-+ (NSMutableArray *)applyHashOrHashHashOpelatorsIn:(NSArray *)aPpTokens forMacroInvocation:(NUCMacroInvocation *)aMacroInvocation
++ (NSMutableArray *)applyOpelatorAndSubstituteParametersInReplacementList:(NSArray *)aReplacementList forMacroInvocation:(NUCMacroInvocation *)aMacroInvocation
 {
-    NSMutableArray *anOperatorAppliedPpTokens = [NSMutableArray array];
-    NUCPreprocessingTokenStream *aPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aPpTokens];
+    return [self substituteParametersInOperatorAppliedReplacementList:[self applyHashOrHashHashOpelatorInReplacementList:aReplacementList forMacroInvocation:aMacroInvocation] forMacroInvocation:aMacroInvocation];
+}
+
++ (NSMutableArray *)applyHashOrHashHashOpelatorInReplacementList:(NSArray *)aReplacementList forMacroInvocation:(NUCMacroInvocation *)aMacroInvocation
+{
+    NSMutableArray *aHashHashOperatorAppliedPpTokens = [NSMutableArray array];
+    NUCPreprocessingTokenStream *aPpTokenStream = nil;
     NUCControlLineDefine *aMacroDefine = [aMacroInvocation define];
-    NUCDecomposedPreprocessingToken *aPpToken = nil;
     
-    while ([aPpTokenStream hasNext])
+    if ([aMacroDefine isFunctionLike])
     {
-        if ([aMacroDefine isFunctionLike])
+        NSMutableArray *aHashOperatorAppliedPpTokens = [NSMutableArray array];
+        aPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aReplacementList];
+        
+        while ([aPpTokenStream hasNext])
         {
             NUCSubstitutedStringLiteral *aSubstitutedStringLiteral = [self substitutedStringInFunctionLikeMacro:aMacroInvocation from:aPpTokenStream];
             
             if (aSubstitutedStringLiteral)
-                [anOperatorAppliedPpTokens addObject:aSubstitutedStringLiteral];
+                [aHashOperatorAppliedPpTokens addObject:aSubstitutedStringLiteral];
+            else
+                [aHashOperatorAppliedPpTokens addObject:[aPpTokenStream next]];
         }
         
+        aPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aHashOperatorAppliedPpTokens];
+    }
+    else
+        aPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aReplacementList];
+
+    while ([aPpTokenStream hasNext])
+    {
         NUCConcatenatedPpToken *aConcatenatedPpToken = [self concatenatedPpTokenInMacro:aMacroInvocation from:aPpTokenStream];
 
         if (aConcatenatedPpToken)
-            [anOperatorAppliedPpTokens addObject:aConcatenatedPpToken];
+            [aHashHashOperatorAppliedPpTokens addObject:aConcatenatedPpToken];
+        else
+            [aHashHashOperatorAppliedPpTokens addObject:[aPpTokenStream next]];
+    }
+    
+    return aHashHashOperatorAppliedPpTokens;
+}
 
-        aPpToken = [aPpTokenStream next];
++ (NSMutableArray *)substituteParametersInOperatorAppliedReplacementList:(NSArray *)anOperatorAppliedReplacementList forMacroInvocation:(NUCMacroInvocation *)aMacroInvocation
+{
+    NSMutableArray *aSubstitutedReplacementList = [NSMutableArray array];
+    NUCPreprocessingTokenStream *aPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:anOperatorAppliedReplacementList];
+    NUCControlLineDefineFunctionLike *aFunctionLikeDefine = (NUCControlLineDefineFunctionLike *)[aMacroInvocation define];
+    
+    while ([aPpTokenStream hasNext])
+    {
+        NUCPreprocessingToken *aPpToken = [aPpTokenStream next];
         
         if ([aPpToken isIdentifier])
         {
             NUCIdentifier *anIdentifier = (NUCIdentifier *)aPpToken;
-            
-            if ([aMacroDefine isFunctionLike])
-            {
-                NUCControlLineDefineFunctionLike *aFunctionLikeDefine = (NUCControlLineDefineFunctionLike *)aMacroDefine;
-                if ([aFunctionLikeDefine identifierIsParameter:anIdentifier])
-                    [anOperatorAppliedPpTokens addObjectsFromArray:[aMacroInvocation argumentAt:[aFunctionLikeDefine parameterIndexOf:anIdentifier]]];
-                else
-                    ;
-            }
+            if ([aFunctionLikeDefine identifierIsParameter:anIdentifier])
+                [aSubstitutedReplacementList addObjectsFromArray:[[aMacroInvocation argumentAt:[aFunctionLikeDefine parameterIndexOf:anIdentifier]] argument]];
             else
-                [anOperatorAppliedPpTokens addObject:anIdentifier];
+                [aSubstitutedReplacementList addObject:aPpToken];
         }
-        else if (aPpToken)
-            [anOperatorAppliedPpTokens addObject:aPpToken];
+        else
+            [aSubstitutedReplacementList addObject:aPpToken];
     }
     
-    return anOperatorAppliedPpTokens;
+    return aSubstitutedReplacementList;
 }
 
 + (NUCConcatenatedPpToken *)concatenatePastingTokens:(NSMutableArray *)aPastingTokens
@@ -316,8 +341,8 @@
         
         if ([aPpToken isIdentifier])
         {
-            NSMutableArray *anArgument = [aMacroInvocation argumentAt:[aFunctionLikeMacroDefine parameterIndexOf:(NUCIdentifier *)aPpToken]];
-            aSubstitutedStringLiteral = [NUCSubstitutedStringLiteral substitutedStringLiteralWithPpTokens:anArgument];
+            NUCMacroArgument *anArgument = [aMacroInvocation argumentAt:[aFunctionLikeMacroDefine parameterIndexOf:(NUCIdentifier *)aPpToken]];
+            aSubstitutedStringLiteral = [NUCSubstitutedStringLiteral substitutedStringLiteralWithMacroArgument:anArgument];
         }
         else
             [aPpTokenStream setPosition:aPosition];
@@ -328,9 +353,9 @@
     return aSubstitutedStringLiteral;
 }
 
-+ (NUCConcatenatedPpToken *)concatenatedPpTokenInMacro:(NUCMacroInvocation *)aMacroInvocation from:(NUCPreprocessingTokenStream *)aPpTokenStream
++ (NUCConcatenatedPpToken *)concatenatedPpTokenInMacro:(NUCMacroInvocation *)aMacroInvocation from:(NUCPreprocessingTokenStream *)aReplacementListPpTokenStream
 {
-    NSMutableArray *aPastingTokens = [self scanPastingTokensInMacroFrom:aPpTokenStream];
+    NSMutableArray *aPastingTokens = [self scanPastingTokensInMacro:aMacroInvocation from:aReplacementListPpTokenStream];
     NUCConcatenatedPpToken *aConcatenetedPpToken = nil;
     
     if ([aPastingTokens count])
@@ -346,25 +371,25 @@
     return aConcatenetedPpToken;
 }
 
-+ (NSMutableArray *)scanPastingTokensInMacroFrom:(NUCPreprocessingTokenStream *)aPpTokenStream
++ (NSMutableArray *)scanPastingTokensInMacro:(NUCMacroInvocation *)aMacroInvocation from:(NUCPreprocessingTokenStream *)aReplacementListPpTokenStream
 {
     NSMutableArray *aPastingTokens = [NSMutableArray array];
-    NSUInteger aPosition = [aPpTokenStream position];
+    NSUInteger aPosition = [aReplacementListPpTokenStream position];
     
-    NUCDecomposedPreprocessingToken *aPrecededPpToken = [aPpTokenStream next];
+    NUCDecomposedPreprocessingToken *aPrecededPpToken = [aReplacementListPpTokenStream next];
     
     if ([aPrecededPpToken isNotWhitespace])
     {
-        while ([aPpTokenStream hasNext])
+        while ([aReplacementListPpTokenStream hasNext])
         {
-            NSUInteger aPosition2 = [aPpTokenStream position];
+            NSUInteger aPosition2 = [aReplacementListPpTokenStream position];
             
-            [aPpTokenStream skipWhitespaces];
+            [aReplacementListPpTokenStream skipWhitespaces];
             
-            if ([[aPpTokenStream peekNext] isHashHash])
+            if ([[aReplacementListPpTokenStream peekNext] isHashHash])
             {
-                [aPpTokenStream next];
-                [aPpTokenStream skipWhitespaces];
+                [aReplacementListPpTokenStream next];
+                [aReplacementListPpTokenStream skipWhitespaces];
                 
                 if (aPrecededPpToken)
                 {
@@ -372,21 +397,21 @@
                     aPrecededPpToken = nil;
                 }
                 
-                NUCDecomposedPreprocessingToken *aFollowingPpToken = [aPpTokenStream next];
+                NUCDecomposedPreprocessingToken *aFollowingPpToken = [aReplacementListPpTokenStream next];
                 
                 if (aFollowingPpToken)
                     [aPastingTokens addObject:aFollowingPpToken];
             }
             else
             {
-                [aPpTokenStream setPosition:aPosition2];
+                [aReplacementListPpTokenStream setPosition:aPosition2];
                 break;
             }
         }
     }
     
     if (![aPastingTokens count])
-        [aPpTokenStream setPosition:aPosition];
+        [aReplacementListPpTokenStream setPosition:aPosition];
     
     return aPastingTokens;
 }

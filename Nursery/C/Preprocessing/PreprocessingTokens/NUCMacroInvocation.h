@@ -3,12 +3,11 @@
 //  Nursery
 //
 //  Created by TAKATA Akifumi on 2023/06/07.
-//  Copyright © 2023 Nursery-Framework. All rights reserved.
 //
 
 #import "NUCPreprocessingToken.h"
 
-@class NUCControlLineDefine, NUCPpTokens, NUCIdentifier, NUCPreprocessingTokenStream, NUCDecomposedPreprocessingToken;
+@class NUCControlLineDefine, NUCPpTokens, NUCIdentifier, NUCPreprocessingTokenStream, NUCDecomposedPreprocessingToken, NUCMacroArgument;
 @class NSMutableSet;
 
 @interface NUCMacroInvocation : NUCPreprocessingToken
@@ -31,11 +30,11 @@
 - (NSMutableArray *)arguments;
 - (void)setArguments:(NSMutableArray *)anArguments;
 
-- (NSArray *)vaArgs;
+- (NUCMacroArgument *)vaArgs;
 
-- (NSMutableArray *)argumentAt:(NSUInteger)anIndex;
+- (NUCMacroArgument *)argumentAt:(NSUInteger)anIndex;
 
-- (void)addArgument:(NSArray *)anArgument;
+- (void)addArgument:(NUCMacroArgument *)anArgument;
 
 - (NUCPpTokens *)ppTokensWithMacroinvocations;
 - (void)setPpTokensWithMacroinvocations:(NUCPpTokens *)aPpTokens;
@@ -47,8 +46,6 @@
 - (void)setOverlappedMacroInvocation:(NUCMacroInvocation *)aMacroInvocation;
 - (BOOL)isOverlapped;
 - (NUCMacroInvocation *)lastOverlappedMacroInvocation;
-
-- (NUCPpTokens *)scanPpTokensFrom:(NUCPreprocessingTokenStream *)aPpTokenStream with:(NUCPreprocessor *)aPreprocessor;
 
 - (NSMutableArray *)expandedPpTokens;
 

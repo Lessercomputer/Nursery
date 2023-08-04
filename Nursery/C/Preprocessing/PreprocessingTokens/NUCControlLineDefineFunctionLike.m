@@ -3,7 +3,6 @@
 //  Nursery
 //
 //  Created by TAKATA Akifumi on 2021/02/11.
-//  Copyright © 2021年 Nursery-Framework. All rights reserved.
 //
 
 #import "NUCControlLineDefineFunctionLike.h"
@@ -170,10 +169,10 @@
 
 - (NSUInteger)parameterIndexOf:(NUCIdentifier *)anIdentifier
 {
-    if (![[anIdentifier content] isEqual:NUCPredfinedMacroVA_ARGS])
+    if (![self ellipsis])
         return [[self parameters] indexOfObject:anIdentifier];
     else
-        return [self parameterCount] ? [self parameterCount] - 1 : 0;;
+        return [self parameterCount];
 }
 
 - (BOOL)parameterIsHashOperatorOperandAt:(NSUInteger)anIndex

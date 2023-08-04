@@ -3,24 +3,23 @@
 //  Nursery
 //
 //  Created by aki on 2023/07/07.
-//  Copyright © 2023 Nursery-Framework. All rights reserved.
 //
 
 #import "NUCPreprocessingToken.h"
 
-@class NSMutableArray;
+@class NUCMacroArgument;
 
 @interface NUCSubstitutedStringLiteral : NUCPreprocessingToken
 {
-    NSMutableArray *ppTokens;
+    NUCMacroArgument *macroArgument;
     NSString *string;
 }
 
-+ (instancetype)substitutedStringLiteralWithPpTokens:(NSMutableArray *)aPpTokens;
++ (instancetype)substitutedStringLiteralWithMacroArgument:(NUCMacroArgument *)aMacroArgument;
 
-- (instancetype)initWithPpTokens:(NSMutableArray *)aPpTokens;
+- (instancetype)initWithMacroArgument:(NUCMacroArgument *)aMacroArgument;
 
-- (NSMutableArray *)ppTokens;
+- (NUCMacroArgument *)macroArgument;
 
 - (NSString *)string;
 

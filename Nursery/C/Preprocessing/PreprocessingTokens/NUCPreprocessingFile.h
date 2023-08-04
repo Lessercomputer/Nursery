@@ -3,7 +3,6 @@
 //  Nursery
 //
 //  Created by TAKATA Akifumi on 2021/11/18.
-//  Copyright © 2021 Nursery-Framework. All rights reserved.
 //
 
 #import "NUCPreprocessingDirective.h"

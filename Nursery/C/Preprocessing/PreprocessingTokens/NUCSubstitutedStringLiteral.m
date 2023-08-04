@@ -3,12 +3,12 @@
 //  Nursery
 //
 //  Created by aki on 2023/07/07.
-//  Copyright © 2023 Nursery-Framework. All rights reserved.
 //
 
 #import "NUCSubstitutedStringLiteral.h"
 #import "NUCPreprocessingTokenStream.h"
 #import "NUCDecomposedPreprocessingToken.h"
+#import "NUCMacroArgument.h"
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSString.h>
@@ -16,16 +16,16 @@
 
 @implementation NUCSubstitutedStringLiteral
 
-+ (instancetype)substitutedStringLiteralWithPpTokens:(NSMutableArray *)aPpTokens
++ (instancetype)substitutedStringLiteralWithMacroArgument:(NUCMacroArgument *)aMacroArgument
 {
-    return [[[self alloc] initWithPpTokens:aPpTokens] autorelease];
+    return [[[self alloc] initWithMacroArgument:aMacroArgument] autorelease];
 }
 
-- (instancetype)initWithPpTokens:(NSMutableArray *)aPpTokens
+- (instancetype)initWithMacroArgument:(NUCMacroArgument *)aMacroArgument
 {
     if (self = [super initWithType:NUCLexicalElementNone])
     {
-        ppTokens = [aPpTokens retain];
+        macroArgument = [aMacroArgument retain];
     }
     
     return self;
@@ -33,17 +33,14 @@
 
 - (void)dealloc
 {
-    [ppTokens release];
+    [macroArgument release];
     
     [super dealloc];
 }
 
-- (NSMutableArray *)ppTokens
+- (NUCMacroArgument *)macroArgument
 {
-    if (!ppTokens)
-        ppTokens = [NSMutableArray new];
-    
-    return ppTokens;
+    return macroArgument;
 }
 
 - (NSString *)string
@@ -56,7 +53,7 @@
 
 - (NSString *)getString
 {
-    NSArray *aPpTokens = [self trimWhitspaces:[self ppTokens]];
+    NSArray *aPpTokens = [[self macroArgument] ppTokensByTrimingWhitespaces];;
 
     if (![aPpTokens count])
         return @"";
@@ -78,34 +75,7 @@
     return aString;
 }
 
-- (NSArray *)trimWhitspaces:(NSArray *)aPpTokens
-{
-    if (![aPpTokens count])
-        return nil;
-    
-    NSUInteger aStartIndex = 0, aStopIndex = [aPpTokens count] - 1;
-    
-    while (aStartIndex < [aPpTokens count])
-    {
-        if ([[aPpTokens objectAtIndex:aStartIndex] isWhitespace])
-            aStartIndex++;
-        else
-            break;
-    }
 
-    while (aStopIndex != NSNotFound && aStopIndex >= 0)
-    {
-        if ([[aPpTokens objectAtIndex:aStopIndex] isWhitespace])
-            aStopIndex = aStopIndex == 0 ? NSNotFound : aStopIndex - 1;
-        else
-            break;
-    }
-    
-    if (aStartIndex < [aPpTokens count] && aStopIndex != NSNotFound)
-        return [aPpTokens subarrayWithRange:NSMakeRange(aStartIndex, aStartIndex - aStopIndex + 1)];
-    else
-        return nil;
-}
 
 
 @end

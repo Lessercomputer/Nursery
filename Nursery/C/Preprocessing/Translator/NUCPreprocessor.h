@@ -3,7 +3,6 @@
 //  Nursery
 //
 //  Created by TAKATA Akifumi on 2020/04/18.
-//  Copyright © 2020年 Nursery-Framework. All rights reserved.
 //
 
 #import <Foundation/NSObject.h>

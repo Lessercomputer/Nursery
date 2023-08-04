@@ -25,6 +25,8 @@
 		24DC9DB92A74CD9000195718 /* NULinkedListTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DC9DA92A74CD9000195718 /* NULinkedListTest.m */; };
 		24DC9DBA2A74CD9000195718 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DC9DAA2A74CD9000195718 /* Person.m */; };
 		613511301B6F9CA4008392C0 /* NUCodingNote.h in Headers */ = {isa = PBXBuildFile; fileRef = 6135112F1B6F9CA4008392C0 /* NUCodingNote.h */; };
+		614F85B42A7C90D100470FEE /* NUCMacroArgument.h in Headers */ = {isa = PBXBuildFile; fileRef = 614F85B22A7C90D100470FEE /* NUCMacroArgument.h */; };
+		614F85B52A7C90D100470FEE /* NUCMacroArgument.m in Sources */ = {isa = PBXBuildFile; fileRef = 614F85B32A7C90D100470FEE /* NUCMacroArgument.m */; };
 		616D0AC72A78972600813539 /* NUCPrimaryExpression.h in Headers */ = {isa = PBXBuildFile; fileRef = 616D0A492A78971300813539 /* NUCPrimaryExpression.h */; };
 		616D0ACA2A78972600813539 /* NUCANDExpression.h in Headers */ = {isa = PBXBuildFile; fileRef = 616D0A4C2A78971400813539 /* NUCANDExpression.h */; };
 		616D0ACE2A78972600813539 /* NUCAdditiveExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 616D0A502A78971400813539 /* NUCAdditiveExpression.m */; };
@@ -429,6 +431,8 @@
 		24DC9DA92A74CD9000195718 /* NULinkedListTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NULinkedListTest.m; sourceTree = "<group>"; };
 		24DC9DAA2A74CD9000195718 /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
 		6135112F1B6F9CA4008392C0 /* NUCodingNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUCodingNote.h; sourceTree = "<group>"; };
+		614F85B22A7C90D100470FEE /* NUCMacroArgument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCMacroArgument.h; sourceTree = "<group>"; };
+		614F85B32A7C90D100470FEE /* NUCMacroArgument.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCMacroArgument.m; sourceTree = "<group>"; };
 		616D0A492A78971300813539 /* NUCPrimaryExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NUCPrimaryExpression.h; path = Nursery/C/Expressions/NUCPrimaryExpression.h; sourceTree = SOURCE_ROOT; };
 		616D0A4C2A78971400813539 /* NUCANDExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NUCANDExpression.h; path = Nursery/C/Expressions/NUCANDExpression.h; sourceTree = SOURCE_ROOT; };
 		616D0A502A78971400813539 /* NUCAdditiveExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NUCAdditiveExpression.m; path = Nursery/C/Expressions/NUCAdditiveExpression.m; sourceTree = SOURCE_ROOT; };
@@ -1345,6 +1349,8 @@
 				61BC39292A78A6C6006CFBB3 /* NUCLine.m */,
 				61BC39322A78A6C6006CFBB3 /* NUCMacroInvocation.h */,
 				61BC390F2A78A6C6006CFBB3 /* NUCMacroInvocation.m */,
+				614F85B22A7C90D100470FEE /* NUCMacroArgument.h */,
+				614F85B32A7C90D100470FEE /* NUCMacroArgument.m */,
 				61BC39362A78A6C6006CFBB3 /* NUCNewline.h */,
 				61BC390B2A78A6C6006CFBB3 /* NUCNewline.m */,
 				61BC39212A78A6C6006CFBB3 /* NUCNonDirective.h */,
@@ -1551,6 +1557,7 @@
 				619B08F31913EEC000A4BAA2 /* NUNSDictionary.h in Headers */,
 				61BC396F2A78A6C6006CFBB3 /* NUCNonDirective.h in Headers */,
 				619B09321913EEC000A4BAA2 /* NUBPlusTreeLeaf.h in Headers */,
+				614F85B42A7C90D100470FEE /* NUCMacroArgument.h in Headers */,
 				B86D152D20958C9200D95C4C /* NUBell+Project.h in Headers */,
 				619B08E21913EEC000A4BAA2 /* NULibrary.h in Headers */,
 				B848ECE820B2F56200B1C06E /* NUQueueWithDepth.h in Headers */,
@@ -1856,6 +1863,7 @@
 				619B092B1913EEC000A4BAA2 /* NUU64ODictionary.m in Sources */,
 				619B091D1913EEC000A4BAA2 /* NUReversedObjectTable.m in Sources */,
 				619B08FF1913EEC000A4BAA2 /* NUNurseryRoot.m in Sources */,
+				614F85B52A7C90D100470FEE /* NUCMacroArgument.m in Sources */,
 				619B08E31913EEC000A4BAA2 /* NULibrary.m in Sources */,
 				B81B14A520CF71520034AC0E /* NUDefaultCharacterTargetClassResolver.m in Sources */,
 				619B08AC1913EEC000A4BAA2 /* NUStringCoder.m in Sources */,

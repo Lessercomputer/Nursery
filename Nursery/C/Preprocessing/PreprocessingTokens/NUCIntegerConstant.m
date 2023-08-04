@@ -3,7 +3,6 @@
 //  Nursery
 //
 //  Created by TAKATA Akifumi on 2021/03/12.
-//  Copyright © 2021 Nursery-Framework. All rights reserved.
 //
 
 #import "NUCIntegerConstant.h"
