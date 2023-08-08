@@ -10,17 +10,15 @@
 
 @interface NUCConcatenatedPpToken : NUCDecomposedPreprocessingToken
 {
-    NUCDecomposedPreprocessingToken *leftToken;
-    NUCDecomposedPreprocessingToken *rightToken;
+    NSArray *ppTokens;
 }
 
-+ (instancetype)concatenatedPpTokenWithLeft:(NUCDecomposedPreprocessingToken *)aLeftToken right:(NUCDecomposedPreprocessingToken *)aRightToken;
++ (instancetype)concatenatedPpTokenWithPpTokens:(NSArray *)aPpTokens;
 
-- (instancetype)initWithLeft:(NUCDecomposedPreprocessingToken *)aLeftToken right:(NUCDecomposedPreprocessingToken *)aRightToken;
+- (instancetype)initWithPpTokens:(NSArray *)aPpTokens;
 
-- (NUCDecomposedPreprocessingToken *)leftToken;
-- (NUCDecomposedPreprocessingToken *)rightToken;
-
+- (NSArray *)ppTokens;
+- (NUCPreprocessingToken *)concatenatedPpToken;
 - (BOOL)isValid;
 
 @end

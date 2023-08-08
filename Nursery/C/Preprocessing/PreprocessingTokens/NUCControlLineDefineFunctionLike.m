@@ -136,6 +136,11 @@
     }
 }
 
+- (BOOL)hasVariableArguments
+{
+    return  [self ellipsis] ? YES : NO;
+}
+
 - (NSMutableArray *)parameters
 {
     if (!parameters)
@@ -161,18 +166,18 @@
 
 - (BOOL)identifierIsParameter:(NUCIdentifier *)anIdentifier
 {
-    if (![self ellipsis])
-        return [[self parameters] containsObject:anIdentifier];
+    if ([self hasVariableArguments] && [[anIdentifier content] isEqual:NUCPredfinedMacroVA_ARGS])
+        return YES;
     else
-        return [[anIdentifier content] isEqual:NUCPredfinedMacroVA_ARGS];
+        return [[self parameters] containsObject:anIdentifier];
 }
 
 - (NSUInteger)parameterIndexOf:(NUCIdentifier *)anIdentifier
 {
-    if (![self ellipsis])
-        return [[self parameters] indexOfObject:anIdentifier];
-    else
+    if ([self hasVariableArguments] && [[anIdentifier content] isEqual:NUCPredfinedMacroVA_ARGS])
         return [self parameterCount];
+    else
+        return [[self parameters] indexOfObject:anIdentifier];
 }
 
 - (BOOL)parameterIsHashOperatorOperandAt:(NSUInteger)anIndex

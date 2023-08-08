@@ -39,11 +39,6 @@
                 
                 aCurrentTextLineCount++;
             }
-            else if ([aGroupPart isControlLine])
-            {
-                NUCControlLine *aControlLine = (NUCControlLine *)[(NUCGroupPart *)aGroupPart content];
-                [aControlLine preprocessWith:aPreprocessor];
-            }
             else
             {
                 if (aCurrentTextLinesBeginningIndex != NSUIntegerMax)
@@ -52,6 +47,12 @@
                     
                     aCurrentTextLinesBeginningIndex = NSUIntegerMax;
                     aCurrentTextLineCount = 0;
+                }
+                
+                if ([aGroupPart isControlLine])
+                {
+                    NUCControlLine *aControlLine = (NUCControlLine *)[(NUCGroupPart *)aGroupPart content];
+                    [aControlLine preprocessWith:aPreprocessor];
                 }
             }
         }
@@ -73,6 +74,7 @@
     NUCPpTokens *aPpTokensWithMacroInvocations = [NUCPpTokens ppTokensWithMacroInvocationsFromTextLines:aCurrentTextLines with:aPreprocessor];
     
     NSMutableArray *aMacroReplacedPpTokens = [aPpTokensWithMacroInvocations replaceMacrosWith:aPreprocessor];
+//    NSLog(@"%@", aMacroReplacedPpTokens);
 }
 
 + (instancetype)group

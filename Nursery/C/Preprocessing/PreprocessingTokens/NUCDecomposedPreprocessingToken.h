@@ -34,6 +34,7 @@
 
 - (NSString *)string;
 - (void)addStringTo:(NSMutableString *)aString;
+- (void)addStringForConcatinationTo:(NSMutableString *)aString;
 
 - (BOOL)isHash;
 - (BOOL)isHashHash;

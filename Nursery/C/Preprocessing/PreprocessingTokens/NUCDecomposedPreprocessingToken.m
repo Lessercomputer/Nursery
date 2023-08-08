@@ -104,6 +104,11 @@ static NUCDecomposedPreprocessingToken *whitespaceToken = nil;
     [aString appendString:[self string]];
 }
 
+- (void)addStringForConcatinationTo:(NSMutableString *)aString
+{
+    [self addStringTo:aString];
+}
+
 - (NSUInteger)hash
 {
     return [[self content] hash];

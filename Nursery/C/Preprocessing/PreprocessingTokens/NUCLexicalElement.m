@@ -316,7 +316,7 @@ static NSArray *NUCPreprocessingDirectiveNames;
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@:%p> type:%lu", [self class], self, (unsigned long)[self type]];
+    return [NSString stringWithFormat:@"<%@ %p> type:%lu", [self class], self, (unsigned long)[self type]];
 }
 
 @end

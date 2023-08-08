@@ -11,17 +11,16 @@
 
 @implementation NUCConcatenatedPpToken
 
-+ (instancetype)concatenatedPpTokenWithLeft:(NUCDecomposedPreprocessingToken *)aLeftToken right:(NUCDecomposedPreprocessingToken *)aRightToken
++ (instancetype)concatenatedPpTokenWithPpTokens:(NSArray *)aPpTokens
 {
-    return [[[self alloc] initWithLeft:aLeftToken right:aRightToken] autorelease];
+    return [[[self alloc] initWithPpTokens:aPpTokens] autorelease];
 }
 
-- (instancetype)initWithLeft:(NUCDecomposedPreprocessingToken *)aLeftToken right:(NUCDecomposedPreprocessingToken *)aRightToken
+- (instancetype)initWithPpTokens:(NSArray *)aPpTokens
 {
     if (self = [super initWithType:NUCLexicalElementNone])
     {
-        leftToken = [aLeftToken retain];
-        rightToken = [aRightToken retain];
+        ppTokens = [aPpTokens retain];
     }
     
     return self;
@@ -29,20 +28,14 @@
 
 - (void)dealloc
 {
-    [leftToken release];
-    [rightToken release];
+    [ppTokens release];
     
     [super dealloc];
 }
 
-- (NUCDecomposedPreprocessingToken *)leftToken
+- (NSArray *)ppTokens
 {
-    return leftToken;
-}
-
-- (NUCDecomposedPreprocessingToken *)rightToken
-{
-    return rightToken;
+    return ppTokens;
 }
 
 - (NSString *)string
@@ -55,14 +48,28 @@
 
 - (void)addStringTo:(NSMutableString *)aString
 {
-    [[self leftToken] addStringTo:aString];
-    [[self rightToken] addStringTo:aString];
+    [[self ppTokens] enumerateObjectsUsingBlock:^(NUCDecomposedPreprocessingToken * _Nonnull aPpToken, NSUInteger anIndex, BOOL * _Nonnull aStop) {
+        [aPpToken addStringForConcatinationTo:aString];
+    }];
+}
+
+- (NUCPreprocessingToken *)concatenatedPpToken
+{
+    NSArray *aTokens = [[[NUCDecomposer new] autorelease] decomposePreprocessingTokensIn:[self string]];
+    if ([aTokens count] == 1)
+        return [aTokens firstObject];
+    else
+        return nil;
 }
 
 - (BOOL)isValid
 {
-    NSArray *aTokens = [[[NUCDecomposer new] autorelease] decomposePreprocessingTokensIn:[self string]];
-    return [aTokens count] == 1;
+    return [self concatenatedPpToken] ? YES : NO;
+}
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@ %p> token: %@", self, self, [self string]];
 }
 
 @end
