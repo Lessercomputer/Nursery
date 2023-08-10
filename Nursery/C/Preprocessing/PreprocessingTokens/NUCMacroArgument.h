@@ -7,7 +7,7 @@
 
 #import "NUCPreprocessingToken.h"
 
-@class NSMutableArray;
+@class NSMutableArray, NSMutableString;
 
 @interface NUCMacroArgument : NUCPreprocessingToken
 {
@@ -25,5 +25,7 @@
 - (NSArray *)ppTokensByTrimingWhitespaces;
 
 - (NUCPreprocessingToken *)lastPpTokenWithoutWhitespaces;
+
+- (void)addStringForConcatinationTo:(NSMutableString *)aString;
 
 @end

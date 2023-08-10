@@ -12,6 +12,7 @@
 #import "NUCHeaderName.h"
 #import "NUCIdentifier.h"
 #import "NUCStringLiteral.h"
+#import "NUCCharacterConstant.h"
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSScanner.h>
@@ -276,22 +277,31 @@
 {
     NSUInteger aScanLocation = [aScanner scanLocation];
     
-    [aScanner scanString:NUCLargeL intoString:NULL]
-        || [aScanner scanString:NUCSmallU intoString:NULL]
-        || [aScanner scanString:NUCLargeU intoString:NULL];
+    NSString *anEncodingPrefix = nil;
+    
+    [aScanner scanString:NUCLargeL intoString:&anEncodingPrefix]
+        || [aScanner scanString:NUCSmallU intoString:&anEncodingPrefix]
+        || [aScanner scanString:NUCLargeU intoString:&anEncodingPrefix];
+    
+    NSUInteger aScanLocationNextEncodingPrefix = [aScanner scanLocation];
     
     if ([aScanner scanString:NUCSingleQuote intoString:NULL]
         && [self scanCCharSequenceFrom:aScanner]
         && [aScanner scanString:NUCSingleQuote intoString:NULL])
     {
-        [anElements addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementCharacterConstantType]];
+        NSRange aRange = NSMakeRange(aScanLocationNextEncodingPrefix + 1, [aScanner scanLocation] - aScanLocationNextEncodingPrefix - 2) ;
+        
+        [anElements addObject:[NUCCharacterConstant preprocessingTokenWithContent:[[aScanner string] substringWithRange:aRange] range:aRange encodingPrefix:anEncodingPrefix]];
         
         [self clearIsInInclude];
         
         return YES;
     }
     else
+    {
+        [aScanner setScanLocation:aScanLocation];
         return NO;
+    }
 }
 
 - (BOOL)decomposeHeaderNameFrom:(NSScanner *)aScanner into:(NSMutableArray *)anElements

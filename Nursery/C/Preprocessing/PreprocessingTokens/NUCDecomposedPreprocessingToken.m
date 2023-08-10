@@ -99,6 +99,11 @@ static NUCDecomposedPreprocessingToken *whitespaceToken = nil;
         return [self content];
 }
 
+- (NSString *)stringForSubstitution
+{
+    return [self string];
+}
+
 - (void)addStringTo:(NSMutableString *)aString
 {
     [aString appendString:[self string]];

@@ -11,6 +11,7 @@
 @interface NUCConcatenatedPpToken : NUCDecomposedPreprocessingToken
 {
     NSArray *ppTokens;
+    NSArray *concatenatedPpTokens;
 }
 
 + (instancetype)concatenatedPpTokenWithPpTokens:(NSArray *)aPpTokens;

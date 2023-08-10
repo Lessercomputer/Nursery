@@ -55,9 +55,11 @@
 
 - (NUCPreprocessingToken *)concatenatedPpToken
 {
-    NSArray *aTokens = [[[NUCDecomposer new] autorelease] decomposePreprocessingTokensIn:[self string]];
-    if ([aTokens count] == 1)
-        return [aTokens firstObject];
+    if (!concatenatedPpTokens)
+        concatenatedPpTokens = [[[[NUCDecomposer new] autorelease] decomposePreprocessingTokensIn:[self string]] retain];
+    
+    if ([concatenatedPpTokens count] == 1)
+        return [concatenatedPpTokens firstObject];
     else
         return nil;
 }
@@ -69,7 +71,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p> token: %@", self, self, [self string]];
+    return [NSString stringWithFormat:@"<%@ %p> token: %@", [self class], self, [self string]];
 }
 
 @end

@@ -53,29 +53,34 @@
 
 - (NSString *)getString
 {
-    NSArray *aPpTokens = [[self macroArgument] ppTokensByTrimingWhitespaces];;
-
-    if (![aPpTokens count])
+    if ([[self macroArgument] isPlacemaker])
         return @"";
     
+    NSArray *aPpTokens = [[self macroArgument] ppTokensByTrimingWhitespaces];;
     NSMutableString *aString = [NSMutableString string];
     NUCPreprocessingTokenStream *aStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aPpTokens];
     
     while ([aStream hasNext])
     {
-        if ([[aStream peekNext] isWhitespace])
+        if ([aStream skipWhitespaces])
         {
             [aString appendString:NUCSpace];
-            [aStream skipWhitespaces];
         }
         else
-            [aString appendString:[[aStream next] string]];
+            [aString appendString:[[aStream next] stringForSubstitution]];
     }
     
     return aString;
 }
 
+- (void)addStringForConcatinationTo:(NSMutableString *)aString
+{
+    [aString appendString:[self string]];
+}
 
-
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"%@ string: %@", [super description], [self string]];
+}
 
 @end

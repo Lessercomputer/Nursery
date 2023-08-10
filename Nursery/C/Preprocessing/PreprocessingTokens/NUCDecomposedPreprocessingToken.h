@@ -33,6 +33,7 @@
 - (NSRange)range;
 
 - (NSString *)string;
+- (NSString *)stringForSubstitution;
 - (void)addStringTo:(NSMutableString *)aString;
 - (void)addStringForConcatinationTo:(NSMutableString *)aString;
 

@@ -7,6 +7,7 @@
 
 #import "NUCPreprocessingToken.h"
 
+@class NSMutableString;
 @class NUCMacroArgument;
 
 @interface NUCSubstitutedStringLiteral : NUCPreprocessingToken
@@ -22,6 +23,7 @@
 - (NUCMacroArgument *)macroArgument;
 
 - (NSString *)string;
+- (void)addStringForConcatinationTo:(NSMutableString *)aString;
 
 @end
 

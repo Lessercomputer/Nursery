@@ -172,6 +172,7 @@
     [aTextLines enumerateObjectsUsingBlock:^(NUCGroupPart * _Nonnull aGroupPart, NSUInteger idx, BOOL * _Nonnull stop) {
         NUCTextLine *aTextLine = (NUCTextLine *)[aGroupPart content];
         [aPpTokensInTextLines addObjectsFromArray:[[aTextLine ppTokens] ppTokens]];
+        [aPpTokensInTextLines addObject:[aTextLine newline]];
     }];
     
     aPpTokensWithMacroInvocations = [self ppTokensWithMacroInvocationsFrom:aPpTokensInTextLines with:aPreprocessor];
@@ -317,13 +318,6 @@
     return aSubstitutedReplacementList;
 }
 
-+ (NUCConcatenatedPpToken *)concatenatePastingTokens:(NSMutableArray *)aPastingTokens
-{
-    NUCConcatenatedPpToken *aConcatenatedPpToken = [NUCConcatenatedPpToken concatenatedPpTokenWithPpTokens:aPastingTokens];
-        
-    return aConcatenatedPpToken;
-}
-
 + (NUCSubstitutedStringLiteral *)substitutedStringInFunctionLikeMacro:(NUCMacroInvocation *)aMacroInvocation from:(NUCPreprocessingTokenStream *)aPpTokenStream
 {
     NUCSubstitutedStringLiteral *aSubstitutedStringLiteral = nil;
@@ -353,19 +347,19 @@
 + (NUCConcatenatedPpToken *)concatenatedPpTokenInMacro:(NUCMacroInvocation *)aMacroInvocation from:(NUCPreprocessingTokenStream *)aReplacementListPpTokenStream
 {
     NSMutableArray *aPastingTokens = [self scanPastingTokensInMacro:aMacroInvocation from:aReplacementListPpTokenStream];
-    NUCConcatenatedPpToken *aConcatenetedPpToken = nil;
+    NUCConcatenatedPpToken *aConcatenatedPpToken = nil;
     
     if ([aPastingTokens count])
     {
-        aConcatenetedPpToken = [self concatenatePastingTokens:aPastingTokens];
+        aConcatenatedPpToken = [NUCConcatenatedPpToken concatenatedPpTokenWithPpTokens:aPastingTokens];
         
-        if ([aConcatenetedPpToken isValid])
-        {
-            
-        }
+//        if ([aConcatenatedPpToken isValid])
+//        {
+//            
+//        }
     }
     
-    return aConcatenetedPpToken;
+    return aConcatenatedPpToken;
 }
 
 + (NSMutableArray *)scanPastingTokensInMacro:(NUCMacroInvocation *)aMacroInvocation from:(NUCPreprocessingTokenStream *)aReplacementListPpTokenStream
@@ -390,14 +384,22 @@
                 
                 if (aPrecededPpToken)
                 {
-                    [aPastingTokens addObject:aPrecededPpToken];
+                    if ([aMacroInvocation isFunctionLike] && [aPrecededPpToken isIdentifier])
+                        [aPastingTokens addObjectsFromArray:[[aMacroInvocation argumentFor:(NUCIdentifier *)aPrecededPpToken] argument]];
+                    else
+                        [aPastingTokens addObject:aPrecededPpToken];
                     aPrecededPpToken = nil;
                 }
                 
                 NUCDecomposedPreprocessingToken *aFollowingPpToken = [aReplacementListPpTokenStream next];
                 
                 if (aFollowingPpToken)
-                    [aPastingTokens addObject:aFollowingPpToken];
+                {
+                    if ([aMacroInvocation isFunctionLike] && [aFollowingPpToken isIdentifier])
+                        [aPastingTokens addObjectsFromArray:[[aMacroInvocation argumentFor:(NUCIdentifier *)aFollowingPpToken] argument]];
+                    else
+                        [aPastingTokens addObject:aFollowingPpToken];
+                }
             }
             else
             {

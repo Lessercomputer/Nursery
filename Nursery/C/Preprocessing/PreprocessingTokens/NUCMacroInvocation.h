@@ -27,12 +27,16 @@
 - (NUCControlLineDefine *)define;
 - (void)setDefine:(NUCControlLineDefine *)aDefine;
 
+- (BOOL)isObjectLike;
+- (BOOL)isFunctionLike;
+
 - (NSMutableArray *)arguments;
 - (void)setArguments:(NSMutableArray *)anArguments;
 
 - (NUCMacroArgument *)vaArgs;
 
 - (NUCMacroArgument *)argumentAt:(NSUInteger)anIndex;
+- (NUCMacroArgument *)argumentFor:(NUCIdentifier *)aParameterIdentifier;
 
 - (void)addArgument:(NUCMacroArgument *)anArgument;
 

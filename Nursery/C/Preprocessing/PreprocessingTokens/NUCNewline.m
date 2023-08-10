@@ -101,4 +101,9 @@
     return lf;
 }
 
+- (BOOL)isWhitespace
+{
+    return YES;
+}
+
 @end

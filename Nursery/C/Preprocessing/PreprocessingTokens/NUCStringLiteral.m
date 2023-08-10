@@ -40,10 +40,12 @@
 
 - (NSString *)string
 {
-    if ([self encodingPrefix])
-        return [NSString stringWithFormat:@"%@\"%@\"", [self encodingPrefix], [self content]];
-    else
-        return [NSString stringWithFormat:@"\"%@\"", [self content]];
+    return [NSString stringWithFormat:@"%@\"%@\"", [self encodingPrefix] ? [self encodingPrefix] : @"", [self content]];
+}
+
+- (NSString *)stringForSubstitution
+{
+    return [NSString stringWithFormat:@"%@\\\"%@\"", [self encodingPrefix] ? [self encodingPrefix] : @"", [self content]];
 }
 
 @end

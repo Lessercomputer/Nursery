@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		24B4D6442A8459ED00C17D61 /* NUCCharacterConstant.h in Headers */ = {isa = PBXBuildFile; fileRef = 24B4D6422A8459ED00C17D61 /* NUCCharacterConstant.h */; };
+		24B4D6452A8459ED00C17D61 /* NUCCharacterConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 24B4D6432A8459ED00C17D61 /* NUCCharacterConstant.m */; };
 		24DC9D7E2A74C90000195718 /* Nursery.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 619B078D1913ED8D00A4BAA2 /* Nursery.framework */; };
 		24DC9DAB2A74CD9000195718 /* NUMutableDictionaryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DC9D992A74CD9000195718 /* NUMutableDictionaryTests.m */; };
 		24DC9DAC2A74CD9000195718 /* NURegionArrayTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DC9D9A2A74CD9000195718 /* NURegionArrayTest.m */; };
@@ -409,6 +411,8 @@
 
 /* Begin PBXFileReference section */
 		245DC04A27774D5800958FE1 /* Documents */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Documents; sourceTree = "<group>"; };
+		24B4D6422A8459ED00C17D61 /* NUCCharacterConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCCharacterConstant.h; sourceTree = "<group>"; };
+		24B4D6432A8459ED00C17D61 /* NUCCharacterConstant.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCCharacterConstant.m; sourceTree = "<group>"; };
 		24DC9D7A2A74C90000195718 /* NurseryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NurseryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		24DC9D972A74CD9000195718 /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
 		24DC9D982A74CD9000195718 /* SelfReferenceObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelfReferenceObject.h; sourceTree = "<group>"; };
@@ -1373,6 +1377,8 @@
 				61BC393B2A78A6C6006CFBB3 /* NUCReplacementList.m */,
 				61BC394D2A78A6C6006CFBB3 /* NUCStringLiteral.h */,
 				61BC392F2A78A6C6006CFBB3 /* NUCStringLiteral.m */,
+				24B4D6422A8459ED00C17D61 /* NUCCharacterConstant.h */,
+				24B4D6432A8459ED00C17D61 /* NUCCharacterConstant.m */,
 				61BC39122A78A6C6006CFBB3 /* NUCTextLine.h */,
 				61BC39402A78A6C6006CFBB3 /* NUCTextLine.m */,
 				61BC39382A78A6C6006CFBB3 /* NUCUndef.h */,
@@ -1436,6 +1442,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				619B08D71913EEC000A4BAA2 /* NUDefaultComparator.h in Headers */,
+				24B4D6442A8459ED00C17D61 /* NUCCharacterConstant.h in Headers */,
 				61BC396A2A78A6C6006CFBB3 /* NUCControlLine.h in Headers */,
 				61BC39A12A78A6C6006CFBB3 /* NUCPragma.h in Headers */,
 				61BC39962A78A6C6006CFBB3 /* NUCControlLineDefineObjectLike.h in Headers */,
@@ -1774,6 +1781,7 @@
 				616D0B182A78972600813539 /* NUCUnaryExpression.m in Sources */,
 				619B089C1913EEC000A4BAA2 /* NUNSData.m in Sources */,
 				B861B3C320D52E12001F76BF /* NUQueue.m in Sources */,
+				24B4D6452A8459ED00C17D61 /* NUCCharacterConstant.m in Sources */,
 				616D0B2A2A78972600813539 /* NUCLogicalANDExpression.m in Sources */,
 				619B09521913EEC000A4BAA2 /* NULocationTreeLeaf.m in Sources */,
 				619B08A91913EEC000A4BAA2 /* NUObjectTable.m in Sources */,

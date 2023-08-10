@@ -3,15 +3,21 @@
 //  Nursery
 //
 //  Created by TAKATA Akifumi on 2023/08/10.
-//  Copyright © 2023 com.lily-bud. All rights reserved.
 //
 
 #import "NUCDecomposedPreprocessingToken.h"
 
-NS_ASSUME_NONNULL_BEGIN
 
 @interface NUCCharacterConstant : NUCDecomposedPreprocessingToken
+{
+    NSString *encodingPrefix;
+}
+
++ (instancetype)preprocessingTokenWithContent:(NSString *)aString range:(NSRange)aRange encodingPrefix:(NSString *)anEncodingPrefix;
+
+- (instancetype)initWithContent:(NSString *)aContent range:(NSRange)aRange encodingPrefix:(NSString *)anEncodingPrefix;
+
+- (NSString *)encodingPrefix;
 
 @end
 
-NS_ASSUME_NONNULL_END

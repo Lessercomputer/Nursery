@@ -185,6 +185,16 @@
     define = aDefine;
 }
 
+- (BOOL)isObjectLike
+{
+    return [[self define] isObjectLike];
+}
+
+- (BOOL)isFunctionLike
+{
+    return [[self define] isFunctionLike];
+}
+
 - (NSMutableArray *)arguments
 {
     return arguments;
@@ -211,6 +221,16 @@
 - (NUCMacroArgument *)argumentAt:(NSUInteger)anIndex
 {
     return [[self arguments] objectAtIndex:anIndex];
+}
+
+- (NUCMacroArgument *)argumentFor:(NUCIdentifier *)aParameterIdentifier
+{
+    NUCControlLineDefineFunctionLike *aFunctionLikeDefine = [[self define] isFunctionLike] ? (NUCControlLineDefineFunctionLike *)[self define] : nil;
+    
+    if (aFunctionLikeDefine)
+        return [self argumentAt:[aFunctionLikeDefine parameterIndexOf:aParameterIdentifier]];
+    
+    return nil;
 }
 
 - (void)addArgument:(NUCMacroArgument *)anArgument

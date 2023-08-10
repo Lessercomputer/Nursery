@@ -70,7 +70,7 @@
     if (![aPpTokens count])
         return nil;
     
-    NSUInteger aStartIndex = 0, aStopIndex = [aPpTokens count] - 1;
+    NSUInteger aStartIndex = 0, aStopIndex = [aPpTokens count] ? [aPpTokens count] - 1 : 0;
     
     while (aStartIndex < [aPpTokens count])
     {
@@ -80,7 +80,7 @@
             break;
     }
 
-    while (aStopIndex != NSNotFound && aStopIndex >= 0)
+    while (aStopIndex >= 0)
     {
         if ([[aPpTokens objectAtIndex:aStopIndex] isWhitespace])
             aStopIndex = aStopIndex == 0 ? NSNotFound : aStopIndex - 1;
@@ -89,7 +89,7 @@
     }
     
     if (aStartIndex < [aPpTokens count] && aStopIndex != NSNotFound)
-        return [aPpTokens subarrayWithRange:NSMakeRange(aStartIndex, aStartIndex - aStopIndex + 1)];
+        return [aPpTokens subarrayWithRange:NSMakeRange(aStartIndex, aStopIndex - aStartIndex + 1)];
     else
         return nil;
 }
