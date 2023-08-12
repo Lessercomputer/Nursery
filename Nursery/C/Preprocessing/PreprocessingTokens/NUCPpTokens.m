@@ -52,7 +52,17 @@
 
 + (instancetype)ppTokens
 {
-    return [[[self alloc] initWithType:NUCLexicalElementPpTokensType] autorelease];
+    return [[self new] autorelease];
+}
+
+- (instancetype)init
+{
+    return [self initWithType:NUCLexicalElementPpTokensType];
+}
+
+- (instancetype)initWithType:(NUCLexicalElementType)aType
+{
+    return [super initWithType:aType];
 }
 
 - (void)dealloc
@@ -106,42 +116,38 @@
 
 - (NUCPreprocessingToken *)lastPpTokenWithoutWhitespaces
 {
-    __block NUCDecomposedPreprocessingToken *aPpTokenToReturn = nil;
-    
-    [[self ppTokens] enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NUCDecomposedPreprocessingToken * _Nonnull aPpToken, NSUInteger anINdex, BOOL * _Nonnull aStop) {
-        if ([aPpToken isNotWhitespace])
-        {
-            aPpTokenToReturn = aPpToken;
-            *aStop = YES;
-        }
-    }];
-    
-    if ([aPpTokenToReturn isMacroInvocation])
-        return [(NUCMacroInvocation *)aPpTokenToReturn lastPpTokenWithoutWhitespaces];
-    else
-        return aPpTokenToReturn;
+    NSUInteger aLastPpTokenWithoutWhitespacesIndex = [self lastPpTokenIndexWithoutWhitespaces];
+    return aLastPpTokenWithoutWhitespacesIndex == NSUIntegerMax ? nil : [self at:aLastPpTokenWithoutWhitespacesIndex];
 }
 
-- (NUCMacroInvocation *)lastMacroInvocationWithoutWhitespaces
+- (NSUInteger)lastPpTokenIndexWithoutWhitespaces
 {
-    __block NUCDecomposedPreprocessingToken *aPpTokenToReturn = nil;
+    __block NSUInteger aLastPpTokenWithoutWhitespacesIndex = NSUIntegerMax;
     
-    [[self ppTokens] enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NUCDecomposedPreprocessingToken * _Nonnull aPpToken, NSUInteger anINdex, BOOL * _Nonnull aStop) {
+    [[self ppTokens] enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NUCDecomposedPreprocessingToken * _Nonnull aPpToken, NSUInteger anIndex, BOOL * _Nonnull aStop) {
         if ([aPpToken isNotWhitespace])
         {
-            aPpTokenToReturn = aPpToken;
+            aLastPpTokenWithoutWhitespacesIndex = anIndex;
             *aStop = YES;
         }
     }];
     
-    if ([aPpTokenToReturn isMacroInvocation])
-    {
-        NUCMacroInvocation *aMacroInvocationOrNil = [(NUCMacroInvocation *)aPpTokenToReturn lastMacroInvocationWithoutWhitespaces];
-        if (aMacroInvocationOrNil)
-            return [aMacroInvocationOrNil lastMacroInvocationWithoutWhitespaces];
-    }
+    return aLastPpTokenWithoutWhitespacesIndex;
+}
+
+- (NUCMacroInvocation *)lastMacroInvocation
+{
+    __block NUCDecomposedPreprocessingToken *aMacroInvocationOrNot = nil;
     
-    return nil;
+    [[self ppTokens] enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NUCDecomposedPreprocessingToken * _Nonnull aPpToken, NSUInteger anINdex, BOOL * _Nonnull aStop) {
+        if ([aPpToken isMacroInvocation])
+        {
+            aMacroInvocationOrNot = aPpToken;
+            *aStop = YES;
+        }
+    }];
+    
+    return [(NUCMacroInvocation *)aMacroInvocationOrNot lastMacroInvocation];
 }
 
 - (void)enumerateObjectsUsingBlock:(void (^)( NUCPreprocessingToken*, NSUInteger, BOOL *))aBlock
@@ -187,7 +193,7 @@
 
 + (NUCPpTokens *)ppTokensWithMacroInvocationsFrom:(NSArray *)aPpTokens of:(NUCMacroInvocation *)aMacroInvocation with:(NUCPreprocessor *)aPreprocessor replacingMacroNames:(NSMutableSet *)aReplacingMacroNames
 {
-    NUCPpTokens *aPpTokensForMacroInvocation = [NUCPpTokensWithMacroInvocations ppTokens];
+    NUCPpTokensWithMacroInvocations *aPpTokensForMacroInvocation = [NUCPpTokensWithMacroInvocations ppTokens];
     NUCPreprocessingTokenStream *aPpTokenStream = nil;
     
     if (!aMacroInvocation)
@@ -218,10 +224,11 @@
         }
         else if ([aPpToken isOpeningParenthesis])
         {
-            NUCMacroInvocation *aMacroInvocationOrNil = [aPpTokensForMacroInvocation lastMacroInvocationWithoutWhitespaces];
-            if (aMacroInvocationOrNil)
+            NUCMacroInvocation *aLastMacroInvocationOrNil = [aPpTokensForMacroInvocation lastMacroInvocation];
+            if (aLastMacroInvocationOrNil)
             {
-                id aLastPpTokenWithoutWhitespaceInMacroInvocation = [aMacroInvocationOrNil lastPpTokenWithoutWhitespaces];
+                NSUInteger aLastPpTokenIndexWithoutWhitespaceInMacroInvocation = NSUIntegerMax;
+                id aLastPpTokenWithoutWhitespaceInMacroInvocation = [aLastMacroInvocationOrNil lastPpTokenWithoutWhitespacesIndexInto:&aLastPpTokenIndexWithoutWhitespaceInMacroInvocation];
                 if ([aLastPpTokenWithoutWhitespaceInMacroInvocation isIdentifier])
                 {
                     [aPpTokenStream previous];
@@ -229,7 +236,10 @@
                     NUCPreprocessingToken *anIdentifierOrMacroInvocation = [[NUCMacroInvocation class] identifierOrMacroInvocation:(NUCIdentifier *)aLastPpTokenWithoutWhitespaceInMacroInvocation from:aPpTokenStream with:aPreprocessor parentMacroInvocation:aMacroInvocation replacingMacroNames:aReplacingMacroNames];
                     
                     if ([anIdentifierOrMacroInvocation isMacroInvocation])
-                        [aMacroInvocationOrNil setOverlappedMacroInvocation:(NUCMacroInvocation *)anIdentifierOrMacroInvocation];
+                    {
+                        [[aLastMacroInvocationOrNil ppTokensWithMacroinvocations] setOverlappedMacroNameIndex:aLastPpTokenIndexWithoutWhitespaceInMacroInvocation];
+                        [aPpTokensForMacroInvocation add:anIdentifierOrMacroInvocation];
+                    }
                     else
                     {
                         [aPpTokenStream next];

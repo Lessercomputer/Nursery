@@ -74,7 +74,7 @@
     NUCPpTokens *aPpTokensWithMacroInvocations = [NUCPpTokens ppTokensWithMacroInvocationsFromTextLines:aCurrentTextLines with:aPreprocessor];
     
     NSMutableArray *aMacroReplacedPpTokens = [aPpTokensWithMacroInvocations replaceMacrosWith:aPreprocessor];
-//    NSLog(@"%@", aMacroReplacedPpTokens);
+    NSLog(@"%@", aMacroReplacedPpTokens);
 }
 
 + (instancetype)group

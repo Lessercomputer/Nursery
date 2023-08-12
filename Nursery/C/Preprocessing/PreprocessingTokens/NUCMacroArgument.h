@@ -26,6 +26,4 @@
 
 - (NUCPreprocessingToken *)lastPpTokenWithoutWhitespaces;
 
-- (void)addStringForConcatinationTo:(NSMutableString *)aString;
-
 @end

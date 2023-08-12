@@ -7,15 +7,14 @@
 
 #import "NUCPreprocessingToken.h"
 
-@class NUCControlLineDefine, NUCPpTokens, NUCIdentifier, NUCPreprocessingTokenStream, NUCDecomposedPreprocessingToken, NUCMacroArgument;
+@class NUCControlLineDefine, NUCPpTokensWithMacroInvocations, NUCIdentifier, NUCPreprocessingTokenStream, NUCDecomposedPreprocessingToken, NUCMacroArgument;
 @class NSMutableSet;
 
 @interface NUCMacroInvocation : NUCPreprocessingToken
 {
     NUCControlLineDefine *define;
     NSMutableArray *arguments;
-    NUCPpTokens *ppTokensWithMacroinvocations;
-    NUCMacroInvocation *overlappedMacroInvocation;
+    NUCPpTokensWithMacroInvocations *ppTokensWithMacroinvocations;
 }
 
 + (instancetype)macroInvocationWithDefine:(NUCControlLineDefine *)aDefine;
@@ -40,16 +39,12 @@
 
 - (void)addArgument:(NUCMacroArgument *)anArgument;
 
-- (NUCPpTokens *)ppTokensWithMacroinvocations;
-- (void)setPpTokensWithMacroinvocations:(NUCPpTokens *)aPpTokens;
+- (NUCPpTokensWithMacroInvocations *)ppTokensWithMacroinvocations;
+- (void)setPpTokensWithMacroinvocations:(NUCPpTokensWithMacroInvocations *)aPpTokens;
 
 - (NUCPreprocessingToken *)lastPpTokenWithoutWhitespaces;
-- (NUCMacroInvocation *)lastMacroInvocationWithoutWhitespaces;
-
-- (NUCMacroInvocation *)overlappedMacroInvocation;
-- (void)setOverlappedMacroInvocation:(NUCMacroInvocation *)aMacroInvocation;
-- (BOOL)isOverlapped;
-- (NUCMacroInvocation *)lastOverlappedMacroInvocation;
+- (NUCPreprocessingToken *)lastPpTokenWithoutWhitespacesIndexInto:(NSUInteger *)anIndex;
+- (NUCMacroInvocation *)lastMacroInvocation;
 
 - (NSMutableArray *)expandedPpTokens;
 

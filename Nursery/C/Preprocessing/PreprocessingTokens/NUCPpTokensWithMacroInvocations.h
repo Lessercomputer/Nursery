@@ -9,6 +9,12 @@
 
 
 @interface NUCPpTokensWithMacroInvocations : NUCPpTokens
+{
+    NSUInteger overlappedMacroNameIndex;
+}
+
+- (NSUInteger)overlappedMacroNameIndex;
+- (void)setOverlappedMacroNameIndex:(NSUInteger)anIndex;
 
 @end
 

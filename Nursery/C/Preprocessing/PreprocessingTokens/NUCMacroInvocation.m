@@ -70,7 +70,7 @@
         
         NUCPpTokens *aPpTokens = [[aMacroDefineToInvoke replacementList] ppTokens];
         NUCPpTokens *aPpTokensWithMacroInvocations = [[NUCPpTokens class] ppTokensWithMacroInvocationsFrom:[aPpTokens ppTokens] of:aMacroInvocation with:aPreprocessor replacingMacroNames:aReplacingMacroNames];
-        [aMacroInvocation setPpTokensWithMacroinvocations:aPpTokensWithMacroInvocations];
+        [aMacroInvocation setPpTokensWithMacroinvocations:(NUCPpTokensWithMacroInvocations *)aPpTokensWithMacroInvocations];
         
         [aReplacingMacroNames removeObject:[aMacroDefineToInvoke identifier]];
         
@@ -170,7 +170,6 @@
 {
     [arguments release];
     [ppTokensWithMacroinvocations release];
-    [overlappedMacroInvocation release];
     
     [super dealloc];
 }
@@ -238,12 +237,12 @@
     [[self arguments] addObject:anArgument];
 }
 
-- (NUCPpTokens *)ppTokensWithMacroinvocations
+- (NUCPpTokensWithMacroInvocations *)ppTokensWithMacroinvocations
 {
     return ppTokensWithMacroinvocations;
 }
 
-- (void)setPpTokensWithMacroinvocations:(NUCPpTokens *)aPpTokens
+- (void)setPpTokensWithMacroinvocations:(NUCPpTokensWithMacroInvocations *)aPpTokens
 {
     [ppTokensWithMacroinvocations release];
     ppTokensWithMacroinvocations = [aPpTokens retain];
@@ -254,39 +253,26 @@
     return [[self ppTokensWithMacroinvocations] lastPpTokenWithoutWhitespaces];
 }
 
-- (NUCMacroInvocation *)lastMacroInvocationWithoutWhitespaces
+- (NUCPreprocessingToken *)lastPpTokenWithoutWhitespacesIndexInto:(NSUInteger *)anIndex
 {
-    NUCMacroInvocation *aMacroInvocation = [[self ppTokensWithMacroinvocations] lastMacroInvocationWithoutWhitespaces];
+    NSUInteger aLastPpTokenIndexWithoutWhitespaces = [[self ppTokensWithMacroinvocations] lastPpTokenIndexWithoutWhitespaces];
+    if (aLastPpTokenIndexWithoutWhitespaces == NSUIntegerMax)
+        return nil;
+    else
+    {
+        if (*anIndex)
+            *anIndex = aLastPpTokenIndexWithoutWhitespaces;
+        return [[self ppTokensWithMacroinvocations] at:aLastPpTokenIndexWithoutWhitespaces];
+    }
+}
+
+- (NUCMacroInvocation *)lastMacroInvocation
+{
+    NUCMacroInvocation *aMacroInvocation = [[self ppTokensWithMacroinvocations] lastMacroInvocation];
     if (aMacroInvocation)
         return aMacroInvocation;
     else
-        if ([self isOverlapped])
-            return [self lastOverlappedMacroInvocation];
-        else
-            return self;
-}
-
-- (NUCMacroInvocation *)overlappedMacroInvocation
-{
-    return overlappedMacroInvocation;
-}
-
-- (NUCMacroInvocation *)lastOverlappedMacroInvocation
-{
-    if ([self isOverlapped])
-        return [[self overlappedMacroInvocation] lastOverlappedMacroInvocation];
-    else
         return self;
-}
-
-- (void)setOverlappedMacroInvocation:(NUCMacroInvocation *)aMacroInvocation
-{
-    overlappedMacroInvocation = [aMacroInvocation retain];
-}
-
-- (BOOL)isOverlapped
-{
-    return [self overlappedMacroInvocation] ? YES : NO;
 }
 
 - (BOOL)isMacroInvocation
@@ -310,16 +296,15 @@
 
 - (void)addExpandedPpTokensTo:(NSMutableArray *)aPpTokens With:(NUCPreprocessor *)aPreprocessor
 {
+    NSUInteger anOverlappedMacroNameIndex = [[self ppTokensWithMacroinvocations] overlappedMacroNameIndex];
+    
     [[self ppTokensWithMacroinvocations] enumerateObjectsUsingBlock:^(NUCPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop) {
         
         if ([aPpToken isMacroInvocation])
             [(NUCMacroInvocation *)aPpToken addExpandedPpTokensTo:aPpTokens With:aPreprocessor];
-        else
+        else if (anIndex != anOverlappedMacroNameIndex)
             [aPpTokens addObject:aPpToken];
     }];
-    
-    if ([self isOverlapped])
-        [[self overlappedMacroInvocation] addExpandedPpTokensTo:aPpTokens With:aPreprocessor];
 }
 
 - (NSString *)description

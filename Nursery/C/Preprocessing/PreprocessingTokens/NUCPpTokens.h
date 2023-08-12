@@ -33,7 +33,8 @@
 - (BOOL)containsIdentifier:(NUCIdentifier *)anIdentifier;
 
 - (NUCPreprocessingToken *)lastPpTokenWithoutWhitespaces;
-- (NUCMacroInvocation *)lastMacroInvocationWithoutWhitespaces;
+- (NSUInteger)lastPpTokenIndexWithoutWhitespaces;
+- (NUCMacroInvocation *)lastMacroInvocation;
 
 - (void)enumerateObjectsUsingBlock:(void (^)(NUCPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop))aBlock;
 
