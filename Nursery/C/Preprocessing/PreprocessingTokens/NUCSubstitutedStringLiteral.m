@@ -38,6 +38,11 @@
     [super dealloc];
 }
 
+- (NSMutableArray *)ppTokens
+{
+    return [[self macroArgument] unexpandedPpTokens];
+}
+
 - (NUCMacroArgument *)macroArgument
 {
     return macroArgument;

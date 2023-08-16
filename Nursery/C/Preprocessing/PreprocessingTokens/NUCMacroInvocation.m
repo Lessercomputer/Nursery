@@ -46,14 +46,17 @@
         if ([aMacroDefineToInvoke isFunctionLike])
         {
             NSUInteger aPosition = [aPpTokenStream position];
-            [aPpTokenStream skipWhitespaces];
+            [aMacroInvocation setWhitespacesFollowingMacroName:[aPpTokenStream scanWhiteSpaces]];
             NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
             
             if ([aPpToken isOpeningParenthesis])
             {
+                [aMacroInvocation setOpeningParenthesis:aPpToken];
                 [aMacroInvocation setArguments:[self macroInvocationArgumentsOf:aMacroInvocation from:aPpTokenStream with:aPreprocessor parentMacroInvocation:aParentMacroInvocation replacingMacroNames:aReplacingMacroNames]];
                 
-                if (![[aPpTokenStream peekPrevious] isClosingParenthesis])
+                if ([[aPpTokenStream peekPrevious] isClosingParenthesis])
+                    [aMacroInvocation setClosingParenthesis:aPpToken];
+                else
                     return nil;
             }
             else
@@ -168,6 +171,9 @@
 
 - (void)dealloc
 {
+    [whitespacesFollowingMacroName release];
+    [openingParenthesis release];
+    [closingParenthesis release];
     [arguments release];
     [ppTokensWithMacroinvocations release];
     
@@ -294,6 +300,30 @@
     return anExpandedPpTokens;
 }
 
+- (void)addUnexpandedPpTokensTo:(NSMutableArray *)aPpTokens
+{
+    [aPpTokens addObject:[[self define] identifier]];
+    
+    if ([self isFunctionLike])
+    {
+        if ([self whitespacesFollowingMacroName])
+            [aPpTokens addObjectsFromArray:[self whitespacesFollowingMacroName]];
+        
+        [aPpTokens addObject:[self openingParenthesis]];
+        
+        [[self arguments] enumerateObjectsUsingBlock:^(NUCMacroArgument * _Nonnull anArgument, NSUInteger idx, BOOL * _Nonnull stop) {
+            [anArgument addUnexpandedPpTokensTo:aPpTokens];
+        }];
+        
+        [aPpTokens addObject:[self closingParenthesis]];
+    }
+}
+
+- (void)addExpandedPpTokensTo:(NSMutableArray *)aPpTokens
+{
+    [self addExpandedPpTokensTo:aPpTokens With:nil];
+}
+
 - (void)addExpandedPpTokensTo:(NSMutableArray *)aPpTokens With:(NUCPreprocessor *)aPreprocessor
 {
     NSUInteger anOverlappedMacroNameIndex = [[self ppTokensWithMacroinvocations] overlappedMacroNameIndex];
@@ -307,9 +337,47 @@
     }];
 }
 
+- (NSString *)stringForSubstitution
+{
+    return [[[self define] identifier] string];
+}
+
 - (NSString *)description
 {
     return [[super description] stringByAppendingFormat:@", name:%@", [[[self define] identifier] string]];
+}
+
+- (NUCDecomposedPreprocessingToken *)closingParenthesis
+{
+    return closingParenthesis;
+}
+
+- (NUCDecomposedPreprocessingToken *)openingParenthesis
+{
+    return openingParenthesis;
+}
+
+- (void)setClosingParenthesis:(NUCDecomposedPreprocessingToken *)aClosingParenthesis
+{
+    [closingParenthesis autorelease];
+    closingParenthesis = [aClosingParenthesis retain];
+}
+
+- (void)setOpeningParenthesis:(NUCDecomposedPreprocessingToken *)anOpeningParenthesis
+{
+    [openingParenthesis autorelease];
+    openingParenthesis = [anOpeningParenthesis retain];
+}
+
+- (void)setWhitespacesFollowingMacroName:(NSArray *)aWhitespaces
+{
+    [whitespacesFollowingMacroName autorelease];
+    whitespacesFollowingMacroName = [aWhitespaces retain];
+}
+
+- (NSArray *)whitespacesFollowingMacroName
+{
+    return whitespacesFollowingMacroName;
 }
 
 @end

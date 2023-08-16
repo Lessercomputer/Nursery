@@ -13,6 +13,9 @@
 @interface NUCMacroInvocation : NUCPreprocessingToken
 {
     NUCControlLineDefine *define;
+    NSArray *whitespacesFollowingMacroName;
+    NUCDecomposedPreprocessingToken *openingParenthesis;
+    NUCDecomposedPreprocessingToken *closingParenthesis;
     NSMutableArray *arguments;
     NUCPpTokensWithMacroInvocations *ppTokensWithMacroinvocations;
 }
@@ -28,6 +31,15 @@
 
 - (BOOL)isObjectLike;
 - (BOOL)isFunctionLike;
+
+- (NSArray *)whitespacesFollowingMacroName;
+- (void)setWhitespacesFollowingMacroName:(NSArray *)aWhitespaces;
+
+- (NUCDecomposedPreprocessingToken *)openingParenthesis;
+- (void)setOpeningParenthesis:(NUCDecomposedPreprocessingToken *)anOpeningParenthesis;
+
+- (NUCDecomposedPreprocessingToken *)closingParenthesis;
+- (void)setClosingParenthesis:(NUCDecomposedPreprocessingToken *)aClosingParenthesis;
 
 - (NSMutableArray *)arguments;
 - (void)setArguments:(NSMutableArray *)anArguments;

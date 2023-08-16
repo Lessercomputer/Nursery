@@ -17,6 +17,7 @@
 #define F4(a, ...) a __VA_ARGS__
 #define F5(a) #a
 #define F6(a, b) #a ## b
+#define F7(a) #a a
 
 A
 D
@@ -34,3 +35,4 @@ F5(  u8"abc"
 F5(u'a')
 F2(C, a)
 F6(abc1, 2)
+F7(A)

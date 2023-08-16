@@ -8,6 +8,7 @@
 #import "NUCLexicalElement.h"
 
 @class NUCPreprocessor;
+@class NSMutableArray;
 
 @interface NUCPreprocessingToken : NUCLexicalElement
 
@@ -28,6 +29,9 @@
 - (BOOL)isOpeningParenthesis;
 - (BOOL)isPlacemaker;
 - (BOOL)isMacroArgument;
+
+- (void)addUnexpandedPpTokensTo:(NSMutableArray *)aPpTokens;
+- (void)addExpandedPpTokensTo:(NSMutableArray *)aPpTokens;
 
 @end
 

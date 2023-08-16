@@ -6,6 +6,7 @@
 //
 
 #import "NUCMacroArgument.h"
+#import "NUCDecomposedPreprocessingToken.h"
 
 #import <Foundation/NSArray.h>
 
@@ -33,11 +34,57 @@
     [[self argument] addObject:aPpToken];
 }
 
+- (NUCDecomposedPreprocessingToken *)precededComma
+{
+    return precededComma;
+}
+
+- (void)setPrecededComma:(NUCDecomposedPreprocessingToken *)aPrecededComma
+{
+    [aPrecededComma autorelease];
+    aPrecededComma = aPrecededComma;
+}
+
 - (NSMutableArray *)argument
 {
     if (!argument)
         argument = [NSMutableArray new];
     return argument;
+}
+
+- (NSMutableArray *)unexpandedPpTokens
+{
+    NSMutableArray *anUnexpandedPpTokens = [NSMutableArray array];
+    
+    [self addUnexpandedPpTokensTo:anUnexpandedPpTokens];
+    
+    return anUnexpandedPpTokens;
+}
+
+- (void)addUnexpandedPpTokensTo:(NSMutableArray *)aPpTokens
+{
+    if ([self precededComma])
+        [aPpTokens addObject:[self precededComma]];
+    
+    [[self argument] enumerateObjectsUsingBlock:^(NUCPreprocessingToken * _Nonnull aPpToken, NSUInteger idx, BOOL * _Nonnull stop) {
+        [aPpToken addUnexpandedPpTokensTo:aPpTokens];
+    }];
+}
+
+- (NSMutableArray *)expandedPpTokens
+{
+    NSMutableArray *anExpandedPpTokens = [NSMutableArray array];
+    
+    [self addExpandedPpTokensTo:anExpandedPpTokens];
+    
+    return anExpandedPpTokens;
+}
+
+- (void)addExpandedPpTokensTo:(NSMutableArray *)aPpTokens
+{
+    [[self argument] enumerateObjectsUsingBlock:^(NUCPreprocessingToken * _Nonnull aPpToken, NSUInteger idx, BOOL * _Nonnull stop) {
+        [aPpToken addExpandedPpTokensTo:aPpTokens];
+    }];
 }
 
 - (BOOL)isPlacemaker

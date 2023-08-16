@@ -40,12 +40,7 @@
 
 - (NSString *)string
 {
-    return [NSString stringWithFormat:@"%@'%@'", [self encodingPrefix] ? [self encodingPrefix] : @"", [self content]];
-}
-
-- (NSString *)stringForSubstitution
-{
-    return [self string];
+    return [NSString stringWithFormat:@"%@\'%@\'", [self encodingPrefix] ? [self encodingPrefix] : @"", [self content]];
 }
 
 @end

@@ -317,7 +317,7 @@
         {
             NUCIdentifier *anIdentifier = (NUCIdentifier *)aPpToken;
             if ([aFunctionLikeDefine identifierIsParameter:anIdentifier])
-                [aSubstitutedReplacementList addObjectsFromArray:[[aMacroInvocation argumentAt:[aFunctionLikeDefine parameterIndexOf:anIdentifier]] argument]];
+                [aSubstitutedReplacementList addObjectsFromArray:[[aMacroInvocation argumentFor:anIdentifier] expandedPpTokens]];
             else
                 [aSubstitutedReplacementList addObject:aPpToken];
         }
@@ -331,7 +331,6 @@
 + (NUCSubstitutedStringLiteral *)substitutedStringInFunctionLikeMacro:(NUCMacroInvocation *)aMacroInvocation from:(NUCPreprocessingTokenStream *)aPpTokenStream
 {
     NUCSubstitutedStringLiteral *aSubstitutedStringLiteral = nil;
-    NUCControlLineDefineFunctionLike *aFunctionLikeMacroDefine = (NUCControlLineDefineFunctionLike *)[aMacroInvocation define];
     NSUInteger aPosition = [aPpTokenStream position];
     NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
     
@@ -342,7 +341,7 @@
         
         if ([aPpToken isIdentifier])
         {
-            NUCMacroArgument *anArgument = [aMacroInvocation argumentAt:[aFunctionLikeMacroDefine parameterIndexOf:(NUCIdentifier *)aPpToken]];
+            NUCMacroArgument *anArgument = [aMacroInvocation argumentFor:(NUCIdentifier *)aPpToken];
             aSubstitutedStringLiteral = [NUCSubstitutedStringLiteral substitutedStringLiteralWithMacroArgument:anArgument];
         }
         else
@@ -395,7 +394,7 @@
                 if (aPrecededPpToken)
                 {
                     if ([aMacroInvocation isFunctionLike] && [aPrecededPpToken isIdentifier])
-                        [aPastingTokens addObjectsFromArray:[[aMacroInvocation argumentFor:(NUCIdentifier *)aPrecededPpToken] argument]];
+                        [aPastingTokens addObjectsFromArray:[[aMacroInvocation argumentFor:(NUCIdentifier *)aPrecededPpToken] unexpandedPpTokens]];
                     else
                         [aPastingTokens addObject:aPrecededPpToken];
                     aPrecededPpToken = nil;
@@ -406,7 +405,7 @@
                 if (aFollowingPpToken)
                 {
                     if ([aMacroInvocation isFunctionLike] && [aFollowingPpToken isIdentifier])
-                        [aPastingTokens addObjectsFromArray:[[aMacroInvocation argumentFor:(NUCIdentifier *)aFollowingPpToken] argument]];
+                        [aPastingTokens addObjectsFromArray:[[aMacroInvocation argumentFor:(NUCIdentifier *)aFollowingPpToken] unexpandedPpTokens]];
                     else
                         [aPastingTokens addObject:aFollowingPpToken];
                 }

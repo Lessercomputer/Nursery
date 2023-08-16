@@ -97,4 +97,14 @@
     return NO;
 }
 
+- (void)addUnexpandedPpTokensTo:(NSMutableArray *)aPpTokens
+{
+    [aPpTokens addObject:self];
+}
+
+- (void)addExpandedPpTokensTo:(NSMutableArray *)aPpTokens
+{
+    [aPpTokens addObject:self];
+}
+
 @end

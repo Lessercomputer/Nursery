@@ -45,7 +45,22 @@
 
 - (NSString *)stringForSubstitution
 {
-    return [NSString stringWithFormat:@"%@\\\"%@\"", [self encodingPrefix] ? [self encodingPrefix] : @"", [self content]];
+    NSMutableString *aString = [NSMutableString string];
+    
+    if ([self encodingPrefix])
+        [aString appendString:[self encodingPrefix]];
+    
+    [aString appendString:@"\""];
+    
+    [[self content] enumerateSubstringsInRange:NSMakeRange(0, [[self content] length]) options:NSStringEnumerationByComposedCharacterSequences usingBlock:^(NSString * _Nullable aSubstring, NSRange substringRange, NSRange enclosingRange, BOOL * _Nonnull stop) {
+        if ([aSubstring isEqual:NUCBackslash])
+            [aString appendString:NUCBackslash];
+        [aString appendString:aSubstring];
+    }];
+    
+    [aString appendString:@"\""];
+    
+    return aString;
 }
 
 @end

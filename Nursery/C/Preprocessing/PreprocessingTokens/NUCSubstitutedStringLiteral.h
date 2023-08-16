@@ -21,6 +21,7 @@
 - (instancetype)initWithMacroArgument:(NUCMacroArgument *)aMacroArgument;
 
 - (NUCMacroArgument *)macroArgument;
+- (NSMutableArray *)ppTokens;
 
 - (NSString *)string;
 - (void)addStringForConcatinationTo:(NSMutableString *)aString;
