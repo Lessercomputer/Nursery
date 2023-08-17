@@ -9,6 +9,7 @@
 #import "NUCPreprocessingTokenStream.h"
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCMacroArgument.h"
+#import "NUCStringLiteral.h"
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSString.h>
@@ -81,6 +82,11 @@
 - (void)addStringForConcatinationTo:(NSMutableString *)aString
 {
     [aString appendString:[self string]];
+}
+
+- (void)addExpandedPpTokensTo:(NSMutableArray *)aPpTokens
+{
+    [[NUCStringLiteral preprocessingTokenWithContent:[self string] range:NSMakeRange(NSNotFound, 0) encodingPrefix:nil] addExpandedPpTokensTo:aPpTokens];
 }
 
 - (NSString *)description

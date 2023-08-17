@@ -97,6 +97,11 @@
     return NO;
 }
 
+- (BOOL)isConcatenatedToken
+{
+    return NO;
+}
+
 - (void)addUnexpandedPpTokensTo:(NSMutableArray *)aPpTokens
 {
     [aPpTokens addObject:self];

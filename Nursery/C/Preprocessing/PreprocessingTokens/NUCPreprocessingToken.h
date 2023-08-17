@@ -29,6 +29,7 @@
 - (BOOL)isOpeningParenthesis;
 - (BOOL)isPlacemaker;
 - (BOOL)isMacroArgument;
+- (BOOL)isConcatenatedToken;
 
 - (void)addUnexpandedPpTokensTo:(NSMutableArray *)aPpTokens;
 - (void)addExpandedPpTokensTo:(NSMutableArray *)aPpTokens;

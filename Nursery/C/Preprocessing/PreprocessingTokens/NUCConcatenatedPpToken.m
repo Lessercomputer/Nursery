@@ -64,6 +64,11 @@
         return nil;
 }
 
+- (BOOL)isConcatenatedToken
+{
+    return YES;
+}
+
 - (BOOL)isValid
 {
     return [self concatenatedPpToken] ? YES : NO;

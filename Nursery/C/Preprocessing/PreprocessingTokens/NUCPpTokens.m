@@ -295,7 +295,10 @@
         NUCConcatenatedPpToken *aConcatenatedPpToken = [self concatenatedPpTokenInMacro:aMacroInvocation from:aPpTokenStream];
 
         if (aConcatenatedPpToken)
-            [aHashHashOperatorAppliedPpTokens addObject:aConcatenatedPpToken];
+        {
+            if ([aConcatenatedPpToken isValid])
+                [aHashHashOperatorAppliedPpTokens addObject:[aConcatenatedPpToken concatenatedPpToken]];
+        }
         else
             [aHashHashOperatorAppliedPpTokens addObject:[aPpTokenStream next]];
     }
@@ -433,14 +436,7 @@
         NSMutableArray *aMacroReplacedPpTokens = [NSMutableArray array];
         
         [self enumerateObjectsUsingBlock:^(NUCPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop) {
-            
-            if ([aPpToken isMacroInvocation])
-            {
-                NUCMacroInvocation *aMacroInvocation = (NUCMacroInvocation *)aPpToken;
-                [aMacroInvocation addExpandedPpTokensTo:aMacroReplacedPpTokens With:aPreprocessor];
-            }
-            else
-                [aMacroReplacedPpTokens addObject:aPpToken];
+            [aPpToken addExpandedPpTokensTo:aMacroReplacedPpTokens];
         }];
 
         return aMacroReplacedPpTokens;

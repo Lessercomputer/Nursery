@@ -333,7 +333,7 @@
         if ([aPpToken isMacroInvocation])
             [(NUCMacroInvocation *)aPpToken addExpandedPpTokensTo:aPpTokens With:aPreprocessor];
         else if (anIndex != anOverlappedMacroNameIndex)
-            [aPpTokens addObject:aPpToken];
+            [aPpToken addExpandedPpTokensTo:aPpTokens];
     }];
 }
 
