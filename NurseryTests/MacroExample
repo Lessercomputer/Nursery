@@ -18,7 +18,7 @@
 #define F5(a) #a
 #define F6(a, b) #a ## b
 #define F7(a) #a a
-
+#define F8(a, b, c) a b c
 A
 D
 A B
@@ -36,3 +36,6 @@ F5(u'a')
 F2(C, a)
 F6(abc1, 2)
 F7(A)
+F8((a, b, c), x, y)
+F8(,,)
+F3(,,)

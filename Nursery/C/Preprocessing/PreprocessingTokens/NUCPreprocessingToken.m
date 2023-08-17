@@ -72,35 +72,67 @@
     return ![self isWhitespace];
 }
 
-- (BOOL)isMacroInvocation
-{
-    return NO;
-}
+- (BOOL)isMacroInvocation { return NO;}
 
-- (BOOL)isPpTokensWithMacroInvocations
-{
-    return NO;
-}
+- (BOOL)isPpTokensWithMacroInvocations { return NO;}
 
-- (BOOL)isOpeningParenthesis
-{
-    return NO;
-}
+- (BOOL)isOpeningParenthesis { return NO;}
 
-- (BOOL)isPlacemaker
-{
-    return NO;
-}
+- (BOOL)isPlacemaker { return NO;}
 
-- (BOOL)isMacroArgument
-{
-    return NO;
-}
+- (BOOL)isMacroArgument { return NO;}
 
-- (BOOL)isConcatenatedToken
-{
-    return NO;
-}
+- (BOOL)isConcatenatedToken { return NO;}
+
+- (BOOL)isHash { return NO;}
+
+- (BOOL)isHashHash { return NO;}
+
+- (BOOL)isComma { return NO;}
+
+- (BOOL)isPeriod { return NO;}
+
+- (BOOL)isQuestionMark { return NO;}
+
+- (BOOL)isColon { return NO;}
+
+- (BOOL)isEllipsis { return NO;}
+
+- (BOOL)isDirectiveName { return NO;}
+
+- (BOOL)isNonDirectiveName { return NO;}
+
+- (BOOL)isLogicalOROperator { return NO;}
+
+- (BOOL)isLogicalANDOperator { return NO;}
+
+- (BOOL)isInclusiveOROperator { return NO;}
+
+- (BOOL)isExclusiveOROperator { return NO;}
+
+- (BOOL)isBitwiseANDOperator { return NO;}
+
+- (BOOL)isInequalityOperator { return NO;}
+
+- (BOOL)isEqualityOperator { return NO;}
+
+- (BOOL)isRelationalOperator { return NO;}
+
+- (BOOL)isShiftOperator { return NO;}
+
+- (BOOL)isAdditiveOperator { return NO;}
+
+- (BOOL)isMultiplicativeOperator { return NO;}
+
+- (BOOL)isUnaryOperator { return NO;}
+
+- (BOOL)isWhitespacesWithoutNewline { return NO;}
+
+- (BOOL)isNewLine { return NO;}
+
+- (BOOL)isNotNewLine { return NO;}
+
+- (BOOL)isClosingParenthesis { return NO;}
 
 - (void)addUnexpandedPpTokensTo:(NSMutableArray *)aPpTokens
 {

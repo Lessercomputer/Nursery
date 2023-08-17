@@ -25,6 +25,7 @@
 - (void)dealloc
 {
     [argument release];
+    [precededComma release];
     
     [super dealloc];
 }
@@ -41,8 +42,8 @@
 
 - (void)setPrecededComma:(NUCDecomposedPreprocessingToken *)aPrecededComma
 {
-    [aPrecededComma autorelease];
-    aPrecededComma = aPrecededComma;
+    [precededComma autorelease];
+    precededComma = [aPrecededComma retain];
 }
 
 - (NSMutableArray *)argument

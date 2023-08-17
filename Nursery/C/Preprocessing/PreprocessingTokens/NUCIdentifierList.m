@@ -15,52 +15,40 @@
 
 + (BOOL)identifierListFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCIdentifierList **)aToken
 {
+    NSUInteger aPosition = [aStream position];
     NUCIdentifierList *anIdentifierList = [NUCIdentifierList identifierList];
-        
-    while ([aStream hasNext])
+    
+    [aStream skipWhitespacesWithoutNewline];
+    NUCDecomposedPreprocessingToken *anIdentifierOrNot = [aStream next];
+    
+    if ([anIdentifierOrNot isIdentifier])
     {
-        NSUInteger aPosition = [aStream position];
-        NUCDecomposedPreprocessingToken *aPpToken1 = nil, *aPpToken2 = nil, *aPpToken3 = nil;
+        [anIdentifierList add:(NUCIdentifier *)anIdentifierOrNot];
         
-        [aStream skipWhitespacesWithoutNewline];
-        aPpToken1 = [aStream next];
-        
-        if ([aPpToken1 isIdentifier])
+        while ([aStream hasNext])
         {
-            aPosition = [aStream position];
-            [aStream skipWhitespacesWithoutNewline];
-            aPpToken2 = [aStream next];
+            NSUInteger aPosition = [aStream position];
             
-            if ([aPpToken2 isComma])
+            [aStream skipWhitespacesWithoutNewline];
+            NUCDecomposedPreprocessingToken *aCommaOrNot = [aStream next];
+            
+            if ([aCommaOrNot isComma])
             {
                 [aStream skipWhitespacesWithoutNewline];
-                aPpToken3 = [aStream next];
+                anIdentifierOrNot = [aStream next];
                 
-                if ([aPpToken3 isIdentifier])
-                {
-                    [anIdentifierList add:(NUCIdentifier *)aPpToken1];
-                    [anIdentifierList add:(NUCIdentifier *)aPpToken3];
-                }
-                else
-                {
-                    [anIdentifierList add:(NUCIdentifier *)aPpToken1];
-                    [aStream setPosition:aPosition];
-                    break;
-                }
+                if ([anIdentifierOrNot isIdentifier])
+                    [anIdentifierList add:(NUCIdentifier *)anIdentifierOrNot];
             }
             else
             {
-                [anIdentifierList add:(NUCIdentifier *)aPpToken1];
                 [aStream setPosition:aPosition];
                 break;
             }
         }
-        else
-        {
-            [aStream setPosition:aPosition];
-            break;
-        }
     }
+    else
+        [aStream setPosition:aPosition];
     
     if ([anIdentifierList count])
     {

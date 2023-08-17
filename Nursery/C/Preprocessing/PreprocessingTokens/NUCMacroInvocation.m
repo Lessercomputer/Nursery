@@ -85,7 +85,7 @@
 {
     NSMutableArray *anArguments = [NSMutableArray array];
     
-    while ([aPpTokenStream hasNext] && ![[aPpTokenStream peekPrevious] isClosingParenthesis])
+    while ([aPpTokenStream hasNext] && (![anArguments count] || [[aPpTokenStream peekNext] isComma]))
     {
         NUCMacroArgument *anArgument = [self macroInvocationArgumentAt:[anArguments count] of:aMacroInvocation from:aPpTokenStream with:aPreprocessor parentMacroInvocation:aParentMacroInvocation replacingMacroNames:aReplacingMacroNames];
         if (anArgument)
@@ -100,7 +100,7 @@
 + (NUCMacroArgument *)macroInvocationArgumentAt:(NSUInteger)anIndex of:(NUCMacroInvocation *)aMacroinvocation from:(NUCPreprocessingTokenStream *)aPpTokenStream with:(NUCPreprocessor *)aPreprocessor parentMacroInvocation:(NUCMacroInvocation *)aParentMacroInvocation replacingMacroNames:(NSMutableSet *)aReplacingMacroNames
 {
     NUCMacroArgument *anArgument = [NUCMacroArgument argument];
-    NSInteger anOpeningParenthesisCount = 0;
+    NSInteger anOpeningParenthesisCount = 1;
     NUCControlLineDefineFunctionLike *aDefine = (NUCControlLineDefineFunctionLike *)[aMacroinvocation define];
     BOOL aCurrentArgumentIsVaArgs = [aDefine ellipsis] && anIndex >= [aDefine parameterCount];
     
@@ -108,7 +108,20 @@
     {
         NUCDecomposedPreprocessingToken *aPpToken = [aPpTokenStream next];
         
-        if ([aPpToken isIdentifier])
+        if ([aPpToken isOpeningParenthesis])
+        {
+            [anArgument add:aPpToken];
+            anOpeningParenthesisCount++;
+        }
+        else if ([aPpToken isClosingParenthesis])
+        {
+            anOpeningParenthesisCount--;
+            if (anOpeningParenthesisCount == 0)
+                break;
+            else
+                [anArgument add:aPpToken];
+        }
+        else if ([aPpToken isIdentifier])
         {
             if ([(NUCControlLineDefineFunctionLike *)[aMacroinvocation define] parameterIsHashOperatorOperandAt:anIndex])
                 [anArgument add:aPpToken];
@@ -120,34 +133,23 @@
             [aPpTokenStream skipWhitespaces];
             [anArgument add:[NUCDecomposedPreprocessingToken whitespace]];
         }
-        else
+        else if ([aPpToken isComma])
         {
-            if ([aPpToken isComma])
+            if (aCurrentArgumentIsVaArgs)
+                [anArgument add:aPpToken];
+            else
             {
-                if (anOpeningParenthesisCount == 0)
+                if (anIndex != 0 && ![anArgument precededComma])
+                    [anArgument setPrecededComma:aPpToken];
+                else if (anOpeningParenthesisCount == 1)
                 {
-                    if (aCurrentArgumentIsVaArgs)
-                        [anArgument add:aPpToken];
-                    else
-                        break;
+                    [aPpTokenStream previous];
+                    break;
                 }
             }
-            else if ([aPpToken isOpeningParenthesis])
-            {
-                [anArgument add:aPpToken];
-                anOpeningParenthesisCount++;
-            }
-            else if ([aPpToken isClosingParenthesis])
-            {
-                if (anOpeningParenthesisCount == 0)
-                    break;
-                
-                [anArgument add:aPpToken];
-                anOpeningParenthesisCount--;
-            }
-            else
-                [anArgument add:aPpToken];
         }
+        else
+            [anArgument add:aPpToken];
     }
     
     return anArgument;
