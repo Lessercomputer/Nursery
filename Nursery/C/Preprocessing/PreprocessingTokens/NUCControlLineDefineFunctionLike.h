@@ -35,7 +35,6 @@
 - (BOOL)hasVariableArguments;
 - (BOOL)identifierIsParameter:(NUCIdentifier *)anIdentifier;
 - (NSUInteger)parameterIndexOf:(NUCIdentifier *)anIdentifier;
-- (BOOL)parameterIsHashOperatorOperandAt:(NSUInteger)anIndex;
 
 @end
 

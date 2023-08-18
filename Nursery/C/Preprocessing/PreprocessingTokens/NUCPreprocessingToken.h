@@ -55,6 +55,7 @@
 - (BOOL)isNewLine;
 - (BOOL)isNotNewLine;
 - (BOOL)isClosingParenthesis;
+- (BOOL)isPredefinedMacroVA_ARGS;
 
 - (void)addUnexpandedPpTokensTo:(NSMutableArray *)aPpTokens;
 - (void)addExpandedPpTokensTo:(NSMutableArray *)aPpTokens;

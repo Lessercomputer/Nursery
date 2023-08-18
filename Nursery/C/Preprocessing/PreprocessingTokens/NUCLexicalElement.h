@@ -64,7 +64,7 @@ extern NSString * const NUCPreprocessingDirectiveLine;
 extern NSString * const NUCPreprocessingDirectiveError;
 extern NSString * const NUCPreprocessingDirectivePragma;
 
-extern NSString * const NUCPredfinedMacroVA_ARGS;
+extern NSString * const NUCPredefinedMacroVA_ARGS;
 
 extern NSString * const NUCTrigraphSequenceEqual;
 extern NSString * const NUCTrigraphSequenceLeftBlacket;
@@ -212,6 +212,7 @@ typedef enum : NSUInteger {
 - (instancetype)initWithType:(NUCLexicalElementType)aType;
 
 - (NUCLexicalElementType)type;
+- (NSString *)typeName;
 
 - (BOOL)isCharacterConstant;
 - (BOOL)isStringLiteral;

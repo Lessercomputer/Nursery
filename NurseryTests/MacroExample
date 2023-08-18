@@ -19,6 +19,8 @@
 #define F6(a, b) #a ## b
 #define F7(a) #a a
 #define F8(a, b, c) a b c
+#define G1 g1
+
 A
 D
 A B
@@ -39,3 +41,4 @@ F7(A)
 F8((a, b, c), x, y)
 F8(,,)
 F3(,,)
+

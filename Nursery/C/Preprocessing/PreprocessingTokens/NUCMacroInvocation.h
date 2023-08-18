@@ -31,6 +31,7 @@
 
 - (BOOL)isObjectLike;
 - (BOOL)isFunctionLike;
+- (BOOL)hasVariableArguments;
 
 - (NSArray *)whitespacesFollowingMacroName;
 - (void)setWhitespacesFollowingMacroName:(NSArray *)aWhitespaces;

@@ -39,6 +39,11 @@
                 
                 if ([anIdentifierOrNot isIdentifier])
                     [anIdentifierList add:(NUCIdentifier *)anIdentifierOrNot];
+                else
+                {
+                    [aStream setPosition:aPosition];
+                    break;
+                }
             }
             else
             {

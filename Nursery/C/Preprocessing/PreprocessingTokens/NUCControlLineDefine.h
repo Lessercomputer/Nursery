@@ -26,6 +26,7 @@
 
 - (BOOL)isObjectLike;
 - (BOOL)isFunctionLike;
+- (BOOL)hasVariableArguments;
 
 @end
 

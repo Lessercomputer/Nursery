@@ -134,6 +134,8 @@
 
 - (BOOL)isClosingParenthesis { return NO;}
 
+- (BOOL)isPredefinedMacroVA_ARGS { return NO; }
+
 - (void)addUnexpandedPpTokensTo:(NSMutableArray *)aPpTokens
 {
     [aPpTokens addObject:self];

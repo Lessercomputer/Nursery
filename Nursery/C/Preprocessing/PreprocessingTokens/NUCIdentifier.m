@@ -26,4 +26,9 @@
     return [self content];
 }
 
+- (BOOL)isPredefinedMacroVA_ARGS
+{
+    return [[self content] isEqual:NUCPredefinedMacroVA_ARGS];
+}
+
 @end

@@ -94,6 +94,11 @@
     return NO;
 }
 
+- (BOOL)hasVariableArguments
+{
+    return NO;
+}
+
 - (BOOL)isEqual:(id)anObject
 {
     NUCControlLineDefine *aDefine = (NUCControlLineDefine *)anObject;

@@ -9,6 +9,8 @@
 
 #import <Foundation/NSCharacterSet.h>
 
+#define NUCEnumToNSString(aType) @#aType
+
 NSString * const NUCBasicSourceCharacters = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#%&'()*+,-./:;<=>?[\\]^_{|}~";
 NSString * const NUCBasicSourceCharactersExceptSingleQuoteAndBackslash = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#%&()*+,-./:;<=>?[]^_{|}~";
 //NSString * const NUCSourceCharactersExceptDoubleQuoteAndBackslashAndNewline = nil;
@@ -63,7 +65,7 @@ NSString * const NUCPreprocessingDirectiveLine = @"line";
 NSString * const NUCPreprocessingDirectiveError = @"error";
 NSString * const NUCPreprocessingDirectivePragma = @"pragma";
 
-NSString * const NUCPredfinedMacroVA_ARGS = @"__VA_ARGS__";
+NSString * const NUCPredefinedMacroVA_ARGS = @"__VA_ARGS__";
 
 NSString * const NUCTrigraphSequenceBeginning = @"??";
 
@@ -304,6 +306,27 @@ static NSArray *NUCPreprocessingDirectiveNames;
     return type;
 }
 
+- (NSString *)typeName
+{
+    switch ([self type])
+    {
+        case NUCLexicalElementNone:
+            return NUCEnumToNSString(NUCLexicalElementNone);
+        case NUCLexicalElementPpNumberType:
+            return NUCEnumToNSString(NUCLexicalElementPpNumberType);
+        case NUCLexicalElementCommentType:
+            return NUCEnumToNSString(NUCLexicalElementCommentType);
+        case NUCLexicalElementPunctuatorType:
+            return NUCEnumToNSString(NUCLexicalElementPunctuatorType);
+        case NUCLexicalElementNonWhiteSpaceCharacterType:
+            return NUCEnumToNSString(NUCLexicalElementNonWhiteSpaceCharacterType);
+        case NUCLexicalElementWhiteSpaceCharacterType:
+            return NUCEnumToNSString(NUCLexicalElementWhiteSpaceCharacterType);
+        default:
+            return [NSString stringWithFormat:@"%lu", [self type]];
+    }
+}
+
 - (BOOL)isCharacterConstant
 {
     return [self type] == NUCLexicalElementCharacterConstantType;
@@ -316,7 +339,7 @@ static NSArray *NUCPreprocessingDirectiveNames;
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p> type:%lu", [self class], self, (unsigned long)[self type]];
+    return [NSString stringWithFormat:@"<%@ %p> typeName:%@", [self class], self, [self typeName]];
 }
 
 @end

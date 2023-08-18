@@ -102,7 +102,7 @@
     NUCMacroArgument *anArgument = [NUCMacroArgument argument];
     NSInteger anOpeningParenthesisCount = 1;
     NUCControlLineDefineFunctionLike *aDefine = (NUCControlLineDefineFunctionLike *)[aMacroinvocation define];
-    BOOL aCurrentArgumentIsVaArgs = [aDefine ellipsis] && anIndex >= [aDefine parameterCount];
+    BOOL aCurrentArgumentIsVaArgs = [aDefine hasVariableArguments] && anIndex >= [aDefine parameterCount];
     
     while ([aPpTokenStream hasNext])
     {
@@ -123,10 +123,7 @@
         }
         else if ([aPpToken isIdentifier])
         {
-            if ([(NUCControlLineDefineFunctionLike *)[aMacroinvocation define] parameterIsHashOperatorOperandAt:anIndex])
-                [anArgument add:aPpToken];
-            else
-                [anArgument add:[self identifierOrMacroInvocation:(NUCIdentifier *)aPpToken from:aPpTokenStream with:aPreprocessor parentMacroInvocation:aParentMacroInvocation replacingMacroNames:aReplacingMacroNames]];
+            [anArgument add:[self identifierOrMacroInvocation:(NUCIdentifier *)aPpToken from:aPpTokenStream with:aPreprocessor parentMacroInvocation:aParentMacroInvocation replacingMacroNames:aReplacingMacroNames]];
         }
         else if ([aPpToken isWhitespace])
         {
@@ -136,7 +133,12 @@
         else if ([aPpToken isComma])
         {
             if (aCurrentArgumentIsVaArgs)
-                [anArgument add:aPpToken];
+            {
+                if (anIndex != 0 && ![anArgument precededComma])
+                    [anArgument setPrecededComma:aPpToken];
+                else
+                    [anArgument add:aPpToken];
+            }
             else
             {
                 if (anIndex != 0 && ![anArgument precededComma])
@@ -200,6 +202,11 @@
 - (BOOL)isFunctionLike
 {
     return [[self define] isFunctionLike];
+}
+
+- (BOOL)hasVariableArguments
+{
+    return [[self define] hasVariableArguments];
 }
 
 - (NSMutableArray *)arguments
