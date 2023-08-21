@@ -12,6 +12,7 @@
 @interface NUCGroup : NUCPreprocessingDirective
 {
     NSMutableArray *groupParts;
+    NSMutableArray *macroReplacedPpTokens;
 }
 
 + (BOOL)groupFrom:(NUCPreprocessingTokenStream *)aStream with:(NUCPreprocessor *)aPreprocessor isSkipped:(BOOL)aGroupIsSkipped into:(NUCGroup **)aToken;
@@ -21,5 +22,7 @@
 - (NSUInteger)count;
 
 - (void)add:(NUCPreprocessingDirective *)aGroupPart;
+
+- (void)executeMacrosFromAt:(NSUInteger)anIndex count:(NSUInteger)aCount with:(NUCPreprocessor *)aPreprocessor;
 
 @end

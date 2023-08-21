@@ -39,7 +39,7 @@
 
 - (BOOL)isUndef
 {
-    return [self type] == NUCLexicalElementUndefType;
+    return NO;
 }
 
 - (BOOL)isLine

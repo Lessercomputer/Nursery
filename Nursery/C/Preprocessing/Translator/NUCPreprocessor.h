@@ -8,7 +8,8 @@
 #import <Foundation/NSObject.h>
 
 @class NSString, NSMutableDictionary, NSMutableArray;
-@class NUCTranslator, NUCSourceFile, NUCControlLineDefine, NUCControlLineInclude, NUCIdentifier, NUCPpTokens, NUCConstantExpression, NUCPreprocessingToken;
+@class NUCTranslator, NUCSourceFile, NUCControlLineDefine, NUCControlLineInclude, NUCUndef,
+NUCIdentifier, NUCPpTokens, NUCConstantExpression, NUCPreprocessingToken;
 
 @interface NUCPreprocessor : NSObject
 {
@@ -31,6 +32,7 @@
 
 - (void)include:(NUCControlLineInclude *)anInclude;
 - (void)define:(NUCControlLineDefine *)aMacroDefine;
+- (void)undef:(NUCUndef *)anUndef;
 
 - (NSInteger)executeConstantExpression:(NUCConstantExpression *)aConstantExpression;
 

@@ -149,6 +149,8 @@
         else
             [aScanner setScanLocation:aScanLocation];
     }
+    else
+        [aScanner setScanLocation:aScanLocation];
     
     return NO;
 }

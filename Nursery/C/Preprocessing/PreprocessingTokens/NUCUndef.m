@@ -9,45 +9,48 @@
 #import "NUCPreprocessingTokenStream.h"
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCNewline.h"
+#import "NUCPreprocessor.h"
+
+#import <Foundation/NSString.h>
 
 @implementation NUCUndef
 
 + (BOOL)undefFrom:(NUCPreprocessingTokenStream *)aStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCPreprocessingDirective **)aToken
 {
-    if ([aDirectiveName isUndef])
-    {
-        NSUInteger aPosition = [aStream position];
-        
-        [aStream skipWhitespacesWithoutNewline];
-        
-        NUCDecomposedPreprocessingToken *anIdentifier = [aStream next];
-        NUCNewline *aNewline = nil;
+    if (![[aDirectiveName content] isEqualToString:NUCPreprocessingDirectiveUndef])
+        return NO;
+    
+    NSUInteger aPosition = [aStream position];
+    
+    [aStream skipWhitespacesWithoutNewline];
+    
+    NUCDecomposedPreprocessingToken *anIdentifierOrNot = [aStream next];
+    NUCNewline *aNewline = nil;
 
-        if ([anIdentifier isIdentifier])
+    if ([anIdentifierOrNot isIdentifier])
+    {
+        [aStream skipWhitespacesWithoutNewline];
+                    
+        if (anIdentifierOrNot && [NUCNewline newlineFrom:aStream into:&aNewline])
         {
-            [aStream skipWhitespacesWithoutNewline];
-                        
-            if (anIdentifier && [NUCNewline newlineFrom:aStream into:&aNewline])
-            {
-                if (aToken)
-                    *aToken = [NUCUndef undefWithHash:aHash directiveName:aDirectiveName identifier:anIdentifier newline:aNewline];
-                
-                return YES;
-            }
+            if (aToken)
+                *aToken = [NUCUndef undefWithHash:aHash directiveName:aDirectiveName identifier:(NUCIdentifier *)anIdentifierOrNot newline:aNewline];
+            
+            return YES;
         }
-        
-        [aStream setPosition:aPosition];
     }
+    
+    [aStream setPosition:aPosition];
     
     return NO;
 }
 
-+ (instancetype)undefWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCPreprocessingToken *)anIdentifier newline:(NUCNewline *)aNewline
++ (instancetype)undefWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCIdentifier *)anIdentifier newline:(NUCNewline *)aNewline
 {
     return [[[self alloc] initWithHash:aHash directiveName:aDirectiveName identifier:anIdentifier newline:aNewline] autorelease];
 }
 
-- (instancetype)initWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCPreprocessingToken *)anIdentifier newline:(NUCNewline *)aNewline
+- (instancetype)initWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName identifier:(NUCIdentifier *)anIdentifier newline:(NUCNewline *)aNewline
 {
     if (self = [super initWithType:NUCLexicalElementUndefType hash:aHash directiveName:aDirectiveName newline:aNewline])
     {
@@ -64,9 +67,14 @@
     [super dealloc];
 }
 
-- (NUCPreprocessingToken *)identifier
+- (NUCIdentifier *)identifier
 {
     return identifier;
+}
+
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
+{
+    [aPreprocessor undef:self];
 }
 
 @end

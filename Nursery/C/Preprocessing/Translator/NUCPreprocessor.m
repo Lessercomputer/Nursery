@@ -23,6 +23,7 @@
 #import "NUCTextLine.h"
 #import "NUCControlLineDefineFunctionLike.h"
 #import "NUCGroupPart.h"
+#import "NUCUndef.h"
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSDictionary.h>
@@ -68,6 +69,11 @@
 - (NUCControlLineDefine *)macroDefineFor:(NUCIdentifier *)aMacroName
 {
     return [[self macroDefines] objectForKey:aMacroName];
+}
+
+- (void)removeMacroDefineFor:(NUCIdentifier *)aMacroName
+{
+    [[self macroDefines] removeObjectForKey:aMacroName];
 }
 
 - (void)setMacroDefine:(NUCControlLineDefine *)aMacroDefine
@@ -122,6 +128,11 @@
         [self setMacroDefine:aMacroDefine];
 }
 
+- (void)undef:(NUCUndef *)anUndef
+{
+    NUCIdentifier *aMacroName = [anUndef identifier];
+    [self removeMacroDefineFor:aMacroName];
+}
 
 - (NSInteger)executeConstantExpression:(NUCConstantExpression *)aConstantExpression
 {

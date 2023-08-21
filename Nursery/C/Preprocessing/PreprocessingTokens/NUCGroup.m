@@ -43,7 +43,7 @@
             {
                 if (aCurrentTextLinesBeginningIndex != NSUIntegerMax)
                 {
-                    [self executeMacrosAt:aCurrentTextLinesBeginningIndex count:aCurrentTextLineCount inGroup:aGroup with:aPreprocessor];
+                    [aGroup executeMacrosFromAt:aCurrentTextLinesBeginningIndex count:aCurrentTextLineCount with:aPreprocessor];
                     
                     aCurrentTextLinesBeginningIndex = NSUIntegerMax;
                     aCurrentTextLineCount = 0;
@@ -59,22 +59,12 @@
     }
     
     if (aCurrentTextLineCount)
-        [self executeMacrosAt:aCurrentTextLinesBeginningIndex count:aCurrentTextLineCount inGroup:aGroup with:aPreprocessor];
+        [aGroup executeMacrosFromAt:aCurrentTextLinesBeginningIndex count:aCurrentTextLineCount with:aPreprocessor];
     
     if (aToken)
         *aToken = aGroup;
     
     return aTokenScanned;
-}
-
-+ (void)executeMacrosAt:(NSUInteger)aTextLineBeginningIndex count:(NSUInteger)aTextLineCount inGroup:(NUCGroup *)aGroup with:(NUCPreprocessor *)aPreprocessor
-{
-    NSArray *aCurrentTextLines = [[aGroup groupParts] subarrayWithRange:NSMakeRange(aTextLineBeginningIndex, aTextLineCount)];
-    
-    NUCPpTokens *aPpTokensWithMacroInvocations = [NUCPpTokens ppTokensWithMacroInvocationsFromTextLines:aCurrentTextLines with:aPreprocessor];
-    
-    NSMutableArray *aMacroReplacedPpTokens = [aPpTokensWithMacroInvocations replaceMacrosWith:aPreprocessor];
-    NSLog(@"%@", aMacroReplacedPpTokens);
 }
 
 + (instancetype)group
@@ -87,6 +77,7 @@
     if (self = [super initWithType:aType])
     {
         groupParts = [NSMutableArray new];
+        macroReplacedPpTokens = [NSMutableArray new];
     }
     
     return self;
@@ -95,6 +86,7 @@
 - (void)dealloc
 {
     [groupParts release];
+    [macroReplacedPpTokens release];
     
     [super dealloc];
 }
@@ -114,4 +106,18 @@
     [[self groupParts] addObject:aGroupPart];
 }
 
+- (NSMutableArray *)macroReplacedPpTokens
+{
+    return macroReplacedPpTokens;
+}
+
+- (void)executeMacrosFromAt:(NSUInteger)anIndex count:(NSUInteger)aCount with:(NUCPreprocessor *)aPreprocessor
+{
+    NSArray *aCurrentTextLines = [[self groupParts] subarrayWithRange:NSMakeRange(anIndex, aCount)];
+    NUCPpTokens *aPpTokensWithMacroInvocations = [NUCPpTokens ppTokensWithMacroInvocationsFromTextLines:aCurrentTextLines with:aPreprocessor];
+    NSMutableArray *aMacroReplacedPpTokens = [aPpTokensWithMacroInvocations replaceMacrosWith:aPreprocessor];
+    [[self macroReplacedPpTokens] addObjectsFromArray:aMacroReplacedPpTokens];
+    
+    NSLog(@"%@", aMacroReplacedPpTokens);
+}
 @end
