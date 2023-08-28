@@ -14,8 +14,24 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSScanner.h>
 #import <Foundation/NSURL.h>
+#import <Foundation/NSCharacterSet.h>
 
 @implementation NUCSourceFile
+
+static NSCharacterSet *newlineAndBackslashCharacterSet;
+
++ (void)initialize
+{
+    NSMutableCharacterSet *aNewlineAndBackslashCharacterSet = [[NUCLexicalElement NUCNewlineCharacterSet] mutableCopy];
+    [aNewlineAndBackslashCharacterSet addCharactersInString:NUCBackslash];
+    newlineAndBackslashCharacterSet = [aNewlineAndBackslashCharacterSet copy];
+    [aNewlineAndBackslashCharacterSet release];
+}
+
++ (NSCharacterSet *)newlineAndBackslashCharacterSet
+{
+    return newlineAndBackslashCharacterSet;
+}
 
 - (instancetype)initWithSourceURL:(NSURL *)aURL
 {
@@ -119,63 +135,76 @@
         }
     }
     
-    logicalSourcePhase1String = [aLogicalSourceStringInPhase1 copy];
+    [self setLogicalSourcePhase1String:aLogicalSourceStringInPhase1];
 }
 
 - (void)preprocessPhase2
 {
-    NULibrary *aSourceStringRangeMappingOfPhase2ToPhase1 = [NULibrary libraryWithComparator:[NUCRangePairFromComparator comparator]];
-    
     NSMutableString *aLogicalSourceStringInPhase2 = [NSMutableString string];
    
-    NSScanner *aScanner = [NSScanner scannerWithString:logicalSourcePhase1String];
+    NSScanner *aScanner = [NSScanner scannerWithString:[self logicalSourcePhase1String]];
     [aScanner setCharactersToBeSkipped:nil];
+    NSCharacterSet *aNewlineAndBackslashCharacterSet = [[self class] newlineAndBackslashCharacterSet];
+    NSUInteger aScanLocation = [aScanner scanLocation];
     NSString *aScannedString = nil;
+    NSMutableArray *aLines = [NSMutableArray array];
+    BOOL aShouldSpliceNextLine = NO;
     
     while (![aScanner isAtEnd])
     {
-        NSUInteger aScanLocation = [aScanner scanLocation];
-        
-        if ([aScanner scanString:NUCBackslash intoString:NULL])
-        {
-            NSString *aNewLineString = nil;
-            
-            if ([aScanner scanString:NUCCRLF intoString:&aNewLineString]
-                  || [aScanner scanString:NUCLF intoString:&aNewLineString]
-                  || [aScanner scanString:NUCCR intoString:&aNewLineString])
-            {
-                NUCRangePair *aRangePair = [NUCRangePair rangePairWithRangeFrom:NUMakeRegion([aLogicalSourceStringInPhase2 length], 0) rangeTo:NUMakeRegion(aScanLocation, 1 + [aNewLineString length])];
-                
-                id anExistingObject = [aSourceStringRangeMappingOfPhase2ToPhase1 objectForKey:aRangePair];
-                
-                if (anExistingObject)
-                {
-                    if ([anExistingObject isKindOfClass:[NUCRangePair class]])
-                    {
-                        NSMutableArray *anArray = [NSMutableArray array];
-                        [aSourceStringRangeMappingOfPhase2ToPhase1 setObject:anArray forKey:anExistingObject];
-                        anExistingObject = anArray;
-                    }
-                    
-                    [(NSMutableArray *)anExistingObject addObject:aRangePair];
-                }
-                else
-                    [aSourceStringRangeMappingOfPhase2ToPhase1 setObject:aRangePair forKey:aRangePair];
-            }
-            else
-            {
-                [aLogicalSourceStringInPhase2 appendString:NUCBackslash];
-            }
-        }
-        else if ([aScanner scanUpToString:NUCBackslash intoString:&aScannedString])
-        {
+        if ([aScanner scanUpToCharactersFromSet:aNewlineAndBackslashCharacterSet intoString:&aScannedString])
             [aLogicalSourceStringInPhase2 appendString:aScannedString];
+        else
+            aShouldSpliceNextLine = NO;
+        
+        NSString *aNewLineString = nil;
+        NSValue *aLineRange = nil;
+        
+        if (([aScanner scanString:NUCCRLF intoString:&aNewLineString]
+            || [aScanner scanString:NUCLF intoString:&aNewLineString]
+            || [aScanner scanString:NUCCR intoString:&aNewLineString]))
+        {
+            [aLogicalSourceStringInPhase2 appendString:aNewLineString];
+            aLineRange = [NSValue valueWithRange:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation)];
+            [self addLineRange:aLineRange to:aLines spliceLine:aShouldSpliceNextLine];
+            
+            aScanLocation = [aScanner scanLocation];
+            aShouldSpliceNextLine = NO;
+        }
+        else if ([aScanner scanString:NUCBackslash intoString:NULL])
+        {
+            if ([aScanner scanString:NUCCRLF intoString:&aNewLineString]
+                 || [aScanner scanString:NUCLF intoString:&aNewLineString]
+                 || [aScanner scanString:NUCCR intoString:&aNewLineString])
+            {
+                aLineRange = [NSValue valueWithRange:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation - 1 - [aNewLineString length])];
+                [self addLineRange:aLineRange to:aLines spliceLine:aShouldSpliceNextLine];
+
+                aScanLocation = [aScanner scanLocation];
+                aShouldSpliceNextLine = YES;
+            }
         }
     }
-    
-    rangeMappingOfPhase2StringToPhase1String = [aSourceStringRangeMappingOfPhase2ToPhase1 retain];
-    
+        
     [self setLogicalSourceString:aLogicalSourceStringInPhase2];
+}
+
+- (void)addLineRange:(NSValue *)aLineRange to:(NSMutableArray *)aLines spliceLine:(BOOL)aShouldSpliceNextLine
+{
+    if (aShouldSpliceNextLine)
+    {
+        id aRangeOrArray = [aLines lastObject];
+        if ([aRangeOrArray isKindOfClass:[NSValue class]])
+        {
+            NSMutableArray *aLineRangeArray = [NSMutableArray arrayWithObject:aRangeOrArray];
+            [aLineRangeArray addObject:aLineRange];
+            [aLines replaceObjectAtIndex:[aLines count] - 1 withObject:aLineRangeArray];
+        }
+        else
+            [aRangeOrArray addObject:aLineRange];
+    }
+    else
+        [aLines addObject:aLineRange];
 }
 
 - (NSString *)physicalSourceString
@@ -192,6 +221,39 @@
 {
     [logicalSourceString autorelease];
     logicalSourceString = [aString copy];
+}
+
+- (NSString *)logicalSourcePhase1String
+{
+    return logicalSourcePhase1String;
+}
+
+- (void)setLogicalSourcePhase1String:(NSString *)aString
+{
+    [logicalSourcePhase1String autorelease];
+    logicalSourcePhase1String = [aString copy];
+}
+
+- (NSUInteger)lineNumberForLocation:(NSUInteger)aLocation
+{
+    return NSNotFound;
+}
+
+- (NSMutableArray *)computeLineRangesOf:(NSString *)aString
+{
+    NSMutableArray *aLineRanges = [NSMutableArray array];
+    NSScanner *aScanner = [NSScanner scannerWithString:aString];
+    [aScanner setCharactersToBeSkipped:nil];
+    
+    while (![aScanner isAtEnd])
+    {
+        NSUInteger aLocation = [aScanner scanLocation];
+        [aScanner scanUpToCharactersFromSet:[NUCLexicalElement NUCNewlineCharacterSet] intoString:NULL];
+        [aScanner scanString:NUCLF intoString:NULL] || [aScanner scanString:NUCCRLF intoString:NULL] || [aScanner scanString:NUCCR intoString:NULL];
+        [aLineRanges addObject:[NSValue valueWithRange:NSMakeRange(aLocation, [aScanner scanLocation] - aLocation)]];
+    }
+    
+    return aLineRanges;
 }
 
 @end

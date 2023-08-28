@@ -30,6 +30,8 @@
 
 - (void)setLogicalSourceString:(NSString *)aString;
 
+- (NSUInteger)lineNumberForLocation:(NSUInteger)aLocation;
+
 - (NUCPreprocessingFile *)preprocessingFile;
 - (void)setPreprocessingFile:(NUCPreprocessingFile *)aPreprocessingFile;
 
