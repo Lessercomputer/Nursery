@@ -146,16 +146,15 @@ static NSCharacterSet *newlineAndBackslashCharacterSet;
     [aScanner setCharactersToBeSkipped:nil];
     NSCharacterSet *aNewlineAndBackslashCharacterSet = [[self class] newlineAndBackslashCharacterSet];
     NSUInteger aScanLocation = [aScanner scanLocation];
-    NSString *aScannedString = nil;
     NSMutableArray *aLines = [NSMutableArray array];
     BOOL aShouldSpliceNextLine = NO;
     
     while (![aScanner isAtEnd])
     {
+        NSString *aScannedString = nil;
+
         if ([aScanner scanUpToCharactersFromSet:aNewlineAndBackslashCharacterSet intoString:&aScannedString])
             [aLogicalSourceStringInPhase2 appendString:aScannedString];
-        else
-            aShouldSpliceNextLine = NO;
         
         NSString *aNewLineString = nil;
         NSValue *aLineRange = nil;
@@ -177,12 +176,14 @@ static NSCharacterSet *newlineAndBackslashCharacterSet;
                  || [aScanner scanString:NUCLF intoString:&aNewLineString]
                  || [aScanner scanString:NUCCR intoString:&aNewLineString])
             {
-                aLineRange = [NSValue valueWithRange:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation - 1 - [aNewLineString length])];
+                aLineRange = [NSValue valueWithRange:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation)];
                 [self addLineRange:aLineRange to:aLines spliceLine:aShouldSpliceNextLine];
 
                 aScanLocation = [aScanner scanLocation];
                 aShouldSpliceNextLine = YES;
             }
+            else
+                [aLogicalSourceStringInPhase2 appendString:NUCBackslash];
         }
     }
         
