@@ -20,6 +20,8 @@
     NUCPreprocessingFile *preprocessingFile;
 }
 
+@property (nonatomic, copy) NSArray *lines;
+
 - (instancetype)initWithSourceURL:(NSURL *)aURL;
 - (instancetype)initWithSourceString:(NSString *)aString url:(NSURL *)aURL;
 
