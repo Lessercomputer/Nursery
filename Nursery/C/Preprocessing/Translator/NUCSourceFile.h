@@ -16,11 +16,11 @@
     NSString *logicalSourcePhase1String;
     NSString *logicalSourceString;
     NULibrary *rangeMappingOfPhase1StringToPhysicalString;
-    NULibrary *rangeMappingOfPhase2StringToPhase1String;
+    NULibrary *lineRangeMappingOfPhase2StringToPhase1String;
     NUCPreprocessingFile *preprocessingFile;
 }
 
-@property (nonatomic, copy) NSArray *lines;
+@property (nonatomic, copy) NSArray *lineRanges;
 
 - (instancetype)initWithSourceURL:(NSURL *)aURL;
 - (instancetype)initWithSourceString:(NSString *)aString url:(NSURL *)aURL;

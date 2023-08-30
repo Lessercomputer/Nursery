@@ -21,7 +21,7 @@
 
 static NSCharacterSet *newlineAndBackslashCharacterSet;
 
-@synthesize lines;
+@synthesize lineRanges;
 
 + (void)initialize
 {
@@ -63,9 +63,9 @@ static NSCharacterSet *newlineAndBackslashCharacterSet;
     [logicalSourceString release];
     logicalSourceString = nil;
     [rangeMappingOfPhase1StringToPhysicalString release];
-    [rangeMappingOfPhase2StringToPhase1String release];
+    [lineRangeMappingOfPhase2StringToPhase1String release];
     [preprocessingFile release];
-    [lines release];
+    [lineRanges release];
     
     [super dealloc];
 }
@@ -150,9 +150,10 @@ static NSCharacterSet *newlineAndBackslashCharacterSet;
     [aScanner setCharactersToBeSkipped:nil];
     NSCharacterSet *aNewlineAndBackslashCharacterSet = [[self class] newlineAndBackslashCharacterSet];
     NSUInteger aScanLocation = [aScanner scanLocation];
-    NSMutableArray *aLines = [NSMutableArray array];
+    NSMutableArray *aLineRanges = [NSMutableArray array];
     NSUInteger aLineStartLocationInPhase2 = 0;
     BOOL aShouldSpliceNextLine = NO;
+    NSUInteger aLineNumber = 1;
     
     while (![aScanner isAtEnd])
     {
@@ -174,7 +175,7 @@ static NSCharacterSet *newlineAndBackslashCharacterSet;
             
             if (aShouldSpliceNextLine)
             {
-                NUCLineMapping *aLineMapping = [aLines lastObject];
+                NUCLineMapping *aLineMapping = [aLineRanges lastObject];
                 [aLineMapping setLineRange:aLineRangeInPhase2];
                 [aLineMapping addOtherLineRange:aLineRangeInPhase1];
             }
@@ -182,7 +183,8 @@ static NSCharacterSet *newlineAndBackslashCharacterSet;
             {
                 NUCLineMapping *aLineMapping = [NUCLineMapping lineMappingWithLineRange:aLineRangeInPhase2];
                 [aLineMapping addOtherLineRange:aLineRangeInPhase1];
-                [aLines addObject:aLineMapping];
+                [aLineMapping setLineNumber:aLineNumber++];
+                [aLineRanges addObject:aLineMapping];
             }
             
             aLineStartLocationInPhase2 = NSMaxRange(aLineRangeInPhase2);
@@ -198,12 +200,13 @@ static NSCharacterSet *newlineAndBackslashCharacterSet;
                 aLineRangeInPhase1 = [NSValue valueWithRange:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation)];
                 
                 if (aShouldSpliceNextLine)
-                    [[aLines lastObject] addOtherLineRange:aLineRangeInPhase1];
+                    [[aLineRanges lastObject] addOtherLineRange:aLineRangeInPhase1];
                 else
                 {
                     NUCLineMapping *aLineMapping = [NUCLineMapping lineMapping];
                     [aLineMapping addOtherLineRange:aLineRangeInPhase1];
-                    [aLines addObject:aLineMapping];
+                    [aLineMapping setLineNumber:aLineNumber++];
+                    [aLineRanges addObject:aLineMapping];
                 }
 
                 aScanLocation = [aScanner scanLocation];
@@ -215,7 +218,24 @@ static NSCharacterSet *newlineAndBackslashCharacterSet;
     }
         
     [self setLogicalSourceString:aLogicalSourceStringInPhase2];
-    [self setLines:aLines];
+    [self setLineRanges:aLineRanges];
+    [self updateLineRangeLibrary];
+}
+
+- (void)setLineRanges:(NSArray *)aLines
+{
+    [lineRanges autorelease];
+    lineRanges = [aLines copy];
+}
+
+- (void)updateLineRangeLibrary
+{
+    [lineRangeMappingOfPhase2StringToPhase1String autorelease];
+    lineRangeMappingOfPhase2StringToPhase1String = [NULibrary new];
+    
+    [[self lineRanges] enumerateObjectsUsingBlock:^(NUCLineMapping * _Nonnull aLineMapping, NSUInteger idx, BOOL * _Nonnull stop) {
+        [lineRangeMappingOfPhase2StringToPhase1String setObject:aLineMapping forKey:aLineMapping];
+    }];
 }
 
 - (NSString *)physicalSourceString
@@ -247,24 +267,13 @@ static NSCharacterSet *newlineAndBackslashCharacterSet;
 
 - (NSUInteger)lineNumberForLocation:(NSUInteger)aLocation
 {
-    return NSNotFound;
-}
+    id aKey = [NUCLineMapping lineMappingWithLineRange:NSMakeRange(aLocation, 0)];
+    NUCLineMapping *aLineMapping = [lineRangeMappingOfPhase2StringToPhase1String keyLessThanOrEqualTo:aKey];
+    
+    if (aLineMapping && [aLineMapping containsLocation:aLocation])
+        return [aLineMapping lineNumber];
 
-- (NSMutableArray *)computeLineRangesOf:(NSString *)aString
-{
-    NSMutableArray *aLineRanges = [NSMutableArray array];
-    NSScanner *aScanner = [NSScanner scannerWithString:aString];
-    [aScanner setCharactersToBeSkipped:nil];
-    
-    while (![aScanner isAtEnd])
-    {
-        NSUInteger aLocation = [aScanner scanLocation];
-        [aScanner scanUpToCharactersFromSet:[NUCLexicalElement NUCNewlineCharacterSet] intoString:NULL];
-        [aScanner scanString:NUCLF intoString:NULL] || [aScanner scanString:NUCCRLF intoString:NULL] || [aScanner scanString:NUCCR intoString:NULL];
-        [aLineRanges addObject:[NSValue valueWithRange:NSMakeRange(aLocation, [aScanner scanLocation] - aLocation)]];
-    }
-    
-    return aLineRanges;
+    return NSNotFound;
 }
 
 @end

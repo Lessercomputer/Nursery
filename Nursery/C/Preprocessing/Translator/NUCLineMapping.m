@@ -60,9 +60,26 @@
         [aRangeOrArray addObject:aLineRange];
 }
 
+- (NSComparisonResult)compare:(id)anObject
+{
+    NSRange aRange1 = [self lineRange], aRange2 = [anObject lineRange];
+    
+    if (aRange1.location > aRange2.location)
+        return NSOrderedDescending;
+    else if (aRange1.location < aRange2.location)
+        return NSOrderedAscending;
+    else
+        return NSOrderedSame;
+}
+
+- (BOOL)containsLocation:(NSUInteger)aLocation
+{
+    return NSLocationInRange(aLocation, [self lineRange]);
+}
+
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p lineRange: %@ otherLineRange:%@", [self class], self, NSStringFromRange([self lineRange]), [self otherLineRange]];
+    return [NSString stringWithFormat:@"<%@ %p> lineNumber: %lu lineRange: %@ otherLineRange:%@", [self class], self, [self lineNumber], NSStringFromRange([self lineRange]), [self otherLineRange]];
 }
 
 @end
