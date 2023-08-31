@@ -264,7 +264,7 @@ static NUCDecomposedPreprocessingToken *whitespaceToken = nil;
 
 - (NSString *)description
 {
-    return [[super description] stringByAppendingFormat:@", content:%@", [self content]];
+    return [[super description] stringByAppendingFormat:@", content:%@, range:%@", [self content], NSStringFromRange([self range])];
 }
 
 - (BOOL)isEqual:(id)anOther

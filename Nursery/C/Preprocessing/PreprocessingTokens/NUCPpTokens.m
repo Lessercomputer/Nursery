@@ -435,8 +435,11 @@
     {
         NSMutableArray *aMacroReplacedPpTokens = [NSMutableArray array];
         
-        [self enumerateObjectsUsingBlock:^(NUCPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop) {
-            [aPpToken addExpandedPpTokensTo:aMacroReplacedPpTokens];
+        [self enumerateObjectsUsingBlock:^(id aPpToken, NSUInteger anIndex, BOOL *aStop) {
+            if ([aPpToken respondsToSelector:@selector(addExpandedPpTokensTo:with:)])
+                [aPpToken addExpandedPpTokensTo:aMacroReplacedPpTokens with:aPreprocessor];
+            else
+                [aPpToken addExpandedPpTokensTo:aMacroReplacedPpTokens];
         }];
 
         return aMacroReplacedPpTokens;

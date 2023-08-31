@@ -18,6 +18,7 @@
 #import "NUCReplacementList.h"
 #import "NUCSubstitutedStringLiteral.h"
 #import "NUCMacroArgument.h"
+#import "NUCPredefinedMacroInvocation.h"
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSSet.h>
@@ -25,9 +26,12 @@
 
 @implementation NUCMacroInvocation
 
-+ (instancetype)macroInvocationWithDefine:(NUCControlLineDefine *)aDefine
+@synthesize identifier;
+@synthesize parent;
+
++ (instancetype)macroInvocationWithIdentifier:(NUCIdentifier *)anIdentifier define:(NUCControlLineDefine *)aDefine parent:(NUCMacroInvocation *)aParent
 {
-    return [[[self alloc] initWithDefine:aDefine] autorelease];
+    return [[[self alloc] initWithIdentifier:anIdentifier define:aDefine parent:aParent] autorelease];
 }
 
 + (NUCPreprocessingToken *)identifierOrMacroInvocation:(NUCIdentifier *)anIdentifier from:(NUCPreprocessingTokenStream *)aPpTokenStream with:(NUCPreprocessor *)aPreprocessor parentMacroInvocation:(NUCMacroInvocation *)aParentMacroInvocation replacingMacroNames:(NSMutableSet *)aReplacingMacroNames
@@ -38,10 +42,15 @@
     NUCControlLineDefine *aMacroDefineToInvoke = [aPreprocessor macroDefineFor:anIdentifier];
     
     if (!aMacroDefineToInvoke)
-        return anIdentifier;
+    {
+        if ([anIdentifier isEqualToString:NUCPredefinedMacroLINE])
+            return [NUCPredefinedMacroInvocation macroInvocationWithIdentifier:anIdentifier parent:aParentMacroInvocation];
+        else
+            return anIdentifier;
+    }
     else
     {
-        NUCMacroInvocation *aMacroInvocation = [NUCMacroInvocation macroInvocationWithDefine:aMacroDefineToInvoke];
+        NUCMacroInvocation *aMacroInvocation = [NUCMacroInvocation macroInvocationWithIdentifier:anIdentifier define:aMacroDefineToInvoke parent:aParentMacroInvocation];
         
         if ([aMacroDefineToInvoke isFunctionLike])
         {
@@ -159,15 +168,16 @@
 
 - (instancetype)init
 {
-    return [self initWithDefine:nil];
+    return [self initWithIdentifier:nil define:nil parent:nil];
 }
 
-- (instancetype)initWithDefine:(NUCControlLineDefine *)aDefine
+- (instancetype)initWithIdentifier:(NUCIdentifier *)anIdentifier define:(NUCControlLineDefine *)aDefine parent:(NUCMacroInvocation *)aParent
 {
     if (self = [super initWithType:NUCLexicalElementNone])
     {
         define = aDefine;
         arguments = [NSMutableArray new];
+        parent = aParent;
     }
     
     return self;
@@ -175,6 +185,7 @@
 
 - (void)dealloc
 {
+    [identifier release];
     [whitespacesFollowingMacroName release];
     [openingParenthesis release];
     [closingParenthesis release];
@@ -192,6 +203,14 @@
 - (void)setDefine:(NUCControlLineDefine *)aDefine
 {
     define = aDefine;
+}
+
+- (NUCMacroInvocation *)top
+{
+    if ([self parent])
+        return [[self parent] top];
+    else
+        return self;
 }
 
 - (BOOL)isObjectLike
@@ -304,7 +323,7 @@
 {
     NSMutableArray *anExpandedPpTokens = [NSMutableArray array];
     
-    [self addExpandedPpTokensTo:anExpandedPpTokens With:nil];
+    [self addExpandedPpTokensTo:anExpandedPpTokens with:nil];
     
     return anExpandedPpTokens;
 }
@@ -330,17 +349,17 @@
 
 - (void)addExpandedPpTokensTo:(NSMutableArray *)aPpTokens
 {
-    [self addExpandedPpTokensTo:aPpTokens With:nil];
+    [self addExpandedPpTokensTo:aPpTokens with:nil];
 }
 
-- (void)addExpandedPpTokensTo:(NSMutableArray *)aPpTokens With:(NUCPreprocessor *)aPreprocessor
+- (void)addExpandedPpTokensTo:(NSMutableArray *)aPpTokens with:(NUCPreprocessor *)aPreprocessor
 {
     NSUInteger anOverlappedMacroNameIndex = [[self ppTokensWithMacroinvocations] overlappedMacroNameIndex];
     
     [[self ppTokensWithMacroinvocations] enumerateObjectsUsingBlock:^(NUCPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop) {
         
         if ([aPpToken isMacroInvocation])
-            [(NUCMacroInvocation *)aPpToken addExpandedPpTokensTo:aPpTokens With:aPreprocessor];
+            [(NUCMacroInvocation *)aPpToken addExpandedPpTokensTo:aPpTokens with:aPreprocessor];
         else if (anIndex != anOverlappedMacroNameIndex)
             [aPpToken addExpandedPpTokensTo:aPpTokens];
     }];

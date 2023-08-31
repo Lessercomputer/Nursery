@@ -20,14 +20,19 @@
     NUCPpTokensWithMacroInvocations *ppTokensWithMacroinvocations;
 }
 
-+ (instancetype)macroInvocationWithDefine:(NUCControlLineDefine *)aDefine;
++ (instancetype)macroInvocationWithIdentifier:(NUCIdentifier *)anIdentifier define:(NUCControlLineDefine *)aDefine parent:(NUCMacroInvocation *)aParent;
 
 + (NUCPreprocessingToken *)identifierOrMacroInvocation:(NUCIdentifier *)anIdentifier from:(NUCPreprocessingTokenStream *)aPpTokenStream with:(NUCPreprocessor *)aPreprocessor parentMacroInvocation:(NUCMacroInvocation *)aParentMacroInvocation replacingMacroNames:(NSMutableSet *)aReplacingMacroNames;
 
-- (instancetype)initWithDefine:(NUCControlLineDefine *)aDefine;
+- (instancetype)initWithIdentifier:(NUCIdentifier *)anIdentifier define:(NUCControlLineDefine *)aDefine parent:(NUCMacroInvocation *)aParent;
+
+@property (nonatomic, retain) NUCIdentifier *identifier;
 
 - (NUCControlLineDefine *)define;
 - (void)setDefine:(NUCControlLineDefine *)aDefine;
+
+@property (nonatomic, assign) NUCMacroInvocation *parent;
+@property (nonatomic, readonly) NUCMacroInvocation *top;
 
 - (BOOL)isObjectLike;
 - (BOOL)isFunctionLike;
@@ -61,7 +66,7 @@
 
 - (NSMutableArray *)expandedPpTokens;
 
-- (void)addExpandedPpTokensTo:(NSMutableArray *)aPpTokens With:(NUCPreprocessor *)aPreprocessor;
+- (void)addExpandedPpTokensTo:(NSMutableArray *)aPpTokens with:(NUCPreprocessor *)aPreprocessor;
 
 @end
 

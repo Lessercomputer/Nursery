@@ -65,6 +65,7 @@ extern NSString * const NUCPreprocessingDirectiveError;
 extern NSString * const NUCPreprocessingDirectivePragma;
 
 extern NSString * const NUCPredefinedMacroVA_ARGS;
+extern NSString * const NUCPredefinedMacroLINE;
 
 extern NSString * const NUCTrigraphSequenceEqual;
 extern NSString * const NUCTrigraphSequenceLeftBlacket;

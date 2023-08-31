@@ -44,3 +44,9 @@ F3(,,)
 
 #undef A
 A
+
+__LINE__
+
+#define line __LINE__
+#define line2 line
+line2

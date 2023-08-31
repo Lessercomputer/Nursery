@@ -31,4 +31,9 @@
     return [[self content] isEqual:NUCPredefinedMacroVA_ARGS];
 }
 
+- (BOOL)isEqualToString:(NSString *)aString
+{
+    return [[self string] isEqualToString:aString];
+}
+
 @end

@@ -14,5 +14,7 @@
 
 - (instancetype)initWithContent:(NSString *)aContent range:(NSRange)aRange;
 
+- (BOOL)isEqualToString:(NSString *)aString;
+
 @end
 

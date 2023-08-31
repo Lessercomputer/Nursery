@@ -349,6 +349,8 @@
 		61BC39BC2A78A6D3006CFBB3 /* NUCRangePair.m in Sources */ = {isa = PBXBuildFile; fileRef = 61BC39B02A78A6D3006CFBB3 /* NUCRangePair.m */; };
 		61BC39BD2A78A6D3006CFBB3 /* NUCDecomposer.m in Sources */ = {isa = PBXBuildFile; fileRef = 61BC39B12A78A6D3006CFBB3 /* NUCDecomposer.m */; };
 		61BC39BE2A78A6D3006CFBB3 /* NUCSourceFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 61BC39B22A78A6D3006CFBB3 /* NUCSourceFile.h */; };
+		61C6F6402AA04B6200E6F24A /* NUCPredefinedMacroInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 61C6F63E2AA04B6200E6F24A /* NUCPredefinedMacroInvocation.h */; };
+		61C6F6412AA04B6200E6F24A /* NUCPredefinedMacroInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C6F63F2AA04B6200E6F24A /* NUCPredefinedMacroInvocation.m */; };
 		61DC96341FA104D900AABC9E /* Nursery.h in Headers */ = {isa = PBXBuildFile; fileRef = 61DC96331FA104D900AABC9E /* Nursery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		61FCF72820044F32001BD320 /* NUNurseryNetService.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FCF72720044F32001BD320 /* NUNurseryNetService.m */; };
 		61FD7A6E1FF9E4E2009ED9D5 /* NUNurseryNetResponder.h in Headers */ = {isa = PBXBuildFile; fileRef = 61FD7A6C1FF9E4E2009ED9D5 /* NUNurseryNetResponder.h */; };
@@ -766,6 +768,8 @@
 		61BC39B02A78A6D3006CFBB3 /* NUCRangePair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUCRangePair.m; sourceTree = "<group>"; };
 		61BC39B12A78A6D3006CFBB3 /* NUCDecomposer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUCDecomposer.m; sourceTree = "<group>"; };
 		61BC39B22A78A6D3006CFBB3 /* NUCSourceFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NUCSourceFile.h; sourceTree = "<group>"; };
+		61C6F63E2AA04B6200E6F24A /* NUCPredefinedMacroInvocation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCPredefinedMacroInvocation.h; sourceTree = "<group>"; };
+		61C6F63F2AA04B6200E6F24A /* NUCPredefinedMacroInvocation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCPredefinedMacroInvocation.m; sourceTree = "<group>"; };
 		61DC96331FA104D900AABC9E /* Nursery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Nursery.h; sourceTree = "<group>"; };
 		61FCF72720044F32001BD320 /* NUNurseryNetService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NUNurseryNetService.m; sourceTree = "<group>"; };
 		61FD7A6C1FF9E4E2009ED9D5 /* NUNurseryNetResponder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUNurseryNetResponder.h; sourceTree = "<group>"; };
@@ -1315,6 +1319,8 @@
 				61BC392B2A78A6C6006CFBB3 /* NUCPreprocessingDirective.m */,
 				61BC39322A78A6C6006CFBB3 /* NUCMacroInvocation.h */,
 				61BC390F2A78A6C6006CFBB3 /* NUCMacroInvocation.m */,
+				61C6F63E2AA04B6200E6F24A /* NUCPredefinedMacroInvocation.h */,
+				61C6F63F2AA04B6200E6F24A /* NUCPredefinedMacroInvocation.m */,
 				614F85B22A7C90D100470FEE /* NUCMacroArgument.h */,
 				614F85B32A7C90D100470FEE /* NUCMacroArgument.m */,
 				61BC391A2A78A6C6006CFBB3 /* NUCSubstitutedStringLiteral.h */,
@@ -1455,6 +1461,7 @@
 				619B09051913EEC000A4BAA2 /* NUOpaqueBPlusTree.h in Headers */,
 				616D0B1E2A78972600813539 /* NUCCastExpression.h in Headers */,
 				61DC96341FA104D900AABC9E /* Nursery.h in Headers */,
+				61C6F6402AA04B6200E6F24A /* NUCPredefinedMacroInvocation.h in Headers */,
 				619B08E71913EEC000A4BAA2 /* NUMainBranchGardenSeeker.h in Headers */,
 				619B08ED1913EEC000A4BAA2 /* NUMutableDictionary.h in Headers */,
 				B83E43682141272E000A5DD0 /* NUIvar+Project.h in Headers */,
@@ -1839,6 +1846,7 @@
 				61BC398E2A78A6C6006CFBB3 /* NUCTextLine.m in Sources */,
 				61BC39B32A78A6D3006CFBB3 /* NUCPreprocessingTokenStream.m in Sources */,
 				61BC39B92A78A6D3006CFBB3 /* NUCTranslator.m in Sources */,
+				61C6F6412AA04B6200E6F24A /* NUCPredefinedMacroInvocation.m in Sources */,
 				616D0AFD2A78972600813539 /* NUCLogicalORExpression.m in Sources */,
 				61BC397C2A78A6C6006CFBB3 /* NUCDecomposedPreprocessingToken.m in Sources */,
 				61BC397A2A78A6C6006CFBB3 /* NUCIfGroup.m in Sources */,
