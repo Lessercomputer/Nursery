@@ -6,6 +6,9 @@
 //
 
 #import "NUCLine.h"
+#import "NUCPreprocessor.h"
+#import "NUCPpTokens.h"
+#import "NUCDecomposer.h"
 
 @implementation NUCLine
 
@@ -34,6 +37,16 @@
 - (NUCPpTokens *)ppTokens
 {
     return ppTokens;
+}
+
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
+{
+    NUCPpTokens *aPptokens = [NUCPpTokens ppTokensWithMacroInvocationsFromPpTokens:[self ppTokens] with:aPreprocessor];
+    NSMutableArray *aMacroReplacedPpTokens = [aPptokens replaceMacrosWith:aPreprocessor];
+    
+//    [NUCDecomposer scanDigitSequenceFrom:<#(NSScanner *)#> into:<#(NSString **)#>]
+    [aPreprocessor line:self];
+
 }
 
 @end

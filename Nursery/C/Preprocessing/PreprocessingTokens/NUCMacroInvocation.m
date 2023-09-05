@@ -175,6 +175,7 @@
 {
     if (self = [super initWithType:NUCLexicalElementNone])
     {
+        identifier = [anIdentifier retain];
         define = aDefine;
         arguments = [NSMutableArray new];
         parent = aParent;

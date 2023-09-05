@@ -9,7 +9,7 @@
 
 #import <Nursery/NURegion.h>
 
-@class NSString, NSMutableArray;
+@class NSString, NSMutableArray, NSMutableString;
 
 extern NSString * const NUCBasicSourceCharacters;
 extern NSString * const NUCBasicSourceCharactersExceptSingleQuoteAndBackslash;
@@ -217,6 +217,8 @@ typedef enum : NSUInteger {
 
 - (BOOL)isCharacterConstant;
 - (BOOL)isStringLiteral;
+
+- (void)addPreprocessedStringTo:(NSMutableString *)aString;
 
 @end
 

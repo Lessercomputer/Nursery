@@ -338,6 +338,11 @@ static NSArray *NUCPreprocessingDirectiveNames;
     return [self type] == NUCLexicalElementStringLiteralType;
 }
 
+- (void)addPreprocessedStringTo:(NSMutableString *)aString
+{
+    
+}
+
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"<%@ %p> typeName:%@", [self class], self, [self typeName]];

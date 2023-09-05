@@ -8,13 +8,15 @@
 #import <Foundation/NSObject.h>
 
 @class NUCSourceFile;
-@class NSArray;
+@class NSArray, NSScanner;
 
 @interface NUCDecomposer : NSObject
 {
     BOOL hashExistsOnCurrentLine;
     BOOL includeExistsOnCurrentLine;
 }
+
++ (BOOL)scanDigitSequenceFrom:(NSScanner *)aScanner into:(NSString **)aString;
 
 - (NSArray *)decomposePreprocessingFile:(NUCSourceFile *)aSourceFile;
 - (NSArray *)decomposePreprocessingTokensIn:(NSString *)aString;

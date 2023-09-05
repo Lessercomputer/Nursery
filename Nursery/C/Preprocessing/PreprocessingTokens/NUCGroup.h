@@ -7,6 +7,7 @@
 
 #import "NUCPreprocessingDirective.h"
 
+@class NSMutableString;
 @class NUCPreprocessingTokenStream;
 
 @interface NUCGroup : NUCPreprocessingDirective
@@ -24,5 +25,7 @@
 - (void)add:(NUCPreprocessingDirective *)aGroupPart;
 
 - (void)executeMacrosFromAt:(NSUInteger)anIndex count:(NSUInteger)aCount with:(NUCPreprocessor *)aPreprocessor;
+
+- (void)addPreprocessedStringTo:(NSMutableString *)aString;
 
 @end

@@ -16,6 +16,7 @@
 @implementation NUCPredefinedMacroInvocation
 
 @synthesize identifier;
+@synthesize parent;
 
 + (instancetype)macroInvocationWithIdentifier:(NUCIdentifier *)anIdentifier parent:(NUCMacroInvocation *)aParent
 {
@@ -27,6 +28,7 @@
     if (self = [super initWithType:NUCLexicalElementNone])
     {
         identifier = [anIdentifier retain];
+        parent = aParent;
     }
     
     return self;

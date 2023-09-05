@@ -8,7 +8,7 @@
 #import "NUCLexicalElement.h"
 
 @class NUCPreprocessor;
-@class NSMutableArray;
+@class NSMutableArray, NSMutableString;
 
 @interface NUCPreprocessingToken : NUCLexicalElement
 

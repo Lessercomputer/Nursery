@@ -50,3 +50,6 @@ __LINE__
 #define line __LINE__
 #define line2 line
 line2
+
+#line 100
+__LINE__

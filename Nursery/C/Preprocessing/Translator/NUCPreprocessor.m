@@ -111,7 +111,10 @@
     NUCPreprocessingFile *aPreprocessingFile = nil;
     
     if ([NUCPreprocessingFile preprocessingFileFrom:aStream with:self into:&aPreprocessingFile])
+    {
         [[self sourceFile] setPreprocessingFile:aPreprocessingFile];
+        [[[self sourceFile] preprocessingFile] preprocessedString];
+    }
 }
 
 - (void)include:(NUCControlLineInclude *)anInclude
@@ -132,6 +135,11 @@
 {
     NUCIdentifier *aMacroName = [anUndef identifier];
     [self removeMacroDefineFor:aMacroName];
+}
+
+- (void)line:(NUCLine *)aLine
+{
+    
 }
 
 - (NSInteger)executeConstantExpression:(NUCConstantExpression *)aConstantExpression

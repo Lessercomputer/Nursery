@@ -10,7 +10,7 @@
 #import "NUCControlLineDefine.h"
 #import "NUCIdentifier.h"
 
-#import <Foundation/NSDictionary.h>
+#import <Foundation/NSString.h>
 
 @implementation NUCPreprocessingFile
 
@@ -54,6 +54,15 @@
 - (NUCGroup *)group
 {
     return group;
+}
+
+- (NSString *)preprocessedString
+{
+    NSMutableString *aString = [NSMutableString string];
+    
+    [[self group] addPreprocessedStringTo:aString];
+    
+    return aString;
 }
 
 @end

@@ -119,5 +119,14 @@
     [[self macroReplacedPpTokens] addObjectsFromArray:aMacroReplacedPpTokens];
     
     NSLog(@"%@", aMacroReplacedPpTokens);
+    
 }
+
+- (void)addPreprocessedStringTo:(NSMutableString *)aString
+{
+    [[self macroReplacedPpTokens] enumerateObjectsUsingBlock:^(NUCPreprocessingToken * _Nonnull aPpToken, NSUInteger idx, BOOL * _Nonnull stop) {
+        [aPpToken addPreprocessedStringTo:aString];
+    }];
+}
+
 @end

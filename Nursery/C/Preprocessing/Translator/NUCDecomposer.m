@@ -67,7 +67,7 @@
     
     if ([self scanIdentifierNondigitFrom:aScanner])
     {
-        while ([self scanDigitFrom:aScanner] || [self scanIdentifierNondigitFrom:aScanner]);
+        while ([self scanDigitFrom:aScanner into:NULL] || [self scanIdentifierNondigitFrom:aScanner]);
     }
     
     if (aScanLocation != [aScanner scanLocation])
@@ -96,9 +96,9 @@
     {
         NSUInteger aScanLocation = [aScanner scanLocation];
         
-        if ([self scanDigitFrom:aScanner])
+        if ([self scanDigitFrom:aScanner into:NULL])
             ;
-        else if ([self scanPeriodFrom:aScanner] && [self scanDigitFrom:aScanner])
+        else if ([self scanPeriodFrom:aScanner] && [self scanDigitFrom:aScanner into:NULL])
             ;
         else if ((([self scanSmallEFrom:aScanner] || [self scanLargeEFrom:aScanner]) && [self scanSignFrom:aScanner])
                  || (([self scanSmallPFrom:aScanner] || [self scanLargePFrom:aScanner]) && [self scanSignFrom:aScanner])
@@ -345,9 +345,17 @@
     return [self scanNondigitFrom:aScanner];
 }
 
-- (BOOL)scanDigitFrom:(NSScanner *)aScanner
++ (BOOL)scanDigitSequenceFrom:(NSScanner *)aScanner into:(NSString **)aString
 {
-    return [aScanner scanCharactersFromSet:[NUCDecomposedPreprocessingToken NUCDigitCharacterSet] intoString:NULL];
+    if (!aString)
+        return [aScanner scanCharactersFromSet:[NUCDecomposedPreprocessingToken NUCDigitCharacterSet] intoString:NULL];
+    else
+        return [aScanner scanCharactersFromSet:[NUCDecomposedPreprocessingToken NUCDigitCharacterSet] intoString:aString];
+}
+
+- (BOOL)scanDigitFrom:(NSScanner *)aScanner into:(NSString **)aString
+{
+    return [[self class] scanDigitSequenceFrom:aScanner into:aString];
 }
 
 - (BOOL)scanNondigitFrom:(NSScanner *)aScanner

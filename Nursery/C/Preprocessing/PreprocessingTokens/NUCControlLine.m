@@ -17,6 +17,7 @@
 #import "NUCPpTokens.h"
 #import "NUCNewline.h"
 #import "NUCPreprocessor.h"
+#import <Foundation/NSString.h>
 
 @implementation NUCControlLine
 
@@ -60,7 +61,7 @@
 
 + (BOOL)controlLineLineFrom:(NUCPreprocessingTokenStream *)aStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCLine **)aToken
 {
-    if ([aDirectiveName isLine])
+    if ([[aDirectiveName content] isEqualToString:NUCPreprocessingDirectiveLine])
     {
         NSUInteger aPosition = [aStream position];
         NUCPpTokens *aTokens = nil;
