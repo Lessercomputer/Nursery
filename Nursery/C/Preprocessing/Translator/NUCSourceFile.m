@@ -11,6 +11,8 @@
 #import "NUCRangePair.h"
 #import "NUCLexicalElement.h"
 #import "NUCLineMapping.h"
+#import "NUCLine.h"
+#import "NUCDecomposedPreprocessingToken.h"
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSScanner.h>
@@ -267,13 +269,35 @@ static NSCharacterSet *newlineAndBackslashCharacterSet;
 
 - (NSUInteger)lineNumberForLocation:(NSUInteger)aLocation
 {
+    return [self lineNumberForLocation:aLocation adjustmentOffset:[self lineNumberAdjustmentOffset]];
+}
+
+- (NSUInteger)lineNumberForLocation:(NSUInteger)aLocation adjustmentOffset:(NSInteger)anOffset
+{
     id aKey = [NUCLineMapping lineMappingWithLineRange:NSMakeRange(aLocation, 0)];
     NUCLineMapping *aLineMapping = [lineRangeMappingOfPhase2StringToPhase1String keyLessThanOrEqualTo:aKey];
     
     if (aLineMapping && [aLineMapping containsLocation:aLocation])
-        return [aLineMapping lineNumber];
+        return [aLineMapping lineNumber] - anOffset;
 
     return NSNotFound;
+}
+
+- (NSUInteger)lineCount
+{
+    return [[self lineRanges] count];
+}
+
+- (void)line:(NUCLine *)aLine
+{
+    NSUInteger aLineNumber = [self lineNumberForLocation:[[aLine hash] range].location adjustmentOffset:0];
+    
+    if (aLineNumber != NSNotFound)
+    {
+        NSInteger aNextLineNumber = aLineNumber + 1;
+        [self setLineNumberBeforeAdjustment:aNextLineNumber];
+        [self setLineNumberAdjustmentOffset:aNextLineNumber - [[aLine digitSequence] integerValue]];
+    }
 }
 
 @end

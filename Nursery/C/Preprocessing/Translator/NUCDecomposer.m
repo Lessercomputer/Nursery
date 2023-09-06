@@ -394,7 +394,7 @@
     return [aScanner scanString:NUCLargeP intoString:NULL];
 }
 
-- (BOOL)scanSCharSequenceFrom:(NSScanner *)aScanner into:(NSString **)aString
++ (BOOL)scanSCharSequenceFrom:(NSScanner *)aScanner into:(NSString **)aString
 {
     NSUInteger aLocation = [aScanner scanLocation];
     NSMutableString *anSCharSequence = [NSMutableString string];
@@ -427,13 +427,18 @@
         return NO;
 }
 
+- (BOOL)scanSCharSequenceFrom:(NSScanner *)aScanner into:(NSString **)aString
+{
+    return [[self class] scanSCharSequenceFrom:aScanner into:aString];
+}
+
 - (BOOL)scanCCharSequenceFrom:(NSScanner *)aScanner
 {
     return [aScanner scanCharactersFromSet:[NUCDecomposedPreprocessingToken NUCBasicSourceCharacterSetExceptSingleQuoteAndBackslash] intoString:NULL]
             || [self scanEscapeSequenceFrom:aScanner into:NULL];
 }
 
-- (BOOL)scanEscapeSequenceFrom:(NSScanner *)aScanner into:(NSString **)anEscapeSequence
++ (BOOL)scanEscapeSequenceFrom:(NSScanner *)aScanner into:(NSString **)anEscapeSequence
 {
     return [self scanSimpleEscapeSequenceFrom:aScanner into:anEscapeSequence]
             || [self scanOctalEscapeSequenceFrom:aScanner]
@@ -441,7 +446,12 @@
             || [self scanUniversalCharacterNameFrom:aScanner];
 }
 
-- (BOOL)scanSimpleEscapeSequenceFrom:(NSScanner *)aScanner into:(NSString **)anEscapedSequence
+- (BOOL)scanEscapeSequenceFrom:(NSScanner *)aScanner into:(NSString **)anEscapeSequence
+{
+    return [[self class] scanEscapeSequenceFrom:aScanner into:anEscapeSequence];
+}
+
++ (BOOL)scanSimpleEscapeSequenceFrom:(NSScanner *)aScanner into:(NSString **)anEscapedSequence
 {
     NSString *aString = nil;
     
@@ -468,7 +478,12 @@
         return NO;
 }
 
-- (BOOL)scanOctalEscapeSequenceFrom:(NSScanner *)aScanner
+- (BOOL)scanSimpleEscapeSequenceFrom:(NSScanner *)aScanner into:(NSString **)anEscapedSequence
+{
+    return [[self class] scanSimpleEscapeSequenceFrom:aScanner into:anEscapedSequence];
+}
+
++ (BOOL)scanOctalEscapeSequenceFrom:(NSScanner *)aScanner
 {
     if ([aScanner scanString:NUCBackslash intoString:NULL])
     {
@@ -493,7 +508,12 @@
     return NO;
 }
 
-- (BOOL)scanHexadecimalEscapeSequenceFrom:(NSScanner *)aScanner
+- (BOOL)scanOctalEscapeSequenceFrom:(NSScanner *)aScanner
+{
+    return [[self class] scanOctalEscapeSequenceFrom:aScanner];
+}
+
++ (BOOL)scanHexadecimalEscapeSequenceFrom:(NSScanner *)aScanner
 {
     if ([aScanner scanString:@"\\x" intoString:NULL])
     {
@@ -504,7 +524,12 @@
     return NO;
 }
 
-- (BOOL)scanUniversalCharacterNameFrom:(NSScanner *)aScanner
+- (BOOL)scanHexadecimalEscapeSequenceFrom:(NSScanner *)aScanner
+{
+    return [[self class] scanHexadecimalEscapeSequenceFrom:aScanner];
+}
+
++ (BOOL)scanUniversalCharacterNameFrom:(NSScanner *)aScanner
 {
     NSUInteger aScanLocation = [aScanner scanLocation];
     
@@ -532,7 +557,12 @@
         return NO;
 }
 
-- (BOOL)scanHexQuadFrom:(NSScanner *)aScanner
+- (BOOL)scanUniversalCharacterNameFrom:(NSScanner *)aScanner
+{
+    return [[self class] scanUniversalCharacterNameFrom:aScanner];
+}
+
++ (BOOL)scanHexQuadFrom:(NSScanner *)aScanner
 {
     if ([[aScanner string] length] - [aScanner scanLocation] >= 4)
     {
@@ -543,6 +573,11 @@
     }
     
     return NO;
+}
+
+- (BOOL)scanHexQuadFrom:(NSScanner *)aScanner
+{
+    return [[self class] scanHexQuadFrom:aScanner];
 }
 
 - (BOOL)isInInclude

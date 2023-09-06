@@ -38,7 +38,7 @@ F5(u'a')
 F2(C, a)
 F6(abc1, 2)
 F7(A)
-F8((a, b, c), x, y)
+F8( ( a  , b , c ) , x, y)
 F8(,,)
 F3(,,)
 
@@ -51,5 +51,12 @@ __LINE__
 #define line2 line
 line2
 
-#line 100
+#line 54
+
 __LINE__
+
+#line 200 "macro"
+
+__LINE__
+
+__FILE__

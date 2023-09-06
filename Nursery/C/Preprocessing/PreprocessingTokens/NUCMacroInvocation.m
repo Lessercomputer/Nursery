@@ -136,8 +136,13 @@
         }
         else if ([aPpToken isWhitespace])
         {
-            [aPpTokenStream skipWhitespaces];
-            [anArgument add:[NUCDecomposedPreprocessingToken whitespace]];
+            if (anOpeningParenthesisCount == 1)
+            {
+                [aPpTokenStream skipWhitespaces];
+                [anArgument add:[NUCDecomposedPreprocessingToken whitespace]];
+            }
+            else
+                [anArgument add:aPpToken];
         }
         else if ([aPpToken isComma])
         {
@@ -157,6 +162,8 @@
                     [aPpTokenStream previous];
                     break;
                 }
+                else
+                    [anArgument add:aPpToken];
             }
         }
         else

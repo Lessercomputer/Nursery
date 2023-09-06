@@ -7,7 +7,8 @@
 
 #import <Foundation/NSObject.h>
 
-@class NSURL, NSString, NSMutableArray, NULibrary, NUCPreprocessingFile;
+@class NSURL, NSString, NSMutableArray;
+@class NULibrary, NUCPreprocessingFile, NUCLine;
 
 @interface NUCSourceFile : NSObject
 {
@@ -33,6 +34,13 @@
 - (void)setLogicalSourceString:(NSString *)aString;
 
 - (NSUInteger)lineNumberForLocation:(NSUInteger)aLocation;
+
+@property (nonatomic, readonly) NSUInteger lineCount;
+
+@property (nonatomic) NSUInteger lineNumberBeforeAdjustment;
+@property (nonatomic) NSInteger lineNumberAdjustmentOffset;
+
+- (void)line:(NUCLine *)aLine;
 
 - (NUCPreprocessingFile *)preprocessingFile;
 - (void)setPreprocessingFile:(NUCPreprocessingFile *)aPreprocessingFile;

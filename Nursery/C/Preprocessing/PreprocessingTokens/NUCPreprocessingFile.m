@@ -56,13 +56,9 @@
     return group;
 }
 
-- (NSString *)preprocessedString
+- (void)addPreprocessedStringTo:(NSMutableString *)aString
 {
-    NSMutableString *aString = [NSMutableString string];
-    
     [[self group] addPreprocessedStringTo:aString];
-    
-    return aString;
 }
 
 @end

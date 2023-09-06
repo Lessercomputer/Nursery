@@ -23,6 +23,4 @@
 
 - (NUCGroup *)group;
 
-- (NSString *)preprocessedString;
-
 @end

@@ -116,10 +116,7 @@
     NSArray *aCurrentTextLines = [[self groupParts] subarrayWithRange:NSMakeRange(anIndex, aCount)];
     NUCPpTokens *aPpTokensWithMacroInvocations = [NUCPpTokens ppTokensWithMacroInvocationsFromTextLines:aCurrentTextLines with:aPreprocessor];
     NSMutableArray *aMacroReplacedPpTokens = [aPpTokensWithMacroInvocations replaceMacrosWith:aPreprocessor];
-    [[self macroReplacedPpTokens] addObjectsFromArray:aMacroReplacedPpTokens];
-    
-    NSLog(@"%@", aMacroReplacedPpTokens);
-    
+    [[self macroReplacedPpTokens] addObjectsFromArray:aMacroReplacedPpTokens];    
 }
 
 - (void)addPreprocessedStringTo:(NSMutableString *)aString

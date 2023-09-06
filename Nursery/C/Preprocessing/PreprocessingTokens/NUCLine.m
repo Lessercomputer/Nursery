@@ -10,6 +10,8 @@
 #import "NUCPpTokens.h"
 #import "NUCDecomposer.h"
 
+#import <Foundation/NSScanner.h>
+
 @implementation NUCLine
 
 + (instancetype)lineWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName ppTokens:(NUCPpTokens *)aPpTokens newline:(NUCNewline *)aNewline
@@ -41,12 +43,29 @@
 
 - (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
 {
-    NUCPpTokens *aPptokens = [NUCPpTokens ppTokensWithMacroInvocationsFromPpTokens:[self ppTokens] with:aPreprocessor];
-    NSMutableArray *aMacroReplacedPpTokens = [aPptokens replaceMacrosWith:aPreprocessor];
-    
-//    [NUCDecomposer scanDigitSequenceFrom:<#(NSScanner *)#> into:<#(NSString **)#>]
-    [aPreprocessor line:self];
+    NSString *aPreprocessedString = [NUCPpTokens preprocessedStringFromPpTokens:[self ppTokens] with:aPreprocessor];
+    NSScanner *aScanner = [NSScanner scannerWithString:aPreprocessedString];
+    [aScanner setCharactersToBeSkipped:nil];
+    NSString *aDigitSequence = nil;
+    NSString *aSCharSequence = nil;
 
+    if ([NUCDecomposer scanDigitSequenceFrom:aScanner into:&aDigitSequence])
+    {
+        [self setDigitSequence:aDigitSequence];
+        
+        [aScanner scanCharactersFromSet:[NUCLexicalElement NUCWhiteSpaceWithoutNewlineCharacterSet] intoString:NULL];
+        
+        if ([aScanner scanString:NUCDoubleQuotationMark intoString:NULL])
+        {
+            [NUCDecomposer scanSCharSequenceFrom:aScanner into:&aSCharSequence];
+            [self setSCharSequence:aSCharSequence];
+            
+            if (![aScanner scanString:NUCDoubleQuotationMark intoString:NULL])
+                ;
+        }
+    }
+    
+    [aPreprocessor line:self];
 }
 
 @end

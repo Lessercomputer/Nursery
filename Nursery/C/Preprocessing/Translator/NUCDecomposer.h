@@ -17,6 +17,7 @@
 }
 
 + (BOOL)scanDigitSequenceFrom:(NSScanner *)aScanner into:(NSString **)aString;
++ (BOOL)scanSCharSequenceFrom:(NSScanner *)aScanner into:(NSString **)aString;
 
 - (NSArray *)decomposePreprocessingFile:(NUCSourceFile *)aSourceFile;
 - (NSArray *)decomposePreprocessingTokensIn:(NSString *)aString;

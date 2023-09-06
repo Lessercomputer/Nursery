@@ -63,4 +63,9 @@
     return aString;
 }
 
+- (void)addPreprocessedStringTo:(NSMutableString *)aString
+{
+    [aString appendString:[self string]];
+}
+
 @end

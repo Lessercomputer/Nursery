@@ -139,7 +139,7 @@
 
 - (void)line:(NUCLine *)aLine
 {
-    
+    [[self sourceFile] line:aLine];
 }
 
 - (NSInteger)executeConstantExpression:(NUCConstantExpression *)aConstantExpression

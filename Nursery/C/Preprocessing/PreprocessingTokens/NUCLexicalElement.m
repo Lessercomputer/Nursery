@@ -67,6 +67,7 @@ NSString * const NUCPreprocessingDirectivePragma = @"pragma";
 
 NSString * const NUCPredefinedMacroVA_ARGS = @"__VA_ARGS__";
 NSString * const NUCPredefinedMacroLINE = @"__LINE__";
+NSString * const NUCPredefinedMacroFILE = @"__FILE__";
 
 NSString * const NUCTrigraphSequenceBeginning = @"??";
 
@@ -336,6 +337,15 @@ static NSArray *NUCPreprocessingDirectiveNames;
 - (BOOL)isStringLiteral
 {
     return [self type] == NUCLexicalElementStringLiteralType;
+}
+
+- (NSString *)preprocessedString
+{
+    NSMutableString *aString = [NSMutableString string];
+    
+    [self addPreprocessedStringTo:aString];
+    
+    return aString;
 }
 
 - (void)addPreprocessedStringTo:(NSMutableString *)aString

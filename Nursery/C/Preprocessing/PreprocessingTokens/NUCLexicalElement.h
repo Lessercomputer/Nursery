@@ -66,6 +66,7 @@ extern NSString * const NUCPreprocessingDirectivePragma;
 
 extern NSString * const NUCPredefinedMacroVA_ARGS;
 extern NSString * const NUCPredefinedMacroLINE;
+extern NSString * const NUCPredefinedMacroFILE;
 
 extern NSString * const NUCTrigraphSequenceEqual;
 extern NSString * const NUCTrigraphSequenceLeftBlacket;
@@ -218,6 +219,7 @@ typedef enum : NSUInteger {
 - (BOOL)isCharacterConstant;
 - (BOOL)isStringLiteral;
 
+- (NSString *)preprocessedString;
 - (void)addPreprocessedStringTo:(NSMutableString *)aString;
 
 @end

@@ -165,6 +165,19 @@
     }];
 }
 
++ (NSString *)preprocessedStringFromPpTokens:(NUCPpTokens *)aPpTokens with:(NUCPreprocessor *)aPreprocessor
+{
+    NUCPpTokens *aPpTokensWithMacroInvocations = [self ppTokensWithMacroInvocationsFromPpTokens:aPpTokens with:aPreprocessor];
+    NSMutableArray *aMacroReplacedPpTokens = [aPpTokensWithMacroInvocations replaceMacrosWith:aPreprocessor];
+    NSMutableString *aMacroReplacedString = [NSMutableString string];
+    
+    [aMacroReplacedPpTokens enumerateObjectsUsingBlock:^(NUCPreprocessingToken * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj addPreprocessedStringTo:aMacroReplacedString];
+    }];
+    
+    return aMacroReplacedString;
+}
+
 + (NUCPpTokens *)ppTokensWithMacroInvocationsFromPpTokens:(NUCPpTokens *)aPpTokens with:(NUCPreprocessor *)aPreprocessor
 {
     return [self ppTokensWithMacroInvocationsFrom:[aPpTokens ppTokens] with:aPreprocessor];
@@ -444,6 +457,13 @@
 
         return aMacroReplacedPpTokens;
     }
+}
+
+- (void)addPreprocessedStringTo:(NSMutableString *)aString
+{
+    [[self ppTokens] enumerateObjectsUsingBlock:^(NUCPreprocessingToken * _Nonnull aPpToken, NSUInteger idx, BOOL * _Nonnull stop) {
+        [aPpToken addPreprocessedStringTo:aString];
+    }];
 }
 
 @end
