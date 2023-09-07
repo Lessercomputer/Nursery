@@ -68,6 +68,8 @@ NSString * const NUCPreprocessingDirectivePragma = @"pragma";
 NSString * const NUCPredefinedMacroVA_ARGS = @"__VA_ARGS__";
 NSString * const NUCPredefinedMacroLINE = @"__LINE__";
 NSString * const NUCPredefinedMacroFILE = @"__FILE__";
+NSString * const NUCPredefinedMacroDATE = @"__DATE__";
+NSString * const NUCPredefinedMacroTIME = @"__TIME__";
 
 NSString * const NUCTrigraphSequenceBeginning = @"??";
 

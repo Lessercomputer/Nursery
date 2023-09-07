@@ -43,7 +43,7 @@
     
     if (!aMacroDefineToInvoke)
     {
-        if ([anIdentifier isEqualToString:NUCPredefinedMacroLINE])
+        if ([NUCPredefinedMacroInvocation identifierIsPredefined:anIdentifier])
             return [NUCPredefinedMacroInvocation macroInvocationWithIdentifier:anIdentifier parent:aParentMacroInvocation];
         else
             return anIdentifier;

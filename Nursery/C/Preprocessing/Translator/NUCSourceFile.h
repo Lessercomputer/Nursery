@@ -12,7 +12,6 @@
 
 @interface NUCSourceFile : NSObject
 {
-    NSURL *url;
     NSString *physicalSourceString;
     NSString *logicalSourcePhase1String;
     NSString *logicalSourceString;
@@ -21,7 +20,9 @@
     NUCPreprocessingFile *preprocessingFile;
 }
 
+@property (nonatomic, copy) NSURL *url;
 @property (nonatomic, copy) NSArray *lineRanges;
+@property (nonatomic, copy, readonly) NSString *preprocessedString;
 
 - (instancetype)initWithSourceURL:(NSURL *)aURL;
 - (instancetype)initWithSourceString:(NSString *)aString url:(NSURL *)aURL;
@@ -44,5 +45,7 @@
 
 - (NUCPreprocessingFile *)preprocessingFile;
 - (void)setPreprocessingFile:(NUCPreprocessingFile *)aPreprocessingFile;
+
+@property (nonatomic, copy, readonly) NSString *file;
 
 @end

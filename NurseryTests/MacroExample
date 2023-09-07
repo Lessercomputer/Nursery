@@ -55,8 +55,10 @@ line2
 
 __LINE__
 
-#line 200 "macro"
+#line 200 "macro example"
 
 __LINE__
 
 __FILE__
+__TIME__
+__DATE__

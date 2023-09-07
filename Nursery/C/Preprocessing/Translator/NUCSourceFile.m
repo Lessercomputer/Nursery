@@ -13,6 +13,7 @@
 #import "NUCLineMapping.h"
 #import "NUCLine.h"
 #import "NUCDecomposedPreprocessingToken.h"
+#import "NUCPreprocessingFile.h"
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSScanner.h>
@@ -23,7 +24,9 @@
 
 static NSCharacterSet *newlineAndBackslashCharacterSet;
 
+@synthesize url;
 @synthesize lineRanges;
+@synthesize file;
 
 + (void)initialize
 {
@@ -58,6 +61,7 @@ static NSCharacterSet *newlineAndBackslashCharacterSet;
 {
     [url release];
     url = nil;
+    [file release];
     [physicalSourceString release];
     physicalSourceString = nil;
     [logicalSourcePhase1String release];
@@ -71,7 +75,6 @@ static NSCharacterSet *newlineAndBackslashCharacterSet;
     
     [super dealloc];
 }
-
 
 - (NUCPreprocessingFile *)preprocessingFile
 {
@@ -297,7 +300,29 @@ static NSCharacterSet *newlineAndBackslashCharacterSet;
         NSInteger aNextLineNumber = aLineNumber + 1;
         [self setLineNumberBeforeAdjustment:aNextLineNumber];
         [self setLineNumberAdjustmentOffset:aNextLineNumber - [[aLine digitSequence] integerValue]];
+        
+        if ([[aLine sCharSequence] length])
+            [self setFile:[aLine sCharSequence]];
     }
+}
+
+- (NSString *)file
+{
+    if (file)
+        return file;
+    else
+        return [[self url] path];
+}
+
+- (void)setFile:(NSString *)aFile
+{
+    [aFile autorelease];
+    file = [aFile copy];
+}
+
+- (NSString *)preprocessedString
+{
+    return [[self preprocessingFile] preprocessedString];
 }
 
 @end

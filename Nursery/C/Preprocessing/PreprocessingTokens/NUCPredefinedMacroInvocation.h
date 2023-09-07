@@ -15,6 +15,8 @@
 @property (nonatomic, assign) NUCMacroInvocation *parent;
 @property (nonatomic, readonly) NUCMacroInvocation *top;
 
++ (BOOL)identifierIsPredefined:(NUCIdentifier *)anIdentifier;
+
 + (instancetype)macroInvocationWithIdentifier:(NUCIdentifier *)anIdentifier parent:(NUCMacroInvocation *)aParent;
 
 - (instancetype)initWithIdentifier:(NUCIdentifier *)anIdentifier parent:(NUCMacroInvocation *)aParent;
