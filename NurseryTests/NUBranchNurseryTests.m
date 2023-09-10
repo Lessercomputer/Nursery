@@ -25,10 +25,10 @@ static NSString *NUNurseryTestFilePath2;
 {
     [super setUp];
     
-    NUNurseryTestFilePath = [[[NSBundle bundleForClass:[self class]] bundlePath] stringByAppendingPathComponent:@"nursery.nursery"];
+    NUNurseryTestFilePath = [[[NSBundle bundleForClass:[self class]] bundlePath] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.nursery", [self class]]];
     [[NSFileManager defaultManager] removeItemAtPath:NUNurseryTestFilePath error:nil];
     
-    NUNurseryTestFilePath2 = [[[NSBundle bundleForClass:[self class]] bundlePath] stringByAppendingPathComponent:@"nursery2.nursery"];
+    NUNurseryTestFilePath2 = [[[NSBundle bundleForClass:[self class]] bundlePath] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@2.nursery", [self class]]];
     [[NSFileManager defaultManager] removeItemAtPath:NUNurseryTestFilePath2 error:nil];
     
     [NSThread sleepForTimeInterval:1];

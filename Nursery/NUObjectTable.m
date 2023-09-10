@@ -261,8 +261,6 @@ const NUUInt8 NUGCMarkColorBitsMask	= 3;
         [self lock];
         
         aNewBellBall = NUMakeBellBall(nextOOP, aGrade);
-
-        [self setObjectLocation:0 for:aNewBellBall];
         nextOOP++;
     }
     @finally {

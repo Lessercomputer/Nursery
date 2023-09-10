@@ -471,7 +471,7 @@ NSString * const NUGardenFarmingOutForbiddenException = @"NUGardenFarmingOutForb
     
     [self lock];
     
-	if ([anObject conformsToProtocol:@protocol(NUCoding)])
+	if ([anObject respondsToSelector:@selector(bell)])
         aBell = ![[anObject bell] isInvalidated] ? [anObject bell] : nil;
 	else
 	{
@@ -525,7 +525,7 @@ NSString * const NUGardenFarmingOutForbiddenException = @"NUGardenFarmingOutForb
     
 	[aBell setObject:anObject];
 	
-	if ([anObject conformsToProtocol:@protocol(NUCoding)])
+    if ([anObject respondsToSelector:@selector(setBell:)])
 		[anObject setBell:aBell];
 	else
         [[self objectToBellDictionary] setObject:aBell forKey:[NUObjectWrapper objectWrapperWithObject:anObject]];
@@ -545,7 +545,7 @@ NSString * const NUGardenFarmingOutForbiddenException = @"NUGardenFarmingOutForb
         
         if ([aBell hasObject])
         {
-            if ([[aBell object] conformsToProtocol:@protocol(NUCoding)])
+            if ([[aBell object] respondsToSelector:@selector(setBell:)])
                 [[aBell object] setBell:[NUBell invalidatedBell]];
             else
             {

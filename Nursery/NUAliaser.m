@@ -284,7 +284,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
     
 	if ([aCharacter coderClass])
 		[[aCharacter coder] encode:anObject withAliaser:self];
-	else
+    else if ([anObject respondsToSelector:@selector(encodeWithAliaser:)])
 		[anObject encodeWithAliaser:self];
 	
 	[self objectDidEncode:[[self currentContext] bell]];
@@ -375,7 +375,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
         if ([(NUBell *)anObject isInvalidated])
             @throw [NSException exceptionWithName:NUInvalidatedObjectException reason:nil userInfo:nil];
     }
-    else if ([anObject conformsToProtocol:@protocol(NUCoding)] && [[anObject bell] isInvalidated])
+    else if ([anObject respondsToSelector:@selector(bell)] && [[anObject bell] isInvalidated])
         @throw [NSException exceptionWithName:NUInvalidatedObjectException reason:nil userInfo:nil];
     
     [self validateGardenOfEncodingObject:anObject];
@@ -387,7 +387,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
     
     if ([anObject isBell])
         aGardenOfAnObject = [(NUBell *)anObject garden];
-    else if ([anObject conformsToProtocol:@protocol(NUCoding)])
+    else if ([anObject respondsToSelector:@selector(bell)])
         aGardenOfAnObject = [[(id <NUCoding>)anObject bell] garden];
     
     if (aGardenOfAnObject && ![aGardenOfAnObject isEqual:[self garden]])
@@ -408,7 +408,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
     if ([anObject isBell])
         anOOP = [anObject OOP];
     else if (anObject
-             && ([anObject conformsToProtocol:@protocol(NUCoding)]
+             && ([anObject respondsToSelector:@selector(classForNursery)]
                  || [[[anObject classForNursery] characterOn:[self garden]] coderClass]))
     {
         NUBell *aBell = [[self garden] bellForObject:anObject];
@@ -946,7 +946,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
     NUBell *aBell = [[self garden] bellForObject:anObject];
     if (!aBell)
     {
-        if ([anObject conformsToProtocol:@protocol(NUCoding)] && [[anObject bell] isInvalidated])
+        if ([anObject respondsToSelector:@selector(bell)] && [[anObject bell] isInvalidated])
             @throw [NSException exceptionWithName:NUInvalidatedObjectException reason:nil userInfo:nil];
         else
             return;
@@ -963,7 +963,7 @@ NSString *NUAliaserCannotDecodeObjectException = @"NUAliaserCannotDecodeObjectEx
     [[self currentContext] setCharacter:aCharacter];
     
     if ([aCharacter coderClass] && ![[aCharacter coder] canMoveUpObject:anObject withAliaser:self]) return;
-    if (![aCharacter coderClass] && ![anObject conformsToProtocol:@protocol(NUMovingUp)]) return;
+    if (![aCharacter coderClass] && ![anObject respondsToSelector:@selector(moveUpWithAliaser:)]) return;
     
     if ([aCharacter isVariable])
     {
