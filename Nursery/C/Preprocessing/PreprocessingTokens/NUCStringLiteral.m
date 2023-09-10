@@ -45,22 +45,16 @@
 
 - (NSString *)stringForSubstitution
 {
-    NSMutableString *aString = [NSMutableString string];
-    
-    if ([self encodingPrefix])
-        [aString appendString:[self encodingPrefix]];
-    
-    [aString appendString:@"\""];
-    
-    [[self content] enumerateSubstringsInRange:NSMakeRange(0, [[self content] length]) options:NSStringEnumerationByComposedCharacterSequences usingBlock:^(NSString * _Nullable aSubstring, NSRange substringRange, NSRange enclosingRange, BOOL * _Nonnull stop) {
-        if ([aSubstring isEqual:NUCBackslash])
-            [aString appendString:NUCBackslash];
-        [aString appendString:aSubstring];
+    NSString *aString = [self string];
+    NSMutableString *aSubstitutedString = [NSMutableString string];
+
+    [aString enumerateSubstringsInRange:NSMakeRange(0, [aString length]) options:NSStringEnumerationByComposedCharacterSequences usingBlock:^(NSString * _Nullable aSubstring, NSRange substringRange, NSRange enclosingRange, BOOL * _Nonnull stop) {
+        if ([aSubstring isEqual:NUCBackslash] || [aSubstring isEqual:NUCDoubleQuotationMark])
+            [aSubstitutedString appendString:NUCBackslash];
+        [aSubstitutedString appendString:aSubstring];
     }];
     
-    [aString appendString:@"\""];
-    
-    return aString;
+    return aSubstitutedString;
 }
 
 - (void)addPreprocessedStringTo:(NSMutableString *)aString

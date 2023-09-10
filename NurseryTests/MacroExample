@@ -32,7 +32,7 @@ E2
 E3
 G
 F4(x, y, z)
-F5(  u8"abc"
+F5(  u8"\"ab\\c"
     def  1  )
 F5(u'a')
 F2(C, a)
