@@ -90,4 +90,9 @@
     [super dealloc];
 }
 
+- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
+{
+    return [exclusiveORExpression executeWithPreprocessor:aPreprocessor];
+}
+
 @end

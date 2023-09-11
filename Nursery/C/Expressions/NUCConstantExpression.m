@@ -53,4 +53,9 @@
     return conditionalExpression;
 }
 
+- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
+{
+    return [[self conditionalExpression] executeWithPreprocessor:aPreprocessor];
+}
+
 @end

@@ -20,5 +20,7 @@
 
 - (instancetype)initWithPrimaryExpression:(NUCPrimaryExpression *)aPrimaryExpression;
 
+- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
+
 @end
 

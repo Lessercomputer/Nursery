@@ -26,5 +26,7 @@
 
 - (instancetype)initWithExclusiveORExpression:(NUCExclusiveORExpression *)anExclusiveORExpression exclusiveOROperator:(NUCDecomposedPreprocessingToken *)anExclusiveOROperator andExpression:(NUCANDExpression *)anANDExpression;
 
+- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
+
 @end
 

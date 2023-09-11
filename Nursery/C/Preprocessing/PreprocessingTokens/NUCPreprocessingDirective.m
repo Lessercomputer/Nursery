@@ -17,7 +17,7 @@
     NSUInteger aPosition = [aStream position];
     NUCPpTokens *aPpTokensWithoutNewLine = [NUCPpTokens ppTokens];
     
-    while ([aStream hasNext] && ![[aStream next] isNewLine])
+    while ([aStream hasNext] && ![[aStream peekNext] isNewLine])
         [aPpTokensWithoutNewLine add:[aStream next]];
     
     if ([[aStream peekNext] isNewLine])

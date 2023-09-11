@@ -11,12 +11,14 @@
 #import "NUCExpression.h"
 #import "NUCPreprocessingTokenStream.h"
 #import "NUCConstant.h"
+#import "NUCIntegerConstant.h"
 
 @implementation NUCPrimaryExpression
 
+
 + (BOOL)primaryExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPrimaryExpression **)anExpression
 {
-    NUCDecomposedPreprocessingToken *aToken = [aStream next];
+    NUCDecomposedPreprocessingToken *aToken = [aStream peekNext];
     NUCConstant *aConstant = nil;
     
     if ([aToken isIdentifier])
@@ -26,7 +28,7 @@
         
         return YES;
     }
-    else if ([NUCConstant constantFrom:aToken into:&aConstant])
+    else if ([NUCConstant constantFrom:aStream into:&aConstant])
     {
         if (anExpression)
             *anExpression = [NUCPrimaryExpression expressionWithConstant:aConstant];
@@ -79,6 +81,12 @@
     [content release];
     
     [super dealloc];
+}
+
+- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
+{
+    id aContent = [(NUCConstant *)content content];
+    return [aContent isKindOfClass:[NUCIntegerConstant class]] ? [aContent value] : 0;
 }
 
 @end

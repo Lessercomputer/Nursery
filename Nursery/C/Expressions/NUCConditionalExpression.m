@@ -123,9 +123,9 @@
     return conditionalExpression;
 }
 
-- (void)executeWith:(NUCPreprocessor *)aPreprocessor
+- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
 {
-    
+    return [[self logicalORExpression] executeWithPreprocessor:aPreprocessor];
 }
 
 @end

@@ -26,5 +26,7 @@
 
 - (instancetype)initWithANDExpression:(NUCANDExpression *)anANDExpression andOperator:(NUCDecomposedPreprocessingToken *)anANDOperator equlityExpression:(NUCEqualityExpression *)anEqulityExpression;
 
+- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
+
 @end
 

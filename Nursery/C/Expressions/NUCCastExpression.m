@@ -48,4 +48,9 @@
     [super dealloc];
 }
 
+- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
+{
+    return [unaryExpression executeWithPreprocessor:aPreprocessor];
+}
+
 @end

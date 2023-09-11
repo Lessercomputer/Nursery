@@ -8,20 +8,22 @@
 #import "NUCConstant.h"
 #import "NUCIntegerConstant.h"
 #import "NUCDecomposedPreprocessingToken.h"
+#import "NUCPreprocessingTokenStream.h"
 
 @implementation NUCConstant
 
-+ (BOOL)constantFrom:(NUCDecomposedPreprocessingToken *)aStream into:(NUCConstant **)aConstant
+@synthesize content;
+
++ (BOOL)constantFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCConstant **)aConstant
 {
-    
     if ([NUCIntegerConstant integerConstantFrom:aStream into:aConstant])
     {
         return YES;
     }
-    else if ([aStream isCharacterConstant])
+    else if ([[aStream peekNext] isCharacterConstant])
     {
         if (aConstant)
-            *aConstant = [NUCConstant constantWithCharacterConstant:aStream];
+            *aConstant = [NUCConstant constantWithCharacterConstant:[aStream next]];
         
         return YES;
     }

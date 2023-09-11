@@ -12,10 +12,11 @@
 @interface NUCIntegerConstant : NUCPreprocessingToken
 {
     NUCDecomposedPreprocessingToken *ppNumber;
-    NUUInt64 value;
 }
 
-+ (BOOL)integerConstantFrom:(NUCDecomposedPreprocessingToken *)aPreprocessingToken into:(NUCConstant **)aConstant;
+@property (nonatomic) NUUInt64 value;
+
++ (BOOL)integerConstantFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCConstant **)aConstant;
 
 + (instancetype)constantWithPpNumber:(NUCDecomposedPreprocessingToken *)aPpNumber value:(NUUInt64)aValue;
 

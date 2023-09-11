@@ -106,4 +106,9 @@
     [super dealloc];
 }
 
+- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
+{
+    return [postfixExpression executeWithPreprocessor:aPreprocessor];
+}
+
 @end

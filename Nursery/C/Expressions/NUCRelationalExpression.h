@@ -26,5 +26,7 @@
 
 - (instancetype)initWithRelationalExpression:(NUCRelationalExpression *)aRelationalExpression relationalOperator:(NUCDecomposedPreprocessingToken *)aRelationalOperator shiftExpression:(NUCShiftExpression *)aShiftExpression;
 
+- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
+
 @end
 

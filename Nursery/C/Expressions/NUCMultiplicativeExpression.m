@@ -91,4 +91,9 @@
     [super dealloc];
 }
 
+- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
+{
+    return [castExpression executeWithPreprocessor:aPreprocessor];
+}
+
 @end

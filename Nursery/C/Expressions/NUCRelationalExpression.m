@@ -90,4 +90,9 @@
     [super dealloc];
 }
 
+- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
+{
+    return [shiftExpression executeWithPreprocessor:aPreprocessor];
+}
+
 @end

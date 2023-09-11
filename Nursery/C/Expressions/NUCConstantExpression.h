@@ -22,5 +22,7 @@
 
 - (NUCConditionalExpression *)conditionalExpression;
 
+- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
+
 @end
 

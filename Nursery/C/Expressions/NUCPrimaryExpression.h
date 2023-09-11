@@ -23,5 +23,7 @@
 
 - (instancetype)initWithToken:(NUCPreprocessingToken *)aContent;
 
+- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
+
 @end
 

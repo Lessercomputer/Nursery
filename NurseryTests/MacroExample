@@ -63,3 +63,7 @@ __LINE__
 __FILE__
 __TIME__
 __DATE__
+
+#if 1
+__LINE__
+#endif

@@ -26,5 +26,7 @@
 
 - (instancetype)initWithlogicalORExpression:(NUCLogicalORExpression *)aLogicalORExpression logicalOREperator:(NUCDecomposedPreprocessingToken *)aLogicalOROperator logicalANDExpression:(NUCLogicalANDExpression *)aLogicalANDExpression;
 
+- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
+
 @end
 

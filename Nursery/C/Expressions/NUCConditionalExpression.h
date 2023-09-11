@@ -32,5 +32,7 @@
 - (NUCDecomposedPreprocessingToken *)colonPunctuator;
 - (NUCConditionalExpression *)conditionalExpression;
 
+- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
+
 @end
 

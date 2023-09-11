@@ -144,7 +144,7 @@
 
 - (NSInteger)executeConstantExpression:(NUCConstantExpression *)aConstantExpression
 {
-    return 0;
+    return [aConstantExpression executeWithPreprocessor:self];
 }
 
 @end

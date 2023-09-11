@@ -44,7 +44,7 @@
             {
                 if (anIfGroupType == NUCLexicalElementIfType)
                 {
-                    [aStream skipWhitespaces];
+                    [aStream skipWhitespacesWithoutNewline];
                     
                     NUCPpTokens *aPpTokens = nil;
                     [self readPpTokensUntilNewlineFrom:aStream into:&aPpTokens];

@@ -88,4 +88,9 @@
     [super dealloc];
 }
 
+- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
+{
+    return [logicalANDExpression executeWithPreprocessor:aPreprocessor];
+}
+
 @end

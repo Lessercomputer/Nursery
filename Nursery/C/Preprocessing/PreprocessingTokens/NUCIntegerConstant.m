@@ -8,18 +8,22 @@
 #import "NUCIntegerConstant.h"
 #import "NUCConstant.h"
 #import "NUCDecomposedPreprocessingToken.h"
+#import "NUCPreprocessingTokenStream.h"
 
 #import <Foundation/NSString.h>
 
 @implementation NUCIntegerConstant
 
-+ (BOOL)integerConstantFrom:(NUCDecomposedPreprocessingToken *)aPreprocessingToken into:(NUCConstant **)aConstant
+@synthesize value;
+
++ (BOOL)integerConstantFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCConstant **)aConstant
 {
-    if (![aPreprocessingToken isPpNumber])
+    NUCDecomposedPreprocessingToken *aPpToken = [aPreprocessingTokenStream next];
+    if (![aPpToken isPpNumber])
         return NO;
     
     NUUInt64 aValue = 0;
-    NSString *aString = [aPreprocessingToken content];
+    NSString *aString = [aPpToken content];
     
     if ([aString hasPrefix:NUCHexadecimalPrefixSmall] || [aString hasPrefix:NUCHexadecimalPrefixLarge])
     {
@@ -70,7 +74,7 @@
     }
     
     if (aConstant)
-        *aConstant = [NUCConstant constantWithIntegerConstant:[NUCIntegerConstant constantWithPpNumber:aPreprocessingToken value:aValue]];
+        *aConstant = [NUCConstant constantWithIntegerConstant:[NUCIntegerConstant constantWithPpNumber:aPpToken value:aValue]];
     
     return YES;
 }

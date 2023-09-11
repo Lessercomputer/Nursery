@@ -20,5 +20,7 @@
 
 - (instancetype)initWithUnaryExpression:(NUCUnaryExpression *)anUnaryExpression;
 
+- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
+
 @end
 
