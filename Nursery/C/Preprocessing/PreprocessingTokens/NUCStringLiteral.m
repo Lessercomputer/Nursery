@@ -45,21 +45,25 @@
 
 - (NSString *)stringForSubstitution
 {
-    NSString *aString = [self string];
-    NSMutableString *aSubstitutedString = [NSMutableString string];
-
-    [aString enumerateSubstringsInRange:NSMakeRange(0, [aString length]) options:NSStringEnumerationByComposedCharacterSequences usingBlock:^(NSString * _Nullable aSubstring, NSRange substringRange, NSRange enclosingRange, BOOL * _Nonnull stop) {
-        if ([aSubstring isEqual:NUCBackslash] || [aSubstring isEqual:NUCDoubleQuotationMark])
-            [aSubstitutedString appendString:NUCBackslash];
-        [aSubstitutedString appendString:aSubstring];
-    }];
-    
-    return aSubstitutedString;
+    return [[self class] escapeStringForStringLiteral:[self string]];
 }
 
 - (void)addPreprocessedStringTo:(NSMutableString *)aString
 {
     [aString appendString:[self string]];
+}
+
++ (NSString *)escapeStringForStringLiteral:(NSString *)aString
+{
+    NSMutableString *anEscapedString = [NSMutableString string];
+    
+    [aString enumerateSubstringsInRange:NSMakeRange(0, [aString length]) options:NSStringEnumerationByComposedCharacterSequences usingBlock:^(NSString * _Nullable aSubstring, NSRange substringRange, NSRange enclosingRange, BOOL * _Nonnull stop) {
+        if ([aSubstring isEqual:NUCBackslash] || [aSubstring isEqual:NUCDoubleQuotationMark])
+            [anEscapedString appendString:NUCBackslash];
+        [anEscapedString appendString:aSubstring];
+    }];
+    
+    return anEscapedString;;
 }
 
 @end

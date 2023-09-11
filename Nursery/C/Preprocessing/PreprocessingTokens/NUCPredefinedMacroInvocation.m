@@ -81,7 +81,7 @@
     else if ([anIdentifier isEqualToString:NUCPredefinedMacroFILE])
     {
         NSString *aFilepath = [[aPreprocessor sourceFile] file];
-        NUCStringLiteral *aStringLiteral = [NUCStringLiteral preprocessingTokenWithContent:aFilepath range:NSMakeRange(NSNotFound, 0) type:NUCLexicalElementStringLiteralType];
+        NUCStringLiteral *aStringLiteral = [NUCStringLiteral preprocessingTokenWithContent:[NUCStringLiteral escapeStringForStringLiteral:aFilepath] range:NSMakeRange(NSNotFound, 0) type:NUCLexicalElementStringLiteralType];
         [aPpTokens addObject:aStringLiteral];
     }
     else if ([anIdentifier isEqualToString:NUCPredefinedMacroDATE])

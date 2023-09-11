@@ -54,6 +54,7 @@ line2
 #line 54
 
 __LINE__
+__FILE__
 
 #line 200 "macro example"
 

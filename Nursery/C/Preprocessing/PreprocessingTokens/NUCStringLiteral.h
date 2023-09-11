@@ -18,5 +18,7 @@
 
 - (NSString *)encodingPrefix;
 
++ (NSString *)escapeStringForStringLiteral:(NSString *)aString;
+
 @end
 
