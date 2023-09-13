@@ -28,4 +28,6 @@
 - (NUCNewline *)newline;
 - (NUCGroup *)group;
 
+@property (nonatomic) BOOL isSkipped;
+
 @end

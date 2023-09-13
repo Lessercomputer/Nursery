@@ -24,16 +24,14 @@
     
     if ([NUCIfGroup ifGroupFrom:aStream with:aPreprocessor isSkipped:aGroupIsSkipped into:&anIfGroup])
     {
-        [NUCElifGroups elifGroupsFrom:aStream with:aPreprocessor isSkipped:aGroupIsSkipped into:&anElifGroups];
-        [NUCElseGroup elseGroupFrom:aStream with:aPreprocessor isSkipped:aGroupIsSkipped
-                            into:&anElseGroup];
+        [NUCElifGroups elifGroupsFrom:aStream with:aPreprocessor isSkipped:(aGroupIsSkipped || ![anIfGroup isSkipped]) into:&anElifGroups];
+        
+        [NUCElseGroup elseGroupFrom:aStream with:aPreprocessor isSkipped:(aGroupIsSkipped || ![anIfGroup isSkipped] || ![anElifGroups isSkipped]) into:&anElseGroup];
         
         if ([NUCEndifLine endifLineFrom:aStream into:&anEndifLine])
         {
             if (anIfSection)
-            {
                 *anIfSection = [NUCIfSection ifSectionWithIfGroup:anIfGroup elifGroups:anElifGroups elseGroup:anElseGroup endifLine:anEndifLine];
-            }
             
             return YES;
         }

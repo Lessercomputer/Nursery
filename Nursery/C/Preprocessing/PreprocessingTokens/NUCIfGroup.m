@@ -40,40 +40,50 @@
             NUCNewline *aNewline = nil;
             NSInteger anExpressionValue = 0;
 
-            if (!aGroupIsSkipped)
+            if (anIfGroupType == NUCLexicalElementIfType
+                ||anIfGroupType == NUCLexicalElementIfdefType
+                || anIfGroupType == NUCLexicalElementIfndefType)
             {
-                if (anIfGroupType == NUCLexicalElementIfType)
+                if (!aGroupIsSkipped)
                 {
-                    [aStream skipWhitespacesWithoutNewline];
-                    
-                    NUCPpTokens *aPpTokens = nil;
-                    [self readPpTokensUntilNewlineFrom:aStream into:&aPpTokens];
-                    
-                    NUCPpTokens *aPpTokensWithMacroInvocations = [NUCPpTokens ppTokensWithMacroInvocationsFromPpTokens:aPpTokens with:aPreprocessor];
-                    
-                    NSMutableArray *aMacroReplacedPpTokens =  [aPpTokensWithMacroInvocations replaceMacrosWith:aPreprocessor];
-                    
-                    NUCPreprocessingTokenStream *aMacroReplacedPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aMacroReplacedPpTokens];
-                    
-                    [NUCConstantExpression constantExpressionFrom:aMacroReplacedPpTokenStream into:&anExpressionOrIdentifier];
-                    
-                    anExpressionValue = [aPreprocessor executeConstantExpression:(NUCConstantExpression *)anExpressionOrIdentifier];
+                    if (anIfGroupType == NUCLexicalElementIfType)
+                    {
+                        [aStream skipWhitespacesWithoutNewline];
+                        
+                        NUCPpTokens *aPpTokens = nil;
+                        [self readPpTokensUntilNewlineFrom:aStream into:&aPpTokens];
+                        
+                        NUCPpTokens *aPpTokensWithMacroInvocations = [NUCPpTokens ppTokensWithMacroInvocationsFromPpTokens:aPpTokens with:aPreprocessor];
+                        
+                        NSMutableArray *aMacroReplacedPpTokens =  [aPpTokensWithMacroInvocations replaceMacrosWith:aPreprocessor];
+                        
+                        NUCPreprocessingTokenStream *aMacroReplacedPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aMacroReplacedPpTokens];
+                        
+                        [NUCConstantExpression constantExpressionFrom:aMacroReplacedPpTokenStream into:&anExpressionOrIdentifier];
+                        
+                        anExpressionValue = [aPreprocessor executeConstantExpression:(NUCConstantExpression *)anExpressionOrIdentifier];
+                    }
+                    else if (anIfGroupType == NUCLexicalElementIfdefType
+                        || anIfGroupType == NUCLexicalElementIfndefType)
+                    {
+                        [aStream skipWhitespaces];
+                        anExpressionOrIdentifier = [aStream next];
+                        BOOL aMacroIsDeffined = [aPreprocessor macroIsDefined:(NUCIdentifier *)anExpressionOrIdentifier];
+                        
+                        if (anIfGroupType == NUCLexicalElementIfdefType)
+                            anExpressionValue = aMacroIsDeffined ? 1 : 0;
+                        else
+                            anExpressionValue = aMacroIsDeffined ? 0 : 1;
+                    }
                 }
-                else if (anIfGroupType == NUCLexicalElementIfdefType
-                    || anIfGroupType == NUCLexicalElementIfndefType)
-                {
-                    [aStream skipWhitespaces];
-                    anExpressionOrIdentifier = [aStream next];
-                    BOOL aMacroIsDeffined = [aPreprocessor macroIsDefined:(NUCIdentifier *)anExpressionOrIdentifier];
-                    
-                    if (anIfGroupType == NUCLexicalElementIfdefType)
-                        anExpressionValue = aMacroIsDeffined ? 1 : 0;
-                    else
-                        anExpressionValue = aMacroIsDeffined ? 0 : 1;
-                }
+                else
+                    [self readPpTokensUntilNewlineFrom:aStream into:&anExpressionOrIdentifier];
             }
             else
-                [self readPpTokensUntilNewlineFrom:aStream into:&anExpressionOrIdentifier];
+            {
+                [aStream setPosition:aPosition];
+                return NO;
+            }
             
             if (aHash && anExpressionOrIdentifier && [NUCNewline newlineFrom:aStream into:&aNewline])
             {
@@ -81,8 +91,17 @@
                 [NUCGroup groupFrom:aStream with:aPreprocessor isSkipped:aGroupIsSkipped ? YES : anExpressionValue ? NO : YES into:&aGroup];
                 
                 if (anIfGroup)
+                {
                     *anIfGroup = [NUCIfGroup ifGroupWithType:anIfGroupType hash:aHash
-                                                    directiveName:aTypeName expressionOrIdentifier:anExpressionOrIdentifier newline:aNewline group:aGroup];
+                                               directiveName:aTypeName expressionOrIdentifier:anExpressionOrIdentifier newline:aNewline group:aGroup];
+                    if (!aGroupIsSkipped && anExpressionValue)
+                    {
+                        [*anIfGroup setIsSkipped:NO];
+                        [*anIfGroup setExpressionValue:anExpressionValue];
+                    }
+                    else
+                        [*anIfGroup setIsSkipped:YES];
+                }
                 
                 return YES;
             }

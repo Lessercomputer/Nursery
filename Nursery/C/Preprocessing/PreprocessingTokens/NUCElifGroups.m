@@ -64,4 +64,24 @@
     return [[self groups] count];
 }
 
+- (BOOL)isSkipped
+{
+    return ![self isNonzero];
+}
+
+- (BOOL)isNonzero
+{
+    __block BOOL anIsNonzero = NO;
+    
+    [[self groups] enumerateObjectsUsingBlock:^(NUCElifGroup * _Nonnull anElifGroup, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([anElifGroup isNonzero])
+        {
+            anIsNonzero = YES;
+            *stop = YES;
+        }
+    }];
+    
+    return anIsNonzero;
+}
+
 @end

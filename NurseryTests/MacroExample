@@ -66,4 +66,9 @@ __DATE__
 
 #if 1
 __LINE__
+a
+#elif 1
+b
+#else
+c
 #endif

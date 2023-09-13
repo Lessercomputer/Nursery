@@ -23,4 +23,7 @@
 - (NSMutableArray *)groups;
 - (NSUInteger)count;
 
+@property (nonatomic, readonly) BOOL isSkipped;
+@property (nonatomic, readonly) BOOL isNonzero;
+
 @end

@@ -29,6 +29,11 @@
 - (BOOL)isIfdef;
 - (BOOL)isIfndef;
 
+@property (nonatomic, readonly) BOOL isNonzero;
+@property (nonatomic) BOOL isSkipped;
+@property (nonatomic) NSInteger expressionValue;
+
+
 - (NUCDecomposedPreprocessingToken *)hash;
 - (NUCLexicalElement *)expression;
 - (NUCLexicalElement *)identifier;

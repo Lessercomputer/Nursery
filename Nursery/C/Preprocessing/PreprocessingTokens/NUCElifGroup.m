@@ -11,6 +11,7 @@
 #import "NUCConstantExpression.h"
 #import "NUCNewline.h"
 #import "NUCGroup.h"
+#import "NUCPreprocessor.h"
 
 #import <Foundation/NSString.h>
 
@@ -24,33 +25,45 @@
     
     if (aToken && [aToken isHash])
     {
-        if ([aStream skipWhitespacesWithoutNewline])
+        [aStream skipWhitespacesWithoutNewline];
+        NUCDecomposedPreprocessingToken *anElif = [aStream next];
+        NSInteger anExpressionValue = 0;
+        
+        if ([[anElif content] isEqualToString:NUCPreprocessingDirectiveElif])
         {
-            NUCDecomposedPreprocessingToken *anElif = [aStream next];
-            
-            if ([[anElif content] isEqualToString:NUCPreprocessingDirectiveElif])
+            NUCLexicalElement *aConstantExpression = nil;
+            NUCNewline *aNewline = nil;
+
+            if (!aGroupIsSkipped)
             {
-                NUCLexicalElement *aConstantExpression = nil;
-                NUCNewline *aNewline = nil;
+                [aStream skipWhitespacesWithoutNewline];
 
-                if (!aGroupIsSkipped)
-                {
-                    [NUCConstantExpression constantExpressionFrom:aStream into:&aConstantExpression];
-                    [aStream skipWhitespacesWithoutNewline];
-                }
-                else
-                    [self readPpTokensUntilNewlineFrom:aStream into:&aConstantExpression];
+                if ([NUCConstantExpression constantExpressionFrom:aStream into:&aConstantExpression])
+                    anExpressionValue = [aPreprocessor executeConstantExpression:(NUCConstantExpression *)aConstantExpression];
+                
+                [aStream skipWhitespacesWithoutNewline];
+            }
+            else
+                [self readPpTokensUntilNewlineFrom:aStream into:&aConstantExpression];
 
-                if (aConstantExpression && [NUCNewline newlineFrom:aStream into:&aNewline])
+            if (aConstantExpression && [NUCNewline newlineFrom:aStream into:&aNewline])
+            {
+                NUCGroup *aGroup = nil;
+                [NUCGroup groupFrom:aStream with:aPreprocessor isSkipped:aGroupIsSkipped into:&aGroup];
+                
+                if (anElifGroup)
                 {
-                    NUCGroup *aGroup = nil;
-                    [NUCGroup groupFrom:aStream with:aPreprocessor isSkipped:aGroupIsSkipped into:&aGroup];
-                    
-                    if (anElifGroup)
-                        *anElifGroup = [NUCElifGroup elifGroupWithType:NUCLexicalElementElifGroup hash:aToken directiveName:anElif expressionOrIdentifier:aConstantExpression newline:aNewline group:aGroup];
-                    
-                    return YES;
+                    *anElifGroup = [NUCElifGroup elifGroupWithType:NUCLexicalElementElifGroup hash:aToken directiveName:anElif expressionOrIdentifier:aConstantExpression newline:aNewline group:aGroup];
+                    if (!aGroupIsSkipped && anExpressionValue)
+                    {
+                        [*anElifGroup setIsSkipped:NO];
+                        [*anElifGroup setExpressionValue:anExpressionValue];
+                    }
+                    else
+                        [*anElifGroup setIsSkipped:YES];
                 }
+                
+                return YES;
             }
         }
     }
