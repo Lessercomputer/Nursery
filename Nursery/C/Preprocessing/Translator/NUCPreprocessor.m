@@ -113,7 +113,7 @@
     if ([NUCPreprocessingFile preprocessingFileFrom:aStream with:self into:&aPreprocessingFile])
     {
         [[self sourceFile] setPreprocessingFile:aPreprocessingFile];
-        [[[self sourceFile] preprocessingFile] preprocessedString];
+        [[[self sourceFile] preprocessingFile] preprocessedStringWithPreprocessor:self];
     }
 }
 

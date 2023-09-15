@@ -106,10 +106,10 @@
     return YES;
 }
 
-- (void)addPreprocessedStringTo:(NSMutableString *)aString
+- (void)addPreprocessedStringTo:(NSMutableString *)aString with:(NUCPreprocessor *)aPreprocessor
 {
-    [[self cr] addPreprocessedStringTo:aString];
-    [[self lf] addPreprocessedStringTo:aString];
+    [[self cr] addPreprocessedStringTo:aString with:aPreprocessor];
+    [[self lf] addPreprocessedStringTo:aString with:aPreprocessor];
 }
 
 @end

@@ -12,6 +12,7 @@
 #import "NUCNewline.h"
 #import "NUCGroup.h"
 #import "NUCPreprocessor.h"
+#import "NUCPpTokens.h"
 
 #import <Foundation/NSString.h>
 
@@ -38,7 +39,14 @@
             {
                 [aStream skipWhitespacesWithoutNewline];
 
-                if ([NUCConstantExpression constantExpressionFrom:aStream into:&aConstantExpression])
+                NUCPpTokens *aPpTokens = nil;
+                [self readPpTokensUntilNewlineFrom:aStream into:&aPpTokens];
+                NUCPpTokens *aPpTokensWithMacroInvocations = [NUCPpTokens ppTokensWithMacroInvocationsFromPpTokens:aPpTokens with:aPreprocessor];
+                NSMutableArray *aMacroReplacedPpTokens =  [aPpTokensWithMacroInvocations replaceMacrosWith:aPreprocessor];
+                
+                NUCPreprocessingTokenStream *aMacroReplacedPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aMacroReplacedPpTokens];
+                
+                if ([NUCConstantExpression constantExpressionFrom:aMacroReplacedPpTokenStream into:&aConstantExpression])
                     anExpressionValue = [aPreprocessor executeConstantExpression:(NUCConstantExpression *)aConstantExpression];
                 
                 [aStream skipWhitespacesWithoutNewline];

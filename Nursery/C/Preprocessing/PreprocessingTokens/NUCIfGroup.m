@@ -177,6 +177,11 @@
     return [self type] == NUCLexicalElementIfndefType;
 }
 
+- (BOOL)isNonzero
+{
+    return [self expressionValue] ? YES : NO;
+}
+
 - (NUCDecomposedPreprocessingToken *)hash
 {
     return hash;
@@ -200,6 +205,11 @@
 - (NUCGroup *)group
 {
     return group;
+}
+
+- (void)addPpTokensByReplacingMacrosTo:(NSMutableArray *)aMacroReplacedPpTokens with:(NUCPreprocessor *)aPreprocessor
+{
+    [[self group] addPpTokensByReplacingMacrosTo:aMacroReplacedPpTokens with:aPreprocessor];
 }
 
 @end

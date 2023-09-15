@@ -40,4 +40,6 @@
 - (NUCPreprocessingDirective *)newline;
 - (NUCGroup *)group;
 
+- (void)addPpTokensByReplacingMacrosTo:(NSMutableArray *)aMacroReplacedPpTokens with:(NUCPreprocessor *)aPreprocessor;
+
 @end

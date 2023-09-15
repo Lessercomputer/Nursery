@@ -90,7 +90,6 @@
 
         [aPreprocessor preprocessSourceFile:aSourceFile];
         [preprocessedSourceFiles addObject:aSourceFile];
-        NSLog(@"%@", [aSourceFile preprocessedString]);
         
         [[self sourceFiles] removeObjectAtIndex:0];
         [aPreprocessor release];

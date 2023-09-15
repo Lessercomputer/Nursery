@@ -96,4 +96,10 @@
     return group;
 }
 
+- (void)addPpTokensByReplacingMacrosTo:(NSMutableArray *)aMacroReplacedPpTokens with:(NUCPreprocessor *)aPreprocessor;
+{
+    if (![[self group] isSkipped])
+        [[self group] addPpTokensByReplacingMacrosTo:aMacroReplacedPpTokens with:aPreprocessor];
+}
+
 @end

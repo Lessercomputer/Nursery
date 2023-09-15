@@ -277,7 +277,7 @@ static NUCDecomposedPreprocessingToken *whitespaceToken = nil;
     return [[self content] isEqual:[aToken content]];
 }
 
-- (void)addPreprocessedStringTo:(NSMutableString *)aString
+- (void)addPreprocessedStringTo:(NSMutableString *)aString with:(NUCPreprocessor *)aPreprocessor
 {
     NSString *aContent = [self content];
     if (aContent)

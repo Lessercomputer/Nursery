@@ -31,7 +31,11 @@
         if ([NUCEndifLine endifLineFrom:aStream into:&anEndifLine])
         {
             if (anIfSection)
+            {
                 *anIfSection = [NUCIfSection ifSectionWithIfGroup:anIfGroup elifGroups:anElifGroups elseGroup:anElseGroup endifLine:anEndifLine];
+                if (aGroupIsSkipped)
+                    [(NUCIfSection *)*anIfSection setIsSkipped:YES];
+            }
             
             return YES;
         }
@@ -88,6 +92,16 @@
 - (NUCEndifLine *)endifLine
 {
     return endifLine;
+}
+
+- (void)addPpTokensByReplacingMacrosTo:(NSMutableArray *)aMacroReplacedPpTokens with:(NUCPreprocessor *)aPreprocessor
+{
+    if ([self ifGroup] && ![[self ifGroup] isSkipped])
+        [[self ifGroup] addPpTokensByReplacingMacrosTo:aMacroReplacedPpTokens with:aPreprocessor];
+    if ([self elifGroups] && ![[self elifGroups] isSkipped])
+        [[self elifGroups] addPpTokensByReplacingMacrosTo:aMacroReplacedPpTokens with:aPreprocessor];
+    if ([self elseGroup] && ![[self elseGroup] isSkipped])
+        [[self elseGroup] addPpTokensByReplacingMacrosTo:aMacroReplacedPpTokens with:aPreprocessor];
 }
 
 @end

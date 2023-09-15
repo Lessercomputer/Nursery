@@ -320,9 +320,4 @@ static NSCharacterSet *newlineAndBackslashCharacterSet;
     file = [aFile copy];
 }
 
-- (NSString *)preprocessedString
-{
-    return [[self preprocessingFile] preprocessedString];
-}
-
 @end

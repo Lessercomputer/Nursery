@@ -12,18 +12,23 @@
 #import "NUCControlLine.h"
 #import "NUCMacroInvocation.h"
 #import "NUCPpTokens.h"
+#import "NUCIfSection.h"
 
 #import <Foundation/NSArray.h>
 
 @implementation NUCGroup
 
+@synthesize macroReplacedPpTokens;
+
 + (BOOL)groupFrom:(NUCPreprocessingTokenStream *)aStream with:(NUCPreprocessor *)aPreprocessor isSkipped:(BOOL)aGroupIsSkipped into:(NUCGroup **)aToken
 {
     NUCGroup *aGroup = [NUCGroup group];
+    [aGroup setIsSkipped:aGroupIsSkipped];
     NUCPreprocessingDirective *aGroupPart = nil;
     BOOL aTokenScanned = NO;
-    NSUInteger aCurrentTextLinesBeginningIndex = NSUIntegerMax;
-    NSUInteger aCurrentTextLineCount = 0;
+    NSInteger aLineIndex = 0;
+    NSInteger aLineCount = 0;
+    NSMutableArray *aMacroReplacesPpTokens = [NSMutableArray array];
     
     while ([NUCGroupPart groupPartFrom:aStream with:aPreprocessor isSkipped:aGroupIsSkipped into:&aGroupPart])
     {
@@ -34,19 +39,16 @@
         {
             if ([aGroupPart isTextLine])
             {
-                if (aCurrentTextLinesBeginningIndex == NSUIntegerMax)
-                    aCurrentTextLinesBeginningIndex = [aGroup count] - 1;
-                
-                aCurrentTextLineCount++;
+                if (!aLineCount)
+                    aLineIndex = [aGroup count] - 1;
+                aLineCount++;
             }
             else
             {
-                if (aCurrentTextLinesBeginningIndex != NSUIntegerMax)
+                if (aLineCount)
                 {
-                    [aGroup executeMacrosFromAt:aCurrentTextLinesBeginningIndex count:aCurrentTextLineCount with:aPreprocessor];
-                    
-                    aCurrentTextLinesBeginningIndex = NSUIntegerMax;
-                    aCurrentTextLineCount = 0;
+                    [aGroup addPpTokensByReplacingMacrosInTextLinesFrom:aLineIndex count:aLineCount to:aMacroReplacesPpTokens with:aPreprocessor];
+                    aLineCount = 0;
                 }
                 
                 if ([aGroupPart isControlLine])
@@ -54,13 +56,19 @@
                     NUCControlLine *aControlLine = (NUCControlLine *)[(NUCGroupPart *)aGroupPart content];
                     [aControlLine preprocessWith:aPreprocessor];
                 }
+                else if ([aGroupPart isIfSection])
+                {
+                    [(NUCIfSection *)[(NUCGroupPart *)aGroupPart content] addPpTokensByReplacingMacrosTo:aMacroReplacesPpTokens with:aPreprocessor];
+                }
             }
         }
     }
     
-    if (aCurrentTextLineCount)
-        [aGroup executeMacrosFromAt:aCurrentTextLinesBeginningIndex count:aCurrentTextLineCount with:aPreprocessor];
+    if (aLineCount)
+        [aGroup addPpTokensByReplacingMacrosInTextLinesFrom:aLineIndex count:aLineCount to:aMacroReplacesPpTokens with:aPreprocessor];
     
+    [aGroup setMacroReplacedPpTokens:aMacroReplacesPpTokens];
+
     if (aToken)
         *aToken = aGroup;
     
@@ -77,7 +85,6 @@
     if (self = [super initWithType:aType])
     {
         groupParts = [NSMutableArray new];
-        macroReplacedPpTokens = [NSMutableArray new];
     }
     
     return self;
@@ -106,23 +113,58 @@
     [[self groupParts] addObject:aGroupPart];
 }
 
-- (NSMutableArray *)macroReplacedPpTokens
+- (NSMutableArray *)replaceMacrosWith:(NUCPreprocessor *)aPreprocessor
 {
-    return macroReplacedPpTokens;
+    NSMutableArray *aMacroExpandedPpTokens = [NSMutableArray array];
+    
+    [self addPpTokensByReplacingMacrosTo:aMacroExpandedPpTokens with:aPreprocessor];
+    
+    return aMacroExpandedPpTokens;
 }
 
-- (void)executeMacrosFromAt:(NSUInteger)anIndex count:(NSUInteger)aCount with:(NUCPreprocessor *)aPreprocessor
+- (void)addPpTokensByReplacingMacrosTo:(NSMutableArray *)aMacroReplacedPpTokens with:(NUCPreprocessor *)aPreprocessor
 {
-    NSArray *aCurrentTextLines = [[self groupParts] subarrayWithRange:NSMakeRange(anIndex, aCount)];
-    NUCPpTokens *aPpTokensWithMacroInvocations = [NUCPpTokens ppTokensWithMacroInvocationsFromTextLines:aCurrentTextLines with:aPreprocessor];
+    __block NSUInteger aTextLineIndex;
+    __block NSUInteger aTextLineCount = 0;
+    
+    [[self groupParts] enumerateObjectsUsingBlock:^(NUCGroupPart * _Nonnull aGroupPart, NSUInteger anIndex, BOOL * _Nonnull stop) {
+        if ([aGroupPart isTextLine])
+        {
+            if (!aTextLineCount)
+                aTextLineIndex = anIndex;
+        
+            aTextLineCount++;
+        }
+        else
+        {
+            if (aTextLineCount)
+            {
+                [self addPpTokensByReplacingMacrosInTextLinesFrom:aTextLineIndex count:aTextLineCount to:aMacroReplacedPpTokens with:aPreprocessor];
+                aTextLineCount = 0;
+            }
+            
+            if ([aGroupPart isIfSection])
+                [(NUCIfSection *)[aGroupPart content] addPpTokensByReplacingMacrosTo:aMacroReplacedPpTokens with:aPreprocessor];
+        }
+    }];
+    
+    if (aTextLineCount)
+        [self addPpTokensByReplacingMacrosInTextLinesFrom:aTextLineIndex count:aTextLineCount to:aMacroReplacedPpTokens with:aPreprocessor];
+}
+
+
+- (void)addPpTokensByReplacingMacrosInTextLinesFrom:(NSUInteger)anIndex count:(NSUInteger)aCount to:(NSMutableArray *)aPpTokens with:(NUCPreprocessor *)aPreprocessor
+{
+    NSArray *aTextLines = [[self groupParts] subarrayWithRange:NSMakeRange(anIndex, aCount)];
+    NUCPpTokens *aPpTokensWithMacroInvocations = [NUCPpTokens ppTokensWithMacroInvocationsFromTextLines:aTextLines with:aPreprocessor];
     NSMutableArray *aMacroReplacedPpTokens = [aPpTokensWithMacroInvocations replaceMacrosWith:aPreprocessor];
-    [[self macroReplacedPpTokens] addObjectsFromArray:aMacroReplacedPpTokens];    
+    [aPpTokens addObjectsFromArray:aMacroReplacedPpTokens];
 }
 
-- (void)addPreprocessedStringTo:(NSMutableString *)aString
+- (void)addPreprocessedStringTo:(NSMutableString *)aString with:(NUCPreprocessor *)aPreprocessor
 {
     [[self macroReplacedPpTokens] enumerateObjectsUsingBlock:^(NUCPreprocessingToken * _Nonnull aPpToken, NSUInteger idx, BOOL * _Nonnull stop) {
-        [aPpToken addPreprocessedStringTo:aString];
+        [aPpToken addPreprocessedStringTo:aString with:aPreprocessor];
     }];
 }
 

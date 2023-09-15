@@ -26,4 +26,6 @@
 @property (nonatomic, readonly) BOOL isSkipped;
 @property (nonatomic, readonly) BOOL isNonzero;
 
+- (void)addPpTokensByReplacingMacrosTo:(NSMutableArray *)aMacroReplacedPpTokens with:(NUCPreprocessor *)aPreprocessor;
+
 @end

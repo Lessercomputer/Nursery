@@ -172,7 +172,7 @@
     NSMutableString *aMacroReplacedString = [NSMutableString string];
     
     [aMacroReplacedPpTokens enumerateObjectsUsingBlock:^(NUCPreprocessingToken * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [obj addPreprocessedStringTo:aMacroReplacedString];
+        [obj addPreprocessedStringTo:aMacroReplacedString with:aPreprocessor];
     }];
     
     return aMacroReplacedString;
@@ -459,10 +459,10 @@
     }
 }
 
-- (void)addPreprocessedStringTo:(NSMutableString *)aString
+- (void)addPreprocessedStringTo:(NSMutableString *)aString with:(NUCPreprocessor *)aPreprocessor
 {
     [[self ppTokens] enumerateObjectsUsingBlock:^(NUCPreprocessingToken * _Nonnull aPpToken, NSUInteger idx, BOOL * _Nonnull stop) {
-        [aPpToken addPreprocessedStringTo:aString];
+        [aPpToken addPreprocessedStringTo:aString with:aPreprocessor];
     }];
 }
 

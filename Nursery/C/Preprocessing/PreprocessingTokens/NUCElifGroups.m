@@ -66,7 +66,17 @@
 
 - (BOOL)isSkipped
 {
-    return ![self isNonzero];
+    __block BOOL anIsSkipped = YES;
+    
+    [[self groups] enumerateObjectsUsingBlock:^(NUCElifGroup * _Nonnull anElifGroup, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (![anElifGroup isSkipped])
+        {
+            anIsSkipped = NO;
+            *stop = YES;
+        }
+    }];
+    
+    return anIsSkipped;
 }
 
 - (BOOL)isNonzero
@@ -82,6 +92,13 @@
     }];
     
     return anIsNonzero;
+}
+
+- (void)addPpTokensByReplacingMacrosTo:(NSMutableArray *)aMacroReplacedPpTokens with:(NUCPreprocessor *)aPreprocessor
+{
+    [[self groups] enumerateObjectsUsingBlock:^(NUCElifGroup * _Nonnull anElifGroup, NSUInteger idx, BOOL * _Nonnull stop) {
+        [anElifGroup addPpTokensByReplacingMacrosTo:aMacroReplacedPpTokens with:aPreprocessor];
+    }];
 }
 
 @end

@@ -341,16 +341,16 @@ static NSArray *NUCPreprocessingDirectiveNames;
     return [self type] == NUCLexicalElementStringLiteralType;
 }
 
-- (NSString *)preprocessedString
+- (NSString *)preprocessedStringWithPreprocessor:(NUCPreprocessor *)aPreprocessor
 {
     NSMutableString *aString = [NSMutableString string];
     
-    [self addPreprocessedStringTo:aString];
+    [self addPreprocessedStringTo:aString with:aPreprocessor];
     
     return aString;
 }
 
-- (void)addPreprocessedStringTo:(NSMutableString *)aString
+- (void)addPreprocessedStringTo:(NSMutableString *)aString with:(NUCPreprocessor *)aPreprocessor
 {
     
 }

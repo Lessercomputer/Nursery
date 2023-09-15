@@ -29,5 +29,9 @@
 - (NUCElseGroup *)elseGroup;
 - (NUCEndifLine *)endifLine;
 
+@property (nonatomic) BOOL isSkipped;
+
+- (void)addPpTokensByReplacingMacrosTo:(NSMutableArray *)aMacroReplacedPpTokens with:(NUCPreprocessor *)aPreprocessor;
+
 @end
 
