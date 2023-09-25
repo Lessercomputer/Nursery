@@ -48,7 +48,7 @@
     return [[self class] escapeStringForStringLiteral:[self string]];
 }
 
-- (void)addPreprocessedStringTo:(NSMutableString *)aString
+- (void)addPreprocessedStringTo:(NSMutableString *)aString with:(NUCPreprocessor *)aPreprocessor;
 {
     [aString appendString:[self string]];
 }

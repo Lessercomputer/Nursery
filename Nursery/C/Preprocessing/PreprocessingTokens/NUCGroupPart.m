@@ -59,7 +59,7 @@
     [super dealloc];
 }
 
--(NUCPreprocessingDirective *)content
+- (NUCPreprocessingDirective *)content
 {
     return content;
 }
