@@ -42,6 +42,27 @@
         
         return YES;
     }
+    else if ([aToken isOpeningParenthesis])
+    {
+        NSUInteger aPosition = [aStream position];
+        [aStream skipWhitespacesWithoutNewline];
+        NUCExpression *anExpression2 = nil;
+        
+        if ([NUCExpression expressionFrom:aStream into:&anExpression2])
+        {
+            if ([aStream skipWhitespacesWithoutNewline])
+            {
+                if (anExpression)
+                    *anExpression = [NUCPrimaryExpression expressionWithExpression:anExpression2];
+                
+                return YES;
+            }
+            else
+            {
+                [aStream setPosition:aPosition];
+            }
+        }
+    }
     
     return NO;
 }

@@ -37,6 +37,11 @@
     return [self type] == NUCLexicalElementPunctuatorType;
 }
 
+- (BOOL)isNegationOperator
+{
+    return NO;
+}
+
 - (BOOL)isUndef
 {
     return NO;

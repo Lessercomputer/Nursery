@@ -17,6 +17,7 @@
 - (BOOL)isCharacterConstant;
 - (BOOL)isPpNumber;
 - (BOOL)isPunctuator;
+- (BOOL)isNegationOperator;
 - (BOOL)isUndef;
 - (BOOL)isLine;
 - (BOOL)isError;

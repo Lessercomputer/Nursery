@@ -65,6 +65,8 @@ NSString * const NUCPreprocessingDirectiveLine = @"line";
 NSString * const NUCPreprocessingDirectiveError = @"error";
 NSString * const NUCPreprocessingDirectivePragma = @"pragma";
 
+NSString * const NUCIdentifierDefined = @"defined";
+
 NSString * const NUCPredefinedMacroVA_ARGS = @"__VA_ARGS__";
 NSString * const NUCPredefinedMacroLINE = @"__LINE__";
 NSString * const NUCPredefinedMacroFILE = @"__FILE__";

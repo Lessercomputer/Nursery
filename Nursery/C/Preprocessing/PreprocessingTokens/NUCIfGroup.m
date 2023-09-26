@@ -53,15 +53,31 @@
                         NUCPpTokens *aPpTokens = nil;
                         [self readPpTokensUntilNewlineFrom:aStream into:&aPpTokens];
                         
-                        NUCPpTokens *aPpTokensWithMacroInvocations = [NUCPpTokens ppTokensWithMacroInvocationsFromPpTokens:aPpTokens with:aPreprocessor];
+                        NUCPreprocessingTokenStream *anExpressionStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:[aPpTokens ppTokens]];
                         
-                        NSMutableArray *aMacroReplacedPpTokens =  [aPpTokensWithMacroInvocations replaceMacrosWith:aPreprocessor];
+                        NUCIdentifier *aMacroIdentifier = nil;
+                        BOOL aHasNegationOperator = NO;
                         
-                        NUCPreprocessingTokenStream *aMacroReplacedPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aMacroReplacedPpTokens];
-                        
-                        [NUCConstantExpression constantExpressionFrom:aMacroReplacedPpTokenStream into:&anExpressionOrIdentifier];
-                        
-                        anExpressionValue = [aPreprocessor executeConstantExpression:(NUCConstantExpression *)anExpressionOrIdentifier];
+                        if ([self expressionIsDefined:anExpressionStream identifier:&aMacroIdentifier hasNegationOperator:&aHasNegationOperator])
+                        {
+                            anExpressionOrIdentifier = (NUCLexicalElement *)aMacroIdentifier;
+                            
+                            if (aHasNegationOperator)
+                                anExpressionValue = [aPreprocessor macroIsDefined:aMacroIdentifier] ? 0 : 1;
+                            else
+                                anExpressionValue = [aPreprocessor macroIsDefined:aMacroIdentifier] ? 1 : 0;
+                        }
+                        else
+                        {
+                            NUCPpTokens *aPpTokensWithMacroInvocations = [NUCPpTokens ppTokensWithMacroInvocationsFromPpTokens:aPpTokens with:aPreprocessor];
+                            NSMutableArray *aMacroReplacedPpTokens =  [aPpTokensWithMacroInvocations replaceMacrosWith:aPreprocessor];
+                            NUCPreprocessingTokenStream *aMacroReplacedPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aMacroReplacedPpTokens];
+                            
+                            if ([NUCConstantExpression constantExpressionFrom:aMacroReplacedPpTokenStream into:&anExpressionOrIdentifier])
+                                anExpressionValue = [aPreprocessor executeConstantExpression:(NUCConstantExpression *)anExpressionOrIdentifier];
+                            
+                            [aStream skipWhitespacesWithoutNewline];
+                        }
                     }
                     else if (anIfGroupType == NUCLexicalElementIfdefType
                         || anIfGroupType == NUCLexicalElementIfndefType)
@@ -111,6 +127,68 @@
     [aStream setPosition:aPosition];
     
     return NO;
+}
+
++ (BOOL)expressionIsDefined:(NUCPreprocessingTokenStream *)aStream identifier:(NUCIdentifier **)anIdentifier hasNegationOperator:(BOOL *)aHasNegationOperator
+{
+    BOOL anExpressionIsDefined = NO;
+    NSUInteger aPosition = [aStream position];
+    [aStream skipWhitespacesWithoutNewline];
+    BOOL aNegationOperatorExists = NO;
+    NUCIdentifier *anIdentifierToReturn = nil;
+    
+    NUCDecomposedPreprocessingToken *aToken = [aStream next];
+    if ([aToken isPunctuator])
+    {
+        if ([aToken isNegationOperator])
+            aNegationOperatorExists = YES;
+        
+        [aStream skipWhitespacesWithoutNewline];
+        aToken = [aStream next];
+    }
+    
+    if ([aToken isIdentifier] && [[aToken content] isEqual:NUCIdentifierDefined])
+    {
+        [aStream skipWhitespacesWithoutNewline];
+        
+        aToken = [aStream next];
+        if ([aToken isOpeningParenthesis])
+        {
+            [aStream skipWhitespacesWithoutNewline];
+            
+            aToken = [aStream next];
+            if ([aToken isIdentifier])
+            {
+                anIdentifierToReturn = (NUCIdentifier *)aToken;
+                
+                [aStream skipWhitespacesWithoutNewline];
+                
+                aToken = [aStream next];
+                if ([aToken isClosingParenthesis])
+                    anExpressionIsDefined = YES;
+            }
+        }
+        else
+        {
+            if ([aToken isIdentifier])
+            {
+                anIdentifierToReturn = (NUCIdentifier *)aToken;
+                anExpressionIsDefined = YES;
+            }
+        }
+    }
+    
+    if (anExpressionIsDefined)
+    {
+        if (anIdentifier)
+            *anIdentifier = anIdentifierToReturn;
+        if (aHasNegationOperator)
+            *aHasNegationOperator = aNegationOperatorExists;
+    }
+    else
+        [aStream setPosition:aPosition];
+    
+    return anExpressionIsDefined;
 }
 
 + (NUCLexicalElementType)lexicalElementTypeForDirectiveName:(NSString *)aName

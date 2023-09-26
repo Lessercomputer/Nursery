@@ -262,6 +262,11 @@ static NUCDecomposedPreprocessingToken *whitespaceToken = nil;
     return [[self content] isEqual:NUCClosingParenthesisPunctuator];
 }
 
+- (BOOL)isNegationOperator
+{
+    return [self isPunctuator] && [[self content] isEqual:NUCLogicalNegationOperator];
+}
+
 - (NSString *)description
 {
     return [[super description] stringByAppendingFormat:@", content:%@, range:%@", [self content], NSStringFromRange([self range])];

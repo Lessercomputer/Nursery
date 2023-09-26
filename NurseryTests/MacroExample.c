@@ -54,7 +54,6 @@ line2
 #line 54
 
 __LINE__
-__FILE__
 
 #line 200 "macro example"
 
@@ -63,19 +62,3 @@ __LINE__
 __FILE__
 __TIME__
 __DATE__
-
-
-#define H 1
-#if defined (H)
-H
-#endif
-
-#if 1
-__LINE__
-a
-#elif 1
-b
-#else
-c
-#endif
-
