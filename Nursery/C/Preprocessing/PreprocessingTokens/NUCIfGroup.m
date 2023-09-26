@@ -48,36 +48,7 @@
                 {
                     if (anIfGroupType == NUCLexicalElementIfType)
                     {
-                        [aStream skipWhitespacesWithoutNewline];
-                        
-                        NUCPpTokens *aPpTokens = nil;
-                        [self readPpTokensUntilNewlineFrom:aStream into:&aPpTokens];
-                        
-                        NUCPreprocessingTokenStream *anExpressionStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:[aPpTokens ppTokens]];
-                        
-                        NUCIdentifier *aMacroIdentifier = nil;
-                        BOOL aHasNegationOperator = NO;
-                        
-                        if ([self expressionIsDefined:anExpressionStream identifier:&aMacroIdentifier hasNegationOperator:&aHasNegationOperator])
-                        {
-                            anExpressionOrIdentifier = (NUCLexicalElement *)aMacroIdentifier;
-                            
-                            if (aHasNegationOperator)
-                                anExpressionValue = [aPreprocessor macroIsDefined:aMacroIdentifier] ? 0 : 1;
-                            else
-                                anExpressionValue = [aPreprocessor macroIsDefined:aMacroIdentifier] ? 1 : 0;
-                        }
-                        else
-                        {
-                            NUCPpTokens *aPpTokensWithMacroInvocations = [NUCPpTokens ppTokensWithMacroInvocationsFromPpTokens:aPpTokens with:aPreprocessor];
-                            NSMutableArray *aMacroReplacedPpTokens =  [aPpTokensWithMacroInvocations replaceMacrosWith:aPreprocessor];
-                            NUCPreprocessingTokenStream *aMacroReplacedPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aMacroReplacedPpTokens];
-                            
-                            if ([NUCConstantExpression constantExpressionFrom:aMacroReplacedPpTokenStream into:&anExpressionOrIdentifier])
-                                anExpressionValue = [aPreprocessor executeConstantExpression:(NUCConstantExpression *)anExpressionOrIdentifier];
-                            
-                            [aStream skipWhitespacesWithoutNewline];
-                        }
+                        [self readAndExecuteExpressionFrom:aStream expressionOrIdentifier:&anExpressionOrIdentifier expressionValue:&anExpressionValue preprocessor:aPreprocessor];
                     }
                     else if (anIfGroupType == NUCLexicalElementIfdefType
                         || anIfGroupType == NUCLexicalElementIfndefType)
@@ -127,6 +98,55 @@
     [aStream setPosition:aPosition];
     
     return NO;
+}
+
++ (BOOL)readAndExecuteExpressionFrom:(NUCPreprocessingTokenStream *)aStream expressionOrIdentifier:(NUCLexicalElement **)anExpressionOrIdentifier expressionValue:(NSInteger *)anExpressionValue preprocessor:(NUCPreprocessor *)aPreprocessor
+{
+    NUCLexicalElement *anExpressionOrIdentifierToReturn = nil;
+    NSInteger anExpressionValueToReturn = 0;
+    
+    [aStream skipWhitespacesWithoutNewline];
+    
+    NUCPpTokens *aPpTokens = nil;
+    [self readPpTokensUntilNewlineFrom:aStream into:&aPpTokens];
+    
+    NUCPreprocessingTokenStream *anExpressionStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:[aPpTokens ppTokens]];
+    
+    NUCIdentifier *aMacroIdentifier = nil;
+    BOOL aHasNegationOperator = NO;
+    
+    if ([self expressionIsDefined:anExpressionStream identifier:&aMacroIdentifier hasNegationOperator:&aHasNegationOperator])
+    {
+        anExpressionOrIdentifierToReturn = (NUCLexicalElement *)aMacroIdentifier;
+        
+        if (aHasNegationOperator)
+            anExpressionValueToReturn = [aPreprocessor macroIsDefined:aMacroIdentifier] ? 0 : 1;
+        else
+            anExpressionValueToReturn = [aPreprocessor macroIsDefined:aMacroIdentifier] ? 1 : 0;
+    }
+    else
+    {
+        NUCPpTokens *aPpTokensWithMacroInvocations = [NUCPpTokens ppTokensWithMacroInvocationsFromPpTokens:aPpTokens with:aPreprocessor];
+        NSMutableArray *aMacroReplacedPpTokens =  [aPpTokensWithMacroInvocations replaceMacrosWith:aPreprocessor];
+        NUCPreprocessingTokenStream *aMacroReplacedPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aMacroReplacedPpTokens];
+        
+        if ([NUCConstantExpression constantExpressionFrom:aMacroReplacedPpTokenStream into:&anExpressionOrIdentifierToReturn])
+            anExpressionValueToReturn = [aPreprocessor executeConstantExpression:(NUCConstantExpression *)anExpressionOrIdentifierToReturn];
+        
+        [aStream skipWhitespacesWithoutNewline];
+    }
+    
+    if (anExpressionOrIdentifierToReturn)
+    {
+        if (anExpressionOrIdentifier)
+            *anExpressionOrIdentifier = anExpressionOrIdentifierToReturn;
+        
+        if (anExpressionValue)
+            *anExpressionValue = anExpressionValueToReturn;
+        return YES;
+    }
+    else
+        return NO;
 }
 
 + (BOOL)expressionIsDefined:(NUCPreprocessingTokenStream *)aStream identifier:(NUCIdentifier **)anIdentifier hasNegationOperator:(BOOL *)aHasNegationOperator

@@ -66,14 +66,14 @@ __DATE__
 
 
 #define H 1
-#if defined (H)
+#if !defined (H)
 H
 #endif
 
-#if 1
+#if 0
 __LINE__
 a
-#elif 1
+#elif 2
 b
 #else
 c

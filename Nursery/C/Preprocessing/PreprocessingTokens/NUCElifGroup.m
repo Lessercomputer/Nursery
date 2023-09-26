@@ -37,19 +37,7 @@
 
             if (!aGroupIsSkipped)
             {
-                [aStream skipWhitespacesWithoutNewline];
-
-                NUCPpTokens *aPpTokens = nil;
-                [self readPpTokensUntilNewlineFrom:aStream into:&aPpTokens];
-                NUCPpTokens *aPpTokensWithMacroInvocations = [NUCPpTokens ppTokensWithMacroInvocationsFromPpTokens:aPpTokens with:aPreprocessor];
-                NSMutableArray *aMacroReplacedPpTokens =  [aPpTokensWithMacroInvocations replaceMacrosWith:aPreprocessor];
-                
-                NUCPreprocessingTokenStream *aMacroReplacedPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aMacroReplacedPpTokens];
-                
-                if ([NUCConstantExpression constantExpressionFrom:aMacroReplacedPpTokenStream into:&aConstantExpression])
-                    anExpressionValue = [aPreprocessor executeConstantExpression:(NUCConstantExpression *)aConstantExpression];
-                
-                [aStream skipWhitespacesWithoutNewline];
+                [self readAndExecuteExpressionFrom:aStream expressionOrIdentifier:&aConstantExpression expressionValue:&anExpressionValue preprocessor:aPreprocessor];
             }
             else
                 [self readPpTokensUntilNewlineFrom:aStream into:&aConstantExpression];
