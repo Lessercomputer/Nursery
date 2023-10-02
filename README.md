@@ -1,28 +1,28 @@
-# Nursery  
-**Nursery** is an embeddable object-oriented database (OODB) framework for Cocoa
+[**English Ver Here**](README.md)
+# Nursery
+**Nursery**とは、Cocoaフレームワーク向けのオブジェクト指向データベース（OODB）です。
+フレームワークとして開発しているので、アプリケーションに組み込む形で利用できます。
 
-## Licence
-**Nursery** is published under the zlib license
+## ライセンス
+ライセンスは、zlibですので、商用・非商用のどちらでも利用できます。
 
-## Donation
-[Donate with PayPal (paypal.me/AkifumiTakata)](https://paypal.me/AkifumiTakata)
+## 寄付
+[PayPalで寄付する (paypal.me/AkifumiTakata)](https://paypal.me/AkifumiTakata)
 
-## Overview
-* Simple & Powerful
-* Written in Objective-C
-* Implemented ONLY with the Foundation framework of Cocoa and Core Foundation Framework (for creating sockets)
-* ACID-compliant
-* Lazy Loading
-* Garbage Collection and Compaction in Database File
-* Simultaneous Use from Multiple Processes
-* Not ORM(Object-relational mapping)
+## 概要
+*　シンプルかつパワフル
+*　ほぼ全てをObjective-Cで記述
+*　FoundationフレームワークとCore Foundationフレームワーク（ソケット作成のため）のみで実装
+*　ACID準拠
+*　遅延読み込み
+*　データベースファイル内のガベージコレクションとコンパクション
+*　複数プロセスからの同時使用
+*　ORMではない
 
-
-### List of Persistable Objects
-* NULibrary  
-	A collection class that implements **B+ tree**.
-* A class that implements the **NUCoding** protocol.
-* A class that implements persistence processing by subclass of **NUCoder**
+### 永続化可能なオブジェクトのリスト
+* NULibrary B+木を実装したコレクションクラス
+* **NUCoding** プロトコルを実装したクラス
+* **NUCoder** のサブクラスを使って永続化処理を実装したクラス
 * NSObject
 * NSString
 * NSMutableString
@@ -40,7 +40,7 @@
 * NSIndexSet
 * NSMutableIndexSet
 
-### Very Simple Example 
+### 非常にシンプルな使用例 
 ```objc
 #import <Nursery/Nursery.h>
 
@@ -52,7 +52,7 @@ NUGarden *aGarden = [aNursery makeGarden];
 [aGarden farmOut];
 ```
 
-### Example Using NUCoding Protocol
+### NUCoding プロトコルを使用した例
 ```objc
 #import <Nursery/Nursery.h>
 
@@ -140,37 +140,34 @@ Person *aPerson = [Person new];
 @end
 ```
 
-## macOS support
-macOS (10.13 or higher)
+## macOS サポート
+macOS (10.13 以上)
 
-## How to buld
-1. Click "Open in Xcode" on project page and clone to (For Example) your Desktop 
-2. Select "Edit Scheme..." < "Scheme" < "Product" in menubar
-3. Select "Run" in left pane and change "Build Configuration" to "Release" then click "Close" button
-4. Select "Build" < "Product" in menubar
+## ビルド方法
+1. プロジェクトページの"Open with Xcode"ボタンをクリックして、デスクトップ等にクローンする
+2. Xcodeのメニューバーの"Product"から"Build"を選択する
 
-## A bit more detailed information
-### Endian Independent
-Instance variables are converted to big endian at the time of encoding and converted to host endian at the time of decoding
+## もう少し詳しい情報
+### エンディアン非依存
+インスタンス変数はエンコーディング時にビッグエンディアンに変換され、デコード時にホストのエンディアンに変換されます
 
-### Thread Safety
-Loading and saving objects is thread-safe.  
-However, there is no guarantee that other processing is thread-safe
+### スレッドセーフティ
+オブジェクトの読み込みと保存は、そのオブジェクトのエンコード/デコード時に呼び出されるメソッドがスレッドセーフである限り、スレッドセーフです。
 
-### Simultaneous Use from Multiple Processes
-**Nursery** supports simultaneous use with multiple processes
+### 複数プロセスからの同時使用
+**Nursery** は複数プロセスからの同時使用をサポートしています
 
-### Durability
-**Nursery** implements write-ahead logging (WAL)
+### 耐久性
+**Nursery** は write-ahead ロギング (WAL)を実装しています
 
-### Garbage Collection in Database File
-Objects that can not be traced from the root object of **Nursery** are automatically released by GC.  
-GC can handle circular references correctly.  
-GC implements garbage collection with Tri-color marking.  
-The released area is compacted 
+### データベースファイル内のガベージコレクション
+*　**Nursery** のルートオブジェクトから到着できないオブジェクトは、GCによって自動的に解放されます
+*　循環参照を適切に取り扱えます
+*　GCのアルゴリズムには3色マーキングを採用しています
+*　解放された領域はコンパクト化されます
 
-## See also
-* [Documents](Documents/)  
+## 参照
+* [ドキュメント（英語）](Documents/)  
 
-## Contribution
-Bug fixes are welcome
+## コントリビューション
+バグ修正歓迎です
