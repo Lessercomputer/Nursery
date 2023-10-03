@@ -1,4 +1,4 @@
-[**English Ver Here**](README.md)
+[**English Ver Here**](README-en.md)
 # Nursery
 **Nursery**とは、Cocoaフレームワーク向けのオブジェクト指向データベース（OODB）です。
 フレームワークとして開発しているので、アプリケーションに組み込む形で利用できます。
