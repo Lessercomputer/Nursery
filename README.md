@@ -7,7 +7,9 @@
 ライセンスは、zlibですので、商用・非商用のどちらでも利用できます。
 
 ## 寄付
-[PayPalで寄付する (paypal.me/AkifumiTakata)](https://paypal.me/AkifumiTakata)
+以下のサービスで寄付を受け付けています:
+* [GitHub Sponsors](https://github.com/sponsors/Lily-bud)
+* [PayPal(paypal.me/AkifumiTakata)](https://paypal.me/AkifumiTakata) 
 
 ## 概要
 * シンプルかつパワフル
