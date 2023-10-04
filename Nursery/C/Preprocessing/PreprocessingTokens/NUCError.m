@@ -10,12 +10,15 @@
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCPpTokens.h"
 #import "NUCNewline.h"
+#import "NUCPreprocessor.h"
+
+#import <Foundation/NSString.h>
 
 @implementation NUCError
 
 + (BOOL)errorFrom:(NUCPreprocessingTokenStream *)aStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCControlLine **)aToken
 {
-    if ([aDirectiveName isError])
+    if ([aDirectiveName isIdentifier] && [[aDirectiveName content] isEqual:NUCPreprocessingDirectiveError])
     {
         NSUInteger aPosition = [aStream position];
         NUCPpTokens *aPpTokens = nil;
@@ -65,6 +68,11 @@
     [ppTokens release];
     
     [super dealloc];
+}
+
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
+{
+    [aPreprocessor error:self];
 }
 
 @end

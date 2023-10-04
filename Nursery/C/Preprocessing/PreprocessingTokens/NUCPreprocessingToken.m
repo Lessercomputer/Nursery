@@ -54,7 +54,7 @@
 
 - (BOOL)isError
 {
-    return [self type] == NUCLexicalElementErrorType;
+    return NO;
 }
 
 - (BOOL)isPragma

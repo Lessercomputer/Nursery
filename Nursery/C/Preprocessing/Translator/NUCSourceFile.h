@@ -8,7 +8,7 @@
 #import <Foundation/NSObject.h>
 
 @class NSURL, NSString, NSMutableArray;
-@class NULibrary, NUCPreprocessingFile, NUCLine;
+@class NULibrary, NUCPreprocessingFile, NUCLine, NUCError;
 
 @interface NUCSourceFile : NSObject
 {
@@ -42,10 +42,14 @@
 @property (nonatomic) NSInteger lineNumberAdjustmentOffset;
 
 - (void)line:(NUCLine *)aLine;
+- (void)error:(NUCError *)anError;
 
 - (NUCPreprocessingFile *)preprocessingFile;
 - (void)setPreprocessingFile:(NUCPreprocessingFile *)aPreprocessingFile;
 
 @property (nonatomic, copy, readonly) NSString *file;
+@property (nonatomic, retain) NSMutableArray *errors;
+
+- (void)addError:(NUCError *)anError;
 
 @end

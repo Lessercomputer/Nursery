@@ -13,6 +13,7 @@
 #import "NUCMacroInvocation.h"
 #import "NUCPpTokens.h"
 #import "NUCIfSection.h"
+#import "NUCError.h"
 
 #import <Foundation/NSArray.h>
 

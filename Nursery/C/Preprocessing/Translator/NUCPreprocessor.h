@@ -9,7 +9,7 @@
 
 @class NSString, NSMutableDictionary, NSMutableArray;
 @class NUCTranslator, NUCSourceFile, NUCControlLineDefine, NUCControlLineInclude, NUCUndef,
-NUCIdentifier, NUCPpTokens, NUCConstantExpression, NUCPreprocessingToken, NUCLine;
+NUCIdentifier, NUCPpTokens, NUCConstantExpression, NUCPreprocessingToken, NUCLine, NUCError;
 
 @interface NUCPreprocessor : NSObject
 {
@@ -34,6 +34,7 @@ NUCIdentifier, NUCPpTokens, NUCConstantExpression, NUCPreprocessingToken, NUCLin
 - (void)define:(NUCControlLineDefine *)aMacroDefine;
 - (void)undef:(NUCUndef *)anUndef;
 - (void)line:(NUCLine *)aLine;
+- (void)error:(NUCError *)anError;
 
 - (NSInteger)executeConstantExpression:(NUCConstantExpression *)aConstantExpression;
 

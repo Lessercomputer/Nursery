@@ -14,6 +14,7 @@
 #import "NUCLine.h"
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCPreprocessingFile.h"
+#import "NUCError.h"
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSScanner.h>
@@ -27,6 +28,7 @@ static NSCharacterSet *newlineAndBackslashCharacterSet;
 @synthesize url;
 @synthesize lineRanges;
 @synthesize file;
+@synthesize errors;
 
 + (void)initialize
 {
@@ -52,6 +54,7 @@ static NSCharacterSet *newlineAndBackslashCharacterSet;
     {
         url = [aURL copy];
         physicalSourceString = [aString copy];
+        errors = [NSMutableArray new];
     }
     
     return self;
@@ -72,6 +75,7 @@ static NSCharacterSet *newlineAndBackslashCharacterSet;
     [lineRangeMappingOfPhase2StringToPhase1String release];
     [preprocessingFile release];
     [lineRanges release];
+    [errors release];
     
     [super dealloc];
 }
@@ -306,6 +310,11 @@ static NSCharacterSet *newlineAndBackslashCharacterSet;
     }
 }
 
+- (void)error:(NUCError *)anError
+{
+    [self addError:anError];
+}
+
 - (NSString *)file
 {
     if (file)
@@ -318,6 +327,11 @@ static NSCharacterSet *newlineAndBackslashCharacterSet;
 {
     [aFile autorelease];
     file = [aFile copy];
+}
+
+- (void)addError:(NUCError *)anError
+{
+    [[self errors] addObject:anError];
 }
 
 @end

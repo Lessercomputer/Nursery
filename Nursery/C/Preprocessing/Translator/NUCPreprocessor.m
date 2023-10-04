@@ -142,6 +142,11 @@
     [[self sourceFile] line:aLine];
 }
 
+- (void)error:(NUCError *)anError
+{
+    [[self sourceFile] error:anError];
+}
+
 - (NSInteger)executeConstantExpression:(NUCConstantExpression *)aConstantExpression
 {
     return [aConstantExpression executeWithPreprocessor:self];

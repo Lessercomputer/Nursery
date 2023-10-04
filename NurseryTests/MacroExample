@@ -79,3 +79,5 @@ b
 c
 #endif
 
+#error error1
+

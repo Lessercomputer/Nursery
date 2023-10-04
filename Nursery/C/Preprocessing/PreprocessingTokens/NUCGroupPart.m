@@ -84,4 +84,9 @@
     return [[self content] isNonDirective];
 }
 
+- (BOOL)isError
+{
+    return [[self content] isError];
+}
+
 @end
