@@ -6,7 +6,7 @@
 //
 //
 
-#import "NUNursery.h"
+#import <Nursery/NUNursery.h>
 
 @class NSMutableDictionary, NSRecursiveLock;
 @class NUObjectTable, NUReversedObjectTable, NUSpaces, NUNurserySeeker, NUNurseryParader;
