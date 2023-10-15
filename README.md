@@ -9,7 +9,7 @@
 ## 寄付
 以下のサービスで寄付を受け付けています:
 * [GitHub Sponsors](https://github.com/sponsors/Lily-bud)
-* [Patreon](patreon.com/user?u=102547861)
+* [Patreon](https://www.patreon.com/user?u=102547861)
 * [PayPal(paypal.me/AkifumiTakata)](https://paypal.me/AkifumiTakata) 
 
 ## 概要
