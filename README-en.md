@@ -7,6 +7,7 @@
 ## Donation
 I accept donations through the following services:
 * [GitHub Sponsors](https://github.com/sponsors/Lily-bud)
+* [Patreon](https://www.patreon.com/user?u=102547861)
 * [PayPal(paypal.me/AkifumiTakata)](https://paypal.me/AkifumiTakata) 
 
 ## Overview
