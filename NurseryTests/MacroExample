@@ -79,5 +79,11 @@ b
 c
 #endif
 
+#pragma pragma1
+
+#pragma STDC FP_CONTRACT ON
+#pragma STDC FENV_ACCESS OFF
+#pragma STDC CX_LIMITED_RANGE DEFAULT
+
 #error error1
 

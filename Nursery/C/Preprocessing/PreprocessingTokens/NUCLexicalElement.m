@@ -66,6 +66,13 @@ NSString * const NUCPreprocessingDirectiveError = @"error";
 NSString * const NUCPreprocessingDirectivePragma = @"pragma";
 
 NSString * const NUCIdentifierDefined = @"defined";
+NSString * const NUCIdentifierSTDC = @"STDC";
+NSString * const NUCIdentifierFPCONTRACT = @"FP_CONTRACT";
+NSString * const NUCIdentifierFENVACCESS = @"FENV_ACCESS";
+NSString * const NUCIdentifierCXLIMITEDRANGE = @"CX_LIMITED_RANGE";
+NSString * const NUCIdentifierON = @"ON";
+NSString * const NUCIdentifierOFF = @"OFF";
+NSString * const NUCIdentifierDEFAULT = @"DEFAULT";
 
 NSString * const NUCPredefinedMacroVA_ARGS = @"__VA_ARGS__";
 NSString * const NUCPredefinedMacroLINE = @"__LINE__";

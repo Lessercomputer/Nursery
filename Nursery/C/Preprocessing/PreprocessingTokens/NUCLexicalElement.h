@@ -66,6 +66,13 @@ extern NSString * const NUCPreprocessingDirectiveError;
 extern NSString * const NUCPreprocessingDirectivePragma;
 
 extern NSString * const NUCIdentifierDefined;
+extern NSString * const NUCIdentifierSTDC;
+extern NSString * const NUCIdentifierFPCONTRACT;
+extern NSString * const NUCIdentifierFENVACCESS;
+extern NSString * const NUCIdentifierCXLIMITEDRANGE;
+extern NSString * const NUCIdentifierON;
+extern NSString * const NUCIdentifierOFF;
+extern NSString * const NUCIdentifierDEFAULT;
 
 extern NSString * const NUCPredefinedMacroVA_ARGS;
 extern NSString * const NUCPredefinedMacroLINE;

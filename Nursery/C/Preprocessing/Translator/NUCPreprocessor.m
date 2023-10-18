@@ -147,6 +147,11 @@
     [[self sourceFile] error:anError];
 }
 
+- (void)pragma:(NUCPragma *)aPragma
+{
+    
+}
+
 - (NSInteger)executeConstantExpression:(NUCConstantExpression *)aConstantExpression
 {
     return [aConstantExpression executeWithPreprocessor:self];
