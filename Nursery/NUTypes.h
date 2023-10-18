@@ -7,7 +7,6 @@
  */
 
 #include <stdint.h>
-#include <CoreGraphics/CGGeometry.h>
 
 typedef uint8_t		NUUInt8;
 typedef uint16_t	NUUInt16;
@@ -43,6 +42,27 @@ typedef struct _NUBellBall {
 } NUBellBall;
 
 extern const NUBellBall NUNotFoundBellBall;
+
+#if !defined(CGFLOAT_DEFINED)
+
+typedef NUDouble CGFloat;
+
+typedef struct _CGPoint {
+    CGFloat x;
+    CGFloat y;
+}  CGPoint;
+
+typedef struct _CGSize {
+    CGFloat width;
+    CGFloat height;
+} CGSize;
+
+typedef struct _CGRect {
+    CGPoint origin;
+    CGSize size;
+} CGRect;
+
+#endif
 
 typedef CGPoint NUPoint;
 typedef CGSize  NUSize;
