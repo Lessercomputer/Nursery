@@ -1,5 +1,6 @@
 # Nursery  
 **Nursery** is an embeddable object-oriented database (OODB) framework for Cocoa
+I am posting a series of articles on [Qiita](https://qiita.com/lily-bud) that introduce the basic usage of Nursery.(Japanese)
 
 ## Licence
 **Nursery** is published under the zlib license
