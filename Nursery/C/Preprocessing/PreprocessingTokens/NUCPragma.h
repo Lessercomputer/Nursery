@@ -14,6 +14,8 @@
     NUCPpTokens *ppTokens;
 }
 
++ (BOOL)pragmaFromPragmaOperator:(NUCPreprocessingTokenStream *)aStream into:(NUCControlLine **)aToken;
+
 + (BOOL)pragmaFrom:(NUCPreprocessingTokenStream *)aStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCControlLine **)aToken;
 
 + (instancetype)pragmaWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName ppTokens:(NUCPpTokens *)aPpTokens newline:(NUCNewline *)aNewline;

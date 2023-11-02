@@ -73,6 +73,7 @@ extern NSString * const NUCIdentifierCXLIMITEDRANGE;
 extern NSString * const NUCIdentifierON;
 extern NSString * const NUCIdentifierOFF;
 extern NSString * const NUCIdentifierDEFAULT;
+extern NSString * const NUCIdentifierPragmaOperator;
 
 extern NSString * const NUCPredefinedMacroVA_ARGS;
 extern NSString * const NUCPredefinedMacroLINE;

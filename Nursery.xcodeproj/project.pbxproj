@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2404BB9B2AF370FE009C5CD6 /* NUCPragmaOperator.h in Headers */ = {isa = PBXBuildFile; fileRef = 2404BB992AF370FE009C5CD6 /* NUCPragmaOperator.h */; };
+		2404BB9C2AF370FE009C5CD6 /* NUCPragmaOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2404BB9A2AF370FE009C5CD6 /* NUCPragmaOperator.m */; };
 		24B4D6442A8459ED00C17D61 /* NUCCharacterConstant.h in Headers */ = {isa = PBXBuildFile; fileRef = 24B4D6422A8459ED00C17D61 /* NUCCharacterConstant.h */; };
 		24B4D6452A8459ED00C17D61 /* NUCCharacterConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 24B4D6432A8459ED00C17D61 /* NUCCharacterConstant.m */; };
 		24DC9D7E2A74C90000195718 /* Nursery.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 619B078D1913ED8D00A4BAA2 /* Nursery.framework */; };
@@ -414,6 +416,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2404BB992AF370FE009C5CD6 /* NUCPragmaOperator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCPragmaOperator.h; sourceTree = "<group>"; };
+		2404BB9A2AF370FE009C5CD6 /* NUCPragmaOperator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCPragmaOperator.m; sourceTree = "<group>"; };
 		245DC04A27774D5800958FE1 /* Documents */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Documents; sourceTree = "<group>"; };
 		24B4D6422A8459ED00C17D61 /* NUCCharacterConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCCharacterConstant.h; sourceTree = "<group>"; };
 		24B4D6432A8459ED00C17D61 /* NUCCharacterConstant.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCCharacterConstant.m; sourceTree = "<group>"; };
@@ -1383,6 +1387,8 @@
 				61BC390C2A78A6C6006CFBB3 /* NUCPpTokensWithMacroInvocations.m */,
 				61BC39532A78A6C6006CFBB3 /* NUCPragma.h */,
 				61BC392A2A78A6C6006CFBB3 /* NUCPragma.m */,
+				2404BB992AF370FE009C5CD6 /* NUCPragmaOperator.h */,
+				2404BB9A2AF370FE009C5CD6 /* NUCPragmaOperator.m */,
 				61BC39172A78A6C6006CFBB3 /* NUCReplacementList.h */,
 				61BC393B2A78A6C6006CFBB3 /* NUCReplacementList.m */,
 				61BC394D2A78A6C6006CFBB3 /* NUCStringLiteral.h */,
@@ -1458,6 +1464,7 @@
 				61BC396A2A78A6C6006CFBB3 /* NUCControlLine.h in Headers */,
 				61BC39A12A78A6C6006CFBB3 /* NUCPragma.h in Headers */,
 				61BC39962A78A6C6006CFBB3 /* NUCControlLineDefineObjectLike.h in Headers */,
+				2404BB9B2AF370FE009C5CD6 /* NUCPragmaOperator.h in Headers */,
 				619B09051913EEC000A4BAA2 /* NUOpaqueBPlusTree.h in Headers */,
 				616D0B1E2A78972600813539 /* NUCCastExpression.h in Headers */,
 				61DC96341FA104D900AABC9E /* Nursery.h in Headers */,
@@ -1921,6 +1928,7 @@
 				61BC39942A78A6C6006CFBB3 /* NUCConcatenatedPpToken.m in Sources */,
 				B837365A20D5DE96006AE915 /* NUUInt64Queue.m in Sources */,
 				619B08EB1913EEC000A4BAA2 /* NUMainBranchAperture.m in Sources */,
+				2404BB9C2AF370FE009C5CD6 /* NUCPragmaOperator.m in Sources */,
 				619B09251913EEC000A4BAA2 /* NUChildminder.m in Sources */,
 				61BC398C2A78A6C6006CFBB3 /* NUCConstant.m in Sources */,
 				616D0AD62A78972600813539 /* NUCEqualityExpression.m in Sources */,

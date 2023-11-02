@@ -85,5 +85,8 @@ c
 #pragma STDC FENV_ACCESS OFF
 #pragma STDC CX_LIMITED_RANGE DEFAULT
 
+_Pragma("\"abc\\")
+_Pragma ( "def" )
+
 #error error1
 

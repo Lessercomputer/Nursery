@@ -21,6 +21,11 @@
 
 @implementation NUCDecomposer
 
++ (instancetype)decomposer
+{
+    return [[self new] autorelease];
+}
+
 - (NSArray *)decomposePreprocessingFile:(NUCSourceFile *)aSourceFile
 {
     return [self decomposePreprocessingTokensIn:[aSourceFile logicalSourceString]];

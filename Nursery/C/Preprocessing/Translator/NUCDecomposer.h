@@ -16,6 +16,8 @@
     BOOL includeExistsOnCurrentLine;
 }
 
++ (instancetype)decomposer;
+
 + (BOOL)scanDigitSequenceFrom:(NSScanner *)aScanner into:(NSString **)aString;
 + (BOOL)scanSCharSequenceFrom:(NSScanner *)aScanner into:(NSString **)aString;
 

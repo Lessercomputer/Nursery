@@ -14,6 +14,7 @@
 #import "NUCPpTokens.h"
 #import "NUCIfSection.h"
 #import "NUCError.h"
+#import "NUCPragmaOperator.h"
 
 #import <Foundation/NSArray.h>
 
@@ -159,7 +160,8 @@
     NSArray *aTextLines = [[self groupParts] subarrayWithRange:NSMakeRange(anIndex, aCount)];
     NUCPpTokens *aPpTokensWithMacroInvocations = [NUCPpTokens ppTokensWithMacroInvocationsFromTextLines:aTextLines with:aPreprocessor];
     NSMutableArray *aMacroReplacedPpTokens = [aPpTokensWithMacroInvocations replaceMacrosWith:aPreprocessor];
-    [aPpTokens addObjectsFromArray:aMacroReplacedPpTokens];
+    NSMutableArray *aPragmaOperatorExecutedPpTokens = [NUCPragmaOperator executePragmaOperatorsIn:aMacroReplacedPpTokens preprocessor:aPreprocessor];
+    [aPpTokens addObjectsFromArray:aPragmaOperatorExecutedPpTokens];
 }
 
 - (void)addPreprocessedStringTo:(NSMutableString *)aString with:(NUCPreprocessor *)aPreprocessor

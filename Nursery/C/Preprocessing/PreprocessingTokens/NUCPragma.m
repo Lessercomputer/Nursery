@@ -17,6 +17,33 @@
 
 @implementation NUCPragma
 
++ (BOOL)pragmaFromPragmaOperator:(NUCPreprocessingTokenStream *)aStream into:(NUCControlLine **)aToken
+{
+    NSUInteger aPosition = [aStream position];
+    NUCPpTokens *aPpTokens = nil;
+    NUCNewline *aNewline = nil;
+    
+    if ([NUCPpTokens ppTokensFrom:aStream into:&aPpTokens])
+    {
+        NUCDecomposedPreprocessingToken *aPpToken = [[aPpTokens ppTokens] firstObject];
+        
+        if ([aPpToken isIdentifier] && [(NUCIdentifier *)[aPpToken content] isEqual:NUCIdentifierSTDC])
+            [self verifyStdcPragma:[aPpTokens ppTokens] stdcIndex:NULL pragmaNameIndex:NULL switchIndex:NULL];
+
+        [aStream skipWhitespacesWithoutNewline];
+        
+        if (aToken)
+            *aToken = [NUCPragma pragmaWithHash:nil directiveName:nil ppTokens:aPpTokens newline:aNewline];
+        
+        return YES;
+    }
+    
+    [aStream setPosition:aPosition];
+    
+    return NO;
+    
+}
+
 + (BOOL)pragmaFrom:(NUCPreprocessingTokenStream *)aStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCControlLine **)aToken
 {
     if ([aDirectiveName isIdentifier] && [(NUCIdentifier *)[aDirectiveName content] isEqual:NUCPreprocessingDirectivePragma ])

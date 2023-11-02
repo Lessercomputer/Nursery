@@ -73,6 +73,7 @@ NSString * const NUCIdentifierCXLIMITEDRANGE = @"CX_LIMITED_RANGE";
 NSString * const NUCIdentifierON = @"ON";
 NSString * const NUCIdentifierOFF = @"OFF";
 NSString * const NUCIdentifierDEFAULT = @"DEFAULT";
+NSString * const NUCIdentifierPragmaOperator = @"_Pragma";
 
 NSString * const NUCPredefinedMacroVA_ARGS = @"__VA_ARGS__";
 NSString * const NUCPredefinedMacroLINE = @"__LINE__";
