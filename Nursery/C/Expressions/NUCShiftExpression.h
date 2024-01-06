@@ -5,11 +5,11 @@
 //  Created by TAKATA Akifumi on 2021/02/21.
 //
 
-#import "NUCPreprocessingToken.h"
+#import "NUCProtoExpression.h"
 
 @class NUCAdditiveExpression, NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream;
 
-@interface NUCShiftExpression : NUCPreprocessingToken
+@interface NUCShiftExpression : NUCProtoExpression
 {
     NUCAdditiveExpression *additiveExpression;
     NUCShiftExpression *shiftExpression;
@@ -25,8 +25,6 @@
 - (instancetype)initWithAdditiveExpression:(NUCAdditiveExpression *)anAdditiveExpression;
 
 - (instancetype)initWithShiftExpression:(NUCShiftExpression *)aShiftExpression shiftOperator:(NUCDecomposedPreprocessingToken *)aShiftOperator additiveExpression:(NUCAdditiveExpression *)anAdditiveExpression;
-
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
 
 @end
 

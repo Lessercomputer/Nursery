@@ -5,22 +5,20 @@
 //  Created by TAKATA Akifumi on 2021/02/21.
 //
 
-#import "NUCPreprocessingToken.h"
+#import "NUCProtoExpression.h"
 
 @class NUCUnaryExpression, NUCPreprocessingTokenStream;
 
-@interface NUCCastExpression : NUCPreprocessingToken
+@interface NUCCastExpression : NUCProtoExpression
 {
     NUCUnaryExpression *unaryExpression;
 }
 
-+ (BOOL)castExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCCastExpression **)aToken;
++ (BOOL)castExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCCastExpression **)anExpression;
 
 + (instancetype)expressionWithUnaryExpression:(NUCUnaryExpression *)anUnaryExpression;
 
 - (instancetype)initWithUnaryExpression:(NUCUnaryExpression *)anUnaryExpression;
-
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
 
 @end
 

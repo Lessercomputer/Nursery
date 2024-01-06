@@ -152,9 +152,9 @@
     
 }
 
-- (NSInteger)executeConstantExpression:(NUCConstantExpression *)aConstantExpression
+- (NUCExpressionResult *)executeConstantExpression:(NUCConstantExpression *)aConstantExpression
 {
-    return [aConstantExpression executeWithPreprocessor:self];
+    return [aConstantExpression executeWith:self];
 }
 
 @end

@@ -180,23 +180,6 @@ typedef enum : NSUInteger {
     NUCLexicalElementErrorType,
     NUCLexicalElementPragmaType,
     NUCLexicalElementControlLineNewlineType,
-    NUCLexicalElementConstantExpressionType,
-    NUCLexicalElementConditionalExpressionType,
-    NUCLexicalElementExpressionType,
-    NUCLexicalElementLogicalORExpressionType,
-    NUCLexicalElementLogicalANDExpressionType,
-    NUCLexicalElementInclusiveORExpressionType,
-    NUCLexicalElementExclusiveORExpressionType,
-    NUCLexicalElementANDExpressionType,
-    NUCLexicalElementEqualityExpressionType,
-    NUCLexicalElementRelationalExpressionType,
-    NUCLexicalElementShiftExpressionType,
-    NUCLexicalElementAdditiveExpressionType,
-    NUCLexicalElementMultiplicativeExpressionType,
-    NUCLexicalElementCastExpressionType,
-    NUCLexicalElementUnaryExpressionType,
-    NUCLexicalElementPostfixExpressionType,
-    NUCLexicalElementPrimaryExpressionType,
     NUCLexicalElementConstantType
 } NUCLexicalElementType;
 

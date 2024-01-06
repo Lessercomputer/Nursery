@@ -72,7 +72,7 @@
 
 - (instancetype)initWithMultiplicativeExpression:(NUCMultiplicativeExpression *)aMultiplicativeExpression multiplicativeOperator:(NUCDecomposedPreprocessingToken *)aMultiplicativeOperator castExpression:(NUCCastExpression *)aCastExpression
 {
-    if (self = [super initWithType:NUCLexicalElementMultiplicativeExpressionType])
+    if (self = [super initWithType:NUCExpressionMultiplicativeExpressionType])
     {
         castExpression = [aCastExpression retain];
         multiplicativeExpression = [aMultiplicativeExpression retain];
@@ -91,9 +91,9 @@
     [super dealloc];
 }
 
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
+- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [castExpression executeWithPreprocessor:aPreprocessor];
+    return [castExpression executeWith:aPreprocessor];
 }
 
 @end

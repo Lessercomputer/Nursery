@@ -71,7 +71,7 @@
 
 - (instancetype)initWithShiftExpression:(NUCShiftExpression *)aShiftExpression shiftOperator:(NUCDecomposedPreprocessingToken *)aShiftOperator additiveExpression:(NUCAdditiveExpression *)anAdditiveExpression
 {
-    if (self = [super initWithType:NUCLexicalElementShiftExpressionType])
+    if (self = [super initWithType:NUCExpressionShiftExpressionType])
     {
         shiftExpression = [aShiftExpression retain];
         shiftOperator = [aShiftOperator retain];
@@ -90,9 +90,9 @@
     [super dealloc];
 }
 
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
+- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [additiveExpression executeWithPreprocessor:aPreprocessor];
+    return [additiveExpression executeWith:aPreprocessor];
 }
 
 @end

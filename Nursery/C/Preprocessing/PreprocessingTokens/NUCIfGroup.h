@@ -22,7 +22,7 @@
 
 + (instancetype)ifGroupWithType:(NUCLexicalElementType)aType hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aName expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup;
 
-+ (BOOL)readAndExecuteExpressionFrom:(NUCPreprocessingTokenStream *)aStream expressionOrIdentifier:(NUCLexicalElement **)anExpressionOrIdentifier expressionValue:(NSInteger *)anExpressionValue preprocessor:(NUCPreprocessor *)aPreprocessor;
++ (BOOL)readAndExecuteExpressionFrom:(NUCPreprocessingTokenStream *)aStream expressionOrIdentifier:(id *)anExpressionOrIdentifier expressionValue:(NSInteger *)anExpressionValue preprocessor:(NUCPreprocessor *)aPreprocessor;
 
 - (instancetype)initWithType:(NUCLexicalElementType)aType hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aName expressionOrIdentifier:(NUCLexicalElement *)anExpressionOrIdentifier newline:(NUCPreprocessingDirective *)aNewline group:(NUCGroup *)aGroup;
 

@@ -69,7 +69,7 @@
 
 - (instancetype)initWithlogicalORExpression:(NUCLogicalORExpression *)aLogicalORExpression logicalOREperator:(NUCDecomposedPreprocessingToken *)aLogicalOROperator logicalANDExpression:(NUCLogicalANDExpression *)aLogicalANDExpression;
 {
-    if (self = [super initWithType:NUCLexicalElementLogicalORExpressionType])
+    if (self = [super initWithType:NUCExpressionLogicalORExpressionType])
     {
         logicalORExpression = [aLogicalORExpression retain];
         logicalOROperator = [aLogicalOROperator retain];
@@ -88,9 +88,9 @@
     [super dealloc];
 }
 
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
+- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [logicalANDExpression executeWithPreprocessor:aPreprocessor];
+    return [logicalANDExpression executeWith:aPreprocessor];
 }
 
 @end

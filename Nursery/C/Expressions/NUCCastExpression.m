@@ -11,14 +11,14 @@
 
 @implementation NUCCastExpression
 
-+ (BOOL)castExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCCastExpression **)aToken
++ (BOOL)castExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCCastExpression **)anExpression
 {
     NUCUnaryExpression *anUnaryExpression = nil;
     
     if ([NUCUnaryExpression unaryExpressionFrom:aStream into:&anUnaryExpression])
     {
-        if (aToken)
-            *aToken = [NUCCastExpression expressionWithUnaryExpression:anUnaryExpression];
+        if (anExpression)
+            *anExpression = [NUCCastExpression expressionWithUnaryExpression:anUnaryExpression];
         
         return YES;
     }
@@ -33,7 +33,7 @@
 
 - (instancetype)initWithUnaryExpression:(NUCUnaryExpression *)anUnaryExpression
 {
-    if (self = [super initWithType:NUCLexicalElementUnaryExpressionType])
+    if (self = [super initWithType:NUCExpressionUnaryExpressionType])
     {
         unaryExpression = [anUnaryExpression retain];
     }
@@ -48,9 +48,9 @@
     [super dealloc];
 }
 
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
+- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [unaryExpression executeWithPreprocessor:aPreprocessor];
+    return [unaryExpression executeWith:aPreprocessor];
 }
 
 @end

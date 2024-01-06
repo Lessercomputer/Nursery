@@ -33,7 +33,7 @@
 
 - (instancetype)initWithPrimaryExpression:(NUCPrimaryExpression *)aPrimaryExpression
 {
-    if (self = [super initWithType:NUCLexicalElementPostfixExpressionType])
+    if (self = [super initWithType:NUCExpressionPostfixExpressionType])
     {
         primaryExpression = [aPrimaryExpression retain];
     }
@@ -48,9 +48,9 @@
     [super dealloc];
 }
 
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
+- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [primaryExpression executeWithPreprocessor:aPreprocessor];
+    return [primaryExpression executeWith:aPreprocessor];
 }
 
 @end

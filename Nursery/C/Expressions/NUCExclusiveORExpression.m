@@ -71,7 +71,7 @@
 
 - (instancetype)initWithExclusiveORExpression:(NUCExclusiveORExpression *)anExclusiveORExpression exclusiveOROperator:(NUCDecomposedPreprocessingToken *)anExclusiveOROperator andExpression:(NUCANDExpression *)anANDExpression
 {
-    if (self = [super initWithType:NUCLexicalElementExclusiveORExpressionType])
+    if (self = [super initWithType:NUCExpressionExclusiveORExpressionType])
     {
         exclusiveORExpression = [anExclusiveORExpression retain];
         exclusiveOROperator = [anExclusiveOROperator retain];
@@ -90,9 +90,9 @@
     [super dealloc];
 }
 
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
+- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [andExpression executeWithPreprocessor:aPreprocessor];
+    return [andExpression executeWith:aPreprocessor];
 }
 
 @end

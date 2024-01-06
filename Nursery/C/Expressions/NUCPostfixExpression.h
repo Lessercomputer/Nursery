@@ -5,11 +5,11 @@
 //  Created by TAKATA Akifumi on 2021/02/21.
 //
 
-#import "NUCPreprocessingToken.h"
+#import "NUCProtoExpression.h"
 
 @class NUCPrimaryExpression, NUCPreprocessingTokenStream;
 
-@interface NUCPostfixExpression : NUCPreprocessingToken
+@interface NUCPostfixExpression : NUCProtoExpression
 {
     NUCPrimaryExpression *primaryExpression;
 }
@@ -19,8 +19,6 @@
 + (instancetype)expressionWithPrimaryExpression:(NUCPrimaryExpression *)aPrimaryExpression;
 
 - (instancetype)initWithPrimaryExpression:(NUCPrimaryExpression *)aPrimaryExpression;
-
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
 
 @end
 

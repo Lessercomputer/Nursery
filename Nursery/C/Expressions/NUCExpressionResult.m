@@ -10,4 +10,16 @@
 
 @implementation NUCExpressionResult
 
+- (instancetype)initWithIntValue:(NSInteger)aValue
+{
+    intValue = aValue;
+    
+    return self;
+}
+
+- (NSInteger)intValue
+{
+    return intValue;
+}
+
 @end

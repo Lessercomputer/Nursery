@@ -67,7 +67,7 @@
 
 - (instancetype)initWithPostfixExpression:(NUCPostfixExpression *)aPostfixExpression
 {
-    if (self = [super initWithType:NUCLexicalElementUnaryExpressionType])
+    if (self = [super initWithType:NUCExpressionUnaryExpressionType])
     {
         postfixExpression = [aPostfixExpression retain];
     }
@@ -77,7 +77,7 @@
 
 - (instancetype)initWithUnaryOperator:(NUCDecomposedPreprocessingToken *)anUnaryOperator unaryExpression:(NUCUnaryExpression *)anUnaryExpression
 {
-    if (self = [super initWithType:NUCLexicalElementUnaryExpressionType])
+    if (self = [super initWithType:NUCExpressionUnaryExpressionType])
     {
         unaryOperator = [anUnaryOperator retain];
         unaryExpression = [anUnaryExpression retain];
@@ -88,7 +88,7 @@
 
 - (instancetype)initWithUnaryOperator:(NUCDecomposedPreprocessingToken *)anUnaryOperator castExpression:(NUCCastExpression *)aCastExpression
 {
-    if (self = [super initWithType:NUCLexicalElementUnaryExpressionType])
+    if (self = [super initWithType:NUCExpressionUnaryExpressionType])
     {
         unaryOperator = [anUnaryOperator retain];
         castExpression = [aCastExpression retain];
@@ -106,9 +106,9 @@
     [super dealloc];
 }
 
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
+- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [postfixExpression executeWithPreprocessor:aPreprocessor];
+    return [postfixExpression executeWith:aPreprocessor];
 }
 
 @end

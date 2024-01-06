@@ -12,14 +12,14 @@
 
 @implementation NUCANDExpression
 
-+ (BOOL)andExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCANDExpression **)aToken
++ (BOOL)andExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCANDExpression **)anExpression
 {
     NUCEqualityExpression *anEqulityExpression = nil;
     
     if ([NUCEqualityExpression equalityExpressionFrom:aStream into:&anEqulityExpression])
     {
-        if (aToken)
-            *aToken = [NUCANDExpression expressionWithEqualityExpression:anEqulityExpression];
+        if (anExpression)
+            *anExpression = [NUCANDExpression expressionWithEqualityExpression:anEqulityExpression];
         
         return YES;
     }
@@ -40,8 +40,8 @@
                 
                 if ([NUCEqualityExpression equalityExpressionFrom:aStream into:&anEqulityExpression])
                 {
-                    if (aToken)
-                        *aToken = [NUCANDExpression expressionWithANDExpression:anANDExpression andOperator:anAndOperator equlityExpression:anEqulityExpression];
+                    if (anExpression)
+                        *anExpression = [NUCANDExpression expressionWithANDExpression:anANDExpression andOperator:anAndOperator equlityExpression:anEqulityExpression];
                     
                     return YES;
                 }
@@ -71,7 +71,7 @@
 
 - (instancetype)initWithANDExpression:(NUCANDExpression *)anANDExpression andOperator:(NUCDecomposedPreprocessingToken *)anANDOperator equlityExpression:(NUCEqualityExpression *)anEqulityExpression
 {
-    if (self = [super initWithType:NUCLexicalElementANDExpressionType])
+    if (self = [super initWithType:NUCExpressionANDExpressionType])
     {
         equlityExpression = [anEqulityExpression retain];
         andExpression = [anANDExpression retain];
@@ -90,9 +90,9 @@
     [super dealloc];
 }
 
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
+- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [equlityExpression executeWithPreprocessor:aPreprocessor];
+    return [equlityExpression executeWith:aPreprocessor];
 }
 
 @end

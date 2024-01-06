@@ -5,11 +5,11 @@
 //  Created by TAKATA Akifumi on 2021/02/12.
 //
 
-#import "NUCPreprocessingToken.h"
+#import "NUCProtoExpression.h"
 
 @class NUCLogicalANDExpression, NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream;
 
-@interface NUCLogicalORExpression : NUCPreprocessingToken
+@interface NUCLogicalORExpression : NUCProtoExpression
 {
     NUCLogicalORExpression *logicalORExpression;
     NUCDecomposedPreprocessingToken *logicalOROperator;
@@ -25,8 +25,6 @@
 - (instancetype)initWithLogicalANDExpression:(NUCLogicalANDExpression *)aLogicalANDExpression;
 
 - (instancetype)initWithlogicalORExpression:(NUCLogicalORExpression *)aLogicalORExpression logicalOREperator:(NUCDecomposedPreprocessingToken *)aLogicalOROperator logicalANDExpression:(NUCLogicalANDExpression *)aLogicalANDExpression;
-
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
 
 @end
 

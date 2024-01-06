@@ -5,11 +5,11 @@
 //  Created by TAKATA Akifumi on 2021/02/21.
 //
 
-#import "NUCPreprocessingToken.h"
+#import "NUCProtoExpression.h"
 
 @class NUCCastExpression, NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream;
 
-@interface NUCMultiplicativeExpression : NUCPreprocessingToken
+@interface NUCMultiplicativeExpression : NUCProtoExpression
 {
     NUCCastExpression *castExpression;
     NUCMultiplicativeExpression *multiplicativeExpression;
@@ -25,8 +25,6 @@
 - (instancetype)initWithCastExpression:(NUCCastExpression *)aCastExpression;
 
 - (instancetype)initWithMultiplicativeExpression:(NUCMultiplicativeExpression *)aMultiplicativeExpression multiplicativeOperator:(NUCDecomposedPreprocessingToken *)aMultiplicativeOperator castExpression:(NUCCastExpression *)aCastExpression;
-
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
 
 @end
 

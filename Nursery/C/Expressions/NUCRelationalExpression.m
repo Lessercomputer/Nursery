@@ -71,7 +71,7 @@
 
 - (instancetype)initWithRelationalExpression:(NUCRelationalExpression *)aRelationalExpression relationalOperator:(NUCDecomposedPreprocessingToken *)aRelationalOperator shiftExpression:(NUCShiftExpression *)aShiftExpression
 {
-    if (self = [super initWithType:NUCLexicalElementRelationalExpressionType])
+    if (self = [super initWithType:NUCExpressionRelationalExpressionType])
     {
         relationalExpression = [aRelationalExpression retain];
         relationalOperator = [aRelationalOperator retain];
@@ -90,9 +90,9 @@
     [super dealloc];
 }
 
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
+- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [shiftExpression executeWithPreprocessor:aPreprocessor];
+    return [shiftExpression executeWith:aPreprocessor];
 }
 
 @end

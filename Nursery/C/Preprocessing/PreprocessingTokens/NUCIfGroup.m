@@ -100,9 +100,9 @@
     return NO;
 }
 
-+ (BOOL)readAndExecuteExpressionFrom:(NUCPreprocessingTokenStream *)aStream expressionOrIdentifier:(NUCLexicalElement **)anExpressionOrIdentifier expressionValue:(NSInteger *)anExpressionValue preprocessor:(NUCPreprocessor *)aPreprocessor
++ (BOOL)readAndExecuteExpressionFrom:(NUCPreprocessingTokenStream *)aStream expressionOrIdentifier:(id *)anExpressionOrIdentifier expressionValue:(NSInteger *)anExpressionValue preprocessor:(NUCPreprocessor *)aPreprocessor
 {
-    NUCLexicalElement *anExpressionOrIdentifierToReturn = nil;
+    id anExpressionOrIdentifierToReturn = nil;
     NSInteger anExpressionValueToReturn = 0;
     
     [aStream skipWhitespacesWithoutNewline];
@@ -131,7 +131,7 @@
         NUCPreprocessingTokenStream *aMacroReplacedPpTokenStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aMacroReplacedPpTokens];
         
         if ([NUCConstantExpression constantExpressionFrom:aMacroReplacedPpTokenStream into:&anExpressionOrIdentifierToReturn])
-            anExpressionValueToReturn = [aPreprocessor executeConstantExpression:(NUCConstantExpression *)anExpressionOrIdentifierToReturn];
+            anExpressionValueToReturn = [[aPreprocessor executeConstantExpression:(NUCConstantExpression *)anExpressionOrIdentifierToReturn] intValue];
         
         [aStream skipWhitespacesWithoutNewline];
     }

@@ -5,11 +5,11 @@
 //  Created by TAKATA Akifumi on 2021/02/17.
 //
 
-#import "NUCPreprocessingToken.h"
+#import "NUCProtoExpression.h"
 
 @class NUCRelationalExpression, NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream;
 
-@interface NUCEqualityExpression : NUCPreprocessingToken
+@interface NUCEqualityExpression : NUCProtoExpression
 {
     NUCRelationalExpression *relationalExpression;
     NUCEqualityExpression *equalityExpression;
@@ -25,8 +25,6 @@
 - (instancetype)initWithRelationalExpression:(NUCRelationalExpression *)aRelationalExpression;
 
 - (instancetype)initWithEqualityExpression:(NUCEqualityExpression *)anEqualityExpression equalityOperator:(NUCDecomposedPreprocessingToken *)anOperator relationalExpression:(NUCRelationalExpression *)aRelationalExpression;
-
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
 
 @end
 

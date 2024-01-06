@@ -3,15 +3,42 @@
 //  Nursery
 //
 //  Created by TAKATA Akifumi on 2024/01/06.
-//  Copyright © 2024 com.lily-bud. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
-NS_ASSUME_NONNULL_BEGIN
+typedef enum : NSUInteger {
+    NUCExpressionNone,
+    NUCExpressionConstantExpressionType,
+    NUCExpressionConditionalExpressionType,
+    NUCExpressionExpressionType,
+    NUCExpressionLogicalORExpressionType,
+    NUCExpressionLogicalANDExpressionType,
+    NUCExpressionInclusiveORExpressionType,
+    NUCExpressionExclusiveORExpressionType,
+    NUCExpressionANDExpressionType,
+    NUCExpressionEqualityExpressionType,
+    NUCExpressionRelationalExpressionType,
+    NUCExpressionShiftExpressionType,
+    NUCExpressionAdditiveExpressionType,
+    NUCExpressionMultiplicativeExpressionType,
+    NUCExpressionCastExpressionType,
+    NUCExpressionUnaryExpressionType,
+    NUCExpressionPostfixExpressionType,
+    NUCExpressionPrimaryExpressionType,
+    NUCExpressionConstantType
+} NUCExpressionType;
+
+@class NUCExpressionResult, NUCPreprocessor;
 
 @interface NUCProtoExpression : NSObject
+{
+    NUCExpressionType type;
+}
+
+- (instancetype)initWithType:(NUCExpressionType)aType;
+
+- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor;
 
 @end
 
-NS_ASSUME_NONNULL_END

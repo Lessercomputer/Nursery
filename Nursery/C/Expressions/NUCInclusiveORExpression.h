@@ -5,11 +5,11 @@
 //  Created by TAKATA Akifumi on 2021/02/16.
 //
 
-#import "NUCPreprocessingToken.h"
+#import "NUCProtoExpression.h"
 
 @class NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream, NUCExclusiveORExpression;
 
-@interface NUCInclusiveORExpression : NUCPreprocessingToken
+@interface NUCInclusiveORExpression : NUCProtoExpression
 {
     NUCInclusiveORExpression *inclusiveORExpression;
     NUCDecomposedPreprocessingToken *inclusiveOROperator;
@@ -25,8 +25,6 @@
 - (instancetype)initWithExclusiveExpression:(NUCExclusiveORExpression *)anExclusiveORExpression;
 
 - (instancetype)initWithInclusiveORExpression:(NUCInclusiveORExpression *)anInclusiveORExpression inclusiveOROperator:(NUCDecomposedPreprocessingToken *)anInclusiveOROperator exclusiveORExpression:(NUCExclusiveORExpression *)anExclusiveORExpression;
-
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
 
 @end
 

@@ -3,15 +3,19 @@
 //  Nursery
 //
 //  Created by TAKATA Akifumi on 2024/01/06.
-//  Copyright © 2024 com.lily-bud. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
-NS_ASSUME_NONNULL_BEGIN
 
 @interface NUCExpressionResult : NSObject
+{
+    NSInteger intValue;
+}
+
+- (instancetype)initWithIntValue:(NSInteger)aValue;
+
+- (NSInteger)intValue;
 
 @end
 
-NS_ASSUME_NONNULL_END

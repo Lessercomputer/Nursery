@@ -33,7 +33,7 @@
 
 - (instancetype)initWithConditionalExpression:(NUCConditionalExpression *)aConditionalExpression
 {
-    if (self = [super initWithType:NUCLexicalElementExpressionType])
+    if (self = [super init])
     {
         conditionalExpression = [aConditionalExpression retain];
     }

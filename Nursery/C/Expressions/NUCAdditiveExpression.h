@@ -5,18 +5,18 @@
 //  Created by TAKATA Akifumi on 2021/02/21.
 //
 
-#import "NUCPreprocessingToken.h"
+#import "NUCProtoExpression.h"
 
 @class NUCMultiplicativeExpression, NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream;
 
-@interface NUCAdditiveExpression : NUCPreprocessingToken
+@interface NUCAdditiveExpression : NUCProtoExpression
 {
     NUCAdditiveExpression *additiveExpression;
     NUCDecomposedPreprocessingToken *additiveOperator;
     NUCMultiplicativeExpression *multiplicativeExpression;
 }
 
-+ (BOOL)additiveExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCAdditiveExpression **)aToken;
++ (BOOL)additiveExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCAdditiveExpression **)anExpression;
 
 + (instancetype)expressionWithMultiplicativeExpression:(NUCMultiplicativeExpression *)aMultiplicativeExpression;
 
@@ -26,7 +26,6 @@
 
 - (instancetype)initWithAdditiveExpression:(NUCAdditiveExpression *)anAdditiveExpression additiveOperator:(NUCDecomposedPreprocessingToken *)anAdditiveOperator multiplicativeExpression:(NUCMultiplicativeExpression *)aMultiplicativeExpression;
 
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
 
 @end
 

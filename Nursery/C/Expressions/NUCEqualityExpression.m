@@ -71,7 +71,7 @@
 
 - (instancetype)initWithEqualityExpression:(NUCEqualityExpression *)anEqualityExpression equalityOperator:(NUCDecomposedPreprocessingToken *)anOperator relationalExpression:(NUCRelationalExpression *)aRelationalExpression
 {
-    if (self = [super initWithType:NUCLexicalElementEqualityExpressionType])
+    if (self = [super initWithType:NUCExpressionEqualityExpressionType])
     {
         relationalExpression = [aRelationalExpression retain];
         equalityExpression = [anEqualityExpression retain];
@@ -90,9 +90,9 @@
     [super dealloc];
 }
 
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
+- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [relationalExpression executeWithPreprocessor:aPreprocessor];
+    return [relationalExpression executeWith:aPreprocessor];
 }
 
 @end

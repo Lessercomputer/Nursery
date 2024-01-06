@@ -5,13 +5,13 @@
 //  Created by TAKATA Akifumi on 2021/02/21.
 //
 
-#import "NUCPreprocessingToken.h"
+#import "NUCProtoExpression.h"
 
 @class NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream, NUCConstant, NUCExpression;
 
-@interface NUCPrimaryExpression : NUCPreprocessingToken
+@interface NUCPrimaryExpression : NUCProtoExpression
 {
-    NUCPreprocessingToken *content;
+    id content;
 }
 
 + (BOOL)primaryExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPrimaryExpression **)anExpression;
@@ -21,9 +21,7 @@
 + (instancetype)expressionWithStringLiteral:(NUCDecomposedPreprocessingToken *)aStringLiteral;
 + (instancetype)expressionWithExpression:(NUCExpression *)anExpression;
 
-- (instancetype)initWithToken:(NUCPreprocessingToken *)aContent;
-
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
+- (instancetype)initWithContent:(id)aContent;
 
 @end
 

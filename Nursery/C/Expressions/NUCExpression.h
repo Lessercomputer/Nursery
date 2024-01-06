@@ -5,11 +5,11 @@
 //  Created by TAKATA Akifumi on 2021/02/12.
 //
 
-#import "NUCPreprocessingToken.h"
+#import <Foundation/NSObject.h>
 
 @class NUCConditionalExpression, NUCPreprocessingTokenStream;
 
-@interface NUCExpression : NUCPreprocessingToken
+@interface NUCExpression : NSObject
 {
     NUCConditionalExpression *conditionalExpression;
 }

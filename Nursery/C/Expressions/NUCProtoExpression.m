@@ -10,4 +10,19 @@
 
 @implementation NUCProtoExpression
 
+- (instancetype)initWithType:(NUCExpressionType)aType
+{
+    if (self = [super init])
+    {
+        type = aType;
+    }
+    
+    return self;
+}
+
+- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
+{
+    return nil;
+}
+
 @end

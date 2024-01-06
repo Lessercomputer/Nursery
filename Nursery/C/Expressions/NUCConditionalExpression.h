@@ -5,11 +5,11 @@
 //  Created by TAKATA Akifumi on 2021/02/12.
 //
 
-#import "NUCPreprocessingToken.h"
+#import "NUCProtoExpression.h"
 
 @class NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream, NUCLogicalORExpression, NUCExpression;
 
-@interface NUCConditionalExpression : NUCPreprocessingToken
+@interface NUCConditionalExpression : NUCProtoExpression
 {
     NUCLogicalORExpression *logicalORExpression;
     NUCDecomposedPreprocessingToken *questionMarkPunctuator;
@@ -18,7 +18,7 @@
     NUCConditionalExpression *conditionalExpression;
 }
 
-+ (BOOL)conditionalExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCConditionalExpression **)aToken;
++ (BOOL)conditionalExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCConditionalExpression **)anExpression;
 
 + (instancetype)expressionWithLogicalORExpression:(NUCLogicalORExpression *)aLogicalORExpression;
 
@@ -31,8 +31,6 @@
 - (NUCExpression *)expression;
 - (NUCDecomposedPreprocessingToken *)colonPunctuator;
 - (NUCConditionalExpression *)conditionalExpression;
-
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
 
 @end
 

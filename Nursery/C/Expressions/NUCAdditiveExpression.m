@@ -12,14 +12,14 @@
 
 @implementation NUCAdditiveExpression
 
-+ (BOOL)additiveExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCAdditiveExpression **)aToken
++ (BOOL)additiveExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCAdditiveExpression **)anExpression
 {
     NUCMultiplicativeExpression *aMultiplicativeExpression = nil;
     
     if ([NUCMultiplicativeExpression multiplicativeExpressionFrom:aStream into:&aMultiplicativeExpression])
     {
-        if (aToken)
-            *aToken = [NUCAdditiveExpression expressionWithMultiplicativeExpression:aMultiplicativeExpression];
+        if (anExpression)
+            *anExpression = [NUCAdditiveExpression expressionWithMultiplicativeExpression:aMultiplicativeExpression];
         
         return YES;
     }
@@ -40,8 +40,8 @@
                 
                 if ([NUCMultiplicativeExpression multiplicativeExpressionFrom:aStream into:&aMultiplicativeExpression])
                 {
-                    if (aToken)
-                        *aToken = [NUCAdditiveExpression expressionWithAdditiveExpression:anAdditiveExpression additiveOperator:anAdditiveOperator multiplicativeExpression:aMultiplicativeExpression];
+                    if (anExpression)
+                        *anExpression = [NUCAdditiveExpression expressionWithAdditiveExpression:anAdditiveExpression additiveOperator:anAdditiveOperator multiplicativeExpression:aMultiplicativeExpression];
                     
                     return YES;
                 }
@@ -70,7 +70,7 @@
 
 - (instancetype)initWithAdditiveExpression:(NUCAdditiveExpression *)anAdditiveExpression additiveOperator:(NUCDecomposedPreprocessingToken *)anAdditiveOperator multiplicativeExpression:(NUCMultiplicativeExpression *)aMultiplicativeExpression
 {
-    if (self = [super initWithType:NUCLexicalElementAdditiveExpressionType])
+    if (self = [super initWithType:NUCExpressionAdditiveExpressionType])
     {
         additiveExpression = [anAdditiveExpression retain];
         additiveOperator = [anAdditiveOperator retain];
@@ -89,9 +89,9 @@
     [super dealloc];
 }
 
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
+- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [multiplicativeExpression executeWithPreprocessor:aPreprocessor];
+    return [multiplicativeExpression executeWith:aPreprocessor];
 }
 
 @end

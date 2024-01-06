@@ -5,24 +5,22 @@
 //  Created by TAKATA Akifumi on 2021/02/12.
 //
 
-#import "NUCPreprocessingToken.h"
+#import "NUCProtoExpression.h"
 
-@class NUCConditionalExpression, NUCPreprocessingTokenStream;
+@class NUCConditionalExpression, NUCPreprocessingTokenStream, NUCLexicalElement;
 
-@interface NUCConstantExpression : NUCPreprocessingToken
+@interface NUCConstantExpression : NUCProtoExpression
 {
     NUCConditionalExpression *conditionalExpression;
 }
 
-+ (BOOL)constantExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCLexicalElement **)aToken;
++ (BOOL)constantExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCConstantExpression **)aConstantExpression;
 
 + (instancetype)expressionWithConditionalExpression:(NUCConditionalExpression *)anExpression;
 
 - (instancetype)initWithConditionalExpression:(NUCConditionalExpression *)anExpression;
 
 - (NUCConditionalExpression *)conditionalExpression;
-
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
 
 @end
 

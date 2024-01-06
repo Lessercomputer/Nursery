@@ -11,14 +11,14 @@
 
 @implementation NUCConstantExpression
 
-+ (BOOL)constantExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCLexicalElement **)aToken
++ (BOOL)constantExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCConstantExpression **)aConstantExpression
 {
     NUCConditionalExpression *aConditionalExpression = nil;
     
     if ([NUCConditionalExpression conditionalExpressionFrom:aStream into:&aConditionalExpression])
     {
-        if (aToken)
-            *aToken = [NUCConstantExpression expressionWithConditionalExpression:aConditionalExpression];
+        if (aConstantExpression)
+            *aConstantExpression = [NUCConstantExpression expressionWithConditionalExpression:aConditionalExpression];
         
         return YES;
     }
@@ -33,7 +33,7 @@
 
 - (instancetype)initWithConditionalExpression:(NUCConditionalExpression *)anExpression
 {
-    if (self = [super initWithType:NUCLexicalElementConstantExpressionType])
+    if (self = [super initWithType:NUCExpressionConstantExpressionType])
     {
         conditionalExpression = [anExpression retain];
     }
@@ -53,9 +53,9 @@
     return conditionalExpression;
 }
 
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
+- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [[self conditionalExpression] executeWithPreprocessor:aPreprocessor];
+    return [[self conditionalExpression] executeWith:aPreprocessor];
 }
 
 @end

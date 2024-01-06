@@ -5,11 +5,11 @@
 //  Created by TAKATA Akifumi on 2021/02/21.
 //
 
-#import "NUCPreprocessingToken.h"
+#import "NUCProtoExpression.h"
 
 @class NUCPostfixExpression, NUCDecomposedPreprocessingToken, NUCCastExpression, NUCPreprocessingTokenStream;
 
-@interface NUCUnaryExpression : NUCPreprocessingToken
+@interface NUCUnaryExpression : NUCProtoExpression
 {
     NUCPostfixExpression *postfixExpression;
     NUCDecomposedPreprocessingToken *unaryOperator;
@@ -30,8 +30,6 @@
 - (instancetype)initWithUnaryOperator:(NUCDecomposedPreprocessingToken *)anUnaryOperator unaryExpression:(NUCUnaryExpression *)anUnaryExpression;
 
 - (instancetype)initWithUnaryOperator:(NUCDecomposedPreprocessingToken *)anUnaryOperator castExpression:(NUCCastExpression *)aCastExpression;
-
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
 
 @end
 

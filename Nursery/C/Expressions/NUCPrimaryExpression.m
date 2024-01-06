@@ -12,6 +12,7 @@
 #import "NUCPreprocessingTokenStream.h"
 #import "NUCConstant.h"
 #import "NUCIntegerConstant.h"
+#import "NUCExpressionResult.h"
 
 @implementation NUCPrimaryExpression
 
@@ -69,27 +70,27 @@
 
 + (instancetype)expressionWithIdentifier:(NUCDecomposedPreprocessingToken *)anIdentifier
 {
-    return [[[self alloc] initWithToken:anIdentifier] autorelease];
+    return [[[self alloc] initWithContent:anIdentifier] autorelease];
 }
 
 + (instancetype)expressionWithConstant:(NUCConstant *)aConstant
 {
-    return [[[self alloc] initWithToken:aConstant] autorelease];
+    return [[[self alloc] initWithContent:aConstant] autorelease];
 }
 
 + (instancetype)expressionWithStringLiteral:(NUCDecomposedPreprocessingToken *)aStringLiteral
 {
-    return [[[self alloc] initWithToken:aStringLiteral] autorelease];
+    return [[[self alloc] initWithContent:aStringLiteral] autorelease];
 }
 
 + (instancetype)expressionWithExpression:(NUCExpression *)anExpression
 {
-    return [[[self alloc] initWithToken:anExpression] autorelease];
+    return [[[self alloc] initWithContent:anExpression] autorelease];
 }
 
-- (instancetype)initWithToken:(NUCPreprocessingToken *)aContent
+- (instancetype)initWithContent:(id)aContent
 {
-    if (self = [super initWithType:NUCLexicalElementPrimaryExpressionType])
+    if (self = [super initWithType:NUCExpressionPrimaryExpressionType])
     {
         content = [aContent retain];
     }
@@ -104,10 +105,13 @@
     [super dealloc];
 }
 
-- (NSInteger)executeWithPreprocessor:(NUCPreprocessor *)aPreprocessor
+- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
 {
     id aContent = [(NUCConstant *)content content];
-    return [aContent isKindOfClass:[NUCIntegerConstant class]] ? [aContent value] : 0;
+    NSInteger aValue = [aContent isKindOfClass:[NUCIntegerConstant class]] ? [aContent value] : 0;
+    NUCExpressionResult *anExpressionResult = [[[NUCExpressionResult alloc] initWithIntValue:aValue] autorelease];
+    
+    return anExpressionResult;
 }
 
 @end
