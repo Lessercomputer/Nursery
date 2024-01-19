@@ -154,7 +154,7 @@
 
 - (NUCExpressionResult *)executeConstantExpression:(NUCConstantExpression *)aConstantExpression
 {
-    return [aConstantExpression executeWith:self];
+    return [aConstantExpression evaluateWith:self];
 }
 
 @end

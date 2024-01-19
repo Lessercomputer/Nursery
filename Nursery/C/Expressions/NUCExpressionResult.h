@@ -10,12 +10,12 @@
 
 @interface NUCExpressionResult : NSObject
 {
-    NSInteger intValue;
+    int intValue;
 }
 
-- (instancetype)initWithIntValue:(NSInteger)aValue;
+- (instancetype)initWithIntValue:(int)aValue;
 
-- (NSInteger)intValue;
+- (int)intValue;
 
 @end
 

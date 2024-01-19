@@ -3,7 +3,6 @@
 //  Nursery
 //
 //  Created by TAKATA Akifumi on 2024/01/06.
-//  Copyright © 2024 com.lily-bud. All rights reserved.
 //
 
 #import "NUCProtoExpression.h"
@@ -20,7 +19,7 @@
     return self;
 }
 
-- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
+- (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
     return nil;
 }

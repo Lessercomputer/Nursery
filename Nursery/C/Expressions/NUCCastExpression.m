@@ -48,9 +48,9 @@
     [super dealloc];
 }
 
-- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
+- (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [unaryExpression executeWith:aPreprocessor];
+    return [unaryExpression evaluateWith:aPreprocessor];
 }
 
 @end

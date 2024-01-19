@@ -53,9 +53,9 @@
     return conditionalExpression;
 }
 
-- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
+- (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [[self conditionalExpression] executeWith:aPreprocessor];
+    return [[self conditionalExpression] evaluateWith:aPreprocessor];
 }
 
 @end

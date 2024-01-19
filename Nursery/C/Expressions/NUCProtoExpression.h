@@ -38,7 +38,7 @@ typedef enum : NSUInteger {
 
 - (instancetype)initWithType:(NUCExpressionType)aType;
 
-- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor;
+- (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor;
 
 @end
 

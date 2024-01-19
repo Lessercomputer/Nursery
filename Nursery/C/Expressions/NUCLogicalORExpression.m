@@ -9,6 +9,7 @@
 #import "NUCPreprocessingTokenStream.h"
 #import "NUCLogicalANDExpression.h"
 #import "NUCDecomposedPreprocessingToken.h"
+#import "NUCExpressionResult.h"
 
 @implementation NUCLogicalORExpression
 
@@ -88,9 +89,23 @@
     [super dealloc];
 }
 
-- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
+- (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [logicalANDExpression executeWith:aPreprocessor];
+    if (logicalOROperator)
+    {
+        NUCExpressionResult *anExpressionResultOfOr = [logicalORExpression evaluateWith:aPreprocessor];
+     
+        if ([anExpressionResultOfOr intValue])
+            return anExpressionResultOfOr;
+        else
+        {
+            NUCExpressionResult *anExpressionResultOfAnd = [logicalANDExpression evaluateWith:aPreprocessor];
+            
+            return anExpressionResultOfAnd;
+        }
+    }
+    else
+        return [logicalANDExpression evaluateWith:aPreprocessor];
 }
 
 @end

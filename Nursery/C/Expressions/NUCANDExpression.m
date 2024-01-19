@@ -9,6 +9,7 @@
 #import "NUCPreprocessingTokenStream.h"
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCEqualityExpression.h"
+#import "NUCExpressionResult.h"
 
 @implementation NUCANDExpression
 
@@ -90,9 +91,18 @@
     [super dealloc];
 }
 
-- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
+- (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [equlityExpression executeWith:aPreprocessor];
+    if (andOperator)
+    {
+        NUCExpressionResult *anExpressionResultOfEqulity = [equlityExpression evaluateWith:aPreprocessor];
+        NUCExpressionResult *anExpressionResultOfAnd = [andExpression evaluateWith:aPreprocessor];
+        
+        int aValue = [anExpressionResultOfEqulity intValue] & [anExpressionResultOfAnd intValue];
+        return [[[NUCExpressionResult alloc] initWithIntValue:aValue] autorelease];
+    }
+    else
+        return [equlityExpression evaluateWith:aPreprocessor];
 }
 
 @end

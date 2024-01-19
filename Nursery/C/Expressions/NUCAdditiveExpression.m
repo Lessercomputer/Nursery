@@ -89,9 +89,9 @@
     [super dealloc];
 }
 
-- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
+- (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [multiplicativeExpression executeWith:aPreprocessor];
+    return [multiplicativeExpression evaluateWith:aPreprocessor];
 }
 
 @end

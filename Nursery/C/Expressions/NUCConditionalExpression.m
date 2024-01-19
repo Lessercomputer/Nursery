@@ -10,6 +10,7 @@
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCLogicalORExpression.h"
 #import "NUCExpression.h"
+#import "NUCExpressionResult.h"
 
 @implementation NUCConditionalExpression
 
@@ -123,9 +124,19 @@
     return conditionalExpression;
 }
 
-- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
+- (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [[self logicalORExpression] executeWith:aPreprocessor];
+    NUCExpressionResult *anExpressionResult = [[self logicalORExpression] evaluateWith:aPreprocessor];
+    
+    if ([self questionMarkPunctuator])
+    {
+        if ([anExpressionResult intValue])
+            return [[self expression] evaluateWith:aPreprocessor];
+        else
+            return [[self conditionalExpression] evaluateWith:aPreprocessor];
+    }
+    else
+        return anExpressionResult;
 }
 
 @end

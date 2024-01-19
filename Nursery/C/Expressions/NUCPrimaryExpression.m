@@ -105,10 +105,10 @@
     [super dealloc];
 }
 
-- (NUCExpressionResult *)executeWith:(NUCPreprocessor *)aPreprocessor
+- (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
     id aContent = [(NUCConstant *)content content];
-    NSInteger aValue = [aContent isKindOfClass:[NUCIntegerConstant class]] ? [aContent value] : 0;
+    int aValue = [aContent isKindOfClass:[NUCIntegerConstant class]] ? (int)[aContent value] : 0;
     NUCExpressionResult *anExpressionResult = [[[NUCExpressionResult alloc] initWithIntValue:aValue] autorelease];
     
     return anExpressionResult;
