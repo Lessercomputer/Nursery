@@ -13,6 +13,8 @@
     int intValue;
 }
 
++ (instancetype)expressionResultWithIntValue:(int)aValue;
+
 - (instancetype)initWithIntValue:(int)aValue;
 
 - (int)intValue;

@@ -160,7 +160,7 @@
     NUCDecomposedPreprocessingToken *aToken = [aStream next];
     if ([aToken isPunctuator])
     {
-        if ([aToken isNegationOperator])
+        if ([aToken isLogicalNegationOperator])
             aNegationOperatorExists = YES;
         
         [aStream skipWhitespacesWithoutNewline];

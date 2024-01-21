@@ -17,9 +17,19 @@
     return [self type] == NUCLexicalElementIdentifierType;
 }
 
+- (BOOL)isConstant
+{
+    return [self type] == NUCLexicalElementConstantType;
+}
+
 - (BOOL)isStringLiteral
 {
     return [self type] == NUCLexicalElementStringLiteralType;
+}
+
+- (BOOL)isIntegerConstant
+{
+    return NO;
 }
 
 - (BOOL)isCharacterConstant
@@ -37,7 +47,12 @@
     return [self type] == NUCLexicalElementPunctuatorType;
 }
 
-- (BOOL)isNegationOperator
+- (BOOL)isBitwiseComplementOperator
+{
+    return NO;
+}
+
+- (BOOL)isLogicalNegationOperator
 {
     return NO;
 }

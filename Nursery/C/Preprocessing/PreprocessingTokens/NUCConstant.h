@@ -7,7 +7,7 @@
 
 #import "NUCPreprocessingToken.h"
 
-@class NUCIntegerConstant, NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream;
+@class NUCIntegerConstant, NUCCharacterConstant, NUCPreprocessingTokenStream;
 
 @interface NUCConstant : NUCPreprocessingToken
 
@@ -16,7 +16,7 @@
 + (BOOL)constantFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCConstant **)aConstant;
 
 + (instancetype)constantWithIntegerConstant:(NUCIntegerConstant *)anIntegerConstant;
-+ (instancetype)constantWithCharacterConstant:(NUCDecomposedPreprocessingToken *)aCharacterConstant;
++ (instancetype)constantWithCharacterConstant:(NUCCharacterConstant *)aCharacterConstant;
 
 - (instancetype)initWithContent:(NUCPreprocessingToken *)aContent;
 

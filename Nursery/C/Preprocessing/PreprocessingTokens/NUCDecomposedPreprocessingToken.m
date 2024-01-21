@@ -234,7 +234,7 @@ static NUCDecomposedPreprocessingToken *whitespaceToken = nil;
 
 - (BOOL)isUnaryOperator
 {
-    return [self isPunctuator] && ([[self content] isEqualToString:NUCUnaryPlusOperator] || [[self content] isEqualToString:NUCUnaryMinusOperator] || [[self content] isEqualToString:NUCBitwiseComplementOperator] || [[self content] isEqualToString:NUCLogicalNegationOperator]);
+    return [self isPunctuator] && ([[self content] isEqualToString:NUCUnaryPlusOperator] || [[self content] isEqualToString:NUCUnaryMinusOperator] || [self isBitwiseComplementOperator] || [self isLogicalNegationOperator]);
 }
 
 - (BOOL)isWhitespacesWithoutNewline
@@ -262,7 +262,12 @@ static NUCDecomposedPreprocessingToken *whitespaceToken = nil;
     return [[self content] isEqual:NUCClosingParenthesisPunctuator];
 }
 
-- (BOOL)isNegationOperator
+- (BOOL)isBitwiseComplementOperator
+{
+    return [self isPunctuator] && [[self content] isEqual:NUCBitwiseComplementOperator];
+}
+
+- (BOOL)isLogicalNegationOperator
 {
     return [self isPunctuator] && [[self content] isEqual:NUCLogicalNegationOperator];
 }

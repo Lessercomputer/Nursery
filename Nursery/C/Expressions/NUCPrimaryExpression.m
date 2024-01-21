@@ -53,10 +53,14 @@
         {
             if ([aStream skipWhitespacesWithoutNewline])
             {
-                if (anExpression)
-                    *anExpression = [NUCPrimaryExpression expressionWithExpression:anExpression2];
-                
-                return YES;
+                aToken = [aStream next];
+                if ([aToken isClosingParenthesis])
+                {
+                    if (anExpression)
+                        *anExpression = [NUCPrimaryExpression expressionWithExpression:anExpression2];
+                    
+                    return YES;
+                }
             }
             else
             {
@@ -107,11 +111,20 @@
 
 - (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
-    id aContent = [(NUCConstant *)content content];
-    int aValue = [aContent isKindOfClass:[NUCIntegerConstant class]] ? (int)[aContent value] : 0;
-    NUCExpressionResult *anExpressionResult = [[[NUCExpressionResult alloc] initWithIntValue:aValue] autorelease];
-    
-    return anExpressionResult;
+    if ([content isIdentifier])
+    {
+        return [[[NUCExpressionResult alloc] initWithIntValue:0] autorelease];
+    }
+    else if ([content isConstant])
+    {
+        id aContent = [(NUCConstant *)content content];
+        int aValue = (int)[aContent value];
+        NUCExpressionResult *anExpressionResult = [[[NUCExpressionResult alloc] initWithIntValue:aValue] autorelease];
+        
+        return anExpressionResult;
+    }
+    else
+        return [(NUCExpression *)content evaluateWith:aPreprocessor];
 }
 
 @end

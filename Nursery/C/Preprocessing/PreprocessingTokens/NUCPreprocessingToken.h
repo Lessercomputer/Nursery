@@ -13,11 +13,14 @@
 @interface NUCPreprocessingToken : NUCLexicalElement
 
 - (BOOL)isIdentifier;
+- (BOOL)isConstant;
+- (BOOL)isIntegerConstant;
 - (BOOL)isStringLiteral;
 - (BOOL)isCharacterConstant;
 - (BOOL)isPpNumber;
 - (BOOL)isPunctuator;
-- (BOOL)isNegationOperator;
+- (BOOL)isBitwiseComplementOperator;
+- (BOOL)isLogicalNegationOperator;
 - (BOOL)isUndef;
 - (BOOL)isLine;
 - (BOOL)isError;

@@ -7,6 +7,7 @@
 
 #import "NUCConstant.h"
 #import "NUCIntegerConstant.h"
+#import "NUCCharacterConstant.h"
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCPreprocessingTokenStream.h"
 
@@ -23,7 +24,7 @@
     else if ([[aStream peekNext] isCharacterConstant])
     {
         if (aConstant)
-            *aConstant = [NUCConstant constantWithCharacterConstant:[aStream next]];
+            *aConstant = [NUCConstant constantWithCharacterConstant:(NUCCharacterConstant *)[aStream next]];
         
         return YES;
     }
@@ -36,7 +37,7 @@
     return [[[self alloc] initWithContent:anIntegerConstant] autorelease];
 }
 
-+ (instancetype)constantWithCharacterConstant:(NUCDecomposedPreprocessingToken *)aCharacterConstant
++ (instancetype)constantWithCharacterConstant:(NUCCharacterConstant *)aCharacterConstant
 {
     return [[[self alloc] initWithContent:aCharacterConstant] autorelease];
 }
@@ -56,6 +57,16 @@
     [content release];
     
     [super dealloc];
+}
+
+- (BOOL)isIntegerConstant
+{
+    return [content isKindOfClass:[NUCIntegerConstant class]];
+}
+
+- (BOOL)isCharacterConstant
+{
+    return [content isCharacterConstant];
 }
 
 @end

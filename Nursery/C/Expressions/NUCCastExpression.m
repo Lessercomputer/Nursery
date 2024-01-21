@@ -8,6 +8,7 @@
 #import "NUCCastExpression.h"
 #import "NUCPreprocessingTokenStream.h"
 #import "NUCUnaryExpression.h"
+#import "NUCDecomposedPreprocessingToken.h"
 
 @implementation NUCCastExpression
 

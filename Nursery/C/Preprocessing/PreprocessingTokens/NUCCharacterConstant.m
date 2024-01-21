@@ -43,4 +43,9 @@
     return [NSString stringWithFormat:@"%@\'%@\'", [self encodingPrefix] ? [self encodingPrefix] : @"", [self content]];
 }
 
+- (NUUInt64)value
+{
+    return (NUUInt64)*[(NSString *)content cStringUsingEncoding:NSUTF8StringEncoding];
+}
+
 @end

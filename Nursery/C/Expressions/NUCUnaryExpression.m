@@ -10,6 +10,7 @@
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCCastExpression.h"
 #import "NUCPostfixExpression.h"
+#import "NUCExpressionResult.h"
 
 @implementation NUCUnaryExpression
 
@@ -102,13 +103,32 @@
     [postfixExpression release];
     [unaryOperator release];
     [unaryExpression release];
+    [castExpression release];
     
     [super dealloc];
 }
 
 - (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [postfixExpression evaluateWith:aPreprocessor];
+    if (unaryOperator)
+    {
+        NUCExpressionResult *aCastExpressionResult = [castExpression evaluateWith:aPreprocessor];
+        
+        if ([unaryOperator isBitwiseComplementOperator])
+        {
+            int aValue = ~[aCastExpressionResult intValue];
+            return [NUCExpressionResult expressionResultWithIntValue:aValue];
+        }
+        else if ([unaryOperator isLogicalNegationOperator])
+        {
+            int aValue = ![aCastExpressionResult intValue];
+            return [NUCExpressionResult expressionResultWithIntValue:aValue];
+        }
+        else
+            return nil;
+    }
+    else
+        return [postfixExpression evaluateWith:aPreprocessor];
 }
 
 @end

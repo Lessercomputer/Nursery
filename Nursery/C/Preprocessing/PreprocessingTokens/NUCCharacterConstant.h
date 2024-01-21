@@ -13,6 +13,8 @@
     NSString *encodingPrefix;
 }
 
+@property (nonatomic, readonly) NUUInt64 value;
+
 + (instancetype)preprocessingTokenWithContent:(NSString *)aString range:(NSRange)aRange encodingPrefix:(NSString *)anEncodingPrefix;
 
 - (instancetype)initWithContent:(NSString *)aContent range:(NSRange)aRange encodingPrefix:(NSString *)anEncodingPrefix;

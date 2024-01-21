@@ -9,6 +9,11 @@
 
 @implementation NUCExpressionResult
 
++ (instancetype)expressionResultWithIntValue:(int)aValue
+{
+    return [[[self alloc] initWithIntValue:aValue] autorelease];
+}
+
 - (instancetype)initWithIntValue:(int)aValue
 {
     intValue = aValue;
