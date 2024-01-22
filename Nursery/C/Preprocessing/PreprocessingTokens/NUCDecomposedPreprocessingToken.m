@@ -212,9 +212,39 @@ static NUCDecomposedPreprocessingToken *whitespaceToken = nil;
     return [self isPunctuator] && [[self content] isEqualToString:NUCEqualityOperator];
 }
 
+- (BOOL)isEqualToOperator
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCEqualityOperator];
+}
+
+- (BOOL)isNotEqualToOperator
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCInequalityOperator];
+}
+
 - (BOOL)isRelationalOperator
 {
     return [self isPunctuator] && ([[self content] isEqualToString:NUCLessThanOperator] || [[self content] isEqualToString:NUCLessThanOrEqualToOperator] || [[self content] isEqualToString:NUCGreaterThanOperator] || [[self content] isEqualToString:NUCGreaterThanOrEqualToOperator]);
+}
+
+- (BOOL)isLessThanOperator
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCLessThanOperator];
+}
+
+- (BOOL)isGreaterThanOperator
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCGreaterThanOperator];
+}
+
+- (BOOL)isLessThanOrEqualToOperator
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCGreaterThanOrEqualToOperator];
+}
+
+- (BOOL)isGreaterThanOrEqualToOperator
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCGreaterThanOrEqualToOperator];
 }
 
 - (BOOL)isShiftOperator;
@@ -222,14 +252,49 @@ static NUCDecomposedPreprocessingToken *whitespaceToken = nil;
     return [self isPunctuator] && ([[self content] isEqualToString:NUCLeftShiftOperator] || [[self content] isEqualToString:NUCRightShiftOperator]);
 }
 
+- (BOOL)isLeftShiftOperator
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCLeftShiftOperator];
+}
+
+- (BOOL)isRightShiftOperator
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCRightShiftOperator];
+}
+
 - (BOOL)isAdditiveOperator
 {
     return [self isPunctuator] && ([[self content] isEqualToString:NUCAdditionOperator] || [[self content] isEqualToString:NUCSubtractionOperator]);
 }
 
+- (BOOL)isAdditionOperator
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCAdditionOperator];
+}
+
+- (BOOL)isSubtractionOperator
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCSubtractionOperator];
+}
+
 - (BOOL)isMultiplicativeOperator
 {
     return [self isPunctuator] && ([[self content] isEqualToString:NUCMultiplicationOperator] || [[self content] isEqualToString:NUCDivisionOperator] || [[self content] isEqualToString:NUCRemainderOperator]);
+}
+
+- (BOOL)isMultiplicationOperator
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCMultiplicationOperator];
+}
+
+- (BOOL)isDivisionOperator
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCDivisionOperator];
+}
+
+- (BOOL)isRemainderOperator
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCRemainderOperator];
 }
 
 - (BOOL)isUnaryOperator

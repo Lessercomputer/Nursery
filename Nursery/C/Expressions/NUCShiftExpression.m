@@ -9,6 +9,7 @@
 #import "NUCPreprocessingTokenStream.h"
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCAdditiveExpression.h"
+#import "NUCExpressionResult.h"
 
 @implementation NUCShiftExpression
 
@@ -92,7 +93,21 @@
 
 - (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [additiveExpression evaluateWith:aPreprocessor];
+    if (shiftOperator)
+    {
+        NUCExpressionResult *aResultOfShiftExpression = [shiftExpression evaluateWith:aPreprocessor];
+        NUCExpressionResult *aResultOfAdditiveExpression = [additiveExpression evaluateWith:aPreprocessor];
+        int aValue = 0;
+        
+        if ([shiftOperator isLeftShiftOperator])
+            aValue = [aResultOfShiftExpression intValue] << [aResultOfAdditiveExpression intValue];
+        else if ([shiftOperator isRightShiftOperator])
+            aValue = [aResultOfShiftExpression intValue] >> [aResultOfAdditiveExpression intValue];
+        
+        return [NUCExpressionResult expressionResultWithIntValue:aValue];
+    }
+    else
+        return [additiveExpression evaluateWith:aPreprocessor];
 }
 
 @end

@@ -136,13 +136,39 @@
 
 - (BOOL)isEqualityOperator { return NO;}
 
+- (BOOL)isEqualToOperator { return NO;}
+
+- (BOOL)isNotEqualToOperator { return NO;}
+
 - (BOOL)isRelationalOperator { return NO;}
+
+- (BOOL)isLessThanOperator { return NO;}
+
+- (BOOL)isGreaterThanOperator { return NO;}
+
+- (BOOL)isLessThanOrEqualToOperator { return NO;}
+
+- (BOOL)isGreaterThanOrEqualToOperator { return NO;}
 
 - (BOOL)isShiftOperator { return NO;}
 
+- (BOOL)isLeftShiftOperator { return NO;}
+
+- (BOOL)isRightShiftOperator { return NO;}
+
 - (BOOL)isAdditiveOperator { return NO;}
 
+- (BOOL)isAdditionOperator { return NO;}
+
+- (BOOL)isSubtractionOperator { return NO;}
+
 - (BOOL)isMultiplicativeOperator { return NO;}
+
+- (BOOL)isMultiplicationOperator { return NO;}
+
+- (BOOL)isDivisionOperator { return NO;}
+
+- (BOOL)isRemainderOperator { return NO;}
 
 - (BOOL)isUnaryOperator { return NO;}
 

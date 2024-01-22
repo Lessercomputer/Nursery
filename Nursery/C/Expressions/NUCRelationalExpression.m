@@ -9,6 +9,7 @@
 #import "NUCPreprocessingTokenStream.h"
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCShiftExpression.h"
+#import "NUCExpressionResult.h"
 
 @implementation NUCRelationalExpression
 
@@ -92,7 +93,25 @@
 
 - (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [shiftExpression evaluateWith:aPreprocessor];
+    if (relationalOperator)
+    {
+        NUCExpressionResult *aResultOfRelationalExpression = [relationalExpression evaluateWith:aPreprocessor];
+        NUCExpressionResult *aResultOfShiftExpression = [shiftExpression evaluateWith:aPreprocessor];
+        int aValue = 0;
+        
+        if ([relationalOperator isLessThanOperator])
+            aValue = [aResultOfRelationalExpression intValue] < [aResultOfShiftExpression intValue];
+        else if ([relationalOperator isGreaterThanOperator])
+            aValue = [aResultOfRelationalExpression intValue] > [aResultOfShiftExpression intValue];
+        else if ([relationalOperator isLessThanOrEqualToOperator])
+            aValue = [aResultOfRelationalExpression intValue] <= [aResultOfShiftExpression intValue];
+        else if ([relationalOperator isGreaterThanOrEqualToOperator])
+            aValue = [aResultOfRelationalExpression intValue] >= [aResultOfShiftExpression intValue];
+        
+        return [NUCExpressionResult expressionResultWithIntValue:aValue];
+    }
+    else
+        return [shiftExpression evaluateWith:aPreprocessor];
 }
 
 @end

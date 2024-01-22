@@ -9,6 +9,7 @@
 #import "NUCPreprocessingTokenStream.h"
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCRelationalExpression.h"
+#import "NUCExpressionResult.h"
 
 @implementation NUCEqualityExpression
 
@@ -92,7 +93,21 @@
 
 - (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [relationalExpression evaluateWith:aPreprocessor];
+    if (equalityOperator)
+    {
+        NUCExpressionResult *aResultOfRelationalExpression = [relationalExpression evaluateWith:aPreprocessor];
+        NUCExpressionResult *aResultOfEqualityExpression = [equalityExpression evaluateWith:aPreprocessor];
+        int aValue = 0;
+        
+        if ([equalityOperator isEqualToOperator])
+            aValue = [aResultOfEqualityExpression intValue] == [aResultOfRelationalExpression intValue];
+        else if ([equalityOperator isNotEqualToOperator])
+            aValue = [aResultOfEqualityExpression intValue] != [aResultOfRelationalExpression intValue];
+            
+        return [NUCExpressionResult expressionResultWithIntValue:aValue];
+    }
+    else
+        return [relationalExpression evaluateWith:aPreprocessor];
 }
 
 @end

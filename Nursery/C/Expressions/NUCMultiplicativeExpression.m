@@ -9,6 +9,7 @@
 #import "NUCPreprocessingTokenStream.h"
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCCastExpression.h"
+#import "NUCExpressionResult.h"
 
 @implementation NUCMultiplicativeExpression
 
@@ -93,7 +94,23 @@
 
 - (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
-    return [castExpression evaluateWith:aPreprocessor];
+    if (multiplicativeOperator)
+    {
+        NUCExpressionResult *aResultOfMultiplicativeExpression = [multiplicativeExpression evaluateWith:aPreprocessor];
+        NUCExpressionResult *aResultOfCastExpression = [castExpression evaluateWith:aPreprocessor];
+        int aValue = 0;
+        
+        if ([multiplicativeOperator isMultiplicationOperator])
+            aValue = [aResultOfMultiplicativeExpression intValue] * [aResultOfCastExpression intValue];
+        else if ([multiplicativeOperator isDivisionOperator])
+            aValue = [aResultOfMultiplicativeExpression intValue] / [aResultOfCastExpression intValue];
+        else if ([multiplicativeOperator isRemainderOperator])
+            aValue = [aResultOfMultiplicativeExpression intValue] % [aResultOfCastExpression intValue];
+        
+        return [NUCExpressionResult expressionResultWithIntValue:aValue];
+    }
+    else
+        return [castExpression evaluateWith:aPreprocessor];
 }
 
 @end
