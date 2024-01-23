@@ -19,38 +19,45 @@
     
     if ([NUCLogicalANDExpression logicalANDExpressionFrom:aStream into:&anAndExpression])
     {
-        if (aToken)
-            *aToken = [NUCLogicalORExpression expressionWithLogicalANDExpression:anAndExpression];
-        
-        return YES;
-    }
-    else
-    {
         NSUInteger aPosition = [aStream position];
-        NUCLogicalORExpression *anORExpression = nil;
+        NUCLogicalANDExpression *anAndExpression2 = nil;
         
-        if ([self logicalORExpressionFrom:aStream into:&anORExpression])
+        [aStream skipWhitespacesWithoutNewline];
+        
+        NUCDecomposedPreprocessingToken *anOROperator = [aStream next];
+        
+        if ([anOROperator isLogicalOROperator])
         {
             [aStream skipWhitespacesWithoutNewline];
-            
-            NUCDecomposedPreprocessingToken *anOROperator = [aStream next];
-            if ([anOROperator isLogicalOROperator])
+                        
+            if ([NUCLogicalANDExpression logicalANDExpressionFrom:aStream into:&anAndExpression2])
             {
-                [aStream skipWhitespacesWithoutNewline];
-                
-                if ([NUCLogicalANDExpression logicalANDExpressionFrom:aStream into:&anAndExpression])
+                if (aToken)
                 {
-                    if (aToken)
-                        *aToken = [NUCLogicalORExpression expressionWithlogicalORExpression:anORExpression logicalOREperator:anOROperator logicalANDExpression:anAndExpression];
-                    
-                    return YES;
+                    NUCLogicalORExpression *anOrExpression = [NUCLogicalORExpression expressionWithLogicalANDExpression:anAndExpression];
+                    *aToken = [NUCLogicalORExpression expressionWithlogicalORExpression:anOrExpression logicalOREperator:anOROperator logicalANDExpression:anAndExpression2];
                 }
+                
+                return YES;
+            }
+            else
+            {
+                [aStream setPosition:aPosition];
+                return NO;
             }
         }
-        
-        [aStream setPosition:aPosition];
-        return NO;
+        else
+        {
+            [aStream setPosition:aPosition];
+            
+            if (aToken)
+                *aToken = [NUCLogicalORExpression expressionWithLogicalANDExpression:anAndExpression];
+            
+            return YES;
+        }
     }
+    else
+        return NO;
 }
 
 + (instancetype)expressionWithLogicalANDExpression:(NUCLogicalANDExpression *)aLogicalANDExpression
