@@ -16,7 +16,8 @@
 
 - (instancetype)initWithIntValue:(int)aValue
 {
-    intValue = aValue;
+    if (self = [super init])
+        intValue = aValue;
     
     return self;
 }

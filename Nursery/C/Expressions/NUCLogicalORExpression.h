@@ -6,25 +6,22 @@
 //
 
 #import "NUCProtoExpression.h"
+#import "NUTypes.h"
 
 @class NUCLogicalANDExpression, NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream;
 
+@class NSMutableArray;
+
 @interface NUCLogicalORExpression : NUCProtoExpression
-{
-    NUCLogicalORExpression *logicalORExpression;
-    NUCDecomposedPreprocessingToken *logicalOROperator;
-    NUCLogicalANDExpression *logicalANDExpression;
-}
+
+@property (nonatomic, retain) NSMutableArray *expressions;
+@property (nonatomic, readonly) NUUInt64 count;
 
 + (BOOL)logicalORExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCLogicalORExpression **)aToken;
 
-+ (instancetype)expressionWithLogicalANDExpression:(NUCLogicalANDExpression *)aLogicalANDExpression;
++ (instancetype)expression;
 
-+ (instancetype)expressionWithlogicalORExpression:(NUCLogicalORExpression *)aLogicalORExpression logicalOREperator:(NUCDecomposedPreprocessingToken *)aLogicalOROperator logicalANDExpression:(NUCLogicalANDExpression *)aLogicalANDExpression;
-
-- (instancetype)initWithLogicalANDExpression:(NUCLogicalANDExpression *)aLogicalANDExpression;
-
-- (instancetype)initWithlogicalORExpression:(NUCLogicalORExpression *)aLogicalORExpression logicalOREperator:(NUCDecomposedPreprocessingToken *)aLogicalOROperator logicalANDExpression:(NUCLogicalANDExpression *)aLogicalANDExpression;
+- (void)add:(NUCLogicalANDExpression *)anExpression;
 
 @end
 
