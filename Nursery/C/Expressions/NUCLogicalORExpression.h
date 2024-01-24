@@ -17,7 +17,7 @@
 @property (nonatomic, retain) NSMutableArray *expressions;
 @property (nonatomic, readonly) NUUInt64 count;
 
-+ (BOOL)logicalORExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCLogicalORExpression **)aToken;
++ (BOOL)logicalORExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCLogicalORExpression **)anExpression;
 
 + (instancetype)expression;
 

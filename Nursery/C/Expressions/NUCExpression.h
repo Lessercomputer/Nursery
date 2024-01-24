@@ -14,7 +14,7 @@
     NUCConditionalExpression *conditionalExpression;
 }
 
-+ (BOOL)expressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCExpression **)aToken;
++ (BOOL)expressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCExpression **)anExpression;
 
 + (instancetype)expressionWithConditionalExpression:(NUCConditionalExpression *)aConditionalExpression;
 

@@ -17,7 +17,7 @@
 
 + (BOOL)logicalORExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCLogicalORExpression **)anExpression
 {
-    NUCLogicalORExpression *aLogicalORExpression = [NUCLogicalORExpression expression];
+    NUCLogicalORExpression *aLogicalORExpression = [self expression];
     
     while (YES)
     {
@@ -88,9 +88,9 @@
 {
     __block NUCExpressionResult *anExpressionResultToReturn = nil;
     
-    [[self expressions] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [[self expressions] enumerateObjectsUsingBlock:^(id  _Nonnull anExpression, NSUInteger idx, BOOL * _Nonnull stop) {
         
-        NUCExpressionResult *anExpressionResult = [[obj evaluateWith:aPreprocessor] retain];
+        NUCExpressionResult *anExpressionResult = [[anExpression evaluateWith:aPreprocessor] retain];
         if ([anExpressionResult intValue])
         {
             *stop = YES;

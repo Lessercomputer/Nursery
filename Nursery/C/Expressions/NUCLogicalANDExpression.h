@@ -7,24 +7,18 @@
 
 #import "NUCProtoExpression.h"
 
-@class NUCInclusiveORExpression, NUCLogicalANDExpression, NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream;
+@class NUCLogicalANDExpression, NUCPreprocessingTokenStream;
+@class NSMutableArray;
 
 @interface NUCLogicalANDExpression : NUCProtoExpression
-{
-    NUCInclusiveORExpression *inclusiveORExpression;
-    NUCLogicalANDExpression *logicalANDExpression;
-    NUCDecomposedPreprocessingToken *logicalANDOperator;
-}
 
-+ (BOOL)logicalANDExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCLogicalANDExpression **)aToken;
+@property (nonatomic, retain) NSMutableArray *expressions;
 
-+ (instancetype)expressionWithInclusiveORExpression:(NUCInclusiveORExpression *)anInclusiveORExpression;
++ (instancetype)expression;
 
-+ (instancetype)expressionWithLogicalANDExpression:(NUCLogicalANDExpression *)aLogicalANDExpression logicalANDOperator:(NUCDecomposedPreprocessingToken *)aLogicalANDOperator inclusiveORExpression:(NUCInclusiveORExpression *)anInclusiveORExpression;
++ (BOOL)logicalANDExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCLogicalANDExpression **)anExpression;
 
-- (instancetype)initWithInclusiveORExpression:(NUCInclusiveORExpression *)anInclusiveORExpression;
-
-- (instancetype)initWithLogicalANDExpression:(NUCLogicalANDExpression *)aLogicalANDExpression logicalANDOperator:(NUCDecomposedPreprocessingToken *)aLogicalANDOperator inclusiveORExpression:(NUCInclusiveORExpression *)anInclusiveORExpression;
+- (void)add:(NUCProtoExpression *)anExpression;
 
 @end
 

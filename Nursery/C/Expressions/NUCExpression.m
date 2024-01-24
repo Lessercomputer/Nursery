@@ -11,14 +11,14 @@
 
 @implementation NUCExpression
 
-+ (BOOL)expressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCExpression **)aToken
++ (BOOL)expressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCExpression **)anExpression
 {
     NUCConditionalExpression *aConditionalExpression = nil;
     
     if ([NUCConditionalExpression conditionalExpressionFrom:aStream into:&aConditionalExpression])
     {
-        if (aToken)
-            *aToken = [NUCExpression expressionWithConditionalExpression:aConditionalExpression];
+        if (anExpression)
+            *anExpression = [NUCExpression expressionWithConditionalExpression:aConditionalExpression];
         
         return YES;
     }
@@ -39,6 +39,11 @@
     }
     
     return self;
+}
+
+- (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
+{
+    return [conditionalExpression evaluateWith:aPreprocessor];
 }
 
 - (void)dealloc

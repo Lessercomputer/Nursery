@@ -10,106 +10,91 @@
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCInclusiveORExpression.h"
 #import "NUCExpressionResult.h"
+#import <Foundation/NSArray.h>
 
 @implementation NUCLogicalANDExpression
 
-+ (BOOL)logicalANDExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCLogicalANDExpression **)aToken
++ (BOOL)logicalANDExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCLogicalANDExpression **)anExpression
 {
-    NUCInclusiveORExpression *anInclusiveORExpression = nil;
+    NUCLogicalANDExpression *aLogicalANDExpression = [self expression];
     
-    if ([NUCInclusiveORExpression inclusiveORExpressionFrom:aStream into:&anInclusiveORExpression])
+    while (YES)
     {
-        if (aToken)
-            *aToken = [NUCLogicalANDExpression expressionWithInclusiveORExpression:anInclusiveORExpression];
+        NUCInclusiveORExpression *anInclusiveORExpression = nil;
         
-        return YES;
-    }
-    else
-    {
-        NSUInteger aPosition = [aStream position];
-        NUCLogicalANDExpression *anAndExpression = nil;
-        
-        if ([self logicalANDExpressionFrom:aStream into:&anAndExpression])
+        if ([NUCInclusiveORExpression inclusiveORExpressionFrom:aStream into:&anInclusiveORExpression])
         {
+            NSUInteger aPosition = [aStream position];
+            
+            [aLogicalANDExpression add:anInclusiveORExpression];
+
             [aStream skipWhitespacesWithoutNewline];
             
             NUCDecomposedPreprocessingToken *aLogicalANDOperator = [aStream next];
+            
             if ([aLogicalANDOperator isLogicalANDOperator])
             {
                 [aStream skipWhitespacesWithoutNewline];
+            }
+            else
+            {
+                [aStream setPosition:aPosition];
                 
-                if ([NUCInclusiveORExpression inclusiveORExpressionFrom:aStream into:&anInclusiveORExpression])
-                {
-                    if (aToken)
-                        *aToken = [NUCLogicalANDExpression expressionWithLogicalANDExpression:anAndExpression logicalANDOperator:aLogicalANDOperator inclusiveORExpression:anInclusiveORExpression];
-                    
-                    return YES;
-                }
+                if (anExpression)
+                    *anExpression = aLogicalANDExpression;
+                
+                return YES;
             }
         }
-        
-        [aStream setPosition:aPosition];
-        
-        return NO;
+        else
+            return NO;
     }
 }
 
-+ (instancetype)expressionWithInclusiveORExpression:(NUCInclusiveORExpression *)anInclusiveORExpression
++ (instancetype)expression
 {
-    return [[[self alloc] initWithInclusiveORExpression:anInclusiveORExpression] autorelease];
+    return [[[self alloc] initWithType:NUCExpressionInclusiveORExpressionType] autorelease];
 }
 
-+ (instancetype)expressionWithLogicalANDExpression:(NUCLogicalANDExpression *)aLogicalANDExpression logicalANDOperator:(NUCDecomposedPreprocessingToken *)aLogicalANDOperator inclusiveORExpression:(NUCInclusiveORExpression *)anInclusiveORExpression
+- (instancetype)initWithType:(NUCExpressionType)aType
 {
-    return [[[self alloc] initWithLogicalANDExpression:aLogicalANDExpression logicalANDOperator:aLogicalANDOperator inclusiveORExpression:anInclusiveORExpression] autorelease];
-}
-
-- (instancetype)initWithInclusiveORExpression:(NUCInclusiveORExpression *)anInclusiveORExpression
-{
-    return [self initWithLogicalANDExpression:nil logicalANDOperator:nil inclusiveORExpression:anInclusiveORExpression];
-}
-
-- (instancetype)initWithLogicalANDExpression:(NUCLogicalANDExpression *)aLogicalANDExpression logicalANDOperator:(NUCDecomposedPreprocessingToken *)aLogicalANDOperator inclusiveORExpression:(NUCInclusiveORExpression *)anInclusiveORExpression
-{
-    if (self = [super initWithType:NUCExpressionLogicalANDExpressionType])
+    if (self = [super initWithType:NUCExpressionInclusiveORExpressionType])
     {
-        inclusiveORExpression = [anInclusiveORExpression retain];
-        logicalANDExpression = [aLogicalANDExpression retain];
-        logicalANDOperator = [aLogicalANDOperator retain];
+        _expressions = [NSMutableArray new];
     }
     
     return self;
 }
 
+- (void)add:(NUCProtoExpression *)anExpression
+{
+    [[self expressions] addObject:anExpression];
+}
+
 - (void)dealloc
 {
-    [inclusiveORExpression release];
-    [logicalANDExpression release];
-    [logicalANDOperator release];
+    [_expressions release];
     
     [super dealloc];
 }
 
 - (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
-    if (logicalANDOperator)
-    {
-        NUCExpressionResult *anExpressionResultOfLogicalAnd = [logicalANDExpression evaluateWith:aPreprocessor];
+    __block NUCExpressionResult *anExpressionResultToReturn = nil;
+    
+    [[self expressions] enumerateObjectsUsingBlock:^(id _Nonnull anExpression, NSUInteger idx, BOOL * _Nonnull stop) {
         
-        if ([anExpressionResultOfLogicalAnd intValue])
+        NUCExpressionResult *anExpressionResult = [[anExpression evaluateWith:aPreprocessor] retain];
+        if (![anExpressionResult intValue])
         {
-            NUCExpressionResult *anExpressionResultOFInclusiveOr = [inclusiveORExpression evaluateWith:aPreprocessor];
-            
-            if ([anExpressionResultOFInclusiveOr intValue])
-                return anExpressionResultOfLogicalAnd;
-            else
-                return [[[NUCExpressionResult alloc] initWithIntValue:0] autorelease];
+            *stop = YES;
+            anExpressionResultToReturn = anExpressionResult;
         }
-        else
-            return [[[NUCExpressionResult alloc] initWithIntValue:0] autorelease];
-    }
-    else
-        return [inclusiveORExpression evaluateWith:aPreprocessor];
+    }];
+    
+    [anExpressionResultToReturn autorelease];
+    
+    return anExpressionResultToReturn ? anExpressionResultToReturn : [NUCExpressionResult expressionResultWithIntValue:1];
 }
 
 @end
