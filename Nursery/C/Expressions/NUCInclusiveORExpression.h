@@ -5,26 +5,13 @@
 //  Created by TAKATA Akifumi on 2021/02/16.
 //
 
-#import "NUCProtoExpression.h"
+#import "NUCExpressionWithMultipleExpressions.h"
 
-@class NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream, NUCExclusiveORExpression;
+@class NUCPreprocessingTokenStream;
 
-@interface NUCInclusiveORExpression : NUCProtoExpression
-{
-    NUCInclusiveORExpression *inclusiveORExpression;
-    NUCDecomposedPreprocessingToken *inclusiveOROperator;
-    NUCExclusiveORExpression *exclusiveORExpression;
-}
+@interface NUCInclusiveORExpression : NUCExpressionWithMultipleExpressions
 
 + (BOOL)inclusiveORExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCInclusiveORExpression **)aToken;
-
-+ (instancetype)expressionExclusiveExpression:(NUCExclusiveORExpression *)anExclusiveORExpression;
-
-+ (instancetype)expressionWithInclusiveORExpression:(NUCInclusiveORExpression *)anInclusiveORExpression inclusiveOROperator:(NUCDecomposedPreprocessingToken *)anInclusiveOROperator exclusiveORExpression:(NUCExclusiveORExpression *)anExclusiveORExpression;
-
-- (instancetype)initWithExclusiveExpression:(NUCExclusiveORExpression *)anExclusiveORExpression;
-
-- (instancetype)initWithInclusiveORExpression:(NUCInclusiveORExpression *)anInclusiveORExpression inclusiveOROperator:(NUCDecomposedPreprocessingToken *)anInclusiveOROperator exclusiveORExpression:(NUCExclusiveORExpression *)anExclusiveORExpression;
 
 @end
 

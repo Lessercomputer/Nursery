@@ -52,36 +52,9 @@
     }
 }
 
-+ (instancetype)expression
+- (instancetype)init
 {
-    return [[[self alloc] initWithType:NUCExpressionLogicalORExpressionType] autorelease];
-}
-
-- (instancetype)initWithType:(NUCExpressionType)aType
-{
-    if (self = [super initWithType:NUCExpressionLogicalORExpressionType])
-    {
-        _expressions = [NSMutableArray new];
-    }
-    
-    return self;
-}
-
-- (void)dealloc
-{
-    [_expressions release];
-    
-    [super dealloc];
-}
-
-- (void)add:(NUCLogicalANDExpression *)anExpression
-{
-    [[self expressions] addObject:anExpression];
-}
-
-- (NUUInt64)count
-{
-    return [[self expressions] count];
+    return [self initWithType:NUCExpressionLogicalORExpressionType];
 }
 
 - (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor

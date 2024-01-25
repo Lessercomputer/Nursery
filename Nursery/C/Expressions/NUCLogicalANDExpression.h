@@ -5,20 +5,13 @@
 //  Created by TAKATA Akifumi on 2021/02/14.
 //
 
-#import "NUCProtoExpression.h"
+#import "NUCExpressionWithMultipleExpressions.h"
 
-@class NUCLogicalANDExpression, NUCPreprocessingTokenStream;
-@class NSMutableArray;
+@class NUCPreprocessingTokenStream;
 
-@interface NUCLogicalANDExpression : NUCProtoExpression
-
-@property (nonatomic, retain) NSMutableArray *expressions;
-
-+ (instancetype)expression;
+@interface NUCLogicalANDExpression : NUCExpressionWithMultipleExpressions
 
 + (BOOL)logicalANDExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCLogicalANDExpression **)anExpression;
-
-- (void)add:(NUCProtoExpression *)anExpression;
 
 @end
 
