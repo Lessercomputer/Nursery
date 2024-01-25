@@ -11,7 +11,7 @@
 
 @interface NUCInclusiveORExpression : NUCExpressionWithMultipleExpressions
 
-+ (BOOL)inclusiveORExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCInclusiveORExpression **)aToken;
++ (BOOL)inclusiveORExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCInclusiveORExpression **)anExpression;
 
 @end
 

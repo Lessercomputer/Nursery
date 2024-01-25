@@ -13,7 +13,7 @@
 
 @implementation NUCInclusiveORExpression
 
-+ (BOOL)inclusiveORExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCInclusiveORExpression **)aToken
++ (BOOL)inclusiveORExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCInclusiveORExpression **)anExpression
 {
     NUCInclusiveORExpression *anInclusiveORExpression = [NUCInclusiveORExpression expression];
     
@@ -39,8 +39,8 @@
             {
                 [aStream setPosition:aPosition];
                 
-                if (aToken)
-                    *aToken = anInclusiveORExpression;
+                if (anExpression)
+                    *anExpression = anInclusiveORExpression;
                 
                 return YES;
             }
@@ -59,9 +59,9 @@
 {
     __block int aValue = 0;
     
-    [[self expressions] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [[self expressions] enumerateObjectsUsingBlock:^(id _Nonnull anExpression, NSUInteger idx, BOOL * _Nonnull stop) {
         
-        NUCExpressionResult *anExpressionResult = [obj evaluateWith:aPreprocessor];
+        NUCExpressionResult *anExpressionResult = [anExpression evaluateWith:aPreprocessor];
         aValue |= [anExpressionResult intValue];
     }];
     
