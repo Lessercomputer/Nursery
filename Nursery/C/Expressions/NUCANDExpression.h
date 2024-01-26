@@ -5,26 +5,13 @@
 //  Created by TAKATA Akifumi on 2021/02/16.
 //
 
-#import "NUCProtoExpression.h"
+#import "NUCExpressionWithMultipleExpressions.h"
 
-@class NUCEqualityExpression, NUCANDExpression, NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream;
+@class NUCPreprocessingTokenStream;
 
-@interface NUCANDExpression : NUCProtoExpression
-{
-    NUCEqualityExpression *equlityExpression;
-    NUCANDExpression *andExpression;
-    NUCDecomposedPreprocessingToken *andOperator;
-}
+@interface NUCANDExpression : NUCExpressionWithMultipleExpressions
 
 + (BOOL)andExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCANDExpression **)anExpression;
-
-+ (instancetype)expressionWithEqualityExpression:(NUCEqualityExpression *)anEqulityExpression;
-
-+ (instancetype)expressionWithANDExpression:(NUCANDExpression *)anANDExpression andOperator:(NUCDecomposedPreprocessingToken *)anANDOperator equlityExpression:(NUCEqualityExpression *)anEqulityExpression;
-
-- (instancetype)initWithEqualityExpression:(NUCEqualityExpression *)anEqulityExpression;
-
-- (instancetype)initWithANDExpression:(NUCANDExpression *)anANDExpression andOperator:(NUCDecomposedPreprocessingToken *)anANDOperator equlityExpression:(NUCEqualityExpression *)anEqulityExpression;
 
 @end
 

@@ -15,7 +15,7 @@
 
 + (BOOL)exclusiveORExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCExclusiveORExpression **)anExpression
 {
-    NUCExclusiveORExpression *anExclusiviORExpression = [NUCExclusiveORExpression expression];
+    NUCExclusiveORExpression *anExclusiviORExpression = [self expression];
     
     while (YES)
     {
@@ -29,9 +29,9 @@
             
             [aStream skipWhitespacesWithoutNewline];
             
-            NUCDecomposedPreprocessingToken *anExclusiveOROperator = [aStream next];
+            NUCDecomposedPreprocessingToken *anOperator = [aStream next];
             
-            if ([anExclusiveOROperator isExclusiveOROperator])
+            if ([anOperator isExclusiveOROperator])
             {
                 [aStream skipWhitespacesWithoutNewline];
             }
@@ -52,7 +52,7 @@
 
 - (instancetype)init
 {
-    return self = [self initWithType:NUCExpressionExclusiveORExpressionType];
+    return [self initWithType:NUCExpressionExclusiveORExpressionType];
 }
 
 - (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor

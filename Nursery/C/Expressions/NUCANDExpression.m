@@ -15,94 +15,57 @@
 
 + (BOOL)andExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCANDExpression **)anExpression
 {
-    NUCEqualityExpression *anEqulityExpression = nil;
+    NUCANDExpression *anANDExpression = [self expression];
     
-    if ([NUCEqualityExpression equalityExpressionFrom:aStream into:&anEqulityExpression])
+    while (YES)
     {
-        if (anExpression)
-            *anExpression = [NUCANDExpression expressionWithEqualityExpression:anEqulityExpression];
+        NUCEqualityExpression *anEqulityExpression = nil;
         
-        return YES;
-    }
-    else
-    {
-        NSUInteger aPosition = [aStream position];
-        NUCANDExpression *anANDExpression = nil;
-        
-        if ([self andExpressionFrom:aStream into:&anANDExpression])
+        if ([NUCEqualityExpression equalityExpressionFrom:aStream into:&anEqulityExpression])
         {
-            [aStream skipWhitespacesWithoutNewline];
-            NUCDecomposedPreprocessingToken *anAndOperator = [aStream next];
+            NSUInteger aPosition = [aStream position];
             
-            if ([anAndOperator isBitwiseANDOperator])
+            [anANDExpression add:anEqulityExpression];
+            
+            [aStream skipWhitespacesWithoutNewline];
+            
+            NUCDecomposedPreprocessingToken *anOperator = [aStream next];
+            
+            if ([anOperator isBitwiseANDOperator])
             {
                 [aStream skipWhitespacesWithoutNewline];
-                NUCEqualityExpression *anEqulityExpression = nil;
+            }
+            else
+            {
+                [aStream setPosition:aPosition];
                 
-                if ([NUCEqualityExpression equalityExpressionFrom:aStream into:&anEqulityExpression])
-                {
-                    if (anExpression)
-                        *anExpression = [NUCANDExpression expressionWithANDExpression:anANDExpression andOperator:anAndOperator equlityExpression:anEqulityExpression];
-                    
-                    return YES;
-                }
+                if (anExpression)
+                    *anExpression = anANDExpression;
+                
+                return YES;
             }
         }
-        
-        [aStream setPosition:aPosition];
-        
-        return NO;
+        else
+            return NO;
     }
 }
 
-+ (instancetype)expressionWithEqualityExpression:(NUCEqualityExpression *)anEqulityExpression
+- (instancetype)init
 {
-    return [[[self alloc] initWithEqualityExpression:anEqulityExpression] autorelease];
-}
-
-+ (instancetype)expressionWithANDExpression:(NUCANDExpression *)anANDExpression andOperator:(NUCDecomposedPreprocessingToken *)anANDOperator equlityExpression:(NUCEqualityExpression *)anEqulityExpression
-{
-    return [[[self alloc] initWithANDExpression:anANDExpression andOperator:anANDOperator equlityExpression:anEqulityExpression] autorelease];
-}
-
-- (instancetype)initWithEqualityExpression:(NUCEqualityExpression *)anEqulityExpression
-{
-    return [self initWithANDExpression:nil andOperator:nil equlityExpression:anEqulityExpression];
-}
-
-- (instancetype)initWithANDExpression:(NUCANDExpression *)anANDExpression andOperator:(NUCDecomposedPreprocessingToken *)anANDOperator equlityExpression:(NUCEqualityExpression *)anEqulityExpression
-{
-    if (self = [super initWithType:NUCExpressionANDExpressionType])
-    {
-        equlityExpression = [anEqulityExpression retain];
-        andExpression = [anANDExpression retain];
-        andOperator = [andOperator retain];
-    }
-    
-    return self;
-}
-
-- (void)dealloc
-{
-    [equlityExpression release];
-    [andExpression release];
-    [andOperator release];
-    
-    [super dealloc];
+    return [self initWithType:NUCExpressionANDExpressionType];
 }
 
 - (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
-    if (andOperator)
-    {
-        NUCExpressionResult *anExpressionResultOfEqulity = [equlityExpression evaluateWith:aPreprocessor];
-        NUCExpressionResult *anExpressionResultOfAnd = [andExpression evaluateWith:aPreprocessor];
+    __block int aValue = ~0;
+    
+    [[self expressions] enumerateObjectsUsingBlock:^(id _Nonnull anExpression, NSUInteger idx, BOOL * _Nonnull stop) {
         
-        int aValue = [anExpressionResultOfEqulity intValue] & [anExpressionResultOfAnd intValue];
-        return [[[NUCExpressionResult alloc] initWithIntValue:aValue] autorelease];
-    }
-    else
-        return [equlityExpression evaluateWith:aPreprocessor];
+        NUCExpressionResult *anExpressionResult = [anExpression evaluateWith:aPreprocessor];
+        aValue &= [anExpressionResult intValue];
+    }];
+    
+    return [NUCExpressionResult expressionResultWithIntValue:aValue];
 }
 
 @end

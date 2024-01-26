@@ -9,7 +9,7 @@
 
 @implementation NUCExpressionWithMultipleExpressions
 
-@synthesize expressions;
+@synthesize expressions, operators;
 
 + (instancetype)expression
 {
@@ -21,6 +21,7 @@
     if (self = [super initWithType:aType])
     {
         expressions = [NSMutableArray new];
+        operators = [NSMutableArray new];
     }
     
     return self;
@@ -29,6 +30,7 @@
 - (void)dealloc
 {
     [expressions release];
+    [operators release];
     
     [super dealloc];
 }
@@ -38,9 +40,29 @@
     [[self expressions] addObject:anExpression];
 }
 
+- (NUCProtoExpression *)at:(NSUInteger)anIndex
+{
+    return [[self expressions] objectAtIndex:anIndex];
+}
+
 - (NUUInt64)count
 {
     return [[self expressions] count];
+}
+
+- (void)addOperator:(NUCDecomposedPreprocessingToken *)anOperator
+{
+    [[self operators] addObject:anOperator];
+}
+
+- (NUCDecomposedPreprocessingToken *)operatorAt:(NSUInteger)anIndex
+{
+    return [[self operators] objectAtIndex:anIndex];
+}
+
+-(NUUInt64)operatorCount
+{
+    return [[self operators] count];
 }
 
 @end

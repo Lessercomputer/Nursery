@@ -13,101 +13,83 @@
 
 @implementation NUCEqualityExpression
 
-+ (BOOL)equalityExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCEqualityExpression **)aToken
++ (BOOL)equalityExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCEqualityExpression **)anExpression
 {
-    NUCRelationalExpression *aRelationalExpression = nil;
+    NUCEqualityExpression *anEqualityExpression = [self expression];
     
-    if ([NUCRelationalExpression relationalExpressionFrom:aStream into:&aRelationalExpression])
+    while (YES)
     {
-        if (aToken)
-            *aToken = [NUCEqualityExpression expressionWithRelationalExpression:aRelationalExpression];
+        NUCRelationalExpression *aRelationalExpression = nil;
         
-        return YES;
-    }
-    else
-    {
-        NSUInteger aPosition = [aStream position];
-        NUCEqualityExpression *anEqualityExpression = nil;
-        
-        if ([self equalityExpressionFrom:aStream into:&anEqualityExpression])
+        if ([NUCRelationalExpression relationalExpressionFrom:aStream into:&aRelationalExpression])
         {
+            NSUInteger aPosition = [aStream position];
+            
+            [anEqualityExpression add:aRelationalExpression];
+            
             [aStream skipWhitespacesWithoutNewline];
             
             NUCDecomposedPreprocessingToken *anOperator = [aStream next];
             
             if ([anOperator isEqualityOperator] || [anOperator isInequalityOperator])
             {
+                [anEqualityExpression addOperator:anOperator];
                 [aStream skipWhitespacesWithoutNewline];
+            }
+            else
+            {
+                [aStream setPosition:aPosition];
                 
-                if ([NUCRelationalExpression relationalExpressionFrom:aStream into:&aRelationalExpression])
-                {
-                    if (aToken)
-                        *aToken = [NUCEqualityExpression expressionWithEqualityExpression:anEqualityExpression equalityOperator:anOperator relationalExpression:aRelationalExpression];
-                    
-                    return YES;
-                }
+                if (anExpression)
+                    *anExpression = anEqualityExpression;
+                
+                return YES;
             }
         }
-        
-        [aStream setPosition:aPosition];
-        
-        return NO;
+        else
+            return NO;
     }
 }
 
-+ (instancetype)expressionWithRelationalExpression:(NUCRelationalExpression *)aRelationalExpression
+- (instancetype)init
 {
-    return [[[self alloc] initWithRelationalExpression:aRelationalExpression] autorelease];
-}
-
-+ (instancetype)expressionWithEqualityExpression:(NUCEqualityExpression *)anEqualityExpression equalityOperator:(NUCDecomposedPreprocessingToken *)anOperator relationalExpression:(NUCRelationalExpression *)aRelationalExpression
-{
-    return [[[self alloc] initWithEqualityExpression:anEqualityExpression equalityOperator:anOperator relationalExpression:aRelationalExpression] autorelease];
-}
-
-- (instancetype)initWithRelationalExpression:(NUCRelationalExpression *)aRelationalExpression
-{
-    return [self initWithEqualityExpression:nil equalityOperator:nil relationalExpression:aRelationalExpression];
-}
-
-- (instancetype)initWithEqualityExpression:(NUCEqualityExpression *)anEqualityExpression equalityOperator:(NUCDecomposedPreprocessingToken *)anOperator relationalExpression:(NUCRelationalExpression *)aRelationalExpression
-{
-    if (self = [super initWithType:NUCExpressionEqualityExpressionType])
-    {
-        relationalExpression = [aRelationalExpression retain];
-        equalityExpression = [anEqualityExpression retain];
-        equalityOperator = [anOperator retain];
-    }
-    
-    return self;
-}
-
-- (void)dealloc
-{
-    [relationalExpression release];
-    [equalityExpression release];
-    [equalityOperator release];
-    
-    [super dealloc];
+    return [self initWithType:NUCExpressionEqualityExpressionType];
 }
 
 - (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
-    if (equalityOperator)
+    NSMutableArray *anExpressionResults = [NSMutableArray array];
+    
+    [[self expressions] enumerateObjectsUsingBlock:^(id  _Nonnull anExpression, NSUInteger idx, BOOL * _Nonnull stop) {
+        [anExpressionResults addObject:[anExpression evaluateWith:aPreprocessor]];
+    }];
+    
+    bool aPreviousValueExists = NO;
+    int aValue = 0;
+    
+    for (NSUInteger i = 0; i < [anExpressionResults count]; i++)
     {
-        NUCExpressionResult *aResultOfRelationalExpression = [relationalExpression evaluateWith:aPreprocessor];
-        NUCExpressionResult *aResultOfEqualityExpression = [equalityExpression evaluateWith:aPreprocessor];
-        int aValue = 0;
+        NUCExpressionResult *aResultOfEqualityExpression = nil;
         
-        if ([equalityOperator isEqualToOperator])
-            aValue = [aResultOfEqualityExpression intValue] == [aResultOfRelationalExpression intValue];
-        else if ([equalityOperator isNotEqualToOperator])
-            aValue = [aResultOfEqualityExpression intValue] != [aResultOfRelationalExpression intValue];
+        if (!aPreviousValueExists)
+        {
+            aResultOfEqualityExpression = [[self at:i] evaluateWith:aPreprocessor];
+            aValue = [aResultOfEqualityExpression intValue];
+            aPreviousValueExists = YES;
+        }
+        else
+        {
+            aResultOfEqualityExpression  = [[self at:i] evaluateWith:aPreprocessor];
+            NUCDecomposedPreprocessingToken *anOperator = [self operatorAt:i - 1];
             
-        return [NUCExpressionResult expressionResultWithIntValue:aValue];
+            if ([anOperator isEqualToOperator])
+                aValue = aValue == [aResultOfEqualityExpression  intValue];
+            else if ([anOperator isNotEqualToOperator])
+                aValue = aValue != [aResultOfEqualityExpression  intValue];
+        }
     }
-    else
-        return [relationalExpression evaluateWith:aPreprocessor];
+    
+    return [NUCExpressionResult expressionResultWithIntValue:aValue];
 }
 
 @end

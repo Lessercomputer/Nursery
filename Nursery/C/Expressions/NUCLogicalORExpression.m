@@ -31,9 +31,9 @@
             
             [aStream skipWhitespacesWithoutNewline];
             
-            NUCDecomposedPreprocessingToken *anOROperator = [aStream next];
+            NUCDecomposedPreprocessingToken *anOperator = [aStream next];
             
-            if ([anOROperator isLogicalOROperator])
+            if ([anOperator isLogicalOROperator])
             {
                 [aStream skipWhitespacesWithoutNewline];
             }
