@@ -65,4 +65,22 @@
     return [[self operators] count];
 }
 
+- (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor using:(void (^)(NUCExpressionResult *aLeftExpressionResult, NUCDecomposedPreprocessingToken *anOperator, NUCExpressionResult *aRightExpressionResult, NUCExpressionResult **aBinaryExpressionResult))aBlock
+{
+    NSMutableArray *anExpressionResults = [NSMutableArray array];
+    
+    [[self expressions] enumerateObjectsUsingBlock:^(id  _Nonnull anExpression, NSUInteger idx, BOOL * _Nonnull stop) {
+        [anExpressionResults addObject:[anExpression evaluateWith:aPreprocessor]];
+    }];
+        
+    NUCExpressionResult *aPreviousExpressionResult = [anExpressionResults firstObject];
+    
+    for (NSUInteger anIndex = 1; anIndex < [anExpressionResults count]; anIndex++)
+    {
+        aBlock(aPreviousExpressionResult, [self operatorAt:anIndex - 1], [anExpressionResults objectAtIndex:anIndex], &aPreviousExpressionResult);
+    }
+    
+    return aPreviousExpressionResult;
+}
+
 @end

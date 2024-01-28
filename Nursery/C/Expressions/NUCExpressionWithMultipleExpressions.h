@@ -27,5 +27,7 @@
 - (void)addOperator:(NUCDecomposedPreprocessingToken *)anOperator;
 - (NUCDecomposedPreprocessingToken *)operatorAt:(NSUInteger)anIndex;
 
+- (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor using:(void (^)(NUCExpressionResult *aLeftExpressionResult, NUCDecomposedPreprocessingToken *anOperator, NUCExpressionResult *aRightExpressionResult, NUCExpressionResult **aBinaryExpressionResult))aBlock;
+
 @end
 

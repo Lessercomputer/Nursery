@@ -58,37 +58,18 @@
 
 - (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
-    NSMutableArray *anExpressionResults = [NSMutableArray array];
-    
-    [[self expressions] enumerateObjectsUsingBlock:^(id  _Nonnull anExpression, NSUInteger idx, BOOL * _Nonnull stop) {
-        [anExpressionResults addObject:[anExpression evaluateWith:aPreprocessor]];
-    }];
-    
-    __block bool aPreviousValueExists = NO;
-    __block int aValue = 0;
-    
-    [anExpressionResults enumerateObjectsUsingBlock:^(NUCExpressionResult * _Nonnull aResultOfEqualityExpression, NSUInteger anIndex, BOOL * _Nonnull stop) {
+    return [self evaluateWith:aPreprocessor using:^(NUCExpressionResult *aLeftExpressionResult, NUCDecomposedPreprocessingToken *anOperator, NUCExpressionResult *aRightExpressionResult, NUCExpressionResult **aBinaryExpressionResult) {
         
-        if (!aPreviousValueExists)
-        {
-            aResultOfEqualityExpression = [anExpressionResults objectAtIndex:anIndex];
-            aValue = [aResultOfEqualityExpression intValue];
-            aPreviousValueExists = YES;
-        }
-        else
-        {
-            aResultOfEqualityExpression  = [anExpressionResults objectAtIndex:anIndex];
-            NUCDecomposedPreprocessingToken *anOperator = [self operatorAt:anIndex - 1];
-            
-            if ([anOperator isEqualToOperator])
-                aValue = aValue == [aResultOfEqualityExpression  intValue];
-            else if ([anOperator isNotEqualToOperator])
-                aValue = aValue != [aResultOfEqualityExpression  intValue];
-        }
+        int aValue = 0;
+        
+        if ([anOperator isEqualToOperator])
+            aValue = [aLeftExpressionResult intValue] == [aRightExpressionResult  intValue];
+        else if ([anOperator isNotEqualToOperator])
+            aValue = [aLeftExpressionResult intValue] != [aRightExpressionResult  intValue];
+        
+        if (aBinaryExpressionResult)
+            *aBinaryExpressionResult = [NUCExpressionResult expressionResultWithIntValue:aValue];
     }];
-
-    
-    return [NUCExpressionResult expressionResultWithIntValue:aValue];
 }
 
 @end
