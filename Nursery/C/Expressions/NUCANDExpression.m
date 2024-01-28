@@ -21,7 +21,7 @@
     {
         NUCEqualityExpression *anEqulityExpression = nil;
         
-        if ([NUCEqualityExpression equalityExpressionFrom:aStream into:&anEqulityExpression])
+        if ([NUCEqualityExpression expressionInto:&anEqulityExpression from:aStream])
         {
             NSUInteger aPosition = [aStream position];
             

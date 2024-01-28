@@ -6,6 +6,7 @@
 //
 
 #import "NUCExpressionWithMultipleExpressions.h"
+#import "NUCPreprocessingTokenStream.h"
 
 @implementation NUCExpressionWithMultipleExpressions
 
@@ -14,6 +15,54 @@
 + (instancetype)expression
 {
     return [[[self alloc] init] autorelease];
+}
+
++ (BOOL)expressionInto:(NUCProtoExpression **)anExpression from:(NUCPreprocessingTokenStream *)aStream
+{
+    NUCExpressionWithMultipleExpressions *anExpressionToReturn = [self expression];
+    
+    while (YES)
+    {
+        NUCProtoExpression *aSubexpression = nil;
+        
+        if ([self subexpressionInto:&aSubexpression from:aStream])
+        {
+            NSUInteger aPosition = [aStream position];
+            
+            [anExpressionToReturn add:aSubexpression];
+            
+            [aStream skipWhitespacesWithoutNewline];
+            
+            NUCDecomposedPreprocessingToken *anOperator = [aStream next];
+            
+            if ([self operatorIsValid:anOperator])
+            {
+                [anExpressionToReturn addOperator:anOperator];
+                [aStream skipWhitespacesWithoutNewline];
+            }
+            else
+            {
+                [aStream setPosition:aPosition];
+                
+                if (anExpression)
+                    *anExpression = anExpressionToReturn;
+                
+                return YES;
+            }
+        }
+        else
+            return NO;
+    }
+}
+
++ (BOOL)subexpressionInto:(NUCProtoExpression **)aSubexpression from:(NUCPreprocessingTokenStream *)aStream
+{
+    return NO;
+}
+
++ (BOOL)operatorIsValid:(NUCDecomposedPreprocessingToken *)anOperator
+{
+    return NO;
 }
 
 - (instancetype)initWithType:(NUCExpressionType)aType

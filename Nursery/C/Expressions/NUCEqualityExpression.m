@@ -13,42 +13,14 @@
 
 @implementation NUCEqualityExpression
 
-+ (BOOL)equalityExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCEqualityExpression **)anExpression
++ (BOOL)subexpressionInto:(NUCProtoExpression **)aSubexpression from:(NUCPreprocessingTokenStream *)aStream
 {
-    NUCEqualityExpression *anEqualityExpression = [self expression];
-    
-    while (YES)
-    {
-        NUCRelationalExpression *aRelationalExpression = nil;
-        
-        if ([NUCRelationalExpression relationalExpressionFrom:aStream into:&aRelationalExpression])
-        {
-            NSUInteger aPosition = [aStream position];
-            
-            [anEqualityExpression add:aRelationalExpression];
-            
-            [aStream skipWhitespacesWithoutNewline];
-            
-            NUCDecomposedPreprocessingToken *anOperator = [aStream next];
-            
-            if ([anOperator isEqualityOperator] || [anOperator isInequalityOperator])
-            {
-                [anEqualityExpression addOperator:anOperator];
-                [aStream skipWhitespacesWithoutNewline];
-            }
-            else
-            {
-                [aStream setPosition:aPosition];
-                
-                if (anExpression)
-                    *anExpression = anEqualityExpression;
-                
-                return YES;
-            }
-        }
-        else
-            return NO;
-    }
+    return [NUCRelationalExpression relationalExpressionFrom:aStream into:(NUCRelationalExpression **)aSubexpression];
+}
+
++ (BOOL)operatorIsValid:(NUCDecomposedPreprocessingToken *)anOperator
+{
+    return [anOperator isEqualityOperator] || [anOperator isInequalityOperator];
 }
 
 - (instancetype)init

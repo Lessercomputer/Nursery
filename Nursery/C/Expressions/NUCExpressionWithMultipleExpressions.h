@@ -10,7 +10,7 @@
 
 #import <Foundation/NSArray.h>
 
-@class NUCDecomposedPreprocessingToken;
+@class NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream;
 
 @interface NUCExpressionWithMultipleExpressions : NUCProtoExpression
 
@@ -20,6 +20,10 @@
 @property (nonatomic, readonly) NUUInt64 operatorCount;
 
 + (instancetype)expression;
+
++ (BOOL)expressionInto:(NUCProtoExpression **)anExpression from:(NUCPreprocessingTokenStream *)aStream;
++ (BOOL)subexpressionInto:(NUCProtoExpression **)aSubexpression from:(NUCPreprocessingTokenStream *)aStream;
++ (BOOL)operatorIsValid:(NUCDecomposedPreprocessingToken *)anOperator;
 
 - (void)add:(NUCProtoExpression *)anExpression;
 - (NUCProtoExpression *)at:(NSUInteger)anIndex;

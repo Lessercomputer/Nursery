@@ -11,7 +11,5 @@
 
 @interface NUCEqualityExpression : NUCExpressionWithMultipleExpressions
 
-+ (BOOL)equalityExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCEqualityExpression **)aToken;
-
 @end
 

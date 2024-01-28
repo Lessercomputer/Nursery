@@ -70,7 +70,11 @@ __DATE__
 H
 #endif
 
-#if 0
+#if 0 == 1 == 0
+x
+#endif
+
+#if 1 && 1 && 1
 __LINE__
 a
 #elif 2
@@ -78,6 +82,8 @@ b
 #else
 c
 #endif
+
+
 
 #pragma pragma1
 
@@ -88,5 +94,8 @@ c
 _Pragma("\"abc\\")
 _Pragma ( "def" )
 
+
+
 #error error1
+
 
