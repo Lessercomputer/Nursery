@@ -13,105 +13,107 @@
 
 @implementation NUCRelationalExpression
 
-+ (BOOL)relationalExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCRelationalExpression **)aToken
++ (BOOL)relationalExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCRelationalExpression **)anExpression
 {
-    NUCShiftExpression *aShiftExpression = nil;
+    NUCRelationalExpression *aRelationalExpression = [self expression];
     
-    if ([NUCShiftExpression shiftExpressionFrom:aStream into:&aShiftExpression])
+    while (YES)
     {
-        if (aToken)
-            *aToken = [NUCRelationalExpression expressionWithShiftExpression:aShiftExpression];
+        NUCShiftExpression *aShiftExpression = nil;
         
-        return YES;
-    }
-    else
-    {
-        NSUInteger aPosition = [aStream position];
-        NUCRelationalExpression *aRelationalExpression = nil;
-        
-        if ([self relationalExpressionFrom:aStream into:&aRelationalExpression])
+        if ([NUCShiftExpression shiftExpressionFrom:aStream into:&aShiftExpression])
         {
+            NSUInteger aPosition = [aStream position];
+            
+            [aRelationalExpression add:aShiftExpression];
+            
             [aStream skipWhitespacesWithoutNewline];
             
             NUCDecomposedPreprocessingToken *anOperator = [aStream next];
             
             if ([anOperator isRelationalOperator])
             {
+                [aRelationalExpression addOperator:anOperator];
                 [aStream skipWhitespacesWithoutNewline];
+            }
+            else
+            {
+                [aStream setPosition:aPosition];
                 
-                if ([NUCShiftExpression shiftExpressionFrom:aStream into:&aShiftExpression])
-                {
-                    if (aToken)
-                        *aToken = [NUCRelationalExpression expressionWithRelationalExpression:aRelationalExpression relationalOperator:anOperator shiftExpression:aShiftExpression];
-                    
-                    return YES;
-                }
+                if (anExpression)
+                    *anExpression = aRelationalExpression;
+                
+                return YES;
             }
         }
-        
-        [aStream setPosition:aPosition];
-        
-        return NO;
+        else
+            return NO;
     }
 }
 
-+ (instancetype)expressionWithShiftExpression:(NUCShiftExpression *)aShiftExpression
+- (instancetype)init
 {
-    return [[[self alloc] initWithRelationalExpression:nil relationalOperator:nil shiftExpression:aShiftExpression] autorelease];
-}
-
-+ (instancetype)expressionWithRelationalExpression:(NUCRelationalExpression *)aRelationalExpression relationalOperator:(NUCDecomposedPreprocessingToken *)aRelationalOperator shiftExpression:(NUCShiftExpression *)aShiftExpression
-{
-    return [[[self alloc] initWithRelationalExpression:aRelationalExpression relationalOperator:aRelationalOperator shiftExpression:aShiftExpression] autorelease];
-}
-
-- (instancetype)initWithShiftExpression:(NUCShiftExpression *)aShiftExpression
-{
-    return [self initWithRelationalExpression:nil relationalOperator:nil shiftExpression:aShiftExpression];
-}
-
-- (instancetype)initWithRelationalExpression:(NUCRelationalExpression *)aRelationalExpression relationalOperator:(NUCDecomposedPreprocessingToken *)aRelationalOperator shiftExpression:(NUCShiftExpression *)aShiftExpression
-{
-    if (self = [super initWithType:NUCExpressionRelationalExpressionType])
-    {
-        relationalExpression = [aRelationalExpression retain];
-        relationalOperator = [aRelationalOperator retain];
-        shiftExpression = [aShiftExpression retain];
-    }
-    
-    return self;
-}
-
-- (void)dealloc
-{
-    [relationalExpression release];
-    [relationalOperator release];
-    [shiftExpression release];
-    
-    [super dealloc];
+    return [self initWithType:NUCExpressionRelationalExpressionType];
 }
 
 - (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
-    if (relationalOperator)
-    {
-        NUCExpressionResult *aResultOfRelationalExpression = [relationalExpression evaluateWith:aPreprocessor];
-        NUCExpressionResult *aResultOfShiftExpression = [shiftExpression evaluateWith:aPreprocessor];
+    NUCExpressionResult *anExpressionResult = [self evaluateWith:aPreprocessor using:^(NUCExpressionResult *aPreviousExpressionResult, NUCDecomposedPreprocessingToken *anOperator, NUCExpressionResult *anExpressionResult, NUCExpressionResult **aBinaryExpressionResult) {
+        
         int aValue = 0;
+
+        if (aPreviousExpressionResult)
+        {
+            if ([anOperator isLessThanOperator])
+                aValue = [aPreviousExpressionResult intValue] < [anExpressionResult intValue];
+            else if ([anOperator isGreaterThanOperator])
+                aValue = [aPreviousExpressionResult intValue] > [anExpressionResult intValue];
+            else if ([anOperator isLessThanOrEqualToOperator])
+                aValue = [aPreviousExpressionResult intValue] <= [anExpressionResult intValue];
+            else if ([anOperator isGreaterThanOrEqualToOperator])
+                aValue = [aPreviousExpressionResult intValue] >= [anExpressionResult intValue];
+        }
+        else
+        {
+            aValue = [anExpressionResult intValue];
+        }
         
-        if ([relationalOperator isLessThanOperator])
-            aValue = [aResultOfRelationalExpression intValue] < [aResultOfShiftExpression intValue];
-        else if ([relationalOperator isGreaterThanOperator])
-            aValue = [aResultOfRelationalExpression intValue] > [aResultOfShiftExpression intValue];
-        else if ([relationalOperator isLessThanOrEqualToOperator])
-            aValue = [aResultOfRelationalExpression intValue] <= [aResultOfShiftExpression intValue];
-        else if ([relationalOperator isGreaterThanOrEqualToOperator])
-            aValue = [aResultOfRelationalExpression intValue] >= [aResultOfShiftExpression intValue];
+        if (aBinaryExpressionResult)
+            *aBinaryExpressionResult = [NUCExpressionResult expressionResultWithIntValue:aValue];
+    }];
+    
+    return anExpressionResult;
+}
+
+- (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor using:(void (^)(NUCExpressionResult *aPreviousExpressionResult, NUCDecomposedPreprocessingToken *anOperator, NUCExpressionResult *anExpressionResult, NUCExpressionResult **aBinaryExpressionResult))aBlock
+{
+    NSMutableArray *anExpressionResults = [NSMutableArray array];
+    
+    [[self expressions] enumerateObjectsUsingBlock:^(id  _Nonnull anExpression, NSUInteger idx, BOOL * _Nonnull stop) {
+        [anExpressionResults addObject:[anExpression evaluateWith:aPreprocessor]];
+    }];
+    
+    __block NUCExpressionResult *aPreviousExpressionResult = nil;
+    __block NUCExpressionResult *aBinaryExpressionResult = nil;
+    __block NSMutableArray *aBinaryExpressionResults = [NSMutableArray array];
+    
+    [anExpressionResults enumerateObjectsUsingBlock:^(NUCExpressionResult * _Nonnull anExpressionResult, NSUInteger anIndex, BOOL * _Nonnull stop) {
         
-        return [NUCExpressionResult expressionResultWithIntValue:aValue];
-    }
-    else
-        return [shiftExpression evaluateWith:aPreprocessor];
+        if (!aPreviousExpressionResult)
+        {
+            aBlock(nil, nil, anExpressionResult, &aBinaryExpressionResult);
+            aPreviousExpressionResult = aBinaryExpressionResult;
+        }
+        else
+        {
+            aBlock(aPreviousExpressionResult, [self operatorAt:anIndex - 1], anExpressionResult, &aBinaryExpressionResult);
+            aPreviousExpressionResult = aBinaryExpressionResult;
+        }
+        
+        [aBinaryExpressionResults addObject:aPreviousExpressionResult];
+    }];
+    
+    return [aBinaryExpressionResults lastObject];
 }
 
 @end

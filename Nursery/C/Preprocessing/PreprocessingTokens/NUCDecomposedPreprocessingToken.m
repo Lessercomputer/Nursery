@@ -224,7 +224,8 @@ static NUCDecomposedPreprocessingToken *whitespaceToken = nil;
 
 - (BOOL)isRelationalOperator
 {
-    return [self isPunctuator] && ([[self content] isEqualToString:NUCLessThanOperator] || [[self content] isEqualToString:NUCLessThanOrEqualToOperator] || [[self content] isEqualToString:NUCGreaterThanOperator] || [[self content] isEqualToString:NUCGreaterThanOrEqualToOperator]);
+    return [self isLessThanOperator] || [self isLessThanOrEqualToOperator]
+        || [self isGreaterThanOperator] || [self isGreaterThanOrEqualToOperator];
 }
 
 - (BOOL)isLessThanOperator
@@ -239,7 +240,7 @@ static NUCDecomposedPreprocessingToken *whitespaceToken = nil;
 
 - (BOOL)isLessThanOrEqualToOperator
 {
-    return [self isPunctuator] && [[self content] isEqualToString:NUCGreaterThanOrEqualToOperator];
+    return [self isPunctuator] && [[self content] isEqualToString:NUCLessThanOrEqualToOperator];
 }
 
 - (BOOL)isGreaterThanOrEqualToOperator

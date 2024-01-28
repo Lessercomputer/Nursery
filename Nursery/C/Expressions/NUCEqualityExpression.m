@@ -64,30 +64,29 @@
         [anExpressionResults addObject:[anExpression evaluateWith:aPreprocessor]];
     }];
     
-    bool aPreviousValueExists = NO;
-    int aValue = 0;
+    __block bool aPreviousValueExists = NO;
+    __block int aValue = 0;
     
-    for (NSUInteger i = 0; i < [anExpressionResults count]; i++)
-    {
-        NUCExpressionResult *aResultOfEqualityExpression = nil;
+    [anExpressionResults enumerateObjectsUsingBlock:^(NUCExpressionResult * _Nonnull aResultOfEqualityExpression, NSUInteger anIndex, BOOL * _Nonnull stop) {
         
         if (!aPreviousValueExists)
         {
-            aResultOfEqualityExpression = [[self at:i] evaluateWith:aPreprocessor];
+            aResultOfEqualityExpression = [anExpressionResults objectAtIndex:anIndex];
             aValue = [aResultOfEqualityExpression intValue];
             aPreviousValueExists = YES;
         }
         else
         {
-            aResultOfEqualityExpression  = [[self at:i] evaluateWith:aPreprocessor];
-            NUCDecomposedPreprocessingToken *anOperator = [self operatorAt:i - 1];
+            aResultOfEqualityExpression  = [anExpressionResults objectAtIndex:anIndex];
+            NUCDecomposedPreprocessingToken *anOperator = [self operatorAt:anIndex - 1];
             
             if ([anOperator isEqualToOperator])
                 aValue = aValue == [aResultOfEqualityExpression  intValue];
             else if ([anOperator isNotEqualToOperator])
                 aValue = aValue != [aResultOfEqualityExpression  intValue];
         }
-    }
+    }];
+
     
     return [NUCExpressionResult expressionResultWithIntValue:aValue];
 }
