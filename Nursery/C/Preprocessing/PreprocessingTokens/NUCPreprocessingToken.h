@@ -19,6 +19,8 @@
 - (BOOL)isCharacterConstant;
 - (BOOL)isPpNumber;
 - (BOOL)isPunctuator;
+- (BOOL)isUnaryPlusOperator;
+- (BOOL)isUnaryMinusOperator;
 - (BOOL)isBitwiseComplementOperator;
 - (BOOL)isLogicalNegationOperator;
 - (BOOL)isUndef;

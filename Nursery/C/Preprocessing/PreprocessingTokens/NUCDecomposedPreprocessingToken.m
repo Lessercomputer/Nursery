@@ -300,7 +300,17 @@ static NUCDecomposedPreprocessingToken *whitespaceToken = nil;
 
 - (BOOL)isUnaryOperator
 {
-    return [self isPunctuator] && ([[self content] isEqualToString:NUCUnaryPlusOperator] || [[self content] isEqualToString:NUCUnaryMinusOperator] || [self isBitwiseComplementOperator] || [self isLogicalNegationOperator]);
+    return [self isUnaryPlusOperator] || [self isUnaryMinusOperator] || [self isBitwiseComplementOperator] || [self isLogicalNegationOperator];
+}
+
+- (BOOL)isUnaryPlusOperator
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCUnaryPlusOperator];
+}
+
+- (BOOL)isUnaryMinusOperator
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCUnaryMinusOperator];
 }
 
 - (BOOL)isWhitespacesWithoutNewline

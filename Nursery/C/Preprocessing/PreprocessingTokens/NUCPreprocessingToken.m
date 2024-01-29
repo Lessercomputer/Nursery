@@ -47,6 +47,16 @@
     return [self type] == NUCLexicalElementPunctuatorType;
 }
 
+- (BOOL)isUnaryPlusOperator
+{
+    return NO;
+}
+
+- (BOOL)isUnaryMinusOperator
+{
+    return NO;
+}
+
 - (BOOL)isBitwiseComplementOperator
 {
     return NO;

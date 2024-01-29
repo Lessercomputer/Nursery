@@ -113,19 +113,18 @@
     if (unaryOperator)
     {
         NUCExpressionResult *aCastExpressionResult = [castExpression evaluateWith:aPreprocessor];
+        int aValue = 0;
         
-        if ([unaryOperator isBitwiseComplementOperator])
-        {
-            int aValue = ~[aCastExpressionResult intValue];
-            return [NUCExpressionResult expressionResultWithIntValue:aValue];
-        }
+        if ([unaryOperator isUnaryPlusOperator])
+            aValue = +[aCastExpressionResult intValue];
+        else if ([unaryOperator isUnaryMinusOperator])
+            aValue = -[aCastExpressionResult intValue];
+        else if ([unaryOperator isBitwiseComplementOperator])
+             aValue = ~[aCastExpressionResult intValue];
         else if ([unaryOperator isLogicalNegationOperator])
-        {
-            int aValue = ![aCastExpressionResult intValue];
-            return [NUCExpressionResult expressionResultWithIntValue:aValue];
-        }
-        else
-            return nil;
+             aValue = ![aCastExpressionResult intValue];
+        
+        return [NUCExpressionResult expressionResultWithIntValue:aValue];
     }
     else
         return [postfixExpression evaluateWith:aPreprocessor];

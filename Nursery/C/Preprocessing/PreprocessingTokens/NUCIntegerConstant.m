@@ -18,9 +18,14 @@
 
 + (BOOL)integerConstantFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCConstant **)aConstant
 {
+    NSUInteger aPosition = [aPreprocessingTokenStream position];
     NUCDecomposedPreprocessingToken *aPpToken = [aPreprocessingTokenStream next];
+    
     if (![aPpToken isPpNumber])
+    {
+        [aPreprocessingTokenStream setPosition:aPosition];
         return NO;
+    }
     
     NUUInt64 aValue = 0;
     NSString *aString = [aPpToken content];
@@ -30,7 +35,10 @@
         NSRange aHexDigitsRange = [aString rangeOfCharacterFromSet:[NUCLexicalElement NUCHexadecimalDigitCharacterSet] options:0 range:NSMakeRange(2, [aString length] - 2)];
         
         if (aHexDigitsRange.location == NSNotFound)
+        {
+            [aPreprocessingTokenStream setPosition:aPosition];
             return NO;
+        }
         
         for (NSUInteger aLocation = aHexDigitsRange.location; NSLocationInRange(aLocation, aHexDigitsRange); aLocation++)
         {
@@ -51,7 +59,10 @@
         NSRange anOctalDigitsRange = [aString rangeOfCharacterFromSet:[NUCLexicalElement NUCOctalDigitCharacterSet]];
         
         if (anOctalDigitsRange.location == NSNotFound)
+        {
+            [aPreprocessingTokenStream setPosition:aPosition];
             return NO;
+        }
         
         for (NSUInteger aLocation = anOctalDigitsRange.location; NSLocationInRange(aLocation, anOctalDigitsRange); aLocation++)
         {
@@ -64,7 +75,10 @@
         NSRange aDecimalDigitsRange = [aString rangeOfCharacterFromSet:[NUCLexicalElement NUCDigitCharacterSet]];
         
         if (aDecimalDigitsRange.location == NSNotFound)
+        {
+            [aPreprocessingTokenStream setPosition:aPosition];
             return NO;
+        }
         
         for (NSUInteger aLocation = aDecimalDigitsRange.location; NSLocationInRange(aLocation, aDecimalDigitsRange) ; aLocation++)
         {
