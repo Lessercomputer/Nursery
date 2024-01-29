@@ -13,101 +13,35 @@
 
 @implementation NUCShiftExpression
 
-+ (BOOL)shiftExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCShiftExpression **)aToken
++ (BOOL)subexpressionInto:(NUCProtoExpression **)aSubexpression from:(NUCPreprocessingTokenStream *)aStream
 {
-    NUCAdditiveExpression *anAdditiveExpression = nil;
-    
-    if ([NUCAdditiveExpression additiveExpressionFrom:aStream into:&anAdditiveExpression])
-    {
-        if (aToken)
-            *aToken = [NUCShiftExpression expressionWithAdditiveExpression:anAdditiveExpression];
-        
-        return YES;
-    }
-    else
-    {
-        NSUInteger aPosition = [aStream position];
-        NUCShiftExpression *aShiftExpression = nil;
-        
-        if ([self shiftExpressionFrom:aStream into:&aShiftExpression])
-        {
-            [aStream skipWhitespacesWithoutNewline];
-            
-            NUCDecomposedPreprocessingToken *aShiftOperator = [aStream next];
-            
-            if ([aShiftOperator isShiftOperator])
-            {
-                [aStream skipWhitespacesWithoutNewline];
-                
-                if ([NUCAdditiveExpression additiveExpressionFrom:aStream into:&anAdditiveExpression])
-                {
-                    if (aToken)
-                        *aToken = [NUCShiftExpression expressionWithShiftExpression:aShiftExpression shiftOperator:aShiftOperator additiveExpression:anAdditiveExpression];
-                    
-                    return YES;
-                }
-            }
-        }
-        
-        [aStream setPosition:aPosition];
-        
-        return NO;
-    }
+    return [NUCAdditiveExpression expressionInto:aSubexpression from:aStream];
 }
 
-+ (instancetype)expressionWithAdditiveExpression:(NUCAdditiveExpression *)anAdditiveExpression
++ (BOOL)operatorIsValid:(NUCDecomposedPreprocessingToken *)anOperator
 {
-    return [self expressionWithShiftExpression:nil shiftOperator:nil additiveExpression:anAdditiveExpression];
+    return [anOperator isShiftOperator];
 }
 
-+ (instancetype)expressionWithShiftExpression:(NUCShiftExpression *)aShiftExpression shiftOperator:(NUCDecomposedPreprocessingToken *)aShiftOperator additiveExpression:(NUCAdditiveExpression *)anAdditiveExpression
+- (instancetype)init
 {
-    return [[[self alloc] initWithShiftExpression:aShiftExpression shiftOperator:aShiftOperator additiveExpression:anAdditiveExpression] autorelease];
-}
-
-- (instancetype)initWithAdditiveExpression:(NUCAdditiveExpression *)anAdditiveExpression
-{
-    return [self initWithShiftExpression:nil shiftOperator:nil additiveExpression:anAdditiveExpression];
-}
-
-- (instancetype)initWithShiftExpression:(NUCShiftExpression *)aShiftExpression shiftOperator:(NUCDecomposedPreprocessingToken *)aShiftOperator additiveExpression:(NUCAdditiveExpression *)anAdditiveExpression
-{
-    if (self = [super initWithType:NUCExpressionShiftExpressionType])
-    {
-        shiftExpression = [aShiftExpression retain];
-        shiftOperator = [aShiftOperator retain];
-        additiveExpression = [anAdditiveExpression retain];
-    }
-    
-    return self;
-}
-
-- (void)dealloc
-{
-    [shiftExpression release];
-    [shiftOperator release];
-    [additiveExpression release];
-    
-    [super dealloc];
+    return [self initWithType:NUCExpressionShiftExpressionType];
 }
 
 - (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
-    if (shiftOperator)
-    {
-        NUCExpressionResult *aResultOfShiftExpression = [shiftExpression evaluateWith:aPreprocessor];
-        NUCExpressionResult *aResultOfAdditiveExpression = [additiveExpression evaluateWith:aPreprocessor];
+    return [self evaluateWith:aPreprocessor using:^(NUCExpressionResult *aLeftExpressionResult, NUCDecomposedPreprocessingToken *anOperator, NUCExpressionResult *aRightExpressionResult, NUCExpressionResult **aBinaryExpressionResult) {
+        
         int aValue = 0;
         
-        if ([shiftOperator isLeftShiftOperator])
-            aValue = [aResultOfShiftExpression intValue] << [aResultOfAdditiveExpression intValue];
-        else if ([shiftOperator isRightShiftOperator])
-            aValue = [aResultOfShiftExpression intValue] >> [aResultOfAdditiveExpression intValue];
+        if ([anOperator isLeftShiftOperator])
+            aValue = [aLeftExpressionResult intValue] << [aRightExpressionResult intValue];
+        else if ([anOperator isRightShiftOperator])
+            aValue = [aLeftExpressionResult intValue] >> [aRightExpressionResult intValue];
         
-        return [NUCExpressionResult expressionResultWithIntValue:aValue];
-    }
-    else
-        return [additiveExpression evaluateWith:aPreprocessor];
+        if (aBinaryExpressionResult)
+            *aBinaryExpressionResult = [NUCExpressionResult expressionResultWithIntValue:aValue];
+    }];
 }
 
 @end

@@ -7,11 +7,7 @@
 
 #import "NUCExpressionWithMultipleExpressions.h"
 
-@class NUCPreprocessingTokenStream;
-
 @interface NUCLogicalANDExpression : NUCExpressionWithMultipleExpressions
-
-+ (BOOL)logicalANDExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCLogicalANDExpression **)anExpression;
 
 @end
 

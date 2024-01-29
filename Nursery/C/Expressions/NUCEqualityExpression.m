@@ -15,7 +15,7 @@
 
 + (BOOL)subexpressionInto:(NUCProtoExpression **)aSubexpression from:(NUCPreprocessingTokenStream *)aStream
 {
-    return [NUCRelationalExpression relationalExpressionFrom:aStream into:(NUCRelationalExpression **)aSubexpression];
+    return [NUCRelationalExpression expressionInto:aSubexpression from:aStream];
 }
 
 + (BOOL)operatorIsValid:(NUCDecomposedPreprocessingToken *)anOperator

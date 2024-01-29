@@ -17,7 +17,7 @@
 + (BOOL)conditionalExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCConditionalExpression **)aConditionalExpression
 {
     NUCLogicalORExpression *aLogicalOrExpression = nil;
-    if ([NUCLogicalORExpression logicalORExpressionFrom:aStream into:&aLogicalOrExpression])
+    if ([NUCLogicalORExpression expressionInto:&aLogicalOrExpression from:aStream])
     {
         NSUInteger aPosition = [aStream position];
         [aStream skipWhitespacesWithoutNewline];

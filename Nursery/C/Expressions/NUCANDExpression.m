@@ -13,41 +13,14 @@
 
 @implementation NUCANDExpression
 
-+ (BOOL)andExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCANDExpression **)anExpression
++ (BOOL)subexpressionInto:(NUCProtoExpression **)aSubexpression from:(NUCPreprocessingTokenStream *)aStream
 {
-    NUCANDExpression *anANDExpression = [self expression];
-    
-    while (YES)
-    {
-        NUCEqualityExpression *anEqulityExpression = nil;
-        
-        if ([NUCEqualityExpression expressionInto:&anEqulityExpression from:aStream])
-        {
-            NSUInteger aPosition = [aStream position];
-            
-            [anANDExpression add:anEqulityExpression];
-            
-            [aStream skipWhitespacesWithoutNewline];
-            
-            NUCDecomposedPreprocessingToken *anOperator = [aStream next];
-            
-            if ([anOperator isBitwiseANDOperator])
-            {
-                [aStream skipWhitespacesWithoutNewline];
-            }
-            else
-            {
-                [aStream setPosition:aPosition];
-                
-                if (anExpression)
-                    *anExpression = anANDExpression;
-                
-                return YES;
-            }
-        }
-        else
-            return NO;
-    }
+    return [NUCEqualityExpression expressionInto:aSubexpression from:aStream];
+}
+
++ (BOOL)operatorIsValid:(NUCDecomposedPreprocessingToken *)anOperator
+{
+    return [anOperator isBitwiseANDOperator];
 }
 
 - (instancetype)init

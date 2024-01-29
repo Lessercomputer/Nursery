@@ -7,8 +7,6 @@
 
 #import "NUCExpressionWithMultipleExpressions.h"
 
-@class NUCPreprocessingTokenStream;
-
 @interface NUCEqualityExpression : NUCExpressionWithMultipleExpressions
 
 @end

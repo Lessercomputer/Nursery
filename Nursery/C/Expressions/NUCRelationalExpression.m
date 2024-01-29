@@ -13,42 +13,14 @@
 
 @implementation NUCRelationalExpression
 
-+ (BOOL)relationalExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCRelationalExpression **)anExpression
++ (BOOL)subexpressionInto:(NUCProtoExpression **)aSubexpression from:(NUCPreprocessingTokenStream *)aStream
 {
-    NUCRelationalExpression *aRelationalExpression = [self expression];
-    
-    while (YES)
-    {
-        NUCShiftExpression *aShiftExpression = nil;
-        
-        if ([NUCShiftExpression shiftExpressionFrom:aStream into:&aShiftExpression])
-        {
-            NSUInteger aPosition = [aStream position];
-            
-            [aRelationalExpression add:aShiftExpression];
-            
-            [aStream skipWhitespacesWithoutNewline];
-            
-            NUCDecomposedPreprocessingToken *anOperator = [aStream next];
-            
-            if ([anOperator isRelationalOperator])
-            {
-                [aRelationalExpression addOperator:anOperator];
-                [aStream skipWhitespacesWithoutNewline];
-            }
-            else
-            {
-                [aStream setPosition:aPosition];
-                
-                if (anExpression)
-                    *anExpression = aRelationalExpression;
-                
-                return YES;
-            }
-        }
-        else
-            return NO;
-    }
+    return [NUCShiftExpression expressionInto:aSubexpression from:aStream];
+}
+
++ (BOOL)operatorIsValid:(NUCDecomposedPreprocessingToken *)anOperator
+{
+    return [anOperator isRelationalOperator];
 }
 
 - (instancetype)init

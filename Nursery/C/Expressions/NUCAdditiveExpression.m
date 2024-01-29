@@ -13,100 +13,34 @@
 
 @implementation NUCAdditiveExpression
 
-+ (BOOL)additiveExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCAdditiveExpression **)anExpression
++ (BOOL)subexpressionInto:(NUCProtoExpression **)aSubexpression from:(NUCPreprocessingTokenStream *)aStream
 {
-    NUCMultiplicativeExpression *aMultiplicativeExpression = nil;
-    
-    if ([NUCMultiplicativeExpression multiplicativeExpressionFrom:aStream into:&aMultiplicativeExpression])
-    {
-        if (anExpression)
-            *anExpression = [NUCAdditiveExpression expressionWithMultiplicativeExpression:aMultiplicativeExpression];
-        
-        return YES;
-    }
-    else
-    {
-        NSUInteger aPosition = [aStream position];
-        NUCAdditiveExpression *anAdditiveExpression = nil;
-        
-        if ([NUCAdditiveExpression additiveExpressionFrom:aStream into:&anAdditiveExpression])
-        {
-            [aStream skipWhitespacesWithoutNewline];
-            
-            NUCDecomposedPreprocessingToken *anAdditiveOperator = [aStream next];
-            
-            if ([anAdditiveOperator isAdditiveOperator])
-            {
-                [aStream skipWhitespacesWithoutNewline];
-                
-                if ([NUCMultiplicativeExpression multiplicativeExpressionFrom:aStream into:&aMultiplicativeExpression])
-                {
-                    if (anExpression)
-                        *anExpression = [NUCAdditiveExpression expressionWithAdditiveExpression:anAdditiveExpression additiveOperator:anAdditiveOperator multiplicativeExpression:aMultiplicativeExpression];
-                    
-                    return YES;
-                }
-            }
-        }
-        
-        [aStream setPosition:aPosition];
-        return NO;
-    }
+    return [NUCMultiplicativeExpression expressionInto:aSubexpression from:aStream];
 }
 
-+ (instancetype)expressionWithMultiplicativeExpression:(NUCMultiplicativeExpression *)aMultiplicativeExpression
++ (BOOL)operatorIsValid:(NUCDecomposedPreprocessingToken *)anOperator
 {
-    return [self expressionWithAdditiveExpression:nil additiveOperator:nil multiplicativeExpression:aMultiplicativeExpression];
+    return [anOperator isAdditiveOperator];
 }
 
-+ (instancetype)expressionWithAdditiveExpression:(NUCAdditiveExpression *)anAdditiveExpression additiveOperator:(NUCDecomposedPreprocessingToken *)anAdditiveOperator multiplicativeExpression:(NUCMultiplicativeExpression *)aMultiplicativeExpression
+- (instancetype)init
 {
-    return [[[self alloc] initWithAdditiveExpression:anAdditiveExpression additiveOperator:anAdditiveOperator multiplicativeExpression:aMultiplicativeExpression] autorelease];
-}
-
-- (instancetype)initWithMultiplicativeExpression:(NUCMultiplicativeExpression *)aMultiplicativeExpression
-{
-    return [self initWithAdditiveExpression:nil additiveOperator:nil multiplicativeExpression:aMultiplicativeExpression];
-}
-
-- (instancetype)initWithAdditiveExpression:(NUCAdditiveExpression *)anAdditiveExpression additiveOperator:(NUCDecomposedPreprocessingToken *)anAdditiveOperator multiplicativeExpression:(NUCMultiplicativeExpression *)aMultiplicativeExpression
-{
-    if (self = [super initWithType:NUCExpressionAdditiveExpressionType])
-    {
-        additiveExpression = [anAdditiveExpression retain];
-        additiveOperator = [anAdditiveOperator retain];
-        multiplicativeExpression = [aMultiplicativeExpression retain];
-    }
-    
-    return self;
-}
-
-- (void)dealloc
-{
-    [additiveExpression release];
-    [additiveOperator release];
-    [multiplicativeExpression release];
-    
-    [super dealloc];
+    return [self initWithType:NUCExpressionAdditiveExpressionType];
 }
 
 - (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
-    if (additiveOperator)
-    {
-        NUCExpressionResult *aResultOfAdditiveExpression = [additiveExpression evaluateWith:aPreprocessor];
-        NUCExpressionResult *aResultOfMultiplicativeExpression = [multiplicativeExpression evaluateWith:aPreprocessor];
+    return [self evaluateWith:aPreprocessor using:^(NUCExpressionResult *aLeftExpressionResult, NUCDecomposedPreprocessingToken *anOperator, NUCExpressionResult *aRightExpressionResult, NUCExpressionResult **aBinaryExpressionResult) {
+        
         int aValue = 0;
         
-        if ([additiveOperator isAdditionOperator])
-            aValue = [aResultOfAdditiveExpression intValue] + [aResultOfMultiplicativeExpression intValue];
-        else if ([additiveOperator isSubtractionOperator])
-            aValue = [aResultOfAdditiveExpression intValue] - [aResultOfMultiplicativeExpression intValue];
+        if ([anOperator isAdditionOperator])
+            aValue = [aLeftExpressionResult intValue] + [aRightExpressionResult intValue];
+        else if ([anOperator isSubtractionOperator])
+            aValue = [aLeftExpressionResult intValue] - [aRightExpressionResult intValue];
         
-        return [NUCExpressionResult expressionResultWithIntValue:aValue];
-    }
-    else
-        return [multiplicativeExpression evaluateWith:aPreprocessor];
+        *aBinaryExpressionResult = [NUCExpressionResult expressionResultWithIntValue:aValue];
+    }];
 }
 
 @end

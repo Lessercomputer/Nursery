@@ -11,7 +11,5 @@
 
 @interface NUCRelationalExpression : NUCExpressionWithMultipleExpressions
 
-+ (BOOL)relationalExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCRelationalExpression **)aToken;
-
 @end
 

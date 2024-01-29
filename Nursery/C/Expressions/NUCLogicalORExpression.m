@@ -15,41 +15,14 @@
 
 @implementation NUCLogicalORExpression
 
-+ (BOOL)logicalORExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCLogicalORExpression **)anExpression
++ (BOOL)subexpressionInto:(NUCProtoExpression **)aSubexpression from:(NUCPreprocessingTokenStream *)aStream
 {
-    NUCLogicalORExpression *aLogicalORExpression = [self expression];
-    
-    while (YES)
-    {
-        NUCLogicalANDExpression *aLogicalANDExpression = nil;
+    return [NUCLogicalANDExpression expressionInto:aSubexpression from:aStream];
+}
 
-        if ([NUCLogicalANDExpression logicalANDExpressionFrom:aStream into:&aLogicalANDExpression])
-        {
-            NSUInteger aPosition = [aStream position];
-            
-            [aLogicalORExpression add:aLogicalANDExpression];
-            
-            [aStream skipWhitespacesWithoutNewline];
-            
-            NUCDecomposedPreprocessingToken *anOperator = [aStream next];
-            
-            if ([anOperator isLogicalOROperator])
-            {
-                [aStream skipWhitespacesWithoutNewline];
-            }
-            else
-            {
-                [aStream setPosition:aPosition];
-                
-                if (anExpression)
-                    *anExpression = aLogicalORExpression;
-                
-                return YES;
-            }
-        }
-        else
-            return NO;
-    }
++ (BOOL)operatorIsValid:(NUCDecomposedPreprocessingToken *)anOperator
+{
+    return [anOperator isLogicalOROperator];
 }
 
 - (instancetype)init

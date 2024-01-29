@@ -13,41 +13,14 @@
 
 @implementation NUCExclusiveORExpression
 
-+ (BOOL)exclusiveORExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCExclusiveORExpression **)anExpression
++ (BOOL)subexpressionInto:(NUCProtoExpression **)aSubexpression from:(NUCPreprocessingTokenStream *)aStream
 {
-    NUCExclusiveORExpression *anExclusiviORExpression = [self expression];
-    
-    while (YES)
-    {
-        NUCANDExpression *anANDExpression = nil;
-        
-        if ([NUCANDExpression andExpressionFrom:aStream into:&anANDExpression])
-        {
-            NSInteger aPosition = [aStream position];
-            
-            [anExclusiviORExpression add:anANDExpression];
-            
-            [aStream skipWhitespacesWithoutNewline];
-            
-            NUCDecomposedPreprocessingToken *anOperator = [aStream next];
-            
-            if ([anOperator isExclusiveOROperator])
-            {
-                [aStream skipWhitespacesWithoutNewline];
-            }
-            else
-            {
-                [aStream setPosition:aPosition];
-                
-                if (anExpression)
-                    *anExpression = anExclusiviORExpression;
-                
-                return YES;
-            }
-        }
-        else
-            return NO;
-    }
+    return [NUCANDExpression expressionInto:aSubexpression from:aStream];
+}
+
++ (BOOL)operatorIsValid:(NUCDecomposedPreprocessingToken *)anOperator
+{
+    return [anOperator isExclusiveOROperator];
 }
 
 - (instancetype)init
