@@ -7,7 +7,7 @@
 
 #import <Foundation/NSObject.h>
 
-@class NSArray, NSMutableArray, NSMutableDictionary, NUCPreprocessor;
+@class NSArray, NSMutableArray, NSMutableDictionary, NUCPreprocessor, NUCSourceFile;
 
 @interface NUCTranslator : NSObject
 {
@@ -17,10 +17,14 @@
     NSMutableArray *preprocessedSourceFiles;
 }
 
+@property (nonatomic, retain) NSMutableArray *searchPathURLs;
+
 - (instancetype)initWithSourceFileURLs:(NSArray *)aURLs;
 - (instancetype)initWithSourceFiles:(NSArray *)aSourceFiles;
 
 - (NSMutableArray *)sourceFiles;
+- (NUCSourceFile *)sourceFileFor:(NSString *)aFilename;
+
 - (NSMutableArray *)preprocessedSourceFiles;
 
 - (void)translate;

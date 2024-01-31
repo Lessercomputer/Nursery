@@ -18,6 +18,8 @@ NUCIdentifier, NUCPpTokens, NUCConstantExpression, NUCPreprocessingToken, NUCLin
     NSMutableDictionary *macroDefines;
 }
 
+@property (nonatomic, assign) NUCPreprocessor *parent;
+
 - (instancetype)initWithTranslator:(NUCTranslator *)aTranslator;
 
 - (NUCTranslator *)translator;

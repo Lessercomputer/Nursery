@@ -34,7 +34,7 @@
         
         if (aDirectiveName)
         {
-            if ([NUCControlLineInclude controlLineIncludeFrom:aStream hash:aHash directiveName:aDirectiveName into:aToken])
+            if ([NUCControlLineInclude controlLineIncludeFrom:aStream with:aPreprocessor hash:aHash directiveName:aDirectiveName into:aToken])
                 return YES;
             else if ([NUCControlLineDefine controlLineDefineFrom:aStream with:aPreprocessor isSkipped:aGroupIsSkipped hash:aHash directiveName:aDirectiveName into:aToken])
                 return YES;

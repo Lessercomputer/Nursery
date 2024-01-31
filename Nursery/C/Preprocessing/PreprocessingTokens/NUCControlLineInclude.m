@@ -16,7 +16,9 @@
 
 @implementation NUCControlLineInclude
 
-+ (BOOL)controlLineIncludeFrom:(NUCPreprocessingTokenStream *)aStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCPreprocessingDirective **)aToken
+@synthesize sourceFile;
+
++ (BOOL)controlLineIncludeFrom:(NUCPreprocessingTokenStream *)aStream with:(NUCPreprocessor *)aPreprocessor hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCPreprocessingDirective **)aToken
 {
     [aStream skipWhitespacesWithoutNewline];
     
@@ -31,6 +33,11 @@
             
             if ([NUCNewline newlineFrom:aStream into:&aNewLine])
             {
+                NUCPpTokens *aPpTokensWithMacroInvocations = [NUCPpTokens ppTokensWithMacroInvocationsFromPpTokens:aPpTokens with:aPreprocessor];
+                NSMutableArray *aMacroReplacedPpTokens =  [aPpTokensWithMacroInvocations replaceMacrosWith:aPreprocessor];
+                aPpTokens = [NUCPpTokens ppTokens];
+                [aPpTokens addFromArray:aMacroReplacedPpTokens];
+                
                 if (aToken)
                     *aToken = [NUCControlLineInclude includeWithHash:aHash directiveName:aDirectiveName ppTokens:aPpTokens newline:aNewLine];
                 
@@ -60,11 +67,20 @@
 - (void)dealloc
 {
     [ppTokens release];
+    [sourceFile release];
     
     [super dealloc];
 }
 
-- (void)executeWith:(NUCPreprocessor *)aPreprocessor
+- (NSString *)filename
+{
+    if ([ppTokens count] == 1)
+        return [(NUCDecomposedPreprocessingToken *)[ppTokens at:0] content];
+    else
+        return [(NUCDecomposedPreprocessingToken *)[ppTokens at:1] content];
+}
+
+- (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
 {
     [aPreprocessor include:self];
 }

@@ -7,14 +7,17 @@
 
 #import "NUCControlLine.h"
 
-@class NUCDecomposedPreprocessingToken, NUCPpTokens, NUCNewline;
+@class NUCDecomposedPreprocessingToken, NUCPpTokens, NUCNewline, NUCSourceFile;
 
 @interface NUCControlLineInclude : NUCControlLine
 {
     NUCPpTokens *ppTokens;
 }
 
-+ (BOOL)controlLineIncludeFrom:(NUCPreprocessingTokenStream *)aStream hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCPreprocessingDirective **)aToken;
+@property (nonatomic, readonly) NSString *filename;
+@property (nonatomic, retain) NUCSourceFile *sourceFile;
+
++ (BOOL)controlLineIncludeFrom:(NUCPreprocessingTokenStream *)aStream  with:(NUCPreprocessor *)aPreprocessor hash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName into:(NUCPreprocessingDirective **)aToken;
 
 + (instancetype)includeWithHash:(NUCDecomposedPreprocessingToken *)aHash directiveName:(NUCDecomposedPreprocessingToken *)aDirectiveName ppTokens:(NUCPpTokens *)aPpTokens newline:(NUCNewline *)aNewline;
 

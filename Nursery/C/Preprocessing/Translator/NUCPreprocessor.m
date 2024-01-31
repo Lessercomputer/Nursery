@@ -9,9 +9,11 @@
 #import "NUCDecomposer.h"
 #import "NUCPreprocessingTokenStream.h"
 #import "NUCDecomposedPreprocessingToken.h"
+#import "NUCTranslator.h"
 #import "NUCSourceFile.h"
 #import "NUCPreprocessingFile.h"
 #import "NUCControlLineDefine.h"
+#import "NUCControlLineInclude.h"
 #import "NUCIdentifier.h"
 #import "NUCReplacementList.h"
 #import "NUCControlLineDefine.h"
@@ -68,17 +70,26 @@
 
 - (NUCControlLineDefine *)macroDefineFor:(NUCIdentifier *)aMacroName
 {
-    return [[self macroDefines] objectForKey:aMacroName];
+    if (![self parent])
+        return [[self macroDefines] objectForKey:aMacroName];
+    else
+        return [[self parent] macroDefineFor:aMacroName];
 }
 
 - (void)removeMacroDefineFor:(NUCIdentifier *)aMacroName
 {
-    [[self macroDefines] removeObjectForKey:aMacroName];
+    if (![self parent])
+        [[self macroDefines] removeObjectForKey:aMacroName];
+    else
+        [[self parent] removeMacroDefineFor:aMacroName];
 }
 
 - (void)setMacroDefine:(NUCControlLineDefine *)aMacroDefine
 {
-    [[self macroDefines] setObject:aMacroDefine forKey:[aMacroDefine identifier]];
+    if (![self parent])
+        [[self macroDefines] setObject:aMacroDefine forKey:[aMacroDefine identifier]];
+    else
+        [[self parent] setMacroDefine:aMacroDefine];
 }
 
 - (BOOL)macroIsDefined:(NUCIdentifier *)aMacroName
@@ -119,7 +130,12 @@
 
 - (void)include:(NUCControlLineInclude *)anInclude
 {
-    
+    NUCTranslator *aTranslator = [self translator];
+    NUCPreprocessor *aSubPreprocessor = [[[[self class] alloc] initWithTranslator:aTranslator] autorelease];
+    NUCSourceFile *aSubSouceFile = [aTranslator sourceFileFor:[anInclude filename]];
+    [aSubPreprocessor setParent:self];
+    [aSubPreprocessor preprocessSourceFile:aSubSouceFile];
+    [anInclude setSourceFile:aSubSouceFile];
 }
 
 - (void)define:(NUCControlLineDefine *)aMacroDefine

@@ -70,6 +70,20 @@
     return sourceFiles;
 }
 
+- (NUCSourceFile *)sourceFileFor:(NSString *)aFilename
+{
+    __block NUCSourceFile *aSouceFile = nil;
+    
+    [[self searchPathURLs] enumerateObjectsUsingBlock:^(NSURL * _Nonnull aSearchPathURL, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSURL *aSourceFileURL = [aSearchPathURL URLByAppendingPathComponent:aFilename];
+        aSouceFile = [[NUCSourceFile alloc] initWithSourceURL:aSourceFileURL];
+        if (aSouceFile)
+            *stop = YES;
+    }];
+    
+    return [aSouceFile autorelease];
+}
+
 - (NSMutableArray *)preprocessedSourceFiles
 {
     return preprocessedSourceFiles;

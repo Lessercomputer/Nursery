@@ -58,6 +58,7 @@
     NSBundle *aBundle = [NSBundle bundleForClass:[self class]];
     NSURL *aPhysicalSourceFileURL = [aBundle URLForResource:@"MacroExample" withExtension:NULL subdirectory:NULL];
     NUCTranslator *aCTranslator = [[[NUCTranslator alloc] initWithSourceFileURLs:[NSArray arrayWithObject:aPhysicalSourceFileURL]] autorelease];
+    [aCTranslator setSearchPathURLs:[NSArray arrayWithObject:[aBundle resourceURL]]];
     
     [aCTranslator translate];
 }

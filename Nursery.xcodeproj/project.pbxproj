@@ -19,6 +19,7 @@
 		24BFBFF02B5A943F00D10FDB /* NUCExpressionResultType.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BFBFEE2B5A943F00D10FDB /* NUCExpressionResultType.m */; };
 		24BFC0172B62103C00D10FDB /* NUCExpressionWithMultipleExpressions.h in Headers */ = {isa = PBXBuildFile; fileRef = 24BFC0152B62103B00D10FDB /* NUCExpressionWithMultipleExpressions.h */; };
 		24BFC0182B62103C00D10FDB /* NUCExpressionWithMultipleExpressions.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BFC0162B62103B00D10FDB /* NUCExpressionWithMultipleExpressions.m */; };
+		24BFC01A2B68D82E00D10FDB /* MacroExample2 in Resources */ = {isa = PBXBuildFile; fileRef = 24BFC0192B68D82E00D10FDB /* MacroExample2 */; };
 		24DC9D7E2A74C90000195718 /* Nursery.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 619B078D1913ED8D00A4BAA2 /* Nursery.framework */; };
 		24DC9DAB2A74CD9000195718 /* NUMutableDictionaryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DC9D992A74CD9000195718 /* NUMutableDictionaryTests.m */; };
 		24DC9DAC2A74CD9000195718 /* NURegionArrayTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DC9D9A2A74CD9000195718 /* NURegionArrayTest.m */; };
@@ -437,6 +438,7 @@
 		24BFBFEE2B5A943F00D10FDB /* NUCExpressionResultType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCExpressionResultType.m; sourceTree = "<group>"; };
 		24BFC0152B62103B00D10FDB /* NUCExpressionWithMultipleExpressions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCExpressionWithMultipleExpressions.h; sourceTree = "<group>"; };
 		24BFC0162B62103B00D10FDB /* NUCExpressionWithMultipleExpressions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCExpressionWithMultipleExpressions.m; sourceTree = "<group>"; };
+		24BFC0192B68D82E00D10FDB /* MacroExample2 */ = {isa = PBXFileReference; lastKnownFileType = text; path = MacroExample2; sourceTree = "<group>"; };
 		24DC9D7A2A74C90000195718 /* NurseryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NurseryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		24DC9D972A74CD9000195718 /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
 		24DC9D982A74CD9000195718 /* SelfReferenceObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelfReferenceObject.h; sourceTree = "<group>"; };
@@ -877,6 +879,7 @@
 				616D0B482A78977D00813539 /* CTranslationPhase1to2Example */,
 				616D0B472A78977D00813539 /* ExpectedCTranslationPhase1to2Example */,
 				616D0B442A78977C00813539 /* MacroExample */,
+				24BFC0192B68D82E00D10FDB /* MacroExample2 */,
 				24DC9DA82A74CD9000195718 /* NurseryTests-Info.plist */,
 			);
 			path = NurseryTests;
@@ -1345,6 +1348,10 @@
 				61BC392E2A78A6C6006CFBB3 /* NUCDecomposedPreprocessingToken.m */,
 				61BC393C2A78A6C6006CFBB3 /* NUCPreprocessingFile.h */,
 				61BC39152A78A6C6006CFBB3 /* NUCPreprocessingFile.m */,
+				61BC39552A78A6C6006CFBB3 /* NUCGroup.h */,
+				61BC39262A78A6C6006CFBB3 /* NUCGroup.m */,
+				61BC39452A78A6C6006CFBB3 /* NUCGroupPart.h */,
+				61BC391F2A78A6C6006CFBB3 /* NUCGroupPart.m */,
 				61BC39522A78A6C6006CFBB3 /* NUCPreprocessingDirective.h */,
 				61BC392B2A78A6C6006CFBB3 /* NUCPreprocessingDirective.m */,
 				61BC39322A78A6C6006CFBB3 /* NUCMacroInvocation.h */,
@@ -1391,10 +1398,6 @@
 				61BC39502A78A6C6006CFBB3 /* NUCEndifLine.m */,
 				61BC39272A78A6C6006CFBB3 /* NUCError.h */,
 				61BC39562A78A6C6006CFBB3 /* NUCError.m */,
-				61BC39552A78A6C6006CFBB3 /* NUCGroup.h */,
-				61BC39262A78A6C6006CFBB3 /* NUCGroup.m */,
-				61BC39452A78A6C6006CFBB3 /* NUCGroupPart.h */,
-				61BC391F2A78A6C6006CFBB3 /* NUCGroupPart.m */,
 				61BC390D2A78A6C6006CFBB3 /* NUCHeaderName.h */,
 				61BC39342A78A6C6006CFBB3 /* NUCHeaderName.m */,
 				61BC393F2A78A6C6006CFBB3 /* NUCIdentifier.h */,
@@ -1760,6 +1763,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				616D0B492A78977D00813539 /* MacroExample in Resources */,
+				24BFC01A2B68D82E00D10FDB /* MacroExample2 in Resources */,
 				24DC9DB82A74CD9000195718 /* NurseryTests-Info.plist in Resources */,
 				616D0B4A2A78977D00813539 /* CommentExample in Resources */,
 				616D0B4D2A78977D00813539 /* CTranslationPhase1to2Example in Resources */,
