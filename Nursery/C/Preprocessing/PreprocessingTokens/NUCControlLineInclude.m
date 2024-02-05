@@ -11,6 +11,9 @@
 #import "NUCPpTokens.h"
 #import "NUCNewline.h"
 #import "NUCPreprocessor.h"
+#import "NUCSourceFile.h"
+#import "NUCPreprocessingFile.h"
+#import "NUCGroup.h"
 
 #import <Foundation/NSString.h>
 
@@ -72,6 +75,11 @@
     [super dealloc];
 }
 
+- (BOOL)isInclude
+{
+    return YES;
+}
+
 - (NSString *)filename
 {
     if ([ppTokens count] == 1)
@@ -83,6 +91,11 @@
 - (void)preprocessWith:(NUCPreprocessor *)aPreprocessor
 {
     [aPreprocessor include:self];
+}
+
+- (void)addPpTokensByReplacingMacrosTo:(NSMutableArray *)aMacroReplacedPpTokens with:(NUCPreprocessor *)aPreprocessor
+{
+    [aMacroReplacedPpTokens addObjectsFromArray:[[[[self sourceFile] preprocessingFile] group] macroReplacedPpTokens]];
 }
 
 @end

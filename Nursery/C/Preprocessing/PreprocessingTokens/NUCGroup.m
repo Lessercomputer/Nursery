@@ -57,6 +57,9 @@
                 {
                     NUCControlLine *aControlLine = (NUCControlLine *)[(NUCGroupPart *)aGroupPart content];
                     [aControlLine preprocessWith:aPreprocessor];
+
+                    if ([aControlLine isInclude])
+                        [(NUCControlLineInclude *)aControlLine addPpTokensByReplacingMacrosTo:aMacroReplacesPpTokens with:aPreprocessor];
                 }
                 else if ([aGroupPart isIfSection])
                 {

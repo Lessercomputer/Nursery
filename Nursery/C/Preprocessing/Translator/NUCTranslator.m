@@ -13,6 +13,8 @@
 
 #import "NUCPreprocessor.h"
 #import "NUCSourceFile.h"
+#import "NUCPreprocessingFile.h"
+
 
 @class NUCSourceFile;
 
@@ -104,6 +106,8 @@
 
         [aPreprocessor preprocessSourceFile:aSourceFile];
         [preprocessedSourceFiles addObject:aSourceFile];
+        
+        NSLog(@"%@", [[aSourceFile preprocessingFile] preprocessedStringWithPreprocessor:aPreprocessor]);
         
         [[self sourceFiles] removeObjectAtIndex:0];
         [aPreprocessor release];

@@ -19,5 +19,6 @@
 - (BOOL)isTextLine;
 - (BOOL)isNonDirective;
 - (BOOL)isDefine;
+- (BOOL)isInclude;
 
 @end

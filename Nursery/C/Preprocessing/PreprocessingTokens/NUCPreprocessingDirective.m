@@ -62,4 +62,9 @@
     return [self type] == NUCLexicalElementDefineType;
 }
 
+- (BOOL)isInclude
+{
+    return NO;
+}
+
 @end

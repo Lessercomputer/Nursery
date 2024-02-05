@@ -69,9 +69,14 @@
     return [[self content] isIfSection];
 }
 
--(BOOL)isControlLine
+- (BOOL)isControlLine
 {
     return [[self content] isControlLine];
+}
+
+- (BOOL)isInclude
+{
+    return [[self content] isInclude];
 }
 
 - (BOOL)isTextLine

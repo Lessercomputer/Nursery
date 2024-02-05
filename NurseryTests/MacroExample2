@@ -1,2 +1,4 @@
-
 C
+#define Z ZZZ
+__FILE__
+__LINE__

@@ -84,8 +84,6 @@ b
 c
 #endif
 
-
-
 #pragma pragma1
 
 #pragma STDC FP_CONTRACT ON
@@ -97,6 +95,8 @@ _Pragma ( "def" )
 
 #define header "MacroExample2"
 #include header
+Z
+
 
 #error error1
 

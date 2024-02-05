@@ -59,7 +59,6 @@
 - (void)addPreprocessedStringTo:(NSMutableString *)aString  with:(NUCPreprocessor *)aPreprocessor
 {
     [[self group] addPreprocessedStringTo:aString with:aPreprocessor];
-    NSLog(@"%@", aString);
 }
 
 @end
