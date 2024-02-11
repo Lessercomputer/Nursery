@@ -195,6 +195,8 @@ static NSArray *NUCPunctuators;
 
 static NSArray *NUCPreprocessingDirectiveNames;
 
+static NSArray *NUCKeywords;
+
 @implementation NUCLexicalElement
 
 + (void)initialize
@@ -227,6 +229,8 @@ static NSArray *NUCPreprocessingDirectiveNames;
                            @"<%", @"%>", @"<", @">", @"%:%:", @"%:", nil] copy];
         
         NUCPreprocessingDirectiveNames = [[NSArray arrayWithObjects:NUCPreprocessingDirectiveIf, NUCPreprocessingDirectiveIfdef, NUCPreprocessingDirectiveIfndef, NUCPreprocessingDirectiveEndif, NUCPreprocessingDirectiveElse, NUCPreprocessingDirectiveElif, NUCPreprocessingDirectiveInclude, NUCPreprocessingDirectiveDefine, NUCPreprocessingDirectiveUndef, NUCPreprocessingDirectiveLine, NUCPreprocessingDirectiveError, NUCPreprocessingDirectivePragma, nil] copy];
+        
+        NUCKeywords = [[NSArray arrayWithObjects:NUCKeywordAuto, NUCKeywordBreak, NUCKeywordCase, NUCKeywordChar, NUCKeywordConst, NUCKeywordContinue, NUCKeywordDefault, NUCKeywordDo, NUCKeywordDouble, NUCKeywordElse, NUCKeywordEnum, NUCKeywordExtern, NUCKeywordFloat, NUCKeywordFor, NUCKeywordGoto, NUCKeywordIf, NUCKeywordInline, NUCKeywordInt, NUCKeywordLong, NUCKeywordRegister, NUCKeywordRestrict, NUCKeywordReturn,  NUCKeywordShort, NUCKeywordSigned, NUCKeywordSizeof, NUCKeywordStatic, NUCKeywordStruct, NUCKeywordSwitch, NUCKeywordTypedef, NUCKeywordUnion, NUCKeywordUnsigned, NUCKeywordVoid, NUCKeywordVolatile, NUCKeywordWhile, NUCKeywordAlignas, NUCKeywordAlignof, NUCKeywordAtomic, NUCKeywordBool, NUCKeywordComplex, NUCKeywordGeneric, NUCKeywordImaginary, NUCKeywordNoreturn, NUCKeywordStaticAssert, NUCKeywordThreadLocal, nil] copy];
     }
 }
 
@@ -300,6 +304,11 @@ static NSArray *NUCPreprocessingDirectiveNames;
     return NUCPreprocessingDirectiveNames;
 }
 
++ (NSArray *)NUCKeywords
+{
+    return NUCKeywords;
+}
+
 + (instancetype)lexicalElementWithType:(NUCLexicalElementType)aType
 {
     return [[[self alloc] initWithType:aType] autorelease];
@@ -341,6 +350,11 @@ static NSArray *NUCPreprocessingDirectiveNames;
     }
 }
 
+- (BOOL)isIdentifier
+{
+    return [self type] == NUCLexicalElementIdentifierType;
+}
+
 - (BOOL)isCharacterConstant
 {
     return [self type] == NUCLexicalElementCharacterConstantType;
@@ -350,6 +364,22 @@ static NSArray *NUCPreprocessingDirectiveNames;
 {
     return [self type] == NUCLexicalElementStringLiteralType;
 }
+
+- (BOOL)isKeyword
+{
+    return [self type] == NUCLexicalElementKeywordType;
+}
+
+- (BOOL)isConstant
+{
+    return [self type] == NUCLexicalElementConstantType;
+}
+
+- (BOOL)isPunctuator
+{
+    return [self type] == NUCLexicalElementPunctuatorType;
+}
+
 
 - (NSString *)preprocessedStringWithPreprocessor:(NUCPreprocessor *)aPreprocessor
 {

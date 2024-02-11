@@ -1,5 +1,5 @@
 //
-//  NUCDecomposer.h
+//  NUCPreprocessingTokenDecomposer.h
 //  Nursery
 //
 //  Created by TAKATA Akifumi on 2023/05/15.
@@ -10,7 +10,7 @@
 @class NUCSourceFile;
 @class NSArray, NSScanner;
 
-@interface NUCDecomposer : NSObject
+@interface NUCPreprocessingTokenDecomposer : NSObject
 {
     BOOL hashExistsOnCurrentLine;
     BOOL includeExistsOnCurrentLine;

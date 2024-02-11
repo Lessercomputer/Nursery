@@ -1,11 +1,11 @@
 //
-//  NUCDecomposer.m
+//  NUCPreprocessingTokenDecomposer.m
 //  Nursery
 //
 //  Created by TAKATA Akifumi on 2023/05/15.
 //
 
-#import "NUCDecomposer.h"
+#import "NUCPreprocessingTokenDecomposer.h"
 #import "NUCSourceFile.h"
 #import "NUCLexicalElement.h"
 #import "NUCDecomposedPreprocessingToken.h"
@@ -19,7 +19,7 @@
 #import <Foundation/NSArray.h>
 
 
-@implementation NUCDecomposer
+@implementation NUCPreprocessingTokenDecomposer
 
 + (instancetype)decomposer
 {

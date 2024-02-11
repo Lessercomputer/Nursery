@@ -180,10 +180,21 @@ typedef enum : NSUInteger {
     NUCLexicalElementErrorType,
     NUCLexicalElementPragmaType,
     NUCLexicalElementControlLineNewlineType,
-    NUCLexicalElementConstantType
+    NUCLexicalElementConstantType,
+    NUCLexicalElementKeywordType
 } NUCLexicalElementType;
 
-@interface NUCLexicalElement : NSObject
+@protocol NUCToken <NSObject>
+
+- (BOOL)isKeyword;
+- (BOOL)isIdentifier;
+- (BOOL)isConstant;
+- (BOOL)isStringLiteral;
+- (BOOL)isPunctuator;
+
+@end
+
+@interface NUCLexicalElement : NSObject <NUCToken>
 {
     NUCLexicalElementType type;
 }
@@ -204,6 +215,8 @@ typedef enum : NSUInteger {
 + (NSArray *)NUCPunctuators;
 
 + (NSArray *)NUCPreprocessingDirectiveNames;
+
++ (NSArray *)NUCKeywords;
 
 + (instancetype)lexicalElementWithType:(NUCLexicalElementType)aType;
 

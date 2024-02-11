@@ -27,8 +27,16 @@
         return NO;
     }
     
+    if ([self integerConstantFromPpNumber:aPpToken into:aConstant])
+        return YES;
+    else
+        return NO;
+}
+
++ (BOOL)integerConstantFromPpNumber:(NUCDecomposedPreprocessingToken *)aPpNumber into:(NUCConstant **)aConstant
+{
     NUUInt64 aValue = 0;
-    NSString *aString = [aPpToken content];
+    NSString *aString = [aPpNumber content];
     
     if ([aString hasPrefix:NUCHexadecimalPrefixSmall] || [aString hasPrefix:NUCHexadecimalPrefixLarge])
     {
@@ -36,7 +44,6 @@
         
         if (aHexDigitsRange.location == NSNotFound)
         {
-            [aPreprocessingTokenStream setPosition:aPosition];
             return NO;
         }
         
@@ -60,7 +67,6 @@
         
         if (anOctalDigitsRange.location == NSNotFound)
         {
-            [aPreprocessingTokenStream setPosition:aPosition];
             return NO;
         }
         
@@ -76,7 +82,6 @@
         
         if (aDecimalDigitsRange.location == NSNotFound)
         {
-            [aPreprocessingTokenStream setPosition:aPosition];
             return NO;
         }
         
@@ -88,7 +93,7 @@
     }
     
     if (aConstant)
-        *aConstant = [NUCConstant constantWithIntegerConstant:[NUCIntegerConstant constantWithPpNumber:aPpToken value:aValue]];
+        *aConstant = [NUCConstant constantWithIntegerConstant:[NUCIntegerConstant constantWithPpNumber:aPpNumber value:aValue]];
     
     return YES;
 }

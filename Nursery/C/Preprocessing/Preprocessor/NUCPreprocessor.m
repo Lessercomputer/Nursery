@@ -6,7 +6,7 @@
 //
 
 #import "NUCPreprocessor.h"
-#import "NUCDecomposer.h"
+#import "NUCPreprocessingTokenDecomposer.h"
 #import "NUCPreprocessingTokenStream.h"
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCTranslator.h"
@@ -109,7 +109,7 @@
 
 - (NSArray *)preprocesPhase3
 {
-    NUCDecomposer *aDecomposer = [NUCDecomposer new];
+    NUCPreprocessingTokenDecomposer *aDecomposer = [NUCPreprocessingTokenDecomposer new];
     NSArray *aPreprocessingTokens = [aDecomposer decomposePreprocessingFile:[self sourceFile]];
     [aDecomposer release];
     

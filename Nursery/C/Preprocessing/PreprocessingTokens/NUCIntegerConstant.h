@@ -18,6 +18,8 @@
 
 + (BOOL)integerConstantFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCConstant **)aConstant;
 
++ (BOOL)integerConstantFromPpNumber:(NUCDecomposedPreprocessingToken *)aPpNumber into:(NUCConstant **)aConstant;
+
 + (instancetype)constantWithPpNumber:(NUCDecomposedPreprocessingToken *)aPpNumber value:(NUUInt64)aValue;
 
 - (instancetype)initWithPpNumber:(NUCDecomposedPreprocessingToken *)aPpNumber value:(NUUInt64)aValue;

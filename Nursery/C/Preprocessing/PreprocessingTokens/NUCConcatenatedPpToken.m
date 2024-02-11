@@ -6,7 +6,7 @@
 //
 
 #import "NUCConcatenatedPpToken.h"
-#import "NUCDecomposer.h"
+#import "NUCPreprocessingTokenDecomposer.h"
 #import <Foundation/NSString.h>
 
 @implementation NUCConcatenatedPpToken
@@ -56,7 +56,7 @@
 - (NUCPreprocessingToken *)concatenatedPpToken
 {
     if (!concatenatedPpTokens)
-        concatenatedPpTokens = [[[[NUCDecomposer new] autorelease] decomposePreprocessingTokensIn:[self string]] retain];
+        concatenatedPpTokens = [[[[NUCPreprocessingTokenDecomposer new] autorelease] decomposePreprocessingTokensIn:[self string]] retain];
     
     if ([concatenatedPpTokens count] == 1)
         return [concatenatedPpTokens firstObject];

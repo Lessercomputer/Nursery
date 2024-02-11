@@ -12,21 +12,6 @@
 
 @implementation NUCPreprocessingToken
 
-- (BOOL)isIdentifier
-{
-    return [self type] == NUCLexicalElementIdentifierType;
-}
-
-- (BOOL)isConstant
-{
-    return [self type] == NUCLexicalElementConstantType;
-}
-
-- (BOOL)isStringLiteral
-{
-    return [self type] == NUCLexicalElementStringLiteralType;
-}
-
 - (BOOL)isIntegerConstant
 {
     return NO;
@@ -40,11 +25,6 @@
 - (BOOL)isPpNumber
 {
     return [self type] == NUCLexicalElementPpNumberType;
-}
-
-- (BOOL)isPunctuator
-{
-    return [self type] == NUCLexicalElementPunctuatorType;
 }
 
 - (BOOL)isUnaryPlusOperator

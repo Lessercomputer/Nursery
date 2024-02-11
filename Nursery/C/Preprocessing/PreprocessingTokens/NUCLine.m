@@ -8,7 +8,7 @@
 #import "NUCLine.h"
 #import "NUCPreprocessor.h"
 #import "NUCPpTokens.h"
-#import "NUCDecomposer.h"
+#import "NUCPreprocessingTokenDecomposer.h"
 
 #import <Foundation/NSScanner.h>
 
@@ -49,7 +49,7 @@
     NSString *aDigitSequence = nil;
     NSString *aSCharSequence = nil;
 
-    if ([NUCDecomposer scanDigitSequenceFrom:aScanner into:&aDigitSequence])
+    if ([NUCPreprocessingTokenDecomposer scanDigitSequenceFrom:aScanner into:&aDigitSequence])
     {
         [self setDigitSequence:aDigitSequence];
         
@@ -57,7 +57,7 @@
         
         if ([aScanner scanString:NUCDoubleQuotationMark intoString:NULL])
         {
-            [NUCDecomposer scanSCharSequenceFrom:aScanner into:&aSCharSequence];
+            [NUCPreprocessingTokenDecomposer scanSCharSequenceFrom:aScanner into:&aSCharSequence];
             [self setSCharSequence:aSCharSequence];
             
             if (![aScanner scanString:NUCDoubleQuotationMark intoString:NULL])

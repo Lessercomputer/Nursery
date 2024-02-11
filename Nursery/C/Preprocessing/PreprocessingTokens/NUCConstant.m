@@ -32,6 +32,18 @@
     return NO;
 }
 
++ (instancetype)constantFromPpToken:(NUCDecomposedPreprocessingToken *)aPpToken
+{
+    NUCConstant *aConstant = nil;
+    
+    if ([NUCIntegerConstant integerConstantFromPpNumber:(NUCDecomposedPreprocessingToken *)aPpToken into:&aConstant])
+        ;
+    else if ([aPpToken isCharacterConstant])
+        aConstant = [NUCConstant constantWithCharacterConstant:(NUCCharacterConstant *)aPpToken];
+    
+    return aConstant;
+}
+
 + (instancetype)constantWithIntegerConstant:(NUCIntegerConstant *)anIntegerConstant
 {
     return [[[self alloc] initWithContent:anIntegerConstant] autorelease];

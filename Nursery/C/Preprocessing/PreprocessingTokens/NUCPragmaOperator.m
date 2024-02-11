@@ -9,7 +9,7 @@
 #import "NUCPreprocessingTokenStream.h"
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCStringLiteral.h"
-#import "NUCDecomposer.h"
+#import "NUCPreprocessingTokenDecomposer.h"
 #import "NUCPragma.h"
 
 #import <Foundation/NSArray.h>
@@ -63,7 +63,7 @@
 + (NSMutableArray *)executePragmaOperatorOperand:(NUCStringLiteral *)aStringLiteral preprocessor:(NUCPreprocessor *)aPreprocessor
 {
     NSMutableArray *aPpTokens = [NSMutableArray array];
-    NUCDecomposer *aDecomposer = [NUCDecomposer decomposer];
+    NUCPreprocessingTokenDecomposer *aDecomposer = [NUCPreprocessingTokenDecomposer decomposer];
     NSArray *aDecomposedPpTokens = [aDecomposer decomposePreprocessingTokensIn:[self destringizeStringLiteral:aStringLiteral]];
     NUCPreprocessingTokenStream *aStream = [NUCPreprocessingTokenStream preprecessingTokenStreamWithPreprocessingTokens:aDecomposedPpTokens];
     NUCControlLine *aPragma = nil;
