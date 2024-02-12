@@ -7,6 +7,7 @@
 
 #import "NUCConstant.h"
 #import "NUCIntegerConstant.h"
+#import "NUCFloatingConstant.h"
 #import "NUCCharacterConstant.h"
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCPreprocessingTokenStream.h"
@@ -36,10 +37,12 @@
 {
     NUCConstant *aConstant = nil;
     
-    if ([NUCIntegerConstant integerConstantFromPpNumber:(NUCDecomposedPreprocessingToken *)aPpToken into:&aConstant])
+    if ([NUCIntegerConstant integerConstantFromPpNumber:aPpToken into:&aConstant])
         ;
     else if ([aPpToken isCharacterConstant])
         aConstant = [NUCConstant constantWithCharacterConstant:(NUCCharacterConstant *)aPpToken];
+    else if ([NUCFloatingConstant floatingConstantFromPpNumber:aPpToken into:&aConstant])
+        ;
     
     return aConstant;
 }
@@ -49,12 +52,17 @@
     return [[[self alloc] initWithContent:anIntegerConstant] autorelease];
 }
 
++ (instancetype)constantWithFloatingConstant:(NUCFloatingConstant *)aFloatingConstant
+{
+    return [[[self alloc] initWithContent:aFloatingConstant] autorelease];
+}
+
 + (instancetype)constantWithCharacterConstant:(NUCCharacterConstant *)aCharacterConstant
 {
     return [[[self alloc] initWithContent:aCharacterConstant] autorelease];
 }
 
-- (instancetype)initWithContent:(NUCPreprocessingToken *)aContent
+- (instancetype)initWithContent:(id <NUCToken>)aContent
 {
     if (self = [super initWithType:NUCLexicalElementConstantType])
     {
@@ -78,7 +86,7 @@
 
 - (BOOL)isCharacterConstant
 {
-    return [content isCharacterConstant];
+    return [content isKindOfClass:[NUCCharacterConstant class]];
 }
 
 @end

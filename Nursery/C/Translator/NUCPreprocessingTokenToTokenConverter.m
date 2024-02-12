@@ -10,6 +10,7 @@
 #import "NUCToken.h"
 #import "NUCKeyword.h"
 #import "NUCConstant.h"
+#import "NUCAdjacentStringLiteral.h"
 
 #import <Foundation/NSArray.h>
 
@@ -39,6 +40,30 @@
     id <NUCToken> aToken = nil;
     
     aToken = [self basicNext];
+    
+    if ([aToken isStringLiteral])
+    {
+        NSMutableArray *anAdjacentStringLiterals = [NSMutableArray arrayWithObject:aToken];
+        
+        while (YES)
+        {
+            NSUInteger aPosition = [self position];
+            id <NUCToken> aNextToken = [self basicNext];
+            
+            if ([aNextToken isStringLiteral])
+            {
+                [anAdjacentStringLiterals addObject:aNextToken];
+            }
+            else
+            {
+                [self setPosition:aPosition];
+                break;;
+            }
+        }
+        
+        if ([anAdjacentStringLiterals count] > 1)
+            aToken = [NUCAdjacentStringLiteral adjacentStringLiteralWith:anAdjacentStringLiterals];
+    }
     
     return aToken;
 }

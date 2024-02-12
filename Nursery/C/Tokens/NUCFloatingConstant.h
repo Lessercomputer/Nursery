@@ -7,8 +7,11 @@
 
 #import "NUCLexicalElement.h"
 
+@class NUCDecomposedPreprocessingToken, NUCConstant;
 
 @interface NUCFloatingConstant : NUCLexicalElement
+
++ (BOOL)floatingConstantFromPpNumber:(NUCDecomposedPreprocessingToken *)aPpNumber into:(NUCConstant **)aConstant;
 
 @end
 
