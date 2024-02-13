@@ -64,7 +64,7 @@
     return NO;
 }
 
-+ (BOOL)fractionalConstantFrom:(NSString *)aString into:(NSString **)aDigitSequence into:(NSString  **)aDIgitSequence2 location:(NSUInteger *)aLocationPointer
++ (BOOL)fractionalConstantFrom:(NSString *)aString into:(NSString **)aDigitSequence into:(NSString  **)aDigitSequence2 location:(NSUInteger *)aLocationPointer
 {
     if (!aLocationPointer)
         return NO;
@@ -72,7 +72,7 @@
     NSRange aDigitSequenceRange = [aString rangeOfCharacterFromSet:[NUCLexicalElement NUCDigitCharacterSet]];
     NSRange aDigitsRange2 = NSMakeRange(NSNotFound, 0);
     
-    if (aDigitSequenceRange.location != NSNotFound)
+    if (aDigitSequenceRange.location == 0 && aDigitSequenceRange.length != 0)
     {
         NSUInteger aLocation = NSMaxRange(aDigitSequenceRange);
         if (aLocation < [aString length])
@@ -81,16 +81,21 @@
             {
                 aDigitsRange2 = [aString rangeOfCharacterFromSet:[NUCLexicalElement NUCDigitCharacterSet] options:0 range:NSMakeRange(aLocation + 1, [aString length] - (aLocation + 1))];
                 
-                if (aDigitsRange2.location != NSNotFound)
+                if (aDigitSequence)
+                    *aDigitSequence = [aString substringWithRange:aDigitSequenceRange];
+                
+                if (aDigitsRange2.length > 0)
                 {
-                    if (aDigitSequence)
-                        *aDigitSequence = [aString substringWithRange:aDigitSequenceRange];
-                    if (aDIgitSequence2)
-                        *aDIgitSequence2 = [aString substringWithRange:aDigitsRange2];
+                    if (aDigitSequence2)
+                        *aDigitSequence2 = [aString substringWithRange:aDigitsRange2];
                     *aLocationPointer = NSMaxRange(aDigitsRange2);
-                    
-                    return YES;
                 }
+                else
+                {
+                    *aLocationPointer = NSMaxRange(aDigitSequenceRange) + 1;
+                }
+                
+                return YES;
             }
         }
     }
@@ -102,8 +107,8 @@
             
             if (aDigitSequenceRange.location != NSNotFound)
             {
-                if (aDigitSequence)
-                    *aDigitSequence = [aString substringWithRange:aDigitSequenceRange];
+                if (aDigitSequence2)
+                    *aDigitSequence2 = [aString substringWithRange:aDigitSequenceRange];
                 
                 if (aLocationPointer)
                     *aLocationPointer = NSMaxRange(aDigitSequenceRange);

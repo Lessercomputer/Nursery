@@ -41,6 +41,8 @@
     {
         if ([self decomposeWhiteSpaceCharacterFrom:aScanner into:aPreprocessingTokens])
             continue;
+        if ([self decomposePpNumberFrom:aScanner into:aPreprocessingTokens])
+            continue;
         if ([self decomposePunctuatorFrom:aScanner into:aPreprocessingTokens])
             continue;
         if ([self isInInclude])
@@ -54,8 +56,6 @@
                 continue;
         }
         if ([self decomposeIdentifierFrom:aScanner into:aPreprocessingTokens])
-            continue;
-        if ([self decomposePpNumberFrom:aScanner into:aPreprocessingTokens])
             continue;
         if ([self decomposeCharacterConstantFrom:aScanner into:aPreprocessingTokens])
             continue;
@@ -95,25 +95,30 @@
 - (BOOL)decomposePpNumberFrom:(NSScanner *)aScanner into:(NSMutableArray *)anElements
 {
     NSUInteger aScanLocation = [aScanner scanLocation];
-    BOOL aLoopShouldContinue = YES;
     
-    while (aLoopShouldContinue)
+    while (YES)
     {
         NSUInteger aScanLocation = [aScanner scanLocation];
         
         if ([self scanDigitFrom:aScanner into:NULL])
             ;
-        else if ([self scanPeriodFrom:aScanner] && [self scanDigitFrom:aScanner into:NULL])
-            ;
-        else if ((([self scanSmallEFrom:aScanner] || [self scanLargeEFrom:aScanner]) && [self scanSignFrom:aScanner])
-                 || (([self scanSmallPFrom:aScanner] || [self scanLargePFrom:aScanner]) && [self scanSignFrom:aScanner])
-                 || [self scanIdentifierNondigitFrom:aScanner])
-            ;
-        else
+        else if ([self scanPeriodFrom:aScanner])
         {
-            [aScanner setScanLocation:aScanLocation];
-            aLoopShouldContinue = NO;
+            if (![self scanDigitFrom:aScanner into:NULL])
+            {
+                [aScanner setScanLocation:aScanLocation];
+                break;
+            }
         }
+        else
+            break;
+    }
+    
+    if ([aScanner scanLocation] != aScanLocation)
+    {
+        [self scanIdentifierNondigitFrom:aScanner]
+            || (([self scanSmallEFrom:aScanner] || [self scanLargeEFrom:aScanner] || [self scanSmallPFrom:aScanner] || [self scanLargePFrom:aScanner]) && [self scanSignFrom:aScanner])
+            || [self scanPeriodFrom:aScanner];
     }
     
     if ([aScanner scanLocation] != aScanLocation)
