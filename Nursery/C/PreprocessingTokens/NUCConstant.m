@@ -37,11 +37,11 @@
 {
     NUCConstant *aConstant = nil;
     
-    if ([NUCIntegerConstant integerConstantFromPpNumber:aPpToken into:&aConstant])
-        ;
-    else if ([aPpToken isCharacterConstant])
+    if ([aPpToken isCharacterConstant])
         aConstant = [NUCConstant constantWithCharacterConstant:(NUCCharacterConstant *)aPpToken];
     else if ([NUCFloatingConstant floatingConstantFromPpNumber:aPpToken into:&aConstant])
+        ;
+    else if ([NUCIntegerConstant integerConstantFromPpNumber:aPpToken into:&aConstant])
         ;
     
     return aConstant;
@@ -87,6 +87,11 @@
 - (BOOL)isCharacterConstant
 {
     return [content isKindOfClass:[NUCCharacterConstant class]];
+}
+
+- (NSString *)description
+{
+    return [[self content] description];
 }
 
 @end

@@ -56,4 +56,14 @@
     [super dealloc];
 }
 
+- (NSString *)description
+{
+    NUCFractionalConstant *aFractionalConstant = [self fractionalConstant];
+    
+    if (aFractionalConstant)
+        return [NSString stringWithFormat:@"<%@ %p> %@.%@%@%@", [self class], self, [aFractionalConstant digitSequence], [aFractionalConstant digitSequence2], [self exponentPart], [self floatingSuffix]];
+    else
+        return [NSString stringWithFormat:@"<%@ %p> %@%@%@", [self class], self, [self digitSequence], [self exponentPart], [self floatingSuffix]];
+}
+
 @end

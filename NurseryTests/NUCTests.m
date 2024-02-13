@@ -63,4 +63,13 @@
     [aCTranslator translate];
 }
 
+- (void)testTranslationPhase1to7
+{
+    NSBundle *aBundle = [NSBundle bundleForClass:[self class]];
+    NSURL *aPhysicalSourceFileURL = [aBundle URLForResource:@"MacroExample" withExtension:NULL subdirectory:NULL];
+    NUCTranslator *aCTranslator = [[[NUCTranslator alloc] initWithSourceFileURLs:[NSArray arrayWithObject:aPhysicalSourceFileURL]] autorelease];
+    
+    [aCTranslator translate];
+}
+
 @end

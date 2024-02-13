@@ -7,6 +7,7 @@
 
 #import "NUCAdjacentStringLiteral.h"
 #import <Foundation/NSArray.h>
+#import <Foundation/NSString.h>
 
 @implementation NUCAdjacentStringLiteral
 
@@ -30,6 +31,19 @@
     [_stringLiterals release];
     
     [super dealloc];
+}
+
+- (NSString *)description
+{
+    NSMutableString *aString = [NSMutableString stringWithFormat:@"<%@ %p> {", [self class], self];
+    
+    [[self stringLiterals] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [aString appendString:[obj description]];
+    }];
+    
+    [aString appendString:@"}"];
+    
+    return aString;
 }
 
 @end

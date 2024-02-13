@@ -23,4 +23,6 @@
 
 - (NUCGroup *)group;
 
+- (NSArray *)macroReplacedPpTokens;
+
 @end

@@ -56,6 +56,11 @@
     return group;
 }
 
+- (NSArray *)macroReplacedPpTokens
+{
+    return (NSArray *)[[self group] macroReplacedPpTokens];
+}
+
 - (void)addPreprocessedStringTo:(NSMutableString *)aString  with:(NUCPreprocessor *)aPreprocessor
 {
     [[self group] addPreprocessedStringTo:aString with:aPreprocessor];

@@ -14,7 +14,8 @@
 #import "NUCPreprocessor.h"
 #import "NUCSourceFile.h"
 #import "NUCPreprocessingFile.h"
-
+#import "NUCPreprocessingTokenToTokenConverter.h"
+#import "NUCToken.h"
 
 @class NUCSourceFile;
 
@@ -94,6 +95,19 @@
 - (void)translate
 {
     [self preprocess];
+    
+    [[self preprocessedSourceFiles] enumerateObjectsUsingBlock:^(NUCSourceFile * _Nonnull aPreprocessedSourceFile, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        NSArray *aPpTokens = [[aPreprocessedSourceFile preprocessingFile] macroReplacedPpTokens];
+        NUCPreprocessingTokenToTokenConverter *aPpTokenToTokenConverter = [[[NUCPreprocessingTokenToTokenConverter alloc] initWithPreprocessingTokens:aPpTokens] autorelease];
+        
+        NUCToken *aToken = nil;
+        
+        while ((aToken = [aPpTokenToTokenConverter next]))
+        {
+            NSLog(@"%@", aToken);
+        }
+    }];
 }
 
 - (void)preprocess

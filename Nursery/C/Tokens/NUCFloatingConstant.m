@@ -64,8 +64,11 @@
     return NO;
 }
 
-+ (BOOL)fractionalConstantFrom:(NSString *)aString into:(NSString **)aDigitSequence into:(NSString  **)aDIgitSequence2 location:(NSUInteger *)aLocation
++ (BOOL)fractionalConstantFrom:(NSString *)aString into:(NSString **)aDigitSequence into:(NSString  **)aDIgitSequence2 location:(NSUInteger *)aLocationPointer
 {
+    if (!aLocationPointer)
+        return NO;
+    
     NSRange aDigitSequenceRange = [aString rangeOfCharacterFromSet:[NUCLexicalElement NUCDigitCharacterSet]];
     NSRange aDigitsRange2 = NSMakeRange(NSNotFound, 0);
     
@@ -76,7 +79,7 @@
         {
             if ([aString compare:NUCPeriod options:0 range:NSMakeRange(aLocation, 1)] == NSOrderedSame)
             {
-                aDigitsRange2 = [aString rangeOfCharacterFromSet:[NUCLexicalElement NUCDigitCharacterSet] options:0 range:NSMakeRange(aLocation + 1, [aString length] - aLocation)];
+                aDigitsRange2 = [aString rangeOfCharacterFromSet:[NUCLexicalElement NUCDigitCharacterSet] options:0 range:NSMakeRange(aLocation + 1, [aString length] - (aLocation + 1))];
                 
                 if (aDigitsRange2.location != NSNotFound)
                 {
@@ -84,6 +87,7 @@
                         *aDigitSequence = [aString substringWithRange:aDigitSequenceRange];
                     if (aDIgitSequence2)
                         *aDIgitSequence2 = [aString substringWithRange:aDigitsRange2];
+                    *aLocationPointer = NSMaxRange(aDigitsRange2);
                     
                     return YES;
                 }
@@ -101,8 +105,8 @@
                 if (aDigitSequence)
                     *aDigitSequence = [aString substringWithRange:aDigitSequenceRange];
                 
-                if (aLocation)
-                    *aLocation = NSMaxRange(aDigitSequenceRange);
+                if (aLocationPointer)
+                    *aLocationPointer = NSMaxRange(aDigitSequenceRange);
                 
                 return YES;
             }
@@ -144,13 +148,13 @@
     NSRange aRange = NSMakeRange(aLocation, 1);
     NSString *aSuffixToReturn = nil;
     
-    if ([aString compare:NUCSmallF options:0 range:aRange])
+    if ([aString compare:NUCSmallF options:0 range:aRange] == NSOrderedSame)
         aSuffixToReturn = NUCSmallF;
-    else if ([aString compare:NUCSmallL options:0 range:aRange])
+    else if ([aString compare:NUCSmallL options:0 range:aRange] == NSOrderedSame)
         aSuffixToReturn = NUCSmallL;
-    else if ([aString compare:NUCLargeF options:0 range:aRange])
+    else if ([aString compare:NUCLargeF options:0 range:aRange] == NSOrderedSame)
         aSuffixToReturn = NUCLargeF;
-    else if ([aString compare:NUCLargeL options:0 range:aRange])
+    else if ([aString compare:NUCLargeL options:0 range:aRange] == NSOrderedSame)
         aSuffixToReturn = NUCLargeL;
     else
         return NO;
