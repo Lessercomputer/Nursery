@@ -365,9 +365,12 @@ static NUCDecomposedPreprocessingToken *whitespaceToken = nil;
 
 - (void)addPreprocessedStringTo:(NSMutableString *)aString with:(NUCPreprocessor *)aPreprocessor
 {
-    NSString *aContent = [self content];
-    if (aContent)
-        [aString appendString:aContent];
+    if ([self type] != NUCLexicalElementCommentType)
+    {
+        NSString *aContent = [self content];
+        if (aContent)
+            [aString appendString:aContent];
+    }
 }
 
 @end

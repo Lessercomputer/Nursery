@@ -6,9 +6,55 @@
 //
 
 #import "NUCExponentPart.h"
+#import "NUCFloatingConstant.h"
 #import <Foundation/NSString.h>
 
 @implementation NUCExponentPart
+
++ (BOOL)expornentPartFrom:(NSString *)aString into:(NSString **)aSmallEOrLargeE into:(NSString **)aSign into:(NSString **)aDigitSequence location:(NSUInteger *)aLocationPointer
+{
+    if (!aLocationPointer)
+        return NO;
+    
+    NSUInteger aLocation = *aLocationPointer;
+    NSString *aSmallEOrLageEToReturn = nil;
+    NSRange aRange = NSMakeRange(aLocation, 1);
+    
+    if ([aString compare:NUCSmallE options:0 range:aRange] == NSOrderedSame)
+        aSmallEOrLageEToReturn = NUCSmallE;
+    else if ([aString compare:NUCLargeE options:0 range:aRange] == NSOrderedSame)
+        aSmallEOrLageEToReturn = NUCLargeE;
+    else
+        return NO;
+    
+    aLocation++;
+    
+    NSString *aSignToReturn = nil;
+    [NUCFloatingConstant signFrom:aString into:&aSignToReturn location:&aLocation];
+    
+    NSString *aDigitSequenceToReturn = nil;
+    if ([NUCFloatingConstant digitSequenceFrom:aString at:&aLocation into:&aDigitSequenceToReturn])
+    {
+        
+        *aLocationPointer = aLocation;
+        
+        if (aDigitSequence)
+            *aDigitSequence = aDigitSequenceToReturn;
+        
+        return  YES;
+    }
+    
+    return NO;
+}
+
++ (instancetype)exponentPartWith:(NSString *)aString location:(NSUInteger *)aLocationPointer
+{
+    NSString *aSmallEOrLargeE = nil, *aSign = nil, *aDigitSequence = nil;;
+    if ([self expornentPartFrom:aString into:&aSmallEOrLargeE into:&aSign into:&aDigitSequence location:aLocationPointer])
+        return [self exponentPartWithSmallEOrLargeE:aSmallEOrLargeE sign:aSign digitSequence:aDigitSequence];
+    else
+        return nil;
+}
 
 + (instancetype)exponentPartWithSmallEOrLargeE:(NSString *)aSmallEOrLargeE sign:(NSString *)aSign digitSequence:(NSString *)aDigitSequence
 {

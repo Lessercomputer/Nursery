@@ -27,15 +27,12 @@
     
     if ([self fractionalConstantFrom:aString into:&aDigitSequence into:&aDigitSequence2 location:&aLocation])
     {
-        NSString *aSmallEOrLargeE = nil, *aSign = nil, *anExponentPartDigitSequence = nil;;
-        [self expornentPartFrom:aString into:&aSmallEOrLargeE into:&aSign into:&anExponentPartDigitSequence location:&aLocation];
+        NUCExponentPart *anExponentPart = [NUCExponentPart exponentPartWith:aString location:&aLocation];
         
         NSString *aFloatingSuffix = nil;
         [self floatingSuffixFrom:aString into:&aFloatingSuffix location:&aLocation];
         
         NUCFractionalConstant *aFractionalConstant = [NUCFractionalConstant constantWithDigitSequence:aDigitSequence digitSequence2:aDigitSequence2];
-        
-        NUCExponentPart *anExponentPart = [NUCExponentPart exponentPartWithSmallEOrLargeE:aSmallEOrLargeE sign:aSign digitSequence:anExponentPartDigitSequence];
         
         NUCDecimalFloatingConstant *aDecimalFloatingConstant = [NUCDecimalFloatingConstant floatingConstantWithFractionalConstant:aFractionalConstant exponentPart:anExponentPart floatingSuffix:aFloatingSuffix];
         
@@ -46,7 +43,22 @@
     }
     else
     {
-        
+        if ([self digitSequenceFrom:aString at:&aLocation into:&aDigitSequence])
+        {
+            NUCExponentPart *anExponentPart = [NUCExponentPart exponentPartWith:aString location:&aLocation];
+            if (anExponentPart)
+            {
+                NSString *aFloatingSuffix = nil;
+                [self floatingSuffixFrom:aString into:&aFloatingSuffix location:&aLocation];
+                
+                NUCDecimalFloatingConstant *aDecimalFloatingConstant = [NUCDecimalFloatingConstant floatingConstantWithDigitSequence:aDigitSequence exponentPart:anExponentPart floatingSuffix:aFloatingSuffix];
+                
+                if (aConstant)
+                    *aConstant = [NUCConstant constantWithFloatingConstant:aDecimalFloatingConstant];
+                
+                return YES;
+            }
+        }
     }
     
     return NO;
@@ -95,42 +107,6 @@
                 return YES;
             }
         }
-    }
-    
-    return NO;
-}
-
-+ (BOOL)expornentPartFrom:(NSString *)aString into:(NSString **)aSmallEOrLargeE into:(NSString **)aSign into:(NSString **)aDigitSequence location:(NSUInteger *)aLocationPointer
-{
-    if (!aLocationPointer)
-        return NO;
-    
-    NSUInteger aLocation = *aLocationPointer;
-    NSString *aSmallEOrLageEToReturn = nil;
-    NSRange aRange = NSMakeRange(aLocation, 1);
-    
-    if ([aString compare:NUCSmallE options:0 range:aRange] == NSOrderedSame)
-        aSmallEOrLageEToReturn = NUCSmallE;
-    else if ([aString compare:NUCLargeE options:0 range:aRange] == NSOrderedSame)
-        aSmallEOrLageEToReturn = NUCLargeE;
-    else
-        return NO;
-    
-    aLocation++;
-    
-    NSString *aSignToReturn = nil;
-    [self signFrom:aString into:&aSignToReturn location:&aLocation];
-    
-    NSString *aDigitSequenceToReturn = nil;
-    if ([self digitSequenceFrom:aString at:aLocation into:&aDigitSequenceToReturn])
-    {
-        
-        *aLocationPointer = aLocation;
-        
-        if (aDigitSequence)
-            *aDigitSequence = aDigitSequenceToReturn;
-        
-        return  YES;
     }
     
     return NO;
@@ -186,14 +162,20 @@
     return YES;
 }
 
-+ (BOOL)digitSequenceFrom:(NSString *)aString at:(NSUInteger)aLocation into:(NSString **)aDigitSequence
++ (BOOL)digitSequenceFrom:(NSString *)aString at:(NSUInteger *)aLocationPointer into:(NSString **)aDigitSequence
 {
+    if (!aLocationPointer)
+        return NO;
+    
+    NSUInteger aLocation = *aLocationPointer;
     NSRange aDigitSequenceRange = [aString rangeOfCharacterFromSet:[NUCLexicalElement NUCDigitCharacterSet] options:0 range:NSMakeRange(aLocation, [aString length] - aLocation)];
     
     if (aDigitSequenceRange.location != NSNotFound)
     {
         if (aDigitSequence)
             *aDigitSequence = [aString substringWithRange:aDigitSequenceRange];
+        
+        *aLocationPointer = NSMaxRange(aDigitSequenceRange);
         
         return YES;
     }
