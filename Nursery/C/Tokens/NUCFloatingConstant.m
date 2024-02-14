@@ -69,7 +69,7 @@
     if (!aLocationPointer)
         return NO;
     
-    NSRange aDigitSequenceRange = [aString rangeOfCharacterFromSet:[NUCLexicalElement NUCDigitCharacterSet]];
+    NSRange aDigitSequenceRange = [self rangeOfDigitSequenceFrom:aString];
     NSRange aDigitsRange2 = NSMakeRange(NSNotFound, 0);
     
     if (aDigitSequenceRange.location == 0 && aDigitSequenceRange.length != 0)
@@ -79,7 +79,7 @@
         {
             if ([aString compare:NUCPeriod options:0 range:NSMakeRange(aLocation, 1)] == NSOrderedSame)
             {
-                aDigitsRange2 = [aString rangeOfCharacterFromSet:[NUCLexicalElement NUCDigitCharacterSet] options:0 range:NSMakeRange(aLocation + 1, [aString length] - (aLocation + 1))];
+                aDigitsRange2 = [self rangeOfDigitSequenceFrom:aString range:NSMakeRange(aLocation + 1, [aString length] - (aLocation + 1))];
                 
                 if (aDigitSequence)
                     *aDigitSequence = [aString substringWithRange:aDigitSequenceRange];
@@ -103,7 +103,7 @@
     {
         if ([aString hasPrefix:NUCPeriod])
         {
-            aDigitSequenceRange = [aString rangeOfCharacterFromSet:[NUCLexicalElement NUCDigitCharacterSet] options:0 range:NSMakeRange(1, [aString length] - 1)];
+            aDigitSequenceRange = [self rangeOfDigitSequenceFrom:aString range:NSMakeRange(1, [aString length] - 1)];
             
             if (aDigitSequenceRange.location != NSNotFound)
             {
@@ -177,7 +177,7 @@
         return NO;
     
     NSUInteger aLocation = *aLocationPointer;
-    NSRange aDigitSequenceRange = [aString rangeOfCharacterFromSet:[NUCLexicalElement NUCDigitCharacterSet] options:0 range:NSMakeRange(aLocation, [aString length] - aLocation)];
+    NSRange aDigitSequenceRange = [self rangeOfDigitSequenceFrom:aString range:NSMakeRange(aLocation, [aString length] - aLocation)];
     
     if (aDigitSequenceRange.location != NSNotFound)
     {

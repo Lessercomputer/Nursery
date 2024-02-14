@@ -221,6 +221,11 @@ typedef enum : NSUInteger {
 
 + (NSArray *)NUCKeywords;
 
++ (NSRange)rangeOfCharactersFromSet:(NSCharacterSet *)aCharacterSet string:(NSString *)aString;
++ (NSRange)rangeOfCharactersFromSet:(NSCharacterSet *)aCharacterSet string:(NSString *)aString range:(NSRange)aRangeToSearch;
++ (NSRange)rangeOfDigitSequenceFrom:(NSString *)aString;
++ (NSRange)rangeOfDigitSequenceFrom:(NSString *)aString range:(NSRange)aRangeToSearch;
+
 + (instancetype)lexicalElementWithType:(NUCLexicalElementType)aType;
 
 - (instancetype)initWithType:(NUCLexicalElementType)aType;

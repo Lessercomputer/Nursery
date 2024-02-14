@@ -40,7 +40,7 @@
     
     if ([aString hasPrefix:NUCHexadecimalPrefixSmall] || [aString hasPrefix:NUCHexadecimalPrefixLarge])
     {
-        NSRange aHexDigitsRange = [aString rangeOfCharacterFromSet:[NUCLexicalElement NUCHexadecimalDigitCharacterSet] options:0 range:NSMakeRange(2, [aString length] - 2)];
+        NSRange aHexDigitsRange = [self rangeOfCharactersFromSet:[NUCLexicalElement NUCHexadecimalDigitCharacterSet] string:aString range:NSMakeRange(2, [aString length] - 2)];
         
         if (aHexDigitsRange.location == NSNotFound)
         {
@@ -63,9 +63,9 @@
     }
     else if ([aString hasPrefix:NUCOctalDigitZero])
     {
-        NSRange anOctalDigitsRange = [aString rangeOfCharacterFromSet:[NUCLexicalElement NUCOctalDigitCharacterSet]];
+        NSRange anOctalDigitsRange = [self rangeOfCharactersFromSet:[NUCLexicalElement NUCOctalDigitCharacterSet] string:aString];
         
-        if (anOctalDigitsRange.location == NSNotFound)
+        if (anOctalDigitsRange.location != 0 || anOctalDigitsRange.length < 1)
         {
             return NO;
         }
@@ -78,9 +78,9 @@
     }
     else
     {
-        NSRange aDecimalDigitsRange = [aString rangeOfCharacterFromSet:[NUCLexicalElement NUCDigitCharacterSet]];
+        NSRange aDecimalDigitsRange = [self rangeOfDigitSequenceFrom:aString];
         
-        if (aDecimalDigitsRange.location == NSNotFound)
+        if (aDecimalDigitsRange.location != 0 || aDecimalDigitsRange.length < 1)
         {
             return NO;
         }

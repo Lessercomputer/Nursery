@@ -312,6 +312,52 @@ static NSArray *NUCKeywords;
     return NUCKeywords;
 }
 
++ (NSRange)rangeOfCharactersFromSet:(NSCharacterSet *)aCharacterSet string:(NSString *)aString
+{
+    NSRange aRangeOfString = NSMakeRange(0, [aString length]);
+    return [self rangeOfCharactersFromSet:aCharacterSet string:aString range:aRangeOfString];
+}
+
++ (NSRange)rangeOfCharactersFromSet:(NSCharacterSet *)aCharacterSet string:(NSString *)aString range:(NSRange)aRangeToSearch
+{
+    NSRange aSubRangeToSearch = aRangeToSearch;
+    BOOL aCharacterIsFound = NO;
+    
+    while (YES)
+    {
+        if (NSLocationInRange(aSubRangeToSearch.location, aRangeToSearch))
+        {
+            NSRange aRangeOfCharacter = [aString rangeOfCharacterFromSet:aCharacterSet options:NSAnchoredSearch range:aSubRangeToSearch];
+            
+            if (aRangeOfCharacter.location != NSNotFound)
+            {
+                aSubRangeToSearch.location += aRangeOfCharacter.length;
+                aSubRangeToSearch.length -= aRangeOfCharacter.length;
+                aCharacterIsFound = YES;
+            }
+            else
+                break;
+        }
+        else
+            break;
+    }
+    
+    if (aCharacterIsFound)
+        return NSMakeRange(aRangeToSearch.location, aSubRangeToSearch.location - aRangeToSearch.location);
+    else
+        return NSMakeRange(NSNotFound, 0);
+}
+
++ (NSRange)rangeOfDigitSequenceFrom:(NSString *)aString
+{
+    return [self rangeOfCharactersFromSet:[self NUCDigitCharacterSet] string:aString];
+}
+
++ (NSRange)rangeOfDigitSequenceFrom:(NSString *)aString range:(NSRange)aRangeToSearch;
+{
+    return [self rangeOfCharactersFromSet:[self NUCDigitCharacterSet] string:aString range:aRangeToSearch];
+}
+
 + (instancetype)lexicalElementWithType:(NUCLexicalElementType)aType
 {
     return [[[self alloc] initWithType:aType] autorelease];

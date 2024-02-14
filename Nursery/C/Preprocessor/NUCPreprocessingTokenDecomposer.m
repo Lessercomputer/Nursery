@@ -504,7 +504,7 @@
         {
             if (aLength > 3) aLength = 3;
             
-            NSRange aRange = [aString rangeOfCharacterFromSet:[NUCDecomposedPreprocessingToken NUCOctalDigitCharacterSet] options:0 range:NSMakeRange([aScanner scanLocation], aLength)];
+            NSRange aRange = [NUCLexicalElement rangeOfCharactersFromSet:[NUCDecomposedPreprocessingToken NUCOctalDigitCharacterSet] string:aString range:NSMakeRange([aScanner scanLocation], aLength)];
             
             if (aRange.location != NSNotFound)
             {
@@ -576,7 +576,7 @@
 {
     if ([[aScanner string] length] - [aScanner scanLocation] >= 4)
     {
-        NSRange aHexdecimalDigitRange = [[aScanner string] rangeOfCharacterFromSet:[NUCDecomposedPreprocessingToken NUCHexadecimalDigitCharacterSet] options:0 range:NSMakeRange([aScanner scanLocation], 4)];
+        NSRange aHexdecimalDigitRange = [NUCLexicalElement rangeOfCharactersFromSet:[NUCDecomposedPreprocessingToken NUCHexadecimalDigitCharacterSet] string:[aScanner string] range:NSMakeRange([aScanner scanLocation], 4)];
         
         if (aHexdecimalDigitRange.length == 4)
             return YES;
