@@ -96,6 +96,14 @@
 {
     NSUInteger aScanLocation = [aScanner scanLocation];
     
+    if (!([self scanDigitFrom:aScanner into:NULL]
+            || ([self scanPeriodFrom:aScanner] && [self scanDigitFrom:aScanner into:NULL])))
+
+    {
+        [aScanner setScanLocation:aScanLocation];
+        return NO;
+    }
+    
     while (YES)
     {
         NSUInteger aScanLocation = [aScanner scanLocation];
@@ -104,26 +112,28 @@
             ;
         else if ([self scanPeriodFrom:aScanner])
         {
-            if (![self scanDigitFrom:aScanner into:NULL])
-            {
-                [aScanner setScanLocation:aScanLocation];
-                break;
-            }
+            if ([self scanDigitFrom:aScanner into:NULL])
+                ;
         }
         else
+        {
+            if ([self scanSmallEFrom:aScanner] || [self scanLargeEFrom:aScanner] || [self scanSmallPFrom:aScanner] || [self scanLargePFrom:aScanner])
+            {
+                if (![self scanSignFrom:aScanner])
+                    [aScanner setScanLocation:aScanLocation];
+            }
+            else
+                [self scanIdentifierNondigitFrom:aScanner];
+        }
+     
+        if (aScanLocation == [aScanner scanLocation])
             break;
     }
     
     if ([aScanner scanLocation] != aScanLocation)
     {
-        [self scanIdentifierNondigitFrom:aScanner]
-            || (([self scanSmallEFrom:aScanner] || [self scanLargeEFrom:aScanner] || [self scanSmallPFrom:aScanner] || [self scanLargePFrom:aScanner]) && [self scanSignFrom:aScanner])
-            || [self scanPeriodFrom:aScanner];
-    }
-    
-    if ([aScanner scanLocation] != aScanLocation)
-    {
-        [anElements addObject:[NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementPpNumberType]];
+        NUCDecomposedPreprocessingToken *aPpToken = [NUCDecomposedPreprocessingToken preprocessingTokenWithContentFromString:[aScanner string] range:NSMakeRange(aScanLocation, [aScanner scanLocation] - aScanLocation) type:NUCLexicalElementPpNumberType];
+        [anElements addObject:aPpToken];
         
         [self clearIsInInclude];
         
