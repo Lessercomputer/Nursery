@@ -16,9 +16,9 @@
 @property (nonatomic, retain) NUCExponentPart *exponentPart;
 @property (nonatomic, copy) NSString *floatingSuffix;
 
-+ (instancetype)floatingConstantWithFractionalConstant:(NUCFractionalConstant *)aFractionalConstant exponentPart:(NUCExponentPart *)anExponentPart floatingSuffix:(NSString *)aFloatingSuffix;
++ (instancetype)floatingConstantWithFractionalConstant:(NUCFractionalConstant *)aFractionalConstant exponentPart:(NUCExponentPart *)anExponentPart floatingSuffix:(NSString *)aFloatingSuffix ppNumber:(NUCDecomposedPreprocessingToken *)aPpNumber;
 
-+ (instancetype)floatingConstantWithDigitSequence:(NSString *)aDigitSequence exponentPart:(NUCExponentPart *)anExponentPart floatingSuffix:(NSString *)aFloatingSuffix;
++ (instancetype)floatingConstantWithDigitSequence:(NSString *)aDigitSequence exponentPart:(NUCExponentPart *)anExponentPart floatingSuffix:(NSString *)aFloatingSuffix ppNumber:(NUCDecomposedPreprocessingToken *)aPpNumber;
 
 @end
 

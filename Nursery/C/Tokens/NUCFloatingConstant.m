@@ -34,7 +34,7 @@
         
         NUCFractionalConstant *aFractionalConstant = [NUCFractionalConstant constantWithDigitSequence:aDigitSequence digitSequence2:aDigitSequence2];
         
-        NUCDecimalFloatingConstant *aDecimalFloatingConstant = [NUCDecimalFloatingConstant floatingConstantWithFractionalConstant:aFractionalConstant exponentPart:anExponentPart floatingSuffix:aFloatingSuffix];
+        NUCDecimalFloatingConstant *aDecimalFloatingConstant = [NUCDecimalFloatingConstant floatingConstantWithFractionalConstant:aFractionalConstant exponentPart:anExponentPart floatingSuffix:aFloatingSuffix ppNumber:aPpNumber];
         
         if (aConstant)
             *aConstant = [NUCConstant constantWithFloatingConstant:aDecimalFloatingConstant];
@@ -51,7 +51,7 @@
                 NSString *aFloatingSuffix = nil;
                 [self floatingSuffixFrom:aString into:&aFloatingSuffix location:&aLocation];
                 
-                NUCDecimalFloatingConstant *aDecimalFloatingConstant = [NUCDecimalFloatingConstant floatingConstantWithDigitSequence:aDigitSequence exponentPart:anExponentPart floatingSuffix:aFloatingSuffix];
+                NUCDecimalFloatingConstant *aDecimalFloatingConstant = [NUCDecimalFloatingConstant floatingConstantWithDigitSequence:aDigitSequence exponentPart:anExponentPart floatingSuffix:aFloatingSuffix ppNumber:aPpNumber];
                 
                 if (aConstant)
                     *aConstant = [NUCConstant constantWithFloatingConstant:aDecimalFloatingConstant];
@@ -203,6 +203,23 @@
     }
     
     return aValue;
+}
+
+- (instancetype)initWithType:(NUCLexicalElementType)aType ppNumber:(NUCDecomposedPreprocessingToken *)aPpNumber
+{
+    if (self = [super initWithType:aType])
+    {
+        _ppNumber = [aPpNumber retain];
+    }
+    
+    return self;
+}
+
+- (void)dealloc
+{
+    [_ppNumber release];
+    
+    [super dealloc];
 }
 
 @end

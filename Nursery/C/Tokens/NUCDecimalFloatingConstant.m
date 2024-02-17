@@ -12,19 +12,19 @@
 
 @implementation NUCDecimalFloatingConstant
 
-+ (instancetype)floatingConstantWithFractionalConstant:(NUCFractionalConstant *)aFractionalConstant exponentPart:(NUCExponentPart *)anExponentPart floatingSuffix:(NSString *)aFloatingSuffix
++ (instancetype)floatingConstantWithFractionalConstant:(NUCFractionalConstant *)aFractionalConstant exponentPart:(NUCExponentPart *)anExponentPart floatingSuffix:(NSString *)aFloatingSuffix ppNumber:(NUCDecomposedPreprocessingToken *)aPpNumber
 {
-    return [[[self alloc] initWithType:NUCLexicalElementNone fractionalConstant:aFractionalConstant exponentPart:anExponentPart floatingSuffix:aFloatingSuffix] autorelease];
+    return [[[self alloc] initWithType:NUCLexicalElementNone fractionalConstant:aFractionalConstant exponentPart:anExponentPart floatingSuffix:aFloatingSuffix ppNumber:aPpNumber] autorelease];
 }
 
-+ (instancetype)floatingConstantWithDigitSequence:(NSString *)aDigitSequence exponentPart:(NUCExponentPart *)anExponentPart floatingSuffix:(NSString *)aFloatingSuffix
++ (instancetype)floatingConstantWithDigitSequence:(NSString *)aDigitSequence exponentPart:(NUCExponentPart *)anExponentPart floatingSuffix:(NSString *)aFloatingSuffix ppNumber:(NUCDecomposedPreprocessingToken *)aPpNumber
 {
-    return [[[self alloc] initWithType:NUCLexicalElementNone digitSequence:aDigitSequence exponentPart:anExponentPart floatingSuffix:aFloatingSuffix] autorelease];
+    return [[[self alloc] initWithType:NUCLexicalElementNone digitSequence:aDigitSequence exponentPart:anExponentPart floatingSuffix:aFloatingSuffix ppNumber:aPpNumber] autorelease];
 }
 
-- (instancetype)initWithType:(NUCLexicalElementType)aType fractionalConstant:(NUCFractionalConstant *)aFractionalConstant exponentPart:(NUCExponentPart *)anExponentPart floatingSuffix:(NSString *)aFloatingSuffix
+- (instancetype)initWithType:(NUCLexicalElementType)aType fractionalConstant:(NUCFractionalConstant *)aFractionalConstant exponentPart:(NUCExponentPart *)anExponentPart floatingSuffix:(NSString *)aFloatingSuffix ppNumber:(NUCDecomposedPreprocessingToken *)aPpNumber
 {
-    if (self = [super initWithType:NUCLexicalElementNone])
+    if (self = [super initWithType:NUCLexicalElementNone ppNumber:aPpNumber])
     {
         _fractionalConstant = [aFractionalConstant retain];
         _exponentPart = [anExponentPart retain];
@@ -34,9 +34,9 @@
     return self;
 }
 
-- (instancetype)initWithType:(NUCLexicalElementType)aType digitSequence:(NSString *)aDigitSequence exponentPart:(NUCExponentPart *)anExponentPart floatingSuffix:(NSString *)aFloatingSuffix
+- (instancetype)initWithType:(NUCLexicalElementType)aType digitSequence:(NSString *)aDigitSequence exponentPart:(NUCExponentPart *)anExponentPart floatingSuffix:(NSString *)aFloatingSuffix ppNumber:(NUCDecomposedPreprocessingToken *)aPpNumber
 {
-    if (self = [super initWithType:NUCLexicalElementNone])
+    if (self = [super initWithType:NUCLexicalElementNone ppNumber:aPpNumber])
     {
         _digitSequence = [aDigitSequence copy];
         _exponentPart = [anExponentPart retain];

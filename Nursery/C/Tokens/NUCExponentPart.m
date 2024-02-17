@@ -13,16 +13,16 @@
 
 + (BOOL)expornentPartFrom:(NSString *)aString into:(NSString **)aSmallEOrLargeE into:(NSString **)aSign into:(NSString **)aDigitSequence location:(NSUInteger *)aLocationPointer
 {
-    if (!aLocationPointer)
+    if (!aLocationPointer || *aLocationPointer >= [aString length])
         return NO;
     
     NSUInteger aLocation = *aLocationPointer;
     NSString *aSmallEOrLageEToReturn = nil;
     NSRange aRange = NSMakeRange(aLocation, 1);
     
-    if ([aString compare:NUCSmallE options:0 range:aRange] == NSOrderedSame)
+    if ([aString compare:NUCSmallE options:NSAnchoredSearch range:aRange] == NSOrderedSame)
         aSmallEOrLageEToReturn = NUCSmallE;
-    else if ([aString compare:NUCLargeE options:0 range:aRange] == NSOrderedSame)
+    else if ([aString compare:NUCLargeE options:NSAnchoredSearch range:aRange] == NSOrderedSame)
         aSmallEOrLageEToReturn = NUCLargeE;
     else
         return NO;
@@ -35,7 +35,6 @@
     NSString *aDigitSequenceToReturn = nil;
     if (aLocation < [aString length] && [NUCFloatingConstant digitSequenceFrom:aString at:&aLocation into:&aDigitSequenceToReturn])
     {
-        
         *aLocationPointer = aLocation;
         
         if (aDigitSequence)
