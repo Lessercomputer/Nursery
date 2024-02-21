@@ -10,7 +10,7 @@
 
 @implementation NUCBinaryExponentPart
 
-+ (BOOL)alphabetFrom:(NSString *)aString into:(NSString **)aSmallPOrLargeP location:(NSUInteger *)aLocationPointer
++ (BOOL)eOrPFrom:(NSString *)aString into:(NSString **)aSmallPOrLargeP location:(NSUInteger *)aLocationPointer
 {
     NSString *aSmallPOrLargePToReturn = nil;
     
@@ -21,21 +21,19 @@
         aSmallPOrLargePToReturn = NUCSmallP;
     else if ([aString compare:NUCLargeP options:NSAnchoredSearch range:NSMakeRange(*aLocationPointer, 1)] == NSOrderedSame)
         aSmallPOrLargePToReturn = NUCLargeP;
+    else
+        return NO;
     
     if (aSmallPOrLargePToReturn)
-    {
-        *aLocationPointer = *aLocationPointer + 1;
-        return YES;
-    }
+        *aSmallPOrLargeP = aSmallPOrLargePToReturn;
+    *aLocationPointer = *aLocationPointer + 1;
     
-    return NO;
+    return YES;
 }
 
-- (void)dealloc
+- (NSString *)smallPOrLargeP
 {
-    [_smallPOrLargeP release];
-    
-    [super dealloc];
+    return [self eOrP];
 }
 
 @end

@@ -1,22 +1,23 @@
 //
-//  NUCHexadecimalFractionalConstant.m
+//  NUCFractionalConstant.m
 //  Nursery
 //
-//  Created by TAKATA Akifumi on 2024/02/17.
+//  Created by TAKATA Akifumi on 2024/02/12.
 //
 
-#import "NUCHexadecimalFractionalConstant.h"
+#import "NUCFractionalConstant.h"
+
 #import <Foundation/NSString.h>
 
-@implementation NUCHexadecimalFractionalConstant
+@implementation NUCFractionalConstant
 
-+ (BOOL)hexadecimalFractionalConstantFrom:(NSString *)aString into:(NSString **)aHexadecimalDigitSequence into:(NSString  **)aHexadecimalDigitSequence2 location:(NSUInteger *)aLocationPointer
++ (BOOL)fractionalConstantFrom:(NSString *)aString into:(NSString **)aHexadecimalDigitSequence into:(NSString  **)aHexadecimalDigitSequence2 location:(NSUInteger *)aLocationPointer
 {
     if (!aLocationPointer)
         return NO;
     
     NSUInteger aLocation = *aLocationPointer;
-    NSRange aDigitSequenceRange = [self rangeOfCharactersFromSet:[NUCLexicalElement NUCHexadecimalDigitCharacterSet] string:aString range:NSMakeRange(aLocation, [aString length] - aLocation)];
+    NSRange aDigitSequenceRange = [self rangeOfCharactersFromSet:[self digitSequenceCharacterSet] string:aString range:NSMakeRange(aLocation, [aString length] - aLocation)];
     NSRange aPeriodRange = NSMakeRange(aLocation, 0);
     NSRange aDigitSequence2Range = NSMakeRange(NSNotFound, 0);
     NSString *aDigitSequence = nil, *aDigitSequence2 = nil;
@@ -31,8 +32,8 @@
     
     if (aPeriodRange.location != NSNotFound)
     {
-        NSUInteger aDigitSequence2Location = aDigitSequenceRange.location + 1;
-        aDigitSequence2Range = [self rangeOfCharactersFromSet:[NUCLexicalElement NUCHexadecimalDigitCharacterSet] string:aString range:NSMakeRange(aDigitSequence2Location, [aString length] - aDigitSequence2Location)];
+        NSUInteger aDigitSequence2Location = NSMaxRange(aPeriodRange);
+        aDigitSequence2Range = [self rangeOfCharactersFromSet:[self digitSequenceCharacterSet] string:aString range:NSMakeRange(aDigitSequence2Location, [aString length] - aDigitSequence2Location)];
         
         if (aDigitSequence2Range.location != NSNotFound)
         {
@@ -61,6 +62,35 @@
     }
     
     return NO;
+}
+
++ (NSCharacterSet *)digitSequenceCharacterSet
+{
+    return [self NUCDigitCharacterSet];
+}
+
++ (instancetype)constantWithDigitSequence:(NSString *)aDigitSequence digitSequence2:(NSString *)aDigitSequence2
+{
+    return [[[self alloc] initWithType:NUCLexicalElementNone digitSequence:aDigitSequence digitSequence2:aDigitSequence2] autorelease];
+}
+
+- (instancetype)initWithType:(NUCLexicalElementType)aType digitSequence:(NSString *)aDigitSequence digitSequence2:(NSString *)aDigitSequence2
+{
+    if (self = [super initWithType:NUCLexicalElementNone])
+    {
+        _digitSequence = [aDigitSequence copy];
+        _digitSequence2 = [aDigitSequence2 copy];
+    }
+    
+    return self;
+}
+
+- (void)dealloc
+{
+    [_digitSequence release];
+    [_digitSequence2 release];
+    
+    [super dealloc];
 }
 
 @end

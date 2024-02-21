@@ -10,7 +10,7 @@
 
 @interface NUCBinaryExponentPart : NUCExponentPart
 
-@property (nonatomic, copy) NSString *smallPOrLargeP;
+@property (nonatomic, readonly) NSString *smallPOrLargeP;
 
 @end
 

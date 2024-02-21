@@ -896,6 +896,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2466CEBE2B86123D0027AB9C /* FloatingConsttants */ = {
+			isa = PBXGroup;
+			children = (
+				24BFC0252B78BCC800D10FDB /* NUCFloatingConstant.h */,
+				24BFC0262B78BCC800D10FDB /* NUCFloatingConstant.m */,
+				24BFC0322B79CDB500D10FDB /* NUCDecimalFloatingConstant.h */,
+				24BFC0332B79CDB500D10FDB /* NUCDecimalFloatingConstant.m */,
+				24BFC0362B79CFBF00D10FDB /* NUCFractionalConstant.h */,
+				24BFC0372B79CFBF00D10FDB /* NUCFractionalConstant.m */,
+				24BFC04D2B7A0B9700D10FDB /* NUCExponentPart.h */,
+				24BFC04E2B7A0B9700D10FDB /* NUCExponentPart.m */,
+				2466CEB22B8072400027AB9C /* NUCHexadecimalFloatingConstant.h */,
+				2466CEB32B8072400027AB9C /* NUCHexadecimalFloatingConstant.m */,
+				2466CEB62B8079130027AB9C /* NUCHexadecimalFractionalConstant.h */,
+				2466CEB72B8079140027AB9C /* NUCHexadecimalFractionalConstant.m */,
+				2466CEBA2B807CD20027AB9C /* NUCBinaryExponentPart.h */,
+				2466CEBB2B807CD20027AB9C /* NUCBinaryExponentPart.m */,
+			);
+			path = FloatingConsttants;
+			sourceTree = "<group>";
+		};
 		24BFC01C2B788D5300D10FDB /* Preprocessor */ = {
 			isa = PBXGroup;
 			children = (
@@ -922,20 +943,7 @@
 				24BFC0222B7890EA00D10FDB /* NUCToken.m */,
 				24BFC0292B78DD0400D10FDB /* NUCKeyword.h */,
 				24BFC02A2B78DD0400D10FDB /* NUCKeyword.m */,
-				24BFC0252B78BCC800D10FDB /* NUCFloatingConstant.h */,
-				24BFC0262B78BCC800D10FDB /* NUCFloatingConstant.m */,
-				24BFC0322B79CDB500D10FDB /* NUCDecimalFloatingConstant.h */,
-				24BFC0332B79CDB500D10FDB /* NUCDecimalFloatingConstant.m */,
-				24BFC0362B79CFBF00D10FDB /* NUCFractionalConstant.h */,
-				24BFC0372B79CFBF00D10FDB /* NUCFractionalConstant.m */,
-				24BFC04D2B7A0B9700D10FDB /* NUCExponentPart.h */,
-				24BFC04E2B7A0B9700D10FDB /* NUCExponentPart.m */,
-				2466CEB22B8072400027AB9C /* NUCHexadecimalFloatingConstant.h */,
-				2466CEB32B8072400027AB9C /* NUCHexadecimalFloatingConstant.m */,
-				2466CEB62B8079130027AB9C /* NUCHexadecimalFractionalConstant.h */,
-				2466CEB72B8079140027AB9C /* NUCHexadecimalFractionalConstant.m */,
-				2466CEBA2B807CD20027AB9C /* NUCBinaryExponentPart.h */,
-				2466CEBB2B807CD20027AB9C /* NUCBinaryExponentPart.m */,
+				2466CEBE2B86123D0027AB9C /* FloatingConsttants */,
 				24BFC02D2B79AFAC00D10FDB /* NUCAdjacentStringLiteral.h */,
 				24BFC02E2B79AFAC00D10FDB /* NUCAdjacentStringLiteral.m */,
 			);
