@@ -18,5 +18,9 @@
 @property (nonatomic, retain) NUCBinaryExponentPart *binaryExponentPart;
 @property (nonatomic, copy) NSString *floatingSuffix;
 
++ (instancetype)floatingConstantWithHexadecimalPrefix:(NSString *)aPrefix fractionalConstant:(NUCHexadecimalFractionalConstant *)aFractionalConstant exponentPart:(NUCBinaryExponentPart *)anExponentPart floatingSuffix:(NSString *)aFloatingSuffix ppNumber:(NUCDecomposedPreprocessingToken *)aPpNumber;
+
++ (instancetype)floatingConstantWithHexadecimalPrefix:(NSString *)aPrefix digitSequence:(NSString *)aDigitSequence exponentPart:(NUCBinaryExponentPart *)anExponentPart floatingSuffix:(NSString *)aFloatingSuffix ppNumber:(NUCDecomposedPreprocessingToken *)aPpNumber;
+
 @end
 

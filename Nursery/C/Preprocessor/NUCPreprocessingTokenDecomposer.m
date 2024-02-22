@@ -70,9 +70,9 @@
 {
     NSUInteger aScanLocation = [aScanner scanLocation];
     
-    if ([self scanIdentifierNondigitFrom:aScanner])
+    if ([self scanIdentifierNondigitsFrom:aScanner])
     {
-        while ([self scanDigitFrom:aScanner into:NULL] || [self scanIdentifierNondigitFrom:aScanner]);
+        while ([self scanDigitsFrom:aScanner into:NULL] || [self scanIdentifierNondigitsFrom:aScanner]);
     }
     
     if (aScanLocation != [aScanner scanLocation])
@@ -96,8 +96,8 @@
 {
     NSUInteger aScanLocation = [aScanner scanLocation];
     
-    if (!([self scanDigitFrom:aScanner into:NULL]
-            || ([self scanPeriodFrom:aScanner] && [self scanDigitFrom:aScanner into:NULL])))
+    if (!([self scanDigitsFrom:aScanner into:NULL]
+            || ([self scanPeriodFrom:aScanner] && [self scanDigitsFrom:aScanner into:NULL])))
 
     {
         [aScanner setScanLocation:aScanLocation];
@@ -108,11 +108,11 @@
     {
         NSUInteger aScanLocation = [aScanner scanLocation];
         
-        if ([self scanDigitFrom:aScanner into:NULL])
+        if ([self scanDigitsFrom:aScanner into:NULL])
             ;
         else if ([self scanPeriodFrom:aScanner])
         {
-            if ([self scanDigitFrom:aScanner into:NULL])
+            if ([self scanDigitsFrom:aScanner into:NULL])
                 ;
         }
         else
@@ -360,6 +360,11 @@
     return NO;
 }
 
+- (BOOL)scanIdentifierNondigitsFrom:(NSScanner *)aScanner
+{
+    return [self scanNondigitsFrom:aScanner];
+}
+
 - (BOOL)scanIdentifierNondigitFrom:(NSScanner *)aScanner
 {
     return [self scanNondigitFrom:aScanner];
@@ -373,14 +378,27 @@
         return [aScanner scanCharactersFromSet:[NUCDecomposedPreprocessingToken NUCDigitCharacterSet] intoString:aString];
 }
 
-- (BOOL)scanDigitFrom:(NSScanner *)aScanner into:(NSString **)aString
+- (BOOL)scanDigitsFrom:(NSScanner *)aScanner into:(NSString **)aString
 {
     return [[self class] scanDigitSequenceFrom:aScanner into:aString];
 }
 
-- (BOOL)scanNondigitFrom:(NSScanner *)aScanner
+- (BOOL)scanNondigitsFrom:(NSScanner *)aScanner
 {
     return [aScanner scanCharactersFromSet:[NUCDecomposedPreprocessingToken NUCNondigitCharacterSet] intoString:NULL];
+}
+
+- (BOOL)scanNondigitFrom:(NSScanner *)aScanner
+{
+    NSUInteger aLocation = [aScanner scanLocation];
+    
+    if ([aScanner scanCharactersFromSet:[NUCLexicalElement NUCNondigitCharacterSet] intoString:NULL])
+    {
+        [aScanner setScanLocation:aLocation + 1];
+        return YES;
+    }
+    
+    return NO;
 }
 
 - (BOOL)scanPeriodFrom:(NSScanner *)aScanner

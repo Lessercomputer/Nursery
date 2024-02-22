@@ -11,6 +11,7 @@
 #import "NUCDecimalFloatingConstant.h"
 #import "NUCFractionalConstant.h"
 #import "NUCExponentPart.h"
+#import "NUCHexadecimalFloatingConstant.h"
 
 #import <Foundation/NSString.h>
 
@@ -20,7 +21,8 @@
 {
     NUCConstant *aConstantToReturn = nil;
     
-    if ([NUCDecimalFloatingConstant floatingConstantFromPpNumber:aPpNumber into:&aConstantToReturn])
+    if ([NUCDecimalFloatingConstant floatingConstantFromPpNumber:aPpNumber into:&aConstantToReturn]
+        || [NUCHexadecimalFloatingConstant floatingConstantFromPpNumber:aPpNumber into:&aConstantToReturn])
     {
         if (aConstant)
             *aConstant = aConstantToReturn;
@@ -41,7 +43,7 @@
     
     if ([aString compare:NUCPlusSign options:0 range:aRange] == NSOrderedSame)
         aSignToReturn = NUCPlusSign;
-    else if ([aString compare:NUCMinusSign options:0 range:aRange])
+    else if ([aString compare:NUCMinusSign options:0 range:aRange] == NSOrderedSame)
         aSignToReturn = NUCMinusSign;
     else
         return NO;
@@ -82,11 +84,11 @@
 
 + (BOOL)digitSequenceFrom:(NSString *)aString at:(NSUInteger *)aLocationPointer into:(NSString **)aDigitSequence
 {
-    if (!aLocationPointer)
+    if (!aLocationPointer && *aLocationPointer >= [aString length])
         return NO;
     
     NSUInteger aLocation = *aLocationPointer;
-    NSRange aDigitSequenceRange = [self rangeOfDigitSequenceFrom:aString range:NSMakeRange(aLocation, [aString length] - aLocation)];
+    NSRange aDigitSequenceRange = [self rangeOfCharactersFromSet:[self digitSequenceCharacterSet] string:aString range:NSMakeRange(aLocation, [aString length] - aLocation)];
     
     if (aDigitSequenceRange.location != NSNotFound)
     {
@@ -99,6 +101,11 @@
     }
     
     return NO;
+}
+
++ (NSCharacterSet *)digitSequenceCharacterSet
+{
+    return [self NUCDigitCharacterSet];
 }
 
 + (NUUInt64)intFromString:(NSString *)aString withRange:(NSRange)aDecimalDigitsRange

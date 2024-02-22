@@ -96,6 +96,11 @@
     return self;
 }
 
++ (NSCharacterSet *)digitSequenceCharacterSet
+{
+    return [self NUCHexadecimalDigitCharacterSet];
+}
+
 - (void)dealloc
 {
     [_fractionalConstant release];

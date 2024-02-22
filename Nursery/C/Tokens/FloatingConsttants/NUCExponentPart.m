@@ -25,7 +25,7 @@
     [NUCFloatingConstant signFrom:aString into:&aSignToReturn location:&aLocation];
     
     NSString *aDigitSequenceToReturn = nil;
-    if (aLocation < [aString length] && [NUCFloatingConstant digitSequenceFrom:aString at:&aLocation into:&aDigitSequenceToReturn])
+    if ([NUCFloatingConstant digitSequenceFrom:aString at:&aLocation into:&aDigitSequenceToReturn])
     {
         *aLocationPointer = aLocation;
         

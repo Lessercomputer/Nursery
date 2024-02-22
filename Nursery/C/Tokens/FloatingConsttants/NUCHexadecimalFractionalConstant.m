@@ -15,4 +15,14 @@
     return [self NUCHexadecimalDigitCharacterSet];
 }
 
+- (NSString *)hexadecimalDigitSequence
+{
+    return [self digitSequence];
+}
+
+- (NSString *)hexadecimalDigitSequence2
+{
+    return [self digitSequence2];
+}
+
 @end
