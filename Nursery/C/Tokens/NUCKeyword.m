@@ -6,6 +6,9 @@
 //
 
 #import "NUCKeyword.h"
+#import "NUCLexicalElement.h"
+#import "NUCDecomposedPreprocessingToken.h"
+#import <Foundation/NSString.h>
 
 @implementation NUCKeyword
 
@@ -29,6 +32,16 @@
     [_identifier release];
     
     [super dealloc];
+}
+
+- (BOOL)isVoid
+{
+    return [[[self identifier] content] isEqualToString:NUCKeywordVoid];
+}
+
+- (BOOL)isInt
+{
+    return [[[self identifier] content] isEqualToString:NUCKeywordInt];
 }
 
 @end

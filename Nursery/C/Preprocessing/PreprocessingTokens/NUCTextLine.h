@@ -1,0 +1,28 @@
+//
+//  NUCTextLine.h
+//  Nursery
+//
+//  Created by TAKATA Akifumi on 2021/02/09.
+//
+
+#import "NUCPreprocessingDirective.h"
+
+@class NUCPpTokens, NUCNewline, NUCPreprocessingTokenStream;
+
+@interface NUCTextLine : NUCPreprocessingDirective
+{
+    NUCPpTokens *ppTokens;
+    NUCNewline *newline;
+}
+
++ (BOOL)textLineFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingDirective **)aToken;
+
++ (instancetype)textLineWithPpTokens:(NUCPpTokens *)aPpTokens newline:(NUCNewline *)aNewline;
+
+- (instancetype)initWithPpTokens:(NUCPpTokens *)aPpTokens newline:(NUCNewline *)aNewline;
+
+- (NUCPpTokens *)ppTokens;
+- (NUCNewline *)newline;
+
+@end
+

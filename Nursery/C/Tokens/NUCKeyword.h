@@ -12,6 +12,9 @@
 
 @property (nonatomic, retain) NUCDecomposedPreprocessingToken *identifier;
 
+@property (nonatomic, readonly) BOOL isVoid;
+@property (nonatomic, readonly) BOOL isInt;
+
 + (instancetype)tokenWith:(NUCDecomposedPreprocessingToken *)aPpToken;
 
 @end

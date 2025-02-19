@@ -1,11 +1,11 @@
 //
-//  NUCPreprocessingTokenToTokenConverter.m
+//  NUCPreprocessingTokenToTokenStream.m
 //  Nursery
 //
 //  Created by TAKATA Akifumi on 2024/02/11.
 //
 
-#import "NUCPreprocessingTokenToTokenConverter.h"
+#import "NUCPreprocessingTokenToTokenStream.h"
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCToken.h"
 #import "NUCKeyword.h"
@@ -14,7 +14,7 @@
 
 #import <Foundation/NSArray.h>
 
-@implementation NUCPreprocessingTokenToTokenConverter
+@implementation NUCPreprocessingTokenToTokenStream
 
 - (instancetype)initWithPreprocessingTokens:(NSArray *)aPreprocessingTokens
 {

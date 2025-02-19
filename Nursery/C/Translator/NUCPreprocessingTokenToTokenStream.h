@@ -1,16 +1,16 @@
 //
-//  NUCPreprocessingTokenToTokenConverter.h
+//  NUCPreprocessingTokenToTokenStream.h
 //  Nursery
 //
 //  Created by TAKATA Akifumi on 2024/02/11.
 //
 
 #import <Foundation/NSObject.h>
-#import "NUCLexicalElement.h"
+#import "NUCTokenProtocol.h"
 
 @class NSArray;
 
-@interface NUCPreprocessingTokenToTokenConverter : NSObject
+@interface NUCPreprocessingTokenToTokenStream : NSObject
 
 - (instancetype)initWithPreprocessingTokens:(NSArray *)aPreprocessingTokens;
 

@@ -1,0 +1,30 @@
+//
+//  NUCGroup.h
+//  Nursery
+//
+//  Created by TAKATA Akifumi on 2021/02/01.
+//
+
+#import "NUCPreprocessingDirective.h"
+
+@class NSMutableString;
+@class NUCPreprocessingTokenStream;
+
+@interface NUCGroup : NUCPreprocessingDirective
+{
+    NSMutableArray *groupParts;
+}
+
++ (BOOL)groupFrom:(NUCPreprocessingTokenStream *)aStream with:(NUCPreprocessor *)aPreprocessor isSkipped:(BOOL)aGroupIsSkipped into:(NUCGroup **)aToken;
++ (instancetype)group;
+
+- (NSMutableArray *)groupParts;
+- (NSUInteger)count;
+
+- (void)add:(NUCPreprocessingDirective *)aGroupPart;
+
+@property (nonatomic, retain) NSMutableArray *macroReplacedPpTokens;
+@property (nonatomic) BOOL isSkipped;
+- (void)addPpTokensByReplacingMacrosTo:(NSMutableArray *)aMacroReplacedPpTokens with:(NUCPreprocessor *)aPreprocessor;
+
+@end

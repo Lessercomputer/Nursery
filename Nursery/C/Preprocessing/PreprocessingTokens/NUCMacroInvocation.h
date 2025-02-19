@@ -1,0 +1,72 @@
+//
+//  NUCMacroInvocation.h
+//  Nursery
+//
+//  Created by TAKATA Akifumi on 2023/06/07.
+//
+
+#import "NUCPreprocessingToken.h"
+
+@class NUCControlLineDefine, NUCPpTokensWithMacroInvocations, NUCIdentifier, NUCPreprocessingTokenStream, NUCDecomposedPreprocessingToken, NUCMacroArgument;
+@class NSMutableSet;
+
+@interface NUCMacroInvocation : NUCPreprocessingToken
+{
+    NUCControlLineDefine *define;
+    NSArray *whitespacesFollowingMacroName;
+    NUCDecomposedPreprocessingToken *openingParenthesis;
+    NUCDecomposedPreprocessingToken *closingParenthesis;
+    NSMutableArray *arguments;
+    NUCPpTokensWithMacroInvocations *ppTokensWithMacroinvocations;
+}
+
++ (instancetype)macroInvocationWithIdentifier:(NUCIdentifier *)anIdentifier define:(NUCControlLineDefine *)aDefine parent:(NUCMacroInvocation *)aParent;
+
++ (NUCPreprocessingToken *)identifierOrMacroInvocation:(NUCIdentifier *)anIdentifier from:(NUCPreprocessingTokenStream *)aPpTokenStream with:(NUCPreprocessor *)aPreprocessor parentMacroInvocation:(NUCMacroInvocation *)aParentMacroInvocation replacingMacroNames:(NSMutableSet *)aReplacingMacroNames;
+
+- (instancetype)initWithIdentifier:(NUCIdentifier *)anIdentifier define:(NUCControlLineDefine *)aDefine parent:(NUCMacroInvocation *)aParent;
+
+@property (nonatomic, retain) NUCIdentifier *identifier;
+
+- (NUCControlLineDefine *)define;
+- (void)setDefine:(NUCControlLineDefine *)aDefine;
+
+@property (nonatomic, assign) NUCMacroInvocation *parent;
+@property (nonatomic, readonly) NUCMacroInvocation *top;
+
+- (BOOL)isObjectLike;
+- (BOOL)isFunctionLike;
+- (BOOL)hasVariableArguments;
+
+- (NSArray *)whitespacesFollowingMacroName;
+- (void)setWhitespacesFollowingMacroName:(NSArray *)aWhitespaces;
+
+- (NUCDecomposedPreprocessingToken *)openingParenthesis;
+- (void)setOpeningParenthesis:(NUCDecomposedPreprocessingToken *)anOpeningParenthesis;
+
+- (NUCDecomposedPreprocessingToken *)closingParenthesis;
+- (void)setClosingParenthesis:(NUCDecomposedPreprocessingToken *)aClosingParenthesis;
+
+- (NSMutableArray *)arguments;
+- (void)setArguments:(NSMutableArray *)anArguments;
+
+- (NUCMacroArgument *)vaArgs;
+
+- (NUCMacroArgument *)argumentAt:(NSUInteger)anIndex;
+- (NUCMacroArgument *)argumentFor:(NUCIdentifier *)aParameterIdentifier;
+
+- (void)addArgument:(NUCMacroArgument *)anArgument;
+
+- (NUCPpTokensWithMacroInvocations *)ppTokensWithMacroinvocations;
+- (void)setPpTokensWithMacroinvocations:(NUCPpTokensWithMacroInvocations *)aPpTokens;
+
+- (NUCPreprocessingToken *)lastPpTokenWithoutWhitespaces;
+- (NUCPreprocessingToken *)lastPpTokenWithoutWhitespacesIndexInto:(NSUInteger *)anIndex;
+- (NUCMacroInvocation *)lastMacroInvocation;
+
+- (NSMutableArray *)expandedPpTokens;
+
+- (void)addExpandedPpTokensTo:(NSMutableArray *)aPpTokens with:(NUCPreprocessor *)aPreprocessor;
+
+@end
+

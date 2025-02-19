@@ -1,0 +1,29 @@
+//
+//  NUCReplacementList.h
+//  Nursery
+//
+//  Created by TAKATA Akifumi on 2021/02/10.
+//
+
+#import "NUCPreprocessingDirective.h"
+
+@class NSIndexSet;
+@class NUCPpTokens, NUCPreprocessingTokenStream;
+
+@interface NUCReplacementList : NUCPreprocessingDirective
+{
+    NUCPpTokens *ppTokens;
+}
+
++ (BOOL)replacementListFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPreprocessingDirective **)aToken;
+
++ (instancetype)replacementListWithPpTokens:(NUCPpTokens *)aPpTokens;
+
+- (instancetype)initWithPpTokens:(NUCPpTokens *)aPpTokens;
+
+- (NUCPpTokens *)ppTokens;
+
+- (void)enumerateObjectsUsingBlock:(void (^)(NUCPreprocessingToken *aPpToken, NSUInteger anIndex, BOOL *aStop))aBlock;
+
+@end
+

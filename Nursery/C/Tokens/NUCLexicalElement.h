@@ -9,6 +9,8 @@
 
 #import <Nursery/NURegion.h>
 
+#import "NUCTokenProtocol.h"
+
 @class NSString, NSMutableArray, NSMutableString;
 @class NUCPreprocessor;
 
@@ -139,6 +141,9 @@ extern NSString * const NUCStringLiteralEncodingPrefixSmallU;
 extern NSString * const NUCStringLiteralEncodingPrefixLargeU;
 extern NSString * const NUCStringLiteralEncodingPrefixLargeL;
 
+extern NSString * const NUCKeywordVoid;
+extern NSString * const NUCKeywordInt;
+
 typedef enum : NSUInteger {
     NUCLexicalElementNone,
     NUCLexicalElementStringLiteralType,
@@ -187,15 +192,6 @@ typedef enum : NSUInteger {
     NUCLexicalElementKeywordType
 } NUCLexicalElementType;
 
-@protocol NUCToken <NSObject>
-
-- (BOOL)isKeyword;
-- (BOOL)isIdentifier;
-- (BOOL)isConstant;
-- (BOOL)isStringLiteral;
-- (BOOL)isPunctuator;
-
-@end
 
 @interface NUCLexicalElement : NSObject <NUCToken>
 {

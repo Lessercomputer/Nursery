@@ -429,6 +429,39 @@ static NSArray *NUCKeywords;
     return [self type] == NUCLexicalElementPunctuatorType;
 }
 
+- (BOOL)isClosingBrace
+{
+    return NO;
+}
+
+- (BOOL)isClosingParenthesis
+{
+    return NO;
+}
+
+
+- (BOOL)isComma
+{
+    return NO;
+}
+
+
+- (BOOL)isEllipsis
+{
+    return NO;
+}
+
+
+- (BOOL)isOpeningBrace
+{
+    return NO;
+}
+
+
+- (BOOL)isOpeningParenthesis
+{
+    return NO;
+}
 
 - (NSString *)preprocessedStringWithPreprocessor:(NUCPreprocessor *)aPreprocessor
 {

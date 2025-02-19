@@ -18,6 +18,7 @@
 }
 
 @property (nonatomic, retain) NSMutableArray *searchPathURLs;
+@property (nonatomic, retain) NSMutableArray *translationUnits;
 
 - (instancetype)initWithSourceFileURLs:(NSArray *)aURLs;
 - (instancetype)initWithSourceFiles:(NSArray *)aSourceFiles;

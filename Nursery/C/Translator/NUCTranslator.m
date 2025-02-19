@@ -14,8 +14,10 @@
 #import "NUCPreprocessor.h"
 #import "NUCSourceFile.h"
 #import "NUCPreprocessingFile.h"
-#import "NUCPreprocessingTokenToTokenConverter.h"
+#import "NUCPreprocessingTokenToTokenStream.h"
 #import "NUCToken.h"
+#import "NUCTranslationUnit.h"
+
 
 @class NUCSourceFile;
 
@@ -96,17 +98,23 @@
 {
     [self preprocess];
     
-    [[self preprocessedSourceFiles] enumerateObjectsUsingBlock:^(NUCSourceFile * _Nonnull aPreprocessedSourceFile, NSUInteger idx, BOOL * _Nonnull stop) {
+    [[self preprocessedSourceFiles] enumerateObjectsUsingBlock:^(NUCSourceFile * _Nonnull aPreprocessedSourceFile, NSUInteger idx, BOOL * _Nonnull aStop) {
         
         NSArray *aPpTokens = [[aPreprocessedSourceFile preprocessingFile] macroReplacedPpTokens];
-        NUCPreprocessingTokenToTokenConverter *aPpTokenToTokenConverter = [[[NUCPreprocessingTokenToTokenConverter alloc] initWithPreprocessingTokens:aPpTokens] autorelease];
+        NUCPreprocessingTokenToTokenStream *aPpTokenToTokenConverter = [[[NUCPreprocessingTokenToTokenStream alloc] initWithPreprocessingTokens:aPpTokens] autorelease];
         
-        NUCToken *aToken = nil;
+//        NUCToken *aToken = nil;
+//        
+//        while ((aToken = [aPpTokenToTokenConverter next]))
+//        {
+//            NSLog(@"%@", aToken);
+//        }
         
-        while ((aToken = [aPpTokenToTokenConverter next]))
-        {
-            NSLog(@"%@", aToken);
-        }
+        NUCTranslationUnit *aTranslationUnit = nil;
+        if ([NUCTranslationUnit translationUnitFrom:aPpTokenToTokenConverter into:&aTranslationUnit])
+            [[self translationUnits] addObject:aTranslationUnit];
+        else
+            *aStop = YES;
     }];
 }
 
