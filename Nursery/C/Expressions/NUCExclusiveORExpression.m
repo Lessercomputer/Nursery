@@ -6,14 +6,13 @@
 //
 
 #import "NUCExclusiveORExpression.h"
-#import "NUCPreprocessingTokenStream.h"
 #import "NUCANDExpression.h"
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCExpressionResult.h"
 
 @implementation NUCExclusiveORExpression
 
-+ (BOOL)subexpressionInto:(NUCProtoExpression **)aSubexpression from:(NUCPreprocessingTokenStream *)aStream
++ (BOOL)subexpressionInto:(NUCProtoExpression **)aSubexpression from:(NUCTokenStream *)aStream
 {
     return [NUCANDExpression expressionInto:aSubexpression from:aStream];
 }

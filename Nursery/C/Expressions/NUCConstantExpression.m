@@ -11,7 +11,7 @@
 
 @implementation NUCConstantExpression
 
-+ (BOOL)constantExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCConstantExpression **)aConstantExpression
++ (BOOL)constantExpressionFrom:(NUCTokenStream *)aStream into:(NUCConstantExpression **)aConstantExpression
 {
     NUCConditionalExpression *aConditionalExpression = nil;
     

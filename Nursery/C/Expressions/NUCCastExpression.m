@@ -6,13 +6,12 @@
 //
 
 #import "NUCCastExpression.h"
-#import "NUCPreprocessingTokenStream.h"
 #import "NUCUnaryExpression.h"
 #import "NUCDecomposedPreprocessingToken.h"
 
 @implementation NUCCastExpression
 
-+ (BOOL)castExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCCastExpression **)anExpression
++ (BOOL)castExpressionFrom:(NUCTokenStream *)aStream into:(NUCCastExpression **)anExpression
 {
     NUCUnaryExpression *anUnaryExpression = nil;
     

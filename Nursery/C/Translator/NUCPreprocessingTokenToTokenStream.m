@@ -68,6 +68,14 @@
     return aToken;
 }
 
+- (id <NUCToken>)peekNext
+{
+    NSUInteger aPosition = [self position];
+    id <NUCToken> aToken = [self next];
+    [self setPosition:aPosition];
+    return aToken;
+}
+
 - (id <NUCToken>)basicNext
 {
     NUCDecomposedPreprocessingToken *aPpToken = nil;

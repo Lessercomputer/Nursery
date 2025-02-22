@@ -7,23 +7,23 @@
 
 #import "NUCIntegerConstant.h"
 #import "NUCConstant.h"
+#import "NUCTokenProtocol.h"
 #import "NUCDecomposedPreprocessingToken.h"
-#import "NUCPreprocessingTokenStream.h"
-
+#import "NUCTokenStream.h"
 #import <Foundation/NSString.h>
 
 @implementation NUCIntegerConstant
 
 @synthesize value;
 
-+ (BOOL)integerConstantFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCConstant **)aConstant
++ (BOOL)integerConstantFrom:(NUCTokenStream *)aStream into:(NUCConstant **)aConstant
 {
-    NSUInteger aPosition = [aPreprocessingTokenStream position];
-    NUCDecomposedPreprocessingToken *aPpToken = [aPreprocessingTokenStream next];
+    NSUInteger aPosition = [aStream position];
+    id <NUCToken> aPpToken = [aStream next];
     
     if (![aPpToken isPpNumber])
     {
-        [aPreprocessingTokenStream setPosition:aPosition];
+        [aStream setPosition:aPosition];
         return NO;
     }
     
@@ -33,10 +33,10 @@
         return NO;
 }
 
-+ (BOOL)integerConstantFromPpNumber:(NUCDecomposedPreprocessingToken *)aPpNumber into:(NUCConstant **)aConstant
++ (BOOL)integerConstantFromPpNumber:(id <NUCToken>)aPpNumber into:(NUCConstant **)aConstant
 {
     NUUInt64 aValue = 0;
-    NSString *aString = [aPpNumber content];
+    NSString *aString = [(NUCDecomposedPreprocessingToken *)aPpNumber content];
     
     if ([aString hasPrefix:NUCHexadecimalPrefixSmall] || [aString hasPrefix:NUCHexadecimalPrefixLarge])
     {
@@ -98,12 +98,12 @@
     return YES;
 }
 
-+ (instancetype)constantWithPpNumber:(NUCDecomposedPreprocessingToken *)aPpNumber value:(NUUInt64)aValue
++ (instancetype)constantWithPpNumber:(id <NUCToken>)aPpNumber value:(NUUInt64)aValue
 {
     return [[[self alloc] initWithPpNumber:aPpNumber value:aValue] autorelease];
 }
 
-- (instancetype)initWithPpNumber:(NUCDecomposedPreprocessingToken *)aPpNumber value:(NUUInt64)aValue
+- (instancetype)initWithPpNumber:(id <NUCToken>)aPpNumber value:(NUUInt64)aValue
 {
     if (self = [super initWithType:NUCLexicalElementIntegerConstantType])
     {

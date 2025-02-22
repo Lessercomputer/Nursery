@@ -15,9 +15,19 @@
     return nil;
 }
 
+- (id <NUCToken>)peekNext
+{
+    return nil;
+}
+
 - (BOOL)skipWhitespacesWithoutNewline
 {
     return YES;
+}
+
+- (BOOL)isForPreprocessing
+{
+    return NO;
 }
 
 @end

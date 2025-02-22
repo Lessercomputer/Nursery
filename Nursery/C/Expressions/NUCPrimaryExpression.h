@@ -7,18 +7,18 @@
 
 #import "NUCProtoExpression.h"
 
-@class NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream, NUCConstant, NUCExpression;
+@class NUCTokenStream, NUCConstant, NUCExpression;
 
 @interface NUCPrimaryExpression : NUCProtoExpression
 {
     id content;
 }
 
-+ (BOOL)primaryExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPrimaryExpression **)anExpression;
++ (BOOL)primaryExpressionFrom:(NUCTokenStream *)aStream into:(NUCPrimaryExpression **)anExpression;
 
-+ (instancetype)expressionWithIdentifier:(NUCDecomposedPreprocessingToken *)anIdentifier;
++ (instancetype)expressionWithIdentifier:(id <NUCToken>)anIdentifier;
 + (instancetype)expressionWithConstant:(NUCConstant *)aConstant;
-+ (instancetype)expressionWithStringLiteral:(NUCDecomposedPreprocessingToken *)aStringLiteral;
++ (instancetype)expressionWithStringLiteral:(id <NUCToken>)aStringLiteral;
 + (instancetype)expressionWithExpression:(NUCExpression *)anExpression;
 
 - (instancetype)initWithContent:(id)aContent;

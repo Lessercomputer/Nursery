@@ -132,4 +132,9 @@
     return [[self peekNext] isWhitespacesWithoutNewline] ? YES : NO;
 }
 
+- (BOOL)isForPreprocessing
+{
+    return YES;
+}
+
 @end

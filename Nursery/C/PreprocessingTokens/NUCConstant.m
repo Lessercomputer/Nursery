@@ -16,21 +16,41 @@
 
 @synthesize content;
 
-+ (BOOL)constantFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCConstant **)aConstant
++ (BOOL)constantFrom:(NUCTokenStream *)aStream into:(NUCConstant **)aConstant
 {
-    if ([NUCIntegerConstant integerConstantFrom:aStream into:aConstant])
+    if ([aStream isForPreprocessing])
     {
-        return YES;
-    }
-    else if ([[aStream peekNext] isCharacterConstant])
-    {
-        if (aConstant)
-            *aConstant = [NUCConstant constantWithCharacterConstant:(NUCCharacterConstant *)[aStream next]];
+        if ([NUCIntegerConstant integerConstantFrom:aStream into:aConstant])
+        {
+            return YES;
+        }
+        else if ([[aStream peekNext] isCharacterConstant])
+        {
+            if (aConstant)
+                *aConstant = [NUCConstant constantWithCharacterConstant:(NUCCharacterConstant *)[aStream next]];
+            
+            return YES;
+        }
         
-        return YES;
+        return NO;
     }
-    
-    return NO;
+    else
+    {
+        NSUInteger aPosition = [aStream position];
+        id <NUCToken> aToken = [aStream next];
+        
+        if ([aToken isConstant])
+        {
+            if (aConstant)
+                *aConstant = aToken;
+            return YES;
+        }
+        else
+        {
+            [aStream setPosition:aPosition];
+            return NO;
+        }
+    }
 }
 
 + (instancetype)constantFromPpToken:(NUCDecomposedPreprocessingToken *)aPpToken

@@ -13,13 +13,14 @@
 #import "NUCConstant.h"
 #import "NUCIntegerConstant.h"
 #import "NUCExpressionResult.h"
+#import "NUCToken.h"
 
 @implementation NUCPrimaryExpression
 
 
-+ (BOOL)primaryExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPrimaryExpression **)anExpression
++ (BOOL)primaryExpressionFrom:(NUCTokenStream *)aStream into:(NUCPrimaryExpression **)anExpression
 {
-    NUCDecomposedPreprocessingToken *aToken = [aStream peekNext];
+    id <NUCToken> aToken = [aStream peekNext];
     NUCConstant *aConstant = nil;
     
     if ([aToken isIdentifier])
@@ -72,7 +73,7 @@
     return NO;
 }
 
-+ (instancetype)expressionWithIdentifier:(NUCDecomposedPreprocessingToken *)anIdentifier
++ (instancetype)expressionWithIdentifier:(id <NUCToken>)anIdentifier
 {
     return [[[self alloc] initWithContent:anIdentifier] autorelease];
 }
@@ -82,7 +83,7 @@
     return [[[self alloc] initWithContent:aConstant] autorelease];
 }
 
-+ (instancetype)expressionWithStringLiteral:(NUCDecomposedPreprocessingToken *)aStringLiteral
++ (instancetype)expressionWithStringLiteral:(id <NUCToken>)aStringLiteral
 {
     return [[[self alloc] initWithContent:aStringLiteral] autorelease];
 }

@@ -15,8 +15,11 @@
 @property (nonatomic) NSUInteger position;
 
 - (id <NUCToken>)next;
+- (id <NUCToken>)peekNext;
 
 - (BOOL)skipWhitespacesWithoutNewline;
+
+- (BOOL)isForPreprocessing;
 
 @end
 

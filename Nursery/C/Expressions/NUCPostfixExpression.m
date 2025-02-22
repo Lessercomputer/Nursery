@@ -6,12 +6,11 @@
 //
 
 #import "NUCPostfixExpression.h"
-#import "NUCPreprocessingTokenStream.h"
 #import "NUCPrimaryExpression.h"
 
 @implementation NUCPostfixExpression
 
-+ (BOOL)postfixExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPostfixExpression **)aToken
++ (BOOL)postfixExpressionFrom:(NUCTokenStream *)aStream into:(NUCPostfixExpression **)aToken
 {
     NUCPrimaryExpression *aPrimaryExpression = nil;
     

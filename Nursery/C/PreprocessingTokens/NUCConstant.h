@@ -7,13 +7,13 @@
 
 #import "NUCPreprocessingToken.h"
 
-@class NUCIntegerConstant, NUCCharacterConstant, NUCPreprocessingTokenStream, NUCDecomposedPreprocessingToken, NUCFloatingConstant;
+@class NUCIntegerConstant, NUCCharacterConstant, NUCTokenStream, NUCDecomposedPreprocessingToken, NUCFloatingConstant;
 
 @interface NUCConstant : NUCPreprocessingToken
 
 @property (nonatomic, retain) id <NUCToken>content;
 
-+ (BOOL)constantFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCConstant **)aConstant;
++ (BOOL)constantFrom:(NUCTokenStream *)aStream into:(NUCConstant **)aConstant;
 
 + (instancetype)constantFromPpToken:(NUCDecomposedPreprocessingToken *)aPpToken;
 

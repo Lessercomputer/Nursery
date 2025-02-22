@@ -7,22 +7,22 @@
 
 #import "NUCPreprocessingToken.h"
 
-@class NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream, NUCConstant;
+@class NUCTokenStream, NUCConstant;
 
 @interface NUCIntegerConstant : NUCPreprocessingToken
 {
-    NUCDecomposedPreprocessingToken *ppNumber;
+    id <NUCToken> ppNumber;
 }
 
 @property (nonatomic) NUUInt64 value;
 
-+ (BOOL)integerConstantFrom:(NUCPreprocessingTokenStream *)aPreprocessingTokenStream into:(NUCConstant **)aConstant;
++ (BOOL)integerConstantFrom:(NUCTokenStream *)aPreprocessingTokenStream into:(NUCConstant **)aConstant;
 
-+ (BOOL)integerConstantFromPpNumber:(NUCDecomposedPreprocessingToken *)aPpNumber into:(NUCConstant **)aConstant;
++ (BOOL)integerConstantFromPpNumber:(id <NUCToken>)aPpNumber into:(NUCConstant **)aConstant;
 
-+ (instancetype)constantWithPpNumber:(NUCDecomposedPreprocessingToken *)aPpNumber value:(NUUInt64)aValue;
++ (instancetype)constantWithPpNumber:(id <NUCToken>)aPpNumber value:(NUUInt64)aValue;
 
-- (instancetype)initWithPpNumber:(NUCDecomposedPreprocessingToken *)aPpNumber value:(NUUInt64)aValue;
+- (instancetype)initWithPpNumber:(id <NUCToken>)aPpNumber value:(NUUInt64)aValue;
 
 @end
 

@@ -6,14 +6,13 @@
 //
 
 #import "NUCShiftExpression.h"
-#import "NUCPreprocessingTokenStream.h"
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCAdditiveExpression.h"
 #import "NUCExpressionResult.h"
 
 @implementation NUCShiftExpression
 
-+ (BOOL)subexpressionInto:(NUCProtoExpression **)aSubexpression from:(NUCPreprocessingTokenStream *)aStream
++ (BOOL)subexpressionInto:(NUCProtoExpression **)aSubexpression from:(NUCTokenStream *)aStream
 {
     return [NUCAdditiveExpression expressionInto:aSubexpression from:aStream];
 }

@@ -6,15 +6,15 @@
 //
 
 #import "NUCUnaryExpression.h"
-#import "NUCPreprocessingTokenStream.h"
-#import "NUCDecomposedPreprocessingToken.h"
 #import "NUCCastExpression.h"
 #import "NUCPostfixExpression.h"
 #import "NUCExpressionResult.h"
+#import "NUCToken.h"
+#import "NUCTokenStream.h"
 
 @implementation NUCUnaryExpression
 
-+ (BOOL)unaryExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCUnaryExpression **)aToken
++ (BOOL)unaryExpressionFrom:(NUCTokenStream *)aStream into:(NUCUnaryExpression **)aToken
 {
     NUCPostfixExpression *aPostfixExpression = nil;
     
@@ -28,7 +28,7 @@
     else
     {
         NSUInteger aPosition = [aStream position];
-        NUCDecomposedPreprocessingToken *anUnaryOperator = [aStream next];
+        id <NUCToken> anUnaryOperator = [aStream next];
         
         if ([anUnaryOperator isUnaryOperator])
         {
@@ -56,12 +56,12 @@
     return [[[self alloc] initWithPostfixExpression:aPostfixExpression] autorelease];
 }
 
-+ (instancetype)expressionWithUnaryOperator:(NUCDecomposedPreprocessingToken *)anUnaryOperator unaryExpression:(NUCUnaryExpression *)anUnaryExpression
++ (instancetype)expressionWithUnaryOperator:(id <NUCToken>)anUnaryOperator unaryExpression:(NUCUnaryExpression *)anUnaryExpression
 {
     return [[[self alloc] initWithUnaryOperator:anUnaryOperator unaryExpression:anUnaryExpression] autorelease];
 }
 
-+ (instancetype)expressionWithUnaryOperator:(NUCDecomposedPreprocessingToken *)anUnaryOperator castExpression:(NUCCastExpression *)aCastExpression
++ (instancetype)expressionWithUnaryOperator:(id <NUCToken>)anUnaryOperator castExpression:(NUCCastExpression *)aCastExpression
 {
     return [[[self alloc] initWithUnaryOperator:anUnaryOperator castExpression:aCastExpression] autorelease];
 }
@@ -76,7 +76,7 @@
     return self;
 }
 
-- (instancetype)initWithUnaryOperator:(NUCDecomposedPreprocessingToken *)anUnaryOperator unaryExpression:(NUCUnaryExpression *)anUnaryExpression
+- (instancetype)initWithUnaryOperator:(id <NUCToken>)anUnaryOperator unaryExpression:(NUCUnaryExpression *)anUnaryExpression
 {
     if (self = [super initWithType:NUCExpressionUnaryExpressionType])
     {
@@ -87,7 +87,7 @@
     return self;
 }
 
-- (instancetype)initWithUnaryOperator:(NUCDecomposedPreprocessingToken *)anUnaryOperator castExpression:(NUCCastExpression *)aCastExpression
+- (instancetype)initWithUnaryOperator:(id <NUCToken>)anUnaryOperator castExpression:(NUCCastExpression *)aCastExpression
 {
     if (self = [super initWithType:NUCExpressionUnaryExpressionType])
     {

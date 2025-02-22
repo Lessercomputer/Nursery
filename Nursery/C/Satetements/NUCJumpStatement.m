@@ -27,10 +27,7 @@
             
             NUCExpression *anExpression = nil;
             if ([NUCExpression expressionFrom:aStream into:&anExpression])
-            {
                 [aJumpStatementToReturn setExpression:anExpression];
-                
-            }
             
             aToken = [aStream next];
             if ([aToken isSemicolon])

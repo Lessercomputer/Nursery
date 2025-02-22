@@ -7,14 +7,14 @@
 
 #import "NUCProtoExpression.h"
 
-@class NUCPrimaryExpression, NUCPreprocessingTokenStream;
+@class NUCPrimaryExpression, NUCTokenStream;
 
 @interface NUCPostfixExpression : NUCProtoExpression
 {
     NUCPrimaryExpression *primaryExpression;
 }
 
-+ (BOOL)postfixExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCPostfixExpression **)aToken;
++ (BOOL)postfixExpressionFrom:(NUCTokenStream *)aStream into:(NUCPostfixExpression **)aToken;
 
 + (instancetype)expressionWithPrimaryExpression:(NUCPrimaryExpression *)aPrimaryExpression;
 

@@ -6,7 +6,6 @@
 //
 
 #import "NUCLogicalORExpression.h"
-#import "NUCPreprocessingTokenStream.h"
 #import "NUCLogicalANDExpression.h"
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCExpressionResult.h"
@@ -15,7 +14,7 @@
 
 @implementation NUCLogicalORExpression
 
-+ (BOOL)subexpressionInto:(NUCProtoExpression **)aSubexpression from:(NUCPreprocessingTokenStream *)aStream
++ (BOOL)subexpressionInto:(NUCProtoExpression **)aSubexpression from:(NUCTokenStream *)aStream
 {
     return [NUCLogicalANDExpression expressionInto:aSubexpression from:aStream];
 }

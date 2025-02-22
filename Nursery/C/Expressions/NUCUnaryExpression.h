@@ -7,29 +7,29 @@
 
 #import "NUCProtoExpression.h"
 
-@class NUCPostfixExpression, NUCDecomposedPreprocessingToken, NUCCastExpression, NUCPreprocessingTokenStream;
+@class NUCPostfixExpression, NUCToken, NUCCastExpression, NUCTokenStream;
 
 @interface NUCUnaryExpression : NUCProtoExpression
 {
     NUCPostfixExpression *postfixExpression;
-    NUCDecomposedPreprocessingToken *unaryOperator;
+    id <NUCToken> unaryOperator;
     NUCUnaryExpression *unaryExpression;
     NUCCastExpression *castExpression;
 }
 
-+ (BOOL)unaryExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCUnaryExpression **)aToken;
++ (BOOL)unaryExpressionFrom:(NUCTokenStream *)aStream into:(NUCUnaryExpression **)aToken;
 
 + (instancetype)expressionWithPostfixExpression:(NUCPostfixExpression *)aPostfixExpression;
 
-+ (instancetype)expressionWithUnaryOperator:(NUCDecomposedPreprocessingToken *)anUnaryOperator unaryExpression:(NUCUnaryExpression *)anUnaryExpression;
++ (instancetype)expressionWithUnaryOperator:(id <NUCToken>)anUnaryOperator unaryExpression:(NUCUnaryExpression *)anUnaryExpression;
 
-+ (instancetype)expressionWithUnaryOperator:(NUCDecomposedPreprocessingToken *)anUnaryOperator castExpression:(NUCCastExpression *)aCastExpression;
++ (instancetype)expressionWithUnaryOperator:(id <NUCToken>)anUnaryOperator castExpression:(NUCCastExpression *)aCastExpression;
 
 - (instancetype)initWithPostfixExpression:(NUCPostfixExpression *)aPostfixExpression;
 
-- (instancetype)initWithUnaryOperator:(NUCDecomposedPreprocessingToken *)anUnaryOperator unaryExpression:(NUCUnaryExpression *)anUnaryExpression;
+- (instancetype)initWithUnaryOperator:(id <NUCToken>)anUnaryOperator unaryExpression:(NUCUnaryExpression *)anUnaryExpression;
 
-- (instancetype)initWithUnaryOperator:(NUCDecomposedPreprocessingToken *)anUnaryOperator castExpression:(NUCCastExpression *)aCastExpression;
+- (instancetype)initWithUnaryOperator:(id <NUCToken>)anUnaryOperator castExpression:(NUCCastExpression *)aCastExpression;
 
 @end
 

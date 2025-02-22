@@ -7,14 +7,14 @@
 
 #import "NUCProtoExpression.h"
 
-@class NUCUnaryExpression, NUCPreprocessingTokenStream;
+@class NUCUnaryExpression, NUCTokenStream;
 
 @interface NUCCastExpression : NUCProtoExpression
 {
     NUCUnaryExpression *unaryExpression;
 }
 
-+ (BOOL)castExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCCastExpression **)anExpression;
++ (BOOL)castExpressionFrom:(NUCTokenStream *)aStream into:(NUCCastExpression **)anExpression;
 
 + (instancetype)expressionWithUnaryExpression:(NUCUnaryExpression *)anUnaryExpression;
 
