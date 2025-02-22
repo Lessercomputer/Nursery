@@ -10,6 +10,7 @@
 #import <Foundation/NSArray.h>
 #import "NUCParameterDeclaration.h"
 #import "NUCPreprocessingTokenToTokenStream.h"
+#import "NUCTokenProtocol.h"
 
 @implementation NUCParameterList
 
@@ -23,10 +24,10 @@
     else
         return NO;
     
-    NSUInteger aPosition = [aStream position];
     
     while (YES)
     {
+        NSUInteger aPosition = [aStream position];
         id <NUCToken> aToken = [aStream next];
         
         if ([aToken isComma])
@@ -41,7 +42,10 @@
             }
         }
         else
+        {
+            [aStream setPosition:aPosition];
             break;
+        }
     }
     
     if (aParameterList)

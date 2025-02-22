@@ -44,4 +44,9 @@
     return [[[self identifier] content] isEqualToString:NUCKeywordInt];
 }
 
+- (BOOL)isReturn
+{
+    return [[[self identifier] content] isEqualToString:NUCKeywordReturn];
+}
+
 @end

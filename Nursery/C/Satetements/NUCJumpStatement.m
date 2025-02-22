@@ -9,6 +9,7 @@
 #import "NUCJumpStatement.h"
 #import "NUCPreprocessingTokenToTokenStream.h"
 #import "NUCExpression.h"
+#import "NUCTokenProtocol.h"
 
 @implementation NUCJumpStatement
 
@@ -20,21 +21,24 @@
     
     if ([aToken isKeyword])
     {
-        [aJumpStatementToReturn setKeyword:(NUCKeyword *)aToken];
-        
-        NUCExpression *anExpression = nil;
-        if ([NUCExpression expressionFrom:aStream into:&anExpression])
+        if ([aToken isReturn])
         {
-            [aJumpStatementToReturn setExpression:anExpression];
+            [aJumpStatementToReturn setKeyword:(NUCKeyword *)aToken];
             
-        }
-        
-        aToken = [aStream next];
-        if ([aToken isPunctuator])
-        {
-            if (aJumpStatement)
-                *aJumpStatement = aJumpStatementToReturn;
-            return YES;
+            NUCExpression *anExpression = nil;
+            if ([NUCExpression expressionFrom:aStream into:&anExpression])
+            {
+                [aJumpStatementToReturn setExpression:anExpression];
+                
+            }
+            
+            aToken = [aStream next];
+            if ([aToken isSemicolon])
+            {
+                if (aJumpStatement)
+                    *aJumpStatement = aJumpStatementToReturn;
+                return YES;
+            }
         }
     }
     

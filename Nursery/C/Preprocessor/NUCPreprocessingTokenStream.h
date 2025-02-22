@@ -5,15 +5,14 @@
 //  Created by TAKATA Akifumi on 2021/01/29.
 //
 
-#import <Foundation/NSObject.h>
+#import "NUCTokenStream.h"
 
 @class NUCDecomposedPreprocessingToken;
 @class NSArray;
 
-@interface NUCPreprocessingTokenStream : NSObject
+@interface NUCPreprocessingTokenStream : NUCTokenStream
 {
     NSArray *preprocessingTokens;
-    NSUInteger position;
 }
 
 + (instancetype)preprecessingTokenStreamWithPreprocessingTokens:(NSArray *)aPreprocessingTokens;
@@ -22,16 +21,20 @@
 
 - (NUCDecomposedPreprocessingToken *)next;
 - (NUCDecomposedPreprocessingToken *)previous;
-- (NSUInteger)position;
-- (void)setPosition:(NSUInteger)aPosition;
+
 - (BOOL)hasNext;
 - (BOOL)hasPrevious;
+
 - (NSArray *)preprocessingTokens;
+
 - (BOOL)skipWhitespaces;
 - (BOOL)skipWhitespacesWithoutNewline;
+
 - (NSArray *)scanWhiteSpaces;
+
 - (NUCDecomposedPreprocessingToken *)peekNext;
 - (NUCDecomposedPreprocessingToken *)peekPrevious;
+
 - (BOOL)nextIsWhitespaces;
 - (BOOL)nextIsWhitespacesWithoutNewline;
 

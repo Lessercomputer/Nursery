@@ -7,14 +7,14 @@
 
 #import "NUCProtoExpression.h"
 
-@class NUCConditionalExpression, NUCPreprocessingTokenStream;
+@class NUCConditionalExpression, NUCTokenStream;
 
 @interface NUCExpression : NUCProtoExpression
 {
     NUCConditionalExpression *conditionalExpression;
 }
 
-+ (BOOL)expressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCExpression **)anExpression;
++ (BOOL)expressionFrom:(NUCTokenStream *)aStream into:(NUCExpression **)anExpression;
 
 + (instancetype)expressionWithConditionalExpression:(NUCConditionalExpression *)aConditionalExpression;
 

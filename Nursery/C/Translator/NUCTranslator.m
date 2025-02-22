@@ -51,6 +51,7 @@
         externalSourceFiles = [NSMutableArray new];
         allSourceFiles = [NSMutableDictionary new];
         preprocessedSourceFiles = [NSMutableArray new];
+        _translationUnits = [NSMutableArray new];
     }
     
     return self;
@@ -101,17 +102,19 @@
     [[self preprocessedSourceFiles] enumerateObjectsUsingBlock:^(NUCSourceFile * _Nonnull aPreprocessedSourceFile, NSUInteger idx, BOOL * _Nonnull aStop) {
         
         NSArray *aPpTokens = [[aPreprocessedSourceFile preprocessingFile] macroReplacedPpTokens];
-        NUCPreprocessingTokenToTokenStream *aPpTokenToTokenConverter = [[[NUCPreprocessingTokenToTokenStream alloc] initWithPreprocessingTokens:aPpTokens] autorelease];
+        NUCPreprocessingTokenToTokenStream *aPpTokenToTokenStream = [[[NUCPreprocessingTokenToTokenStream alloc] initWithPreprocessingTokens:aPpTokens] autorelease];
         
-//        NUCToken *aToken = nil;
-//        
-//        while ((aToken = [aPpTokenToTokenConverter next]))
-//        {
-//            NSLog(@"%@", aToken);
-//        }
+        NUCToken *aToken = nil;
+        
+        while ((aToken = [aPpTokenToTokenStream next]))
+        {
+            NSLog(@"%@", aToken);
+        }
+        
+        [aPpTokenToTokenStream setPosition:0];
         
         NUCTranslationUnit *aTranslationUnit = nil;
-        if ([NUCTranslationUnit translationUnitFrom:aPpTokenToTokenConverter into:&aTranslationUnit])
+        if ([NUCTranslationUnit translationUnitFrom:aPpTokenToTokenStream into:&aTranslationUnit])
             [[self translationUnits] addObject:aTranslationUnit];
         else
             *aStop = YES;

@@ -9,6 +9,7 @@
 #import "NUCCompoundStatement.h"
 #import "NUCBlockItemList.h"
 #import "NUCPreprocessingTokenToTokenStream.h"
+#import "NUCTokenProtocol.h"
 
 @implementation NUCCompoundStatement
 

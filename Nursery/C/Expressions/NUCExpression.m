@@ -11,7 +11,7 @@
 
 @implementation NUCExpression
 
-+ (BOOL)expressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCExpression **)anExpression
++ (BOOL)expressionFrom:(NUCTokenStream *)aStream into:(NUCExpression **)anExpression
 {
     NUCConditionalExpression *aConditionalExpression = nil;
     

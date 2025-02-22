@@ -53,6 +53,11 @@
     [super dealloc];
 }
 
+- (NSUInteger)count
+{
+    return [[self specifiers] count];
+}
+
 - (void)add:(NUCExternalDefinition *)anExternalDefinition
 {
     [[self specifiers] addObject:anExternalDefinition];

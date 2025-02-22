@@ -14,7 +14,7 @@
 
 @implementation NUCConditionalExpression
 
-+ (BOOL)conditionalExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCConditionalExpression **)aConditionalExpression
++ (BOOL)conditionalExpressionFrom:(NUCTokenStream *)aStream into:(NUCConditionalExpression **)aConditionalExpression
 {
     NUCLogicalORExpression *aLogicalOrExpression = nil;
     if ([NUCLogicalORExpression expressionInto:&aLogicalOrExpression from:aStream])
@@ -22,7 +22,7 @@
         NSUInteger aPosition = [aStream position];
         [aStream skipWhitespacesWithoutNewline];
         
-        NUCDecomposedPreprocessingToken *aQuestionMark = [aStream next];
+        id <NUCToken> aQuestionMark = [aStream next];
         if ([aQuestionMark isQuestionMark])
         {
             [aStream skipWhitespacesWithoutNewline];
@@ -32,7 +32,7 @@
             {
                 [aStream skipWhitespacesWithoutNewline];
                 
-                NUCDecomposedPreprocessingToken *aColon = [aStream next];
+                id <NUCToken> aColon = [aStream next];
                 if ([aColon isColon])
                 {
                     [aStream skipWhitespacesWithoutNewline];
@@ -69,12 +69,12 @@
     return [self expressionWithLogicalORExpression:aLogicalORExpression questionMarkPunctuator:nil expression:nil colonPunctuator:nil conditionalExpression:nil];
 }
 
-+ (instancetype)expressionWithLogicalORExpression:(NUCLogicalORExpression *)aLogicalORExpression questionMarkPunctuator:(NUCDecomposedPreprocessingToken *)aQuestionMarkPunctuator expression:(NUCExpression *)anExpression colonPunctuator:(NUCDecomposedPreprocessingToken *)aColonPunctuator conditionalExpression:(NUCConditionalExpression *)aConditionalExpression
++ (instancetype)expressionWithLogicalORExpression:(NUCLogicalORExpression *)aLogicalORExpression questionMarkPunctuator:(id <NUCToken>)aQuestionMarkPunctuator expression:(NUCExpression *)anExpression colonPunctuator:(id <NUCToken>)aColonPunctuator conditionalExpression:(NUCConditionalExpression *)aConditionalExpression
 {
     return [[[self alloc] initWithLogicalORExpression:aLogicalORExpression questionMarkPunctuator:aQuestionMarkPunctuator expression:anExpression colonPunctuator:aColonPunctuator conditionalExpression:aConditionalExpression] autorelease];
 }
 
-- (instancetype)initWithLogicalORExpression:(NUCLogicalORExpression *)aLogicalORExpression questionMarkPunctuator:(NUCDecomposedPreprocessingToken *)aQuestionMarkPunctuator expression:(NUCExpression *)anExpression colonPunctuator:(NUCDecomposedPreprocessingToken *)aColonPunctuator conditionalExpression:(NUCConditionalExpression *)aConditionalExpression
+- (instancetype)initWithLogicalORExpression:(NUCLogicalORExpression *)aLogicalORExpression questionMarkPunctuator:(id <NUCToken>)aQuestionMarkPunctuator expression:(NUCExpression *)anExpression colonPunctuator:(id <NUCToken>)aColonPunctuator conditionalExpression:(NUCConditionalExpression *)aConditionalExpression
 {
     if ([self initWithType:NUCExpressionConditionalExpressionType])
     {
@@ -104,7 +104,7 @@
     return logicalORExpression;
 }
 
-- (NUCDecomposedPreprocessingToken *)questionMarkPunctuator
+- (id <NUCToken>)questionMarkPunctuator
 {
     return questionMarkPunctuator;
 }
@@ -114,7 +114,7 @@
     return expression;
 }
 
-- (NUCDecomposedPreprocessingToken *)colonPunctuator
+- (id <NUCToken>)colonPunctuator
 {
     return colonPunctuator;
 }

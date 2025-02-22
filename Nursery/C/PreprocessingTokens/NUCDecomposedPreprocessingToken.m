@@ -160,6 +160,21 @@ static NUCDecomposedPreprocessingToken *whitespaceToken = nil;
                 && [[self content] isEqualToString:NUCColonPunctuator];
 }
 
+- (BOOL)isSemicolon
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCSemicolonPunctuator];
+}
+
+- (BOOL)isOpeningBrace
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCOpeningBracePunctuator];
+}
+
+- (BOOL)isClosingBrace
+{
+    return [self isPunctuator] && [[self content] isEqualToString:NUCClosingBracePunctuator];
+}
+
 - (BOOL)isEllipsis
 {
     return [self isPunctuator] && [[self content] isEqualToString:NUCEllipsis];

@@ -9,36 +9,30 @@
 #import "NUCDirectDeclarator.h"
 #import "NUCPreprocessingTokenToTokenStream.h"
 #import "NUCParameterTypeList.h"
+#import "NUCTokenProtocol.h"
 
 @implementation NUCDirectDeclarator
 
 + (BOOL)directDeclaratorFrom:(NUCPreprocessingTokenToTokenStream *)aStream into:(NUCDirectDeclarator **)aDirectDeclarator
 {
+    return [self directDeclaratorFrom:aStream into:aDirectDeclarator preceding:nil];
+}
+
++ (BOOL)directDeclaratorFrom:(NUCPreprocessingTokenToTokenStream *)aStream into:(NUCDirectDeclarator **)aDirectDeclarator preceding:(NUCDirectDeclarator *)aPrecedingDirectDeclarator
+{
     NSUInteger aPosition = [aStream position];
-    id <NUCToken> aToken = [aStream next];
     NUCDirectDeclarator *aDirectDeclaratorToReturn = nil;
     
-    if ([aToken isIdentifier])
+    if (aPrecedingDirectDeclarator)
     {
-        aDirectDeclaratorToReturn = [[self new] autorelease];
-        [aDirectDeclaratorToReturn setIdentifier:aToken];
-        
-        if (aDirectDeclarator)
-            *aDirectDeclarator = aDirectDeclaratorToReturn;
-        
-        return YES;
-    }
-    else
-    {
-        NUCDirectDeclarator *anInternalDirectDeclarator = nil;
-        if ([self directDeclaratorFrom:aStream into:&anInternalDirectDeclarator])
+        if ([aPrecedingDirectDeclarator identifier])
         {
             aDirectDeclaratorToReturn = [[self new] autorelease];
             id <NUCToken> aToken=  [aStream next];
             
             if ([aToken isOpeningParenthesis])
             {
-                [aDirectDeclaratorToReturn setDirectDeclarator:(id <NUCToken>)anInternalDirectDeclarator];
+                [aDirectDeclaratorToReturn setDirectDeclarator:(id <NUCToken>)aPrecedingDirectDeclarator];
                 [aDirectDeclaratorToReturn setOpeningPunctuator:aToken];
                 
                 NUCParameterTypeList *aParameterTypeList = nil;
@@ -59,6 +53,22 @@
                     }
                 }
             }
+        }
+    }
+    else
+    {
+        id <NUCToken> aToken = [aStream next];
+        if ([aToken isIdentifier])
+        {
+            NUCDirectDeclarator *aDirectDeclaratorWithIdentifier = [[self new] autorelease];
+            [aDirectDeclaratorWithIdentifier setIdentifier:aToken];
+            
+            if (![self directDeclaratorFrom:aStream into:&aDirectDeclaratorToReturn preceding:aDirectDeclaratorWithIdentifier])
+                aDirectDeclaratorToReturn = aDirectDeclaratorWithIdentifier;
+            
+            if (aDirectDeclarator)
+                *aDirectDeclarator = aDirectDeclaratorToReturn;
+            return YES;
         }
     }
     

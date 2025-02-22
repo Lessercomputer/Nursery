@@ -66,7 +66,7 @@
 - (void)testTranslationPhase1to7
 {
     NSBundle *aBundle = [NSBundle bundleForClass:[self class]];
-    NSURL *aPhysicalSourceFileURL = [aBundle URLForResource:@"MacroExample" withExtension:NULL subdirectory:NULL];
+    NSURL *aPhysicalSourceFileURL = [aBundle URLForResource:@"simplec" withExtension:NULL subdirectory:NULL];
     NUCTranslator *aCTranslator = [[[NUCTranslator alloc] initWithSourceFileURLs:[NSArray arrayWithObject:aPhysicalSourceFileURL]] autorelease];
     
     [aCTranslator translate];

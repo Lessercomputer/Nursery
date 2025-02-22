@@ -19,8 +19,16 @@
     
     if ([NUCDeclarationSpecifiers declarationSpecifiersFrom:aStream into:&aDeclarationSpecifiers])
     {
+        [aParameterDeclarationToRetun setDeclarationSpecifiers:aDeclarationSpecifiers];
+        
         NUCDeclarator *aDeclarator = nil;
         if ([NUCDeclarator declaratorFrom:aStream into:&aDeclarator])
+        {
+            if (aParameterDeclaration)
+                *aParameterDeclaration = aParameterDeclarationToRetun;
+            return YES;
+        }
+        else
         {
             if (aParameterDeclaration)
                 *aParameterDeclaration = aParameterDeclarationToRetun;

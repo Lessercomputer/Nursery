@@ -10,7 +10,8 @@
 
 #import <Foundation/NSArray.h>
 
-@class NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream;
+@class NUCDecomposedPreprocessingToken, NUCTokenStream;
+@protocol NUCToken;
 
 @interface NUCExpressionWithMultipleExpressions : NUCProtoExpression
 
@@ -21,14 +22,14 @@
 
 + (instancetype)expression;
 
-+ (BOOL)expressionInto:(NUCProtoExpression **)anExpression from:(NUCPreprocessingTokenStream *)aStream;
-+ (BOOL)subexpressionInto:(NUCProtoExpression **)aSubexpression from:(NUCPreprocessingTokenStream *)aStream;
-+ (BOOL)operatorIsValid:(NUCDecomposedPreprocessingToken *)anOperator;
++ (BOOL)expressionInto:(NUCProtoExpression **)anExpression from:(NUCTokenStream *)aStream;
++ (BOOL)subexpressionInto:(NUCProtoExpression **)aSubexpression from:(NUCTokenStream *)aStream;
++ (BOOL)operatorIsValid:(id <NUCToken>)anOperator;
 
 - (void)add:(NUCProtoExpression *)anExpression;
 - (NUCProtoExpression *)at:(NSUInteger)anIndex;
 
-- (void)addOperator:(NUCDecomposedPreprocessingToken *)anOperator;
+- (void)addOperator:(id <NUCToken>)anOperator;
 - (NUCDecomposedPreprocessingToken *)operatorAt:(NSUInteger)anIndex;
 
 - (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor using:(void (^)(NUCExpressionResult *aLeftExpressionResult, NUCDecomposedPreprocessingToken *anOperator, NUCExpressionResult *aRightExpressionResult, NUCExpressionResult **aBinaryExpressionResult))aBlock;

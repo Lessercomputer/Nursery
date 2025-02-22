@@ -29,9 +29,12 @@ extern NSString * const NUCHashHash;
 extern NSString * const NUCEllipsis;
 extern NSString * const NUCOpeningParenthesisPunctuator;
 extern NSString * const NUCClosingParenthesisPunctuator;
+extern NSString * const NUCOpeningBracePunctuator;
+extern NSString * const NUCClosingBracePunctuator;
 extern NSString * const NUCCommaPunctuator;
 extern NSString * const NUCQuestionMarkPunctuator;
 extern NSString * const NUCColonPunctuator;
+extern NSString * const NUCSemicolonPunctuator;
 extern NSString * const NUCLogicalOROperator;
 extern NSString * const NUCLogicalANDOperator;
 extern NSString * const NUCInclusiveOROperator;
@@ -143,6 +146,7 @@ extern NSString * const NUCStringLiteralEncodingPrefixLargeL;
 
 extern NSString * const NUCKeywordVoid;
 extern NSString * const NUCKeywordInt;
+extern NSString * const NUCKeywordReturn;
 
 typedef enum : NSUInteger {
     NUCLexicalElementNone,
@@ -228,9 +232,6 @@ typedef enum : NSUInteger {
 
 - (NUCLexicalElementType)type;
 - (NSString *)typeName;
-
-- (BOOL)isCharacterConstant;
-- (BOOL)isStringLiteral;
 
 - (NSString *)preprocessedStringWithPreprocessor:(NUCPreprocessor *)aPreprocessor;
 - (void)addPreprocessedStringTo:(NSMutableString *)aString with:(NUCPreprocessor *)aPreprocessor;

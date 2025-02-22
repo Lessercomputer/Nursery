@@ -7,29 +7,29 @@
 
 #import "NUCProtoExpression.h"
 
-@class NUCDecomposedPreprocessingToken, NUCPreprocessingTokenStream, NUCLogicalORExpression, NUCExpression;
+@class NUCDecomposedPreprocessingToken, NUCTokenStream, NUCLogicalORExpression, NUCExpression;
 
 @interface NUCConditionalExpression : NUCProtoExpression
 {
     NUCLogicalORExpression *logicalORExpression;
-    NUCDecomposedPreprocessingToken *questionMarkPunctuator;
+    id <NUCToken> questionMarkPunctuator;
     NUCExpression *expression;
-    NUCDecomposedPreprocessingToken *colonPunctuator;
+    id <NUCToken> colonPunctuator;
     NUCConditionalExpression *conditionalExpression;
 }
 
-+ (BOOL)conditionalExpressionFrom:(NUCPreprocessingTokenStream *)aStream into:(NUCConditionalExpression **)anExpression;
++ (BOOL)conditionalExpressionFrom:(NUCTokenStream *)aStream into:(NUCConditionalExpression **)anExpression;
 
 + (instancetype)expressionWithLogicalORExpression:(NUCLogicalORExpression *)aLogicalORExpression;
 
-+ (instancetype)expressionWithLogicalORExpression:(NUCLogicalORExpression *)aLogicalORExpression questionMarkPunctuator:(NUCDecomposedPreprocessingToken *)aQuestionMarkPunctuator expression:(NUCExpression *)anExpression colonPunctuator:(NUCDecomposedPreprocessingToken *)aColonPunctuator conditionalExpression:(NUCConditionalExpression *)aConditionalExpression;
++ (instancetype)expressionWithLogicalORExpression:(NUCLogicalORExpression *)aLogicalORExpression questionMarkPunctuator:(id <NUCToken>)aQuestionMarkPunctuator expression:(NUCExpression *)anExpression colonPunctuator:(id <NUCToken>)aColonPunctuator conditionalExpression:(NUCConditionalExpression *)aConditionalExpression;
 
-- (instancetype)initWithLogicalORExpression:(NUCLogicalORExpression *)aLogicalORExpression questionMarkPunctuator:(NUCDecomposedPreprocessingToken *)aQuestionMarkPunctuator expression:(NUCExpression *)anExpression colonPunctuator:(NUCDecomposedPreprocessingToken *)aColonPunctuator conditionalExpression:(NUCConditionalExpression *)aConditionalExpression;
+- (instancetype)initWithLogicalORExpression:(NUCLogicalORExpression *)aLogicalORExpression questionMarkPunctuator:(id <NUCToken>)aQuestionMarkPunctuator expression:(NUCExpression *)anExpression colonPunctuator:(id <NUCToken>)aColonPunctuator conditionalExpression:(NUCConditionalExpression *)aConditionalExpression;
 
 - (NUCLogicalORExpression *)logicalORExpression;
-- (NUCDecomposedPreprocessingToken *)questionMarkPunctuator;
+- (id <NUCToken>)questionMarkPunctuator;
 - (NUCExpression *)expression;
-- (NUCDecomposedPreprocessingToken *)colonPunctuator;
+- (id <NUCToken>)colonPunctuator;
 - (NUCConditionalExpression *)conditionalExpression;
 
 @end

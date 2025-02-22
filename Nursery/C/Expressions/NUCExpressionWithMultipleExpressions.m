@@ -17,7 +17,7 @@
     return [[[self alloc] init] autorelease];
 }
 
-+ (BOOL)expressionInto:(NUCProtoExpression **)anExpression from:(NUCPreprocessingTokenStream *)aStream
++ (BOOL)expressionInto:(NUCProtoExpression **)anExpression from:(NUCTokenStream *)aStream
 {
     NUCExpressionWithMultipleExpressions *anExpressionToReturn = [self expression];
     
@@ -33,7 +33,7 @@
             
             [aStream skipWhitespacesWithoutNewline];
             
-            NUCDecomposedPreprocessingToken *anOperator = [aStream next];
+            id <NUCToken> anOperator = [aStream next];
             
             if ([self operatorIsValid:anOperator])
             {
@@ -55,12 +55,12 @@
     }
 }
 
-+ (BOOL)subexpressionInto:(NUCProtoExpression **)aSubexpression from:(NUCPreprocessingTokenStream *)aStream
++ (BOOL)subexpressionInto:(NUCProtoExpression **)aSubexpression from:(NUCTokenStream *)aStream
 {
     return NO;
 }
 
-+ (BOOL)operatorIsValid:(NUCDecomposedPreprocessingToken *)anOperator
++ (BOOL)operatorIsValid:(id <NUCToken>)anOperator
 {
     return NO;
 }
@@ -99,7 +99,7 @@
     return [[self expressions] count];
 }
 
-- (void)addOperator:(NUCDecomposedPreprocessingToken *)anOperator
+- (void)addOperator:(id <NUCToken>)anOperator
 {
     [[self operators] addObject:anOperator];
 }

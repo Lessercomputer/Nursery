@@ -24,21 +24,15 @@
         if ([aKeyword isVoid] || [aKeyword isInt])
         {
             [aTypeSpecifierToReturn setContent:aKeyword];
-        }
-        else
-        {
-            [aStream setPosition:aPosition];
-            return NO;
+            
+            if (aTypeSpecifier)
+                *aTypeSpecifier = aTypeSpecifierToReturn;
+            return YES;
         }
     }
-    else
-    {
-        [aStream setPosition:aPosition];
-    }
-    
-    if (aTypeSpecifier)
-        *aTypeSpecifier = aTypeSpecifierToReturn;
-    return YES;
+
+    [aStream setPosition:aPosition];
+    return NO;
 }
 
 - (void)dealloc

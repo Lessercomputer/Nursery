@@ -39,7 +39,10 @@
     NUCDecomposedPreprocessingToken *aToken = nil;
     
     if ([self hasNext])
-        aToken = [[self preprocessingTokens] objectAtIndex:position++];
+    {
+        aToken = [[self preprocessingTokens] objectAtIndex:[self position]];
+        [self setPosition:[self position] + 1];
+    }
     
     return aToken;
 }
@@ -49,19 +52,12 @@
     NUCDecomposedPreprocessingToken *aToken = nil;
     
     if ([self hasPrevious])
-        aToken = [[self preprocessingTokens] objectAtIndex:--position];
+    {
+        [self setPosition:[self position] - 1];
+        aToken = [[self preprocessingTokens] objectAtIndex:[self position]];
+    }
     
     return aToken;
-}
-
-- (NSUInteger)position
-{
-    return position;
-}
-
-- (void)setPosition:(NSUInteger)aPosition
-{
-    position = aPosition;
 }
 
 - (BOOL)hasNext

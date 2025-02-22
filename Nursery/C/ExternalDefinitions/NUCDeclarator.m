@@ -18,6 +18,8 @@
     NUCDirectDeclarator *aDirectDeclarator = nil;
     if ([NUCDirectDeclarator directDeclaratorFrom:aStream into:&aDirectDeclarator])
     {
+        [aDeclaratorToReturn setDirectDeclarator:aDirectDeclarator];
+        
         if (aDeclarator)
             *aDeclarator = aDeclaratorToReturn;
         return YES;

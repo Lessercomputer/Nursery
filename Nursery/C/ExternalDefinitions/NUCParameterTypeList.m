@@ -9,6 +9,7 @@
 #import "NUCParameterTypeList.h"
 #import "NUCParameterList.h"
 #import "NUCPreprocessingTokenToTokenStream.h"
+#import "NUCTokenProtocol.h"
 
 @implementation NUCParameterTypeList
 
@@ -33,20 +34,22 @@
             if ([aToken isEllipsis])
             {
                 [aParameterTypeListToReturn setEllipsis:aToken];
-                
-                if (aParameterTypeList)
-                    *aParameterTypeList = aParameterTypeListToReturn;
-                return YES;
+            }
+            else
+            {
+                [aStream setPosition:aPosition];
+                return NO;
             }
         }
-       
-        [aStream setPosition:aPosition];
-        return NO;
+        else
+            [aStream setPosition:aPosition];
+        
+        if (aParameterTypeList)
+            *aParameterTypeList = aParameterTypeListToReturn;
+        return YES;
     }
     
-    if (aParameterTypeList)
-        *aParameterTypeList = aParameterTypeListToReturn;
-    return YES;
+    return NO;
 }
 
 - (void)dealloc

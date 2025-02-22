@@ -8,7 +8,7 @@
 
 #import "NUCExternalDefinition.h"
 
-@class NUCDeclarationSpecifiers, NUCDeclarator;
+@class NUCDeclarationSpecifiers, NUCDeclarator, NUCCompoundStatement;
 
 @interface NUCFunctionDefinition : NUCExternalDefinition
 
@@ -16,6 +16,7 @@
 
 @property (nonatomic, retain) NUCDeclarationSpecifiers *declarationSpecifiers;
 @property (nonatomic, retain) NUCDeclarator *declarator;
+@property (nonatomic, retain) NUCCompoundStatement *compoundStatement;
 
 @end
 

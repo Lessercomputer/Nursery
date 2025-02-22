@@ -30,6 +30,7 @@ typedef enum : NSUInteger {
 } NUCExpressionType;
 
 @class NUCExpressionResult, NUCPreprocessor;
+@protocol NUCToken;
 
 @interface NUCProtoExpression : NSObject
 {

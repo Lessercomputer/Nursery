@@ -20,7 +20,7 @@
     return [NUCLogicalANDExpression expressionInto:aSubexpression from:aStream];
 }
 
-+ (BOOL)operatorIsValid:(NUCDecomposedPreprocessingToken *)anOperator
++ (BOOL)operatorIsValid:(id <NUCToken>)anOperator
 {
     return [anOperator isLogicalOROperator];
 }

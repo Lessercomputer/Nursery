@@ -5,19 +5,15 @@
 //  Created by TAKATA Akifumi on 2024/02/11.
 //
 
-#import <Foundation/NSObject.h>
-#import "NUCTokenProtocol.h"
+#import "NUCTokenStream.h"
 
 @class NSArray;
 
-@interface NUCPreprocessingTokenToTokenStream : NSObject
+@interface NUCPreprocessingTokenToTokenStream : NUCTokenStream
 
 - (instancetype)initWithPreprocessingTokens:(NSArray *)aPreprocessingTokens;
 
 @property (nonatomic, retain) NSArray *preprocessingTokens;
-@property (nonatomic) NSUInteger position;
-
-- (id <NUCToken>)next;
 
 @end
 
