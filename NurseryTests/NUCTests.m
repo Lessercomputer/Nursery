@@ -9,6 +9,7 @@
 
 #import "NUCTranslator.h"
 #import "NUCSourceFile.h"
+#import "NUMachO.h"
 
 @interface NUCTests : XCTestCase
 
@@ -70,6 +71,16 @@
     NUCTranslator *aCTranslator = [[[NUCTranslator alloc] initWithSourceFileURLs:[NSArray arrayWithObject:aPhysicalSourceFileURL]] autorelease];
     
     [aCTranslator translate];
+}
+
+- (void)testCreateMinMachOFile
+{
+    NSString *aMachOFilePath = [@"~/Desktop/minmacho" stringByExpandingTildeInPath];
+    NUMachO *aMachO = [[NUMachO new] autorelease];
+//    NSData *aData = [aMachO serializedBinaryData];
+//    [aData writeToFile:aMachOFilePath atomically:YES];
+    
+    XCTAssertTrue([aMachO writeToPath:aMachOFilePath]);
 }
 
 @end
