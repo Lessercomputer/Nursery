@@ -44,9 +44,9 @@
     aSegmentCommand64.cmdsize = sizeof(struct segment_command_64) + sizeof(struct section_64) * aSegmentCommand64.nsects;
     strcpy(aSegmentCommand64.segname, SEG_TEXT);
     aSegmentCommand64.vmaddr = 4294967296;
-    aSegmentCommand64.vmsize = 16384;//PAGE_SIZE;
+    aSegmentCommand64.vmsize = 4096 * 4;
     aSegmentCommand64.fileoff = 0;
-    aSegmentCommand64.filesize = 4096;//16384;
+    aSegmentCommand64.filesize = 4096 * 4;//16384;
     aSegmentCommand64.maxprot = VM_PROT_READ | VM_PROT_EXECUTE;
     aSegmentCommand64.initprot = VM_PROT_READ | VM_PROT_EXECUTE;
     aSegmentCommand64.flags = 0;

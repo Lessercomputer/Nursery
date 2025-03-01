@@ -78,6 +78,7 @@
 - (NSData *)serializedBinaryData
 {
     NSMutableData *aData = [[[[self header] serializedBinaryData] mutableCopy] autorelease];
+    
     [[self loadCommands] enumerateObjectsUsingBlock:^(NUMachOLoadCommand * _Nonnull aLoadCommand, NSUInteger idx, BOOL * _Nonnull stop) {
         [aData appendData:[aLoadCommand serializedData]];
     }];
@@ -94,8 +95,8 @@
         }
     }];
     
-    if ([aData length] < 4096)
-        [aData setLength:4096];
+    if ([aData length] < 4096 * 5)
+        [aData setLength:4096 * 5];
     return aData;
 }
 

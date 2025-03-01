@@ -24,7 +24,7 @@
     if (self) {
         strcpy(_section.sectname, SECT_TEXT);
         strcpy(_section.segname, SEG_TEXT);
-        _section.addr = 4294983584;
+        _section.addr = 4294967296;
         _section.size = 8;
         _section.offset = 544;
         _section.align = 0;
