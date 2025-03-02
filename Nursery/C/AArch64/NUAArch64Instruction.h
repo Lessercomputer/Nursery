@@ -8,13 +8,15 @@
 
 #import <Foundation/NSObject.h>
 
+@class NSMutableData;
 
 @interface NUAArch64Instruction : NSObject
 
 + (instancetype)instruction;
 
-@property (nonatomic, readonly) uint32_t instruction;
 @property (nonatomic, readonly) uint32_t size;
+
+- (void)writeToData:(NSMutableData *)aData;
 
 @end
 

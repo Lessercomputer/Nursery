@@ -7,6 +7,7 @@
 //
 
 #import "NUAArch64RetInstruction.h"
+#import <Foundation/NSData.h>
 
 @implementation NUAArch64RetInstruction
 
@@ -37,6 +38,11 @@
 - (void)setRn:(NSInteger)rn
 {
     _retInstruction.bits.Rn = (uint32_t)rn;
+}
+
+- (void)writeToData:(NSMutableData *)aData
+{
+    [aData appendBytes:&_retInstruction length:[self size]];
 }
 
 @end

@@ -10,14 +10,17 @@
 #import <mach-o/loader.h>
 
 @class NUMachO;
-@class NSData;
+@class NSData, NSMutableData;
 
 @interface NUMachOHeader64 : NSObject
 
 @property (nonatomic, assign) NUMachO *machO;
-@property (nonatomic) struct mach_header_64 machHeader;
 
-@property (nonatomic, readonly) NSData *serializedBinaryData;
+@property (nonatomic) struct mach_header_64 machHeader;
+@property (nonatomic, readonly) uint64_t size;
+
+- (void)computeLayout;
+- (void)writeToData:(NSMutableData *)aData;
 
 @end
 

@@ -23,25 +23,25 @@
         _machHeader.ncmds = 0;
         _machHeader.sizeofcmds = 0;
 //        _machHeader.flags = MH_NOUNDEFS | MH_DYLDLINK | MH_TWOLEVEL | MH_PIE;
-        _machHeader.flags = MH_PIE;
+        _machHeader.flags = MH_NOUNDEFS | MH_PIE;
     }
     return self;
 }
 
-- (NSData *)serializedBinaryData
+- (uint64_t)size
 {
-    NSMutableData *aData = [NSMutableData dataWithLength:sizeof(struct mach_header_64)];
-    struct mach_header *aMachHeaderPointer = [aData mutableBytes];
-    aMachHeaderPointer->magic = _machHeader.magic;
-    aMachHeaderPointer->cputype = _machHeader.cputype;
-    aMachHeaderPointer->cpusubtype = _machHeader.cpusubtype;
-    aMachHeaderPointer->filetype = _machHeader.filetype;
+    return sizeof(_machHeader);
+}
+
+- (void)computeLayout
+{
     _machHeader.ncmds = [[self machO] commandCount];
-    aMachHeaderPointer->ncmds = _machHeader.ncmds;
-    aMachHeaderPointer->sizeofcmds = [[self machO] commandSize];
-    aMachHeaderPointer->flags = _machHeader.flags;
-    
-    return aData;
+    _machHeader.sizeofcmds = [[self machO] commandSize];
+}
+
+- (void)writeToData:(NSMutableData *)aData
+{
+    [aData appendBytes:&_machHeader length:sizeof(_machHeader)];
 }
 
 @end

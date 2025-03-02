@@ -20,4 +20,8 @@
     return 4;
 }
 
+- (void)writeToData:(NSMutableData *)aData
+{
+}
+
 @end

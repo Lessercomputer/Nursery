@@ -1,0 +1,29 @@
+//
+//  NUMachOSectionData.h
+//  Nursery
+//
+//  Created by akiha on 2025/03/02.
+//  Copyright © 2025 com.lily-bud. All rights reserved.
+//
+
+#import <Foundation/NSObject.h>
+
+@class NUMachOSegmentData;
+@class NUAArch64Instruction;
+@class NSMutableArray;
+@class NSMutableData;
+
+@interface NUMachOSectionData : NSObject
+
+@property (nonatomic, assign) NUMachOSegmentData *segmentData;
+@property (nonatomic, retain) NSMutableArray *instructions;
+
+- (void)addInstruction:(NUAArch64Instruction *)anInstruction;
+- (void)computeLayout;
+
+@property (nonatomic, readonly) uint64_t size;
+
+- (void)writeToData:(NSMutableData *)aData;
+
+@end
+

@@ -8,10 +8,11 @@
 
 #import "NUMachO.h"
 #import "NUMachOHeader64.h"
-#import "NUMachOData.h"
+#import "NUMachOSegmentData.h"
 #import "NUMachOSegmentCommand64.h"
 #import "NUMachOThreadCommand.h"
 #import "NUMachOSection.h"
+#import "NUMachOSectionData.h"
 #import "NUAArch64MovzInstruction.h"
 #import "NUAArch64RetInstruction.h"
 
@@ -24,6 +25,29 @@
 
 @implementation NUMachO
 
++ (uint32_t)pageSize
+{
+    return 4096 * 4;
+}
+
++ (instancetype)exampleReturnZero
+{
+    NUMachO *aMachO = [[self new] autorelease];
+    
+    [aMachO add:[NUMachOSegmentCommand64 pageZeroSegmentCommand]];
+    
+    NUMachOSegmentCommand64 *aLoadCommand = [NUMachOSegmentCommand64 textSegmentCommand];
+    [aMachO add:aLoadCommand];
+    NUMachOSection *aSection = [NUMachOSection textSection];
+    [aLoadCommand add:aSection];
+    [[aSection sectionData] addInstruction:[NUAArch64MovzInstruction instruction]];
+    [[aSection sectionData] addInstruction:[NUAArch64RetInstruction instruction]];
+    
+    [aMachO add:[NUMachOThreadCommand unixThreadCommand]];
+    
+    return aMachO;
+}
+
 - (instancetype)init
 {
     self = [super init];
@@ -31,19 +55,7 @@
         _header = [NUMachOHeader64 new];
         [_header setMachO:self];
         _loadCommands = [NSMutableArray new];
-        
-        [_loadCommands addObject:[NUMachOSegmentCommand64 pageZeroSegmentCommand]];
-        
-        NUMachOSegmentCommand64 *aCommand = [NUMachOSegmentCommand64 textSegmentCommand];
-        NUMachOSection *aSection = [NUMachOSection textSection];
-        [aSection add:[NUAArch64MovzInstruction instruction]];
-        [aSection add:[NUAArch64RetInstruction instruction]];
-        [aCommand add:aSection];
-        
-        [_loadCommands addObject:aCommand];
-        
-        [_loadCommands addObject:[NUMachOThreadCommand unixThreadCommand]];
-        _data = [NUMachOData new];
+        _segmentData = [NSMutableArray new];
     }
     return self;
 }
@@ -52,13 +64,23 @@
 {
     [_header release];
     [_loadCommands release];
-    [_data release];
+    [_segmentData release];
     [super dealloc];
+}
+
+- (uint32_t)pageSize
+{
+    return [[self class] pageSize];
 }
 
 - (void)add:(NUMachOLoadCommand *)aLoadCommand
 {
+    [aLoadCommand setHeader:[self header]];
+    [aLoadCommand setPrevious:[[self loadCommands] lastObject]];
     [[self loadCommands] addObject:aLoadCommand];
+    
+    if ([aLoadCommand isSegmentCommand])
+        [[self segmentData] addObject:[(NUMachOSegmentCommand64 *)aLoadCommand segmentData]];
 }
 
 - (uint32_t)commandCount
@@ -75,36 +97,28 @@
     return aSize;
 }
 
-- (NSData *)serializedBinaryData
+- (void)computeLayout
 {
-    NSMutableData *aData = [[[[self header] serializedBinaryData] mutableCopy] autorelease];
+    [[self loadCommands] makeObjectsPerformSelector:@selector(computeLayout)];
+    [[self header] computeLayout];
+}
+
+- (void)writeToData:(NSMutableData *)aData
+{
+    [self computeLayout];
     
-    [[self loadCommands] enumerateObjectsUsingBlock:^(NUMachOLoadCommand * _Nonnull aLoadCommand, NSUInteger idx, BOOL * _Nonnull stop) {
-        [aData appendData:[aLoadCommand serializedData]];
-    }];
-    
-    [[self loadCommands] enumerateObjectsUsingBlock:^(NUMachOLoadCommand * _Nonnull aLoadCommand, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([aLoadCommand isKindOfClass:[NUMachOSegmentCommand64 class]])
-        {
-            [[(NUMachOSegmentCommand64 *)aLoadCommand sections] enumerateObjectsUsingBlock:^(NUMachOSection * _Nonnull aSection, NSUInteger idx, BOOL * _Nonnull stop) {
-                [[aSection instructions] enumerateObjectsUsingBlock:^(NUAArch64Instruction * _Nonnull anInstruction, NSUInteger idx, BOOL * _Nonnull stop) {
-                    uint32_t aRawInstruction = [anInstruction instruction];
-                    [aData appendBytes:&aRawInstruction length:sizeof(uint32_t)];
-                }];
-            }];
-        }
-    }];
-    
-    if ([aData length] < 4096 * 5)
-        [aData setLength:4096 * 5];
-    return aData;
+    [[self header] writeToData:aData];
+    [[self loadCommands] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
+    [[self segmentData] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
 }
 
 - (BOOL)writeToPath:(NSString *)aFilepath
 {
     NSDictionary *aFileAttributes = [NSDictionary dictionaryWithObject:[NSNumber numberWithShort:ACCESSPERMS] forKey:NSFilePosixPermissions];
+    NSMutableData *aData = [NSMutableData data];
+    [self writeToData:aData];
     
-    return [[NSFileManager defaultManager] createFileAtPath:aFilepath contents:[self serializedBinaryData] attributes:aFileAttributes];
+    return [[NSFileManager defaultManager] createFileAtPath:aFilepath contents:aData attributes:aFileAttributes];
 }
 
 @end

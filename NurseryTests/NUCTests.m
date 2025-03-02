@@ -76,7 +76,7 @@
 - (void)testCreateMinMachOFile
 {
     NSString *aMachOFilePath = [@"~/Desktop/minmacho" stringByExpandingTildeInPath];
-    NUMachO *aMachO = [[NUMachO new] autorelease];
+    NUMachO *aMachO = [NUMachO exampleReturnZero];
 //    NSData *aData = [aMachO serializedBinaryData];
 //    [aData writeToFile:aMachOFilePath atomically:YES];
     
