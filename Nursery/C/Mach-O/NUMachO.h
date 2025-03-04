@@ -27,6 +27,11 @@
 @property (nonatomic, readonly) uint32_t commandCount;
 @property (nonatomic, readonly) uint32_t commandSize;
 
+@property (nonatomic) uint64_t fileSize;
+
+- (uint64_t)roundUpToPageSize:(uint64_t)aSize;
+- (uint32_t)headerAndAllLoadCommandsSize;
+
 - (void)add:(NUMachOLoadCommand *)aLoadCommand;
 - (void)computeLayout;
 - (void)writeToData:(NSMutableData *)aData;

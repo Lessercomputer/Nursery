@@ -81,6 +81,46 @@
     return strcmp(_segmentCommand64.segname, SEG_PAGEZERO) == 0;
 }
 
+- (uint64_t)vmaddr
+{
+    return _segmentCommand64.vmaddr;
+}
+
+- (void)setVmaddr:(uint64_t)vmaddr
+{
+    _segmentCommand64.vmaddr = vmaddr;
+}
+
+- (uint64_t)vmsize
+{
+    return _segmentCommand64.vmsize;
+}
+
+- (void)setVmsize:(uint64_t)vmsize
+{
+    _segmentCommand64.vmsize = vmsize;
+}
+
+- (uint64_t)fileoff
+{
+    return _segmentCommand64.fileoff;
+}
+
+- (void)setFileoff:(uint64_t)fileoff
+{
+    _segmentCommand64.fileoff = fileoff;
+}
+
+- (uint64_t)filesize
+{
+    return _segmentCommand64.filesize;
+}
+
+- (void)setFilesize:(uint64_t)filesize
+{
+    _segmentCommand64.filesize = filesize;
+}
+
 - (uint32_t)size
 {
     return _segmentCommand64.cmdsize;
@@ -133,6 +173,8 @@
         _segmentCommand64.vmsize = aRoundupedSegmentDataSize;
         
         _segmentCommand64.fileoff = aPreviousSegmentCommand.fileoff + aPreviousSegmentCommand.filesize;
+//        if ([aPreviousLoadSegmentCommand isPageZero])
+//            _segmentCommand64.fileoff += [[[self header] machO] headerAndAllLoadCommandsSize];
         _segmentCommand64.filesize = aRoundupedSegmentDataSize;
         
         [self setPaddingSize:aRoundupedSegmentDataSize - aSegmentDataSize];
@@ -141,12 +183,12 @@
         [[self sections] enumerateObjectsUsingBlock:^(NUMachOSection * _Nonnull aSection, NSUInteger idx, BOOL * _Nonnull stop) {
             if (idx == 0)
             {
-                [aSection setOffset:[self paddingSize]];
+                [aSection setOffset:[self paddingSize] + (uint32_t)[aPreviousSection size] + [[[self header] machO] headerAndAllLoadCommandsSize]];
                 [aSection setAddress:[self paddingSize] + _segmentCommand64.vmaddr];
             }
             else
             {
-                [aSection setOffset:[aPreviousSection offset] + (uint32_t)[aPreviousSection size]];
+                [aSection setOffset:[aPreviousSection offset]];
                 [aSection setAddress:[self paddingSize] + [aPreviousSection address] + [aPreviousSection size]];
             }
             

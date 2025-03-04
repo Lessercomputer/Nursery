@@ -35,12 +35,7 @@
 
 - (uint64_t)roundUpToPageSize:(uint64_t)aSize
 {
-    uint64_t aPageSize = [[[self header] machO] pageSize];
-    
-    if (aSize % aPageSize)
-        return (aSize / aPageSize + 1) * aPageSize;
-    else
-        return aSize;
+    return [[[self header] machO] roundUpToPageSize:aSize];
 }
 
 - (BOOL)isSegmentCommand

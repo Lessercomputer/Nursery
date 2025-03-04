@@ -73,6 +73,16 @@
     return [[self class] pageSize];
 }
 
+- (uint64_t)roundUpToPageSize:(uint64_t)aSize
+{
+    uint64_t aPageSize = [self pageSize];
+    
+    if (aSize % aPageSize)
+        return (aSize / aPageSize + 1) * aPageSize;
+    else
+        return aSize;
+}
+
 - (void)add:(NUMachOLoadCommand *)aLoadCommand
 {
     [aLoadCommand setHeader:[self header]];
@@ -99,8 +109,59 @@
 
 - (void)computeLayout
 {
-    [[self loadCommands] makeObjectsPerformSelector:@selector(computeLayout)];
-    [[self header] computeLayout];
+//    [[self loadCommands] makeObjectsPerformSelector:@selector(computeLayout)];
+    
+    [[self loadCommands] makeObjectsPerformSelector:@selector(computeLoadCommandSize)];
+    [[self header] updateHeaderInfo];
+    uint32_t aHeaderAndLoadCommandsSize = [self headerAndAllLoadCommandsSize];
+    uint64_t aRoundedHeaderAndLoadCommandsSize = [self roundUpToPageSize:aHeaderAndLoadCommandsSize];
+    uint64_t aRemainingSegmentSize = aRoundedHeaderAndLoadCommandsSize - aHeaderAndLoadCommandsSize;
+    [self setFileSize:aRoundedHeaderAndLoadCommandsSize];
+    
+    __block NUMachOSegmentCommand64 *aPreceedingSegmentCommand = nil;
+    
+    [[self loadCommands] enumerateObjectsUsingBlock:^(NUMachOLoadCommand * _Nonnull aLoadCommand, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([aLoadCommand isSegmentCommand])
+        {
+            NUMachOSegmentCommand64 *aSegmentCommand = (NUMachOSegmentCommand64 *)aLoadCommand;
+            if (![aSegmentCommand isPageZero])
+            {
+                if (aPreceedingSegmentCommand)
+                {
+                    [aSegmentCommand setVmaddr:[aPreceedingSegmentCommand vmaddr] + [aPreceedingSegmentCommand vmsize]];
+                    [aSegmentCommand setVmsize:aRoundedHeaderAndLoadCommandsSize];
+                    [aSegmentCommand setFileoff:aHeaderAndLoadCommandsSize];
+                    [aSegmentCommand setFilesize:aRemainingSegmentSize];
+                    
+                    [[aSegmentCommand sections] enumerateObjectsUsingBlock:^(NUMachOSection * _Nonnull aSection, NSUInteger idx, BOOL * _Nonnull stop) {
+                        [aSection setAddress:aHeaderAndLoadCommandsSize];
+                        [aSection setOffset:aHeaderAndLoadCommandsSize];
+                        [aSection setSize:[[aSection sectionData] size]];
+                    }];
+                }
+            }
+            else
+            {
+                aPreceedingSegmentCommand = aSegmentCommand;
+            }
+        }
+    }];
+    
+    
+}
+
+- (uint32_t)totalLoadCommandsSize
+{
+    __block uint32_t aSize = 0;
+    [[self loadCommands] enumerateObjectsUsingBlock:^(NUMachOLoadCommand * _Nonnull aLoadCommand, NSUInteger idx, BOOL * _Nonnull stop) {
+        aSize += [aLoadCommand size];
+    }];
+    return aSize;
+}
+
+- (uint32_t)headerAndAllLoadCommandsSize
+{
+    return [[self header] size] + [self totalLoadCommandsSize];
 }
 
 - (void)writeToData:(NSMutableData *)aData
@@ -109,7 +170,25 @@
     
     [[self header] writeToData:aData];
     [[self loadCommands] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
+//    uint32_t aHeaderAndLoadCommandsSize = [self headerAndAllLoadCommandsSize];
+//    uint32_t aRoundedHeaderAndLoadCommandsSize = (uint32_t)[self roundUpToPageSize:aHeaderAndLoadCommandsSize];
+//    uint32_t aPaddingSize = aRoundedHeaderAndLoadCommandsSize - aHeaderAndLoadCommandsSize;
+//    
+//    NSMutableData *aPaddingData = [NSMutableData data];//[NSMutableData dataWithLength:aPaddingSize];
+//    uint32_t aNumber = 1;
+//    while ([aPaddingData length] < aPaddingSize) {
+//        [aPaddingData appendBytes:&aNumber length:sizeof(aNumber)];
+//        aNumber++;
+//    }
+//    [aPaddingData setLength:aPaddingSize];
+//    [aPaddingData writeToFile:[@"~/Desktop/pad" stringByExpandingTildeInPath] atomically:YES];
+//    
+//    [aData appendData:aPaddingData];
+    
     [[self segmentData] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
+    
+    if ([aData length] < [self fileSize])
+        [aData setLength:[self fileSize]];
 }
 
 - (BOOL)writeToPath:(NSString *)aFilepath

@@ -17,9 +17,9 @@
 @property (nonatomic, assign) NUMachO *machO;
 
 @property (nonatomic) struct mach_header_64 machHeader;
-@property (nonatomic, readonly) uint64_t size;
+@property (nonatomic, readonly) uint32_t size;
 
-- (void)computeLayout;
+- (void)updateHeaderInfo;
 - (void)writeToData:(NSMutableData *)aData;
 
 @end

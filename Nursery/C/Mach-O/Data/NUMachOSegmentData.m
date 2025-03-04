@@ -11,6 +11,7 @@
 #import "NUMachOSegmentCommand64.h"
 #import <Foundation/NSArray.h>
 #import <Foundation/NSData.h>
+#import <Foundation/NSString.h>
 
 @implementation NUMachOSegmentData
 
@@ -50,7 +51,18 @@
 
 - (void)writeToData:(NSMutableData *)aData
 {
-    [aData increaseLengthBy:[[self segmentCommand] paddingSize]];
+//    [aData increaseLengthBy:[[self segmentCommand] paddingSize]];
+    
+//    NSMutableData *aPaddingData = [NSMutableData data];
+//    uint32_t aNumber = 1;
+//    while ([aPaddingData length] < [[self segmentCommand] paddingSize]) {
+//        [aPaddingData appendBytes:&aNumber length:sizeof(aNumber)];
+//        aNumber++;
+//    }
+//    [aPaddingData setLength:[[self segmentCommand] paddingSize]];
+//    
+//    [aPaddingData writeToFile:[@"~/Desktop/pad2" stringByExpandingTildeInPath] atomically:YES];
+//    [aData appendData:aPaddingData];
     [[self sectionData] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
 }
 

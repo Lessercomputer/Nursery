@@ -16,6 +16,7 @@ struct NUAArch64MovInstructionBits
 //    uint32_t sft : 2;
 //    uint32_t imm16 : 16;
 //    uint32_t Rd : 5;
+    
     uint32_t Rd : 5;
     uint32_t imm16 : 16;
     uint32_t sft : 2;

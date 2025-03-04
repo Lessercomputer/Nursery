@@ -16,6 +16,7 @@ struct NUAArch64RetInstructionBits
 //    uint32_t field3 : 6;
 //    uint32_t Rn : 5;
 //    uint32_t field5 : 5;
+    
     uint32_t field5 : 5;
     uint32_t Rn : 5;
     int32_t field3 : 6;

@@ -51,6 +51,7 @@
 
 - (void)writeToData:(NSMutableData *)aData
 {
+//    [aData replaceBytesInRange:NSMakeRange(16920, 4) withBytes:&_movInstruction];
     [aData appendBytes:&_movInstruction length:[self size]];
 }
 

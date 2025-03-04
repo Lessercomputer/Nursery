@@ -28,12 +28,12 @@
     return self;
 }
 
-- (uint64_t)size
+- (uint32_t)size
 {
     return sizeof(_machHeader);
 }
 
-- (void)computeLayout
+- (void)updateHeaderInfo
 {
     _machHeader.ncmds = [[self machO] commandCount];
     _machHeader.sizeofcmds = [[self machO] commandSize];

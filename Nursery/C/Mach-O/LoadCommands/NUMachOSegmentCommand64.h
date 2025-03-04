@@ -20,6 +20,10 @@
 
 @property (nonatomic, readonly) BOOL isPageZero;
 @property (nonatomic) struct segment_command_64 segmentCommand64;
+@property (nonatomic) uint64_t vmaddr;
+@property (nonatomic) uint64_t vmsize;
+@property (nonatomic) uint64_t fileoff;
+@property (nonatomic) uint64_t filesize;
 @property (nonatomic) uint32_t paddingSize;
 @property (nonatomic, retain) NSMutableArray *sections;
 
