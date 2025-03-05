@@ -10,6 +10,7 @@
 #import "NUMachOSegmentData.h"
 #import "NUAArch64Instruction.h"
 #import <Foundation/NSArray.h>
+#import <Foundation/NSData.h>
 
 @implementation NUMachOSectionData
 
@@ -44,6 +45,9 @@
 
 - (void)writeToData:(NSMutableData *)aData
 {
+    if ([self paddingSize])
+        [aData increaseLengthBy:[self paddingSize]];
+    
     [[self instructions] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
 }
 

@@ -17,9 +17,9 @@
 
 @property (nonatomic, assign) NUMachOSegmentData *segmentData;
 @property (nonatomic, retain) NSMutableArray *instructions;
+@property (nonatomic) uint64_t paddingSize;
 
 - (void)addInstruction:(NUAArch64Instruction *)anInstruction;
-- (void)computeLayout;
 
 @property (nonatomic, readonly) uint64_t size;
 

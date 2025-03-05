@@ -130,12 +130,20 @@
                 {
                     [aSegmentCommand setVmaddr:[aPreceedingSegmentCommand vmaddr] + [aPreceedingSegmentCommand vmsize]];
                     [aSegmentCommand setVmsize:aRoundedHeaderAndLoadCommandsSize];
-                    [aSegmentCommand setFileoff:aHeaderAndLoadCommandsSize];
-                    [aSegmentCommand setFilesize:aRemainingSegmentSize];
+                    [aSegmentCommand setFileoff:0];
+                    [aSegmentCommand setFilesize:aRoundedHeaderAndLoadCommandsSize];
                     
                     [[aSegmentCommand sections] enumerateObjectsUsingBlock:^(NUMachOSection * _Nonnull aSection, NSUInteger idx, BOOL * _Nonnull stop) {
-                        [aSection setAddress:aHeaderAndLoadCommandsSize];
-                        [aSection setOffset:aHeaderAndLoadCommandsSize];
+                        if (idx == 0)
+                        {
+                            uint64_t aPaddingSize = aRemainingSegmentSize - [[aSection sectionData] size];
+                            [[aSection sectionData] setPaddingSize:aPaddingSize];
+                            [aSection setOffset:aHeaderAndLoadCommandsSize + (uint32_t)aPaddingSize];
+                        }
+                        else
+                            [aSection setOffset:aHeaderAndLoadCommandsSize];
+                        
+                        [aSection setAddress:aHeaderAndLoadCommandsSize + [aPreceedingSegmentCommand vmsize] + [aSegmentCommand vmsize]];
                         [aSection setSize:[[aSection sectionData] size]];
                     }];
                 }
