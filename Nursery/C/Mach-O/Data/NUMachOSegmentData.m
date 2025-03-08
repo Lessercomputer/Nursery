@@ -51,7 +51,7 @@
 
 - (void)writeToData:(NSMutableData *)aData
 {
-//    [aData increaseLengthBy:[[self segmentCommand] paddingSize]];
+    [aData increaseLengthBy:[[self segmentCommand] paddingSize]];
     
 //    NSMutableData *aPaddingData = [NSMutableData data];
 //    uint32_t aNumber = 1;

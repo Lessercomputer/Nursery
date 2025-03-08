@@ -12,6 +12,16 @@
 
 @implementation NUMachOLoadCommand
 
++ (instancetype)loadCommand
+{
+    return [[self new] autorelease];
+}
+
+- (NUMachO *)macho
+{
+    return [[self header] machO];
+}
+
 - (uint32_t)size
 {
     return 0;

@@ -23,7 +23,9 @@
 @property (nonatomic, assign) NUMachOSegmentCommand64 *segmentCommand;
 @property (nonatomic, readonly) NUMachOSegmentData *segmentData;
 @property (nonatomic, assign) NUMachOSection *previous;
+@property (nonatomic, readonly) BOOL isText;
 
+@property (nonatomic) uint64_t paddingSize;
 @property (nonatomic) struct section_64 section;
 @property (nonatomic) uint64_t address;
 @property (nonatomic) uint64_t size;

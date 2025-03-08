@@ -11,15 +11,19 @@
 
 @class NUMachOHeader64;
 @class NUMachOSegmentCommand64;
+@class NUMachO;
 @class NSMutableData;
 
 @interface NUMachOLoadCommand : NSObject
 
 @property (nonatomic, assign) NUMachOHeader64 *header;
+@property (nonatomic, readonly) NUMachO *macho;
 @property (nonatomic, assign) NUMachOLoadCommand *previous;
 @property (nonatomic, readonly) NUMachOSegmentCommand64 *previousLoadSegmentCommand;
 @property (nonatomic, readonly) uint32_t size;
 @property (nonatomic, readonly) BOOL isSegmentCommand;
+
++ (instancetype)loadCommand;
 
 - (void)computeLayout;
 - (void)computeLoadCommandSize;

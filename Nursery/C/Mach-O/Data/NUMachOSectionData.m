@@ -45,8 +45,7 @@
 
 - (void)writeToData:(NSMutableData *)aData
 {
-    if ([self paddingSize])
-        [aData increaseLengthBy:[self paddingSize]];
+    [aData increaseLengthBy:[self paddingSize]];
     
     [[self instructions] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
 }

@@ -52,6 +52,14 @@
     return [[self segmentCommand] segmentData];
 }
 
+- (BOOL)isText
+{
+    if (strcmp(_section.sectname, SECT_TEXT) == 0)
+        return YES;
+    else
+        return NO;
+}
+
 - (void)add:(NUAArch64Instruction *)anInstruction
 {
     [[self sectionData] addInstruction:anInstruction];

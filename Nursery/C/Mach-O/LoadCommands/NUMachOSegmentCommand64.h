@@ -17,14 +17,16 @@
 
 + (instancetype)pageZeroSegmentCommand;
 + (instancetype)textSegmentCommand;
++ (instancetype)linkeditCommand;
 
 @property (nonatomic, readonly) BOOL isPageZero;
+@property (nonatomic, readonly) BOOL isText;
 @property (nonatomic) struct segment_command_64 segmentCommand64;
 @property (nonatomic) uint64_t vmaddr;
 @property (nonatomic) uint64_t vmsize;
 @property (nonatomic) uint64_t fileoff;
 @property (nonatomic) uint64_t filesize;
-@property (nonatomic) uint32_t paddingSize;
+@property (nonatomic) uint64_t paddingSize;
 @property (nonatomic, retain) NSMutableArray *sections;
 
 @property (nonatomic, retain) NUMachOSegmentData *segmentData;

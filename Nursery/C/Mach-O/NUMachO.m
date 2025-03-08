@@ -15,6 +15,12 @@
 #import "NUMachOSectionData.h"
 #import "NUAArch64MovzInstruction.h"
 #import "NUAArch64RetInstruction.h"
+#import "NUMachOEntryPointCommand.h"
+#import "NUMachODylinkerCommand.h"
+#import "NUMachODyldInfoOnly.h"
+#import "NUMachOSymtabCommand.h"
+#import "NUMachODySymtabCommand.h"
+#import "NUMachODylibCommand.h"
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSData.h>
@@ -43,7 +49,14 @@
     [[aSection sectionData] addInstruction:[NUAArch64MovzInstruction instruction]];
     [[aSection sectionData] addInstruction:[NUAArch64RetInstruction instruction]];
     
-    [aMachO add:[NUMachOThreadCommand unixThreadCommand]];
+//    [aMachO add:[NUMachOThreadCommand unixThreadCommand]];
+    [aMachO add:[NUMachOEntryPointCommand loadCommand]];
+    [aMachO add:[NUMachOSegmentCommand64 linkeditCommand]];
+    [aMachO add:[NUMachODylinkerCommand loadCommand]];
+    [aMachO add:[NUMachODyldInfoOnly loadCommand]];
+    [aMachO add:[NUMachOSymtabCommand loadCommand]];
+    [aMachO add:[NUMachODySymtabCommand loadCommand]];
+    [aMachO add:[NUMachODylibCommand loadCommand]];
     
     return aMachO;
 }
@@ -112,48 +125,75 @@
 //    [[self loadCommands] makeObjectsPerformSelector:@selector(computeLayout)];
     
     [[self loadCommands] makeObjectsPerformSelector:@selector(computeLoadCommandSize)];
+    [[self loadCommands] makeObjectsPerformSelector:@selector(computeLayout)];
     [[self header] updateHeaderInfo];
-    uint32_t aHeaderAndLoadCommandsSize = [self headerAndAllLoadCommandsSize];
-    uint64_t aRoundedHeaderAndLoadCommandsSize = [self roundUpToPageSize:aHeaderAndLoadCommandsSize];
-    uint64_t aRemainingSegmentSize = aRoundedHeaderAndLoadCommandsSize - aHeaderAndLoadCommandsSize;
-    [self setFileSize:aRoundedHeaderAndLoadCommandsSize];
     
-    __block NUMachOSegmentCommand64 *aPreceedingSegmentCommand = nil;
+//    uint32_t aHeaderAndLoadCommandsSize = [self headerAndAllLoadCommandsSize];
+//    uint64_t aRoundedHeaderAndLoadCommandsSize = [self roundUpToPageSize:aHeaderAndLoadCommandsSize];
+//    uint64_t aRemainingSegmentSize = aRoundedHeaderAndLoadCommandsSize - aHeaderAndLoadCommandsSize;
     
-    [[self loadCommands] enumerateObjectsUsingBlock:^(NUMachOLoadCommand * _Nonnull aLoadCommand, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([aLoadCommand isSegmentCommand])
-        {
-            NUMachOSegmentCommand64 *aSegmentCommand = (NUMachOSegmentCommand64 *)aLoadCommand;
-            if (![aSegmentCommand isPageZero])
-            {
-                if (aPreceedingSegmentCommand)
-                {
-                    [aSegmentCommand setVmaddr:[aPreceedingSegmentCommand vmaddr] + [aPreceedingSegmentCommand vmsize]];
-                    [aSegmentCommand setVmsize:aRoundedHeaderAndLoadCommandsSize];
-                    [aSegmentCommand setFileoff:0];
-                    [aSegmentCommand setFilesize:aRoundedHeaderAndLoadCommandsSize];
-                    
-                    [[aSegmentCommand sections] enumerateObjectsUsingBlock:^(NUMachOSection * _Nonnull aSection, NSUInteger idx, BOOL * _Nonnull stop) {
-                        if (idx == 0)
-                        {
-                            uint64_t aPaddingSize = aRemainingSegmentSize - [[aSection sectionData] size];
-                            [[aSection sectionData] setPaddingSize:aPaddingSize];
-                            [aSection setOffset:aHeaderAndLoadCommandsSize + (uint32_t)aPaddingSize];
-                        }
-                        else
-                            [aSection setOffset:aHeaderAndLoadCommandsSize];
-                        
-                        [aSection setAddress:aHeaderAndLoadCommandsSize + [aPreceedingSegmentCommand vmsize] + [aSegmentCommand vmsize]];
-                        [aSection setSize:[[aSection sectionData] size]];
-                    }];
-                }
-            }
-            else
-            {
-                aPreceedingSegmentCommand = aSegmentCommand;
-            }
-        }
-    }];
+//    __block uint64_t aSegmentDataSize = 0;
+//    __block uint64_t aRoundedSegmentDataSize = 0;
+//    __block uint64_t aRemainingSegmentDataSize = 0;
+//    __block BOOL aSegmentCommandIsFirstWithoutPageZero = YES;
+//    
+////    [self setFileSize:aRoundedHeaderAndLoadCommandsSize];
+//    
+//    __block NUMachOSegmentCommand64 *aPreceedingSegmentCommand = nil;
+//    
+//    [[self loadCommands] enumerateObjectsUsingBlock:^(NUMachOLoadCommand * _Nonnull aLoadCommand, NSUInteger idx, BOOL * _Nonnull stop) {
+//        if ([aLoadCommand isSegmentCommand])
+//        {
+//            NUMachOSegmentCommand64 *aSegmentCommand = (NUMachOSegmentCommand64 *)aLoadCommand;
+//            if (![aSegmentCommand isPageZero])
+//            {
+//                if (aSegmentCommandIsFirstWithoutPageZero)
+//                {
+//                    aSegmentDataSize = [self headerAndAllLoadCommandsSize];
+//                }
+//                else
+//                    aSegmentDataSize = 0;
+//                
+//                aRoundedSegmentDataSize = [self roundUpToPageSize:aSegmentDataSize];
+//                aRemainingSegmentDataSize = aRoundedSegmentDataSize - aSegmentDataSize;
+//                
+//                if (aPreceedingSegmentCommand)
+//                {
+//                    [aSegmentCommand setVmaddr:[aPreceedingSegmentCommand vmaddr] + [aPreceedingSegmentCommand vmsize]];
+//                    [aSegmentCommand setVmsize:aRoundedSegmentDataSize];
+//                    [aSegmentCommand setFileoff:[aPreceedingSegmentCommand fileoff] + [aPreceedingSegmentCommand filesize]];
+//                    [aSegmentCommand setFilesize:aRoundedSegmentDataSize];
+//                    
+//                    __block NUMachOSection *aPreceedingSection = nil;
+//                    [[aSegmentCommand sections] enumerateObjectsUsingBlock:^(NUMachOSection * _Nonnull aSection, NSUInteger idx, BOOL * _Nonnull stop) {
+//                        
+//                        if (idx == 0)
+//                        {
+//                            uint64_t aPaddingSize = aRemainingSegmentDataSize - [[aSection sectionData] size];
+//                            [[aSection sectionData] setPaddingSize:aPaddingSize];
+//                            [aSection setAddress:[aPreceedingSegmentCommand vmaddr] + aSegmentDataSize + aPaddingSize];
+//                            [aSection setOffset:(uint32_t)(aSegmentDataSize + aPaddingSize)];
+//                        }
+//                        else
+//                        {
+//                            [aSection setAddress:[aPreceedingSection address] + [[aPreceedingSection sectionData] size]];
+//                            [aSection setOffset:[aPreceedingSection offset] + (uint32_t)[[aPreceedingSection sectionData] size]];
+//                        }
+//                        
+//                        [aSection setSize:[[aSection sectionData] size]];
+//                        aPreceedingSection = aSection;
+//                    }];
+//                }
+//                
+//                aPreceedingSegmentCommand = aSegmentCommand;
+//                aSegmentCommandIsFirstWithoutPageZero = NO;
+//            }
+//            else
+//            {
+//                aPreceedingSegmentCommand = aSegmentCommand;
+//            }
+//        }
+//    }];
     
     
 }
