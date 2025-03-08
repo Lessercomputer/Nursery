@@ -27,6 +27,8 @@
 @property (nonatomic) uint64_t fileoff;
 @property (nonatomic) uint64_t filesize;
 @property (nonatomic) uint64_t paddingSize;
+@property (nonatomic, readonly) uint64_t nextVMAddr;
+@property (nonatomic, readonly) uint64_t nextFileoff;
 @property (nonatomic, retain) NSMutableArray *sections;
 
 @property (nonatomic, retain) NUMachOSegmentData *segmentData;

@@ -37,6 +37,7 @@
         _section.reserved2 = 0;
         _section.reserved3 = 0;
         _sectionData = [NUMachOSectionData new];
+        [_sectionData setSection:self];
     }
     return self;
 }
@@ -65,12 +66,12 @@
     [[self sectionData] addInstruction:anInstruction];
 }
 
-- (uint64_t)address
+- (uint64_t)addr
 {
     return _section.addr;
 }
 
-- (void)setAddress:(uint64_t)address
+- (void)setAddr:(uint64_t)address
 {
     _section.addr = address;
 }

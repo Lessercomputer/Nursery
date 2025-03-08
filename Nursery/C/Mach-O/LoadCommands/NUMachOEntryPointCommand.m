@@ -17,7 +17,7 @@
     if (self) {
         _entoryPointCommand.cmd = LC_MAIN;
         _entoryPointCommand.cmdsize = sizeof(_entoryPointCommand);
-        _entoryPointCommand.entryoff = 0;
+        _entoryPointCommand.entryoff = 16376;
         _entoryPointCommand.stacksize = 0;
     }
     return self;

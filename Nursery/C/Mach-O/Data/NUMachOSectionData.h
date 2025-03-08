@@ -9,6 +9,7 @@
 #import <Foundation/NSObject.h>
 
 @class NUMachOSegmentData;
+@class NUMachOSection;
 @class NUAArch64Instruction;
 @class NSMutableArray;
 @class NSMutableData;
@@ -16,8 +17,9 @@
 @interface NUMachOSectionData : NSObject
 
 @property (nonatomic, assign) NUMachOSegmentData *segmentData;
+@property (nonatomic, assign) NUMachOSection *section;
 @property (nonatomic, retain) NSMutableArray *instructions;
-@property (nonatomic) uint64_t paddingSize;
+@property (nonatomic, readonly) uint64_t paddingSize;
 
 - (void)addInstruction:(NUAArch64Instruction *)anInstruction;
 

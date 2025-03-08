@@ -27,7 +27,7 @@
 
 @property (nonatomic) uint64_t paddingSize;
 @property (nonatomic) struct section_64 section;
-@property (nonatomic) uint64_t address;
+@property (nonatomic) uint64_t addr;
 @property (nonatomic) uint64_t size;
 @property (nonatomic) uint32_t offset;
 

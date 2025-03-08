@@ -8,6 +8,7 @@
 
 #import "NUMachOSectionData.h"
 #import "NUMachOSegmentData.h"
+#import "NUMachOSection.h"
 #import "NUAArch64Instruction.h"
 #import <Foundation/NSArray.h>
 #import <Foundation/NSData.h>
@@ -41,6 +42,11 @@
         aSize += [anInstruction size];
     }];
     return aSize;
+}
+
+- (uint64_t)paddingSize
+{
+    return [[self section] paddingSize];
 }
 
 - (void)writeToData:(NSMutableData *)aData
