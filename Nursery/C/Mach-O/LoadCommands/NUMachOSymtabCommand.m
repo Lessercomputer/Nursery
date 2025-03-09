@@ -21,6 +21,31 @@
     return self;
 }
 
+- (uint32_t)symoff
+{
+    return _symtabCommand.symoff;
+}
+
+- (void)setSymoff:(uint32_t)symoff
+{
+    _symtabCommand.symoff = symoff;
+}
+
+- (uint32_t)stroff
+{
+    return _symtabCommand.stroff;
+}
+
+- (void)setStroff:(uint32_t)stroff
+{
+    _symtabCommand.stroff = stroff;
+}
+
+- (BOOL)isSymtabCommand
+{
+    return YES;
+}
+
 - (uint32_t)size
 {
     return _symtabCommand.cmdsize;

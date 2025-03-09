@@ -21,6 +21,7 @@
 
 @property (nonatomic, readonly) BOOL isPageZero;
 @property (nonatomic, readonly) BOOL isText;
+@property (nonatomic, readonly) BOOL isLinkedit;
 @property (nonatomic) struct segment_command_64 segmentCommand64;
 @property (nonatomic) uint64_t vmaddr;
 @property (nonatomic) uint64_t vmsize;

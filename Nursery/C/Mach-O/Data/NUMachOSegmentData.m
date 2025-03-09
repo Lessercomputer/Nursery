@@ -63,7 +63,15 @@
 //    
 //    [aPaddingData writeToFile:[@"~/Desktop/pad2" stringByExpandingTildeInPath] atomically:YES];
 //    [aData appendData:aPaddingData];
-    [[self sectionData] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
+    if ([[self segmentCommand] isPageZero])
+        return;
+    
+    if ([[self sectionData] count])
+        [[self sectionData] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
+    else
+    {
+        [aData increaseLengthBy:[[self segmentCommand] filesize]];
+    }
 }
 
 @end

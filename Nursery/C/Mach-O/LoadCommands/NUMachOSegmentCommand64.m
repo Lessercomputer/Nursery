@@ -65,6 +65,8 @@
     aSegmentCommand.cmd = LC_SEGMENT_64;
     aSegmentCommand.cmdsize = sizeof(aSegmentCommand);
     strcpy(aSegmentCommand.segname, SEG_LINKEDIT);
+//    aSegmentCommand.filesize = [NUMachO pageSize];
+//    aSegmentCommand.vmsize = [NUMachO pageSize];
     aSegmentCommand.maxprot = VM_PROT_READ | VM_PROT_WRITE | VM_PROT_EXECUTE;
     aSegmentCommand.initprot = VM_PROT_READ | VM_PROT_EXECUTE;
     
@@ -100,6 +102,11 @@
 - (BOOL)isText
 {
     return strcmp(_segmentCommand64.segname, SEG_TEXT) == 0;
+}
+
+- (BOOL)isLinkedit
+{
+    return strcmp(_segmentCommand64.segname, SEG_LINKEDIT) == 0;
 }
 
 - (uint64_t)vmaddr
@@ -228,6 +235,8 @@
         }];
         
         uint64_t aRoundedSegmentDataSize = [self roundUpToPageSize:aSegmentDataSize];
+        if (!aRoundedSegmentDataSize)
+            aRoundedSegmentDataSize = [[self macho] pageSize];
         uint64_t aPaddingSize = aRoundedSegmentDataSize - aSegmentDataSize;
         [self setVmsize:aRoundedSegmentDataSize];
         [self setFileoff:[aPreviousLoadSegmentCommand nextFileoff]];

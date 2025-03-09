@@ -12,6 +12,8 @@
 @interface NUMachOSymtabCommand : NUMachOLoadCommand
 
 @property (nonatomic) struct symtab_command symtabCommand;
+@property (nonatomic) uint32_t symoff;
+@property (nonatomic) uint32_t stroff;
 
 @end
 

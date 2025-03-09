@@ -33,7 +33,7 @@
     return sizeof(_machHeader);
 }
 
-- (void)updateHeaderInfo
+- (void)updateHeader
 {
     _machHeader.ncmds = [[self machO] commandCount];
     _machHeader.sizeofcmds = [[self machO] commandSize];

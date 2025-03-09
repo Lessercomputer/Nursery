@@ -12,6 +12,7 @@
 @interface NUMachOEntryPointCommand : NUMachOLoadCommand
 
 @property (nonatomic) struct entry_point_command entoryPointCommand;
+@property (nonatomic) uint64_t entryoff;
 
 @end
 

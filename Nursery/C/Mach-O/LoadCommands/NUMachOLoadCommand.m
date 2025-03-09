@@ -53,6 +53,16 @@
     return NO;
 }
 
+- (BOOL)isEntryPointCommand
+{
+    return NO;
+}
+
+- (BOOL)isSymtabCommand
+{
+    return NO;
+}
+
 - (NUMachOSegmentCommand64 *)previousLoadSegmentCommand
 {
     if ([[self previous] isSegmentCommand])

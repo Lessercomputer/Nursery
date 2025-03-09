@@ -19,7 +19,7 @@
         _retInstruction.bits.field1 = 2;
         _retInstruction.bits.field2 = 31;
         _retInstruction.bits.field3 = 0;
-        _retInstruction.bits.Rn = 0;
+        _retInstruction.bits.Rn = 30;
         _retInstruction.bits.field5 = 0;
     }
     return self;

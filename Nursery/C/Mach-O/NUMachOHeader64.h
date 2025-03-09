@@ -19,7 +19,7 @@
 @property (nonatomic) struct mach_header_64 machHeader;
 @property (nonatomic, readonly) uint32_t size;
 
-- (void)updateHeaderInfo;
+- (void)updateHeader;
 - (void)writeToData:(NSMutableData *)aData;
 
 @end

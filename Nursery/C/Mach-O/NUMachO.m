@@ -49,15 +49,14 @@
     [[aSection sectionData] addInstruction:[NUAArch64MovzInstruction instruction]];
     [[aSection sectionData] addInstruction:[NUAArch64RetInstruction instruction]];
     
-//    [aMachO add:[NUMachOThreadCommand unixThreadCommand]];
-    [aMachO add:[NUMachOEntryPointCommand loadCommand]];
     [aMachO add:[NUMachOSegmentCommand64 linkeditCommand]];
-    [aMachO add:[NUMachODylinkerCommand loadCommand]];
-    [aMachO add:[NUMachODyldInfoOnly loadCommand]];
     [aMachO add:[NUMachOSymtabCommand loadCommand]];
     [aMachO add:[NUMachODySymtabCommand loadCommand]];
+    [aMachO add:[NUMachODylinkerCommand loadCommand]];
+    [aMachO add:[NUMachODyldInfoOnly loadCommand]];
     [aMachO add:[NUMachODylibCommand loadCommand]];
-    
+    [aMachO add:[NUMachOEntryPointCommand loadCommand]];
+
     return aMachO;
 }
 
@@ -124,7 +123,80 @@
 {
     [[self loadCommands] makeObjectsPerformSelector:@selector(computeLoadCommandSize)];
     [[self loadCommands] makeObjectsPerformSelector:@selector(computeLayout)];
-    [[self header] updateHeaderInfo];
+    [self updateLoadCommands];
+    [[self header] updateHeader];
+}
+
+- (void)updateLoadCommands
+{
+    NUMachOSegmentCommand64 *aTextSegment = [self textSegment];
+    NUMachOSection *aTextSection = [[aTextSegment sections] firstObject];
+    NUMachOEntryPointCommand *anEntryPointCommand = [self entryPointCommand];
+    [anEntryPointCommand setEntryoff:[aTextSection offset]];
+    
+    NUMachOSegmentCommand64 *aLinkeditCommand = [self linkeditSegment];
+    [aLinkeditCommand setFileoff:[aTextSection offset] + [aTextSection size]];
+    NUMachOSymtabCommand *aSymtabCommand = [self symtabCommand];
+    [aSymtabCommand setSymoff:(uint32_t)[aLinkeditCommand fileoff]];
+    [aSymtabCommand setStroff:[aSymtabCommand symoff]];
+}
+
+- (NUMachOSegmentCommand64 *)textSegment
+{
+    __block NUMachOSegmentCommand64 *aSegmentCommand = nil;
+    
+    [[self loadCommands] enumerateObjectsUsingBlock:^(NUMachOLoadCommand * _Nonnull aLoadCommand, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([aLoadCommand isSegmentCommand])
+        {
+            if ([(NUMachOSegmentCommand64 *)aLoadCommand isText])
+                aSegmentCommand = (NUMachOSegmentCommand64 *)aLoadCommand;
+        }
+    }];
+    
+    return aSegmentCommand;
+}
+
+- (NUMachOEntryPointCommand *)entryPointCommand
+{
+    __block NUMachOEntryPointCommand *anEntryPointCommand = nil;
+    
+    [[self loadCommands] enumerateObjectsUsingBlock:^(NUMachOLoadCommand * _Nonnull aLoadCommand, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([aLoadCommand isEntryPointCommand])
+        {
+            anEntryPointCommand = (NUMachOEntryPointCommand *)aLoadCommand;
+        }
+    }];
+    
+    return anEntryPointCommand;
+}
+
+- (NUMachOSegmentCommand64 *)linkeditSegment
+{
+    __block NUMachOSegmentCommand64 *aSegmentCommand = nil;
+    
+    [[self loadCommands] enumerateObjectsUsingBlock:^(NUMachOLoadCommand * _Nonnull aLoadCommand, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([aLoadCommand isSegmentCommand])
+        {
+            if ([(NUMachOSegmentCommand64 *)aLoadCommand isLinkedit])
+                aSegmentCommand = (NUMachOSegmentCommand64 *)aLoadCommand;
+        }
+    }];
+    
+    return aSegmentCommand;
+}
+
+- (NUMachOSymtabCommand *)symtabCommand
+{
+    __block NUMachOSymtabCommand *aSymtabCommand = nil;
+    
+    [[self loadCommands] enumerateObjectsUsingBlock:^(NUMachOLoadCommand * _Nonnull aLoadCommand, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([aLoadCommand isSymtabCommand])
+        {
+            aSymtabCommand = (NUMachOSymtabCommand *)aLoadCommand;
+        }
+    }];
+    
+    return aSymtabCommand;
 }
 
 - (uint32_t)totalLoadCommandsSize

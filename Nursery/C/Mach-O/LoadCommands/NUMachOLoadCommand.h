@@ -22,6 +22,8 @@
 @property (nonatomic, readonly) NUMachOSegmentCommand64 *previousLoadSegmentCommand;
 @property (nonatomic, readonly) uint32_t size;
 @property (nonatomic, readonly) BOOL isSegmentCommand;
+@property (nonatomic, readonly) BOOL isEntryPointCommand;
+@property (nonatomic, readonly) BOOL isSymtabCommand;
 
 + (instancetype)loadCommand;
 
