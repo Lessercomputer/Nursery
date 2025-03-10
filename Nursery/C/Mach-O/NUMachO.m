@@ -25,16 +25,42 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSData.h>
 #import <Foundation/NSFileManager.h>
+#import <Foundation/NSTask.h>
+#import <Foundation/NSURL.h>
+#import <Foundation/NSString.h>
 
 #import <mach-o/loader.h>
 #import <sys/stat.h>
 
+static NSString *codeSignPath = @"/usr/bin/codesign";
+static uint32_t pageSize = 4096 * 4;
+
 @implementation NUMachO
+
++ (NSString *)codesignPath
+{
+    return codeSignPath;
+}
+
++ (void)setCodesignPath:(NSString *)aCodesignPath
+{
+    codeSignPath = [aCodesignPath copy];
+}
 
 + (uint32_t)pageSize
 {
-    return 4096 * 4;
+    return pageSize;
 }
+
++ (void)setPageSize:(uint32_t)aPageSize
+{
+    pageSize = aPageSize;
+}
+
+//+ (uint32_t)pageSize
+//{
+//    return 4096 * 4;
+//}
 
 + (instancetype)exampleReturnZero
 {
@@ -243,7 +269,17 @@
     NSMutableData *aData = [NSMutableData data];
     [self writeToData:aData];
     
-    return [[NSFileManager defaultManager] createFileAtPath:aFilepath contents:aData attributes:aFileAttributes];
+    if ([[NSFileManager defaultManager] createFileAtPath:aFilepath contents:aData attributes:aFileAttributes])
+    {
+        NSTask *aCodesignTask = [[NSTask new] autorelease];
+        [aCodesignTask setExecutableURL:[NSURL fileURLWithPath:[[self class] codesignPath]]];
+        [aCodesignTask setArguments:@[@"--force",  @"-s",  @"-", aFilepath]];
+        [aCodesignTask launch];
+        [aCodesignTask waitUntilExit];
+        return ![aCodesignTask terminationStatus];
+    }
+    else
+        return NO;
 }
 
 @end

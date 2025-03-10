@@ -18,7 +18,8 @@
 
 + (instancetype)exampleReturnZero;
 
-@property (class, nonatomic, readonly) uint32_t pageSize;
+@property (class, nonatomic) uint32_t pageSize;
+@property (class, nonatomic, copy) NSString *codesignPath;
 @property (nonatomic, readonly) uint32_t pageSize;
 @property (nonatomic, retain) NUMachOHeader64 *header;
 @property (nonatomic, retain) NSMutableArray *loadCommands;
