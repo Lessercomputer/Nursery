@@ -35,11 +35,6 @@
     [[self sectionData] addObject:aSectionData];
 }
 
-- (void)computeLayout
-{
-    
-}
-
 - (uint64_t)size
 {
     __block uint64_t aSize = 0;
@@ -51,27 +46,13 @@
 
 - (void)writeToData:(NSMutableData *)aData
 {
-//    [aData increaseLengthBy:[[self segmentCommand] paddingSize]];
-    
-//    NSMutableData *aPaddingData = [NSMutableData data];
-//    uint32_t aNumber = 1;
-//    while ([aPaddingData length] < [[self segmentCommand] paddingSize]) {
-//        [aPaddingData appendBytes:&aNumber length:sizeof(aNumber)];
-//        aNumber++;
-//    }
-//    [aPaddingData setLength:[[self segmentCommand] paddingSize]];
-//    
-//    [aPaddingData writeToFile:[@"~/Desktop/pad2" stringByExpandingTildeInPath] atomically:YES];
-//    [aData appendData:aPaddingData];
     if ([[self segmentCommand] isPageZero])
         return;
     
     if ([[self sectionData] count])
         [[self sectionData] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
     else
-    {
         [aData increaseLengthBy:[[self segmentCommand] filesize]];
-    }
 }
 
 @end

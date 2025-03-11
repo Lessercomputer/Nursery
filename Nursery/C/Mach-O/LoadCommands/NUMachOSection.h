@@ -33,8 +33,6 @@
 
 @property (nonatomic, retain) NUMachOSectionData *sectionData;
 
-
-//- (void)computeLayout;
 - (void)writeToData:(NSMutableData *)aData;
 
 @end

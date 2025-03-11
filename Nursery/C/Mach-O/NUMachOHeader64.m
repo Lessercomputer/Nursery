@@ -23,7 +23,6 @@
         _machHeader.ncmds = 0;
         _machHeader.sizeofcmds = 0;
         _machHeader.flags = MH_NOUNDEFS | MH_DYLDLINK | MH_TWOLEVEL | MH_PIE;
-//        _machHeader.flags = MH_NOUNDEFS | MH_PIE;
     }
     return self;
 }

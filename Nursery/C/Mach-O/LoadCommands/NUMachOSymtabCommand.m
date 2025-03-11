@@ -26,9 +26,9 @@
     return _symtabCommand.symoff;
 }
 
-- (void)setSymoff:(uint32_t)symoff
+- (void)setSymoff:(uint32_t)aSymoff
 {
-    _symtabCommand.symoff = symoff;
+    _symtabCommand.symoff = aSymoff;
 }
 
 - (uint32_t)stroff
@@ -36,9 +36,9 @@
     return _symtabCommand.stroff;
 }
 
-- (void)setStroff:(uint32_t)stroff
+- (void)setStroff:(uint32_t)aStroff
 {
-    _symtabCommand.stroff = stroff;
+    _symtabCommand.stroff = aStroff;
 }
 
 - (BOOL)isSymtabCommand

@@ -45,10 +45,10 @@
     aSegmentCommand64.nsects = 0;
     aSegmentCommand64.cmdsize = sizeof(struct segment_command_64) + sizeof(struct section_64) * aSegmentCommand64.nsects;
     strcpy(aSegmentCommand64.segname, SEG_TEXT);
-    aSegmentCommand64.vmaddr = 0;//4294967296;
-    aSegmentCommand64.vmsize = 0;//4096 * 4;
+    aSegmentCommand64.vmaddr = 0;
+    aSegmentCommand64.vmsize = 0;
     aSegmentCommand64.fileoff = 0;
-    aSegmentCommand64.filesize = 0;//8;//4096 * 4;//16384;
+    aSegmentCommand64.filesize = 0;
     aSegmentCommand64.maxprot = VM_PROT_READ | VM_PROT_EXECUTE;
     aSegmentCommand64.initprot = VM_PROT_READ | VM_PROT_EXECUTE;
     aSegmentCommand64.flags = SG_HIGHVM;
@@ -65,8 +65,6 @@
     aSegmentCommand.cmd = LC_SEGMENT_64;
     aSegmentCommand.cmdsize = sizeof(aSegmentCommand);
     strcpy(aSegmentCommand.segname, SEG_LINKEDIT);
-//    aSegmentCommand.filesize = [NUMachO pageSize];
-//    aSegmentCommand.vmsize = [NUMachO pageSize];
     aSegmentCommand.maxprot = VM_PROT_READ | VM_PROT_WRITE | VM_PROT_EXECUTE;
     aSegmentCommand.initprot = VM_PROT_READ | VM_PROT_EXECUTE;
     
@@ -114,9 +112,9 @@
     return _segmentCommand64.vmaddr;
 }
 
-- (void)setVmaddr:(uint64_t)vmaddr
+- (void)setVmaddr:(uint64_t)aVvmaddr
 {
-    _segmentCommand64.vmaddr = vmaddr;
+    _segmentCommand64.vmaddr = aVvmaddr;
 }
 
 - (uint64_t)vmsize
@@ -124,9 +122,9 @@
     return _segmentCommand64.vmsize;
 }
 
-- (void)setVmsize:(uint64_t)vmsize
+- (void)setVmsize:(uint64_t)aVmsize
 {
-    _segmentCommand64.vmsize = vmsize;
+    _segmentCommand64.vmsize = aVmsize;
 }
 
 - (uint64_t)nextVMAddr
@@ -139,9 +137,9 @@
     return _segmentCommand64.fileoff;
 }
 
-- (void)setFileoff:(uint64_t)fileoff
+- (void)setFileoff:(uint64_t)aFileoff
 {
-    _segmentCommand64.fileoff = fileoff;
+    _segmentCommand64.fileoff = aFileoff;
 }
 
 - (uint64_t)filesize
@@ -149,9 +147,9 @@
     return _segmentCommand64.filesize;
 }
 
-- (void)setFilesize:(uint64_t)filesize
+- (void)setFilesize:(uint64_t)aFilesize
 {
-    _segmentCommand64.filesize = filesize;
+    _segmentCommand64.filesize = aFilesize;
 }
 
 - (uint64_t)nextFileoff
@@ -168,18 +166,6 @@
 {
     return YES;
 }
-
-//- (uint32_t)sectionSize
-//{
-//    __block uint32_t aSectionSize = 0;
-//    
-//    [[self sections] enumerateObjectsUsingBlock:^(NUMachOSection * _Nonnull aSection, NSUInteger idx, BOOL * _Nonnull stop) {
-//        aSectionSize += sizeof(struct section_64);
-//        aSectionSize += [aSection size];
-//    }];
-//    
-//    return aSectionSize;
-//}
 
 - (void)computeLayout
 {
@@ -248,7 +234,6 @@
 - (void)writeToData:(NSMutableData *)aData
 {
     [aData appendBytes:&_segmentCommand64 length:sizeof(_segmentCommand64)];
-//    [aData increaseLengthBy:[self paddingSize]];
     [[self sections] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
 }
 
@@ -258,11 +243,6 @@
     [aSection setPrevious:[[self sections] lastObject]];
     [[self sections] addObject:aSection];
     [[self segmentData] add:[aSection sectionData]];
-}
-
-- (void)addInstruction:(NUAArch64Instruction *)anInstruction
-{
-//    []
 }
 
 @end

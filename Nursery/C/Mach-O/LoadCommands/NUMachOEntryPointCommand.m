@@ -33,9 +33,9 @@
     return _entoryPointCommand.entryoff;
 }
 
-- (void)setEntryoff:(uint64_t)entryoff
+- (void)setEntryoff:(uint64_t)anEntryoff
 {
-    _entoryPointCommand.entryoff = entryoff;
+    _entoryPointCommand.entryoff = anEntryoff;
 }
 
 - (uint32_t)size

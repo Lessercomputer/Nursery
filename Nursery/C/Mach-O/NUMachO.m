@@ -57,11 +57,6 @@ static uint32_t pageSize = 4096 * 4;
     pageSize = aPageSize;
 }
 
-//+ (uint32_t)pageSize
-//{
-//    return 4096 * 4;
-//}
-
 + (instancetype)exampleReturnZero
 {
     NUMachO *aMachO = [[self new] autorelease];
@@ -245,21 +240,6 @@ static uint32_t pageSize = 4096 * 4;
     
     [[self header] writeToData:aData];
     [[self loadCommands] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
-//    uint32_t aHeaderAndLoadCommandsSize = [self headerAndAllLoadCommandsSize];
-//    uint32_t aRoundedHeaderAndLoadCommandsSize = (uint32_t)[self roundUpToPageSize:aHeaderAndLoadCommandsSize];
-//    uint32_t aPaddingSize = aRoundedHeaderAndLoadCommandsSize - aHeaderAndLoadCommandsSize;
-//    
-//    NSMutableData *aPaddingData = [NSMutableData data];//[NSMutableData dataWithLength:aPaddingSize];
-//    uint32_t aNumber = 1;
-//    while ([aPaddingData length] < aPaddingSize) {
-//        [aPaddingData appendBytes:&aNumber length:sizeof(aNumber)];
-//        aNumber++;
-//    }
-//    [aPaddingData setLength:aPaddingSize];
-//    [aPaddingData writeToFile:[@"~/Desktop/pad" stringByExpandingTildeInPath] atomically:YES];
-//    
-//    [aData appendData:aPaddingData];
-    
     [[self segmentData] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
 }
 

@@ -35,7 +35,6 @@
 @property (nonatomic, retain) NUMachOSegmentData *segmentData;
 
 - (void)add:(NUMachOSection *)aSection;
-- (void)addInstruction:(NUAArch64Instruction *)anInstruction;
 
 @end
 

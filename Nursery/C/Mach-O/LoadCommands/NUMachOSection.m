@@ -71,9 +71,9 @@
     return _section.addr;
 }
 
-- (void)setAddr:(uint64_t)address
+- (void)setAddr:(uint64_t)anAddress
 {
-    _section.addr = address;
+    _section.addr = anAddress;
 }
 
 - (uint64_t)size
@@ -81,9 +81,9 @@
     return _section.size;
 }
 
-- (void)setSize:(uint64_t)size
+- (void)setSize:(uint64_t)aSize
 {
-    _section.size = size;
+    _section.size = aSize;
 }
 
 - (uint32_t)offset
@@ -95,16 +95,6 @@
 {
     _section.offset = offset;
 }
-
-//- (void)computeLayout;
-//{
-//    __block uint32_t aSize = 0;
-//    [[[self sectionData] instructions] enumerateObjectsUsingBlock:^(NUAArch64Instruction * _Nonnull anInstruction, NSUInteger idx, BOOL * _Nonnull stop) {
-//        aSize += [anInstruction size];
-//    }];
-//    
-//    _section.size = aSize;
-//}
 
 - (void)writeToData:(NSMutableData *)aData
 {

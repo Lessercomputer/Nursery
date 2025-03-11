@@ -17,12 +17,9 @@
 
 @property (nonatomic, assign) NUMachOSegmentCommand64 *segmentCommand;
 @property (nonatomic, retain) NSMutableArray *sectionData;
-
-- (void)add:(NUMachOSectionData *)aSectionData;
-- (void)computeLayout;
-
 @property (nonatomic, readonly) uint64_t size;
 
+- (void)add:(NUMachOSectionData *)aSectionData;
 - (void)writeToData:(NSMutableData *)aData;
 
 @end
