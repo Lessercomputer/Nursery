@@ -51,7 +51,6 @@
     aSegmentCommand64.filesize = 0;
     aSegmentCommand64.maxprot = VM_PROT_READ | VM_PROT_EXECUTE;
     aSegmentCommand64.initprot = VM_PROT_READ | VM_PROT_EXECUTE;
-    aSegmentCommand64.flags = SG_HIGHVM;
     
     NUMachOSegmentCommand64 *aTextSegmentCommand = [[self new] autorelease];
     [aTextSegmentCommand setSegmentCommand64:aSegmentCommand64];
