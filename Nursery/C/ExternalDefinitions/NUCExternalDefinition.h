@@ -6,11 +6,11 @@
 //  Copyright © 2025 com.lily-bud. All rights reserved.
 //
 
-#import <Foundation/NSObject.h>
+#import "NUCSyntaxElement.h"
 
 @class NUCPreprocessingTokenToTokenStream;
 
-@interface NUCExternalDefinition : NSObject
+@interface NUCExternalDefinition : NUCSyntaxElement
 
 @end
 

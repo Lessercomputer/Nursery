@@ -9,6 +9,7 @@
 #import "NUCBlockItemList.h"
 #import "NUCPreprocessingTokenToTokenStream.h"
 #import "NUCBlockItem.h"
+#import "NUCTranslationOrderMap.h"
 #import <Foundation/NSArray.h>
 
 @implementation NUCBlockItemList
@@ -44,6 +45,14 @@
 - (void)add:(NUCBlockItem *)aBlockItem
 {
     [[self list] addObject:aBlockItem];
+}
+
+- (void)mapTo:(NUCTranslationOrderMap *)aMap parent:(id)aParent depth:(NUUInt64)aDepth
+{
+    [aMap add:self parent:aParent depth:aDepth];
+    [[self list] enumerateObjectsUsingBlock:^(NUCSyntaxElement * _Nonnull aSyntaxElement, NSUInteger idx, BOOL * _Nonnull stop) {
+            [aSyntaxElement mapTo:aMap parent:self depth:aDepth + 1];
+    }];
 }
 
 @end

@@ -17,7 +17,7 @@
 #import "NUCPreprocessingTokenToTokenStream.h"
 #import "NUCToken.h"
 #import "NUCTranslationUnit.h"
-
+#import "NUCTranslationOrderMap.h"
 
 @class NUCSourceFile;
 
@@ -118,6 +118,14 @@
             [[self translationUnits] addObject:aTranslationUnit];
         else
             *aStop = YES;
+    }];
+    
+    [[self translationUnits] enumerateObjectsUsingBlock:^(NUCTranslationUnit * _Nonnull aTranslationUnit, NSUInteger idx, BOOL * _Nonnull stop) {
+        NUCTranslationOrderMap *aTranslationOrderMap = [[NUCTranslationOrderMap new] autorelease];
+        [aTranslationUnit mapTo:aTranslationOrderMap];
+        NSLog(@"%@", aTranslationOrderMap);
+        NSArray *anArray = [aTranslationOrderMap mappingArray];
+        NSLog(@"%@", anArray);
     }];
 }
 

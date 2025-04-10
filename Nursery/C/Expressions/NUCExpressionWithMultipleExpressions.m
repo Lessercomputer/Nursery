@@ -7,6 +7,7 @@
 
 #import "NUCExpressionWithMultipleExpressions.h"
 #import "NUCPreprocessingTokenStream.h"
+#import "NUCTranslationOrderMap.h"
 
 @implementation NUCExpressionWithMultipleExpressions
 
@@ -130,6 +131,14 @@
     }
     
     return aPreviousExpressionResult;
+}
+
+- (void)mapTo:(NUCTranslationOrderMap *)aMap parent:(id)aParent depth:(NUUInt64)aDepth
+{
+    [aMap add:self parent:aParent depth:aDepth];
+    [[self expressions] enumerateObjectsUsingBlock:^(NUCSyntaxElement * _Nonnull aSyntaxElement, NSUInteger idx, BOOL * _Nonnull stop) {
+            [aSyntaxElement mapTo:aMap parent:self depth:aDepth + 1];
+    }];
 }
 
 @end

@@ -90,4 +90,19 @@
     [aData writeToFile:[@"~/Desktop/increaseddata" stringByExpandingTildeInPath] atomically:YES];
 }
 
+- (void)testNSValueHash
+{
+    id anObject = [[NSObject new] autorelease];
+    id anObject2 = [[NSObject new] autorelease];
+    
+    id aValue = [NSValue valueWithNonretainedObject:anObject];
+    id aValue2 = [NSValue valueWithNonretainedObject:anObject];
+    
+    id aValue3 = [NSValue valueWithNonretainedObject:anObject2];
+    
+    XCTAssertEqual([anObject hash], [aValue hash]);
+    XCTAssertEqual([aValue hash], [aValue2 hash]);
+    XCTAssertNotEqual([aValue hash], [aValue3 hash]);
+}
+
 @end

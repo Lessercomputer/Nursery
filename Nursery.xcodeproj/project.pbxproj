@@ -421,6 +421,8 @@
 		B86D152F2095EA9200D95C4C /* NUNurseryNetService+Project.h in Headers */ = {isa = PBXBuildFile; fileRef = B86D152E2095EA9200D95C4C /* NUNurseryNetService+Project.h */; };
 		B8D59EB820AFC415009FC4A9 /* NUPairedMainBranchAperture.h in Headers */ = {isa = PBXBuildFile; fileRef = B8D59EB620AFC415009FC4A9 /* NUPairedMainBranchAperture.h */; };
 		B8D59EB920AFC415009FC4A9 /* NUPairedMainBranchAperture.m in Sources */ = {isa = PBXBuildFile; fileRef = B8D59EB720AFC415009FC4A9 /* NUPairedMainBranchAperture.m */; };
+		E27AE8AC2DA7769C00E8DEEF /* NUCTranslationOrderMap.h in Headers */ = {isa = PBXBuildFile; fileRef = E27AE8AA2DA7769C00E8DEEF /* NUCTranslationOrderMap.h */; };
+		E27AE8AD2DA7769C00E8DEEF /* NUCTranslationOrderMap.m in Sources */ = {isa = PBXBuildFile; fileRef = E27AE8AB2DA7769C00E8DEEF /* NUCTranslationOrderMap.m */; };
 		E29B20492D6503CB0071F617 /* NUCBlockItemList.h in Headers */ = {isa = PBXBuildFile; fileRef = E29B20472D6503CB0071F617 /* NUCBlockItemList.h */; };
 		E29B204A2D6503CB0071F617 /* NUCBlockItemList.m in Sources */ = {isa = PBXBuildFile; fileRef = E29B20482D6503CB0071F617 /* NUCBlockItemList.m */; };
 		E29B204D2D6506980071F617 /* NUCStatement.h in Headers */ = {isa = PBXBuildFile; fileRef = E29B204B2D6506980071F617 /* NUCStatement.h */; };
@@ -949,6 +951,8 @@
 		B86D152E2095EA9200D95C4C /* NUNurseryNetService+Project.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NUNurseryNetService+Project.h"; sourceTree = "<group>"; };
 		B8D59EB620AFC415009FC4A9 /* NUPairedMainBranchAperture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUPairedMainBranchAperture.h; sourceTree = "<group>"; };
 		B8D59EB720AFC415009FC4A9 /* NUPairedMainBranchAperture.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUPairedMainBranchAperture.m; sourceTree = "<group>"; };
+		E27AE8AA2DA7769C00E8DEEF /* NUCTranslationOrderMap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCTranslationOrderMap.h; sourceTree = "<group>"; };
+		E27AE8AB2DA7769C00E8DEEF /* NUCTranslationOrderMap.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCTranslationOrderMap.m; sourceTree = "<group>"; };
 		E29B20472D6503CB0071F617 /* NUCBlockItemList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCBlockItemList.h; sourceTree = "<group>"; };
 		E29B20482D6503CB0071F617 /* NUCBlockItemList.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCBlockItemList.m; sourceTree = "<group>"; };
 		E29B204B2D6506980071F617 /* NUCStatement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCStatement.h; sourceTree = "<group>"; };
@@ -1463,6 +1467,8 @@
 				240029C32B496535001C7E5B /* NUCExpressionResult.m */,
 				24BFBFED2B5A943F00D10FDB /* NUCExpressionResultType.h */,
 				24BFBFEE2B5A943F00D10FDB /* NUCExpressionResultType.m */,
+				616D0A692A78971800813539 /* NUCExpression.h */,
+				616D0ABA2A78972400813539 /* NUCExpression.m */,
 				616D0AC32A78972600813539 /* NUCConstantExpression.h */,
 				616D0A8C2A78971D00813539 /* NUCConstantExpression.m */,
 				616D0A5E2A78971600813539 /* NUCConditionalExpression.h */,
@@ -1495,8 +1501,6 @@
 				616D0AAC2A78972200813539 /* NUCLogicalANDExpression.m */,
 				616D0AB02A78972300813539 /* NUCLogicalORExpression.h */,
 				616D0A7F2A78971B00813539 /* NUCLogicalORExpression.m */,
-				616D0A692A78971800813539 /* NUCExpression.h */,
-				616D0ABA2A78972400813539 /* NUCExpression.m */,
 			);
 			path = Expressions;
 			sourceTree = "<group>";
@@ -1688,6 +1692,8 @@
 				24BFC01E2B788EBF00D10FDB /* NUCPreprocessingTokenToTokenStream.m */,
 				E29B204F2D6506C00071F617 /* NUCSyntaxElement.h */,
 				E29B20502D6506C00071F617 /* NUCSyntaxElement.m */,
+				E27AE8AA2DA7769C00E8DEEF /* NUCTranslationOrderMap.h */,
+				E27AE8AB2DA7769C00E8DEEF /* NUCTranslationOrderMap.m */,
 			);
 			path = Translator;
 			sourceTree = "<group>";
@@ -2027,6 +2033,7 @@
 				61BC395B2A78A6C6006CFBB3 /* NUCHeaderName.h in Headers */,
 				619B09141913EEC000A4BAA2 /* NUAperture.h in Headers */,
 				E2B504572D7A93C300DAD9BA /* NUMachOSymtabCommand.h in Headers */,
+				E27AE8AC2DA7769C00E8DEEF /* NUCTranslationOrderMap.h in Headers */,
 				619B08F61913EEC000A4BAA2 /* NUNSObject.h in Headers */,
 				619B093A1913EEC000A4BAA2 /* NUObjectTableBranch.h in Headers */,
 				619B08E01913EEC000A4BAA2 /* NUNurserySeeker.h in Headers */,
@@ -2414,6 +2421,7 @@
 				619B09251913EEC000A4BAA2 /* NUChildminder.m in Sources */,
 				E2E3F3B82D526AFC00E247A5 /* NUCDeclarator.m in Sources */,
 				61BC398C2A78A6C6006CFBB3 /* NUCConstant.m in Sources */,
+				E27AE8AD2DA7769C00E8DEEF /* NUCTranslationOrderMap.m in Sources */,
 				E29B20682D6D7AB40071F617 /* NUMachO.m in Sources */,
 				616D0AD62A78972600813539 /* NUCEqualityExpression.m in Sources */,
 				E2E3F39F2D51C29E00E247A5 /* NUCTranslationUnit.m in Sources */,

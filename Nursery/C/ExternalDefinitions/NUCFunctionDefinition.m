@@ -11,6 +11,7 @@
 #import "NUCDeclarator.h"
 #import "NUCCompoundStatement.h"
 #import "NUCPreprocessingTokenToTokenStream.h"
+#import "NUCTranslationOrderMap.h"
 
 @implementation NUCFunctionDefinition
 
@@ -43,6 +44,12 @@
     
     [aStream setPosition:aPosition];
     return NO;
+}
+
+- (void)mapTo:(NUCTranslationOrderMap *)aMap parent:(id)aParent depth:(NUUInt64)aDepth
+{
+    [aMap add:self parent:aParent depth:aDepth];
+    [[self compoundStatement] mapTo:aMap parent:self depth:aDepth + 1];
 }
 
 - (void)dealloc

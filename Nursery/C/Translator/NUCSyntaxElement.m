@@ -10,4 +10,19 @@
 
 @implementation NUCSyntaxElement
 
+- (void)mapTo:(NUCTranslationOrderMap *)aMap
+{
+    [self mapTo:aMap parent:nil];
+}
+
+- (void)mapTo:(NUCTranslationOrderMap *)aMap parent:(id)aParent
+{
+    [self mapTo:aMap parent:aParent depth:0];
+}
+
+- (void)mapTo:(NUCTranslationOrderMap *)aMap parent:(id)aParent depth:(NUUInt64)aDepth
+{
+    
+}
+
 @end

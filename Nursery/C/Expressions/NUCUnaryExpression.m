@@ -11,6 +11,7 @@
 #import "NUCExpressionResult.h"
 #import "NUCToken.h"
 #import "NUCTokenStream.h"
+#import "NUCTranslationOrderMap.h"
 
 @implementation NUCUnaryExpression
 
@@ -128,6 +129,14 @@
     }
     else
         return [postfixExpression evaluateWith:aPreprocessor];
+}
+
+- (void)mapTo:(NUCTranslationOrderMap *)aMap parent:(id)aParent depth:(NUUInt64)aDepth
+{
+    [aMap add:self parent:aParent depth:aDepth];
+    
+    if (postfixExpression)
+        [postfixExpression mapTo:aMap parent:self depth:aDepth + 1];
 }
 
 @end

@@ -5,7 +5,7 @@
 //  Created by TAKATA Akifumi on 2024/01/06.
 //
 
-#import <Foundation/NSObject.h>
+#import "NUCSyntaxElement.h"
 
 typedef enum : NSUInteger {
     NUCExpressionNone,
@@ -32,7 +32,7 @@ typedef enum : NSUInteger {
 @class NUCExpressionResult, NUCPreprocessor;
 @protocol NUCToken;
 
-@interface NUCProtoExpression : NSObject
+@interface NUCProtoExpression : NUCSyntaxElement
 {
     NUCExpressionType type;
 }

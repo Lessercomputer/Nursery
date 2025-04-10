@@ -7,9 +7,15 @@
 //
 
 #import <Foundation/NSObject.h>
+#import <Nursery/NUTypes.h>
 
+@class NUCTranslationOrderMap;
 
 @interface NUCSyntaxElement : NSObject
+
+- (void)mapTo:(NUCTranslationOrderMap *)aMap;
+- (void)mapTo:(NUCTranslationOrderMap *)aMap parent:(id)aParent;
+- (void)mapTo:(NUCTranslationOrderMap *)aMap parent:(id)aParent depth:(NUUInt64)aDepth;
 
 @end
 

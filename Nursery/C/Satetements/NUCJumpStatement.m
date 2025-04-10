@@ -10,6 +10,7 @@
 #import "NUCPreprocessingTokenToTokenStream.h"
 #import "NUCExpression.h"
 #import "NUCTokenProtocol.h"
+#import "NUCTranslationOrderMap.h"
 
 @implementation NUCJumpStatement
 
@@ -48,6 +49,12 @@
     [_keyword release];
     [_expression release];
     [super dealloc];
+}
+
+- (void)mapTo:(NUCTranslationOrderMap *)aMap parent:(id)aParent depth:(NUUInt64)aDepth
+{
+    [aMap add:self parent:aParent depth:aDepth];
+    [[self expression] mapTo:aMap parent:self depth:aDepth + 1];
 }
 
 @end

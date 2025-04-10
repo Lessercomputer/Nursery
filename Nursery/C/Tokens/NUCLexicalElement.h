@@ -5,7 +5,7 @@
 //  Created by TAKATA Akifumi on 2020/04/18.
 //
 
-#import <Foundation/NSObject.h>
+#import "NUCSyntaxElement.h"
 
 #import <Nursery/NURegion.h>
 
@@ -197,7 +197,7 @@ typedef enum : NSUInteger {
 } NUCLexicalElementType;
 
 
-@interface NUCLexicalElement : NSObject <NUCToken>
+@interface NUCLexicalElement : NUCSyntaxElement <NUCToken>
 {
     NUCLexicalElementType type;
 }

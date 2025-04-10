@@ -8,6 +8,7 @@
 #import "NUCCastExpression.h"
 #import "NUCUnaryExpression.h"
 #import "NUCDecomposedPreprocessingToken.h"
+#import "NUCTranslationOrderMap.h"
 
 @implementation NUCCastExpression
 
@@ -51,6 +52,12 @@
 - (NUCExpressionResult *)evaluateWith:(NUCPreprocessor *)aPreprocessor
 {
     return [unaryExpression evaluateWith:aPreprocessor];
+}
+
+- (void)mapTo:(NUCTranslationOrderMap *)aMap parent:(id)aParent depth:(NUUInt64)aDepth
+{
+    [aMap add:self parent:aParent depth:aDepth];
+    [unaryExpression mapTo:aMap parent:self depth:aDepth + 1];
 }
 
 @end

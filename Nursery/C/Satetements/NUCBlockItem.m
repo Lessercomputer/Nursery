@@ -8,6 +8,7 @@
 
 #import "NUCBlockItem.h"
 #import "NUCStatement.h"
+#import "NUCTranslationOrderMap.h"
 
 @implementation NUCBlockItem
 
@@ -24,6 +25,12 @@
     if (aBlockItem)
         *aBlockItem = aBlockItemToReturn;
     return YES;
+}
+
+- (void)mapTo:(NUCTranslationOrderMap *)aMap parent:(id)aParent depth:(NUUInt64)aDepth
+{
+    [aMap add:self parent:aParent depth:aDepth];
+    [[self statement] mapTo:aMap parent:self depth:aDepth + 1];
 }
 
 @end
