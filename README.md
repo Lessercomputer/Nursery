@@ -3,16 +3,8 @@
 **Nursery**とは、Cocoaフレームワーク向けのオブジェクト指向データベース（OODB）です。
 フレームワークとして開発しているので、アプリケーションに組み込む形で利用できます。
 
-[Qiita](https://qiita.com/lily-bud)にNurseryの基本的な使い方を紹介する一連の記事を投稿してます。
-
 ## ライセンス
 ライセンスは、zlibですので、商用・非商用のどちらでも利用できます。
-
-## 寄付
-以下のサービスで寄付を受け付けています:
-* [GitHub Sponsors](https://github.com/sponsors/Lily-bud)
-* [Patreon](https://www.patreon.com/user?u=102547861)
-* [PayPal(paypal.me/AkifumiTakata)](https://paypal.me/AkifumiTakata) 
 
 ## 概要
 * シンプルかつパワフル
