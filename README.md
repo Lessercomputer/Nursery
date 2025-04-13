@@ -4,9 +4,6 @@
 ## Licence
 **Nursery** is published under the zlib license
 
-## Donation
-[Donate with PayPal (paypal.me/AkifumiTakata)](https://paypal.me/AkifumiTakata)
-
 ## Overview
 * Simple & Powerful
 * Written in Objective-C
