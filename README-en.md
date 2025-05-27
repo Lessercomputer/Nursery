@@ -66,8 +66,8 @@ NUGarden *aGarden = [aNursery makeGarden];
     
 Person *aPerson = [Person new];
 
-[aPerson setFirstName:@"Akifumi"];
-[aPerson setLastName:@"Takata"];
+[aPerson setFirstName:@"Nursery"];
+[aPerson setLastName:@"Lessercomputer"];
 
 [aGarden setRoot:aPerson];
     
