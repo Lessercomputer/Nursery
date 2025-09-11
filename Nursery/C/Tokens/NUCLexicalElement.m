@@ -464,7 +464,7 @@ static NSArray *NUCKeywords;
 
 - (BOOL)isIntegerConstant
 {
-    return NO;
+    return [self type] == NUCLexicalElementIntegerConstantType;
 }
 
 - (BOOL)isPpNumber

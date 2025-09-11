@@ -8,6 +8,8 @@
 #import <Foundation/NSObject.h>
 
 @class NSArray, NSMutableArray, NSMutableDictionary, NUCPreprocessor, NUCSourceFile;
+@class NUMachO;
+@protocol NUCToken;
 
 @interface NUCTranslator : NSObject
 {
@@ -19,6 +21,7 @@
 
 @property (nonatomic, retain) NSMutableArray *searchPathURLs;
 @property (nonatomic, retain) NSMutableArray *translationUnits;
+@property (nonatomic, retain) NUMachO *machO;
 
 - (instancetype)initWithSourceFileURLs:(NSArray *)aURLs;
 - (instancetype)initWithSourceFiles:(NSArray *)aSourceFiles;
@@ -29,5 +32,6 @@
 - (NSMutableArray *)preprocessedSourceFiles;
 
 - (void)translate;
+- (void)translate:(id <NUCToken>)aToken;
 
 @end

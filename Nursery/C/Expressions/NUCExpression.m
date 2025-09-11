@@ -8,7 +8,6 @@
 #import "NUCExpression.h"
 #import "NUCPreprocessingTokenStream.h"
 #import "NUCConditionalExpression.h"
-#import "NUCTranslationOrderMap.h"
 
 @implementation NUCExpression
 
@@ -54,10 +53,9 @@
     [super dealloc];
 }
 
-- (void)mapTo:(NUCTranslationOrderMap *)aMap parent:(id)aParent depth:(NUUInt64)aDepth
+- (void)translateWith:(NUCTranslator *)aTranslator
 {
-    [aMap add:self parent:aParent depth:aDepth];
-    [conditionalExpression mapTo:aMap parent:self depth:aDepth + 1];
+    [conditionalExpression translateWith:aTranslator];
 }
 
 @end

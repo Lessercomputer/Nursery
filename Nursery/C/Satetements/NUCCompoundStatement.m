@@ -10,7 +10,6 @@
 #import "NUCBlockItemList.h"
 #import "NUCPreprocessingTokenToTokenStream.h"
 #import "NUCTokenProtocol.h"
-#import "NUCTranslationOrderMap.h"
 
 @implementation NUCCompoundStatement
 
@@ -46,10 +45,10 @@
     [super dealloc];
 }
 
-- (void)mapTo:(NUCTranslationOrderMap *)aMap parent:(id)aParent depth:(NUUInt64)aDepth
+
+- (void)translateWith:(NUCTranslator *)aTranslator
 {
-    [aMap add:self parent:aParent depth:aDepth];
-    [[self blockItemList] mapTo:aMap parent:self depth:aDepth + 1];
+    [[self blockItemList] translateWith:aTranslator];
 }
 
 @end

@@ -11,7 +11,6 @@
 #import "NUCLogicalORExpression.h"
 #import "NUCExpression.h"
 #import "NUCExpressionResult.h"
-#import "NUCTranslationOrderMap.h"
 
 @implementation NUCConditionalExpression
 
@@ -140,15 +139,14 @@
         return anExpressionResult;
 }
 
-- (void)mapTo:(NUCTranslationOrderMap *)aMap parent:(id)aParent depth:(NUUInt64)aDepth
+- (void)translateWith:(NUCTranslator *)aTranslator
 {
-    [aMap add:self parent:aParent depth:aDepth];
-    [[self logicalORExpression] mapTo:aMap parent:self depth:aDepth + 1];
+    [[self logicalORExpression] translateWith:aTranslator];
     
     if ([self questionMarkPunctuator])
     {
-        [[self expression] mapTo:aMap parent:self depth:aDepth + 1];
-        [[self conditionalExpression] mapTo:aMap parent:self depth:aDepth + 1];
+        [[self expression] translateWith:aTranslator];
+        [[self conditionalExpression] translateWith:aTranslator];
     }
 }
 

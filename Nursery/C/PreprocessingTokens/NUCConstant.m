@@ -114,4 +114,10 @@
     return [[self content] description];
 }
 
+- (void)translateWith:(NUCTranslator *)aTranslator
+{
+    if ([self isIntegerConstant])
+        [(NUCIntegerConstant *)[self content] translateWith:aTranslator];
+}
+
 @end

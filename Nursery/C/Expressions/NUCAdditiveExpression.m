@@ -42,4 +42,9 @@
     }];
 }
 
+- (void)translateWith:(NUCTranslator *)aTranslator
+{
+    [super translateWith:aTranslator];
+}
+
 @end

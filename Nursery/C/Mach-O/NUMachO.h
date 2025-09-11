@@ -13,6 +13,7 @@
 @class NUMachOSegmentData;
 @class NSMutableArray;
 @class NSData, NSMutableData;
+@class NUCIntegerConstant;
 
 @interface NUMachO : NSObject
 
@@ -37,6 +38,8 @@
 - (void)computeLayout;
 - (void)writeToData:(NSMutableData *)aData;
 - (BOOL)writeToPath:(NSString *)aFilepath;
+
+- (void)addIntegerConstant:(NUCIntegerConstant *)aConstant;
 
 @end
 

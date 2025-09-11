@@ -6,7 +6,6 @@
 //
 
 #import "NUCStringLiteral.h"
-
 #import <Foundation/NSString.h>
 
 @implementation NUCStringLiteral
@@ -63,7 +62,7 @@
         [anEscapedString appendString:aSubstring];
     }];
     
-    return anEscapedString;;
+    return anEscapedString;
 }
 
 @end

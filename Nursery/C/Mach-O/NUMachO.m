@@ -234,6 +234,11 @@ static uint32_t pageSize = 4096 * 4;
     return [[self header] size] + [self totalLoadCommandsSize];
 }
 
+- (void)addIntegerConstant:(NUCIntegerConstant *)aConstant
+{
+    
+}
+
 - (void)writeToData:(NSMutableData *)aData
 {
     [self computeLayout];

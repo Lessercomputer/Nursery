@@ -17,7 +17,15 @@
 #import "NUCPreprocessingTokenToTokenStream.h"
 #import "NUCToken.h"
 #import "NUCTranslationUnit.h"
-#import "NUCTranslationOrderMap.h"
+#import "NUMachO.h"
+#import "NUMachOSegmentCommand64.h"
+#import "NUMachOSection.h"
+#import "NUMachOSymtabCommand.h"
+#import "NUMachODySymtabCommand.h"
+#import "NUMachODylinkerCommand.h"
+#import "NUMachODyldInfoOnly.h"
+#import "NUMachODylibCommand.h"
+#import "NUMachOEntryPointCommand.h"
 
 @class NUCSourceFile;
 
@@ -52,6 +60,26 @@
         allSourceFiles = [NSMutableDictionary new];
         preprocessedSourceFiles = [NSMutableArray new];
         _translationUnits = [NSMutableArray new];
+        
+        NUMachO *aMachO = [NUMachO new];
+        
+        [aMachO add:[NUMachOSegmentCommand64 pageZeroSegmentCommand]];
+        
+        NUMachOSegmentCommand64 *aLoadCommand = [NUMachOSegmentCommand64 textSegmentCommand];
+        [aMachO add:aLoadCommand];
+        NUMachOSection *aSection = [NUMachOSection textSection];
+        [aLoadCommand add:aSection];
+//        [[aSection sectionData] addInstruction:[NUAArch64MovzInstruction instruction]];
+//        [[aSection sectionData] addInstruction:[NUAArch64RetInstruction instruction]];
+        
+        [aMachO add:[NUMachOSegmentCommand64 linkeditCommand]];
+        [aMachO add:[NUMachOSymtabCommand loadCommand]];
+        [aMachO add:[NUMachODySymtabCommand loadCommand]];
+        [aMachO add:[NUMachODylinkerCommand loadCommand]];
+        [aMachO add:[NUMachODyldInfoOnly loadCommand]];
+        [aMachO add:[NUMachODylibCommand loadCommand]];
+        [aMachO add:[NUMachOEntryPointCommand loadCommand]];
+        _machO = aMachO;
     }
     
     return self;
@@ -121,11 +149,7 @@
     }];
     
     [[self translationUnits] enumerateObjectsUsingBlock:^(NUCTranslationUnit * _Nonnull aTranslationUnit, NSUInteger idx, BOOL * _Nonnull stop) {
-        NUCTranslationOrderMap *aTranslationOrderMap = [[NUCTranslationOrderMap new] autorelease];
-        [aTranslationUnit mapTo:aTranslationOrderMap];
-        NSLog(@"%@", aTranslationOrderMap);
-        NSArray *anArray = [aTranslationOrderMap mappingArray];
-        NSLog(@"%@", anArray);
+        [aTranslationUnit translateWith:self];
     }];
 }
 
@@ -145,6 +169,14 @@
         [[self sourceFiles] removeObjectAtIndex:0];
         [aPreprocessor release];
     };
+}
+
+- (void)translate:(id <NUCToken>)aToken
+{
+    if ([aToken isIntegerConstant])
+    {
+        [[self machO] addIntegerConstant:(NUCIntegerConstant *)aToken];
+    }
 }
 
 @end

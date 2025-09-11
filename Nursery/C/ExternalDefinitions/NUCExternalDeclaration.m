@@ -8,7 +8,6 @@
 
 #import "NUCExternalDeclaration.h"
 #import "NUCFunctionDefinition.h"
-#import "NUCTranslationOrderMap.h"
 #import <Foundation/NSArray.h>
 
 @implementation NUCExternalDeclaration
@@ -47,11 +46,10 @@
     [[self externalDeclarations] addObject:anExternalDeclation];
 }
 
-- (void)mapTo:(NUCTranslationOrderMap *)aMap parent:(id)aParent depth:(NUUInt64)aDepth
+- (void)translateWith:(NUCTranslator *)aTranslator
 {
-    [aMap add:self parent:aParent depth:aDepth];
     [[self externalDeclarations] enumerateObjectsUsingBlock:^(NUCSyntaxElement * _Nonnull aSyntaxElement, NSUInteger idx, BOOL * _Nonnull stop) {
-            [aSyntaxElement mapTo:aMap parent:self depth:aDepth + 1];
+        [aSyntaxElement translateWith:aTranslator];
     }];
 }
 

@@ -10,6 +10,7 @@
 #import "NUCTokenProtocol.h"
 #import "NUCDecomposedPreprocessingToken.h"
 #import "NUCTokenStream.h"
+#import "NUCTranslator.h"
 #import <Foundation/NSString.h>
 
 @implementation NUCIntegerConstant
@@ -112,6 +113,11 @@
     }
     
     return self;
+}
+
+- (void)translateWith:(NUCTranslator *)aTranslator
+{
+    [aTranslator translate:self];
 }
 
 - (void)dealloc

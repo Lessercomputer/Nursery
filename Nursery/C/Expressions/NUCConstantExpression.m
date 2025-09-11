@@ -58,4 +58,9 @@
     return [[self conditionalExpression] evaluateWith:aPreprocessor];
 }
 
+- (void)translateWith:(NUCTranslator *)aTranslator
+{
+    [[self conditionalExpression] translateWith:aTranslator];
+}
+
 @end

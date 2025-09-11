@@ -8,7 +8,6 @@
 
 #import "NUCStatement.h"
 #import "NUCJumpStatement.h"
-#import "NUCTranslationOrderMap.h"
 
 @implementation NUCStatement
 
@@ -35,10 +34,9 @@
     [super dealloc];
 }
 
-- (void)mapTo:(NUCTranslationOrderMap *)aMap parent:(id)aParent depth:(NUUInt64)aDepth
+- (void)translateWith:(NUCTranslator *)aTranslator
 {
-    [aMap add:self parent:aParent depth:aDepth];
-    [[self statement] mapTo:aMap parent:self depth:aDepth + 1];
+    [[self statement] translateWith:aTranslator];
 }
 
 @end

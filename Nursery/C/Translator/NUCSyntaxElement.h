@@ -9,13 +9,11 @@
 #import <Foundation/NSObject.h>
 #import <Nursery/NUTypes.h>
 
-@class NUCTranslationOrderMap;
+@class NUCTranslator;
 
 @interface NUCSyntaxElement : NSObject
 
-- (void)mapTo:(NUCTranslationOrderMap *)aMap;
-- (void)mapTo:(NUCTranslationOrderMap *)aMap parent:(id)aParent;
-- (void)mapTo:(NUCTranslationOrderMap *)aMap parent:(id)aParent depth:(NUUInt64)aDepth;
+- (void)translateWith:(NUCTranslator *)aTranslator;
 
 @end
 

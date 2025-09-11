@@ -14,7 +14,6 @@
 #import "NUCIntegerConstant.h"
 #import "NUCExpressionResult.h"
 #import "NUCToken.h"
-#import "NUCTranslationOrderMap.h"
 
 @implementation NUCPrimaryExpression
 
@@ -129,11 +128,9 @@
         return [(NUCExpression *)content evaluateWith:aPreprocessor];
 }
 
-- (void)mapTo:(NUCTranslationOrderMap *)aMap parent:(id)aParent depth:(NUUInt64)aDepth
+- (void)translateWith:(NUCTranslator *)aTranslator
 {
-    [aMap add:self parent:aParent depth:aDepth];
-    if ([content isKindOfClass:[NUCExpression class]])
-        [content  mapTo:aMap parent:self depth:aDepth + 1];
+    [content translateWith:aTranslator];
 }
 
 @end

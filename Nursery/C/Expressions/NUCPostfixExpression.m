@@ -7,7 +7,6 @@
 
 #import "NUCPostfixExpression.h"
 #import "NUCPrimaryExpression.h"
-#import "NUCTranslationOrderMap.h"
 
 @implementation NUCPostfixExpression
 
@@ -53,10 +52,9 @@
     return [primaryExpression evaluateWith:aPreprocessor];
 }
 
-- (void)mapTo:(NUCTranslationOrderMap *)aMap parent:(id)aParent depth:(NUUInt64)aDepth
+- (void)translateWith:(NUCTranslator *)aTranslator
 {
-    [aMap add:self parent:aParent depth:aDepth];
-    [primaryExpression mapTo:aMap parent:self depth:aDepth + 1];
+    [primaryExpression translateWith:aTranslator];
 }
 
 @end

@@ -83,13 +83,6 @@
     XCTAssertTrue([aMachO writeToPath:aMachOFilePath]);
 }
 
-- (void)testIncreaseData
-{
-    NSMutableData *aData = [NSMutableData dataWithLength:0];
-    [aData increaseLengthBy:4096 * 4 * 2];
-    [aData writeToFile:[@"~/Desktop/increaseddata" stringByExpandingTildeInPath] atomically:YES];
-}
-
 - (void)testNSValueHash
 {
     id anObject = [[NSObject new] autorelease];
