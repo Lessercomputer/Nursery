@@ -14,6 +14,9 @@
 @class NSMutableArray;
 @class NSData, NSMutableData;
 @class NUCIntegerConstant;
+@class NUAArch64Instruction;
+@class NUMachOSegmentCommand64;
+@class NUMachOSection;
 
 @interface NUMachO : NSObject
 
@@ -31,15 +34,23 @@
 
 @property (nonatomic) uint64_t fileSize;
 
+@property (nonatomic, readonly) NUMachOSegmentCommand64 *textSegment;
+@property (nonatomic, readonly) NUMachOSection *textSection;
+
+@property (nonatomic, readonly) uint64_t instructionIndex;
+
+@property (nonatomic) BOOL needsComputeLayout;
+
 - (uint64_t)roundUpToPageSize:(uint64_t)aSize;
 - (uint32_t)headerAndAllLoadCommandsSize;
 
 - (void)add:(NUMachOLoadCommand *)aLoadCommand;
+- (void)computeLayoutIfNeeded;
 - (void)computeLayout;
 - (void)writeToData:(NSMutableData *)aData;
 - (BOOL)writeToPath:(NSString *)aFilepath;
 
-- (void)addIntegerConstant:(NUCIntegerConstant *)aConstant;
+- (void)addInstruction:(NUAArch64Instruction *)anInstruction;
 
 @end
 

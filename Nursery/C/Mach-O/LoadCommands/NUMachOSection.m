@@ -61,6 +61,11 @@
         return NO;
 }
 
+- (BOOL)isData
+{
+    return strcmp(_section.sectname, SECT_DATA) == 0;
+}
+
 - (void)add:(NUAArch64Instruction *)anInstruction
 {
     [[self sectionData] addInstruction:anInstruction];

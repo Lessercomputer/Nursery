@@ -20,6 +20,7 @@
     self = [super init];
     if (self) {
         _instructions = [NSMutableArray new];
+        _data = [NSMutableData new];
     }
     return self;
 }
@@ -27,12 +28,27 @@
 - (void)dealloc
 {
     [_instructions release];
+    [_data release];
     [super dealloc];
 }
 
 - (void)addInstruction:(NUAArch64Instruction *)anInstruction
 {
     [[self instructions] addObject:anInstruction];
+}
+
+- (uint64_t)addUInt64:(uint64_t)aValue
+{
+    uint64_t anIndex = [[self data] length];
+    [[self data] appendBytes:&aValue length:sizeof(aValue)];
+    return anIndex;
+}
+
+- (uint64_t)addInt64:(int64_t)aValue
+{
+    uint64_t anIndex = [[self data] length];
+    [[self data] appendBytes:&aValue length:sizeof(aValue)];
+    return anIndex;
 }
 
 - (uint64_t)size

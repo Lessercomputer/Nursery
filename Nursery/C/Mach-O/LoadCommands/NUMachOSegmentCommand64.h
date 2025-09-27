@@ -14,10 +14,9 @@
 @class NSMutableArray;
 
 @interface NUMachOSegmentCommand64 : NUMachOLoadCommand
-
-+ (instancetype)pageZeroSegmentCommand;
-+ (instancetype)textSegmentCommand;
-+ (instancetype)linkeditCommand;
+{
+    struct segment_command_64 _segmentCommand64;
+}
 
 @property (nonatomic, readonly) BOOL isPageZero;
 @property (nonatomic, readonly) BOOL isText;
@@ -31,6 +30,7 @@
 @property (nonatomic, readonly) uint64_t nextVMAddr;
 @property (nonatomic, readonly) uint64_t nextFileoff;
 @property (nonatomic, retain) NSMutableArray *sections;
+@property (nonatomic, readonly) NUMachOSection *textSection;
 
 @property (nonatomic, retain) NUMachOSegmentData *segmentData;
 

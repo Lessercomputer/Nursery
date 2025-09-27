@@ -19,13 +19,16 @@
 #import "NUCTranslationUnit.h"
 #import "NUMachO.h"
 #import "NUMachOSegmentCommand64.h"
+#import "NUMachOPageZeroSegmentCommand.h"
 #import "NUMachOSection.h"
+#import "NUMachODataSection.h"
 #import "NUMachOSymtabCommand.h"
 #import "NUMachODySymtabCommand.h"
 #import "NUMachODylinkerCommand.h"
 #import "NUMachODyldInfoOnly.h"
 #import "NUMachODylibCommand.h"
 #import "NUMachOEntryPointCommand.h"
+#import "NUAArch64Placeholder.h"
 
 @class NUCSourceFile;
 
@@ -63,7 +66,7 @@
         
         NUMachO *aMachO = [NUMachO new];
         
-        [aMachO add:[NUMachOSegmentCommand64 pageZeroSegmentCommand]];
+        [aMachO add:[NUMachOPageZeroSegmentCommand loadCommand]];
         
         NUMachOSegmentCommand64 *aLoadCommand = [NUMachOSegmentCommand64 textSegmentCommand];
         [aMachO add:aLoadCommand];
@@ -72,6 +75,10 @@
 //        [[aSection sectionData] addInstruction:[NUAArch64MovzInstruction instruction]];
 //        [[aSection sectionData] addInstruction:[NUAArch64RetInstruction instruction]];
         
+        NUMachOSegmentCommand64 *aDataSegmentCommand = [NUMachOSegmentCommand64 dataSegmentCommand];
+        [aMachO add:aDataSegmentCommand];
+        NUMachODataSection *aDataSection = [NUMachODataSection section];
+        [aDataSegmentCommand add:aDataSection];
         [aMachO add:[NUMachOSegmentCommand64 linkeditCommand]];
         [aMachO add:[NUMachOSymtabCommand loadCommand]];
         [aMachO add:[NUMachODySymtabCommand loadCommand]];
@@ -80,6 +87,8 @@
         [aMachO add:[NUMachODylibCommand loadCommand]];
         [aMachO add:[NUMachOEntryPointCommand loadCommand]];
         _machO = aMachO;
+        
+        _instructionIndexesAndValueIndexesToReplace = [NSMutableDictionary new];
     }
     
     return self;
@@ -95,6 +104,7 @@
     allSourceFiles = nil;
     [preprocessedSourceFiles  release];
     preprocessedSourceFiles = nil;
+    [_instructionIndexesAndValueIndexesToReplace release];
     
     [super dealloc];
 }
@@ -174,8 +184,12 @@
 - (void)translate:(id <NUCToken>)aToken
 {
     if ([aToken isIntegerConstant])
-    {
-        [[self machO] addIntegerConstant:(NUCIntegerConstant *)aToken];
+    {        
+        uint64_t anInstructionIndex = [[self machO] instructionIndex];
+        [[self machO] addInstruction:[NUAArch64Placeholder instruction]];
+        [[self machO] addInstruction:[NUAArch64Placeholder instruction]];
+//        [[self machO] ]]
+//        [[self instructionIndexesAndValueIndexesToReplace] setObject:@([aToken forKey:@(anInstructionIndex)];
     }
 }
 

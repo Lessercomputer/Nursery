@@ -16,6 +16,8 @@
 
 @property (nonatomic, readonly) uint32_t size;
 
+@property (nonatomic, readonly) BOOL isPlaceholder;
+
 - (void)writeToData:(NSMutableData *)aData;
 
 @end

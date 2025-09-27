@@ -22,6 +22,7 @@
 @property (nonatomic, retain) NSMutableArray *searchPathURLs;
 @property (nonatomic, retain) NSMutableArray *translationUnits;
 @property (nonatomic, retain) NUMachO *machO;
+@property (nonatomic, retain) NSMutableDictionary *instructionIndexesAndValueIndexesToReplace;
 
 - (instancetype)initWithSourceFileURLs:(NSArray *)aURLs;
 - (instancetype)initWithSourceFiles:(NSArray *)aSourceFiles;

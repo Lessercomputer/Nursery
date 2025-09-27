@@ -71,6 +71,10 @@
     NUCTranslator *aCTranslator = [[[NUCTranslator alloc] initWithSourceFileURLs:[NSArray arrayWithObject:aPhysicalSourceFileURL]] autorelease];
     
     [aCTranslator translate];
+    
+    NSString *aMachOFilePath = [@"~/Desktop/simplec" stringByExpandingTildeInPath];
+    XCTAssertTrue([[aCTranslator machO] writeToPath:aMachOFilePath]);
+
 }
 
 - (void)testCreateMinMachOFile

@@ -20,6 +20,11 @@
     return 4;
 }
 
+- (BOOL)isPlaceholder
+{
+    return NO;
+}
+
 - (void)writeToData:(NSMutableData *)aData
 {
 }

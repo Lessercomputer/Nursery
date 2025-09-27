@@ -17,6 +17,10 @@
 @class NSMutableData;
 
 @interface NUMachOSection : NSObject
+{
+    struct section_64 _section;
+    NUMachOSectionData *_sectionData;
+}
 
 + (instancetype)textSection;
 
@@ -24,6 +28,7 @@
 @property (nonatomic, readonly) NUMachOSegmentData *segmentData;
 @property (nonatomic, assign) NUMachOSection *previous;
 @property (nonatomic, readonly) BOOL isText;
+@property (nonatomic, readonly) BOOL isData;
 
 @property (nonatomic) uint64_t paddingSize;
 @property (nonatomic) struct section_64 section;
