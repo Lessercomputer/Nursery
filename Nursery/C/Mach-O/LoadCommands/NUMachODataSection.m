@@ -7,15 +7,10 @@
 //
 
 #import "NUMachODataSection.h"
-#import "NUMachOSectionData.h"
+#import <Foundation/NSData.h>
 #import <string.h>
 
 @implementation NUMachODataSection
-
-+ (instancetype)section
-{
-    return [[self new] autorelease];
-}
 
 - (instancetype)init
 {
@@ -33,10 +28,22 @@
         _section.reserved1 = 0;
         _section.reserved2 = 0;
         _section.reserved3 = 0;
-        _sectionData = [NUMachOSectionData new];
-        [_sectionData setSection:self];
     }
     return self;
+}
+
+- (uint64_t)addUInt64:(uint64_t)aValue
+{
+    uint64_t anOffset = [[self data] length];
+    [[self data] appendBytes:&aValue length:sizeof(aValue)];
+    return anOffset;
+}
+
+- (uint64_t)addInt64:(int64_t)aValue
+{
+    uint64_t anOffset = [[self data] length];
+    [[self data] appendBytes:&aValue length:sizeof(aValue)];
+    return anOffset;
 }
 
 @end

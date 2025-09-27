@@ -17,6 +17,7 @@
 @class NUAArch64Instruction;
 @class NUMachOSegmentCommand64;
 @class NUMachOSection;
+@class NUMachOTextSection;
 
 @interface NUMachO : NSObject
 
@@ -27,7 +28,6 @@
 @property (nonatomic, readonly) uint32_t pageSize;
 @property (nonatomic, retain) NUMachOHeader64 *header;
 @property (nonatomic, retain) NSMutableArray *loadCommands;
-@property (nonatomic, retain) NSMutableArray *segmentData;
 
 @property (nonatomic, readonly) uint32_t commandCount;
 @property (nonatomic, readonly) uint32_t commandSize;
@@ -35,7 +35,7 @@
 @property (nonatomic) uint64_t fileSize;
 
 @property (nonatomic, readonly) NUMachOSegmentCommand64 *textSegment;
-@property (nonatomic, readonly) NUMachOSection *textSection;
+@property (nonatomic, readonly) NUMachOTextSection *textSection;
 
 @property (nonatomic, readonly) uint64_t instructionIndex;
 

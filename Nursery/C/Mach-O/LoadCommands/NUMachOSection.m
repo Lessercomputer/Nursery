@@ -7,7 +7,6 @@
 //
 
 #import "NUMachOSection.h"
-#import "NUMachOSectionData.h"
 #import "NUMachOSegmentCommand64.h"
 #import <Foundation/NSData.h>
 #import <Foundation/NSArray.h>
@@ -15,7 +14,7 @@
 
 @implementation NUMachOSection
 
-+ (instancetype)textSection
++ (instancetype)section
 {
     return [[self new] autorelease];
 }
@@ -36,21 +35,15 @@
         _section.reserved1 = 0;
         _section.reserved2 = 0;
         _section.reserved3 = 0;
-        _sectionData = [NUMachOSectionData new];
-        [_sectionData setSection:self];
+        _data = [NSMutableData new];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [_sectionData release];
+    [_data release];
     [super dealloc];
-}
-
-- (NUMachOSegmentData *)segmentData
-{
-    return [[self segmentCommand] segmentData];
 }
 
 - (BOOL)isText
@@ -64,11 +57,6 @@
 - (BOOL)isData
 {
     return strcmp(_section.sectname, SECT_DATA) == 0;
-}
-
-- (void)add:(NUAArch64Instruction *)anInstruction
-{
-    [[self sectionData] addInstruction:anInstruction];
 }
 
 - (uint64_t)addr
@@ -101,9 +89,25 @@
     _section.offset = offset;
 }
 
+- (uint64_t)computeSize
+{
+    return [[self data] length];
+}
+
+- (uint64_t)updateSize
+{
+    uint64_t aSize = [self computeSize];
+    [self setSize:aSize];
+    return aSize;
+}
+
 - (void)writeToData:(NSMutableData *)aData
 {
     [aData appendBytes:&_section length:sizeof(_section)];
+}
+
+- (void)writeSectionToData:(NSMutableData *)aData
+{
 }
 
 @end

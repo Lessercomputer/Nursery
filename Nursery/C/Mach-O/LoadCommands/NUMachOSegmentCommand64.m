@@ -10,22 +10,20 @@
 #import "NUMachOSection.h"
 #import "NUMachOHeader64.h"
 #import "NUMachO.h"
-#import "NUMachOSegmentData.h"
-#import "NUMachOSectionData.h"
 #import <Foundation/NSData.h>
 #import <Foundation/NSArray.h>
 #import <string.h>
 
 @implementation NUMachOSegmentCommand64
 
-- (NUMachOSection *)textSection
+- (NUMachOTextSection *)textSection
 {
-    __block NUMachOSection *aTextSection = nil;
+    __block NUMachOTextSection *aTextSection = nil;
     
     [[self sections] enumerateObjectsUsingBlock:^(NUMachOSection * _Nonnull aSection, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([aSection isText])
         {
-            aTextSection = aSection;
+            aTextSection = (NUMachOTextSection *)aSection;
             *stop = YES;
         }
     }];
@@ -38,8 +36,7 @@
     self = [super init];
     if (self) {
         _sections = [NSMutableArray new];
-        _segmentData = [NUMachOSegmentData new];
-        [_segmentData setSegmentCommand:self];
+        _data = [NSMutableData new];
     }
     return self;
 }
@@ -47,7 +44,7 @@
 - (void)dealloc
 {
     [_sections release];
-    [_segmentData release];
+    [_data release];
     [super dealloc];
 }
 
@@ -126,6 +123,15 @@
     return YES;
 }
 
+- (uint64_t)sectionSize
+{
+    __block uint64_t aSize = 0;
+    [[self sections] enumerateObjectsUsingBlock:^(NUMachOSection * _Nonnull aSection, NSUInteger idx, BOOL * _Nonnull stop) {
+        aSize += [aSection size];
+    }];
+    return aSize;
+}
+
 - (void)computeLayout
 {
     [self computeLoadCommandSize];
@@ -153,25 +159,25 @@
         {
             [aSection setOffset:[aPreviousSection offset] + (uint32_t)[aPreviousSection size]];
             [aSection setAddr:[aPreviousSection addr] + [aPreviousSection size]];
-            [aSection setSize:[[aSection sectionData] size]];
+            [aSection updateSize];
         }
         else
         {
             if ([aPreviousLoadSegmentCommand isPageZero])
             {
-                uint64_t aRoundedSectionDataSize = [self roundUpToPageSize:[[self macho] headerAndAllLoadCommandsSize] + [[aSection sectionData] size]];
-                uint64_t aPaddingSize = aRoundedSectionDataSize - [[self macho] headerAndAllLoadCommandsSize] - [[aSection sectionData] size];
+                uint64_t aSectionSize = [aSection updateSize];
+                uint64_t aRoundedSectionDataSize = [self roundUpToPageSize:[[self macho] headerAndAllLoadCommandsSize] + aSectionSize];
+                uint64_t aPaddingSize = aRoundedSectionDataSize - [[self macho] headerAndAllLoadCommandsSize] - aSectionSize;
                 
                 [aSection setPaddingSize:aPaddingSize];
                 [aSection setOffset:(uint32_t)([aPreviousLoadSegmentCommand nextFileoff] + [[self macho] headerAndAllLoadCommandsSize] + aPaddingSize)];
                 [aSection setAddr:[aPreviousLoadSegmentCommand nextVMAddr] + [[self macho] headerAndAllLoadCommandsSize] + aPaddingSize];
-                [aSection setSize:[[aSection sectionData] size]];
             }
             else
             {
                 [aSection setOffset:(uint32_t)[aPreviousLoadSegmentCommand nextFileoff]];
                 [aSection setAddr:[aPreviousLoadSegmentCommand nextVMAddr]];
-                [aSection setSize:[[aSection sectionData] size]];
+                [aSection updateSize];
             }
         }
         
@@ -195,12 +201,33 @@
     [[self sections] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
 }
 
+- (void)writeSegmentToData:(NSMutableData *)aData
+{
+    if ([self isPageZero])
+        return;
+    
+    if ([[self sections] count])
+        [[self sections] makeObjectsPerformSelector:@selector(writeSectionToData:) withObject:aData];
+    else
+        [aData increaseLengthBy:[self filesize]];
+}
+
+- (void)writeSectionsToData:(NSMutableData *)aData
+{
+    if ([self isPageZero])
+        return;
+    
+    if ([[self sections] count])
+        [[self sections] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
+    else
+        [aData increaseLengthBy:[self filesize]];
+}
+
 - (void)add:(NUMachOSection *)aSection
 {
     [aSection setSegmentCommand:self];
     [aSection setPrevious:[[self sections] lastObject]];
     [[self sections] addObject:aSection];
-    [[self segmentData] add:[aSection sectionData]];
 }
 
 @end

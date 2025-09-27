@@ -8,14 +8,13 @@
 
 #import "NUMachO.h"
 #import "NUMachOHeader64.h"
-#import "NUMachOSegmentData.h"
 #import "NUMachOSegmentCommand64.h"
 #import "NUMachOPageZeroSegmentCommand.h"
 #import "NUMachOTextSegmentCommand.h"
 #import "NUMachOLinkeditCommand.h"
 #import "NUMachOThreadCommand.h"
 #import "NUMachOSection.h"
-#import "NUMachOSectionData.h"
+#import "NUMachOTextSection.h"
 #import "NUAArch64MovzInstruction.h"
 #import "NUAArch64RetInstruction.h"
 #import "NUMachOEntryPointCommand.h"
@@ -68,10 +67,10 @@ static uint32_t pageSize = 4096 * 4;
     
     NUMachOSegmentCommand64 *aLoadCommand = [NUMachOTextSegmentCommand loadCommand];
     [aMachO add:aLoadCommand];
-    NUMachOSection *aSection = [NUMachOSection textSection];
+    NUMachOTextSection *aSection = [NUMachOTextSection section];
     [aLoadCommand add:aSection];
-    [[aSection sectionData] addInstruction:[NUAArch64MovzInstruction instruction]];
-    [[aSection sectionData] addInstruction:[NUAArch64RetInstruction instruction]];
+    [aSection addInstruction:[NUAArch64MovzInstruction instruction]];
+    [aSection addInstruction:[NUAArch64RetInstruction instruction]];
     
     [aMachO add:[NUMachOLinkeditCommand loadCommand]];
     [aMachO add:[NUMachOSymtabCommand loadCommand]];
@@ -91,7 +90,6 @@ static uint32_t pageSize = 4096 * 4;
         _header = [NUMachOHeader64 new];
         [_header setMachO:self];
         _loadCommands = [NSMutableArray new];
-        _segmentData = [NSMutableArray new];
         _needsComputeLayout = YES;
     }
     return self;
@@ -101,7 +99,6 @@ static uint32_t pageSize = 4096 * 4;
 {
     [_header release];
     [_loadCommands release];
-    [_segmentData release];
     [super dealloc];
 }
 
@@ -125,9 +122,6 @@ static uint32_t pageSize = 4096 * 4;
     [aLoadCommand setHeader:[self header]];
     [aLoadCommand setPrevious:[[self loadCommands] lastObject]];
     [[self loadCommands] addObject:aLoadCommand];
-    
-    if ([aLoadCommand isSegmentCommand])
-        [[self segmentData] addObject:[(NUMachOSegmentCommand64 *)aLoadCommand segmentData]];
 }
 
 - (uint32_t)commandCount
@@ -189,14 +183,14 @@ static uint32_t pageSize = 4096 * 4;
     return aSegmentCommand;
 }
 
-- (NUMachOSection *)textSection
+- (NUMachOTextSection *)textSection
 {
     return [[self textSegment] textSection];
 }
 
 - (uint64_t)instructionIndex
 {
-    return [[[[self textSection] sectionData] instructions] count];
+    return [[[self textSection] instructions] count];
 }
 
 - (NUMachOEntryPointCommand *)entryPointCommand
@@ -258,7 +252,7 @@ static uint32_t pageSize = 4096 * 4;
 
 - (void)addInstruction:(NUAArch64Instruction *)anInstruction
 {
-    [[[self textSection] sectionData] addInstruction:anInstruction];
+    [[self textSection] addInstruction:anInstruction];
 }
 
 - (void)writeToData:(NSMutableData *)aData
@@ -267,7 +261,7 @@ static uint32_t pageSize = 4096 * 4;
     
     [[self header] writeToData:aData];
     [[self loadCommands] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
-    [[self segmentData] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
+    [[self loadCommands] makeObjectsPerformSelector:@selector(writeSegmentToData:) withObject:aData];
 }
 
 - (BOOL)writeToPath:(NSString *)aFilepath

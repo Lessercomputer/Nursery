@@ -20,7 +20,11 @@
 #import "NUMachO.h"
 #import "NUMachOSegmentCommand64.h"
 #import "NUMachOPageZeroSegmentCommand.h"
+#import "NUMachOTextSegmentCommand.h"
+#import "NUMachODataSegmentCommand.h"
+#import "NUMachOLinkeditCommand.h"
 #import "NUMachOSection.h"
+#import "NUMachOTextSection.h"
 #import "NUMachODataSection.h"
 #import "NUMachOSymtabCommand.h"
 #import "NUMachODySymtabCommand.h"
@@ -68,18 +72,18 @@
         
         [aMachO add:[NUMachOPageZeroSegmentCommand loadCommand]];
         
-        NUMachOSegmentCommand64 *aLoadCommand = [NUMachOSegmentCommand64 textSegmentCommand];
+        NUMachOSegmentCommand64 *aLoadCommand = [NUMachOTextSegmentCommand loadCommand];
         [aMachO add:aLoadCommand];
-        NUMachOSection *aSection = [NUMachOSection textSection];
+        NUMachOSection *aSection = [NUMachOTextSection section];
         [aLoadCommand add:aSection];
 //        [[aSection sectionData] addInstruction:[NUAArch64MovzInstruction instruction]];
 //        [[aSection sectionData] addInstruction:[NUAArch64RetInstruction instruction]];
         
-        NUMachOSegmentCommand64 *aDataSegmentCommand = [NUMachOSegmentCommand64 dataSegmentCommand];
+        NUMachOSegmentCommand64 *aDataSegmentCommand = [NUMachODataSegmentCommand loadCommand];
         [aMachO add:aDataSegmentCommand];
         NUMachODataSection *aDataSection = [NUMachODataSection section];
         [aDataSegmentCommand add:aDataSection];
-        [aMachO add:[NUMachOSegmentCommand64 linkeditCommand]];
+        [aMachO add:[NUMachOLinkeditCommand loadCommand]];
         [aMachO add:[NUMachOSymtabCommand loadCommand]];
         [aMachO add:[NUMachODySymtabCommand loadCommand]];
         [aMachO add:[NUMachODylinkerCommand loadCommand]];

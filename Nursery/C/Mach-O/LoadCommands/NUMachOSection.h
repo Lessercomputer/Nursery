@@ -12,20 +12,16 @@
 #import <mach-o/loader.h>
 
 @class NUMachOSegmentCommand64;
-@class NUMachOSegmentData;
-@class NUMachOSectionData;
 @class NSMutableData;
 
 @interface NUMachOSection : NSObject
 {
     struct section_64 _section;
-    NUMachOSectionData *_sectionData;
 }
 
-+ (instancetype)textSection;
++ (instancetype)section;
 
 @property (nonatomic, assign) NUMachOSegmentCommand64 *segmentCommand;
-@property (nonatomic, readonly) NUMachOSegmentData *segmentData;
 @property (nonatomic, assign) NUMachOSection *previous;
 @property (nonatomic, readonly) BOOL isText;
 @property (nonatomic, readonly) BOOL isData;
@@ -36,9 +32,13 @@
 @property (nonatomic) uint64_t size;
 @property (nonatomic) uint32_t offset;
 
-@property (nonatomic, retain) NUMachOSectionData *sectionData;
+@property (nonatomic, retain) NSMutableData *data;
+
+- (uint64_t)computeSize;
+- (uint64_t)updateSize;
 
 - (void)writeToData:(NSMutableData *)aData;
+- (void)writeSectionToData:(NSMutableData *)aData;
 
 @end
 
