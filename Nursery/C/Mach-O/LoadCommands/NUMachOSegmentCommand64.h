@@ -10,6 +10,7 @@
 
 @class NUMachOSection;
 @class NUMachOTextSection;
+@class NUMachODataSection;
 @class NUMachOSegmentData;
 @class NUAArch64Instruction;
 @class NSMutableArray, NSMutableData;
@@ -22,6 +23,7 @@
 
 @property (nonatomic, readonly) BOOL isPageZero;
 @property (nonatomic, readonly) BOOL isText;
+@property (nonatomic, readonly) BOOL isData;
 @property (nonatomic, readonly) BOOL isLinkedit;
 @property (nonatomic) struct segment_command_64 segmentCommand64;
 @property (nonatomic) uint64_t vmaddr;
@@ -34,6 +36,7 @@
 @property (nonatomic, readonly) NSMutableData *data;
 @property (nonatomic, retain) NSMutableArray *sections;
 @property (nonatomic, readonly) NUMachOTextSection *textSection;
+@property (nonatomic, readonly) NUMachODataSection *dataSection;
 @property (nonatomic, readonly) uint64_t sectionSize;
 
 - (void)add:(NUMachOSection *)aSection;

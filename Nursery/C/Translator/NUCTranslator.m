@@ -16,6 +16,7 @@
 #import "NUCPreprocessingFile.h"
 #import "NUCPreprocessingTokenToTokenStream.h"
 #import "NUCToken.h"
+#import "NUCIntegerConstant.h"
 #import "NUCTranslationUnit.h"
 #import "NUMachO.h"
 #import "NUMachOSegmentCommand64.h"
@@ -33,6 +34,8 @@
 #import "NUMachODylibCommand.h"
 #import "NUMachOEntryPointCommand.h"
 #import "NUAArch64Placeholder.h"
+#import "NUMachOPostProcess.h"
+
 
 @class NUCSourceFile;
 
@@ -188,12 +191,23 @@
 - (void)translate:(id <NUCToken>)aToken
 {
     if ([aToken isIntegerConstant])
-    {        
-        uint64_t anInstructionIndex = [[self machO] instructionIndex];
+    {
+        NUMachOPostProcess *aPostProcess = [[NUMachOPostProcess new] autorelease];
+        
+        uint64_t anInstructionOffsetInSection = [[self machO] instructionOffsetInSection];
         [[self machO] addInstruction:[NUAArch64Placeholder instruction]];
         [[self machO] addInstruction:[NUAArch64Placeholder instruction]];
-//        [[self machO] ]]
-//        [[self instructionIndexesAndValueIndexesToReplace] setObject:@([aToken forKey:@(anInstructionIndex)];
+        
+        [aPostProcess setInstructionOffset:anInstructionOffsetInSection];
+        [aPostProcess setTextSection:[[self machO] textSection]];
+        
+        NUMachODataSection *aDataSection = [[self machO] dataSection];
+        uint64_t aDataOffsetInSection = [aDataSection dataOffsetInSection];
+        [aPostProcess setDataOffset:aDataOffsetInSection];
+        [aPostProcess setDataSection:aDataSection];
+        [aDataSection addInt64:[(NUCIntegerConstant *)aToken value]];
+        
+        [[self machO] addPostProcess:aPostProcess];
     }
 }
 

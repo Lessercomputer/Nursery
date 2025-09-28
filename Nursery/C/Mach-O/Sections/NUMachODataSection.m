@@ -32,9 +32,15 @@
     return self;
 }
 
+- (void)setDataOffsetInSection:(uint64_t)anOffset
+{
+    _dataOffsetInSection = anOffset;
+}
+
 - (uint64_t)addUInt64:(uint64_t)aValue
 {
     uint64_t anOffset = [[self data] length];
+    [self setDataOffsetInSection:[self dataOffsetInSection] + sizeof(aValue)];
     [[self data] appendBytes:&aValue length:sizeof(aValue)];
     return anOffset;
 }
@@ -42,6 +48,7 @@
 - (uint64_t)addInt64:(int64_t)aValue
 {
     uint64_t anOffset = [[self data] length];
+    [self setDataOffsetInSection:[self dataOffsetInSection] + sizeof(aValue)];
     [[self data] appendBytes:&aValue length:sizeof(aValue)];
     return anOffset;
 }

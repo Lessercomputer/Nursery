@@ -431,6 +431,8 @@
 		E2597C372E87E4F300E21CC4 /* NUMachOLinkeditCommand.h in Headers */ = {isa = PBXBuildFile; fileRef = E2597C342E87E4F300E21CC4 /* NUMachOLinkeditCommand.h */; };
 		E2597C3A2E885B1900E21CC4 /* NUMachOTextSection.m in Sources */ = {isa = PBXBuildFile; fileRef = E2597C392E885B1900E21CC4 /* NUMachOTextSection.m */; };
 		E2597C3B2E885B1900E21CC4 /* NUMachOTextSection.h in Headers */ = {isa = PBXBuildFile; fileRef = E2597C382E885B1900E21CC4 /* NUMachOTextSection.h */; };
+		E2597C3F2E88E1F600E21CC4 /* NUMachOPostProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = E2597C3E2E88E1F600E21CC4 /* NUMachOPostProcess.m */; };
+		E2597C402E88E1F600E21CC4 /* NUMachOPostProcess.h in Headers */ = {isa = PBXBuildFile; fileRef = E2597C3D2E88E1F600E21CC4 /* NUMachOPostProcess.h */; };
 		E29B20492D6503CB0071F617 /* NUCBlockItemList.h in Headers */ = {isa = PBXBuildFile; fileRef = E29B20472D6503CB0071F617 /* NUCBlockItemList.h */; };
 		E29B204A2D6503CB0071F617 /* NUCBlockItemList.m in Sources */ = {isa = PBXBuildFile; fileRef = E29B20482D6503CB0071F617 /* NUCBlockItemList.m */; };
 		E29B204D2D6506980071F617 /* NUCStatement.h in Headers */ = {isa = PBXBuildFile; fileRef = E29B204B2D6506980071F617 /* NUCStatement.h */; };
@@ -969,6 +971,8 @@
 		E2597C352E87E4F300E21CC4 /* NUMachOLinkeditCommand.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUMachOLinkeditCommand.m; sourceTree = "<group>"; };
 		E2597C382E885B1900E21CC4 /* NUMachOTextSection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUMachOTextSection.h; sourceTree = "<group>"; };
 		E2597C392E885B1900E21CC4 /* NUMachOTextSection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUMachOTextSection.m; sourceTree = "<group>"; };
+		E2597C3D2E88E1F600E21CC4 /* NUMachOPostProcess.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUMachOPostProcess.h; sourceTree = "<group>"; };
+		E2597C3E2E88E1F600E21CC4 /* NUMachOPostProcess.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUMachOPostProcess.m; sourceTree = "<group>"; };
 		E29B20472D6503CB0071F617 /* NUCBlockItemList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCBlockItemList.h; sourceTree = "<group>"; };
 		E29B20482D6503CB0071F617 /* NUCBlockItemList.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCBlockItemList.m; sourceTree = "<group>"; };
 		E29B204B2D6506980071F617 /* NUCStatement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCStatement.h; sourceTree = "<group>"; };
@@ -1740,6 +1744,19 @@
 			name = Apertures;
 			sourceTree = "<group>";
 		};
+		E2597C3C2E88DE1400E21CC4 /* Sections */ = {
+			isa = PBXGroup;
+			children = (
+				E29B207E2D6DA19C0071F617 /* NUMachOSection.h */,
+				E29B207F2D6DA19C0071F617 /* NUMachOSection.m */,
+				E2597C382E885B1900E21CC4 /* NUMachOTextSection.h */,
+				E2597C392E885B1900E21CC4 /* NUMachOTextSection.m */,
+				E2EA2D242E83E2B40067ECAC /* NUMachODataSection.h */,
+				E2EA2D252E83E2B40067ECAC /* NUMachODataSection.m */,
+			);
+			path = Sections;
+			sourceTree = "<group>";
+		};
 		E29B20642D6D7A7E0071F617 /* Mach-O */ = {
 			isa = PBXGroup;
 			children = (
@@ -1747,7 +1764,10 @@
 				E29B20662D6D7AB40071F617 /* NUMachO.m */,
 				E29B206A2D6D90870071F617 /* NUMachOHeader64.h */,
 				E29B206B2D6D90870071F617 /* NUMachOHeader64.m */,
+				E2597C3D2E88E1F600E21CC4 /* NUMachOPostProcess.h */,
+				E2597C3E2E88E1F600E21CC4 /* NUMachOPostProcess.m */,
 				E2EF7BB92D7460CF000C3A3A /* LoadCommands */,
+				E2597C3C2E88DE1400E21CC4 /* Sections */,
 			);
 			path = "Mach-O";
 			sourceTree = "<group>";
@@ -1844,12 +1864,6 @@
 				E2B504592D7A94E000DAD9BA /* NUMachODySymtabCommand.m */,
 				E2B504502D79D2BB00DAD9BA /* NUMachODylibCommand.h */,
 				E2B504512D79D2BB00DAD9BA /* NUMachODylibCommand.m */,
-				E29B207E2D6DA19C0071F617 /* NUMachOSection.h */,
-				E29B207F2D6DA19C0071F617 /* NUMachOSection.m */,
-				E2597C382E885B1900E21CC4 /* NUMachOTextSection.h */,
-				E2597C392E885B1900E21CC4 /* NUMachOTextSection.m */,
-				E2EA2D242E83E2B40067ECAC /* NUMachODataSection.h */,
-				E2EA2D252E83E2B40067ECAC /* NUMachODataSection.m */,
 			);
 			path = LoadCommands;
 			sourceTree = "<group>";
@@ -2022,6 +2036,7 @@
 				61B3241A2A9DA50C0083E45F /* NUCLineMapping.h in Headers */,
 				61BC39722A78A6C6006CFBB3 /* NUCDiagnostic.h in Headers */,
 				616D0AE72A78972600813539 /* NUCExpression.h in Headers */,
+				E2597C402E88E1F600E21CC4 /* NUMachOPostProcess.h in Headers */,
 				B861B3BE20D495DA001F76BF /* NUOpaqueQueue.h in Headers */,
 				61BC39622A78A6C6006CFBB3 /* NUCConstant.h in Headers */,
 				619B08F31913EEC000A4BAA2 /* NUNSDictionary.h in Headers */,
@@ -2309,6 +2324,7 @@
 				61BC39BC2A78A6D3006CFBB3 /* NUCRangePair.m in Sources */,
 				E29B20A62D6EC68B0071F617 /* NUAArch64RetInstruction.m in Sources */,
 				24BFC0502B7A0B9700D10FDB /* NUCExponentPart.m in Sources */,
+				E2597C3F2E88E1F600E21CC4 /* NUMachOPostProcess.m in Sources */,
 				619B08DD1913EEC000A4BAA2 /* NUIndexSetCoder.m in Sources */,
 				616D0B092A78972600813539 /* NUCConditionalExpression.m in Sources */,
 				61BC39892A78A6C6006CFBB3 /* NUCReplacementList.m in Sources */,

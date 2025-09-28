@@ -11,6 +11,8 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSData.h>
 
+#define InstructionSizeInBytes 4
+
 @implementation NUMachOTextSection
 
 - (instancetype)init
@@ -31,6 +33,11 @@
 - (void)addInstruction:(NUAArch64Instruction *)anInstruction
 {
     [[self instructions] addObject:anInstruction];
+}
+
+- (uint64_t)instructionOffsetInSection
+{
+    return [[self instructions] count] * InstructionSizeInBytes;
 }
 
 - (uint64_t)computeSize

@@ -31,6 +31,21 @@
     return aTextSection;
 }
 
+- (NUMachODataSection *)dataSection
+{
+    __block NUMachODataSection *aTextSection = nil;
+    
+    [[self sections] enumerateObjectsUsingBlock:^(NUMachOSection * _Nonnull aSection, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([aSection isData])
+        {
+            aTextSection = (NUMachODataSection *)aSection;
+            *stop = YES;
+        }
+    }];
+    
+    return aTextSection;
+}
+
 - (instancetype)init
 {
     self = [super init];
@@ -56,6 +71,11 @@
 - (BOOL)isText
 {
     return strcmp(_segmentCommand64.segname, SEG_TEXT) == 0;
+}
+
+- (BOOL)isData
+{
+    return strcmp(_segmentCommand64.segname, SEG_DATA) == 0;
 }
 
 - (BOOL)isLinkedit

@@ -11,6 +11,8 @@
 
 @interface NUMachODataSection : NUMachOSection
 
+@property (nonatomic, readonly) uint64_t dataOffsetInSection;
+
 - (uint64_t)addUInt64:(uint64_t)aValue;
 - (uint64_t)addInt64:(int64_t)aValue;
 

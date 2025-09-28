@@ -14,6 +14,7 @@
 @interface NUMachOTextSection : NUMachOSection
 
 @property (nonatomic, retain) NSMutableArray *instructions;
+@property (nonatomic, readonly) uint64_t instructionOffsetInSection;
 
 - (void)addInstruction:(NUAArch64Instruction *)anInstruction;
 

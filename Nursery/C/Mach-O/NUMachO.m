@@ -11,6 +11,7 @@
 #import "NUMachOSegmentCommand64.h"
 #import "NUMachOPageZeroSegmentCommand.h"
 #import "NUMachOTextSegmentCommand.h"
+#import "NUMachODataSegmentCommand.h"
 #import "NUMachOLinkeditCommand.h"
 #import "NUMachOThreadCommand.h"
 #import "NUMachOSection.h"
@@ -23,6 +24,7 @@
 #import "NUMachOSymtabCommand.h"
 #import "NUMachODySymtabCommand.h"
 #import "NUMachODylibCommand.h"
+#import "NUMachOPostProcess.h"
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSData.h>
@@ -90,6 +92,7 @@ static uint32_t pageSize = 4096 * 4;
         _header = [NUMachOHeader64 new];
         [_header setMachO:self];
         _loadCommands = [NSMutableArray new];
+        _postProcesses = [NSMutableArray new];
         _needsComputeLayout = YES;
     }
     return self;
@@ -99,6 +102,7 @@ static uint32_t pageSize = 4096 * 4;
 {
     [_header release];
     [_loadCommands release];
+    [_postProcesses release];
     [super dealloc];
 }
 
@@ -188,9 +192,28 @@ static uint32_t pageSize = 4096 * 4;
     return [[self textSegment] textSection];
 }
 
-- (uint64_t)instructionIndex
+- (NUMachODataSegmentCommand *)dataSegment
 {
-    return [[[self textSection] instructions] count];
+    __block NUMachODataSegmentCommand *aSegmentCommand = nil;
+    
+    [[self loadCommands] enumerateObjectsUsingBlock:^(NUMachOLoadCommand * _Nonnull aLoadCommand, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([aLoadCommand isSegmentCommand])
+        {
+            if ([(NUMachOSegmentCommand64 *)aLoadCommand isData])
+                aSegmentCommand = (NUMachODataSegmentCommand *)aLoadCommand;
+        }
+    }];
+    
+    return aSegmentCommand;
+}
+- (NUMachODataSection *)dataSection
+{
+    return [[self dataSegment] dataSection];
+}
+
+- (uint64_t)instructionOffsetInSection
+{
+    return [[self textSection] instructionOffsetInSection];
 }
 
 - (NUMachOEntryPointCommand *)entryPointCommand
@@ -255,10 +278,21 @@ static uint32_t pageSize = 4096 * 4;
     [[self textSection] addInstruction:anInstruction];
 }
 
+- (void)addPostProcess:(NUMachOPostProcess *)aPostProcess
+{
+    [[self postProcesses] addObject:aPostProcess];
+}
+
+- (void)executePostProcesses
+{
+    [[self postProcesses] makeObjectsPerformSelector:@selector(execute)];
+}
+
 - (void)writeToData:(NSMutableData *)aData
 {
     [self computeLayoutIfNeeded];
-    
+    [self executePostProcesses];
+
     [[self header] writeToData:aData];
     [[self loadCommands] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
     [[self loadCommands] makeObjectsPerformSelector:@selector(writeSegmentToData:) withObject:aData];

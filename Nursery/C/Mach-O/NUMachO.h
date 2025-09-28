@@ -16,8 +16,12 @@
 @class NUCIntegerConstant;
 @class NUAArch64Instruction;
 @class NUMachOSegmentCommand64;
+@class NUMachOTextSegmentCommand;
+@class NUMachODataSegmentCommand;
 @class NUMachOSection;
 @class NUMachOTextSection;
+@class NUMachODataSection;
+@class NUMachOPostProcess;
 
 @interface NUMachO : NSObject
 
@@ -34,10 +38,14 @@
 
 @property (nonatomic) uint64_t fileSize;
 
-@property (nonatomic, readonly) NUMachOSegmentCommand64 *textSegment;
+@property (nonatomic, readonly) NUMachOTextSegmentCommand *textSegment;
 @property (nonatomic, readonly) NUMachOTextSection *textSection;
 
-@property (nonatomic, readonly) uint64_t instructionIndex;
+@property (nonatomic, readonly) NUMachODataSegmentCommand *dataSegment;
+@property (nonatomic, readonly) NUMachODataSection *dataSection;
+
+@property (nonatomic, readonly) uint64_t instructionOffsetInSection;
+@property (nonatomic, retain) NSMutableArray *postProcesses;
 
 @property (nonatomic) BOOL needsComputeLayout;
 
@@ -51,6 +59,9 @@
 - (BOOL)writeToPath:(NSString *)aFilepath;
 
 - (void)addInstruction:(NUAArch64Instruction *)anInstruction;
+
+- (void)addPostProcess:(NUMachOPostProcess *)aPostProcess;
+- (void)executePostProcesses;
 
 @end
 
