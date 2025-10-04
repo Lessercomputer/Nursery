@@ -53,4 +53,9 @@
     return anOffset;
 }
 
+- (void)writeSectionDataToData:(NSMutableData *)aData
+{
+    [aData appendData:[self data]];
+}
+
 @end

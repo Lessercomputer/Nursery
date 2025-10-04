@@ -106,7 +106,7 @@
     [aData appendBytes:&_section length:sizeof(_section)];
 }
 
-- (void)writeSectionToData:(NSMutableData *)aData
+- (void)writeSectionDataToData:(NSMutableData *)aData
 {
 }
 

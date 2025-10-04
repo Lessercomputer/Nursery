@@ -166,9 +166,9 @@ static uint32_t pageSize = 4096 * 4;
     [anEntryPointCommand setEntryoff:[aTextSection offset]];
     
     NUMachOSegmentCommand64 *aLinkeditCommand = [self linkeditSegment];
-    [aLinkeditCommand setFileoff:[aTextSection offset] + [aTextSection size]];
+    [aLinkeditCommand setFileoff:[aTextSegment nextFileoff]];
     NUMachOSymtabCommand *aSymtabCommand = [self symtabCommand];
-    [aSymtabCommand setSymoff:(uint32_t)[aLinkeditCommand fileoff]];
+    [aSymtabCommand setSymoff:(uint32_t)[aLinkeditCommand nextFileoff]];
     [aSymtabCommand setStroff:[aSymtabCommand symoff]];
 }
 
@@ -295,7 +295,7 @@ static uint32_t pageSize = 4096 * 4;
 
     [[self header] writeToData:aData];
     [[self loadCommands] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
-    [[self loadCommands] makeObjectsPerformSelector:@selector(writeSegmentToData:) withObject:aData];
+    [[self loadCommands] makeObjectsPerformSelector:@selector(writeSegmentDataToData:) withObject:aData];
 }
 
 - (BOOL)writeToPath:(NSString *)aFilepath

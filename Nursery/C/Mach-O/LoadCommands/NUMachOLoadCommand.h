@@ -32,8 +32,7 @@
 - (uint32_t)roundUpLoadCommandSize:(uint32_t)aCommandSize;
 - (uint64_t)roundUpToPageSize:(uint64_t)aSize;
 - (void)writeToData:(NSMutableData *)aData;
-- (void)writeSegmentToData:(NSMutableData *)aData;
-- (void)writeSectionsToData:(NSMutableData *)aData;
+- (void)writeSegmentDataToData:(NSMutableData *)aData;
 
 @end
 

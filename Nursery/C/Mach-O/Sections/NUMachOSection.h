@@ -26,7 +26,7 @@
 @property (nonatomic, readonly) BOOL isText;
 @property (nonatomic, readonly) BOOL isData;
 
-@property (nonatomic) uint64_t paddingSize;
+//@property (nonatomic) uint64_t paddingSize;
 @property (nonatomic) struct section_64 section;
 @property (nonatomic) uint64_t addr;
 @property (nonatomic) uint64_t size;
@@ -38,7 +38,7 @@
 - (uint64_t)updateSize;
 
 - (void)writeToData:(NSMutableData *)aData;
-- (void)writeSectionToData:(NSMutableData *)aData;
+- (void)writeSectionDataToData:(NSMutableData *)aData;
 
 @end
 

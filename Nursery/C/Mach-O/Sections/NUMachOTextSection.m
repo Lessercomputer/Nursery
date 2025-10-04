@@ -49,10 +49,8 @@
     return aSize;
 }
 
-- (void)writeSectionToData:(NSMutableData *)aData
+- (void)writeSectionDataToData:(NSMutableData *)aData
 {
-    [aData increaseLengthBy:[self paddingSize]];
-    
     [[self instructions] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
 }
 

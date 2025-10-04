@@ -130,7 +130,7 @@
 
 - (uint64_t)nextFileoff
 {
-    return [self fileoff] + [self filesize];
+    return [self roundUpToPageSize:[self fileoff] + [self filesize]];
 }
 
 - (uint32_t)size
@@ -166,15 +166,32 @@
 
 - (void)computeSegmentDataLayout
 {
+    if ([self isPageZero]) return;
+
+    uint64_t aSegmentDataSize = [self computeSegmentDataSize];
+    uint64_t aRoundedSegmentDataSize = [self roundUpToPageSize:aSegmentDataSize];
+    if (!aRoundedSegmentDataSize)
+        aRoundedSegmentDataSize = [[self macho] pageSize];
+    uint64_t aPaddingSize = aRoundedSegmentDataSize - aSegmentDataSize;
+    
+    NUMachOSegmentCommand64 *aPreviousLoadSegmentCommand = [self previousLoadSegmentCommand];
+    [self setVmaddr:[aPreviousLoadSegmentCommand nextVMAddr]];
+    [self setVmsize:aRoundedSegmentDataSize];
+    [self setFileoff:[aPreviousLoadSegmentCommand nextFileoff]];
+    [self setFilesize:aRoundedSegmentDataSize];
+    [self setPaddingSize:aPaddingSize];
+}
+
+- (uint64_t)computeSegmentDataSize
+{
+    __block uint64_t aSegmentDataSize = 0;
+    
+    if ([self isPageZero]) return aSegmentDataSize;
+    
     NUMachOSegmentCommand64 *aPreviousLoadSegmentCommand = [self previousLoadSegmentCommand];
     
-    if (!aPreviousLoadSegmentCommand) return;
-    
-    __block uint64_t aSegmentDataSize = 0;
-    [self setVmaddr:[aPreviousLoadSegmentCommand nextVMAddr]];
-    
     __block NUMachOSection *aPreviousSection = nil;
-    [[self sections] enumerateObjectsUsingBlock:^(NUMachOSection * _Nonnull aSection, NSUInteger idx, BOOL * _Nonnull stop) {
+    [[self sections] enumerateObjectsUsingBlock:^(NUMachOSection * _Nonnull aSection, NSUInteger anIndex, BOOL * _Nonnull stop) {
         if (aPreviousSection)
         {
             [aSection setOffset:[aPreviousSection offset] + (uint32_t)[aPreviousSection size]];
@@ -184,35 +201,19 @@
         else
         {
             if ([aPreviousLoadSegmentCommand isPageZero])
-            {
-                uint64_t aSectionSize = [aSection updateSize];
-                uint64_t aRoundedSectionDataSize = [self roundUpToPageSize:[[self macho] headerAndAllLoadCommandsSize] + aSectionSize];
-                uint64_t aPaddingSize = aRoundedSectionDataSize - [[self macho] headerAndAllLoadCommandsSize] - aSectionSize;
-                
-                [aSection setPaddingSize:aPaddingSize];
-                [aSection setOffset:(uint32_t)([aPreviousLoadSegmentCommand nextFileoff] + [[self macho] headerAndAllLoadCommandsSize] + aPaddingSize)];
-                [aSection setAddr:[aPreviousLoadSegmentCommand nextVMAddr] + [[self macho] headerAndAllLoadCommandsSize] + aPaddingSize];
-            }
+                [aSection setOffset:(uint32_t)[aPreviousLoadSegmentCommand nextFileoff] + [[self macho] headerAndAllLoadCommandsSize]];
             else
-            {
                 [aSection setOffset:(uint32_t)[aPreviousLoadSegmentCommand nextFileoff]];
-                [aSection setAddr:[aPreviousLoadSegmentCommand nextVMAddr]];
-                [aSection updateSize];
-            }
+                 
+            [aSection setAddr:[aPreviousLoadSegmentCommand nextVMAddr]];
+            [aSection updateSize];
         }
         
-        aSegmentDataSize += [aSection paddingSize] + [aSection size];
+        aSegmentDataSize += [aSection size];
         aPreviousSection = aSection;
     }];
     
-    uint64_t aRoundedSegmentDataSize = [self roundUpToPageSize:aSegmentDataSize];
-    if (!aRoundedSegmentDataSize)
-        aRoundedSegmentDataSize = [[self macho] pageSize];
-    uint64_t aPaddingSize = aRoundedSegmentDataSize - aSegmentDataSize;
-    [self setVmsize:aRoundedSegmentDataSize];
-    [self setFileoff:[aPreviousLoadSegmentCommand nextFileoff]];
-    [self setFilesize:aRoundedSegmentDataSize];
-    [self setPaddingSize:aPaddingSize];
+    return aSegmentDataSize;
 }
 
 - (void)writeToData:(NSMutableData *)aData
@@ -221,24 +222,16 @@
     [[self sections] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
 }
 
-- (void)writeSegmentToData:(NSMutableData *)aData
+- (void)writeSegmentDataToData:(NSMutableData *)aData
 {
     if ([self isPageZero])
         return;
     
     if ([[self sections] count])
-        [[self sections] makeObjectsPerformSelector:@selector(writeSectionToData:) withObject:aData];
-    else
-        [aData increaseLengthBy:[self filesize]];
-}
-
-- (void)writeSectionsToData:(NSMutableData *)aData
-{
-    if ([self isPageZero])
-        return;
-    
-    if ([[self sections] count])
-        [[self sections] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
+    {
+        [[self sections] makeObjectsPerformSelector:@selector(writeSectionDataToData:) withObject:aData];
+        [aData increaseLengthBy:[self paddingSize]];
+    }
     else
         [aData increaseLengthBy:[self filesize]];
 }

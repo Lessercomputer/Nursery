@@ -75,11 +75,7 @@
 {
 }
 
-- (void)writeSegmentToData:(NSMutableData *)aData
-{
-}
-
-- (void)writeSectionsToData:(NSMutableData *)aData
+- (void)writeSegmentDataToData:(NSMutableData *)aData
 {
 }
 
