@@ -308,7 +308,7 @@ static uint32_t pageSize = 4096 * 4;
     {
         NSTask *aCodesignTask = [[NSTask new] autorelease];
         [aCodesignTask setExecutableURL:[NSURL fileURLWithPath:[[self class] codesignPath]]];
-        [aCodesignTask setArguments:@[@"--force", @"--no-strict", @"-s",  @"-", aFilepath]];
+        [aCodesignTask setArguments:@[@"--force", @"-s", @"-", aFilepath]];
         [aCodesignTask launch];
         [aCodesignTask waitUntilExit];
         return ![aCodesignTask terminationStatus];
