@@ -165,11 +165,11 @@ static uint32_t pageSize = 4096 * 4;
     NUMachOEntryPointCommand *anEntryPointCommand = [self entryPointCommand];
     [anEntryPointCommand setEntryoff:[aTextSection offset]];
     
-    NUMachOSegmentCommand64 *aLinkeditCommand = [self linkeditSegment];
-    [aLinkeditCommand setFileoff:[aTextSegment nextFileoff]];
-    NUMachOSymtabCommand *aSymtabCommand = [self symtabCommand];
-    [aSymtabCommand setSymoff:(uint32_t)[aLinkeditCommand nextFileoff]];
-    [aSymtabCommand setStroff:[aSymtabCommand symoff]];
+//    NUMachOSegmentCommand64 *aLinkeditCommand = [self linkeditSegment];
+//    [aLinkeditCommand setFileoff:[aTextSegment nextFileoff]];
+//    NUMachOSymtabCommand *aSymtabCommand = [self symtabCommand];
+//    [aSymtabCommand setSymoff:(uint32_t)[aLinkeditCommand nextFileoff]];
+//    [aSymtabCommand setStroff:[aSymtabCommand symoff]];
 }
 
 - (NUMachOSegmentCommand64 *)textSegment
@@ -308,7 +308,7 @@ static uint32_t pageSize = 4096 * 4;
     {
         NSTask *aCodesignTask = [[NSTask new] autorelease];
         [aCodesignTask setExecutableURL:[NSURL fileURLWithPath:[[self class] codesignPath]]];
-        [aCodesignTask setArguments:@[@"--force",  @"-s",  @"-", aFilepath]];
+        [aCodesignTask setArguments:@[@"--force", @"--no-strict", @"-s",  @"-", aFilepath]];
         [aCodesignTask launch];
         [aCodesignTask waitUntilExit];
         return ![aCodesignTask terminationStatus];

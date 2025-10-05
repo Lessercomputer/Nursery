@@ -172,14 +172,13 @@
     uint64_t aRoundedSegmentDataSize = [self roundUpToPageSize:aSegmentDataSize];
     if (!aRoundedSegmentDataSize)
         aRoundedSegmentDataSize = [[self macho] pageSize];
-    uint64_t aPaddingSize = aRoundedSegmentDataSize - aSegmentDataSize;
     
     NUMachOSegmentCommand64 *aPreviousLoadSegmentCommand = [self previousLoadSegmentCommand];
+
     [self setVmaddr:[aPreviousLoadSegmentCommand nextVMAddr]];
     [self setVmsize:aRoundedSegmentDataSize];
     [self setFileoff:[aPreviousLoadSegmentCommand nextFileoff]];
     [self setFilesize:aRoundedSegmentDataSize];
-    [self setPaddingSize:aPaddingSize];
 }
 
 - (uint64_t)computeSegmentDataSize
@@ -194,19 +193,27 @@
     [[self sections] enumerateObjectsUsingBlock:^(NUMachOSection * _Nonnull aSection, NSUInteger anIndex, BOOL * _Nonnull stop) {
         if (aPreviousSection)
         {
+            [aSection updateSize];
             [aSection setOffset:[aPreviousSection offset] + (uint32_t)[aPreviousSection size]];
             [aSection setAddr:[aPreviousSection addr] + [aPreviousSection size]];
-            [aSection updateSize];
         }
         else
         {
+            [aSection updateSize];
             if ([aPreviousLoadSegmentCommand isPageZero])
-                [aSection setOffset:(uint32_t)[aPreviousLoadSegmentCommand nextFileoff] + [[self macho] headerAndAllLoadCommandsSize]];
+            {
+                uint64_t aHeaderAndAllLoadCommandSize = [[self macho] headerAndAllLoadCommandsSize];
+                uint64_t aFirstSectionSize = aHeaderAndAllLoadCommandSize;
+                aFirstSectionSize += [aSection size];
+                uint64_t aRoundedFirstSectionSize = [self roundUpToPageSize:aFirstSectionSize];
+                uint64_t aPaddingSize = aRoundedFirstSectionSize - aHeaderAndAllLoadCommandSize - [aSection size];
+                [self setPaddingSize:aPaddingSize];
+                [aSection setOffset:(uint32_t)(aHeaderAndAllLoadCommandSize + aPaddingSize)];
+            }
             else
                 [aSection setOffset:(uint32_t)[aPreviousLoadSegmentCommand nextFileoff]];
                  
             [aSection setAddr:[aPreviousLoadSegmentCommand nextVMAddr]];
-            [aSection updateSize];
         }
         
         aSegmentDataSize += [aSection size];
@@ -229,8 +236,8 @@
     
     if ([[self sections] count])
     {
-        [[self sections] makeObjectsPerformSelector:@selector(writeSectionDataToData:) withObject:aData];
         [aData increaseLengthBy:[self paddingSize]];
+        [[self sections] makeObjectsPerformSelector:@selector(writeSectionDataToData:) withObject:aData];
     }
     else
         [aData increaseLengthBy:[self filesize]];
