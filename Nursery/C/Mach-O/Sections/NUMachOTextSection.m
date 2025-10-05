@@ -19,6 +19,7 @@
 {
     self = [super init];
     if (self) {
+        _section.align = 2;
         _instructions = [NSMutableArray new];
     }
     return self;
