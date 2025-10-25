@@ -7,11 +7,14 @@
 //
 
 #import "NUMachOPostProcess.h"
+#import "NUMachOTextSection.h"
 
 @implementation NUMachOPostProcess
 
 - (void)execute
 {
+    uint64_t aDataOffset;
+    uint64_t aDataPage = [NUAArch64Instruction pageOf:[[self dataSection] addr] + [self dataOffset] offset:&aDataOffset];
     
 }
 

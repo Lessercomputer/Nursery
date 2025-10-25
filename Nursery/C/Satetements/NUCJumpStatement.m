@@ -10,6 +10,9 @@
 #import "NUCPreprocessingTokenToTokenStream.h"
 #import "NUCExpression.h"
 #import "NUCTokenProtocol.h"
+#import "NUCTranslator.h"
+#import "NUMachO.h"
+#import "NUAArch64RetInstruction.h"
 
 @implementation NUCJumpStatement
 
@@ -53,6 +56,7 @@
 - (void)translateWith:(NUCTranslator *)aTranslator
 {
     [[self expression] translateWith:aTranslator];
+    [[aTranslator machO] addInstruction:[NUAArch64RetInstruction instruction]];
 }
 
 @end

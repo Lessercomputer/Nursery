@@ -35,7 +35,7 @@ union NUAArch64RetInstruction
 
 @property (nonatomic) union NUAArch64RetInstruction retInstruction;
 
-@property (nonatomic) NSInteger rn;
+@property (nonatomic) uint32_t rn;
 
 @end
 

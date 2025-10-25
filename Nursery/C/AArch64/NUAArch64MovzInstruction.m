@@ -7,8 +7,6 @@
 //
 
 #import "NUAArch64MovzInstruction.h"
-#import <Foundation/NSData.h>
-
 
 
 @implementation NUAArch64MovzInstruction
@@ -47,11 +45,6 @@
 - (void)setRd:(NSInteger)rd
 {
     _movInstruction.bits.Rd = (uint32_t)rd;
-}
-
-- (void)writeToData:(NSMutableData *)aData
-{
-    [aData appendBytes:&_movInstruction length:[self size]];
 }
 
 @end

@@ -33,12 +33,19 @@
 
 - (void)addInstruction:(NUAArch64Instruction *)anInstruction
 {
+    uint64_t anInstructionOffset = [self instructionOffsetInSection];
     [[self instructions] addObject:anInstruction];
+    _instructionOffsetInSection += InstructionSizeInBytes;
 }
 
-- (uint64_t)instructionOffsetInSection
+- (void)replaceInstructionAtOffset:(uint64_t)anOffset with:(NUAArch64Instruction *)anInstruction
 {
-    return [[self instructions] count] * InstructionSizeInBytes;
+    [self replaceInstructionAt:anOffset / InstructionSizeInBytes with:anInstruction];
+}
+
+- (void)replaceInstructionAt:(uint64_t)anIndex with:(NUAArch64Instruction *)anInstruction
+{
+    [[self instructions] replaceObjectAtIndex:anIndex withObject:anInstruction];
 }
 
 - (uint64_t)computeSize

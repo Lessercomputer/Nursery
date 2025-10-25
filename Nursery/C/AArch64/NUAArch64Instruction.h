@@ -12,10 +12,13 @@
 
 @interface NUAArch64Instruction : NSObject
 
++ (uint64_t)pageSize;
++ (uint64_t)pageOf:(uint64_t)anAddress offset:(uint64_t *)anOffset;
+
 + (instancetype)instruction;
 
 @property (nonatomic, readonly) uint32_t size;
-
+@property (nonatomic, readonly) uint32_t instruction;
 @property (nonatomic, readonly) BOOL isPlaceholder;
 
 - (void)writeToData:(NSMutableData *)aData;

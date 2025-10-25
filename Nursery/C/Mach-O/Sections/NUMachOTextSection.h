@@ -17,6 +17,7 @@
 @property (nonatomic, readonly) uint64_t instructionOffsetInSection;
 
 - (void)addInstruction:(NUAArch64Instruction *)anInstruction;
+- (void)replaceInstructionAt:(uint64_t)anIndex with:(NUAArch64Instruction *)anInstruction;
 
 @end
 
