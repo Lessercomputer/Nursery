@@ -154,6 +154,7 @@ static uint32_t pageSize = 4096 * 4;
 {
     [[self loadCommands] makeObjectsPerformSelector:@selector(computeLoadCommandSize)];
     [[self loadCommands] makeObjectsPerformSelector:@selector(computeLayout)];
+    
     [self updateLoadCommands];
     [[self header] updateHeader];
 }
@@ -273,6 +274,11 @@ static uint32_t pageSize = 4096 * 4;
     return [[self header] size] + [self totalLoadCommandsSize];
 }
 
+- (uint32_t)roundUpedHeaderAndAllLoadCommandsSize
+{
+    return (uint32_t)[self roundUpToPageSize:[self headerAndAllLoadCommandsSize]];
+}
+
 - (void)addInstruction:(NUAArch64Instruction *)anInstruction
 {
     [[self textSection] addInstruction:anInstruction];
@@ -294,6 +300,7 @@ static uint32_t pageSize = 4096 * 4;
     [self executePostProcesses];
 
     [[self header] writeToData:aData];
+    
     [[self loadCommands] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
     [[self loadCommands] makeObjectsPerformSelector:@selector(writeSegmentDataToData:) withObject:aData];
 }

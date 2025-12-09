@@ -437,6 +437,8 @@
 		E29069D82EAC70C60058F5C7 /* NUAArch64AdrpInstruction.h in Headers */ = {isa = PBXBuildFile; fileRef = E29069D52EAC70C60058F5C7 /* NUAArch64AdrpInstruction.h */; };
 		E29069DB2EACB25E0058F5C7 /* NUAArch64AddInstruction.m in Sources */ = {isa = PBXBuildFile; fileRef = E29069DA2EACB25E0058F5C7 /* NUAArch64AddInstruction.m */; };
 		E29069DC2EACB25E0058F5C7 /* NUAArch64AddInstruction.h in Headers */ = {isa = PBXBuildFile; fileRef = E29069D92EACB25E0058F5C7 /* NUAArch64AddInstruction.h */; };
+		E29069DF2EB220B40058F5C7 /* NUAArch64LdrInstruction.m in Sources */ = {isa = PBXBuildFile; fileRef = E29069DE2EB220B40058F5C7 /* NUAArch64LdrInstruction.m */; };
+		E29069E02EB220B40058F5C7 /* NUAArch64LdrInstruction.h in Headers */ = {isa = PBXBuildFile; fileRef = E29069DD2EB220B40058F5C7 /* NUAArch64LdrInstruction.h */; };
 		E29B20492D6503CB0071F617 /* NUCBlockItemList.h in Headers */ = {isa = PBXBuildFile; fileRef = E29B20472D6503CB0071F617 /* NUCBlockItemList.h */; };
 		E29B204A2D6503CB0071F617 /* NUCBlockItemList.m in Sources */ = {isa = PBXBuildFile; fileRef = E29B20482D6503CB0071F617 /* NUCBlockItemList.m */; };
 		E29B204D2D6506980071F617 /* NUCStatement.h in Headers */ = {isa = PBXBuildFile; fileRef = E29B204B2D6506980071F617 /* NUCStatement.h */; };
@@ -981,6 +983,8 @@
 		E29069D62EAC70C60058F5C7 /* NUAArch64AdrpInstruction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUAArch64AdrpInstruction.m; sourceTree = "<group>"; };
 		E29069D92EACB25E0058F5C7 /* NUAArch64AddInstruction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUAArch64AddInstruction.h; sourceTree = "<group>"; };
 		E29069DA2EACB25E0058F5C7 /* NUAArch64AddInstruction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUAArch64AddInstruction.m; sourceTree = "<group>"; };
+		E29069DD2EB220B40058F5C7 /* NUAArch64LdrInstruction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUAArch64LdrInstruction.h; sourceTree = "<group>"; };
+		E29069DE2EB220B40058F5C7 /* NUAArch64LdrInstruction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUAArch64LdrInstruction.m; sourceTree = "<group>"; };
 		E29B20472D6503CB0071F617 /* NUCBlockItemList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCBlockItemList.h; sourceTree = "<group>"; };
 		E29B20482D6503CB0071F617 /* NUCBlockItemList.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NUCBlockItemList.m; sourceTree = "<group>"; };
 		E29B204B2D6506980071F617 /* NUCStatement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCStatement.h; sourceTree = "<group>"; };
@@ -1795,6 +1799,8 @@
 				E29069D62EAC70C60058F5C7 /* NUAArch64AdrpInstruction.m */,
 				E29069D92EACB25E0058F5C7 /* NUAArch64AddInstruction.h */,
 				E29069DA2EACB25E0058F5C7 /* NUAArch64AddInstruction.m */,
+				E29069DD2EB220B40058F5C7 /* NUAArch64LdrInstruction.h */,
+				E29069DE2EB220B40058F5C7 /* NUAArch64LdrInstruction.m */,
 				E2B8C7E72E7277670086C2EB /* NUAArch64Placeholder.h */,
 				E2B8C7E82E7277670086C2EB /* NUAArch64Placeholder.m */,
 			);
@@ -1982,6 +1988,7 @@
 				61BC39812A78A6C6006CFBB3 /* NUCControlLineDefine.h in Headers */,
 				E2E3F3C52D608D1100E247A5 /* NUCParameterList.h in Headers */,
 				61BC398D2A78A6C6006CFBB3 /* NUCIdentifier.h in Headers */,
+				E29069E02EB220B40058F5C7 /* NUAArch64LdrInstruction.h in Headers */,
 				619B08EF1913EEC000A4BAA2 /* NUNSArray.h in Headers */,
 				616D0ACA2A78972600813539 /* NUCANDExpression.h in Headers */,
 				61BC396C2A78A6C6006CFBB3 /* NUCIfSection.h in Headers */,
@@ -2360,6 +2367,7 @@
 				61FD7A771FFA48E9009ED9D5 /* NUNurseryNetMessageArgument.m in Sources */,
 				619B08951913EEC000A4BAA2 /* NUGardenSeeker.m in Sources */,
 				61BC39882A78A6C6006CFBB3 /* NUCElseGroup.m in Sources */,
+				E29069DF2EB220B40058F5C7 /* NUAArch64LdrInstruction.m in Sources */,
 				B861518920B3FED400862B9D /* NULazyMutableArray.m in Sources */,
 				619B08CF1913EEC000A4BAA2 /* NUChangedRegionArray.m in Sources */,
 				E29B206D2D6D90870071F617 /* NUMachOHeader64.m in Sources */,

@@ -51,6 +51,7 @@
 
 - (uint64_t)roundUpToPageSize:(uint64_t)aSize;
 - (uint32_t)headerAndAllLoadCommandsSize;
+- (uint32_t)roundUpedHeaderAndAllLoadCommandsSize;
 
 - (void)add:(NUMachOLoadCommand *)aLoadCommand;
 - (void)computeLayoutIfNeeded;

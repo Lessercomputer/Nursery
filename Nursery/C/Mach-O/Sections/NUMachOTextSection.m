@@ -59,6 +59,7 @@
 
 - (void)writeSectionDataToData:(NSMutableData *)aData
 {
+    [aData increaseLengthBy:[self leadingPaddingSize]];
     [[self instructions] makeObjectsPerformSelector:@selector(writeToData:) withObject:aData];
 }
 

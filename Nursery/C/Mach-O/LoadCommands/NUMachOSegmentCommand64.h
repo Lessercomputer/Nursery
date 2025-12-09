@@ -22,6 +22,7 @@
 }
 
 @property (nonatomic, readonly) BOOL isPageZero;
+@property (nonatomic, readonly) BOOL isFirstSegmentButNotPageZero;
 @property (nonatomic, readonly) BOOL isText;
 @property (nonatomic, readonly) BOOL isData;
 @property (nonatomic, readonly) BOOL isLinkedit;
@@ -30,7 +31,6 @@
 @property (nonatomic) uint64_t vmsize;
 @property (nonatomic) uint64_t fileoff;
 @property (nonatomic) uint64_t filesize;
-@property (nonatomic) uint64_t paddingSize;
 @property (nonatomic, readonly) uint64_t nextVMAddr;
 @property (nonatomic, readonly) uint64_t nextFileoff;
 @property (nonatomic, readonly) NSMutableData *data;

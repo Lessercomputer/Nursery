@@ -68,6 +68,11 @@
     return strcmp(_segmentCommand64.segname, SEG_PAGEZERO) == 0;
 }
 
+- (BOOL)isFirstSegmentButNotPageZero
+{
+    return [[self previousLoadSegmentCommand] isPageZero];
+}
+
 - (BOOL)isText
 {
     return strcmp(_segmentCommand64.segname, SEG_TEXT) == 0;
@@ -130,7 +135,7 @@
 
 - (uint64_t)nextFileoff
 {
-    return [self roundUpToPageSize:[self fileoff] + [self filesize]];
+    return [self fileoff] + [self filesize];
 }
 
 - (uint32_t)size
@@ -169,16 +174,12 @@
     if ([self isPageZero]) return;
 
     uint64_t aSegmentDataSize = [self computeSegmentDataSize];
-    uint64_t aRoundedSegmentDataSize = [self roundUpToPageSize:aSegmentDataSize];
-    if (!aRoundedSegmentDataSize)
-        aRoundedSegmentDataSize = [[self macho] pageSize];
-    
     NUMachOSegmentCommand64 *aPreviousLoadSegmentCommand = [self previousLoadSegmentCommand];
 
     [self setVmaddr:[aPreviousLoadSegmentCommand nextVMAddr]];
-    [self setVmsize:aRoundedSegmentDataSize];
+    [self setVmsize:aSegmentDataSize];
     [self setFileoff:[aPreviousLoadSegmentCommand nextFileoff]];
-    [self setFilesize:aRoundedSegmentDataSize];
+    [self setFilesize:aSegmentDataSize];
 }
 
 - (uint64_t)computeSegmentDataSize
@@ -188,34 +189,79 @@
     if ([self isPageZero]) return aSegmentDataSize;
     
     NUMachOSegmentCommand64 *aPreviousLoadSegmentCommand = [self previousLoadSegmentCommand];
-    
     __block NUMachOSection *aPreviousSection = nil;
+    
     [[self sections] enumerateObjectsUsingBlock:^(NUMachOSection * _Nonnull aSection, NSUInteger anIndex, BOOL * _Nonnull stop) {
-        if (aPreviousSection)
+        
+//        [aSection updateSize];
+//
+//        if (anIndex == 0)
+//        {
+//            if ([aPreviousLoadSegmentCommand isPageZero])
+//                [aSection setOffset:[[self macho] roundUpedHeaderAndAllLoadCommandsSize]];
+//            else
+//                [aSection setOffset:(uint32_t)[aPreviousLoadSegmentCommand nextFileoff]];
+//
+//            [aSection setAddr:[aPreviousLoadSegmentCommand nextVMAddr]];
+//        }
+//        else
+//        {
+//            [aSection setOffset:[aPreviousSection nextOffset]];
+//        }
+        [aSection updateSize];
+        
+        if ([self isFirstSegmentButNotPageZero] && anIndex == 0)
         {
-            [aSection updateSize];
-            [aSection setOffset:[aPreviousSection offset] + (uint32_t)[aPreviousSection size]];
-            [aSection setAddr:[aPreviousSection addr] + [aPreviousSection size]];
+            uint64_t aHeaderAndAllLoadCommandSize = [[self macho] headerAndAllLoadCommandsSize];
+            uint64_t aFirstSectionSize = aHeaderAndAllLoadCommandSize;
+            aFirstSectionSize += [aSection size];
+            uint64_t aRoundedFirstSectionSize = [self roundUpToPageSize:aFirstSectionSize];
+            uint64_t aPaddingSize = aRoundedFirstSectionSize - aHeaderAndAllLoadCommandSize - [aSection size];
+            [aSection setLeadingPaddingSize:aPaddingSize];
+            [aSection setOffset:(uint32_t)(aHeaderAndAllLoadCommandSize + aPaddingSize)];
+            [aSection setAddr:[aPreviousLoadSegmentCommand nextVMAddr] + [aSection offset]];
+            aSegmentDataSize += aHeaderAndAllLoadCommandSize;
         }
         else
         {
-            [aSection updateSize];
-            if ([aPreviousLoadSegmentCommand isPageZero])
+            if (anIndex == 0)
             {
-                uint64_t aHeaderAndAllLoadCommandSize = [[self macho] headerAndAllLoadCommandsSize];
-                uint64_t aFirstSectionSize = aHeaderAndAllLoadCommandSize;
-                aFirstSectionSize += [aSection size];
-                uint64_t aRoundedFirstSectionSize = [self roundUpToPageSize:aFirstSectionSize];
-                uint64_t aPaddingSize = aRoundedFirstSectionSize - aHeaderAndAllLoadCommandSize - [aSection size];
-                [self setPaddingSize:aPaddingSize];
-                [aSection setOffset:(uint32_t)(aHeaderAndAllLoadCommandSize + aPaddingSize)];
+                [aSection setOffset:(uint32_t)[aPreviousLoadSegmentCommand nextFileoff]];
+                [aSection setAddr:[aPreviousLoadSegmentCommand nextVMAddr]];
             }
             else
-                [aSection setOffset:(uint32_t)[aPreviousLoadSegmentCommand nextFileoff]];
-                 
-            [aSection setAddr:[aPreviousLoadSegmentCommand nextVMAddr]];
+            {
+                [aSection setOffset:[aPreviousSection offset] + (uint32_t)[aPreviousSection size]];
+                [aSection setAddr:[aPreviousSection addr] + [aPreviousSection size]];
+            }
         }
         
+//        if (aPreviousSection)
+//        {
+//            [aSection updateSize];
+//            [aSection setOffset:[aPreviousSection offset] + (uint32_t)[aPreviousSection size]];
+//            [aSection setAddr:[aPreviousSection addr] + [aPreviousSection size]];
+//        }
+//        else
+//        {
+//            [aSection updateSize];
+//            if ([aPreviousLoadSegmentCommand isPageZero])
+//            {
+//                uint64_t aHeaderAndAllLoadCommandSize = [[self macho] headerAndAllLoadCommandsSize];
+//                uint64_t aFirstSectionSize = aHeaderAndAllLoadCommandSize;
+//                aFirstSectionSize += [aSection size];
+//                uint64_t aRoundedFirstSectionSize = [self roundUpToPageSize:aFirstSectionSize];
+//                uint64_t aPaddingSize = aRoundedFirstSectionSize - aHeaderAndAllLoadCommandSize - [aSection size];
+//                [self setPaddingSize:aPaddingSize];
+//                [aSection setOffset:(uint32_t)(aHeaderAndAllLoadCommandSize + aPaddingSize)];
+//            }
+//            else
+//                [aSection setOffset:(uint32_t)[aPreviousLoadSegmentCommand nextFileoff]];
+//                 
+//            [aSection setAddr:[aPreviousLoadSegmentCommand nextVMAddr]];
+//        }
+        
+        aSegmentDataSize += [aSection leadingPaddingSize];
         aSegmentDataSize += [aSection size];
         aPreviousSection = aSection;
     }];
@@ -235,10 +281,7 @@
         return;
     
     if ([[self sections] count])
-    {
-        [aData increaseLengthBy:[self paddingSize]];
         [[self sections] makeObjectsPerformSelector:@selector(writeSectionDataToData:) withObject:aData];
-    }
     else
         [aData increaseLengthBy:[self filesize]];
 }

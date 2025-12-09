@@ -14,6 +14,7 @@
 {
     self = [super init];
     if (self) {
+        _addInstruction.bits.sf = 1;
         _addInstruction.bits.field0 = 0x22;
     }
     return self;

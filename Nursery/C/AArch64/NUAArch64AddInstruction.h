@@ -14,8 +14,10 @@ struct NUAArch64AddInstructionBits
     uint32_t Rn : 5;
     uint32_t imm12 : 12;
     uint32_t sh : 1;
-    uint32_t field0 : 8;
-    uint32_t SF : 1;
+    uint32_t field0 : 6;
+    uint32_t S : 1;
+    uint32_t op : 1;
+    uint32_t sf : 1;
 };
 
 union NUAArch64AddInstruction

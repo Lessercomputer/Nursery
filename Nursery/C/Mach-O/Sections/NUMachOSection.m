@@ -89,6 +89,11 @@
     _section.offset = offset;
 }
 
+- (uint32_t)nextOffset
+{
+    return [self offset] + (uint32_t)[self size];
+}
+
 - (uint64_t)computeSize
 {
     return [[self data] length];
