@@ -13,7 +13,7 @@
 @interface NUAArch64Instruction : NSObject
 
 + (uint64_t)pageSize;
-+ (uint64_t)pageOf:(uint64_t)anAddress offset:(uint64_t *)anOffset;
++ (uint64_t)pageAddressOf:(uint64_t)anAddress offsetInPage:(uint64_t *)anOffset;
 
 + (instancetype)instruction;
 

@@ -16,12 +16,14 @@
     return 4096;
 }
 
-+ (uint64_t)pageOf:(uint64_t)anAddress offset:(uint64_t *)anOffset
++ (uint64_t)pageAddressOf:(uint64_t)anAddress offsetInPage:(uint64_t *)anOffset
 {
-    uint64_t aPage = anAddress / [self pageSize];
+    uint64_t aPageSize = anAddress / [self pageSize] * [self pageSize];
+    
     if (anOffset)
         *anOffset = anAddress % [self pageSize];
-    return aPage;
+    
+    return aPageSize;
 }
 
 + (instancetype)instruction

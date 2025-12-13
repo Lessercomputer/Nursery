@@ -193,18 +193,19 @@
     if ([aToken isIntegerConstant])
     {
         NUMachOPostProcess *aPostProcess = [[NUMachOPostProcess new] autorelease];
+        [aPostProcess setMacho:[self machO]];
         
         uint64_t anInstructionOffsetInSection = [[self machO] instructionOffsetInSection];
         [[self machO] addInstruction:[NUAArch64Placeholder instruction]];
         [[self machO] addInstruction:[NUAArch64Placeholder instruction]];
         [[self machO] addInstruction:[NUAArch64Placeholder instruction]];
         
-        [aPostProcess setInstructionOffset:anInstructionOffsetInSection];
+        [aPostProcess setInstructionOffsetInSection:anInstructionOffsetInSection];
         [aPostProcess setTextSection:[[self machO] textSection]];
         
         NUMachODataSection *aDataSection = [[self machO] dataSection];
         uint64_t aDataOffsetInSection = [aDataSection dataOffsetInSection];
-        [aPostProcess setDataOffset:aDataOffsetInSection];
+        [aPostProcess setDataOffsetInSection:aDataOffsetInSection];
         [aPostProcess setDataSection:aDataSection];
         [aDataSection addInt64:[(NUCIntegerConstant *)aToken value]];
         
