@@ -41,6 +41,7 @@
 - (void)writeToData:(NSMutableData *)aData
 {
     [aData appendBytes:&_machHeader length:sizeof(_machHeader)];
+    NSLog(@"header size: %lu", sizeof(_machHeader));
 }
 
 @end

@@ -20,8 +20,8 @@
         aSegmentCommand.cmd = LC_SEGMENT_64;
         aSegmentCommand.cmdsize = sizeof(aSegmentCommand);
         strcpy(aSegmentCommand.segname, SEG_LINKEDIT);
-        aSegmentCommand.maxprot = VM_PROT_READ | VM_PROT_WRITE | VM_PROT_EXECUTE;
-        aSegmentCommand.initprot = VM_PROT_READ | VM_PROT_EXECUTE;
+        aSegmentCommand.maxprot = VM_PROT_READ;// | VM_PROT_WRITE | VM_PROT_EXECUTE;
+        aSegmentCommand.initprot = VM_PROT_READ;// | VM_PROT_EXECUTE;
         
         _segmentCommand64 = aSegmentCommand;
     }

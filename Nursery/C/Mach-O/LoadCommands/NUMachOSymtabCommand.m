@@ -53,7 +53,9 @@
 
 - (void)writeToData:(NSMutableData *)aData
 {
+    NSLog(@"symtab command offst: %lu", [aData length]);
     [aData appendBytes:&_symtabCommand length:sizeof(_symtabCommand)];
+    NSLog(@"symtab command end offst: %lu", [aData length]);
 }
 
 @end

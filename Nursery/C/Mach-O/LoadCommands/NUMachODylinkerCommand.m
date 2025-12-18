@@ -32,10 +32,13 @@ char DylinkerPath[] = "/usr/lib/dyld";
 
 - (void)writeToData:(NSMutableData *)aData
 {
+    NSLog(@"dy linker command offst: %lu", [aData length]);
+    NSLog(@"dy linker command size: %lu", sizeof(_dyLinkerCommand));
     [aData appendBytes:&_dyLinkerCommand length:sizeof(_dyLinkerCommand)];
     [aData appendBytes:DylinkerPath length:strlen(DylinkerPath)];
     NSUInteger aPaddingSize = _dyLinkerCommand.cmdsize - (sizeof(_dyLinkerCommand) + strlen(DylinkerPath));
     [aData increaseLengthBy:aPaddingSize];
+    NSLog(@"dy linker command end offset: %lu", [aData length]);
 }
 
 @end

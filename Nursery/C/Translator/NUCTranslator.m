@@ -86,13 +86,13 @@
         [aMachO add:aDataSegmentCommand];
         NUMachODataSection *aDataSection = [NUMachODataSection section];
         [aDataSegmentCommand add:aDataSection];
+        [aMachO add:[NUMachOLinkeditCommand loadCommand]];
         [aMachO add:[NUMachOSymtabCommand loadCommand]];
         [aMachO add:[NUMachODySymtabCommand loadCommand]];
         [aMachO add:[NUMachODylinkerCommand loadCommand]];
         [aMachO add:[NUMachODyldInfoOnly loadCommand]];
         [aMachO add:[NUMachODylibCommand loadCommand]];
         [aMachO add:[NUMachOEntryPointCommand loadCommand]];
-        [aMachO add:[NUMachOLinkeditCommand loadCommand]];
         _machO = aMachO;
         
         _instructionIndexesAndValueIndexesToReplace = [NSMutableDictionary new];

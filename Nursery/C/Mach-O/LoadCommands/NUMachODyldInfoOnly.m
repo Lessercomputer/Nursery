@@ -28,7 +28,9 @@
 
 - (void)writeToData:(NSMutableData *)aData
 {
+    NSLog(@"dy ld info only command offst: %lu", [aData length]);
     [aData appendBytes:&_dyldInfoCommand length:sizeof(_dyldInfoCommand)];
+    NSLog(@"dy ld info only command end offst: %lu", [aData length]);
 }
 
 @end

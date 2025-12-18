@@ -38,6 +38,8 @@
 @property (nonatomic, readonly) NUMachOTextSection *textSection;
 @property (nonatomic, readonly) NUMachODataSection *dataSection;
 @property (nonatomic, readonly) uint64_t sectionSize;
+@property (nonatomic) uint64_t leadingPaddingSize;
+@property (nonatomic) uint64_t trailingPaddingSize;
 
 - (void)add:(NUMachOSection *)aSection;
 

@@ -45,6 +45,8 @@
 
 - (void)writeToData:(NSMutableData *)aData
 {
+    NSLog(@"entry point command offst: %lu", [aData length]);
+    NSLog(@"entry point command size: %lu", sizeof(_entoryPointCommand));
     [aData appendBytes:&_entoryPointCommand length:sizeof(_entoryPointCommand)];
 }
 

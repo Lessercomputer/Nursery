@@ -32,10 +32,12 @@ char LSYSTEM[]  = "/usr/lib/system/libdyld.dylib";
 
 - (void)writeToData:(NSMutableData *)aData
 {
+    NSLog(@"dylib command offst: %lu", [aData length]);
     [aData appendBytes:&_dylibCommand length:sizeof(_dylibCommand)];
     [aData appendBytes:LSYSTEM length:strlen(LSYSTEM)];
     uint64_t aPaddingSize = _dylibCommand.cmdsize - (sizeof(_dylibCommand) + strlen(LSYSTEM));
     [aData increaseLengthBy:aPaddingSize];
+    NSLog(@"dylib command end offst: %lu", [aData length]);
 }
 
 @end
